@@ -2,7 +2,7 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.67.0
+version: 2.68.0
 last_verified: 2026-10-10
 ---
 
@@ -654,3 +654,7 @@ Ainda em 2026-09-03, a branch `codex/knowledge-source-monitoring` ativou no Pris
 Ainda em 2026-09-03, a branch `codex/m5-3-pilot-operational-resilience` fechou as lacunas operacionais do piloto sem criar outro pipeline. Cinco migrations forward-only foram aplicadas e registradas no Prisma-QA; a prova SQL transacional foi revertida após validar revisão por Perfil ou documento, restauração incremental, exclusão com Perfil imutável, correção integral de vínculo, mesclagem idempotente, tenant, papel e grants. O smoke autenticado percorreu versões completas, confirmação de restauração, preflight de exclusão, correção de Pessoa, comparação de mesclagem e arquivamento seguido de reativação da Pessoa sintética, sem deixar o cadastro arquivado. A Central da Pessoa foi aprovada em `360x800`, `390x844`, `768x1024`, `1280x720` e `1440x900`, com zero overflow horizontal global ou interno. O passe também corrigiu a leitura de idiomas estruturados em versões históricas, exibindo `Inglês · avançado` em vez de `[object Object]`. Produção não foi alterada.
 
 Em 2026-09-04, a entrada `Processamento e revisões` da Central da Pessoa passou a preservar o contexto da Pessoa na rota e na consulta Supabase. A rota `/profiles/:personId/processes` limita documentos, cadastro e Perfis por `person_id`, identifica visualmente o escopo e oferece saída explícita para a visão global; `/profiles/processes` permanece como central de toda a organização. Não houve mudança de schema, RLS, grants ou dados remotos.
+
+## Pessoas para a Posição — cards compactos v2.3.4
+
+Implementação aprovada por Bruno em10/10/2026: primeira proposta de cards compactos em uma coluna, identificação/estado/score no cabeçalho, toolbar de consulta/acompanhamento, requisitos resumidos com conteúdo completo expansível, explicação e revisão humana separadas. Primeiro card aberto, demais recolhidos com controle acessível. Grupos/ordem/fórmulas/decisões preservados. Consulta agregada do processo atual por organização/Posição indica “Já está no acompanhamento” e “Abrir acompanhamento” com ciclo explícito, inclusive na reentrada/retorno à janela; histórico arquivado não conta como vínculo atual. Estado desconhecido impede inclusão sem impedir consulta de Perfil/evidências. Loading, falha/retry e processo encerrado tratados. Sem migration, backend, IA ou dependência nova. Registry2.3.4 com3pulado por pedido explícito. Acordo/execução/mapa/AoT `people-compact-v234`; publicação só é comprovada pelos recibos finais do AoT.

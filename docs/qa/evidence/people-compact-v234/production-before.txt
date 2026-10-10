@@ -1,0 +1,59 @@
+220b5034d951a83b9d353596604da5cdd856ff7c
+[
+  {
+    "name": "/prisma-web",
+    "id": "d383f8b175b33820e9bafd7227c16cef3e4b8a5d24b462e35023ed8a12098725",
+    "image": "sha256:b98a63137351e7bef19726f6ce6e54094ed74dc57f7184971ffcd57bb6b37555",
+    "status": "running",
+    "restarts": 0,
+    "health": null
+  },
+  {
+    "name": "/hrt-mail-forwarder",
+    "id": "b257a83cbb370299dc3666d120a22b47f7fb5acfc4a73516a78b821ae43fea6a",
+    "image": "sha256:ffc0f2a53e093cec01c4a91e652b29b0ede4808ecc2f461df9e6faa52940cc31",
+    "status": "running",
+    "restarts": 0,
+    "health": "healthy"
+  },
+  {
+    "name": "/prisma-parser-ia",
+    "id": "311f8e4f4d0f2c3e24c96bbbd098fcc0212561eb0862f4da3529792d1681c2f1",
+    "image": "sha256:786219d08845036060d99ca06e441c1fde98923228f60e5db7b29422f208e752",
+    "status": "running",
+    "restarts": 0,
+    "health": "healthy"
+  },
+  {
+    "name": "/prisma-profile-synthesis",
+    "id": "db6c5c0ef238534ba2967dce3bbf80e9e8c94089ca7bb48b84f4e523961b00d7",
+    "image": "sha256:2fdccaea0fb50449f9f5e800ada1925c690fab319e4d3708ade0f831c7e99167",
+    "status": "running",
+    "restarts": 0,
+    "health": "healthy"
+  },
+  {
+    "name": "/prisma-paddle-gateway",
+    "id": "2eed2dd379eacf4ff58d83f034f5ff7a122792ba7fa7da3977cda580bc74e983",
+    "image": "sha256:d061cea3ae0a785f5cc0879704e1918666d22aa51236ec4ff7384b1387d2cf99",
+    "status": "running",
+    "restarts": 0,
+    "health": null
+  },
+  {
+    "name": "/paddle-vl-llama-test",
+    "id": "d991a574e45eb002ce05e6c0fc9e448f4a4ed5f6128aaac049ea8cbdb24e4b8f",
+    "image": "sha256:b15cd87030b2eb8a284d398c095e03c6ba8baf386b68e1b83ab8b46e9555ffe8",
+    "status": "running",
+    "restarts": 0,
+    "health": "unhealthy"
+  },
+  {
+    "name": "/traefik-traefik-1",
+    "id": "5e25fdc6d2e6fd3c622972310f67f640b80cac70538e17b42a529d1935488bc6",
+    "image": "sha256:f86a2cab1b5c649070c49f883c743dd32d8485a56e3368c5f93b9e91f1e91259",
+    "status": "running",
+    "restarts": 0,
+    "health": null
+  }
+]

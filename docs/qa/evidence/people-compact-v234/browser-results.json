@@ -1,0 +1,601 @@
+[
+  {
+    "name": "1536: current membership and correct primary action",
+    "pass": true
+  },
+  {
+    "name": "1536: no duplicate add action for current member",
+    "pass": true
+  },
+  {
+    "name": "1536: following cards collapsed by default",
+    "pass": true
+  },
+  {
+    "name": "1536: single aggregated read and no passive writes",
+    "pass": true
+  },
+  {
+    "name": "1536: no overflow",
+    "pass": true
+  },
+  {
+    "name": "1536: human review is collapsed independently",
+    "pass": true
+  },
+  {
+    "name": "1536: reference topology header -> toolbar -> requirements -> explanation -> review",
+    "pass": true
+  },
+  {
+    "name": "1536: score is in identity and follow-up outside score",
+    "pass": true
+  },
+  {
+    "width": 1536,
+    "geometry": {
+      "card": {
+        "x": 0,
+        "y": 220.890625,
+        "width": 1536,
+        "height": 698.546875
+      },
+      "identity": {
+        "x": 17,
+        "y": 237.890625,
+        "width": 1502,
+        "height": 187.109375
+      },
+      "toolbar": {
+        "x": 17,
+        "y": 435,
+        "width": 1502,
+        "height": 60
+      },
+      "score": {
+        "x": 1232,
+        "y": 237.890625,
+        "width": 235,
+        "height": 150.71875
+      },
+      "requirements": {
+        "x": 17,
+        "y": 505,
+        "width": 1502,
+        "height": 207.671875
+      },
+      "trajectory": {
+        "x": 17,
+        "y": 722.671875,
+        "width": 1502,
+        "height": 118.078125
+      },
+      "review": {
+        "x": 17,
+        "y": 850.75,
+        "width": 1502,
+        "height": 51.6875
+      }
+    }
+  },
+  {
+    "name": "1536: contextual human controls retained",
+    "pass": true
+  },
+  {
+    "name": "1536: expanding causes no write",
+    "pass": true
+  },
+  {
+    "name": "1536: explicit current cycle navigation",
+    "pass": true
+  },
+  {
+    "name": "1448: current membership and correct primary action",
+    "pass": true
+  },
+  {
+    "name": "1448: no duplicate add action for current member",
+    "pass": true
+  },
+  {
+    "name": "1448: following cards collapsed by default",
+    "pass": true
+  },
+  {
+    "name": "1448: single aggregated read and no passive writes",
+    "pass": true
+  },
+  {
+    "name": "1448: no overflow",
+    "pass": true
+  },
+  {
+    "name": "1448: human review is collapsed independently",
+    "pass": true
+  },
+  {
+    "name": "1448: reference topology header -> toolbar -> requirements -> explanation -> review",
+    "pass": true
+  },
+  {
+    "name": "1448: score is in identity and follow-up outside score",
+    "pass": true
+  },
+  {
+    "width": 1448,
+    "geometry": {
+      "card": {
+        "x": 0,
+        "y": 219.421875,
+        "width": 1448,
+        "height": 698.546875
+      },
+      "identity": {
+        "x": 17,
+        "y": 236.421875,
+        "width": 1414,
+        "height": 187.109375
+      },
+      "toolbar": {
+        "x": 17,
+        "y": 433.53125,
+        "width": 1414,
+        "height": 60
+      },
+      "score": {
+        "x": 1144,
+        "y": 236.421875,
+        "width": 235,
+        "height": 150.71875
+      },
+      "requirements": {
+        "x": 17,
+        "y": 503.53125,
+        "width": 1414,
+        "height": 207.671875
+      },
+      "trajectory": {
+        "x": 17,
+        "y": 721.203125,
+        "width": 1414,
+        "height": 118.078125
+      },
+      "review": {
+        "x": 17,
+        "y": 849.28125,
+        "width": 1414,
+        "height": 51.6875
+      }
+    }
+  },
+  {
+    "name": "1448: contextual human controls retained",
+    "pass": true
+  },
+  {
+    "name": "1448: expanding causes no write",
+    "pass": true
+  },
+  {
+    "name": "1448: explicit current cycle navigation",
+    "pass": true
+  },
+  {
+    "name": "768: current membership and correct primary action",
+    "pass": true
+  },
+  {
+    "name": "768: no duplicate add action for current member",
+    "pass": true
+  },
+  {
+    "name": "768: following cards collapsed by default",
+    "pass": true
+  },
+  {
+    "name": "768: single aggregated read and no passive writes",
+    "pass": true
+  },
+  {
+    "name": "768: no overflow",
+    "pass": true
+  },
+  {
+    "name": "768: human review is collapsed independently",
+    "pass": true
+  },
+  {
+    "name": "768: reference topology header -> toolbar -> requirements -> explanation -> review",
+    "pass": true
+  },
+  {
+    "name": "768: score is in identity and follow-up outside score",
+    "pass": true
+  },
+  {
+    "width": 768,
+    "geometry": {
+      "card": {
+        "x": 0,
+        "y": 271.8125,
+        "width": 768,
+        "height": 825.71875
+      },
+      "identity": {
+        "x": 17,
+        "y": 288.8125,
+        "width": 734,
+        "height": 221.5
+      },
+      "toolbar": {
+        "x": 17,
+        "y": 520.3125,
+        "width": 734,
+        "height": 60
+      },
+      "score": {
+        "x": 464,
+        "y": 288.8125,
+        "width": 235,
+        "height": 150.71875
+      },
+      "requirements": {
+        "x": 17,
+        "y": 590.3125,
+        "width": 734,
+        "height": 276.453125
+      },
+      "trajectory": {
+        "x": 17,
+        "y": 876.765625,
+        "width": 734,
+        "height": 142.078125
+      },
+      "review": {
+        "x": 17,
+        "y": 1028.84375,
+        "width": 734,
+        "height": 51.6875
+      }
+    }
+  },
+  {
+    "name": "768: contextual human controls retained",
+    "pass": true
+  },
+  {
+    "name": "768: expanding causes no write",
+    "pass": true
+  },
+  {
+    "name": "768: explicit current cycle navigation",
+    "pass": true
+  },
+  {
+    "name": "390: current membership and correct primary action",
+    "pass": true
+  },
+  {
+    "name": "390: no duplicate add action for current member",
+    "pass": true
+  },
+  {
+    "name": "390: following cards collapsed by default",
+    "pass": true
+  },
+  {
+    "name": "390: single aggregated read and no passive writes",
+    "pass": true
+  },
+  {
+    "name": "390: no overflow",
+    "pass": true
+  },
+  {
+    "name": "390: human review is collapsed independently",
+    "pass": true
+  },
+  {
+    "name": "390: reference topology header -> toolbar -> requirements -> explanation -> review",
+    "pass": true
+  },
+  {
+    "name": "390: score is in identity and follow-up outside score",
+    "pass": true
+  },
+  {
+    "width": 390,
+    "geometry": {
+      "card": {
+        "x": 0,
+        "y": 482.1875,
+        "width": 390,
+        "height": 1269
+      },
+      "identity": {
+        "x": 13,
+        "y": 495.1875,
+        "width": 364,
+        "height": 403.109375
+      },
+      "toolbar": {
+        "x": 13,
+        "y": 908.296875,
+        "width": 364,
+        "height": 168.78125
+      },
+      "score": {
+        "x": 13,
+        "y": 645.125,
+        "width": 364,
+        "height": 129.609375
+      },
+      "requirements": {
+        "x": 13,
+        "y": 1087.078125,
+        "width": 364,
+        "height": 413.34375
+      },
+      "trajectory": {
+        "x": 13,
+        "y": 1510.421875,
+        "width": 364,
+        "height": 166.078125
+      },
+      "review": {
+        "x": 13,
+        "y": 1686.5,
+        "width": 364,
+        "height": 51.6875
+      }
+    }
+  },
+  {
+    "name": "390: contextual human controls retained",
+    "pass": true
+  },
+  {
+    "name": "390: expanding causes no write",
+    "pass": true
+  },
+  {
+    "name": "390: explicit current cycle navigation",
+    "pass": true
+  },
+  {
+    "name": "320: current membership and correct primary action",
+    "pass": true
+  },
+  {
+    "name": "320: no duplicate add action for current member",
+    "pass": true
+  },
+  {
+    "name": "320: following cards collapsed by default",
+    "pass": true
+  },
+  {
+    "name": "320: single aggregated read and no passive writes",
+    "pass": true
+  },
+  {
+    "name": "320: no overflow",
+    "pass": true
+  },
+  {
+    "name": "320: human review is collapsed independently",
+    "pass": true
+  },
+  {
+    "name": "320: reference topology header -> toolbar -> requirements -> explanation -> review",
+    "pass": true
+  },
+  {
+    "name": "320: score is in identity and follow-up outside score",
+    "pass": true
+  },
+  {
+    "width": 320,
+    "geometry": {
+      "card": {
+        "x": 0,
+        "y": 504.921875,
+        "width": 320,
+        "height": 1373.78125
+      },
+      "identity": {
+        "x": 13,
+        "y": 517.921875,
+        "width": 294,
+        "height": 423.109375
+      },
+      "toolbar": {
+        "x": 13,
+        "y": 951.03125,
+        "width": 294,
+        "height": 168.78125
+      },
+      "score": {
+        "x": 13,
+        "y": 687.859375,
+        "width": 294,
+        "height": 129.609375
+      },
+      "requirements": {
+        "x": 13,
+        "y": 1129.8125,
+        "width": 294,
+        "height": 447.734375
+      },
+      "trajectory": {
+        "x": 13,
+        "y": 1587.546875,
+        "width": 294,
+        "height": 216.46875
+      },
+      "review": {
+        "x": 13,
+        "y": 1814.015625,
+        "width": 294,
+        "height": 51.6875
+      }
+    }
+  },
+  {
+    "name": "320: contextual human controls retained",
+    "pass": true
+  },
+  {
+    "name": "320: expanding causes no write",
+    "pass": true
+  },
+  {
+    "name": "320: explicit current cycle navigation",
+    "pass": true
+  },
+  {
+    "name": "empty: no overflow",
+    "pass": true
+  },
+  {
+    "name": "empty: no archived membership mistaken for current",
+    "pass": true
+  },
+  {
+    "name": "archived: no overflow",
+    "pass": true
+  },
+  {
+    "name": "archived: no archived membership mistaken for current",
+    "pass": true
+  },
+  {
+    "name": "closed: no overflow",
+    "pass": true
+  },
+  {
+    "name": "closed: adding new person is disabled",
+    "pass": true
+  },
+  {
+    "name": "missing: no overflow",
+    "pass": true
+  },
+  {
+    "name": "long: no overflow",
+    "pass": true
+  },
+  {
+    "name": "pending: no overflow",
+    "pass": true
+  },
+  {
+    "name": "pending: no false human conclusion for unfinished candidate",
+    "pass": true
+  },
+  {
+    "name": "review: no overflow",
+    "pass": true
+  },
+  {
+    "name": "review: divergence action retained",
+    "pass": true
+  },
+  {
+    "name": "confirmed: no overflow",
+    "pass": true
+  },
+  {
+    "name": "confirmed: persisted decision gates retained",
+    "pass": true
+  },
+  {
+    "name": "dismissed: no overflow",
+    "pass": true
+  },
+  {
+    "name": "dismissed: persisted decision gates retained",
+    "pass": true
+  },
+  {
+    "name": "contextual: no overflow",
+    "pass": true
+  },
+  {
+    "name": "member: no overflow",
+    "pass": true
+  },
+  {
+    "name": "member: no privileged follow-up read or add",
+    "pass": true
+  },
+  {
+    "name": "loading: unknown membership never becomes absence",
+    "pass": true
+  },
+  {
+    "name": "failure: existing discovery remains consultable",
+    "pass": true
+  },
+  {
+    "name": "failure: add stays blocked until read succeeds",
+    "pass": true
+  },
+  {
+    "name": "retry: membership recovered",
+    "pass": true
+  },
+  {
+    "name": "return: persisted membership reloaded",
+    "pass": true
+  },
+  {
+    "name": "window return: membership read only",
+    "pass": true
+  },
+  {
+    "name": "add failure: no success invented",
+    "pass": true
+  },
+  {
+    "name": "add success: immediate membership update and open action",
+    "pass": true
+  },
+  {
+    "name": "existing process: inclusion carries explicit cycle and tenant",
+    "pass": true
+  },
+  {
+    "name": "scope race: stale original tenant data ignored",
+    "pass": true
+  },
+  {
+    "name": "scope race: new tenant/position read",
+    "pass": true
+  },
+  {
+    "name": "profile: original route retained",
+    "pass": true
+  },
+  {
+    "name": "human decision: explicit handler and no follow-up write",
+    "pass": true
+  },
+  {
+    "name": "curation/recalculation: explicit handlers retained",
+    "pass": true
+  },
+  {
+    "name": "1448: comparison CSS preserved",
+    "pass": true
+  },
+  {
+    "name": "390: comparison CSS preserved",
+    "pass": true
+  },
+  {
+    "name": "no runtime/external failures",
+    "pass": true
+  }
+]

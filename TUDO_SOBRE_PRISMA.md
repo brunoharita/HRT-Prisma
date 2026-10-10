@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 434
-source_manifest_sha256: 74d1b947e42d46c8818fcd692fba76a8d03080fb6c74cbec80557beea727f523
+documentation_source_count: 438
+source_manifest_sha256: fe1382482be303965f0ab00e235ffc101f6e57016f6026a343fd6da92d40e5b2
 -->
 
 # Tudo sobre o Prisma
@@ -2626,7 +2626,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.67.0
+version: 2.68.0
 last_verified: 2026-10-10
 ---
 
@@ -3278,6 +3278,10 @@ Ainda em 2026-09-03, a branch `codex/knowledge-source-monitoring` ativou no Pris
 Ainda em 2026-09-03, a branch `codex/m5-3-pilot-operational-resilience` fechou as lacunas operacionais do piloto sem criar outro pipeline. Cinco migrations forward-only foram aplicadas e registradas no Prisma-QA; a prova SQL transacional foi revertida após validar revisão por Perfil ou documento, restauração incremental, exclusão com Perfil imutável, correção integral de vínculo, mesclagem idempotente, tenant, papel e grants. O smoke autenticado percorreu versões completas, confirmação de restauração, preflight de exclusão, correção de Pessoa, comparação de mesclagem e arquivamento seguido de reativação da Pessoa sintética, sem deixar o cadastro arquivado. A Central da Pessoa foi aprovada em `360x800`, `390x844`, `768x1024`, `1280x720` e `1440x900`, com zero overflow horizontal global ou interno. O passe também corrigiu a leitura de idiomas estruturados em versões históricas, exibindo `Inglês · avançado` em vez de `[object Object]`. Produção não foi alterada.
 
 Em 2026-09-04, a entrada `Processamento e revisões` da Central da Pessoa passou a preservar o contexto da Pessoa na rota e na consulta Supabase. A rota `/profiles/:personId/processes` limita documentos, cadastro e Perfis por `person_id`, identifica visualmente o escopo e oferece saída explícita para a visão global; `/profiles/processes` permanece como central de toda a organização. Não houve mudança de schema, RLS, grants ou dados remotos.
+
+## Pessoas para a Posição — cards compactos v2.3.4
+
+Implementação aprovada por Bruno em10/10/2026: primeira proposta de cards compactos em uma coluna, identificação/estado/score no cabeçalho, toolbar de consulta/acompanhamento, requisitos resumidos com conteúdo completo expansível, explicação e revisão humana separadas. Primeiro card aberto, demais recolhidos com controle acessível. Grupos/ordem/fórmulas/decisões preservados. Consulta agregada do processo atual por organização/Posição indica “Já está no acompanhamento” e “Abrir acompanhamento” com ciclo explícito, inclusive na reentrada/retorno à janela; histórico arquivado não conta como vínculo atual. Estado desconhecido impede inclusão sem impedir consulta de Perfil/evidências. Loading, falha/retry e processo encerrado tratados. Sem migration, backend, IA ou dependência nova. Registry2.3.4 com3pulado por pedido explícito. Acordo/execução/mapa/AoT `people-compact-v234`; publicação só é comprovada pelos recibos finais do AoT.
 
 ---
 
@@ -5596,6 +5600,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+Decisão de Bruno em10/10/2026: publicar **Prisma v2.3.4**, primeira proposta de cards compactos na descoberta de Pessoas e indicação persistida de acompanhamento no processo atual. Registry acrescenta a entrega4 ao movimento3 e marca3como pulada por solicitação explícita, sem entrega fictícia. Sem mudança de contrato persistido, matching, IA, banco ou backend. Rollout somente web; acordo/execução/AoT `people-compact-v234` registram validação e publicação.
 
 Decisão de Bruno em10/10/2026: publicar **Prisma v2.3.2**, prova comum por processo seletivo, montagem automática e aprovação/envio em lote. Registry único acrescenta entrega2 ao movimento3, preservando2.3.0/1. Persistência nova `position-assessment-2.0.0`; envelope de operador `process-assessment-1.0.0`; portal público e dados históricos1.0.0 preservados. Ciclos atuais/históricos e escritores com ID de processo explícito. Migração aditiva, Edge position-assessment e web; demais serviços/modelos/Score preservados. ADR-082, acordo/execução/AoT process-assessment-v232. Rollout comprovado somente nos recibos finais.
 
@@ -12352,6 +12358,10 @@ O acompanhamento usa cinco colunas concretas e de dimensões iguais: Selecionada
 
 Referência aprovada em docs/qa/agreement-compact-follow-up-cards.md: avatar/identificação/localização à esquerda; alça e quadrado numérico à direita; aviso de qualidade fora do quadrado; rodapé com Ver detalhes e Mover etapa lado a lado. Nome/cargo quebram linhas, sem corte. Cinco colunas iguais, mínimo desktop 320px com rolagem local; mobile mantém uma coluna selecionável. Numeral indisponível é travessão com nome acessível; zero persistido é exibido como zero. Idade e explicações completas continuam no detalhe.
 
+## Pessoas compactas e vínculo atual — 2.3.4
+
+A primeira proposta visual aprovada em10/10/2026 define os cards da descoberta em uma coluna. O cabeçalho reúne seleção, Pessoa, status de acompanhamento e Score. A faixa abaixo concentra consulta e inclusão/abertura do acompanhamento. Requisitos resumidos permanecem visíveis no card expandido; todas as evidências e a revisão humana são expansíveis e independentes. O primeiro card abre completo e os seguintes ficam recolhidos, com controle acessível. Celular reorganiza os mesmos dados em uma coluna. A indicação de acompanhamento usa o processo atual persistido, sem esconder a Pessoa nem mudar matching ou decisão humana. Fonte/limites: acordo e AoT `people-compact-v234`.
+
 ---
 
 ## Source: `docs/product/vacancy-intelligence.md`
@@ -12443,6 +12453,12 @@ Detalhe reúne anotações internas/perguntas, ação/responsável/prazo, entrev
 Essas operações só leem o resultado persistido, sem recalcular score. Novas versões são sinalizadas; descoberta e recálculo autorizado continuam seguindo a estabilidade vigente. Notas e decisões operacionais não são evidência profissional nem curadoria Knowledge. Acesso reutiliza os papéis existentes de Posições, validado no servidor: super_admin autorizado, owner/admin/recruiter da organização. Atribuição não concede acesso; member não é ampliado. Não existem automações de candidatura/contratação, mensagens, novas fontes ou nova IA.
 
 Contrato aprovado: `docs/qa/agreement-position-follow-up-v220.md`1.0.0; nomenclatura/colunas/inclusão atualizadas por `docs/qa/agreement-follow-up-stages.md`1.0.0, mantendo 2.2.1. Implementação/aceite/limites de ambiente: `docs/qa/aot-position-follow-up-v220.md`. ADR-079 registra persistência e interação.
+
+## Cards compactos e acompanhamento atual — v2.3.4
+
+Decisão de Bruno em10/10/2026: aplicar a primeira proposta visual aprovada à lista Pessoas para a Posição. Cards em uma coluna com identidade/status/score no cabeçalho, faixa de ações, requisitos resumidos e explicação/revisão humana em expansões separadas. Todo o conteúdo completo permanece acessível. Os grupos A/B/C, ordem, matching, fórmula/denominador, comparação e significado das decisões permanecem.
+
+Uma consulta agregada do acompanhamento por organização/Posição informa o processo atual. Pessoas já incluídas permanecem na descoberta, com “Já está no acompanhamento”, “Processo atual” e “Abrir acompanhamento” com ID explícito do ciclo. Histórico arquivado não equivale a vínculo atual. Inclusão é humana; consulta desconhecida bloqueia a inclusão e oferece retry sem bloquear consulta de Perfil/evidências. Processo encerrado não permite incluir Pessoa. Reentrada e retorno à janela reconsultam somente acompanhamento, sem IA ou recálculo. Relação da trajetória continua independente do processo seletivo. Acordo/execução/mapa/AoT `people-compact-v234` documentam evidência/limites.
 
 ---
 
@@ -15450,6 +15466,45 @@ Baseline verificado: SHA `efdadeb64fbe8399d718018cf6080cb9737774e6` local/origin
 | Paddle/experimento inativo | no_impact_identified | ausentes da rota automática; containers/modelos/portas existentes não alterados | inspeção antes/depois |
 
 Imagem anexada é evidência de incidente, não alvo de redesenho. Fidelidade visual não aplicável: nenhuma alteração de tela.
+
+---
+
+## Source: `docs/qa/agreement-people-compact-v234.md`
+
+# Acordo — Pessoas para a Posição v2.3.4
+
+Versão 1.0.0, congelada em 10/10/2026 pela solicitação explícita de Bruno: aplicar a primeira proposta, indicar acompanhamento existente, integrar main e publicar 2.3.4. Referência normativa de arquitetura visual: `evidence/people-compact-v234/approved-reference.png`, cópia da primeira proposta. Pessoas, textos de menu e registros adicionais da imagem são ilustrativos. A imagem original enviada é contraexemplo de baixa densidade.
+
+D-UX-01/02 deste acordo supersedem D-01/D-UX-01 e D-02/D-UX-02 do acordo `agreement-evaluation-inside-score.md` v1.0.0 quanto à localização/agrupamento: ação sai do Score e passa à toolbar. D-03/04 deste acordo supersedem a apresentação do sucesso desabilitado em D-03 daquele acordo, preservando inclusão humana e alterando somente a confirmação persistida/ação Abrir acompanhamento. D-05 preserva o significado/gates de `agreement-position-relation-clarity.md`; explicações continuam acessíveis na expansão.
+
+## DEVE
+
+- D-UX-01: cards compactos em uma coluna; identidade/avatar/seleção à esquerda, estado do acompanhamento junto ao nome, score e cobertura à direita. Faixa compacta de ações abaixo, consulta à esquerda e acompanhamento à direita. Requisitos resumidos visíveis, explicação da descoberta e revisão humana em divulgações progressivas separadas. Sem duas grandes colunas Consultar/Decisão. Preservar agrupamentos A/B/C existentes.
+- D-UX-02: celular reorganiza os mesmos dados em uma coluna, sem overflow; estado/score e acompanhamento continuam visíveis, ações têm texto legível e evidências completas podem ser expandidas. Desktop preserva hierarquia, agrupamento e densidade reconhecíveis da primeira proposta.
+- D-03: consultar uma vez por Posição o acompanhamento persistido do processo atual. Pessoa incluída permanece na descoberta com “Já está no acompanhamento”, “Processo atual” e “Abrir acompanhamento”. Histórico arquivado não equivale a inclusão atual. Reentrada/reload/retorno à janela reconsultam o estado sem IA.
+- D-04: preservar inclusão explícita, loading, falha/retry, permissão, IDs de organização/Pessoa/Perfil/Posição e processo. Consulta pendente ou indisponível não inventa ausência; inclusão fica indisponível até confirmar estado. Falha da consulta preserva descoberta e ações manuais de consulta. Inclusão bem-sucedida atualiza indicação e ação; processo encerrado não permite inclusão.
+- D-05: preservar comparação, Perfil, cálculo/detalhes/recalcular score, divergências, confirmação/desconsideração/curadoria e seus gates. Relação da trajetória é independente do acompanhamento. Nenhuma ação humana acontece por abrir/expandir a tela.
+- D-06: publicar web v2.3.4 em main/origin/VPS pelo dispatcher após validação proporcional, rollback e smoke. Número 2.3.3 é pulado por pedido explícito do PO, sem criar entrega fictícia.
+
+## PROIBIDO
+
+- P-01: não alterar score/matching, requisitos, fatos, ranking, estados de processo, decisões humanas ou histórico. Não esconder a Pessoa porque já está acompanhada nem afirmar reprovação por falta de evidência.
+- P-02: não mostrar vínculo de outro tenant/Posição/processo como atual, não gravar por consulta, não invocar IA nem recalcular score automaticamente, não usar produção como fixture.
+- P-UX-03: não substituir cards por grade/painel lateral nem cortar ações/evidências no celular; não duplicar os grandes espaços vazios do contraexemplo.
+
+## FORA DE ESCOPO / AUTONOMIA / PENDENTES
+
+- F-01: banco/migrations/Edge, provas/convites, billing, Parser/Synthesis/Knowledge, novas regras de recrutamento e redesign de outras telas.
+- A-UX-01: adaptar tokens, ícones, textos concisos e detalhes expansíveis aos componentes existentes. Todos os dados completos permanecem acessíveis; pequenos detalhes de decoração e ilustrações da proposta não são contratos funcionais.
+- A-02: mecanismo de consulta agregada, concorrência e reuso dos RPCs já autorizados; nenhum novo serviço/biblioteca necessário.
+- Q: nenhuma decisão material pendente.
+
+## CRITÉRIOS DE ACEITE
+
+- CA-01 (D-UX-01/02): renders da UI real com fixture equivalente à proposta (Diego62/100, cobertura62%,2atendidos/11sem evidência, vínculo atual) em desktop/celular; comparação estrutural e ausência de overflow em1448/768/390/320; referência completa1536x1024.
+- CA-02 (D-03/04): negativos atual versus histórico, tenant/Posição trocados, consulta pendente/falha/retry, processo encerrado, inclusão e navegação com processo explícito; uma consulta agregada e zero mutações passivas.
+- CA-03 (D-05/P): componentes reais, expansão/seleção/ações/handlers/loading/falha e permissões; regressão dirigida de matching e navegação existente sem IA/banco produtivo.
+- CA-04 (D-06): tipos/build/checks direcionados, Context Pack/CI, SHA explícito em main/produção, versão/assets/saúde/rollback e preservação de serviços.
 
 ---
 
@@ -20621,6 +20676,85 @@ Sem desvio de produto. Rejeição inicial da revisão automática exigiu autoriz
 ## Conclusão
 
 D-01 a D-06 e P-01 a P-03 PASS com os limites de observação descritos. Importação automática online ativada na KVM2, Prisma v2.0.1 publicada em main/produção, frontend autenticado disponível. Jornada com currículo real até revisão/publicação e avaliação ampliada de qualidade: NOT TESTED, fora deste smoke, sem criação de Pessoa ou Perfil de teste. Fechamento documental deve ser sincronizado por fast-forward sem rebuild do runtime funcional validado.
+
+---
+
+## Source: `docs/qa/aot-people-compact-v234.md`
+
+# AoT — Pessoas compactas v2.3.4
+
+Contrato `agreement-people-compact-v234.md` v1.0.0 e execução integral; mapa `impact-people-compact-v234.md`. Bruno aprovou a primeira proposta e main/produção2.3.4 em10/10/2026. Baseline220b5034d951a83b9d353596604da5cdd856ff7c; branch codex/people-compact-v234. Estado deste registro antes do rollout: implementação e QA local concluídas; produção pendente. Não equivale a publicação.
+
+## Matriz de Acordos
+
+| ID | Acordo / implementação | Teste | Evidência | Status | Ambiente / limitação |
+| --- | --- | --- | --- | --- | --- |
+| D-UX-01 | CandidateMatchCard compacto, toolbar, requisitos/expansões; primeiro aberto, demais recolhidos | geometria/topologia/conteúdo e renders equivalentes | baseline/browser/visual-results e after-* | PASS | UI real, dados sintéticos |
+| D-UX-02 | uma coluna mobile, avatar/ações/textos legíveis e detalhes completos |1536/1448/768/390/320, overflow/avatar/expansão |66checks visual-results | PASS | viewport e fixtures locais |
+| D-03 | usePositionFollowUpMemberships, consulta agregada do ciclo atual, selo/abertura | atual/arquivado/reentrada/focus/scope race; uma leitura |91checks browser-results | PASS | sem consulta a Pessoa real |
+| D-04 | desconhecido bloqueia inclusão, conteúdo preservado, retry/closed/add e IDs explícitos | loading/failure/retry/add failure/success, current ID/tenant | browser-results | PASS | mocks no lugar do transporte remoto |
+| D-05 | seleção/Perfil/cálculo/recalcular/relação/curadoria/divergências e navegação preservados |74Node dirigidos, callbacks/browser, comparação e drawer | browser-results/action-results, testes descritos abaixo | PASS | sem decisão ou recálculo produtivo |
+| D-06 | registry2.3.4,3pulado; web-only/CI/main/VPS/rollback | local versão/build; CI/rollout/smoke pendentes | production-before/plano a gerar | NOT TESTED | publicação ainda não executada |
+
+## Proibições verificadas
+
+| ID | Negativo / evidência | Status |
+| --- | --- | --- |
+| P-01 | matching/score/domain/SQL sem alteração,74regressões; ausência permanece sem evidência; Pessoa acompanhada continua na lista | PASS |
+| P-02 | read agregado sem write/IA, role member sem RPC, outro tenant/Posição e retorno tardio ignorado, writer recebe ciclo atual | PASS |
+| P-UX-03 | cards em uma coluna, nenhuma grade/painel lateral, todos os requisitos acessíveis, overflow/avatar/controle em5larguras | PASS |
+
+## Mapa de Impacto e Preservação
+
+Mapa inicial lido antes da implementação. Descoberta: o novo Alert com retry longo comprimía conteúdo no celular; passou a direct e recebeu CSS exclusivo e regressão de falha. Sem novas dependências ou destinos. Consulta não faz leitura por Pessoa; não altera RPC, grant/RLS ou dados.
+
+| Capacidade / área | Relação | Baseline / regressão | Evidência | Status |
+| --- | --- | --- | --- | --- |
+| Cards/score/requisitos/relação/loading/mobile | direct | UI real before/after, conteúdos completos e handlers;37%menos altura do primeiro card1448 e51%menos390 | PNGs/JSON e fonte | PASS |
+| Estado/inclusão por ciclo | direct | legado added local substituído por leitura persistida; negativos/closed/add/ID/focus | browser-results | PASS |
+| Tenant/papéis/concorrência | critical_transversal | guardas anteriores mantidas; member sem consulta, scope race e ID explícito | mocks/rotas/diff | PASS |
+| Perfil/comparação/navegação | plausible_indirect | CSS restrito ao card; comparação1448/390, handlers e20regressões compartilhadas | compare-PNG/JSON/action-results/Node | PASS |
+| Matching/IA/fatos/scorepersistido | no_impact_identified | sem fórmula/contrato/persistência nova; snapshots e51domínio/registry | testes/diff/plano | PASS |
+| Prova/portal/convites/DB/Edge | no_impact_identified | chamadas de follow-up existentes, nenhum envio/migration/backend modificado | diff/tipos/plano | PASS |
+| Workers/Mail/Gateway/Traefik | no_impact_identified | baseline metadados coletado; pós-rollout pendente | production-before.txt | NOT TESTED |
+| Contextos/registry/release | direct |2.3.4, pulada3; checks/CI/smoke a completar | recibos posteriores | NOT TESTED |
+
+### Novidade e preservação
+
+Nova composição visual e estado agregado do acompanhamento atual. Capacidades funcionais anteriores continuam por ações explícitas. Fixtures usam Diego e exemplos exclusivamente sintéticos; nenhum dado produtivo foi exportado ou modificado para teste. Leitura real autenticada, entrega de convite e qualidade de matching permanecem NOT TESTED. Não é evidência de equidade ou capacidade do candidato.
+
+## Fora de escopo preservado
+
+F-01: nenhum backend/schema/Edge/modelo/billing/aviso de candidato novo, nenhum envio real, nenhum redesenho de outra página. Diff delimitado e plano devem permanecer web/documentação/testes. PASS local.
+
+## Evidência de fidelidade visual
+
+| Referência / viewport | Estado / dados equivalentes | Render | Comparação estrutural / diferenças | Status |
+| --- | --- | --- | --- | --- |
+| approved-reference.png, artboard1536x1024 desktop+mobile | Diego62/100, cobertura62%,2atendidos/11sem evidência e vínculo atual; exemplos adicionais | after-1536/1448-viewport, after-390-viewport e completos | Uma coluna, cabeçalho identidade/status/score, toolbar, resumo, explicação e revisão separadas. Demais cards recolhidos. Mesmos tokens e ordem; inspeção manual dos renders | PASS |
+| mobile390/320 e tablet768 | mesma fixture | after-* e visual-results | Reorganização sem corte, avatar/checkbox/score/status e ações preservados; lista completa expansível | PASS |
+
+Decoração, textos/menus ilustrativos da imagem e selos de revisão refletem os dados efetivamente fornecidos pela fixture, sem inventar revisão humana. A shell e a seta global pertencem à integração existente, não são substituídas pelo menu desenhado no mockup. Aviso de triagem anterior passa a expansão compacta com conteúdo preservado. Diferenças são adaptação de A-UX-01, sem mudança material de topologia. Altura medida do primeiro card:1448px viewport1106,5→698,55CSSpx;390viewport2604,69→1269CSSpx. Novidade/preservação não dependem de identidade de pixels.
+
+## Desvios do contrato
+
+Nenhum desvio material identificado na revisão local dos D/P/F/A. Publicação ainda pendente, portanto D-06 não recebe PASS antes de prova. D-UX-01/02 supersedem a antiga localização dentro do Score conforme acordo; dados/proveniência/gates preservados.
+
+## Mudanças autorizadas durante a execução
+
+Nenhuma decisão adicional do Product Owner. CSS scoped do Alert/avatares, uma consulta agregada e IDs explícitos exercem autonomia técnica previamente delegada.
+
+## Validação final
+
+Local: build root, tipos web e build web PASS;74Node dirigidos (51vacancyIntelligence/positionFollowUp/productRelease,3rotas,20navigationHistory/stableMatching/trajectoryReviewModal/uxFoundation).91checks funcionais/negativos de navegador PASS;66checks de render/estrutura finais PASS após ajuste visual mobile. 5checks adicionais do drawer/comparação PASS em action-results. Nenhuma chamada IA, dado real ou email. Contextos gerados/checker, lint e foundation PASS em snapshot do index selecionado, sem arquivos particulares não rastreados. CI/publicação ainda pendentes. Avisos de bundle/import dinâmico preexistentes permanecem.
+
+## Git / QA / ambiente
+
+QA local via Vite5711 e Edge headless; baseline exato220b503 via transform de leitura em5712, mesmos dados/viewport. Serviços remotos originais conferidos em production-before.txt; experimento paddle-vl-llama-test já estava unhealthy, não é regressão deste movimento. Arquivos privados/não rastreados alheios preservados. Rollback/sincronização a registrar após publicação.
+
+## Conclusão
+
+Implementação/QA local PASS; D-06 e conclusão operacional pendentes. Este registro será atualizado com os recibos reais, sem converter limitações em PASS.
 
 ---
 
@@ -26080,6 +26214,14 @@ Registrar ADR sobre a implantação, separando cache persistente de lock voláti
 
 ---
 
+## Source: `docs/qa/execution-people-compact-v234.md`
+
+# Execução — Pessoas compactas v2.3.4
+
+Implementar integralmente `agreement-people-compact-v234.md` v1.0.0 e `impact-people-compact-v234.md`, lidos integralmente antes de editar. D-UX-01/02,D-03..06/CA-01..04; impedir P-01/02/P-UX-03, preservar F-01. A-UX-01/A-02 permitem somente ajustes de componentes e consulta agregada. Referência normativa `evidence/people-compact-v234/approved-reference.png`: uma coluna de cards, identidade/status/score, toolbar, resumo requisitos, expansões independentes. Preservar grupos reais e contratos, sem implementar textos/menu ilustrativos. Validar UI real com fixtures equivalentes, negativos/falhas/scope, comparação e navegação; registrar AoT pelo template. Publicação autorizada main/produção2.3.4 pelo dispatcher do SHA validado, sem acessar destinos fora do plano.
+
+---
+
 ## Source: `docs/qa/execution-person-unified-v210.md`
 
 # Execução — Pessoa unificada v2.1.0
@@ -26311,6 +26453,28 @@ Versão 1.0.0. Autorizada por Bruno em 2026-09-18. Ler integralmente `docs/qa/ag
 Implementar a regra no contrato do agente, owner de UX, templates de acordo/AoT, protocolo de rastreabilidade, ADR e roteamento do Context Pack. Projetar a seção canônica de fidelidade visual diretamente na fonte compacta do GPT, protegê-la com checker e teste e regenerar os dois artefatos derivados. Não editar artefatos gerados manualmente.
 
 Validar `check:foundation`, o teste de tooling do Context Pack, geração e verificação dos artefatos. Revisar diff e manifesto. Este movimento não altera telas, código de produto, banco, Supabase, IA de runtime, QA ou produção.
+
+---
+
+## Source: `docs/qa/impact-people-compact-v234.md`
+
+# Mapa de impacto — Pessoas compactas v2.3.4
+
+Inicial10/10/2026, antes da implementação. Baseline main/origin220b5034d951a83b9d353596604da5cdd856ff7c, runtime webfa4168c69bc58dea78c0bf0eb7cb286088e38c6d/2.3.2; conferir operacionalmente antes do rollout. Branch codex/people-compact-v234. Risco C, integração frontend por RPC existente; sem schema/auth novo. Trabalho alheio não rastreado preservado.
+
+| Área / capacidade | Relação | Baseline / cenário | Regressão mínima |
+| --- | --- | --- | --- |
+| Pessoas/identidade/score/requisitos/expansão/mobile | direct | CandidateMatchCard em VacancyPages, grandes colunas; fixture real sintética before desktop/mobile | renders equivalentes, geometria/overflow, conteúdos e ações |
+| Vínculo/inclusão/estado por processo atual | direct | AddToPositionFollowUp guarda apenas added local; RPC atual existente retorna processo/entries | atual/histórico/fechado/ausente/pending/failure/retry/add/race e processo explícito |
+| Tenant/papéis/concorrência | critical_transversal | RPC existente autoriza fora do frontend; efeitos seguem organização/Posição | mocks negativos de mudança de scope e retorno tardio; sem modificar grants/RLS |
+| Confirmação/desconsideração/curadoria/divergências | direct | callbacks existentes independentes de follow-up | handlers/gates/loading/falha, separação humana e nenhum automatismo |
+| Comparação/Perfil/navegação de retorno | plausible_indirect | CSS de score compartilhado e selection/view state | CSS restrito ao card; comparação existente, rota de Perfil/follow-up e seta anterior |
+| Matching/fatos/IA/scorepersistido | no_impact_identified | leitura dos snapshots e callbacks de recálculo explicitamente humano | diff e testes vacancyIntelligence/positionFollowUp/stable-score; nenhuma fórmula ou chamada IA nova |
+| Prova/portal/convites | no_impact_identified | link follow-up é único contato, serviço não alterado | diff + tipos/build; não executar envio/geração |
+| Backend/DB/Edge/Parser/Synthesis/Mail/Gateway/Traefik | no_impact_identified | contratos e runtimes existentes | plano sem esses destinos; IDs/imagens/restarts antes/depois VPS |
+| Registry/contextos/releaseweb | direct | versão2.3.2 | versão2.3.4 com3pulado, generator/check/CI, smoke e rollback |
+
+Referência normativa: primeira proposta aprovada. Reutilização: Ant Design, details nativo, cards, serviços e RPCs Prisma atendem integralmente; não há lacuna que exija dependência externa. SQL será somente lido no repositório para conferir contrato; nenhuma consulta ou fixture de produção é necessária. Atualizar mapa se descoberta ampliar dependências.
 
 ---
 

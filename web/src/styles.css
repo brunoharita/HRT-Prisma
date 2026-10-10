@@ -6257,7 +6257,7 @@ textarea {
 .prisma-vacancy-match-card { transition: border-color 160ms ease, box-shadow 160ms ease; }
 .prisma-vacancy-match-card.is-selected { border-color: #7c3aed; box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.11); }
 .prisma-vacancy-match-card.is-dismissed { opacity: 0.72; background: #f8fafc; }
-.prisma-vacancy-match-layout { display: grid; gap: 16px; min-width: 0; }
+.prisma-vacancy-match-layout { display: grid; gap: 10px; min-width: 0; }
 .prisma-vacancy-match-identity { display: grid; grid-template-columns: auto auto minmax(0, 1fr) minmax(250px, 350px); gap: 14px; align-items: center; min-width: 0; }
 .prisma-vacancy-match-identity.has-follow-up { grid-template-columns: auto auto minmax(0, 1fr) minmax(210px, 300px); }
 .prisma-vacancy-match-action { min-width: 0; margin-top: 6px; }
@@ -6995,4 +6995,82 @@ textarea {
 @media (max-width: 767px) {
   .prisma-profile-page .prisma-person-center-header__metadata { display: flex; gap: 8px; margin-top: 4px; }
   .prisma-profile-page .prisma-person-center-header__metadata .ant-tag { width: fit-content; }
+}
+
+/* Pessoas para a Posição: cards compactos, acompanhamento independente do score. */
+.prisma-vacancy-match-card > .ant-card-body { padding: 16px; }
+.prisma-vacancy-match-card .prisma-vacancy-match-identity,
+.prisma-vacancy-match-card .prisma-vacancy-match-identity.has-follow-up { grid-template-columns: auto auto minmax(0, 1fr) minmax(190px, 235px) auto; gap: 10px 14px; }
+.prisma-vacancy-match-card .prisma-vacancy-match-identity .prisma-score-summary { min-height: 0; padding: 12px 14px; gap: 3px; border-radius: 8px; }
+.prisma-vacancy-match-card .prisma-vacancy-match-identity .prisma-score-summary strong { font-size: 1.75rem; }
+.prisma-candidate-name-row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 16px; }
+.prisma-candidate-follow-up-status { min-width: 0; max-width: 100%; }
+.prisma-candidate-follow-up-status .ant-tag { margin: 0; white-space: normal; overflow-wrap: anywhere; }
+.prisma-vacancy-match-card .prisma-position-relation-tags { grid-column: 1 / -1; margin-top: 0; }
+.prisma-candidate-toolbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; padding: 10px; border: 1px solid #dce7f4; border-radius: 8px; background: #f8fbff; }
+.prisma-candidate-toolbar .prisma-vacancy-action-group.is-consult { display: block; min-width: 0; padding: 0; margin: 0; border: 0; }
+.prisma-candidate-toolbar .prisma-vacancy-match-action { width: 235px; max-width: 100%; margin: 0; }
+.prisma-candidate-toolbar .ant-btn { height: auto; min-height: 36px; white-space: normal; }
+.prisma-candidate-toolbar .prisma-add-to-evaluation { gap: 5px; }
+.prisma-candidate-requirements { display: grid; gap: 8px; padding: 12px; border: 1px solid #dce7f4; border-radius: 8px; background: #f8fbff; min-width: 0; }
+.prisma-candidate-requirements > header { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 5px 12px; }
+.prisma-candidate-requirements small { color: var(--prisma-text-muted); }
+.prisma-candidate-buckets { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 10px; min-width: 0; }
+.prisma-candidate-buckets.is-contextual { grid-template-columns: 1fr; }
+.prisma-candidate-buckets .prisma-match-bucket { min-height: 0; padding: 10px 12px; gap: 6px; border-radius: 8px; }
+.prisma-candidate-buckets .ant-tag { margin: 0; white-space: normal; overflow-wrap: anywhere; max-width: 100%; }
+.prisma-candidate-disclosure { padding: 10px 12px; border: 1px solid #dce7f4; border-radius: 8px; background: #f8fbff; min-width: 0; }
+.prisma-candidate-disclosure > summary { display: flex; justify-content: space-between; align-items: center; gap: 8px; cursor: pointer; list-style: none; color: var(--prisma-text); }
+.prisma-candidate-disclosure > summary::-webkit-details-marker { display: none; }
+.prisma-candidate-disclosure > summary::after { content: '⌄'; font-size: 18px; flex: 0 0 18px; text-align: center; }
+.prisma-candidate-disclosure[open] > summary::after { content: '⌃'; }
+.prisma-candidate-disclosure > summary .anticon { margin-right: 8px; color: #526c96; }
+.prisma-candidate-explanation > .ant-typography { margin: 8px 0; }
+.prisma-candidate-sources > summary,
+.prisma-candidate-more-requirements > summary { cursor: pointer; color: #1767e8; font-weight: 500; }
+.prisma-candidate-sources[open] { display: grid; gap: 8px; }
+.prisma-candidate-sources .ant-typography { margin: 0; }
+.prisma-candidate-sources .ant-tag { white-space: normal; overflow-wrap: anywhere; }
+.prisma-candidate-more-requirements .ant-space { margin-top: 6px; }
+.prisma-candidate-review .prisma-vacancy-action-group { display: grid; padding: 12px 0 0; margin: 0; border: 0; }
+.prisma-candidate-review .prisma-position-relation-guidance { margin-bottom: 0; }
+@media (max-width: 760px) {
+  .prisma-vacancy-match-card > .ant-card-body { padding: 12px; }
+  .prisma-vacancy-match-card .prisma-vacancy-match-identity,
+  .prisma-vacancy-match-card .prisma-vacancy-match-identity.has-follow-up { grid-template-columns: auto auto minmax(0, 1fr) auto; gap: 10px; }
+  .prisma-vacancy-match-card .prisma-vacancy-match-identity h3.ant-typography { font-size: 1.15rem; }
+  .prisma-candidate-name-row { gap: 6px; }
+  .prisma-candidate-toolbar { align-items: stretch; }
+  .prisma-candidate-toolbar .prisma-vacancy-action-group.is-consult,
+  .prisma-candidate-toolbar .prisma-vacancy-match-action { width: 100%; }
+  .prisma-candidate-toolbar .is-consult .ant-space { display: flex; }
+  .prisma-candidate-toolbar .is-consult .ant-space-item { flex: 1 1 110px; }
+  .prisma-candidate-toolbar .is-consult .ant-btn { width: 100%; }
+  .prisma-candidate-buckets { grid-template-columns: 1fr; }
+  .prisma-candidate-requirements,
+  .prisma-candidate-disclosure { padding: 10px; }
+}
+
+.prisma-candidate-details { display: grid; gap: 10px; }
+.prisma-candidate-details[hidden] { display: none; }
+.prisma-vacancy-match-card:has(.prisma-candidate-details[hidden]) .prisma-position-relation-tags { display: none; }
+.prisma-candidate-expand { align-self: center; }
+.prisma-candidate-triage-notice { color: var(--prisma-text-muted); font-size: 14px; }
+.prisma-candidate-triage-notice > summary { cursor: pointer; }
+.prisma-candidate-triage-notice > .ant-alert { margin-top: 8px; }
+@media (max-width: 760px) {
+  .prisma-vacancy-match-card .prisma-vacancy-match-identity .prisma-score-summary { grid-column: 1 / -1; grid-row: 2; }
+  .prisma-candidate-expand { grid-column: 4; grid-row: 1; }
+}
+
+@media (max-width: 760px) {
+  .prisma-candidate-follow-up-notice.ant-alert { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; }
+  .prisma-candidate-follow-up-notice .ant-alert-section { min-width: 0; }
+  .prisma-candidate-follow-up-notice .ant-alert-actions { grid-column: 1 / -1; margin: 0; min-width: 0; }
+  .prisma-candidate-follow-up-notice .ant-alert-actions .ant-btn { width: 100%; height: auto; min-height: 36px; white-space: normal; }
+}
+
+@media (max-width: 760px) {
+  .prisma-vacancy-match-card .prisma-vacancy-avatar { display: grid; width: 40px; height: 40px; flex: 0 0 40px; }
+  .prisma-vacancy-people-page .prisma-page-header h1 { font-size: 1.4rem; }
 }

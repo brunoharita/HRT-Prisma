@@ -10,10 +10,14 @@ test("accepted deliveries determine the displayed version and a new movement res
   assert.equal(current.deliveries.length, 2);
 });
 
-test("registro oficial expõe v2.3.2 autorizada e preserva histórico", () => {
-  assert.equal(PRISMA_RELEASE.displayVersion, "v2.3.2");
+test("registro oficial expõe v2.3.4 autorizada e preserva histórico", () => {
+  assert.equal(PRISMA_RELEASE.displayVersion, "v2.3.4");
   assert.equal(PRISMA_RELEASE.movement, 3);
-  assert.equal(PRISMA_RELEASE.delivery, 2);
+  assert.equal(PRISMA_RELEASE.delivery, 4);
+  const selection = PRISMA_RELEASE_HISTORY.at(-1)!;
+  assert.ok("skippedDeliveryNumbers" in selection);
+  assert.deepEqual(selection.skippedDeliveryNumbers, [3]);
+  assert.equal(calculateProductRelease([{ ...selection, skippedDeliveryNumbers: [], deliveries: selection.deliveries.slice(0, 3) }]).version, "2.3.2");
   const launch = PRISMA_RELEASE_HISTORY.at(-2)!;
   assert.equal(calculateProductRelease([{...launch,deliveries:launch.deliveries.slice(0,1)}]).version, "2.2.0");
   const current = PRISMA_RELEASE_HISTORY.at(-3)!;

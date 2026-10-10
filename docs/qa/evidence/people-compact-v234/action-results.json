@@ -1,0 +1,22 @@
+[
+  {
+    "name": "explicit score drawer: original dimensions and provenance retained",
+    "pass": true
+  },
+  {
+    "name": "score consultation records evaluation explicitly, never recalculates",
+    "pass": true
+  },
+  {
+    "name": "two deliberate selections enable comparison",
+    "pass": true
+  },
+  {
+    "name": "third selection does not replace either human choice",
+    "pass": true
+  },
+  {
+    "name": "comparison receives selected person identities",
+    "pass": true
+  }
+]

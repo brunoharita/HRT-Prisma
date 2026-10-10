@@ -1,5 +1,7 @@
 # Versionamento
 
+Decisão de Bruno em10/10/2026: publicar **Prisma v2.3.4**, primeira proposta de cards compactos na descoberta de Pessoas e indicação persistida de acompanhamento no processo atual. Registry acrescenta a entrega4 ao movimento3 e marca3como pulada por solicitação explícita, sem entrega fictícia. Sem mudança de contrato persistido, matching, IA, banco ou backend. Rollout somente web; acordo/execução/AoT `people-compact-v234` registram validação e publicação.
+
 Decisão de Bruno em10/10/2026: publicar **Prisma v2.3.2**, prova comum por processo seletivo, montagem automática e aprovação/envio em lote. Registry único acrescenta entrega2 ao movimento3, preservando2.3.0/1. Persistência nova `position-assessment-2.0.0`; envelope de operador `process-assessment-1.0.0`; portal público e dados históricos1.0.0 preservados. Ciclos atuais/históricos e escritores com ID de processo explícito. Migração aditiva, Edge position-assessment e web; demais serviços/modelos/Score preservados. ADR-082, acordo/execução/AoT process-assessment-v232. Rollout comprovado somente nos recibos finais.
 
 Decisão de Bruno em10/10/2026: publicar **Prisma v2.3.1**, seta compartilhada que retorna à tela imediatamente anterior, com atalhos fixos coexistentes. Registry único acrescenta a entrega1 ao movimento3, preservando2.3.0 e histórico anterior. Contrato de apresentação `prisma-ux-foundation-1.4.0`; nenhum contrato persistido, serviço, modelo, fórmula ou migration muda. Rollout somente web, Agreement/Execution/AoT `navigation-back-v231`.

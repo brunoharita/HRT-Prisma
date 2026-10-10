@@ -125,3 +125,7 @@ O acompanhamento usa cinco colunas concretas e de dimensões iguais: Selecionada
 ## Cards compactos do acompanhamento (2.2.1)
 
 Referência aprovada em docs/qa/agreement-compact-follow-up-cards.md: avatar/identificação/localização à esquerda; alça e quadrado numérico à direita; aviso de qualidade fora do quadrado; rodapé com Ver detalhes e Mover etapa lado a lado. Nome/cargo quebram linhas, sem corte. Cinco colunas iguais, mínimo desktop 320px com rolagem local; mobile mantém uma coluna selecionável. Numeral indisponível é travessão com nome acessível; zero persistido é exibido como zero. Idade e explicações completas continuam no detalhe.
+
+## Pessoas compactas e vínculo atual — 2.3.4
+
+A primeira proposta visual aprovada em10/10/2026 define os cards da descoberta em uma coluna. O cabeçalho reúne seleção, Pessoa, status de acompanhamento e Score. A faixa abaixo concentra consulta e inclusão/abertura do acompanhamento. Requisitos resumidos permanecem visíveis no card expandido; todas as evidências e a revisão humana são expansíveis e independentes. O primeiro card abre completo e os seguintes ficam recolhidos, com controle acessível. Celular reorganiza os mesmos dados em uma coluna. A indicação de acompanhamento usa o processo atual persistido, sem esconder a Pessoa nem mudar matching ou decisão humana. Fonte/limites: acordo e AoT `people-compact-v234`.

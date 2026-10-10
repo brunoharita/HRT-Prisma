@@ -96,7 +96,8 @@ export const PRISMA_RELEASE_HISTORY = [{
   productGeneration: 2,
   movement: 3,
   firstDeliveryNumber: 0,
-  deliveries: ["2.3.0: Avaliação para Posição, convites e histórico genérico de IA", "2.3.1: seta de retorno à tela anterior e atalhos de destino preservados", "2.3.2: prova comum por processo seletivo, montagem automática e convites em lote"],
+  deliveries: ["2.3.0: Avaliação para Posição, convites e histórico genérico de IA", "2.3.1: seta de retorno à tela anterior e atalhos de destino preservados", "2.3.2: prova comum por processo seletivo, montagem automática e convites em lote", "2.3.4: cards compactos de Pessoas e acompanhamento atual identificado"],
+  skippedDeliveryNumbers: [3],
 }] as const satisfies readonly ProductMovementRelease[];
 
 export function calculateProductRelease(history: readonly ProductMovementRelease[]) {

@@ -1,0 +1,501 @@
+[
+  {
+    "name": "1536: current membership and correct primary action",
+    "pass": true
+  },
+  {
+    "name": "1536: no duplicate add action for current member",
+    "pass": true
+  },
+  {
+    "name": "1536: following cards collapsed by default",
+    "pass": true
+  },
+  {
+    "name": "1536: single aggregated read and no passive writes",
+    "pass": true
+  },
+  {
+    "name": "1536: no overflow",
+    "pass": true
+  },
+  {
+    "name": "1536: avatar preserved on desktop and mobile",
+    "pass": true
+  },
+  {
+    "name": "1536: human review is collapsed independently",
+    "pass": true
+  },
+  {
+    "name": "1536: reference topology header -> toolbar -> requirements -> explanation -> review",
+    "pass": true
+  },
+  {
+    "name": "1536: score is in identity and follow-up outside score",
+    "pass": true
+  },
+  {
+    "width": 1536,
+    "geometry": {
+      "card": {
+        "x": 0,
+        "y": 220.890625,
+        "width": 1536,
+        "height": 698.546875
+      },
+      "identity": {
+        "x": 17,
+        "y": 237.890625,
+        "width": 1502,
+        "height": 187.109375
+      },
+      "toolbar": {
+        "x": 17,
+        "y": 435,
+        "width": 1502,
+        "height": 60
+      },
+      "score": {
+        "x": 1232,
+        "y": 237.890625,
+        "width": 235,
+        "height": 150.71875
+      },
+      "requirements": {
+        "x": 17,
+        "y": 505,
+        "width": 1502,
+        "height": 207.671875
+      },
+      "trajectory": {
+        "x": 17,
+        "y": 722.671875,
+        "width": 1502,
+        "height": 118.078125
+      },
+      "review": {
+        "x": 17,
+        "y": 850.75,
+        "width": 1502,
+        "height": 51.6875
+      }
+    }
+  },
+  {
+    "name": "1536: contextual human controls retained",
+    "pass": true
+  },
+  {
+    "name": "1536: expanding causes no write",
+    "pass": true
+  },
+  {
+    "name": "1536: all missing requirements remain accessible",
+    "pass": true
+  },
+  {
+    "name": "1536: explicit current cycle navigation",
+    "pass": true
+  },
+  {
+    "name": "1448: current membership and correct primary action",
+    "pass": true
+  },
+  {
+    "name": "1448: no duplicate add action for current member",
+    "pass": true
+  },
+  {
+    "name": "1448: following cards collapsed by default",
+    "pass": true
+  },
+  {
+    "name": "1448: single aggregated read and no passive writes",
+    "pass": true
+  },
+  {
+    "name": "1448: no overflow",
+    "pass": true
+  },
+  {
+    "name": "1448: avatar preserved on desktop and mobile",
+    "pass": true
+  },
+  {
+    "name": "1448: human review is collapsed independently",
+    "pass": true
+  },
+  {
+    "name": "1448: reference topology header -> toolbar -> requirements -> explanation -> review",
+    "pass": true
+  },
+  {
+    "name": "1448: score is in identity and follow-up outside score",
+    "pass": true
+  },
+  {
+    "width": 1448,
+    "geometry": {
+      "card": {
+        "x": 0,
+        "y": 219.421875,
+        "width": 1448,
+        "height": 698.546875
+      },
+      "identity": {
+        "x": 17,
+        "y": 236.421875,
+        "width": 1414,
+        "height": 187.109375
+      },
+      "toolbar": {
+        "x": 17,
+        "y": 433.53125,
+        "width": 1414,
+        "height": 60
+      },
+      "score": {
+        "x": 1144,
+        "y": 236.421875,
+        "width": 235,
+        "height": 150.71875
+      },
+      "requirements": {
+        "x": 17,
+        "y": 503.53125,
+        "width": 1414,
+        "height": 207.671875
+      },
+      "trajectory": {
+        "x": 17,
+        "y": 721.203125,
+        "width": 1414,
+        "height": 118.078125
+      },
+      "review": {
+        "x": 17,
+        "y": 849.28125,
+        "width": 1414,
+        "height": 51.6875
+      }
+    }
+  },
+  {
+    "name": "1448: contextual human controls retained",
+    "pass": true
+  },
+  {
+    "name": "1448: expanding causes no write",
+    "pass": true
+  },
+  {
+    "name": "1448: all missing requirements remain accessible",
+    "pass": true
+  },
+  {
+    "name": "1448: explicit current cycle navigation",
+    "pass": true
+  },
+  {
+    "name": "768: current membership and correct primary action",
+    "pass": true
+  },
+  {
+    "name": "768: no duplicate add action for current member",
+    "pass": true
+  },
+  {
+    "name": "768: following cards collapsed by default",
+    "pass": true
+  },
+  {
+    "name": "768: single aggregated read and no passive writes",
+    "pass": true
+  },
+  {
+    "name": "768: no overflow",
+    "pass": true
+  },
+  {
+    "name": "768: avatar preserved on desktop and mobile",
+    "pass": true
+  },
+  {
+    "name": "768: human review is collapsed independently",
+    "pass": true
+  },
+  {
+    "name": "768: reference topology header -> toolbar -> requirements -> explanation -> review",
+    "pass": true
+  },
+  {
+    "name": "768: score is in identity and follow-up outside score",
+    "pass": true
+  },
+  {
+    "width": 768,
+    "geometry": {
+      "card": {
+        "x": 0,
+        "y": 271.8125,
+        "width": 768,
+        "height": 825.71875
+      },
+      "identity": {
+        "x": 17,
+        "y": 288.8125,
+        "width": 734,
+        "height": 221.5
+      },
+      "toolbar": {
+        "x": 17,
+        "y": 520.3125,
+        "width": 734,
+        "height": 60
+      },
+      "score": {
+        "x": 464,
+        "y": 288.8125,
+        "width": 235,
+        "height": 150.71875
+      },
+      "requirements": {
+        "x": 17,
+        "y": 590.3125,
+        "width": 734,
+        "height": 276.453125
+      },
+      "trajectory": {
+        "x": 17,
+        "y": 876.765625,
+        "width": 734,
+        "height": 142.078125
+      },
+      "review": {
+        "x": 17,
+        "y": 1028.84375,
+        "width": 734,
+        "height": 51.6875
+      }
+    }
+  },
+  {
+    "name": "768: contextual human controls retained",
+    "pass": true
+  },
+  {
+    "name": "768: expanding causes no write",
+    "pass": true
+  },
+  {
+    "name": "768: all missing requirements remain accessible",
+    "pass": true
+  },
+  {
+    "name": "768: explicit current cycle navigation",
+    "pass": true
+  },
+  {
+    "name": "390: current membership and correct primary action",
+    "pass": true
+  },
+  {
+    "name": "390: no duplicate add action for current member",
+    "pass": true
+  },
+  {
+    "name": "390: following cards collapsed by default",
+    "pass": true
+  },
+  {
+    "name": "390: single aggregated read and no passive writes",
+    "pass": true
+  },
+  {
+    "name": "390: no overflow",
+    "pass": true
+  },
+  {
+    "name": "390: avatar preserved on desktop and mobile",
+    "pass": true
+  },
+  {
+    "name": "390: human review is collapsed independently",
+    "pass": true
+  },
+  {
+    "name": "390: reference topology header -> toolbar -> requirements -> explanation -> review",
+    "pass": true
+  },
+  {
+    "name": "390: score is in identity and follow-up outside score",
+    "pass": true
+  },
+  {
+    "width": 390,
+    "geometry": {
+      "card": {
+        "x": 0,
+        "y": 428.890625,
+        "width": 390,
+        "height": 1269
+      },
+      "identity": {
+        "x": 13,
+        "y": 441.890625,
+        "width": 364,
+        "height": 403.109375
+      },
+      "toolbar": {
+        "x": 13,
+        "y": 855,
+        "width": 364,
+        "height": 168.78125
+      },
+      "score": {
+        "x": 13,
+        "y": 591.828125,
+        "width": 364,
+        "height": 129.609375
+      },
+      "requirements": {
+        "x": 13,
+        "y": 1033.78125,
+        "width": 364,
+        "height": 413.34375
+      },
+      "trajectory": {
+        "x": 13,
+        "y": 1457.125,
+        "width": 364,
+        "height": 166.078125
+      },
+      "review": {
+        "x": 13,
+        "y": 1633.203125,
+        "width": 364,
+        "height": 51.6875
+      }
+    }
+  },
+  {
+    "name": "390: contextual human controls retained",
+    "pass": true
+  },
+  {
+    "name": "390: expanding causes no write",
+    "pass": true
+  },
+  {
+    "name": "390: all missing requirements remain accessible",
+    "pass": true
+  },
+  {
+    "name": "390: explicit current cycle navigation",
+    "pass": true
+  },
+  {
+    "name": "320: current membership and correct primary action",
+    "pass": true
+  },
+  {
+    "name": "320: no duplicate add action for current member",
+    "pass": true
+  },
+  {
+    "name": "320: following cards collapsed by default",
+    "pass": true
+  },
+  {
+    "name": "320: single aggregated read and no passive writes",
+    "pass": true
+  },
+  {
+    "name": "320: no overflow",
+    "pass": true
+  },
+  {
+    "name": "320: avatar preserved on desktop and mobile",
+    "pass": true
+  },
+  {
+    "name": "320: human review is collapsed independently",
+    "pass": true
+  },
+  {
+    "name": "320: reference topology header -> toolbar -> requirements -> explanation -> review",
+    "pass": true
+  },
+  {
+    "name": "320: score is in identity and follow-up outside score",
+    "pass": true
+  },
+  {
+    "width": 320,
+    "geometry": {
+      "card": {
+        "x": 0,
+        "y": 451.625,
+        "width": 320,
+        "height": 1373.78125
+      },
+      "identity": {
+        "x": 13,
+        "y": 464.625,
+        "width": 294,
+        "height": 423.109375
+      },
+      "toolbar": {
+        "x": 13,
+        "y": 897.734375,
+        "width": 294,
+        "height": 168.78125
+      },
+      "score": {
+        "x": 13,
+        "y": 634.5625,
+        "width": 294,
+        "height": 129.609375
+      },
+      "requirements": {
+        "x": 13,
+        "y": 1076.515625,
+        "width": 294,
+        "height": 447.734375
+      },
+      "trajectory": {
+        "x": 13,
+        "y": 1534.25,
+        "width": 294,
+        "height": 216.46875
+      },
+      "review": {
+        "x": 13,
+        "y": 1760.71875,
+        "width": 294,
+        "height": 51.6875
+      }
+    }
+  },
+  {
+    "name": "320: contextual human controls retained",
+    "pass": true
+  },
+  {
+    "name": "320: expanding causes no write",
+    "pass": true
+  },
+  {
+    "name": "320: all missing requirements remain accessible",
+    "pass": true
+  },
+  {
+    "name": "320: explicit current cycle navigation",
+    "pass": true
+  },
+  {
+    "name": "no runtime/external failures",
+    "pass": true
+  }
+]
