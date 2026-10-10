@@ -1,0 +1,17 @@
+{
+  "assets": [
+    "/assets/index-C2dfaVN2.js",
+    "/assets/rolldown-runtime-C0FnF6B9.js",
+    "/assets/antd-vendor-Cv3JrkhW.js",
+    "/assets/supabase-vendor-DoXvCMLf.js",
+    "/assets/react-vendor-BdxMnOeJ.js",
+    "/assets/antd-vendor-B5BXDqMa.css",
+    "/assets/index-DK5yn7O4.css"
+  ],
+  "http": [
+    {
+      "path": "/",
+      "status": 200
+    }
+  ]
+}

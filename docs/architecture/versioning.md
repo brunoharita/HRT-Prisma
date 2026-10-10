@@ -303,3 +303,7 @@ Entrega explicitamente aprovada por Bruno em05/10/2026: uma ou mais fontes selec
 ## Correção acadêmica do painel v2.0.12
 
 `published-profile-highlights-1.0.1` corrige perda de metadados acadêmicos em readEducation e explicita qualificações sustentadas no título. Produto continua2.0.12, registro de entregas inalterado. Contrato persistido, revisão humana, dados/snapshots, síntese/IA e SQL inalterados; sem migração nem reprocessamento. Acordo/AoT `agreement-profile-education-read-fix.md` / `aot-profile-education-read-fix.md`.
+
+## Patch de apresentação 2.3.5
+
+A correção da identificação do Kanban incrementa somente a entrega para2.3.5. Histórico2.3.4 e salto3 preservados. Sem alteração de contrato persistido, backend, IA ou etapas; runtime web publicado pelo dispatcher com SHA explícito. Registro: kanban-identity-v235.

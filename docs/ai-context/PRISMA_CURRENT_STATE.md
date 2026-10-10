@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.68.0
+version: 2.69.0
 last_verified: 2026-10-10
 ---
 
 # Estado atual do Prisma
+
+## Identificação do Kanban — correção v2.3.5
+
+Correção do posicionamento dos quatro filhos da grade de três colunas do card: checkbox e avatar compartilham a região esquerda, identificação ocupa a coluna flexível e alça/score a direita. A seleção adicionada em2.3.2 deslocava nome/cargo para o track50px; a validação anterior não detectou o encolhimento. Conteúdo completo, score, seleção, detalhes e etapas preservados; somente CSS e versão patch2.3.5, sem backend/dados/IA. Contrato, mapa, execução e AoT em `docs/qa/kanban-identity-v235.md`. Publicação depende das evidências finais desse registro.
 
 ## Prova comum por processo seletivo — v2.3.2 publicada
 

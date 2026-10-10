@@ -129,3 +129,7 @@ Referência aprovada em docs/qa/agreement-compact-follow-up-cards.md: avatar/ide
 ## Pessoas compactas e vínculo atual — 2.3.4
 
 A primeira proposta visual aprovada em10/10/2026 define os cards da descoberta em uma coluna. O cabeçalho reúne seleção, Pessoa, status de acompanhamento e Score. A faixa abaixo concentra consulta e inclusão/abertura do acompanhamento. Requisitos resumidos permanecem visíveis no card expandido; todas as evidências e a revisão humana são expansíveis e independentes. O primeiro card abre completo e os seguintes ficam recolhidos, com controle acessível. Celular reorganiza os mesmos dados em uma coluna. A indicação de acompanhamento usa o processo atual persistido, sem esconder a Pessoa nem mudar matching ou decisão humana. Fonte/limites: acordo e AoT `people-compact-v234`.
+
+## Correção da identificação no Kanban — 2.3.5
+
+A seleção para avaliação compartilha a região esquerda com o avatar. Nome, cargo e localização ocupam o centro flexível; alça e score permanecem à direita. Posicionamento explícito impede que um controle novo desloque a identificação para o track de50px. Conteúdo completo, composição compacta, rodapé, seleção e ações são preservados. Referência: contrato/AoT kanban-identity-v235.

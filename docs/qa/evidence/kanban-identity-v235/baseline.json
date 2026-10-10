@@ -1,0 +1,1437 @@
+[
+  {
+    "width": 2048,
+    "scenario": "reference",
+    "geometry": [
+      {
+        "name": "Bruno Harita Santos",
+        "identity": {
+          "x": 568,
+          "y": 702.59375,
+          "width": 50,
+          "height": 264.703125
+        },
+        "avatar": {
+          "x": 400,
+          "y": 702.59375,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 358,
+          "y": 702.59375,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 358,
+          "y": 977.296875,
+          "width": 32,
+          "height": 88
+        },
+        "score": {
+          "x": 340,
+          "y": 1015.296875,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 288,
+        "overflow": false
+      },
+      {
+        "name": "Diego Reis",
+        "identity": {
+          "x": 568,
+          "y": 1168.296875,
+          "width": 50,
+          "height": 169.078125
+        },
+        "avatar": {
+          "x": 400,
+          "y": 1168.296875,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 358,
+          "y": 1168.296875,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 358,
+          "y": 1347.375,
+          "width": 32,
+          "height": 88
+        },
+        "score": {
+          "x": 340,
+          "y": 1385.375,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 288,
+        "overflow": false
+      }
+    ],
+    "pass": null
+  },
+  {
+    "width": 2048,
+    "scenario": "long",
+    "geometry": [
+      {
+        "name": "Maria da Silva Albuquerque de Vasconcelos e Souza",
+        "identity": {
+          "x": 568,
+          "y": 702.59375,
+          "width": 50,
+          "height": 529.1875
+        },
+        "avatar": {
+          "x": 400,
+          "y": 702.59375,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 358,
+          "y": 702.59375,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 358,
+          "y": 1241.78125,
+          "width": 32,
+          "height": 88
+        },
+        "score": {
+          "x": 340,
+          "y": 1279.78125,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 288,
+        "overflow": false
+      },
+      {
+        "name": "Marina Costa",
+        "identity": {
+          "x": 568,
+          "y": 1432.78125,
+          "width": 50,
+          "height": 169.078125
+        },
+        "avatar": {
+          "x": 400,
+          "y": 1432.78125,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 358,
+          "y": 1432.78125,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 358,
+          "y": 1611.859375,
+          "width": 32,
+          "height": 88
+        },
+        "score": {
+          "x": 340,
+          "y": 1649.859375,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 288,
+        "overflow": false
+      },
+      {
+        "name": "Joana Alves",
+        "identity": {
+          "x": 1248,
+          "y": 702.59375,
+          "width": 50,
+          "height": 152.28125
+        },
+        "avatar": {
+          "x": 1080,
+          "y": 702.59375,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 1038,
+          "y": 702.59375,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 1038,
+          "y": 864.875,
+          "width": 32,
+          "height": 88
+        },
+        "score": {
+          "x": 1020,
+          "y": 902.875,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 288,
+        "overflow": false
+      },
+      {
+        "name": "Pedro Santos",
+        "identity": {
+          "x": 1588,
+          "y": 702.59375,
+          "width": 50,
+          "height": 169.078125
+        },
+        "avatar": {
+          "x": 1420,
+          "y": 702.59375,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 1378,
+          "y": 702.59375,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 1378,
+          "y": 881.671875,
+          "width": 32,
+          "height": 88
+        },
+        "score": {
+          "x": 1360,
+          "y": 919.671875,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 288,
+        "overflow": false
+      }
+    ],
+    "pass": null
+  },
+  {
+    "width": 2048,
+    "scenario": "missing",
+    "geometry": [
+      {
+        "name": "Marina Costa",
+        "identity": {
+          "x": 568,
+          "y": 702.59375,
+          "width": 50,
+          "height": 169.078125
+        },
+        "avatar": {
+          "x": 400,
+          "y": 702.59375,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 358,
+          "y": 702.59375,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 358,
+          "y": 881.671875,
+          "width": 32,
+          "height": 88
+        },
+        "score": {
+          "x": 340,
+          "y": 919.671875,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 288,
+        "overflow": false
+      },
+      {
+        "name": "Rafael Lima",
+        "identity": {
+          "x": 568,
+          "y": 1072.671875,
+          "width": 50,
+          "height": 219.46875
+        },
+        "avatar": {
+          "x": 400,
+          "y": 1072.671875,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 358,
+          "y": 1072.671875,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 358,
+          "y": 1302.140625,
+          "width": 32,
+          "height": 88
+        },
+        "score": {
+          "x": 340,
+          "y": 1340.140625,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 288,
+        "overflow": false
+      },
+      {
+        "name": "Joana Alves",
+        "identity": {
+          "x": 1248,
+          "y": 702.59375,
+          "width": 50,
+          "height": 152.28125
+        },
+        "avatar": {
+          "x": 1080,
+          "y": 702.59375,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 1038,
+          "y": 702.59375,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 1038,
+          "y": 864.875,
+          "width": 32,
+          "height": 88
+        },
+        "score": {
+          "x": 1020,
+          "y": 902.875,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 288,
+        "overflow": false
+      },
+      {
+        "name": "Pedro Santos",
+        "identity": {
+          "x": 1588,
+          "y": 702.59375,
+          "width": 50,
+          "height": 169.078125
+        },
+        "avatar": {
+          "x": 1420,
+          "y": 702.59375,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 1378,
+          "y": 702.59375,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 1378,
+          "y": 881.671875,
+          "width": 32,
+          "height": 88
+        },
+        "score": {
+          "x": 1360,
+          "y": 919.671875,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 288,
+        "overflow": false
+      }
+    ],
+    "pass": null
+  },
+  {
+    "width": 1448,
+    "scenario": "reference",
+    "geometry": [
+      {
+        "name": "Bruno Harita Santos",
+        "identity": {
+          "x": 561.84375,
+          "y": 740.125,
+          "width": 50,
+          "height": 264.703125
+        },
+        "avatar": {
+          "x": 389.84375,
+          "y": 740.125,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 347.84375,
+          "y": 740.125,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 347.84375,
+          "y": 1014.828125,
+          "width": 32,
+          "height": 88
+        },
+        "score": {
+          "x": 329.84375,
+          "y": 1052.828125,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 292,
+        "overflow": false
+      },
+      {
+        "name": "Diego Reis",
+        "identity": {
+          "x": 561.84375,
+          "y": 1205.828125,
+          "width": 50,
+          "height": 169.078125
+        },
+        "avatar": {
+          "x": 389.84375,
+          "y": 1205.828125,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 347.84375,
+          "y": 1205.828125,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 347.84375,
+          "y": 1384.90625,
+          "width": 32,
+          "height": 88
+        },
+        "score": {
+          "x": 329.84375,
+          "y": 1422.90625,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 292,
+        "overflow": false
+      }
+    ],
+    "pass": null
+  },
+  {
+    "width": 1448,
+    "scenario": "long",
+    "geometry": [
+      {
+        "name": "Maria da Silva Albuquerque de Vasconcelos e Souza",
+        "identity": {
+          "x": 561.84375,
+          "y": 740.125,
+          "width": 50,
+          "height": 529.1875
+        },
+        "avatar": {
+          "x": 389.84375,
+          "y": 740.125,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 347.84375,
+          "y": 740.125,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 347.84375,
+          "y": 1279.3125,
+          "width": 32,
+          "height": 88
+        },
+        "score": {
+          "x": 329.84375,
+          "y": 1317.3125,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 292,
+        "overflow": false
+      },
+      {
+        "name": "Marina Costa",
+        "identity": {
+          "x": 561.84375,
+          "y": 1470.3125,
+          "width": 50,
+          "height": 169.078125
+        },
+        "avatar": {
+          "x": 389.84375,
+          "y": 1470.3125,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 347.84375,
+          "y": 1470.3125,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 347.84375,
+          "y": 1649.390625,
+          "width": 32,
+          "height": 88
+        },
+        "score": {
+          "x": 329.84375,
+          "y": 1687.390625,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 292,
+        "overflow": false
+      },
+      {
+        "name": "Joana Alves",
+        "identity": {
+          "x": 1233.84375,
+          "y": 740.125,
+          "width": 50,
+          "height": 152.28125
+        },
+        "avatar": {
+          "x": 1061.84375,
+          "y": 740.125,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 1019.84375,
+          "y": 740.125,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 1019.84375,
+          "y": 902.40625,
+          "width": 32,
+          "height": 88
+        },
+        "score": {
+          "x": 1001.84375,
+          "y": 940.40625,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 292,
+        "overflow": false
+      },
+      {
+        "name": "Pedro Santos",
+        "identity": {
+          "x": 1569.84375,
+          "y": 740.125,
+          "width": 50,
+          "height": 169.078125
+        },
+        "avatar": {
+          "x": 1397.84375,
+          "y": 740.125,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 1355.84375,
+          "y": 740.125,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 1355.84375,
+          "y": 919.203125,
+          "width": 32,
+          "height": 88
+        },
+        "score": {
+          "x": 1337.84375,
+          "y": 957.203125,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 292,
+        "overflow": false
+      }
+    ],
+    "pass": null
+  },
+  {
+    "width": 1448,
+    "scenario": "missing",
+    "geometry": [
+      {
+        "name": "Marina Costa",
+        "identity": {
+          "x": 561.84375,
+          "y": 740.125,
+          "width": 50,
+          "height": 169.078125
+        },
+        "avatar": {
+          "x": 389.84375,
+          "y": 740.125,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 347.84375,
+          "y": 740.125,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 347.84375,
+          "y": 919.203125,
+          "width": 32,
+          "height": 88
+        },
+        "score": {
+          "x": 329.84375,
+          "y": 957.203125,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 292,
+        "overflow": false
+      },
+      {
+        "name": "Rafael Lima",
+        "identity": {
+          "x": 561.84375,
+          "y": 1110.203125,
+          "width": 50,
+          "height": 219.46875
+        },
+        "avatar": {
+          "x": 389.84375,
+          "y": 1110.203125,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 347.84375,
+          "y": 1110.203125,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 347.84375,
+          "y": 1339.671875,
+          "width": 32,
+          "height": 88
+        },
+        "score": {
+          "x": 329.84375,
+          "y": 1377.671875,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 292,
+        "overflow": false
+      },
+      {
+        "name": "Joana Alves",
+        "identity": {
+          "x": 1233.84375,
+          "y": 740.125,
+          "width": 50,
+          "height": 152.28125
+        },
+        "avatar": {
+          "x": 1061.84375,
+          "y": 740.125,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 1019.84375,
+          "y": 740.125,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 1019.84375,
+          "y": 902.40625,
+          "width": 32,
+          "height": 88
+        },
+        "score": {
+          "x": 1001.84375,
+          "y": 940.40625,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 292,
+        "overflow": false
+      },
+      {
+        "name": "Pedro Santos",
+        "identity": {
+          "x": 1569.84375,
+          "y": 740.125,
+          "width": 50,
+          "height": 169.078125
+        },
+        "avatar": {
+          "x": 1397.84375,
+          "y": 740.125,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 1355.84375,
+          "y": 740.125,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 1355.84375,
+          "y": 919.203125,
+          "width": 32,
+          "height": 88
+        },
+        "score": {
+          "x": 1337.84375,
+          "y": 957.203125,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 292,
+        "overflow": false
+      }
+    ],
+    "pass": null
+  },
+  {
+    "width": 768,
+    "scenario": "reference",
+    "geometry": [
+      {
+        "name": "Bruno Harita Santos",
+        "identity": {
+          "x": 668,
+          "y": 878.90625,
+          "width": 50,
+          "height": 291.234375
+        },
+        "avatar": {
+          "x": 180,
+          "y": 878.90625,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 138,
+          "y": 878.90625,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 138,
+          "y": 1180.140625,
+          "width": 32,
+          "height": 53
+        },
+        "score": {
+          "x": 120,
+          "y": 1183.140625,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 608,
+        "overflow": false
+      },
+      {
+        "name": "Diego Reis",
+        "identity": {
+          "x": 668,
+          "y": 1336.140625,
+          "width": 50,
+          "height": 174.640625
+        },
+        "avatar": {
+          "x": 180,
+          "y": 1336.140625,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 138,
+          "y": 1336.140625,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 138,
+          "y": 1520.78125,
+          "width": 32,
+          "height": 53
+        },
+        "score": {
+          "x": 120,
+          "y": 1523.78125,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 608,
+        "overflow": false
+      }
+    ],
+    "pass": null
+  },
+  {
+    "width": 768,
+    "scenario": "long",
+    "geometry": [
+      {
+        "name": "Maria da Silva Albuquerque de Vasconcelos e Souza",
+        "identity": {
+          "x": 668,
+          "y": 878.90625,
+          "width": 50,
+          "height": 566.84375
+        },
+        "avatar": {
+          "x": 180,
+          "y": 878.90625,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 138,
+          "y": 878.90625,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 138,
+          "y": 1455.75,
+          "width": 32,
+          "height": 53
+        },
+        "score": {
+          "x": 120,
+          "y": 1458.75,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 608,
+        "overflow": false
+      },
+      {
+        "name": "Marina Costa",
+        "identity": {
+          "x": 668,
+          "y": 1611.75,
+          "width": 50,
+          "height": 174.640625
+        },
+        "avatar": {
+          "x": 180,
+          "y": 1611.75,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 138,
+          "y": 1611.75,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 138,
+          "y": 1796.390625,
+          "width": 32,
+          "height": 53
+        },
+        "score": {
+          "x": 120,
+          "y": 1799.390625,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 608,
+        "overflow": false
+      }
+    ],
+    "pass": null
+  },
+  {
+    "width": 768,
+    "scenario": "missing",
+    "geometry": [
+      {
+        "name": "Marina Costa",
+        "identity": {
+          "x": 668,
+          "y": 878.90625,
+          "width": 50,
+          "height": 174.640625
+        },
+        "avatar": {
+          "x": 180,
+          "y": 878.90625,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 138,
+          "y": 878.90625,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 138,
+          "y": 1063.546875,
+          "width": 32,
+          "height": 53
+        },
+        "score": {
+          "x": 120,
+          "y": 1066.546875,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 608,
+        "overflow": false
+      },
+      {
+        "name": "Rafael Lima",
+        "identity": {
+          "x": 668,
+          "y": 1219.546875,
+          "width": 50,
+          "height": 225.03125
+        },
+        "avatar": {
+          "x": 180,
+          "y": 1219.546875,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 138,
+          "y": 1219.546875,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 138,
+          "y": 1454.578125,
+          "width": 32,
+          "height": 53
+        },
+        "score": {
+          "x": 120,
+          "y": 1457.578125,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 608,
+        "overflow": false
+      }
+    ],
+    "pass": null
+  },
+  {
+    "width": 390,
+    "scenario": "reference",
+    "geometry": [
+      {
+        "name": "Bruno Harita Santos",
+        "identity": {
+          "x": 296,
+          "y": 1106.59375,
+          "width": 50,
+          "height": 291.234375
+        },
+        "avatar": {
+          "x": 86,
+          "y": 1106.59375,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 44,
+          "y": 1106.59375,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 44,
+          "y": 1407.828125,
+          "width": 32,
+          "height": 53
+        },
+        "score": {
+          "x": 26,
+          "y": 1410.828125,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 330,
+        "overflow": false
+      },
+      {
+        "name": "Diego Reis",
+        "identity": {
+          "x": 296,
+          "y": 1563.828125,
+          "width": 50,
+          "height": 174.640625
+        },
+        "avatar": {
+          "x": 86,
+          "y": 1563.828125,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 44,
+          "y": 1563.828125,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 44,
+          "y": 1748.46875,
+          "width": 32,
+          "height": 53
+        },
+        "score": {
+          "x": 26,
+          "y": 1751.46875,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 330,
+        "overflow": false
+      }
+    ],
+    "pass": null
+  },
+  {
+    "width": 390,
+    "scenario": "long",
+    "geometry": [
+      {
+        "name": "Maria da Silva Albuquerque de Vasconcelos e Souza",
+        "identity": {
+          "x": 296,
+          "y": 1106.59375,
+          "width": 50,
+          "height": 566.84375
+        },
+        "avatar": {
+          "x": 86,
+          "y": 1106.59375,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 44,
+          "y": 1106.59375,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 44,
+          "y": 1683.4375,
+          "width": 32,
+          "height": 53
+        },
+        "score": {
+          "x": 26,
+          "y": 1686.4375,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 330,
+        "overflow": false
+      },
+      {
+        "name": "Marina Costa",
+        "identity": {
+          "x": 296,
+          "y": 1839.4375,
+          "width": 50,
+          "height": 174.640625
+        },
+        "avatar": {
+          "x": 86,
+          "y": 1839.4375,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 44,
+          "y": 1839.4375,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 44,
+          "y": 2024.078125,
+          "width": 32,
+          "height": 53
+        },
+        "score": {
+          "x": 26,
+          "y": 2027.078125,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 330,
+        "overflow": false
+      }
+    ],
+    "pass": null
+  },
+  {
+    "width": 390,
+    "scenario": "missing",
+    "geometry": [
+      {
+        "name": "Marina Costa",
+        "identity": {
+          "x": 296,
+          "y": 1106.59375,
+          "width": 50,
+          "height": 174.640625
+        },
+        "avatar": {
+          "x": 86,
+          "y": 1106.59375,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 44,
+          "y": 1106.59375,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 44,
+          "y": 1291.234375,
+          "width": 32,
+          "height": 53
+        },
+        "score": {
+          "x": 26,
+          "y": 1294.234375,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 330,
+        "overflow": false
+      },
+      {
+        "name": "Rafael Lima",
+        "identity": {
+          "x": 296,
+          "y": 1447.234375,
+          "width": 50,
+          "height": 225.03125
+        },
+        "avatar": {
+          "x": 86,
+          "y": 1447.234375,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 44,
+          "y": 1447.234375,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 44,
+          "y": 1682.265625,
+          "width": 32,
+          "height": 53
+        },
+        "score": {
+          "x": 26,
+          "y": 1685.265625,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 330,
+        "overflow": false
+      }
+    ],
+    "pass": null
+  },
+  {
+    "width": 320,
+    "scenario": "reference",
+    "geometry": [
+      {
+        "name": "Bruno Harita Santos",
+        "identity": {
+          "x": 226,
+          "y": 1162.59375,
+          "width": 50,
+          "height": 291.234375
+        },
+        "avatar": {
+          "x": 86,
+          "y": 1162.59375,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 44,
+          "y": 1162.59375,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 44,
+          "y": 1463.828125,
+          "width": 32,
+          "height": 53
+        },
+        "score": {
+          "x": 26,
+          "y": 1466.828125,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 260,
+        "overflow": false
+      },
+      {
+        "name": "Diego Reis",
+        "identity": {
+          "x": 226,
+          "y": 1619.828125,
+          "width": 50,
+          "height": 174.640625
+        },
+        "avatar": {
+          "x": 86,
+          "y": 1619.828125,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 44,
+          "y": 1619.828125,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 44,
+          "y": 1804.46875,
+          "width": 32,
+          "height": 53
+        },
+        "score": {
+          "x": 26,
+          "y": 1807.46875,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 260,
+        "overflow": false
+      }
+    ],
+    "pass": null
+  },
+  {
+    "width": 320,
+    "scenario": "long",
+    "geometry": [
+      {
+        "name": "Maria da Silva Albuquerque de Vasconcelos e Souza",
+        "identity": {
+          "x": 226,
+          "y": 1162.59375,
+          "width": 50,
+          "height": 566.84375
+        },
+        "avatar": {
+          "x": 86,
+          "y": 1162.59375,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 44,
+          "y": 1162.59375,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 44,
+          "y": 1739.4375,
+          "width": 32,
+          "height": 53
+        },
+        "score": {
+          "x": 26,
+          "y": 1742.4375,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 260,
+        "overflow": false
+      },
+      {
+        "name": "Marina Costa",
+        "identity": {
+          "x": 226,
+          "y": 1895.4375,
+          "width": 50,
+          "height": 174.640625
+        },
+        "avatar": {
+          "x": 86,
+          "y": 1895.4375,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 44,
+          "y": 1895.4375,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 44,
+          "y": 2080.078125,
+          "width": 32,
+          "height": 53
+        },
+        "score": {
+          "x": 26,
+          "y": 2083.078125,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 260,
+        "overflow": false
+      }
+    ],
+    "pass": null
+  },
+  {
+    "width": 320,
+    "scenario": "missing",
+    "geometry": [
+      {
+        "name": "Marina Costa",
+        "identity": {
+          "x": 226,
+          "y": 1162.59375,
+          "width": 50,
+          "height": 174.640625
+        },
+        "avatar": {
+          "x": 86,
+          "y": 1162.59375,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 44,
+          "y": 1162.59375,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 44,
+          "y": 1347.234375,
+          "width": 32,
+          "height": 53
+        },
+        "score": {
+          "x": 26,
+          "y": 1350.234375,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 260,
+        "overflow": false
+      },
+      {
+        "name": "Rafael Lima",
+        "identity": {
+          "x": 226,
+          "y": 1503.234375,
+          "width": 50,
+          "height": 225.03125
+        },
+        "avatar": {
+          "x": 86,
+          "y": 1503.234375,
+          "width": 32,
+          "height": 32
+        },
+        "checkbox": {
+          "x": 44,
+          "y": 1503.234375,
+          "width": 32,
+          "height": 24
+        },
+        "aside": {
+          "x": 44,
+          "y": 1738.265625,
+          "width": 32,
+          "height": 53
+        },
+        "score": {
+          "x": 26,
+          "y": 1741.265625,
+          "width": 50,
+          "height": 50
+        },
+        "cardWidth": 260,
+        "overflow": false
+      }
+    ],
+    "pass": null
+  }
+]
