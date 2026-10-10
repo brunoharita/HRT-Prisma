@@ -2,15 +2,64 @@
   "date": "2026-10-10",
   "baseline": "b4e0923c382eae518ac19cbf29c0d715d5f50aed",
   "branch": "codex/process-assessment-v232",
-  "sql": {"status": "PASS", "assertions": 77, "environment": "empty local PostgreSQL17 import_evidence_v202:55479", "rollback": true},
-  "concurrency": {"status": "PASS", "scenarios": 5, "ownedCloneRemoved": true},
-  "nodeDirected": {"status": "PASS", "tests": 52},
-  "deno": {"status": "PASS", "tests": 4},
-  "newBrowser": {"status": "PASS", "checks": 76, "widths": [1448,768,390,320]},
-  "navigationBrowser": {"status": "PASS", "checks": 78},
-  "followUpBrowser": {"status": "PASS", "checks": 34, "mutationCounters": "both legacy and process-scoped RPCs"},
+  "sql": {
+    "status": "PASS",
+    "assertions": 79,
+    "environment": "empty local PostgreSQL17 import_evidence_v202:55479",
+    "rollback": true
+  },
+  "concurrency": {
+    "status": "PASS",
+    "scenarios": 5,
+    "ownedCloneRemoved": true
+  },
+  "nodeDirected": {
+    "status": "PASS",
+    "tests": 52
+  },
+  "deno": {
+    "status": "PASS",
+    "tests": 4
+  },
+  "newBrowser": {
+    "status": "PASS",
+    "checks": 76,
+    "widths": [
+      1448,
+      768,
+      390,
+      320
+    ]
+  },
+  "navigationBrowser": {
+    "status": "PASS",
+    "checks": 78
+  },
+  "followUpBrowser": {
+    "status": "PASS",
+    "checks": 34,
+    "mutationCounters": "both legacy and process-scoped RPCs"
+  },
   "typecheckWeb": "PASS",
   "rootBuild": "PASS",
-  "contextLintFoundation": {"status": "PASS", "scope": "tracked-only staged snapshot excluding unrelated user files"},
-  "limits": ["synthetic fixtures", "no real candidate journey", "no live email", "no paid AI", "no empirical difficulty or fairness calibration"]
+  "contextLintFoundation": {
+    "status": "PASS",
+    "scope": "tracked-only staged snapshot excluding unrelated user files"
+  },
+  "limits": [
+    "synthetic fixtures",
+    "no real candidate journey",
+    "no live email",
+    "no paid AI",
+    "no empirical difficulty or fairness calibration"
+  ],
+  "webBuild": "PASS",
+  "releaseTooling": {
+    "status": "PASS",
+    "tests": 21
+  },
+  "actionableNotices": {
+    "status": "PASS",
+    "tests": 3
+  }
 }

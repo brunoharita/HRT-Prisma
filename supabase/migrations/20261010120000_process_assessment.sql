@@ -196,6 +196,7 @@ begin
  select * into proc from public.position_evaluation_processes where organization_id=p_organization_id and vacancy_id=p_vacancy_id and is_current for update;
  if proc.id is null or proc.status<>'active' then raise exception 'PA_CONTEXT_CLOSED' using errcode='42501'; end if;
  if p_person_id is not null then raise exception 'PA_USE_PROCESS_ASSESSMENT' using errcode='22023'; end if;
+ if p_action='configure' and p_assessment_id is null and p_payload->>'processId' is distinct from proc.id::text then raise exception 'PA_CONTEXT_CHANGED' using errcode='40001'; end if;
  if p_action not in ('configure','questions','approve','ready','allow_ai') or p_action is null then raise exception 'PA_ACTION_INVALID' using errcode='22023'; end if;
  if p_assessment_id is not null then
   select * into a from public.position_assessments where id=p_assessment_id and organization_id=p_organization_id and person_id is null and process_id=proc.id and vacancy_id=p_vacancy_id for update;

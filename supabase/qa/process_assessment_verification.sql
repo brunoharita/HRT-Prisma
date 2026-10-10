@@ -9,7 +9,9 @@ select m83_reject('select public.process_assessment_workspace(m83_id(''a''),m83_
 select set_config('request.jwt.claim.sub',m83_id('recruiter')::text,true);
 select m83_reject('select * from public.position_assessment_batches','42501');
 select m83_reject('select public.position_assessment_mutate(m83_id(''a''),m83_id(''vacancy''),m83_id(''person''),''configure'')','22023');
-insert into pa_state values('shared',public.position_assessment_mutate(m83_id('a'),m83_id('vacancy'),null,'configure',null,null,jsonb_build_object('config',jsonb_build_object('quantity',10,'level',1,'durationMinutes',60,'mode','ai'),'requirementIds',jsonb_build_array(m83_id('req')))));
+select m83_reject('select public.position_assessment_mutate(m83_id(''a''),m83_id(''vacancy''),null,''configure'')','40001');
+select m83_reject('select public.position_assessment_mutate(m83_id(''a''),m83_id(''vacancy''),null,''configure'',null,null,''{"processId":"00000000-0000-0000-0000-000000000001"}'')','40001');
+insert into pa_state values('shared',public.position_assessment_mutate(m83_id('a'),m83_id('vacancy'),null,'configure',null,null,jsonb_build_object('processId',(public.get_position_follow_up(m83_id('a'),m83_id('vacancy'))->'process'->>'id'),'config',jsonb_build_object('quantity',10,'level',1,'durationMinutes',60,'mode','ai'),'requirementIds',jsonb_build_array(m83_id('req')))));
 select m83_assert((select value->>'person_id' is null and value->>'process_id' is not null and value->>'contract_version'='position-assessment-2.0.0' from pa_state where key='shared'),'new proof belongs to process, never individual');
 insert into pa_state values('sharedgen',public.position_assessment_generation_request(m83_id('a'),(select (value->>'id')::uuid from pa_state where key='shared'),m83_id('shared-gen'),(select value->'distribution' from pa_state where key='gen')));
 reset role;
