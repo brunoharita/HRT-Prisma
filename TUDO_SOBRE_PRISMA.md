@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 426
-source_manifest_sha256: a74372bbd2816143c3714aaa976f3b1a819f05763bb808a971021786b5fc9dfd
+source_manifest_sha256: 934f99f228faa7eb495c165a125e6243162537555b6ff1212606f1438f78886f
 -->
 
 # Tudo sobre o Prisma
@@ -2634,7 +2634,7 @@ last_verified: 2026-10-10
 
 ## Retorno à tela anterior — v2.3.1
 
-Prisma v2.3.1 registra a entrega autorizada por Bruno em10/10/2026: seta compartilhada no alto à esquerda volta à origem imediata, mantendo atalhos de destino fixo sem seta. Estende History API/guardas/store existentes e integra etapas/áreas internas de avaliação, importação, preparação, banco e Perfil. Escopo de sessão/papel/empresa, reidratação autenticada, retorno sem origem indisponível e URLs de portais/autenticação excluídas dos metadados. Não altera domínio, dados, Score, backend ou serviços. Acordo/execução v1.0.0 e AoT `navigation-back-v231`; QA browser sintético78checks em1448/768/390/320px e30testes Node dirigidos PASS, tipos/build PASS. Publicação/CI ainda pendentes; não inferir produção desta descrição. Jornada autenticada real NOT TESTED.
+Prisma v2.3.1 registra a entrega autorizada por Bruno em10/10/2026: seta compartilhada no alto à esquerda volta à origem imediata, mantendo atalhos de destino fixo sem seta. Estende History API/guardas/store existentes e integra etapas/áreas internas de avaliação, importação, preparação, banco e Perfil. Escopo de sessão/papel/empresa, reidratação autenticada, retorno sem origem indisponível e URLs de portais/autenticação excluídas dos metadados. Não altera domínio, dados, Score, backend ou serviços. Acordo/execução v1.0.0 e AoT `navigation-back-v231`; QA browser sintético78checks em1448/768/390/320px e30testes Node dirigidos PASS, tipos/build PASS. Publicado em main/origin/VPS no SHA funcional96c912d8eeb6ebc40722fe5970dc4bf80082ac90; CI branch/main PASS, versão/SHA no bundle e login público confirmados,14HTTP esperados, rollback preservado e seis demais serviços sem reconstrução/reinício. Smoke imediato404 transitório recuperado por verificação após estabilização; recibo no AoT. Jornada autenticada real NOT TESTED.
 
 ## E-mail corporativo HRT: recebimento e encaminhamento operacionais
 
@@ -2886,7 +2886,7 @@ O Agreement M8 v1.0.0, aditivo M8.1 v1.1.1 e imagem normativa de nove telas auto
 
 ## Resumo operacional para prompts
 
-Retorno v2.3.1 autorizado em10/10/2026: seta superior esquerda segue origem imediata e histórico da sessão; links de destino fixo coexistem sem seta. Reutiliza guardas/store/History API, com negativos de rascunho, escopo e URLs pessoais, e etapas internas integradas. Publicação ainda pendente neste checkpoint; AoT `docs/qa/aot-navigation-back-v231.md` separa QA sintético/produção/jornada real. Release somente web, preservando avaliação2.3.0/serviços/banco/Score/autoridade.
+Retorno v2.3.1 autorizado em10/10/2026: seta superior esquerda segue origem imediata e histórico da sessão; links de destino fixo coexistem sem seta. Reutiliza guardas/store/History API, com negativos de rascunho, escopo e URLs pessoais, e etapas internas integradas. Publicada em main/origin/VPS no SHA funcional96c912d8eeb6ebc40722fe5970dc4bf80082ac90, CI/smoke/version/rollback/preservação PASS; AoT `docs/qa/aot-navigation-back-v231.md` separa QA sintético/produção/jornada real. Release somente web, preservando avaliação2.3.0/serviços/banco/Score/autoridade.
 
 Complemento de publicação da v2.0.2 ativo no SHA SQL a9fa4da: títulos personalizados com nome normalizado idêntico reutilizam definição da organização sem trocar IDs de fonte/Perfil. Migration 20261004022925, 52 verificações SQL/cinco primeiras publicações e replays/concorrência, 14 testes dirigidos/243 person-flow/CI PASS; grants/RLS e HTTPS/readiness preservados. Sem rebuild web/Parser (build 96e3ecb mantido). Revisão real permanece draft/lock 1/zero Perfil para confirmação do operador; não afirmar publicação automática ou smoke autenticado executado. AoT `docs/qa/aot-section-publication-v202.md`.
 
@@ -20363,7 +20363,7 @@ Git/CI/produção: SHA funcional `a12b4e09884d6017c4cf1da339db73ede28ac5e1` inte
 
 # AoT — Retorno imediato v2.3.1
 
-Agreement/Execution `navigation-back-v231` v1.0.0 aprovados por Bruno em10/10/2026. Baseline79f12a54eb727c42ab237304a7e1ce9c251a3ec2, branch codex/navigation-back-v231. Referências/evidência em docs/qa/evidence/navigation-back-v231/. Checkpoint antes de publicação; não representa fechamento.
+Agreement/Execution `navigation-back-v231` v1.0.0 aprovados por Bruno em10/10/2026. Baseline79f12a54eb727c42ab237304a7e1ce9c251a3ec2, branch codex/navigation-back-v231. Referências/evidência em docs/qa/evidence/navigation-back-v231/. Fechamento funcional após publicação e verificação em produção. SHA funcional96c912d8eeb6ebc40722fe5970dc4bf80082ac90.
 
 ## Acordos
 
@@ -20373,7 +20373,7 @@ Agreement/Execution `navigation-back-v231` v1.0.0 aprovados por Bruno em10/10/20
 | D-02 | Atalhos fixos mantêm destinos, sem ArrowLeftOutlined em páginas | Pessoa real em fixture + avaliação real em fixture + revisão do diff | PASS |
 | D-03 | Guardas antes de back e aprovação única em popstate; store/scroll atuais | Quatro viewports: cancelar/confirmar seta e navegador, filtro/rolagem, forward/reload | PASS |
 | D-04 | Metadados elegíveis operatorHistoryPath; escopo exato e reidratação assíncrona; entrada direta disabled | URLs externas/tokens/query/fragmento; sessão/papel/empresa; reload; testes negativos | PASS |
-| D-05 | Registry2.3.1; publicação web única com rollback | Tipos/build PASS; CI/publicação/smoke pendentes | PARTIAL |
+| D-05 | Registry2.3.1; publicação web única com rollback | Tipos/build, CI branch/main, produção2.3.1+SHA do bundle,14HTTP, UI pública1448/390, rollback e preservação PASS | PASS |
 
 ## Proibições
 
@@ -20391,13 +20391,13 @@ Agreement/Execution `navigation-back-v231` v1.0.0 aprovados por Bruno em10/10/20
 | Rascunhos/filtros/seleção/rolagem | direct | NavigationGuards/NavigationViewStore e scroll anteriores | Positivos/negativos no browser; uxFoundation;11Node de rotas/recovery | PASS |
 | Sessão/papel/empresa | critical_transversal | Autorização fora da UI e scope anterior | Negativos; webProtectedRoutes; reidratação confirmada só após Auth | PASS |
 | Avaliação/importação/revisão/curadoria | plausible_indirect | Domínio explícito e controles de origem | Pessoa15cenários reais em fixture PASS; avaliação38checks reais em fixture PASS; sem dados reais | PASS |
-| Serviços/banco/Score/IA | no_impact_identified | production-before.json7containers e14HTTP | Sem implementação/runtime fora de web; comparação remota pendente | PARTIAL |
+| Serviços/banco/Score/IA | no_impact_identified | production-before.json7containers e14HTTP | Seis serviços com IDs/imagens/restarts preservados; Parser/Synthesis/Mail healthy;14HTTP e sete assets antigos200 | PASS |
 
 Nenhuma nova dependência/roteador. Estado interno limita memória a50valores de apresentação; metadados de rota usam History API existente e não local/sessionStorage. A reidratação Auth assíncrona foi incluída no mapa: metadata fica inerte até scope confirmado; não aceitar scope antigo como autoridade.
 
 ## Limites e correções da validação
 
-QA browser usa navegação/PrismaPage reais e PersonForm/PositionAssessment reais com serviços substituídos; demais caminhos do grafo usam páginas sintéticas compartilhadas. Sem Pessoa real/autenticação de produção, escrita, IA ou e-mail. NOT TESTED para jornada autenticada real, não inferida de HTTP público.
+QA browser usa navegação/PrismaPage reais e PersonForm/PositionAssessment reais com serviços substituídos; demais caminhos do grafo usam páginas sintéticas compartilhadas. Sem Pessoa real/autenticação de produção, escrita, IA ou e-mail. Smoke público em produção1448/390 com login/v2.3.1 sem erro/overflow, sem envio de formulário. NOT TESTED para jornada autenticada real, não inferida de HTTP público.
 
 Primeiro teste de diálogo contou animação de fechamento como nova confirmação: ajustado para aguardar destruição do diálogo. Fixture de edição incompleta carecia updatedAt; corrigida sem mudar produto. Reidratação da fixture inicialmente aguardava metadata antiga, não Auth confirmado: corrigido readiness. Chrome local retornou EACCES; QA usa Edge headless existente. Falhas iniciais não eram fechamento PASS e não justificaram retirar guardas.
 
@@ -20407,7 +20407,11 @@ F-01 preservado no diff; portais públicos mantêm seus controles. Documentos al
 
 ## Git, CI, publicação e conclusão
 
-CI inicial38045473960 bloqueou promoção:872/873, expectativa estática antiga de rótulo em m2DocumentReliabilityReview. Corrigida para novo rótulo e destino exato preservado; oito testes de documentos PASS (document-preservation.txt). Sem retirada de gate ou nova alteração de produto. CI final/publicação pendentes. D-05 ainda PARTIAL: não declarar movimento concluído até publicação e preservação remota comprovadas.
+CI inicial38045473960 bloqueou promoção:872/873, expectativa estática antiga de rótulo em m2DocumentReliabilityReview. Corrigida para novo rótulo e destino exato preservado; oito testes de documentos PASS (document-preservation.txt). Sem retirada de gate ou nova alteração de produto. CI final38045604570 (branch) e38045676664 (main) PASS no SHA96c912d8eeb6ebc40722fe5970dc4bf80082ac90. Main/origin/VPS funcionais sincronizados neste SHA. Somente prisma-web recriado (81e1c9d0d53c), imagem74df2620bfc6; bundle público contém SHA validado,2.3.1 e rótulo da seta. HTTP14/14 esperados, sete assets anteriores200 preservados; UI de login pública em1448/390 mostra v2.3.1 e protege rota autenticada sem erro/overflow.
+
+Dispatcher publicou a unidade, mas seu smoke imediato terminou exit22/HTTP404 durante recriação. A verificação independente após estabilização passou, sem reconstruir/republicar nem contornar gate. Recibo publication-preservation.json conserva essa distinção. Rollback prisma-web:rollback-before-96c912d8eeb6 corresponde à imagem anterior b53ee95bb7b8. Seis demais containers mantiveram IDs/imagens/restarts/status; Parser/Synthesis/Mail continuam healthy. O experimento paddle-vl-llama-test já estava unhealthy no baseline e permaneceu assim: não é capacidade validada ou alterada neste movimento.
+
+Fechamento documental e Context Pack seguem em commit posterior, sem reconstrução do runtime funcional. D-01..05 e P-01..03 PASS; nenhuma divergência do escopo aprovado. Jornada autenticada real continua NOT TESTED. Arquivos alheios e worktrees preexistentes preservados; avisos locais de prune com Permission denied não impediram commit/fetch e não foram tratados por exclusão. Evidências: ci-branch/main.json, release-plan.json, production-after.json, publication-preservation.json e production-browser.json. Nenhuma migration, função, runtime IA ou mail publicado.
 
 ---
 

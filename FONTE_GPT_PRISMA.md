@@ -6,7 +6,7 @@ product_version: 2.3.1
 current_state_version: 2.66.0
 current_state_last_verified: 2026-10-10
 documentation_source_count: 426
-source_manifest_sha256: a74372bbd2816143c3714aaa976f3b1a819f05763bb808a971021786b5fc9dfd
+source_manifest_sha256: 934f99f228faa7eb495c165a125e6243162537555b6ff1212606f1438f78886f
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -268,7 +268,7 @@ Teste funcional, typecheck, presença dos componentes ou descrição textual nã
 
 #### Resumo operacional para prompts
 
-Retorno v2.3.1 autorizado em10/10/2026: seta superior esquerda segue origem imediata e histórico da sessão; links de destino fixo coexistem sem seta. Reutiliza guardas/store/History API, com negativos de rascunho, escopo e URLs pessoais, e etapas internas integradas. Publicação ainda pendente neste checkpoint; AoT `docs/qa/aot-navigation-back-v231.md` separa QA sintético/produção/jornada real. Release somente web, preservando avaliação2.3.0/serviços/banco/Score/autoridade.
+Retorno v2.3.1 autorizado em10/10/2026: seta superior esquerda segue origem imediata e histórico da sessão; links de destino fixo coexistem sem seta. Reutiliza guardas/store/History API, com negativos de rascunho, escopo e URLs pessoais, e etapas internas integradas. Publicada em main/origin/VPS no SHA funcional96c912d8eeb6ebc40722fe5970dc4bf80082ac90, CI/smoke/version/rollback/preservação PASS; AoT `docs/qa/aot-navigation-back-v231.md` separa QA sintético/produção/jornada real. Release somente web, preservando avaliação2.3.0/serviços/banco/Score/autoridade.
 
 Complemento de publicação da v2.0.2 ativo no SHA SQL a9fa4da: títulos personalizados com nome normalizado idêntico reutilizam definição da organização sem trocar IDs de fonte/Perfil. Migration 20261004022925, 52 verificações SQL/cinco primeiras publicações e replays/concorrência, 14 testes dirigidos/243 person-flow/CI PASS; grants/RLS e HTTPS/readiness preservados. Sem rebuild web/Parser (build 96e3ecb mantido). Revisão real permanece draft/lock 1/zero Perfil para confirmação do operador; não afirmar publicação automática ou smoke autenticado executado. AoT `docs/qa/aot-section-publication-v202.md`.
 

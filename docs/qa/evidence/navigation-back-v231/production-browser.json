@@ -1,0 +1,22 @@
+{
+  "results": [
+    {
+      "width": 1448,
+      "version": "v2.3.1",
+      "protectedRouteShowsSignIn": true,
+      "publicPortalNoOperatorArrow": true,
+      "noRuntimeErrors": true,
+      "noOverflow": true
+    },
+    {
+      "width": 390,
+      "version": "v2.3.1",
+      "protectedRouteShowsSignIn": true,
+      "publicPortalNoOperatorArrow": true,
+      "noRuntimeErrors": true,
+      "noOverflow": true
+    }
+  ],
+  "authenticatedJourney": "NOT TESTED",
+  "actions": "Read-only unauthenticated page load; no credentials or submissions"
+}

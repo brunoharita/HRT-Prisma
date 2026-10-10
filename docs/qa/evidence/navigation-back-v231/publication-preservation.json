@@ -1,0 +1,151 @@
+{
+  "functionalSha": "96c912d8eeb6ebc40722fe5970dc4bf80082ac90",
+  "version": "2.3.1",
+  "preserved": [
+    {
+      "name": "prisma-parser-ia",
+      "idUnchanged": true,
+      "imageUnchanged": true,
+      "restartsUnchanged": true,
+      "status": "running",
+      "health": "healthy"
+    },
+    {
+      "name": "prisma-profile-synthesis",
+      "idUnchanged": true,
+      "imageUnchanged": true,
+      "restartsUnchanged": true,
+      "status": "running",
+      "health": "healthy"
+    },
+    {
+      "name": "hrt-mail-forwarder",
+      "idUnchanged": true,
+      "imageUnchanged": true,
+      "restartsUnchanged": true,
+      "status": "running",
+      "health": "healthy"
+    },
+    {
+      "name": "prisma-paddle-gateway",
+      "idUnchanged": true,
+      "imageUnchanged": true,
+      "restartsUnchanged": true,
+      "status": "running",
+      "health": null
+    },
+    {
+      "name": "paddle-vl-llama-test",
+      "idUnchanged": true,
+      "imageUnchanged": true,
+      "restartsUnchanged": true,
+      "status": "running",
+      "health": "unhealthy"
+    },
+    {
+      "name": "traefik-traefik-1",
+      "idUnchanged": true,
+      "imageUnchanged": true,
+      "restartsUnchanged": true,
+      "status": "running",
+      "health": null
+    }
+  ],
+  "rollback": {
+    "tag": "prisma-web:rollback-before-96c912d8eeb6",
+    "image": "sha256:b53ee95bb7b8f5bf0e8acc7ede068a33c0390fc1a3674fb6dfb6b8bc4085f97e",
+    "baselineMatches": true
+  },
+  "legacyAssets": [
+    {
+      "path": "/assets/index-BTwYoic1.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/rolldown-runtime-C0FnF6B9.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/antd-vendor-Cv3JrkhW.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/supabase-vendor-DoXvCMLf.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/react-vendor-BdxMnOeJ.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/antd-vendor-B5BXDqMa.css",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-0nrX6U2B.css",
+      "status": 200
+    }
+  ],
+  "smoke": [
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/profiles/search",
+      "status": 200
+    },
+    {
+      "path": "/vacancies/p/follow-up/a/assessment",
+      "status": 200
+    },
+    {
+      "path": "/assessment/",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-CLPsleuU.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/rolldown-runtime-C0FnF6B9.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/antd-vendor-Cv3JrkhW.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/supabase-vendor-DoXvCMLf.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/react-vendor-BdxMnOeJ.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/antd-vendor-B5BXDqMa.css",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-CirI3MOO.css",
+      "status": 200
+    },
+    {
+      "path": "/parser-ia-hosted/parse",
+      "status": 403
+    },
+    {
+      "path": "/document-intelligence/layout-parsing",
+      "status": 403
+    },
+    {
+      "path": "/webhooks/resend-inbound",
+      "status": 401
+    }
+  ],
+  "initialPublishExit": 22,
+  "initialSmoke": 404,
+  "recovery": "Read-only smoke after container stabilization passed. No repeated deploy/build.",
+  "authenticatedProductionJourney": "NOT TESTED"
+}
