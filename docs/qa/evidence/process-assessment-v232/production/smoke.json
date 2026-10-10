@@ -1,0 +1,186 @@
+{
+  "functionalSha": "fa4168c69bc58dea78c0bf0eb7cb286088e38c6d",
+  "checkedAt": "2026-10-10T15:08:45.951Z",
+  "checks": [
+    {
+      "name": "root",
+      "pass": true,
+      "status": 200
+    },
+    {
+      "name": "route /login",
+      "pass": true,
+      "status": 200
+    },
+    {
+      "name": "route /vacancies",
+      "pass": true,
+      "status": 200
+    },
+    {
+      "name": "route /vacancies/00000000-0000-0000-0000-000000000001/follow-up/assessment",
+      "pass": true,
+      "status": 200
+    },
+    {
+      "name": "route /assessment/",
+      "pass": true,
+      "status": 200
+    },
+    {
+      "name": "portal privacy headers",
+      "pass": true
+    },
+    {
+      "name": "current asset /assets/index-Cty9HDMh.js",
+      "pass": true
+    },
+    {
+      "name": "current asset /assets/rolldown-runtime-C0FnF6B9.js",
+      "pass": true
+    },
+    {
+      "name": "current asset /assets/antd-vendor-Cv3JrkhW.js",
+      "pass": true
+    },
+    {
+      "name": "current asset /assets/supabase-vendor-DoXvCMLf.js",
+      "pass": true
+    },
+    {
+      "name": "current asset /assets/react-vendor-BdxMnOeJ.js",
+      "pass": true
+    },
+    {
+      "name": "current asset /assets/antd-vendor-B5BXDqMa.css",
+      "pass": true
+    },
+    {
+      "name": "current asset /assets/index-C9LidSYt.css",
+      "pass": true
+    },
+    {
+      "name": "published SHA in bundle",
+      "pass": true
+    },
+    {
+      "name": "previous asset /assets/index-CLPsleuU.js",
+      "pass": true
+    },
+    {
+      "name": "previous asset /assets/rolldown-runtime-C0FnF6B9.js",
+      "pass": true
+    },
+    {
+      "name": "previous asset /assets/antd-vendor-Cv3JrkhW.js",
+      "pass": true
+    },
+    {
+      "name": "previous asset /assets/supabase-vendor-DoXvCMLf.js",
+      "pass": true
+    },
+    {
+      "name": "previous asset /assets/react-vendor-BdxMnOeJ.js",
+      "pass": true
+    },
+    {
+      "name": "previous asset /assets/antd-vendor-B5BXDqMa.css",
+      "pass": true
+    },
+    {
+      "name": "previous asset /assets/index-CirI3MOO.css",
+      "pass": true
+    },
+    {
+      "name": "operator session required",
+      "pass": true,
+      "status": 401
+    },
+    {
+      "name": "operator session required: no token or answer leakage",
+      "pass": true
+    },
+    {
+      "name": "generation session required",
+      "pass": true,
+      "status": 401
+    },
+    {
+      "name": "generation session required: no token or answer leakage",
+      "pass": true
+    },
+    {
+      "name": "legacy batch refused",
+      "pass": true,
+      "status": 409
+    },
+    {
+      "name": "legacy batch refused: no token or answer leakage",
+      "pass": true
+    },
+    {
+      "name": "operator envelope cannot enter portal",
+      "pass": true,
+      "status": 400
+    },
+    {
+      "name": "operator envelope cannot enter portal: no token or answer leakage",
+      "pass": true
+    },
+    {
+      "name": "invalid personal invitation",
+      "pass": true,
+      "status": 403
+    },
+    {
+      "name": "invalid personal invitation: no token or answer leakage",
+      "pass": true
+    },
+    {
+      "name": "foreign origin refused",
+      "pass": true,
+      "status": 403
+    },
+    {
+      "name": "foreign origin refused: no token or answer leakage",
+      "pass": true
+    },
+    {
+      "name": "old unknown contract",
+      "pass": true,
+      "status": 409
+    },
+    {
+      "name": "old unknown contract: no token or answer leakage",
+      "pass": true
+    },
+    {
+      "name": "login 1448: v2.3.2",
+      "pass": true
+    },
+    {
+      "name": "login 1448: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "login 1448: no page overflow",
+      "pass": true
+    },
+    {
+      "name": "login 390: v2.3.2",
+      "pass": true
+    },
+    {
+      "name": "login 390: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "login 390: no page overflow",
+      "pass": true
+    }
+  ],
+  "limits": [
+    "public smoke only",
+    "no real candidates, messages or paid AI"
+  ]
+}

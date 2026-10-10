@@ -1404,6 +1404,16 @@
       "localStatementSha256": "b35a526ac39206e56193b91bbde31d2b8869b6f12f431790337245c1e07bc610",
       "remoteStatementSha256": "b35a526ac39206e56193b91bbde31d2b8869b6f12f431790337245c1e07bc610",
       "verifiedAt": "2026-10-09"
+    },
+    {
+      "name": "process_assessment",
+      "localVersion": "20261010120000",
+      "remoteVersion": "20261010150632",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localStatementSha256": "05d221bad6e4991736d0b73a27069de2dc42d32add93394dcc08495835b4b9b4",
+      "remoteStatementSha256": "05d221bad6e4991736d0b73a27069de2dc42d32add93394dcc08495835b4b9b4",
+      "verifiedAt": "2026-10-10"
     }
   ],
   "localOnly": [
@@ -1443,15 +1453,12 @@
     }
   ],
   "lastIncrementalVerification": {
-    "date": "2026-10-09",
-    "movement": "position-assessment-v230",
+    "date": "2026-10-10",
+    "movement": "process-assessment-v232",
     "names": [
-      "generic_ai_request_history",
-      "position_assessment",
-      "ai_history_worker_boundary",
-      "position_assessment_operational_boundary"
+      "process_assessment"
     ],
-    "evidence": "docs/qa/evidence/position-assessment-v230/production/migrations.json",
+    "evidence": "docs/qa/evidence/process-assessment-v232/production/statement-fingerprint.json",
     "historicalSnapshotVerifiedAtUnchanged": true
   }
 }

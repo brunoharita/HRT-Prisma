@@ -1,0 +1,20 @@
+{
+  "id": "69ab3e50-5e73-48f4-ba8b-e04871ede244",
+  "slug": "position-assessment",
+  "name": "position-assessment",
+  "status": "ACTIVE",
+  "version": 2,
+  "created_at": 1791586661774,
+  "updated_at": 1791644802598,
+  "verify_jwt": false,
+  "import_map": false,
+  "entrypoint_path": "/tmp/user_fn_ioldpnqqvobprjiontre_69ab3e50-5e73-48f4-ba8b-e04871ede244_2/source/supabase/functions/position-assessment/index.ts",
+  "ezbr_sha256": "e67d6d43ab0e24b0a9d9a4c247d7dd627c34522373a2ea2a4e7ea2a172384d16",
+  "localSourceComparison": {
+    "equal": true,
+    "files": [
+      "supabase/functions/position-assessment/index.ts",
+      "src/infrastructure/positionAssessmentEmailTransport.ts"
+    ]
+  }
+}

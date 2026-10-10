@@ -1,0 +1,15 @@
+{
+ "functionalSha":"fa4168c69bc58dea78c0bf0eb7cb286088e38c6d",
+ "mainFunctionalCi":{"branch":38062132581,"main":38062345249,"status":"success"},
+ "web":"PUBLISHED_AND_VERIFIED",
+ "dispatcherInitialExit":1,
+ "dispatcherReason":"deploy script received transient HTTP404 after container recreation",
+ "recovery":"read-only stabilization and 41 smoke checks passed; no second build",
+ "webContainer":"d383f8b175b33820e9bafd7227c16cef3e4b8a5d24b462e35023ed8a12098725",
+ "rollbackImage":"prisma-web:rollback-before-fa4168c69bc5",
+ "rollbackDigest":"sha256:74df2620bfc6d42a51645762b1a08146722ae3ef42e1b0b74b33ce7a5bb5a0e6",
+ "unrelatedServices":{"idsImagesRestarts":"unchanged","mail":"healthy","parser":"healthy","synthesis":"healthy","historicalExperimentalPaddle":"unhealthy unchanged"},
+ "supabase":{"project":"ioldpnqqvobprjiontre","migrationLocal":"20261010120000","migrationRemote":"20261010150632","name":"process_assessment","edge":"position-assessment","edgeVersion":2,"edgeActive":true,"verifyJwt":false,"authentication":"existing custom operator/token/worker boundary"},
+ "snapshotPreservation":{"processes":1,"assessments":1,"attempts":0,"deliveries":0,"assessmentHash":"0efd65e112aba7a11a7fb66dfb918cbd","processHash":"b5dfd33ec60552127fa0e2053802171c","beforeAfterEqual":true},
+ "limits":["no real candidate journey","no real email","no paid AI","public smoke does not prove empirical quality or fairness"]
+}
