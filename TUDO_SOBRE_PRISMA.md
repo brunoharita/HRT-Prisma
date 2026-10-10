@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 423
-source_manifest_sha256: 4cb9ab3b8e500cbcd1712ab9dc4f6863a129403453a92f1001b3dbc458d094fb
+source_manifest_sha256: c391c85bcb170f0b2f8f07eae947679502c562c54197c9e33cde2958c41b0869
 -->
 
 # Tudo sobre o Prisma
@@ -2626,15 +2626,18 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.64.0
+version: 2.65.0
 last_verified: 2026-10-09
 ---
 
 # Estado atual do Prisma
 
-## E-mail corporativo HRT: DNS verificado, correção de encaminhamento em rollout
+## E-mail corporativo HRT: recebimento e encaminhamento operacionais
 
-PO salvou o MX raiz10 inbound-smtp.sa-east-1.amazonaws.com em09/10/2026. DNS autoritativo/público e Resend verified em envio/recebimento; oito registros antigos preservados. Dois testes sintéticos chegaram com texto/HTML/anexo, mas1.0.1 bloqueou o download porque o host real cdn.resend.app estava ausente da lista. Correção1.0.2 permite apenas esse host exato adicional, preservando HTTPS, rejeição de redirects/portas/credenciais e limite20MiB;17testes Windows/QA Docker isolado PASS e audit sem vulnerabilidades. Rollout/retomada desses recibos e prova Gmail pendentes neste checkpoint. Destino privado com binding hash, assinatura/API scope, SQLite somente metadados, retry/idempotência/reinício/reconciliação preservados. Full access separado concedido pelo PO; config privada UID1000/mode400, nenhum secret exposto. Prisma2.3.0, convites/chave restrita, banco/IA/Score e runtimes existentes preservados. Cota Free100envios/dia3000/mês compartilhada, sem plano pago. Destino constou do primeiro SHA públicodc13eee; removido dos arquivos atuais, mas permanece no histórico e P-02 FAIL registrado no AoT. Acordo/execução v1.0.1, ADR-081 e operações; Gmail SMTP/Enviar como e respostas automáticas fora do escopo.
+Serviço independente1.0.2 publicado no SHA funcional ffc5a8ce626b6d87c219e1f511cc0f467682714f em main/origin/VPS. PO salvou o MX raiz10 inbound-smtp.sa-east-1.amazonaws.com em09/10/2026; DNS autoritativo/1.1.1.1 e Resend verified em envio/recebimento, oito entradas antigas/TLS oportunista/tracking off preservados. Dois testes reais para aliases distintos chegaram e foram delivered ao Gmail, com texto/HTML/assunto/Reply-To/anexo byte a byte e destino privado conferido por hash. Replay oficial HTTP200 e reinício preservaram dois recibos/uma tentativa por recebido. SMTP entregue não garante Inbox/spam; interface e filtro Gmail não inspecionados.
+
+Correção1.0.2 inclui host exato cdn.resend.app retornado pela API autenticada, mantendo HTTPS/redirects/portas/credenciais/limite20MiB protegidos.17testes Windows e17QA Docker isolado PASS, audit sem vulnerabilidades, quatro CIs branch/main success. Serviço healthy/zero reinícios inesperados, config UID1000/mode400, volume durável; seis containers existentes mesmos IDs/imagens/restarts e11HTTP site/portal/assets/gateways PASS. Prisma2.3.0, convites/chave restrita, banco/Score/IA e frontend preservados. Cota Free100envios/dia3000/mês compartilhada, sem plano pago. Todos D-* PASS; P-02 FAIL histórico: endereço de destino constou do primeiro SHA públicodc13eee e permanece no histórico, embora removido dos arquivos atuais e mantido em secret privado com binding hash. Sem segredo/corpo recebido exposto. Não declarar conformidade integral. Acordo/execução v1.0.1, AoT hrt-email-forwarding, ADR-081 e operações registram provas/limites/rollback. Gmail SMTP/Enviar como e respostas automáticas fora de escopo.
+
 ## Avaliação para Posição — v2.3.0 publicada
 
 Publicação integral autorizada pelo PO em09/10/2026; Agreement/Execution v0.5.0 congelados. Publicada2.3.0 no SHA funcional3e271e32d6e9c7b7bd3b77571507ccd71d037956 em main/origin/VPS. Cobre configuração/requisitos/distribuição exata, Banco/IA/Misto, revisão humana/cópia contextual, convites Resend com fila/claim/idempotência, portal resiliente com cinco alternativas, correção objetiva e resultado/atividade privados. Nada altera automaticamente Score/Perfil/Posição/etapa. Aviso final e expurgo temporal adiados, sem inventar base legal; exclusão explícita/direitos preservados. Resend domínio Verified, TLS oportunista e remetente suporte@hrtsolutions.com.br aprovados; credencial instalada em ciphertext backend-only/bootstrapping consumido, autenticação conferida com payload vazio422 sem mensagem. OpenAI Responses gpt-5.6-luna: máximo20questões/US$0,25pedido/US$10mês por empresa, reserva serializada e aprovação humana obrigatória.
@@ -10275,7 +10278,7 @@ Código: ref/artefato anterior. Migration: preferir forward fix; rollback destru
 
 # Recebimento e encaminhamento HRT
 
-Contrato docs/qa/agreement-hrt-email-forwarding.md v1.0.1, ADR-081. PO autorizou receber todos os endereços @hrtsolutions.com.br, incluindo bruno.harita e suporte, e encaminhar para seu Gmail pessoal. Prisma2.3.0 mantido; serviço corporativo1.0.2 independente. MX salvo pelo PO e verificado no DNS autoritativo/público e no Resend, com envio preservado. Dois testes sintéticos chegaram com texto/HTML/anexo; download do MIME bloqueado na1.0.1 porque o host real cdn.resend.app estava ausente da lista. Correção1.0.2 validada Windows/QA Docker, aguardando rollout e retomada desses dois recibos; não declarar entrega Gmail até esse teste. Destino privado validado por binding hash; ocorrência do SHA inicial registrada no AoT.
+Contrato docs/qa/agreement-hrt-email-forwarding.md v1.0.1, ADR-081. PO autorizou receber todos os endereços @hrtsolutions.com.br, incluindo bruno.harita e suporte, e encaminhar para seu Gmail pessoal. Prisma2.3.0 mantido; serviço corporativo1.0.2 publicado no SHA ffc5a8ce626b6d87c219e1f511cc0f467682714f. MX salvo pelo PO, verificado no DNS autoritativo/público e no Resend; oito registros antigos, envio e TLS oportunista preservados. Dois testes reais sintéticos delivered no Gmail com texto/HTML/assunto/Reply-To/anexo byte a byte, destino conferido por hash. Replay oficial e reinício preservaram dois recibos/uma tentativa por mensagem. SMTP entregue não garante Inbox/spam. Destino privado validado por binding hash; ocorrência histórica P-02 FAIL permanece registrada no AoT.
 
 ## Fluxo
 
@@ -17356,43 +17359,41 @@ PARTIAL. Correção de identidade entregue e validada; jornada hospedada chegou 
 
 # AoT: encaminhamento corporativo HRT
 
-## Atualização operacional1.0.2
-
-PO salvou o MX em09/10/2026. Nove entradas persistidas no Registro.br, preservando as oito anteriores; DNS autoritativo e1.1.1.1 confirmam root MX10 inbound-smtp.sa-east-1.amazonaws.com. Resend verified em envio/recebimento, tracking desabilitado. Dois e-mails sintéticos recebidos com texto/HTML/anexo; job bloqueado antes de enviar por raw_url_invalid. Causa provada: API autenticada entrega download em cdn.resend.app, ausente da lista inicial. Correção autoriza somente esse host exato adicional e mantém HTTP/portas/credenciais/redirecionamentos bloqueados. Mapa de impacto original preservado, com download CDN do mesmo provider diretamente afetado;17testes Windows e17QA Docker readonly/networknone/cap_drop PASS, audit sem vulnerabilidades. Rollout/retomada e prova Gmail ainda pendentes neste checkpoint; matriz abaixo é baseline e será fechada com a evidência real.
-
-Contrato docs/qa/agreement-hrt-email-forwarding.md v1.0.1 e execução correspondente, template aot-template.md. Baseline main2fe4e31, branch codex/hrt-email-forwarding, Prisma2.3.0 preservado. Em andamento: não declarar recebimento funcional antes da ativação/entrega. Primeiro SHA funcionaldc13eee publicado em main/origin/VPS, CI branch38012158752/38012158817 e main38012271121/38012271133 success. Serviço healthy/zero reinícios, assinatura ausente401; seis containers preservam IDs/imagens/restarts. Receiving enabled, DKIM/CNAMEs verified e MX pending; sessão Registro.br expirou e aguarda login do PO.
+Contrato docs/qa/agreement-hrt-email-forwarding.md v1.0.1, execução correspondente e ADR-081. Fonte: PO aprovou catch-all para seu Gmail e salvou o MX em09/10/2026. Prisma2.3.0 preservado; serviço independente1.0.2 publicado no SHA funcional ffc5a8ce626b6d87c219e1f511cc0f467682714f. Comportamento funcional comprovado. Conformidade integral do movimento não declarada: P-02 FAIL pela ocorrência histórica de endereço pessoal no Git público, detalhada abaixo.
 
 ## Matriz de acordos
 
 | ID | Implementação | Teste/evidência | Status | Limitação |
 | --- | --- | --- | --- | --- |
-| D-01 | Catch-all no domínio e destino fixo | Fila local/sintética pronta; ativação e teste real pendentes | PARTIAL | Sem MX ativo ainda |
-| D-02 | MIME oficial, Reply-To e identificação | Teste texto/HTML/anexo inline/headers | PARTIAL | E-mail real com anexo pendente |
-| D-03 | Assinatura, API scope, SQLite/hash/receipt/retry |17testes Windows/CI Node24;16Docker inicial readonly/networknone | PASS | Inclui falha/replay/concorrência/reinício/expiração/destino injetado; assinatura HTTP401 em produção |
-| D-04 | Compose/router/secrets, registros antigos e chave isolados | Baseline/after IDs/imagens/restarts idênticos; chave restrita preservada; sending DNS verified | PARTIAL | MX não modificado; conclusão depende do login/DNS |
-| D-05 | VPS existente, pacote/CI/release próprios | SHA15db406 main/origin/VPS, quatro CIs success; health200 e11HTTP de preservação | PASS | Sem plano pago/PC/túnel; rollout parcial por gate DNS |
+| D-01 | Catch-all no domínio e destino privado fixo | Dois aliases recebidos e forwarded last_event delivered, destino conferido por hash | PASS | SMTP do Gmail aceitou; Inbox/spam não inspecionados |
+| D-02 | Parser MIME oficial, Reply-To, X-Original-To/From |17testes; ambos os testes reais preservam texto/HTML/assunto/Reply-To e anexo byte a byte | PASS | Cabeçalhos de identificação demonstrados no parser/serialização SDK; interface do Gmail não inspecionada |
+| D-03 | Assinatura/API scope/destino fixo/SQLite/idem/retry |17negativos/contratos Windows e17Docker; replay oficial HTTP200 duas vezes por evento, mesmos recibos/uma tentativa; reinício persistiu dois delivered | PASS | Reenvio após24h ou payload alterado exige reconciliação |
+| D-04 | DNS/config/chave de convites/serviços preservados | Nove entradas persistidas com oito anteriores iguais; MX autoritativo/1.1.1.1 verified; TLS oportunista/tracking off; seis containers mesmos IDs/imagens/restarts e11HTTP PASS | PASS | Smoke público não substitui jornada autenticada de candidato |
+| D-05 | VPS existente, QA isolado, CI/main/rollout/rollback | Quatro CIs ffc5a8c success; container healthy/zero reinícios inesperados, config UID1000/mode400; docs sincronizadas sem rebuild dos outros runtimes | PASS | Sem ambiente QA remoto separado; QA Docker readonly/networknone na VPS |
 
-## Proibições
+## Proibições e ocorrência histórica
 
-P-01 PASS: texto de ataque fica só no corpo encaminhado, sem IA/comando/destino externo. P-02 FAIL: endereço pessoal de configuração permanece no histórico público, conforme ocorrência registrada abaixo; arquivos atuais corrigidos, sem exposição de conteúdo recebido/segredos/logs/SQLite. A correção não elimina a violação histórica e impede declarar conformidade integral do movimento. Segredo capturado DPAPI/SSH stdin e salvo UID1000/mode400. P-03 PASS local: idempotência/payload/expiração testados; aceitação separada de entrega. P-04 PASS: comparação pós-rollout preserva seis containers e suas imagens/restarts; nenhuma mudança de produto/banco/chave restrita ou plano.
+P-01 PASS: nenhuma IA, execução ou resposta automática; conteúdo recebido não controla destino nem ações. P-03 PASS: mesma idempotência/hash, uma tentativa e um recibo por recebido após replay/reinício, sem reenvio cego; accepted separado de delivered. P-04 PASS: nenhum dado de candidato, chave restrita, produto, banco/Score/IA, TLS, SPF/DKIM, plano ou outro runtime alterado.
 
-## Impacto e preservação
+P-02 FAIL: o destino de configuração entrou em texto claro no primeiro SHA público dc13eee antes da confirmação de visibilidade PUBLIC do remoto. PO informado. Correção1.0.1 retirou o valor dos arquivos atuais e colocou-o em secret privado com binding SHA256, mas o endereço permanece no histórico. Nenhum segredo, corpo, assunto, anexo ou conteúdo recebido foi exposto; recibos/logs atuais guardam só UUIDs, estados, tempos, hash e categorias técnicas. Não houve reescrita/remoção de histórico. A correção atual não elimina a violação histórica nem autoriza declarar conformidade integral.
 
-Mapa inicial no Agreement. Serviço/DNS/Gmail direct; cota/envio Resend e recursos do host plausible_indirect; Traefik/site critical_transversal; Supabase/tenant/Score/IA no_impact_identified após inspeção dos consumidores e ausência de credenciais/destinos do produto. Baseline sanitized em evidence/hrt-email-forwarding/baseline-containers.txt. Registro.br tem oito entradas, sem MX; Resend receiving disabled, sending verified/enabled. Infra existente não deve ser recriada. Após implantação: comparar IDs/imagens/restarts/health e smoke público do site/assets/portal/negações dos gateways.
+## Mapa de impacto e preservação
 
-## Fora de escopo e visual
+Mapa inicial no Agreement: serviço/DNS/Gmail direct, cota Resend/recursos VPS plausible_indirect, Traefik/site critical_transversal, Supabase/tenant/Score/IA no_impact_identified após inspeção de consumidores e ausência de suas credenciais no serviço. Baseline main2fe4e31, web funcional3e271e32, sem MX e receiving disabled. Baseline/after preservam os seis containers, suas imagens e reinícios; novo serviço é o único recriado. Paddle experimental unhealthy é condição anterior preservada, não foi tratado por este movimento. Smoke público site/portal/sete assets200 e gateways sem auth403; webhook sem assinatura401.
 
-F-01/F-02 preservados: nenhuma UI/template normativo novo, Gmail SMTP/Enviar como, IA, billing, purga, mudança de plano ou mensagens antigas. Referência visual não aplicável; formulário administrativo não é mockup de produto.
+Delta1.0.2: os dois testes chegaram, mas a lista inicial recusou raw download de cdn.resend.app. Causa provada pela API autenticada e recibos raw_url_invalid antes de qualquer envio. Host com CNAME CloudFront; documentação oficial define URL assinada CloudFront. Correção permite somente esse host exato adicional, preservando rejeição HTTP/portas/credenciais/redirects/hosts semelhantes e limite20MiB. Mapa mantém as áreas anteriores; download CDN do mesmo provider diretamente afetado. Retomada seletiva somente dos dois recibos sintéticos bloqueados sem tentativa/recibo prévio, sem apagar dados. Ambos passaram a delivered com uma tentativa.
 
-## Desvios e limites
+## Testes, evidências e ambientes
 
-Nenhum desvio funcional identificado na revisão local. Ocorrência de privacidade: destino configurado entrou em texto claro no SHA públicodc13eee, antes da confirmação da visibilidade PUBLIC do remoto. Valor removido dos arquivos atuais e transferido para config privada com binding hash na correção1.0.1. PO informado; endereço não é credencial, mas continua no histórico publicado. Nenhum secret ou conteúdo recebido foi exposto, nenhuma reescrita/remoção de histórico realizada. Full access exigido pelo provider foi apresentado e concedido pelo PO antes da instalação. Docker local indisponível; QA executado em container isolado na VPS existente, readonly e networknone, sem dados/segredos/produto. Não há QA remoto separado. Limite raw20MiB, quotas compartilhadas; não garante Inbox, spam, autenticação do remetente original ou segurança dos anexos. Rota de forwarding não toma decisões de emprego e não usa IA/ledger.
+Windows17tests e audit sem vulnerabilidades; QA17tests na imagem Node24, readonly/networknone/cap_drop/no-new-privileges e tmpfs, sem credenciais/dados reais. CI branch38014993520/38014993516 e main38015084029/38015084035 success. Context/lint em snapshot rastreado preserva arquivos alheios/untracked. Serviço1.0.2 healthy no SHA ffc5a8c, imagem ffc0f2a53e093cec01c4a91e652b29b0ede4808ecc2f461df9e6faa52940cc31. Um reinício manual de validação manteve dois jobs delivered e mesmos recibos/attempts=1; RestartCount0, sem crash. Rollback-before-ffc5a8ce626b preserva1.0.1, volume/secret mantidos.
 
-## Validação e ambientes
+Evidências sanitizadas em evidence/hrt-email-forwarding: operational-checkpoint.json, forwarding-before-restart.json/forwarding-after-restart.json, replay-audit.json, dns-zone-after.json, ci-cdn-fix.json, deployed-smoke.json, http-preservation.json e baseline-containers.txt/after-containers.txt. Nenhum endereço Gmail, URL assinada, chave ou corpo foi incluído nesses arquivos. Evento recebido e entregue confirmado pelo provider; anexos baixados só para comparação dos testes sintéticos, em memória.
 
-Windows17testes PASS; Docker16testes iniciais PASS;21testes tooling PASS; audit isolado sem vulnerabilidades. Contextos/lint PASS em snapshot dos arquivos rastreados sem os documentos alheios/untracked. Correção1.0.1 no SHA15db40625e636bd273e2cb78d99095e709737f57; branch CI38012643014/38012643034 e main38012751626/38012751674 success. VPS checkout alinhado e serviço com SHA esperado, healthy/zero reinícios. Rollback-before-15db406 preserva imagem inicial; volume/secret mantidos. HTTP site/portal/sete assets200, Parser/Paddle sem auth403 e webhook sem assinatura401. Evidências em evidence/hrt-email-forwarding/ci.json, deployed-smoke.json, http-preservation.json, baseline-containers.txt/after-containers.txt e operational-checkpoint.json.
+## Limites, fora de escopo e fechamento
 
-Estado parcial: servidor/código/credencial/webhook implementados, recebimento habilitado no Resend; MX raiz priority10 inbound-smtp.sa-east-1.amazonaws.com ainda pending e não gravado no Registro.br. Nenhum e-mail real enviado ou encaminhado. Nova autenticação do PO foi solicitada pela sessão expirada; somente depois desse gate concluir DNS autoritativo, verificação e testes sintéticos em dois aliases/anexo/replay. Não declarar D-01/D-02/D-04 PASS nem entrega funcional até essas evidências. Arquivos alheios preservados. Prisma permanece2.3.0; não houve rebuild dos runtimes existentes.
+Gmail Inbox/spam e sua UI/filtro NOT TESTED. Filtro recomendado from:encaminhamento@hrtsolutions.com.br; configuração Gmail/SMTP/Enviar como fora de escopo, respostas seguem Gmail pessoal. Cota Free observada100envios/dia3000/mês compartilhada com convites; sem upgrade/contratação. Mensagem bruta limitada20MiB, limites adicionais e retenção Resend/Gmail preservados; anexos continuam conteúdo não confiável.
+
+Sem nova referência visual/UI do produto. F-01/F-02 preservados: nenhuma IA/billing/purga/migração de mensagens antigas ou fluxo de candidato. Todos D-* PASS; P-02 FAIL histórico permanece como resíduo explícito. Entrega funcional publicada e sincronizada; não declarar conformidade integral do movimento.
 
 ---
 

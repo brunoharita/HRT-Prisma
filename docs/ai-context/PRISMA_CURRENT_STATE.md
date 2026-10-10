@@ -2,15 +2,18 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.64.0
+version: 2.65.0
 last_verified: 2026-10-09
 ---
 
 # Estado atual do Prisma
 
-## E-mail corporativo HRT: DNS verificado, correção de encaminhamento em rollout
+## E-mail corporativo HRT: recebimento e encaminhamento operacionais
 
-PO salvou o MX raiz10 inbound-smtp.sa-east-1.amazonaws.com em09/10/2026. DNS autoritativo/público e Resend verified em envio/recebimento; oito registros antigos preservados. Dois testes sintéticos chegaram com texto/HTML/anexo, mas1.0.1 bloqueou o download porque o host real cdn.resend.app estava ausente da lista. Correção1.0.2 permite apenas esse host exato adicional, preservando HTTPS, rejeição de redirects/portas/credenciais e limite20MiB;17testes Windows/QA Docker isolado PASS e audit sem vulnerabilidades. Rollout/retomada desses recibos e prova Gmail pendentes neste checkpoint. Destino privado com binding hash, assinatura/API scope, SQLite somente metadados, retry/idempotência/reinício/reconciliação preservados. Full access separado concedido pelo PO; config privada UID1000/mode400, nenhum secret exposto. Prisma2.3.0, convites/chave restrita, banco/IA/Score e runtimes existentes preservados. Cota Free100envios/dia3000/mês compartilhada, sem plano pago. Destino constou do primeiro SHA públicodc13eee; removido dos arquivos atuais, mas permanece no histórico e P-02 FAIL registrado no AoT. Acordo/execução v1.0.1, ADR-081 e operações; Gmail SMTP/Enviar como e respostas automáticas fora do escopo.
+Serviço independente1.0.2 publicado no SHA funcional ffc5a8ce626b6d87c219e1f511cc0f467682714f em main/origin/VPS. PO salvou o MX raiz10 inbound-smtp.sa-east-1.amazonaws.com em09/10/2026; DNS autoritativo/1.1.1.1 e Resend verified em envio/recebimento, oito entradas antigas/TLS oportunista/tracking off preservados. Dois testes reais para aliases distintos chegaram e foram delivered ao Gmail, com texto/HTML/assunto/Reply-To/anexo byte a byte e destino privado conferido por hash. Replay oficial HTTP200 e reinício preservaram dois recibos/uma tentativa por recebido. SMTP entregue não garante Inbox/spam; interface e filtro Gmail não inspecionados.
+
+Correção1.0.2 inclui host exato cdn.resend.app retornado pela API autenticada, mantendo HTTPS/redirects/portas/credenciais/limite20MiB protegidos.17testes Windows e17QA Docker isolado PASS, audit sem vulnerabilidades, quatro CIs branch/main success. Serviço healthy/zero reinícios inesperados, config UID1000/mode400, volume durável; seis containers existentes mesmos IDs/imagens/restarts e11HTTP site/portal/assets/gateways PASS. Prisma2.3.0, convites/chave restrita, banco/Score/IA e frontend preservados. Cota Free100envios/dia3000/mês compartilhada, sem plano pago. Todos D-* PASS; P-02 FAIL histórico: endereço de destino constou do primeiro SHA públicodc13eee e permanece no histórico, embora removido dos arquivos atuais e mantido em secret privado com binding hash. Sem segredo/corpo recebido exposto. Não declarar conformidade integral. Acordo/execução v1.0.1, AoT hrt-email-forwarding, ADR-081 e operações registram provas/limites/rollback. Gmail SMTP/Enviar como e respostas automáticas fora de escopo.
+
 ## Avaliação para Posição — v2.3.0 publicada
 
 Publicação integral autorizada pelo PO em09/10/2026; Agreement/Execution v0.5.0 congelados. Publicada2.3.0 no SHA funcional3e271e32d6e9c7b7bd3b77571507ccd71d037956 em main/origin/VPS. Cobre configuração/requisitos/distribuição exata, Banco/IA/Misto, revisão humana/cópia contextual, convites Resend com fila/claim/idempotência, portal resiliente com cinco alternativas, correção objetiva e resultado/atividade privados. Nada altera automaticamente Score/Perfil/Posição/etapa. Aviso final e expurgo temporal adiados, sem inventar base legal; exclusão explícita/direitos preservados. Resend domínio Verified, TLS oportunista e remetente suporte@hrtsolutions.com.br aprovados; credencial instalada em ciphertext backend-only/bootstrapping consumido, autenticação conferida com payload vazio422 sem mensagem. OpenAI Responses gpt-5.6-luna: máximo20questões/US$0,25pedido/US$10mês por empresa, reserva serializada e aprovação humana obrigatória.

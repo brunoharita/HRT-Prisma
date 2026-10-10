@@ -1,6 +1,6 @@
 # Recebimento e encaminhamento HRT
 
-Contrato docs/qa/agreement-hrt-email-forwarding.md v1.0.1, ADR-081. PO autorizou receber todos os endereços @hrtsolutions.com.br, incluindo bruno.harita e suporte, e encaminhar para seu Gmail pessoal. Prisma2.3.0 mantido; serviço corporativo1.0.2 independente. MX salvo pelo PO e verificado no DNS autoritativo/público e no Resend, com envio preservado. Dois testes sintéticos chegaram com texto/HTML/anexo; download do MIME bloqueado na1.0.1 porque o host real cdn.resend.app estava ausente da lista. Correção1.0.2 validada Windows/QA Docker, aguardando rollout e retomada desses dois recibos; não declarar entrega Gmail até esse teste. Destino privado validado por binding hash; ocorrência do SHA inicial registrada no AoT.
+Contrato docs/qa/agreement-hrt-email-forwarding.md v1.0.1, ADR-081. PO autorizou receber todos os endereços @hrtsolutions.com.br, incluindo bruno.harita e suporte, e encaminhar para seu Gmail pessoal. Prisma2.3.0 mantido; serviço corporativo1.0.2 publicado no SHA ffc5a8ce626b6d87c219e1f511cc0f467682714f. MX salvo pelo PO, verificado no DNS autoritativo/público e no Resend; oito registros antigos, envio e TLS oportunista preservados. Dois testes reais sintéticos delivered no Gmail com texto/HTML/assunto/Reply-To/anexo byte a byte, destino conferido por hash. Replay oficial e reinício preservaram dois recibos/uma tentativa por mensagem. SMTP entregue não garante Inbox/spam. Destino privado validado por binding hash; ocorrência histórica P-02 FAIL permanece registrada no AoT.
 
 ## Fluxo
 
