@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 423
-source_manifest_sha256: 2ed6619a205db9f8a635477c3f1005210cd56fd4f490a2afeabfbe53310c712c
+source_manifest_sha256: 7377bd6ddcf1aef78a8440d071e96844d424fe812e80d9ed5bdc9e45acf1fc9c
 -->
 
 # Tudo sobre o Prisma
@@ -2632,9 +2632,9 @@ last_verified: 2026-10-09
 
 # Estado atual do Prisma
 
-## E-mail corporativo HRT: encaminhamento em implantação
+## E-mail corporativo HRT: serviço publicado, DNS pendente
 
-PO aprovou receber todos os endereços @hrtsolutions.com.br e encaminhar para Gmail pessoal informado pelo PO. Serviço isolado1.0.1 em implantação, sem alterar Prisma2.3.0, Supabase, frontend, IA ou chaves de convites. SDK/parser oficiais, assinatura/destino fixo/API scope, SQLite de recibos sem corpo/PII, idempotência/retry/reinício e reconciliação após24h;16testes Windows/16Docker/21tooling PASS e audit sem vulnerabilidades. PO criou Full access separado e config privada instalada via DPAPI/SSH stdin, sem exposição. Serviço inicialdc13eee main/VPS/CI PASS, healthy e assinatura ausente401; seis containers preservados. Receiving enabled, MX e entrega real ainda pendentes; não é capacidade operacional comprovada. Cota Free100envios/dia3000/mês compartilhada com convites, nenhum plano pago. Acordo/execução/AoT hrt-email-forwarding, ADR-081 e operações especializadas registram gates/limites/rollback; Gmail SMTP/Enviar como e respostas automáticas fora do escopo.
+PO aprovou receber todos os endereços @hrtsolutions.com.br e encaminhar para seu Gmail pessoal. Serviço isolado1.0.1 publicado no SHA15db40625e636bd273e2cb78d99095e709737f57 em main/origin/VPS, sem alterar Prisma2.3.0, Supabase, frontend, IA ou chave de convites. SDK/parser oficiais, assinatura/destino privado com binding hash/API scope, SQLite de recibos sem corpo/endereços, idempotência/retry/reinício e reconciliação após24h;17testes Windows/CI Node24,16Docker inicial,21tooling PASS, contextos/lint em snapshot rastreado e audit sem vulnerabilidades. Full access separado concedido explicitamente pelo PO e config privada DPAPI/SSH stdin/UID1000mode400, nenhum secret exposto. Serviço healthy/zero reinícios, health200 e assinatura ausente401; seis containers preservam IDs/imagens/restarts e11HTTP site/portal/assets/gateways PASS. CIs branch38012643014/38012643034 e main38012751626/38012751674 success. Receiving enabled, sending DNS verified, mas MX raiz priority10 inbound-smtp.sa-east-1.amazonaws.com pending: sessão Registro.br expirou e aguarda login do PO. Nenhum e-mail real enviado/encaminhado; D-01/D-02/D-04 parciais, não é recebimento operacional comprovado. Cota Free100envios/dia3000/mês compartilhada com convites, nenhum plano pago. Destino apareceu no primeiro SHA públicodc13eee; removido dos arquivos atuais e privado na correção, mas permanece no histórico; PO informado. Acordo/execução v1.0.1, AoT hrt-email-forwarding, ADR-081 e operações registram gates/limites/rollback. Gmail SMTP/Enviar como e respostas automáticas fora do escopo.
 
 ## Avaliação para Posição — v2.3.0 publicada
 
@@ -10274,7 +10274,7 @@ Código: ref/artefato anterior. Migration: preferir forward fix; rollback destru
 
 # Recebimento e encaminhamento HRT
 
-Contrato docs/qa/agreement-hrt-email-forwarding.md v1.0.1, ADR-081. PO autorizou receber todos os endereços @hrtsolutions.com.br, incluindo bruno.harita e suporte, e encaminhar para seu Gmail pessoal. Prisma2.3.0 mantido; serviço corporativo1.0.1 independente. Serviço já publicado/healthy no SHA inicialdc13eee, recebimento habilitado mas MX ainda pendente; não declarar entrega operacional.
+Contrato docs/qa/agreement-hrt-email-forwarding.md v1.0.1, ADR-081. PO autorizou receber todos os endereços @hrtsolutions.com.br, incluindo bruno.harita e suporte, e encaminhar para seu Gmail pessoal. Prisma2.3.0 mantido; serviço corporativo1.0.1 independente. Serviço1.0.1 publicado/healthy no SHA15db406 em main/origin/VPS; CIs branch/main success. Recebimento habilitado mas MX ainda pendente; não declarar entrega operacional. Destino privado validado por binding hash, conforme correção1.0.1; ocorrência do SHA inicial registrada no AoT.
 
 ## Fluxo
 
@@ -10812,7 +10812,7 @@ DNS público consultado com Resolve-DnsName: NS `a.sec.dns.br` / `b.sec.dns.br`.
 | CNAME | `rsend` | `rsend-sae1.forge.rmta.net` | padrão do painel |
 | CNAME | `send` | `send.forge.rmta.net` | padrão do painel |
 
-Fonte dos conteúdos: UI autenticada do Resend para este domínio, não inferidos de exemplos antigos da API. A chave DKIM acima é pública, não uma credencial. Conferir novamente antes de gravar. Não substituir MX do domínio principal ou TXT SPF/DMARC atuais. DMARC sugerido na UI é opcional e não entra nesta configuração; não enfraquecer política existente. Recebimento no Resend está desativado e deve permanecer assim. Nenhum subdomínio de tracking foi configurado; abertura/cliques não devem ser inferidos ou necessários ao convite. TLS **Opportunistic** mantido por decisão explícita do PO após apresentação do risco de envio sem TLS quando o destinatário não o suporta. A revisão automática rejeitou a alteração para Enforced por não estar autorizada na decisão de DNS; não houve retry ou contorno. A decisão posterior do PO foi manter a configuração atual.
+Fonte dos conteúdos: UI autenticada do Resend para este domínio, não inferidos de exemplos antigos da API. A chave DKIM acima é pública, não uma credencial. Conferir novamente antes de gravar. Não substituir MX do domínio principal ou TXT SPF/DMARC atuais. DMARC sugerido na UI é opcional e não entra nesta configuração; não enfraquecer política existente. Recebimento estava desativado no baseline da2.3.0. A decisão posterior do PO autorizou catch-all corporativo separado para seu Gmail: ver docs/operations/hrt-email-forwarding.md e ADR-081. Essa decisão substitui apenas a restrição de recebimento, preservando envio, chave restrita e demais registros. Nenhum subdomínio de tracking foi configurado; abertura/cliques não devem ser inferidos ou necessários ao convite. TLS **Opportunistic** mantido por decisão explícita do PO após apresentação do risco de envio sem TLS quando o destinatário não o suporta. A revisão automática rejeitou a alteração para Enforced por não estar autorizada na decisão de DNS; não houve retry ou contorno. A decisão posterior do PO foi manter a configuração atual.
 
 O PO confirmou a criação/cópia da chave preparada como “Prisma - Convites de avaliação”. Consulta somente aos metadados pelo conector Resend confirmou a chave com esse nome; o valor não foi consultado. O mesmo conector confirmou domínio verified, região sa-east-1, envio habilitado, recebimento desabilitado e tracking de abertura/cliques desabilitado. A credencial do conector não é uma chave disponível para o backend da plataforma.
 
@@ -17363,13 +17363,13 @@ Contrato docs/qa/agreement-hrt-email-forwarding.md v1.0.1 e execução correspon
 | --- | --- | --- | --- | --- |
 | D-01 | Catch-all no domínio e destino fixo | Fila local/sintética pronta; ativação e teste real pendentes | PARTIAL | Sem MX ativo ainda |
 | D-02 | MIME oficial, Reply-To e identificação | Teste texto/HTML/anexo inline/headers | PARTIAL | E-mail real com anexo pendente |
-| D-03 | Assinatura, API scope, SQLite/hash/receipt/retry |16testes Windows e16Docker readonly/networknone no host existente | PASS | Inclui falha/replay/concorrência/reinício/expiração/destino injetado |
-| D-04 | Compose/router e secrets isolados | Baseline IDs/imagens/restarts; sending key distinta | PARTIAL | Comparação pós-rollout pendente |
-| D-05 | VPS existente, pacote/CI/release próprios | Build Docker/16testes,21tooling e audit sem vulnerabilidade | PARTIAL | CI/main/prod/smoke pendentes |
+| D-03 | Assinatura, API scope, SQLite/hash/receipt/retry |17testes Windows/CI Node24;16Docker inicial readonly/networknone | PASS | Inclui falha/replay/concorrência/reinício/expiração/destino injetado; assinatura HTTP401 em produção |
+| D-04 | Compose/router/secrets, registros antigos e chave isolados | Baseline/after IDs/imagens/restarts idênticos; chave restrita preservada; sending DNS verified | PARTIAL | MX não modificado; conclusão depende do login/DNS |
+| D-05 | VPS existente, pacote/CI/release próprios | SHA15db406 main/origin/VPS, quatro CIs success; health200 e11HTTP de preservação | PASS | Sem plano pago/PC/túnel; rollout parcial por gate DNS |
 
 ## Proibições
 
-P-01 PASS: texto de ataque fica só no corpo encaminhado, sem IA/comando/destino externo. P-02 PASS local: logs/SQLite/artefatos apenas metadados; segredo capturado DPAPI/SSH stdin e salvo UID1000/mode400. P-03 PASS local: idempotência/payload/expiração testados; aceitação separada de entrega. P-04 PARTIAL até comparação pós-rollout; nenhuma mudança de produto/banco/chave restrita ou plano.
+P-01 PASS: texto de ataque fica só no corpo encaminhado, sem IA/comando/destino externo. P-02 PASS para conteúdo recebido/segredos/logs/SQLite; ocorrência de endereço de configuração em histórico público registrada abaixo, sem alegar remoção histórica. Segredo capturado DPAPI/SSH stdin e salvo UID1000/mode400. P-03 PASS local: idempotência/payload/expiração testados; aceitação separada de entrega. P-04 PASS: comparação pós-rollout preserva seis containers e suas imagens/restarts; nenhuma mudança de produto/banco/chave restrita ou plano.
 
 ## Impacto e preservação
 
@@ -17385,7 +17385,9 @@ Nenhum desvio funcional identificado na revisão local. Ocorrência de privacida
 
 ## Validação e ambientes
 
-Windows16testes PASS; Docker16testes PASS;21testes tooling PASS; audit isolado sem vulnerabilidades. CI, main/origin/VPS, MX, verificação Resend e entrega real NOT TESTED nesta etapa. Fechamento somente quando todos D forem PASS.
+Windows17testes PASS; Docker16testes iniciais PASS;21testes tooling PASS; audit isolado sem vulnerabilidades. Contextos/lint PASS em snapshot dos arquivos rastreados sem os documentos alheios/untracked. Correção1.0.1 no SHA15db40625e636bd273e2cb78d99095e709737f57; branch CI38012643014/38012643034 e main38012751626/38012751674 success. VPS checkout alinhado e serviço com SHA esperado, healthy/zero reinícios. Rollback-before-15db406 preserva imagem inicial; volume/secret mantidos. HTTP site/portal/sete assets200, Parser/Paddle sem auth403 e webhook sem assinatura401. Evidências em evidence/hrt-email-forwarding/ci.json, deployed-smoke.json, http-preservation.json, baseline-containers.txt/after-containers.txt e operational-checkpoint.json.
+
+Estado parcial: servidor/código/credencial/webhook implementados, recebimento habilitado no Resend; MX raiz priority10 inbound-smtp.sa-east-1.amazonaws.com ainda pending e não gravado no Registro.br. Nenhum e-mail real enviado ou encaminhado. Nova autenticação do PO foi solicitada pela sessão expirada; somente depois desse gate concluir DNS autoritativo, verificação e testes sintéticos em dois aliases/anexo/replay. Não declarar D-01/D-02/D-04 PASS nem entrega funcional até essas evidências. Arquivos alheios preservados. Prisma permanece2.3.0; não houve rebuild dos runtimes existentes.
 
 ---
 

@@ -1,6 +1,6 @@
 # Recebimento e encaminhamento HRT
 
-Contrato docs/qa/agreement-hrt-email-forwarding.md v1.0.1, ADR-081. PO autorizou receber todos os endereços @hrtsolutions.com.br, incluindo bruno.harita e suporte, e encaminhar para seu Gmail pessoal. Prisma2.3.0 mantido; serviço corporativo1.0.1 independente. Serviço já publicado/healthy no SHA inicialdc13eee, recebimento habilitado mas MX ainda pendente; não declarar entrega operacional.
+Contrato docs/qa/agreement-hrt-email-forwarding.md v1.0.1, ADR-081. PO autorizou receber todos os endereços @hrtsolutions.com.br, incluindo bruno.harita e suporte, e encaminhar para seu Gmail pessoal. Prisma2.3.0 mantido; serviço corporativo1.0.1 independente. Serviço1.0.1 publicado/healthy no SHA15db406 em main/origin/VPS; CIs branch/main success. Recebimento habilitado mas MX ainda pendente; não declarar entrega operacional. Destino privado validado por binding hash, conforme correção1.0.1; ocorrência do SHA inicial registrada no AoT.
 
 ## Fluxo
 

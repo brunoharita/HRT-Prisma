@@ -1,0 +1,17 @@
+{
+  "sendingDns": "verified",
+  "serviceVersion": "1.0.1",
+  "protectedConfigUid": 1000,
+  "protectedConfigMode": "400",
+  "mxValue": "inbound-smtp.sa-east-1.amazonaws.com",
+  "mxName": "hrtsolutions.com.br",
+  "functionalSha": "15db40625e636bd273e2cb78d99095e709737f57",
+  "receivingDns": "pending",
+  "mxPriority": 10,
+  "prismaVersion": "2.3.0",
+  "webhookId": "98052d19-4dbb-44b2-9fd0-b99540a3c618",
+  "realForwardingTest": "NOT TESTED",
+  "paidPlan": false,
+  "receivingCapability": "enabled",
+  "blocker": "REGISTRY_SESSION_EXPIRED_AWAITING_USER_LOGIN"
+}

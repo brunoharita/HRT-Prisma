@@ -8,13 +8,13 @@ Contrato docs/qa/agreement-hrt-email-forwarding.md v1.0.1 e execução correspon
 | --- | --- | --- | --- | --- |
 | D-01 | Catch-all no domínio e destino fixo | Fila local/sintética pronta; ativação e teste real pendentes | PARTIAL | Sem MX ativo ainda |
 | D-02 | MIME oficial, Reply-To e identificação | Teste texto/HTML/anexo inline/headers | PARTIAL | E-mail real com anexo pendente |
-| D-03 | Assinatura, API scope, SQLite/hash/receipt/retry |16testes Windows e16Docker readonly/networknone no host existente | PASS | Inclui falha/replay/concorrência/reinício/expiração/destino injetado |
-| D-04 | Compose/router e secrets isolados | Baseline IDs/imagens/restarts; sending key distinta | PARTIAL | Comparação pós-rollout pendente |
-| D-05 | VPS existente, pacote/CI/release próprios | Build Docker/16testes,21tooling e audit sem vulnerabilidade | PARTIAL | CI/main/prod/smoke pendentes |
+| D-03 | Assinatura, API scope, SQLite/hash/receipt/retry |17testes Windows/CI Node24;16Docker inicial readonly/networknone | PASS | Inclui falha/replay/concorrência/reinício/expiração/destino injetado; assinatura HTTP401 em produção |
+| D-04 | Compose/router/secrets, registros antigos e chave isolados | Baseline/after IDs/imagens/restarts idênticos; chave restrita preservada; sending DNS verified | PARTIAL | MX não modificado; conclusão depende do login/DNS |
+| D-05 | VPS existente, pacote/CI/release próprios | SHA15db406 main/origin/VPS, quatro CIs success; health200 e11HTTP de preservação | PASS | Sem plano pago/PC/túnel; rollout parcial por gate DNS |
 
 ## Proibições
 
-P-01 PASS: texto de ataque fica só no corpo encaminhado, sem IA/comando/destino externo. P-02 PASS local: logs/SQLite/artefatos apenas metadados; segredo capturado DPAPI/SSH stdin e salvo UID1000/mode400. P-03 PASS local: idempotência/payload/expiração testados; aceitação separada de entrega. P-04 PARTIAL até comparação pós-rollout; nenhuma mudança de produto/banco/chave restrita ou plano.
+P-01 PASS: texto de ataque fica só no corpo encaminhado, sem IA/comando/destino externo. P-02 PASS para conteúdo recebido/segredos/logs/SQLite; ocorrência de endereço de configuração em histórico público registrada abaixo, sem alegar remoção histórica. Segredo capturado DPAPI/SSH stdin e salvo UID1000/mode400. P-03 PASS local: idempotência/payload/expiração testados; aceitação separada de entrega. P-04 PASS: comparação pós-rollout preserva seis containers e suas imagens/restarts; nenhuma mudança de produto/banco/chave restrita ou plano.
 
 ## Impacto e preservação
 
@@ -30,4 +30,6 @@ Nenhum desvio funcional identificado na revisão local. Ocorrência de privacida
 
 ## Validação e ambientes
 
-Windows16testes PASS; Docker16testes PASS;21testes tooling PASS; audit isolado sem vulnerabilidades. CI, main/origin/VPS, MX, verificação Resend e entrega real NOT TESTED nesta etapa. Fechamento somente quando todos D forem PASS.
+Windows17testes PASS; Docker16testes iniciais PASS;21testes tooling PASS; audit isolado sem vulnerabilidades. Contextos/lint PASS em snapshot dos arquivos rastreados sem os documentos alheios/untracked. Correção1.0.1 no SHA15db40625e636bd273e2cb78d99095e709737f57; branch CI38012643014/38012643034 e main38012751626/38012751674 success. VPS checkout alinhado e serviço com SHA esperado, healthy/zero reinícios. Rollback-before-15db406 preserva imagem inicial; volume/secret mantidos. HTTP site/portal/sete assets200, Parser/Paddle sem auth403 e webhook sem assinatura401. Evidências em evidence/hrt-email-forwarding/ci.json, deployed-smoke.json, http-preservation.json, baseline-containers.txt/after-containers.txt e operational-checkpoint.json.
+
+Estado parcial: servidor/código/credencial/webhook implementados, recebimento habilitado no Resend; MX raiz priority10 inbound-smtp.sa-east-1.amazonaws.com ainda pending e não gravado no Registro.br. Nenhum e-mail real enviado ou encaminhado. Nova autenticação do PO foi solicitada pela sessão expirada; somente depois desse gate concluir DNS autoritativo, verificação e testes sintéticos em dois aliases/anexo/replay. Não declarar D-01/D-02/D-04 PASS nem entrega funcional até essas evidências. Arquivos alheios preservados. Prisma permanece2.3.0; não houve rebuild dos runtimes existentes.
