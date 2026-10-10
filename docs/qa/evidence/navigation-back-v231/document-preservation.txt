@@ -1,0 +1,16 @@
+✔ M2-C makes document operations idempotent and serializes version allocation (19.0838ms)
+✔ M2-C persists retry attempts, immutable extraction, review revisions, and field changes (3.8661ms)
+✔ M2-C critical mutations use locked-down RPCs and fail closed outside reviewer roles (4.2394ms)
+✔ M2-C audit events contain operational references without document text or full profile payload (2.2032ms)
+✔ M2-C exposes four local flows under Pessoas without adding a global navigation item (2.9588ms)
+✔ M2-C operations table preserves readable person and document columns (2.3701ms)
+✔ Person Center opens processing and reviews already scoped to the selected Person (3.1624ms)
+✔ M2-C closes review through Delta and returns to the Person only after publication (1.9156ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 206.6785

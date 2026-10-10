@@ -116,7 +116,7 @@ test("Person Center opens processing and reviews already scoped to the selected 
   assert.match(application, /personId=\{route\.profileId\}/);
   assert.match(operations, /listDocumentOperations\(activeMembership\.organizationId, personId\)/);
   assert.match(operations, /Ver toda a organização/);
-  assert.match(operations, /Voltar para a Pessoa/);
+  assert.match(operations, /onClick=\{\(\) => onNavigate\(`\/profiles\/\$\{personId\}`\)\}>Ir para a Pessoa/);
   assert.match(service, /personId \? documentQuery\.eq\("person_id", personId\)/);
   assert.match(service, /personId \? peopleQuery\.eq\("id", personId\)/);
   assert.match(service, /personId \? profileQuery\.eq\("person_id", personId\)/);

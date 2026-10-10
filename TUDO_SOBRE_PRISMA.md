@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 426
-source_manifest_sha256: d9b563cab1156536d38c994434b3070783edb79d4f6156997f81ced60b93d64d
+source_manifest_sha256: a74372bbd2816143c3714aaa976f3b1a819f05763bb808a971021786b5fc9dfd
 -->
 
 # Tudo sobre o Prisma
@@ -20407,7 +20407,7 @@ F-01 preservado no diff; portais públicos mantêm seus controles. Documentos al
 
 ## Git, CI, publicação e conclusão
 
-Pendentes. D-05 ainda PARTIAL: não declarar movimento concluído até publicação e preservação remota comprovadas.
+CI inicial38045473960 bloqueou promoção:872/873, expectativa estática antiga de rótulo em m2DocumentReliabilityReview. Corrigida para novo rótulo e destino exato preservado; oito testes de documentos PASS (document-preservation.txt). Sem retirada de gate ou nova alteração de produto. CI final/publicação pendentes. D-05 ainda PARTIAL: não declarar movimento concluído até publicação e preservação remota comprovadas.
 
 ---
 
