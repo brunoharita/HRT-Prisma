@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';import {createRequire} from 'node:module';import {mkdir,writeFile} from 'node:fs/promises';
 const {chromium}=createRequire(import.meta.url)(process.env.PRISMA_PLAYWRIGHT_PATH??'playwright');const browser=await chromium.launch({headless:true,executablePath:process.env.PRISMA_BROWSER_PATH});
-const base='http://127.0.0.1:5710',dir='docs/qa/evidence/process-assessment-v232/browser',checks=[];await mkdir(dir,{recursive:true});
+const base='http://127.0.0.1:5710',dir=process.env.PRISMA_EVIDENCE_DIR??'docs/qa/evidence/process-assessment-v232/browser',checks=[];await mkdir(dir,{recursive:true});
 const check=(name,value)=>{checks.push({name,pass:!!value});assert.ok(value,name);};
 async function open(page,state){await page.goto(`${base}/process-assessment.html?state=${state}`);await page.getByRole('heading',{name:state==='follow-up'?'Coordenação de Operações':'Avaliação do processo',exact:true}).waitFor();await page.waitForTimeout(150);}
 const calls=page=>page.evaluate(()=>window.__processFixture.calls);

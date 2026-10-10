@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.69.0
+version: 2.70.0
 last_verified: 2026-10-10
 ---
 
 # Estado atual do Prisma
+
+## Avaliação com seções guiadas 4A — v2.3.5
+
+Implementação aprovada em10/10/2026: duas seções simultâneas, Configuração e Requisitos da Posição, com faixa numerada azul claro à esquerda no desktop, campos/composição e chips à direita; mobile empilha cabeçalhos, mantém campos2×2 e requisitos em lista. Montar avaliação abaixo, histórico expansível separado, acompanhamento/atualização no cabeçalho. Personalizar requisitos preserva edição explícita; selecionados ficam visíveis também fora da edição. Sem alteração de prova/IA/envio/Score/backend/dados, nem novas etapas. A versão2.3.5 já publicada para o Kanban é mantida por solicitação explícita do Product Owner, distinguindo implantação pelo SHA. Acordo, mapa, prompt e AoT em `docs/qa/process-assessment-guided-v235.md`; referência normativa4A registrada. QA local PASS:60checks visuais/funcionais,76regressões browser,9testes Node e tipos/build. Publicação pendente, até registro operacional no AoT; cenários reais autenticados não foram executados.
 
 ## Identificação do Kanban — correção v2.3.5
 

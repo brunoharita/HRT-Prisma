@@ -133,3 +133,7 @@ A primeira proposta visual aprovada em10/10/2026 define os cards da descoberta e
 ## Correção da identificação no Kanban — 2.3.5
 
 A seleção para avaliação compartilha a região esquerda com o avatar. Nome, cargo e localização ocupam o centro flexível; alça e score permanecem à direita. Posicionamento explícito impede que um controle novo desloque a identificação para o track de50px. Conteúdo completo, composição compacta, rodapé, seleção e ações são preservados. Referência: contrato/AoT kanban-identity-v235.
+
+## Avaliação do processo — seções guiadas 4A, 2.3.5
+
+Referência aprovada: `docs/product/proposta-avaliacao-processo-2026-10-10/variacoes-secoes-guiadas/4a-azul-equilibrado.png`. Configuração e Requisitos da Posição aparecem simultaneamente. Desktop usa faixa numerada azul suave à esquerda e controles à direita, quatro campos em linha, composição abaixo e requisitos em chips. Mobile empilha cabeçalhos e conteúdo, campos2×2 e lista legível; ação Montar avaliação abaixo e histórico independente. A numeração não cria um wizard. Personalização continua explícita; requisitos escolhidos ficam visíveis fora da edição. Cores/tokens, shell, navegação, loading e handlers reutilizam o sistema. Avaliação e regras de IA/revisão/envio/dados não mudam. Acordo e AoT `process-assessment-guided-v235`.

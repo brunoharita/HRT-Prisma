@@ -1,8 +1,8 @@
 .process-assessment {display:flex;flex-direction:column;gap:16px;min-width:0;}
 .process-assessment .ant-card,.process-assessment .ant-table-wrapper,.process-assessment .ant-collapse {min-width:0;max-width:100%;}
 .process-assessment-fields {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:16px;}
-.process-assessment label {display:flex;flex-direction:column;gap:6px;margin:12px 0;}
-.process-assessment label .ant-input-number,.process-assessment label .ant-select {width:100%;}
+.process-assessment label:not(.ant-checkbox-wrapper) {display:flex;flex-direction:column;gap:6px;margin:12px 0;min-width:0;}
+.process-assessment label:not(.ant-checkbox-wrapper) .ant-input-number,.process-assessment label:not(.ant-checkbox-wrapper) .ant-select {width:100%;}
 .process-assessment .ant-collapse-header-text {overflow-wrap:anywhere;}
 .process-assessment .ant-btn {max-width:100%;height:auto;min-height:32px;white-space:normal;}
 .process-assessment-option {display:flex;align-items:center;gap:8px;margin:12px 0;}
@@ -10,4 +10,38 @@
 .process-assessment-reuse .ant-space-item {min-width:0;}
 .process-assessment-reuse .ant-select {width:100%;}
 @media(max-width:800px){.process-assessment-fields{grid-template-columns:repeat(2,minmax(0,1fr));}}
-@media(max-width:480px){.process-assessment-fields,.process-assessment-reuse{grid-template-columns:minmax(0,1fr);} .process-assessment .ant-checkbox-group{display:flex;flex-direction:column;}}
+.process-assessment-preparation {display:grid;gap:16px;min-width:0;}
+.process-assessment-section {display:grid;grid-template-columns:minmax(185px,20%) minmax(0,1fr);border:1px solid var(--prisma-highlight-border,#b9d2ff);border-radius:12px;background:#fff;overflow:hidden;min-width:0;}
+.process-assessment-section-heading {background:var(--prisma-highlight,#edf4ff);padding:24px;min-width:0;}
+.process-assessment-section-number {display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#155eef;color:#fff;font-size:18px;font-weight:650;margin-bottom:12px;}
+.process-assessment-section-heading h2,.process-assessment-history-heading h2 {font-size:18px;line-height:1.4;margin:0 0 10px;color:var(--prisma-text,#10203a);}
+.process-assessment-section-heading p {margin:0;color:var(--prisma-text-secondary,#53637d);font-size:14px;line-height:1.5;}
+.process-assessment-section-body {padding:24px;min-width:0;}
+.process-assessment-fields {gap:12px;margin-bottom:18px;}
+.process-assessment-fields > label:not(.ant-checkbox-wrapper) {border:1px solid var(--prisma-border,#e2e8f2);border-radius:8px;padding:12px;margin:0;font-size:14px;}
+.process-assessment-composition {display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--prisma-highlight,#edf4ff);border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.5;}
+.process-assessment-composition > .anticon {color:#155eef;font-size:18px;}
+.process-assessment-composition strong {font-weight:500;}
+.process-assessment-composition > span:last-child:not(.anticon) {color:var(--prisma-text-secondary,#53637d);}
+.process-assessment-requirements-header {display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px;}
+.process-assessment-requirements-header p {margin:0;font-size:14px;}
+.process-assessment-requirements-header .ant-btn {padding-inline:0;}
+.process-assessment-selected-requirements,.process-assessment-requirements .ant-checkbox-group {display:flex;gap:10px;flex-wrap:wrap;width:100%;min-width:0;}
+.process-assessment-requirement-chip,.process-assessment-requirements .ant-checkbox-wrapper {display:inline-flex;align-items:center;gap:8px;padding:9px 12px;margin:0;border:1px solid var(--prisma-border,#e2e8f2);border-radius:6px;background:#fff;font-size:14px;line-height:1.5;min-width:0;max-width:100%;overflow-wrap:anywhere;}
+.process-assessment-requirement-chip,.process-assessment-requirements .ant-checkbox-wrapper-checked {background:var(--prisma-highlight,#edf4ff);border-color:var(--prisma-highlight-border,#b9d2ff);}
+.process-assessment-requirement-chip > .anticon {color:#155eef;font-size:18px;flex-shrink:0;}
+.process-assessment-requirements .ant-checkbox-wrapper > span:last-child {padding-inline:0;min-width:0;}
+.process-assessment-mount {display:flex;justify-content:flex-end;border-top:1px solid var(--prisma-border,#e2e8f2);padding-top:14px;}
+.process-assessment-mount .ant-btn {min-height:44px;min-width:185px;font-weight:600;}
+.process-assessment-history.ant-collapse {background:#f5f7fb;border-color:var(--prisma-border,#e2e8f2);border-radius:12px;margin-top:2px;}
+.process-assessment-history .ant-collapse-header {align-items:center!important;padding:18px 20px!important;}
+.process-assessment-history-heading {display:flex;align-items:center;gap:14px;}
+.process-assessment-history-heading > .anticon {font-size:20px;}
+.process-assessment-history-heading h2 {margin:0 0 3px;}
+.process-assessment-history-heading p {margin:0;color:var(--prisma-text-secondary,#53637d);font-size:14px;line-height:1.5;}
+.process-assessment-history-row {display:flex;justify-content:space-between;gap:14px;align-items:center;padding:8px 0;min-width:0;}
+.process-assessment-history-row > span {overflow-wrap:anywhere;}
+.process-assessment-history-row + .process-assessment-history-row {border-top:1px solid var(--prisma-border,#e2e8f2);}
+@media(max-width:1100px){.process-assessment-section{grid-template-columns:minmax(165px,23%) minmax(0,1fr);}.process-assessment-fields{grid-template-columns:repeat(2,minmax(0,1fr));}.process-assessment-section-heading,.process-assessment-section-body{padding:18px;}}
+@media(max-width:768px){.process-assessment-section{grid-template-columns:minmax(0,1fr);}.process-assessment-section-heading{display:flex;align-items:flex-start;gap:12px;padding:16px;}.process-assessment-section-number{flex:0 0 30px;width:30px;height:30px;font-size:16px;margin:0;}.process-assessment-section-heading h2{margin-bottom:4px;}.process-assessment-section-heading p{font-size:13px;}.process-assessment-section-body{padding:16px;}.process-assessment-fields > label:not(.ant-checkbox-wrapper){border:0;padding:0;}.process-assessment-fields{gap:12px;}.process-assessment-selected-requirements,.process-assessment-requirements .ant-checkbox-group{flex-direction:column;gap:6px;}.process-assessment-requirement-chip,.process-assessment-requirements .ant-checkbox-wrapper{width:100%;padding:7px 10px;}.process-assessment-mount .ant-btn{width:100%;}.process-assessment-requirements-header{margin-bottom:12px;}.process-assessment-history .ant-collapse-header{padding:16px!important;}.process-assessment-history-heading{gap:10px;}.process-assessment-history-heading h2{font-size:16px;}}
+@media(max-width:480px){.process-assessment-reuse{grid-template-columns:minmax(0,1fr);}.process-assessment-section-heading,.process-assessment-section-body{padding:12px;}.process-assessment-composition{gap:8px;padding:10px;}.process-assessment-fields{gap:10px;}}

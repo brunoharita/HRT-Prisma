@@ -1,0 +1,66 @@
+import assert from 'node:assert/strict';
+import {createRequire} from 'node:module';
+import {mkdir,writeFile} from 'node:fs/promises';
+const {chromium}=createRequire(import.meta.url)(process.env.PRISMA_PLAYWRIGHT_PATH??'playwright');
+const browser=await chromium.launch({headless:true,executablePath:process.env.PRISMA_BROWSER_PATH});
+const dir='docs/qa/evidence/process-assessment-guided-v235',base='http://127.0.0.1:5710',checks=[];
+await mkdir(dir,{recursive:true});
+const check=(name,pass)=>{checks.push({name,pass:!!pass});assert.ok(pass,name);};
+try {
+ for(const width of [1448,768,390,320]){
+  const page=await browser.newPage({viewport:{width,height:1024}}),errors=[],external=[];
+  page.on('pageerror',e=>errors.push(e.message));
+  await page.route('**/*',r=>r.request().url().startsWith(base+'/')?r.continue():(external.push(r.request().url()),r.abort()));
+  await page.goto(`${base}/process-assessment.html?state=visual`);
+  await page.getByRole('heading',{name:'Configuração',exact:true}).waitFor();
+  await page.getByText('13 requisitos selecionados',{exact:true}).waitFor();
+  const geometry=await page.evaluate(()=>{
+   const box=e=>{const r=e.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height,right:r.right,bottom:r.bottom};};
+   const sections=[...document.querySelectorAll('.process-assessment-section')].map(e=>({section:box(e),heading:box(e.querySelector('.process-assessment-section-heading')),body:box(e.querySelector('.process-assessment-section-body'))}));
+   return {sections,fields:[...document.querySelectorAll('.process-assessment-fields > label')].map(box),cta:box(document.querySelector('.process-assessment-mount button')),footer:box(document.querySelector('.process-assessment-mount')),overflow:document.documentElement.scrollWidth>innerWidth};
+  });
+  check(`${width}: no horizontal overflow`,!geometry.overflow);
+  check(`${width}: two simultaneous sections and primary action below`,geometry.sections.length===2&&geometry.sections[1].section.y>=geometry.sections[0].section.bottom&&geometry.cta.y>=geometry.sections[1].section.bottom);
+  check(`${width}: field layout`,width>1100?geometry.fields.every(f=>Math.abs(f.y-geometry.fields[0].y)<2):Math.abs(geometry.fields[0].y-geometry.fields[1].y)<2&&geometry.fields[2].y>geometry.fields[0].y);
+  check(`${width}: guided gutters transform responsively`,geometry.sections.every(s=>width>768?s.body.x>=s.heading.right-2:s.body.y>=s.heading.bottom-2));
+  check(`${width}: primary action alignment`,width>768?Math.abs(geometry.cta.right-geometry.footer.right)<3:Math.abs(geometry.cta.width-geometry.footer.width)<3);
+  check(`${width}: all selected requirements visible`,await page.locator('.process-assessment-requirement-chip').count()===13);
+  check(`${width}: no passive write or AI`,await page.evaluate(()=>window.__processFixture.calls.every(c=>c.action==='load')));
+  await page.screenshot({path:`${dir}/guided-${width}.png`,fullPage:true});
+  await writeFile(`${dir}/geometry-${width}.json`,JSON.stringify(geometry,null,2));
+  await page.getByRole('button',{name:'Personalizar requisitos',exact:true}).click();
+  await page.getByRole('checkbox',{name:'Desenvolvimento de APIs REST',exact:true}).uncheck();
+  check(`${width}: explicit personalization changes selection`,await page.getByText('12 requisitos selecionados',{exact:true}).count()===1);
+  await page.getByRole('checkbox',{name:'Desenvolvimento de APIs REST',exact:true}).check();
+  await page.getByRole('checkbox',{name:'Node.js',exact:true}).focus();await page.keyboard.press('Space');
+  check(`${width}: keyboard toggles selection`,await page.getByText('12 requisitos selecionados',{exact:true}).count()===1);
+  await page.keyboard.press('Space');
+  await page.getByRole('button',{name:'Personalizar requisitos',exact:true}).click();
+  const quantity=page.getByRole('spinbutton',{name:'Quantidade de questões',exact:true});
+  await quantity.fill('19');await quantity.blur();
+  check(`${width}: invalid quantity remains blocked`,await page.getByRole('button',{name:'Montar avaliação',exact:true}).isDisabled());
+  await quantity.fill('20');await quantity.blur();
+  await page.evaluate(()=>{window.__processFixture.hold=true;});
+  await page.getByRole('button',{name:'Atualizar',exact:true}).click();
+  await page.waitForFunction(()=>document.querySelector('.ant-btn-loading')!==null);
+  check(`${width}: refresh preserves fields while pending`,await quantity.inputValue()==='20'&&await page.locator('.process-assessment-requirement-chip').count()===13);
+  await page.evaluate(()=>{window.__processFixture.hold=false;});
+  await page.waitForFunction(()=>!document.querySelector('.ant-btn-loading'));
+  await page.evaluate(()=>{window.__processFixture.fail=true;});await page.getByRole('button',{name:'Atualizar',exact:true}).click();
+  await page.getByText('Falha sintética. O último estado confirmado foi preservado.',{exact:true}).waitFor();
+  check(`${width}: failure preserves draft and offers retry`,await quantity.inputValue()==='20'&&await page.getByRole('button',{name:'Atualizar dados',exact:true}).count()===1);
+  await page.evaluate(()=>{window.__processFixture.fail=false;});
+  const history=page.locator('.process-assessment-history');
+  if(!await history.getByRole('button',{name:'Consultar · Pessoa exemplo · Rascunho',exact:true}).isVisible())await page.getByRole('button',{name:/Avaliações individuais anteriores/}).click();
+  await history.getByRole('button',{name:'Consultar · Pessoa exemplo · Rascunho',exact:true}).click();
+  await page.getByRole('dialog').getByText('20 questões · 60 minutos',{exact:true}).waitFor();
+  check(`${width}: historical assessment remains consultable`,await page.getByRole('dialog').getByRole('button',{name:'Montar avaliação',exact:true}).count()===0);
+  await page.keyboard.press('Escape');await page.getByRole('dialog').waitFor({state:'hidden'});
+  await page.getByRole('button',{name:'Ir ao acompanhamento',exact:true}).click();
+  await page.getByRole('heading',{name:'Coordenação de Operações',exact:true}).waitFor();
+  check(`${width}: follow-up shortcut preserved`,await page.evaluate(()=>window.__processFixture.path.endsWith('/follow-up')));
+  check(`${width}: no external requests or runtime errors`,!errors.length&&!external.length);
+  await page.close();
+ }
+}finally{await writeFile(`${dir}/visual-checks.json`,JSON.stringify({checks,limits:['Real page and shell with synthetic transports/data; no real candidates, email or AI.']},null,2));await browser.close();}
+console.log(JSON.stringify({passed:checks.filter(c=>c.pass).length,total:checks.length}));

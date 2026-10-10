@@ -1,0 +1,247 @@
+{
+  "checks": [
+    {
+      "name": "1448: no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "1448: two simultaneous sections and primary action below",
+      "pass": true
+    },
+    {
+      "name": "1448: field layout",
+      "pass": true
+    },
+    {
+      "name": "1448: guided gutters transform responsively",
+      "pass": true
+    },
+    {
+      "name": "1448: primary action alignment",
+      "pass": true
+    },
+    {
+      "name": "1448: all selected requirements visible",
+      "pass": true
+    },
+    {
+      "name": "1448: no passive write or AI",
+      "pass": true
+    },
+    {
+      "name": "1448: explicit personalization changes selection",
+      "pass": true
+    },
+    {
+      "name": "1448: keyboard toggles selection",
+      "pass": true
+    },
+    {
+      "name": "1448: invalid quantity remains blocked",
+      "pass": true
+    },
+    {
+      "name": "1448: refresh preserves fields while pending",
+      "pass": true
+    },
+    {
+      "name": "1448: failure preserves draft and offers retry",
+      "pass": true
+    },
+    {
+      "name": "1448: historical assessment remains consultable",
+      "pass": true
+    },
+    {
+      "name": "1448: follow-up shortcut preserved",
+      "pass": true
+    },
+    {
+      "name": "1448: no external requests or runtime errors",
+      "pass": true
+    },
+    {
+      "name": "768: no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "768: two simultaneous sections and primary action below",
+      "pass": true
+    },
+    {
+      "name": "768: field layout",
+      "pass": true
+    },
+    {
+      "name": "768: guided gutters transform responsively",
+      "pass": true
+    },
+    {
+      "name": "768: primary action alignment",
+      "pass": true
+    },
+    {
+      "name": "768: all selected requirements visible",
+      "pass": true
+    },
+    {
+      "name": "768: no passive write or AI",
+      "pass": true
+    },
+    {
+      "name": "768: explicit personalization changes selection",
+      "pass": true
+    },
+    {
+      "name": "768: keyboard toggles selection",
+      "pass": true
+    },
+    {
+      "name": "768: invalid quantity remains blocked",
+      "pass": true
+    },
+    {
+      "name": "768: refresh preserves fields while pending",
+      "pass": true
+    },
+    {
+      "name": "768: failure preserves draft and offers retry",
+      "pass": true
+    },
+    {
+      "name": "768: historical assessment remains consultable",
+      "pass": true
+    },
+    {
+      "name": "768: follow-up shortcut preserved",
+      "pass": true
+    },
+    {
+      "name": "768: no external requests or runtime errors",
+      "pass": true
+    },
+    {
+      "name": "390: no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "390: two simultaneous sections and primary action below",
+      "pass": true
+    },
+    {
+      "name": "390: field layout",
+      "pass": true
+    },
+    {
+      "name": "390: guided gutters transform responsively",
+      "pass": true
+    },
+    {
+      "name": "390: primary action alignment",
+      "pass": true
+    },
+    {
+      "name": "390: all selected requirements visible",
+      "pass": true
+    },
+    {
+      "name": "390: no passive write or AI",
+      "pass": true
+    },
+    {
+      "name": "390: explicit personalization changes selection",
+      "pass": true
+    },
+    {
+      "name": "390: keyboard toggles selection",
+      "pass": true
+    },
+    {
+      "name": "390: invalid quantity remains blocked",
+      "pass": true
+    },
+    {
+      "name": "390: refresh preserves fields while pending",
+      "pass": true
+    },
+    {
+      "name": "390: failure preserves draft and offers retry",
+      "pass": true
+    },
+    {
+      "name": "390: historical assessment remains consultable",
+      "pass": true
+    },
+    {
+      "name": "390: follow-up shortcut preserved",
+      "pass": true
+    },
+    {
+      "name": "390: no external requests or runtime errors",
+      "pass": true
+    },
+    {
+      "name": "320: no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "320: two simultaneous sections and primary action below",
+      "pass": true
+    },
+    {
+      "name": "320: field layout",
+      "pass": true
+    },
+    {
+      "name": "320: guided gutters transform responsively",
+      "pass": true
+    },
+    {
+      "name": "320: primary action alignment",
+      "pass": true
+    },
+    {
+      "name": "320: all selected requirements visible",
+      "pass": true
+    },
+    {
+      "name": "320: no passive write or AI",
+      "pass": true
+    },
+    {
+      "name": "320: explicit personalization changes selection",
+      "pass": true
+    },
+    {
+      "name": "320: keyboard toggles selection",
+      "pass": true
+    },
+    {
+      "name": "320: invalid quantity remains blocked",
+      "pass": true
+    },
+    {
+      "name": "320: refresh preserves fields while pending",
+      "pass": true
+    },
+    {
+      "name": "320: failure preserves draft and offers retry",
+      "pass": true
+    },
+    {
+      "name": "320: historical assessment remains consultable",
+      "pass": true
+    },
+    {
+      "name": "320: follow-up shortcut preserved",
+      "pass": true
+    },
+    {
+      "name": "320: no external requests or runtime errors",
+      "pass": true
+    }
+  ],
+  "limits": [
+    "Real page and shell with synthetic transports/data; no real candidates, email or AI."
+  ]
+}
