@@ -1,0 +1,10 @@
+{
+  "name": "hrt-mail-forwarder",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.19.0",
+  "engines": { "node": ">=24" },
+  "scripts": { "test": "node --test forwarder.test.mjs", "start": "node server.mjs" },
+  "dependencies": { "postal-mime": "2.7.6", "resend": "6.32.1" }
+}

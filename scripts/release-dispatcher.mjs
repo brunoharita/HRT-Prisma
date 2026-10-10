@@ -68,6 +68,7 @@ function printPlan(plan, options) {
   console.log(`Functions: ${plan.deployments.edgeFunctions.join(", ") || "skip"}`);
   console.log(`Web/VPS: ${plan.deployments.web ? "publish prisma-web only" : "skip"}`);
   console.log(`Parser/VPS: ${plan.deployments.parserIa ? "publish prisma-parser-ia only" : "skip"}`);
+  console.log(`Mail/VPS: ${plan.deployments.mailForwarder ? "publish hrt-mail-forwarder only" : "skip"}`);
   console.log(`Validations: ${plan.validationCommands.join(" -> ")}`);
   if (plan.blockedReasons.length) console.log(`BLOCKED: ${plan.blockedReasons.join("; ")}`);
 }
@@ -148,6 +149,12 @@ async function publish(plan, options) {
     parserIa = "PUBLISHED";
   }
   let web = plan.deployments.web ? "PENDING_VPS_CONFIGURATION" : "SKIPPED";
+  let mailForwarder = plan.deployments.mailForwarder ? "PENDING_VPS_CONFIGURATION" : "SKIPPED";
+  if (plan.deployments.mailForwarder && options.promoteMain && options.vpsHost) {
+    if (!/^[A-Za-z0-9_.@:-]+$/.test(options.vpsHost) || !/^\/[A-Za-z0-9_./-]+$/.test(options.vpsPath)) throw new Error("Invalid VPS configuration");
+    runCommand("ssh", [options.vpsHost, `cd -- '${options.vpsPath}' && bash deploy/release-mail-forwarder.sh '${sha}'`]);
+    mailForwarder = "PUBLISHED";
+  }
   let profileSynthesis = plan.deployments.profileSynthesis ? "PENDING_VPS_CONFIGURATION" : "SKIPPED";
   if (plan.deployments.profileSynthesis && options.promoteMain && options.vpsHost) {
     if (!/^[A-Za-z0-9_.@:-]+$/.test(options.vpsHost) || !/^\/[A-Za-z0-9_./-]+$/.test(options.vpsPath)) throw new Error("Invalid VPS configuration");
@@ -168,12 +175,14 @@ async function publish(plan, options) {
     web,
     parserIa,
     profileSynthesis,
+    mailForwarder,
     remaining: {
       database: plan.deployments.database,
       edgeFunctions: plan.deployments.edgeFunctions,
       web: web === "PENDING_VPS_CONFIGURATION",
       parserIa: parserIa === "PENDING_VPS_CONFIGURATION",
       profileSynthesis: profileSynthesis === "PENDING_VPS_CONFIGURATION",
+      mailForwarder: mailForwarder === "PENDING_VPS_CONFIGURATION",
     },
   };
 }

@@ -1,0 +1,45 @@
+services:
+  mail-forwarder:
+    build:
+      context: ../services/mail-forwarder
+      dockerfile: Dockerfile
+    image: hrt-mail-forwarder:${HRT_MAIL_SHA:?validated SHA required}
+    container_name: hrt-mail-forwarder
+    restart: unless-stopped
+    init: true
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    environment:
+      HRT_MAIL_SHA: ${HRT_MAIL_SHA}
+    secrets: [mail_forwarder_config]
+    volumes: [hrt-mail-receipts:/var/lib/hrt-mail]
+    networks: [prisma-existing]
+    mem_limit: 384m
+    cpus: 0.5
+    pids_limit: 64
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3021/webhooks/resend-inbound/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=deploy_default"
+      - "traefik.http.routers.hrt-mail.rule=Host(`prisma.hrtsolutions.com.br`) && PathPrefix(`/webhooks/resend-inbound`)"
+      - "traefik.http.routers.hrt-mail.priority=100"
+      - "traefik.http.routers.hrt-mail.entrypoints=websecure"
+      - "traefik.http.routers.hrt-mail.tls=true"
+      - "traefik.http.routers.hrt-mail.tls.certresolver=letsencrypt"
+      - "traefik.http.services.hrt-mail.loadbalancer.server.port=3021"
+secrets:
+  mail_forwarder_config:
+    file: /etc/prisma/hrt-mail-forwarder.json
+volumes:
+  hrt-mail-receipts:
+    name: hrt-mail-receipts
+networks:
+  prisma-existing:
+    external: true
+    name: deploy_default

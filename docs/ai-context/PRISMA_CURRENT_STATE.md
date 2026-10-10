@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.62.0
+version: 2.63.0
 last_verified: 2026-10-09
 ---
 
 # Estado atual do Prisma
+
+## E-mail corporativo HRT: encaminhamento em implantação
+
+PO aprovou receber todos os endereços @hrtsolutions.com.br e encaminhar para bruno.harita@gmail.com. Serviço isolado1.0.0 em implementação, sem alterar Prisma2.3.0, Supabase, frontend, IA ou chaves de convites. SDK/parser oficiais, assinatura/destino fixo/API scope, SQLite de recibos sem corpo/PII, idempotência/retry/reinício e reconciliação após24h;16testes Windows/16Docker/21tooling PASS e audit sem vulnerabilidades. PO criou Full access separado e config privada instalada via DPAPI/SSH stdin, sem exposição. Receiving/MX e entrega real ainda pendentes; não é capacidade operacional comprovada. Cota Free100envios/dia3000/mês compartilhada com convites, nenhum plano pago. Acordo/execução/AoT hrt-email-forwarding, ADR-081 e operações especializadas registram gates/limites/rollback; Gmail SMTP/Enviar como e respostas automáticas fora do escopo.
 
 ## Avaliação para Posição — v2.3.0 publicada
 

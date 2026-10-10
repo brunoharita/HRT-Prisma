@@ -1,6 +1,6 @@
 import { basename } from "node:path";
 
-export const RELEASE_PLAN_VERSION = "1.0.4";
+export const RELEASE_PLAN_VERSION = "1.0.5";
 
 const contextSource = (path) => path === "AGENTS.md" || path === "README.md" || path.startsWith("docs/");
 
@@ -31,6 +31,9 @@ export function classifyChanges(changes) {
   for (const change of changes) {
     const path = normalizeRepositoryPath(change.path);
     let classified = false;
+    if (path.startsWith("services/mail-forwarder/") || ["deploy/mail-forwarder.compose.yml", "deploy/release-mail-forwarder.sh"].includes(path)) {
+      surfaces.add("mail-forwarder"); classified = true;
+    }
     if (["src/domain/profileSynthesis.ts", "scripts/profile-synthesis-worker.mjs", "scripts/position-assessment-email-worker.mjs", "deploy/release-profile-synthesis.sh", "deploy/profile-synthesis.compose.yml"].includes(path) || path.startsWith("services/profile-synthesis/")) {
       surfaces.add("profile-synthesis"); classified = true;
     }
@@ -68,7 +71,7 @@ export function classifyChanges(changes) {
       edgeFunctions.add("matching-trajectory");
     }
     if (path.startsWith("tests/")) {
-      surfaces.add("tests");
+      surfaces.add(["tests/tooling/releaseDispatcher.test.mjs", "tests/tooling/prismaContext.test.mjs"].includes(path) ? "tooling" : "tests");
       classified = true;
     }
     if (path.startsWith("scripts/")) {
@@ -78,7 +81,7 @@ export function classifyChanges(changes) {
     if (path === "deploy/release-web.sh") {
       surfaces.add("tooling");
       classified = true;
-    } else if (path.startsWith("deploy/") && !path.includes("profile-synthesis")) {
+    } else if (path.startsWith("deploy/") && !path.includes("profile-synthesis") && !path.includes("mail-forwarder")) {
       surfaces.add("hosting");
       classified = true;
     }
@@ -160,6 +163,10 @@ export function buildReleasePlan(changes) {
     add("node --test tests/tooling/parserIaService.test.mjs tests/tooling/parserIaRecovery.test.mjs tests/tooling/parserIaHosted.test.mjs tests/tooling/parserIaBenchmark.test.mjs");
   }
   if (impact.surfaces.includes("profile-synthesis")) add("node --test tests/tooling/profileSynthesis.test.mjs");
+  if (impact.surfaces.includes("mail-forwarder")) {
+    add("pnpm --dir services/mail-forwarder test");
+    add("pnpm --dir services/mail-forwarder audit --prod --audit-level high");
+  }
   if (["database", "database-ledger", "supabase-config"].some((surface) => impact.surfaces.includes(surface))) {
     add("pnpm run check:supabase-ledger");
   }
@@ -176,6 +183,7 @@ export function buildReleasePlan(changes) {
     web: impact.surfaces.includes("web") || impact.surfaces.includes("hosting"),
     parserIa: impact.surfaces.includes("parser-ia"),
     profileSynthesis: impact.surfaces.includes("profile-synthesis"),
+    mailForwarder: impact.surfaces.includes("mail-forwarder"),
   };
   return {
     version: RELEASE_PLAN_VERSION,

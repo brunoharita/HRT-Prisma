@@ -1,0 +1,21 @@
+name: HRT mail forwarding CI
+on:
+  push:
+    paths: ["services/mail-forwarder/**", "deploy/*mail-forwarder*", ".github/workflows/mail-forwarder.yml"]
+  pull_request:
+    paths: ["services/mail-forwarder/**", "deploy/*mail-forwarder*", ".github/workflows/mail-forwarder.yml"]
+jobs:
+  mail-forwarder:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.19.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: pnpm --dir services/mail-forwarder install --ignore-workspace --frozen-lockfile
+      - run: pnpm --dir services/mail-forwarder test
+      - run: pnpm --dir services/mail-forwarder audit --prod --audit-level high
+      - run: bash -n deploy/release-mail-forwarder.sh

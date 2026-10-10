@@ -4,6 +4,8 @@
 
 Executar somente validações e publicações exigidas pelo diff. A unidade de release é um SHA validado; documentação, banco, Edge Functions, web e Parser hospedado são destinos independentes.
 
+Dispatcher1.0.5 reconhece `services/mail-forwarder/`, `deploy/mail-forwarder.compose.yml` e `deploy/release-mail-forwarder.sh` como destino independente `mailForwarder`. Esses arquivos não publicam web, Parser, Synthesis, banco ou funções. Testes e auditoria de dependências usam o pacote isolado. A publicação exige config privada já instalada e SHA validado; recebimento/DNS só após saúde do serviço. Recibo diferencia destino pendente/publicado.
+
 ## Comandos
 
 ```powershell

@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 418
-source_manifest_sha256: ebb408c1959737d6d2419551e842967221342a58498cc27c7f0018d0d8e47de4
+documentation_source_count: 423
+source_manifest_sha256: 749a3046ffc8da20c555b3fc56674ef616c5e85e42b1b9d7b9541c039372a50d
 -->
 
 # Tudo sobre o Prisma
@@ -2626,11 +2626,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.62.0
+version: 2.63.0
 last_verified: 2026-10-09
 ---
 
 # Estado atual do Prisma
+
+## E-mail corporativo HRT: encaminhamento em implantação
+
+PO aprovou receber todos os endereços @hrtsolutions.com.br e encaminhar para bruno.harita@gmail.com. Serviço isolado1.0.0 em implementação, sem alterar Prisma2.3.0, Supabase, frontend, IA ou chaves de convites. SDK/parser oficiais, assinatura/destino fixo/API scope, SQLite de recibos sem corpo/PII, idempotência/retry/reinício e reconciliação após24h;16testes Windows/16Docker/21tooling PASS e audit sem vulnerabilidades. PO criou Full access separado e config privada instalada via DPAPI/SSH stdin, sem exposição. Receiving/MX e entrega real ainda pendentes; não é capacidade operacional comprovada. Cota Free100envios/dia3000/mês compartilhada com convites, nenhum plano pago. Acordo/execução/AoT hrt-email-forwarding, ADR-081 e operações especializadas registram gates/limites/rollback; Gmail SMTP/Enviar como e respostas automáticas fora do escopo.
 
 ## Avaliação para Posição — v2.3.0 publicada
 
@@ -9964,6 +9968,20 @@ Testes:56asserções SQL, três disputas com conexões independentes, consumidor
 
 ---
 
+## Source: `docs/decisions/ADR-081-corporate-mail-forwarding.md`
+
+# ADR-081: encaminhamento corporativo determinístico
+
+09/10/2026. Decisão de produto aprovada: catch-all Resend para Gmail único; engenharia sob A-01 do agreement-hrt-email-forwarding v1.0.0. PO concedeu Full access explicitamente pelo fluxo de criação/cópia, separado da chave de convites.
+
+Não existe capacidade de recebimento no Prisma. Reutilizar SMTP do Gmail ou a fila de candidatos misturaria finalidades e credenciais. O [Resend recomenda webhook e SDK/parser MIME](https://resend.com/docs/dashboard/receiving/forward-emails); o helper forward não preserva Reply-To nem identificação dos destinatários na API de envio (fonte oficial resend-node/receiving.ts consultada09/10). Escolhido o mesmo parser postal-mime usado pelo SDK, com envio pelo SDK oficial, Reply-To e cabeçalhos de encaminhamento explícitos. Nenhum parser próprio ou interpretação por IA.
+
+Serviço Node isolado, runtime24, SQLite nativo para fila/recibos duráveis, Docker/Traefik existentes; dependências e lockfile próprios, sem mudar bundle/worker do produto. A fila não guarda corpo, assunto, remetentes ou anexos. Persiste ID recebido, hash do payload enviado, tentativa, erro técnico e recibo. Chave/idempotência determinísticas, processamento serial e retomada após reinício; após24h menos margem com aceite desconhecido, exige reconciliação. Conteúdo só em memória, downloads HTTPS de hosts do provider e tamanho limitado. Eventos assinados são conferidos novamente pela API; destino Gmail fixo não pode ser controlado pelo evento.
+
+A API só oferece full_access e sending_access; leitura exige Full access, recurso mais amplo que o desejável, autorizado separadamente e armazenado apenas em secret privado do novo serviço. Chave de convites permanece restrita e separada. Contas/credenciais não chegam ao frontend ou aos outros workers. Resend/Gmail mantêm suas próprias cópias e limites; não há garantia de Inbox, ausência de spam ou entrega de anexos acima do limite. Cota Free compartilhada com convites, sem upgrade automático. Falhas ficam no recibo/fila e webhook pode ser reexecutado; não há resposta automática ao remetente. Rollback para serviço/MX anteriores mantém fila/recibos, demais serviços e registros DNS.
+
+---
+
 ## Source: `docs/decisions/README.md`
 
 # Architectural Decision Records
@@ -10249,6 +10267,36 @@ Migration aplicada não prova aplicação publicada; aplicação publicada não 
 ## Rollback
 
 Código: ref/artefato anterior. Migration: preferir forward fix; rollback destrutivo exige plano e aprovação. Prompt/modelo: reativar versão aprovada anterior. Capability: flag fail-closed somente quando existir infraestrutura de flags.
+
+---
+
+## Source: `docs/operations/hrt-email-forwarding.md`
+
+# Recebimento e encaminhamento HRT
+
+Contrato docs/qa/agreement-hrt-email-forwarding.md v1.0.0, ADR-081. PO autorizou receber todos os endereços @hrtsolutions.com.br, incluindo bruno.harita e suporte, e encaminhar para bruno.harita@gmail.com. Prisma2.3.0 mantido; serviço corporativo1.0.0 independente. Status antes do rollout: implementação/QA prontas, recebimento/MX ainda desativados.
+
+## Fluxo
+
+MX raiz Resend -> evento email.received -> HTTPS no Traefik existente -> hrt-mail-forwarder -> Resend send -> Gmail. Remetente do encaminhamento `HRT Solutions <encaminhamento@hrtsolutions.com.br>`; assunto/texto/HTML/anexos preservados, Reply-To original, X-Original-To registra destinatários do envelope (inclusive Bcc) e X-Original-From registra Reply-To/remetente. No Gmail, filtro `from:encaminhamento@hrtsolutions.com.br` identifica todos esses encaminhamentos; filtro/configuração do Gmail não integra esta execução. O endereço HRT é um alias de recebimento, sem caixa separada ou senha própria. Respostas continuam saindo pelo Gmail pessoal até futura configuração de cliente SMTP.
+
+Mensagens não são interpretadas nem executadas. SDK Resend6.32.1 e postal-mime2.7.6 (mesmo parser do SDK), Node24/SQLite nativo, lockfile isolado, Docker readonly/node/cap_drop/limites, secret privado e volume de recibos. API em endereço fixo HTTPS sem redirects; download MIME HTTPS somente em hosts Resend/AWS, máximo20MiB de mensagem bruta. Excesso permanece bloqueado no recibo e no provider, sem truncamento silencioso. Resend/Gmail têm limites adicionais e políticas de retenção próprias. Não há varredura antivírus própria: anexos permanecem conteúdo não confiável e são entregues para inspeção pelo Gmail/usuário.
+
+Webhook assinado é autenticado pelo SDK e os destinatários reconfirmados pela API. Destino fixo no código, sem campo configurável por mensagem. Recibo SQLite guarda somente UUIDs, tempos, estado, contagem, código técnico e hash, nunca corpo/anexos/assunto/e-mail/secret. Eventos repetidos não recriam job; worker serial impede concorrência; persistência antes da API e mesma idempotencyKey/payload permitem retomar após falha/reinício. Após24h menos60s de tentativa sem recibo ou mudança de hash, estado reconcile exige intervenção e consulta ao provider, sem reenvio cego. accepted significa aceito pelo Resend; delivered significa evento de entrega ao servidor destinatário, não garante Inbox ou ausência de spam. Eventos de outros envios não alteram jobs corporativos.
+
+## Credenciais e publicação
+
+PO criou “HRT - Recebimento e encaminhamento” com Full access após ciência do alcance administrativo, separado de “Prisma - Convites de avaliação” (Sending access). Captura DPAPI ignorada, transferência SSH stdin e instalação via install-config.py na VPS srv1038882; config `/etc/prisma/hrt-mail-forwarder.json`, UID1000/mode400, nunca em argumento/log/saída/Git. Installer valida API de leitura sem baixar corpo, reutiliza webhook do mesmo endpoint ou cria um, guarda signing_secret diretamente no secret. Reexecução com mesma chave não altera a config; outra chave falha para exigir rotação deliberada. Nenhuma credencial de produto/Supabase/OpenAI é usada. Plano Free/cota observada100envios/dia3000/mês compartilhada com convites, sem upgrade/contratação. Falhas de cota ficam pendentes; volume elevado pode exigir decisão futura de plano.
+
+`deploy/release-mail-forwarder.sh <SHA>` exige checkout/SHA limpos e secret protegido, preserva imagem anterior e recria somente este container. Sem novo host, PC ou túnel. Health HTTPS `/webhooks/resend-inbound/health` apresenta SHA e contagens, sem IDs de mensagens ou PII. POST sem assinatura deve401; outros caminhos/métodos404; payload acima64KiB413. Não testar corpos pessoais ou candidatos reais.
+
+## Recuperação e rollback
+
+Consultar somente IDs/estado no volume hrt-mail-receipts. Em blocked, investigar categoria sem imprimir corpo/segredo; corrigir causa e reinserir o mesmo job como retry preservando first_send/hash/recibo. Em reconcile, não alterar first_send/idempotência para tentar de novo: conferir aceite no provider e registrar recibo, ou obter decisão específica de reenvio. Replay do webhook reencontra a fila existente; não apaga histórico. Webhooks ausentes por indisponibilidade prolongada devem ser reconciliados com IDs do provider, evitando mensagens já encaminhadas.
+
+Rollback inicial: desativar receiving no Resend e restaurar somente MX adicionado mediante autorização, parar o container sem remover volume/secret. Depois da ativação, desligar recebimento pode interromper novos e-mails; preferir restaurar imagem validada enquanto mantém o MX/fila. Todos os oito registros DNS anteriores, envio/TLS/tracking e containers Prisma são preservados. Não remover domínios, chaves, mensagens ou dados para executar rollback.
+
+Fontes verificadas09/10/2026: [recebimento em domínio próprio](https://resend.com/docs/dashboard/receiving/custom-domains), [encaminhamento oficial](https://resend.com/docs/dashboard/receiving/forward-emails), [permissões de chave](https://resend.com/docs/api-reference/api-keys/create-api-key), [idempotência](https://resend.com/docs/dashboard/emails/idempotency-keys). Evidências e estado final em docs/qa/aot-hrt-email-forwarding.md.
 
 ---
 
@@ -10870,6 +10918,8 @@ Synthesis recebe ASSESSMENT_DISPATCHER_SECRET distinto para drenar somente convi
 ## Objetivo
 
 Executar somente validações e publicações exigidas pelo diff. A unidade de release é um SHA validado; documentação, banco, Edge Functions, web e Parser hospedado são destinos independentes.
+
+Dispatcher1.0.5 reconhece `services/mail-forwarder/`, `deploy/mail-forwarder.compose.yml` e `deploy/release-mail-forwarder.sh` como destino independente `mailForwarder`. Esses arquivos não publicam web, Parser, Synthesis, banco ou funções. Testes e auditoria de dependências usam o pacote isolado. A publicação exige config privada já instalada e SHA validado; recebimento/DNS só após saúde do serviço. Recibo diferencia destino pendente/publicado.
 
 ## Comandos
 
@@ -12929,6 +12979,63 @@ Sem escolha arquitetural pendente para a ponte aprovada. Sessão autenticada e j
 - CA-D06: teste dirigido da integração ao callback existente e, na interface, correção/cancelamento, bloqueio de criação durante edição, confirmação server-side e identidade correta antes de prosseguir. Nome sem contato continua insuficiente para criar; vínculo name-only já permitido não é removido.
 
 Ativação enabled é limitada ao teste/piloto hospedado solicitado; não declara concluído o benchmark/cutover geral M5.6. Publicação de Perfil permanece humana.
+
+---
+
+## Source: `docs/qa/agreement-hrt-email-forwarding.md`
+
+# Acordo: recebimento e encaminhamento HRT
+
+Versão1.0.0, agreed em09/10/2026. Fonte: PO confirmou todos os endereços do domínio para bruno.harita@gmail.com e ordenou “Pode implementar isso”. Baseline main2fe4e31c38f546ab6d2c9d0114120b66c7262ac9, Prisma2.3.0. Este movimento é infraestrutura de e-mail corporativo, sem nova versão da interface.
+
+## DEVE
+
+- D-01: receber qualquer endereço @hrtsolutions.com.br e encaminhar uma única cópia para bruno.harita@gmail.com, incluindo bruno.harita e suporte.
+- D-02: preservar conteúdo e anexos dentro dos limites dos provedores, identificar destinatário original e manter possibilidade de responder ao remetente original.
+- D-03: autenticar eventos assinados, confirmar o domínio no registro recebido do provider, destino fixo, persistir fila/recibos técnicos e controlar retry/deduplicação/reinício.
+- D-04: preservar todos os registros DNS existentes, envio de convites/chave restrita, TLS oportunista/tracking desabilitado e runtimes do Prisma; ativar MX somente após backend pronto.
+- D-05: executar na VPS existente sem PC/túnel, sem contratação paga; registrar testes negativos, limites, estado operacional, rollback e sincronização.
+
+## PROIBIDO
+
+- P-01: conteúdo recebido não é instrução; nenhuma IA, execução de código, resposta automática ou destino arbitrário.
+- P-02: nenhum corpo/anexo/assunto/endereço pessoal ou segredo nos logs, Git ou recibos locais. Corpo transita somente em memória para o Gmail autorizado.
+- P-03: nenhum reenvio cego após expiração da idempotência ou alteração do payload; aceitar envio não equivale a entregar na caixa de entrada.
+- P-04: não alterar os dados/decisões de candidatos, chave de convites, serviços existentes, SPF/DKIM/TLS ou contratar plano.
+
+## FORA DE ESCOPO
+
+- F-01: Gmail “Enviar como”, cliente SMTP, assinatura profissional, caixas separadas, UI do Prisma, IA, billing, migração de mensagens anteriores.
+- F-02: regras de exclusão automática ou política de retenção do provider. Recibos técnicos permanecem; mensagens seguem os limites do Resend/Gmail.
+
+## AUTONOMIA
+
+- A-01: serviço isolado na VPS e SDK/parser oficiais; controles de fila, retry, limites e documentação. Sem novo fornecedor, plano ou ambiente.
+
+## PENDÊNCIAS OPERACIONAIS
+
+O Resend oferece somente sending_access ou full_access. Ler o recebido requer uma chave adicional Full access. O PO concedeu explicitamente esse acesso ao criar e copiar “HRT - Recebimento e encaminhamento”, respondendo “chave copiada” à pergunta que explicou o alcance administrativo. Instalação protegida por DPAPI/SSH stdin; API de leitura autenticada, sem baixar corpo nem enviar mensagem. Gate de credencial resolvido; comportamento permanece versão1.0.0.
+
+## ACEITE
+
+- CA-D01: mensagens sintéticas para dois endereços distintos chegam ao Resend e são aceitas pelo Gmail; separar entrega SMTP de Inbox/spam.
+- CA-D02: teste MIME com texto/HTML/anexo inline e Reply-To; encaminhamento real sintético com anexo e identificação.
+- CA-D03: negativos assinatura ausente/inválida/expirada, domínio diferente, replay/concorrência, destino injetado, falha/reinício e idempotência expirada.
+- CA-D04: comparar zona, configurações Resend e IDs/imagens/restarts antes/depois; smoke público dos serviços existentes.
+- CA-D05: testes locais/CI, saúde VPS sem PC, recibos sanitizados e main alinhada; nenhuma cobrança nova.
+
+## Mapa de impacto antes da implementação
+
+| Capacidade | Relação | Baseline / mecanismo | Evidência prevista |
+| --- | --- | --- | --- |
+| Recebimento raiz/DNS | direct | Sem MX na consulta anterior; receiving disabled confirmado pelo conector | Zona preservada, MX autoritativo e Resend verified |
+| Encaminhamento/Gmail | direct | Inexistente; novo serviço dedicado | MIME, assinatura, fila/replay/restart e testes reais sintéticos |
+| Resend convites | plausible_indirect | Domínio verified, sending enabled, TLS oportunista; cota compartilhada100/dia3000/mês | Metadados/chave preservados; limite compartilhado explícito |
+| Traefik/site | critical_transversal | VPS srv1038882, main2fe4e31, web funcional3e271e32; router adicional só no path do webhook | IDs/imagens/restarts e HTTP/assets/health antes/depois |
+| Parser/Synthesis/gateway | plausible_indirect | Serviços existentes healthy/running, volumes/secrets privados | IDs/imagens/restarts/saúde preservados |
+| Supabase/tenant/Score/IA | no_impact_identified | Serviço não acessa banco, tokens ou funções do produto; nenhuma mudança de domínio/runtime | Diff/ausência de credenciais/destinos, sem dados de candidato |
+
+Sem referência visual normativa: não há alteração de produto ou template visual.
 
 ---
 
@@ -17241,6 +17348,44 @@ Qualidade: inspeção visual do PDF original na revisão confirmou nome, título
 ## Conclusão
 
 PARTIAL. Correção de identidade entregue e validada; jornada hospedada chegou à revisão sem publicar Perfil. Runtime ativo `55733a0`; túnel e workers dependem do PC ligado, sem retomada automática. Qualidade do rascunho insuficiente, telemetria não persistida e inferência Paddle não exercitada pela rota nativa escolhida. Não há conclusão de cutover nem evidência de viabilidade CPU para este PDF. Parser/roteamento e disponibilização da telemetria exigem movimento separado autorizado.
+
+---
+
+## Source: `docs/qa/aot-hrt-email-forwarding.md`
+
+# AoT: encaminhamento corporativo HRT
+
+Contrato docs/qa/agreement-hrt-email-forwarding.md v1.0.0 e execução correspondente, template aot-template.md. Baseline main2fe4e31, branch codex/hrt-email-forwarding, Prisma2.3.0 preservado. Em andamento: não declarar recebimento funcional antes da ativação/entrega.
+
+## Matriz de acordos
+
+| ID | Implementação | Teste/evidência | Status | Limitação |
+| --- | --- | --- | --- | --- |
+| D-01 | Catch-all no domínio e destino fixo | Fila local/sintética pronta; ativação e teste real pendentes | PARTIAL | Sem MX ativo ainda |
+| D-02 | MIME oficial, Reply-To e identificação | Teste texto/HTML/anexo inline/headers | PARTIAL | E-mail real com anexo pendente |
+| D-03 | Assinatura, API scope, SQLite/hash/receipt/retry |16testes Windows e16Docker readonly/networknone no host existente | PASS | Inclui falha/replay/concorrência/reinício/expiração/destino injetado |
+| D-04 | Compose/router e secrets isolados | Baseline IDs/imagens/restarts; sending key distinta | PARTIAL | Comparação pós-rollout pendente |
+| D-05 | VPS existente, pacote/CI/release próprios | Build Docker/16testes,21tooling e audit sem vulnerabilidade | PARTIAL | CI/main/prod/smoke pendentes |
+
+## Proibições
+
+P-01 PASS: texto de ataque fica só no corpo encaminhado, sem IA/comando/destino externo. P-02 PASS local: logs/SQLite/artefatos apenas metadados; segredo capturado DPAPI/SSH stdin e salvo UID1000/mode400. P-03 PASS local: idempotência/payload/expiração testados; aceitação separada de entrega. P-04 PARTIAL até comparação pós-rollout; nenhuma mudança de produto/banco/chave restrita ou plano.
+
+## Impacto e preservação
+
+Mapa inicial no Agreement. Serviço/DNS/Gmail direct; cota/envio Resend e recursos do host plausible_indirect; Traefik/site critical_transversal; Supabase/tenant/Score/IA no_impact_identified após inspeção dos consumidores e ausência de credenciais/destinos do produto. Baseline sanitized em evidence/hrt-email-forwarding/baseline-containers.txt. Registro.br tem oito entradas, sem MX; Resend receiving disabled, sending verified/enabled. Infra existente não deve ser recriada. Após implantação: comparar IDs/imagens/restarts/health e smoke público do site/assets/portal/negações dos gateways.
+
+## Fora de escopo e visual
+
+F-01/F-02 preservados: nenhuma UI/template normativo novo, Gmail SMTP/Enviar como, IA, billing, purga, mudança de plano ou mensagens antigas. Referência visual não aplicável; formulário administrativo não é mockup de produto.
+
+## Desvios e limites
+
+Nenhum desvio de comportamento identificado na revisão local. Full access exigido pelo provider foi apresentado e concedido pelo PO antes da instalação. Docker local indisponível; QA executado em container isolado na VPS existente, readonly e networknone, sem dados/segredos/produto. Não há QA remoto separado. Limite raw20MiB, quotas compartilhadas; não garante Inbox, spam, autenticação do remetente original ou segurança dos anexos. Rota de forwarding não toma decisões de emprego e não usa IA/ledger.
+
+## Validação e ambientes
+
+Windows16testes PASS; Docker16testes PASS;21testes tooling PASS; audit isolado sem vulnerabilidades. CI, main/origin/VPS, MX, verificação Resend e entrega real NOT TESTED nesta etapa. Fechamento somente quando todos D forem PASS.
 
 ---
 
@@ -22568,6 +22713,14 @@ Implementar integralmente `docs/qa/agreement-hosted-paddle-bridge.md` versão 1.
 Aditivo: reutilizar IdentityForm e identifyResumeIntake para expor correção explícita antes da criação; revalidar correspondências, bloquear resolução durante a edição e preservar o formulário em erro. Não corrigir o algoritmo extrator neste escopo. Implantar o ajuste e repetir a jornada real autorizada sem publicar Perfil.
 
 Sequência: diagnóstico existente -> branch isolada do deploy f1cc983 -> gateway de transporte reutilizando Auth/RLS -> SSH reverso -> negativos/adapter/build -> implantação reversível -> jornada real hospedada -> AoT e contexto gerado. Gateway não contém parser, modelo nem regra de extração; usa Node já adotado pelo repositório e nenhuma biblioteca nova. Não executar validação integral sem autorização adicional. Não publicar Perfil nem ativar Parser IA M5.7. Se acesso autenticado/qualidade/tempo impedir prova, registrar PARTIAL/BLOCKED no AoT, sem declarar encerramento.
+
+---
+
+## Source: `docs/qa/execution-hrt-email-forwarding.md`
+
+# Execução: encaminhamento HRT
+
+Contrato integral lido: docs/qa/agreement-hrt-email-forwarding.md versão1.0.0. Implementar todos D-01..D-05, preservar P-01..P-04 e F-01..F-02, usar A-01 para detalhes técnicos. Gate de credencial Full access resolvido pela criação/cópia explícita do PO e instalação protegida. Baseline2fe4e31; branch codex/hrt-email-forwarding. Não ativar recebimento/MX antes de serviço/chave/webhook prontos. Validar localmente assinatura, MIME, destino, persistência, replay, concorrência, falhas/retomada e limites; publicar somente serviço isolado, sem rebuild web/Parser/Synthesis. Completar com AoT e evidências operacionais sanitizadas.
 
 ---
 

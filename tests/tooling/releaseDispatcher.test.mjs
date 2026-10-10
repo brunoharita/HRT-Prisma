@@ -7,6 +7,22 @@ import { buildReleasePlan, classifyChanges, migrationIdentity, parseNameStatus }
 import { assertPublishPreconditions, parseArguments, writeReceipt } from "../../scripts/release-dispatcher.mjs";
 
 const change = (status, path) => ({ status, path, previousPath: null });
+test("corporate forwarding deploys independently of every Prisma runtime", () => {
+  for (const path of ["services/mail-forwarder/server.mjs", "services/mail-forwarder/pnpm-lock.yaml", "deploy/mail-forwarder.compose.yml", "deploy/release-mail-forwarder.sh"]) {
+    const plan = buildReleasePlan([change("A", path)]);
+    assert.equal(plan.deployments.mailForwarder, true);
+    assert.equal(plan.deployments.web, false);
+    assert.equal(plan.deployments.parserIa, false);
+    assert.equal(plan.deployments.profileSynthesis, false);
+    assert.deepEqual(plan.deployments.database, []);
+    assert.deepEqual(plan.deployments.edgeFunctions, []);
+    assert.ok(plan.validationCommands.includes("pnpm --dir services/mail-forwarder test"));
+    assert.equal(plan.validationCommands.includes("pnpm run test"), false);
+  }
+  const tooling = buildReleasePlan([change("M", "tests/tooling/releaseDispatcher.test.mjs")]);
+  assert.ok(tooling.validationCommands.includes("pnpm run test:release-tooling"));
+  assert.equal(tooling.validationCommands.includes("pnpm run test"), false);
+});
 test("shared AI history routes its actual consumers and the portal preserves independent hosting", () => {
   const shared = buildReleasePlan([change("A", "src/infrastructure/aiHistory.ts")]);
   assert.equal(shared.deployments.parserIa, true);
