@@ -1,0 +1,164 @@
+{
+  "sha": "3ed9cb4f7e52306c3eaa697175b17c59a1d78ff6",
+  "checks": [
+    {
+      "name": "VPS checkout equals validated SHA",
+      "pass": true
+    },
+    {
+      "name": "web running without restarts",
+      "pass": true
+    },
+    {
+      "name": "web image changed",
+      "pass": true
+    },
+    {
+      "name": "rollback preserves previous image",
+      "pass": true
+    },
+    {
+      "name": "/hrt-mail-forwarder ID/image/status/restarts preserved",
+      "pass": true
+    },
+    {
+      "name": "/hrt-mail-forwarder health preserved",
+      "pass": true
+    },
+    {
+      "name": "/prisma-parser-ia ID/image/status/restarts preserved",
+      "pass": true
+    },
+    {
+      "name": "/prisma-parser-ia health preserved",
+      "pass": true
+    },
+    {
+      "name": "/prisma-profile-synthesis ID/image/status/restarts preserved",
+      "pass": true
+    },
+    {
+      "name": "/prisma-profile-synthesis health preserved",
+      "pass": true
+    },
+    {
+      "name": "/prisma-paddle-gateway ID/image/status/restarts preserved",
+      "pass": true
+    },
+    {
+      "name": "/prisma-paddle-gateway health preserved",
+      "pass": true
+    },
+    {
+      "name": "/paddle-vl-llama-test ID/image/status/restarts preserved",
+      "pass": true
+    },
+    {
+      "name": "/paddle-vl-llama-test health preserved",
+      "pass": true
+    },
+    {
+      "name": "/traefik-traefik-1 ID/image/status/restarts preserved",
+      "pass": true
+    },
+    {
+      "name": "/traefik-traefik-1 health preserved",
+      "pass": true
+    },
+    {
+      "name": "root HTTPS 200",
+      "pass": true
+    },
+    {
+      "name": "/sign-in HTTP 200",
+      "pass": true
+    },
+    {
+      "name": "/login HTTP 200",
+      "pass": true
+    },
+    {
+      "name": "/index.html HTTP 200",
+      "pass": true
+    },
+    {
+      "name": "/assets/index-BVxMGhRs.js HTTP 200",
+      "pass": true
+    },
+    {
+      "name": "/assets/rolldown-runtime-C0FnF6B9.js HTTP 200",
+      "pass": true
+    },
+    {
+      "name": "/assets/antd-vendor-Cv3JrkhW.js HTTP 200",
+      "pass": true
+    },
+    {
+      "name": "/assets/supabase-vendor-DoXvCMLf.js HTTP 200",
+      "pass": true
+    },
+    {
+      "name": "/assets/react-vendor-BdxMnOeJ.js HTTP 200",
+      "pass": true
+    },
+    {
+      "name": "/assets/antd-vendor-B5BXDqMa.css HTTP 200",
+      "pass": true
+    },
+    {
+      "name": "/assets/index-B1qtTueB.css HTTP 200",
+      "pass": true
+    },
+    {
+      "name": "served JS carries validated SHA",
+      "pass": true
+    },
+    {
+      "name": "served CSS has guided layout",
+      "pass": true
+    },
+    {
+      "name": "served JS includes guided requirements",
+      "pass": true
+    },
+    {
+      "name": "previous asset preserved /assets/index-DAxCd3bY.js",
+      "pass": true
+    },
+    {
+      "name": "previous asset preserved /assets/rolldown-runtime-C0FnF6B9.js",
+      "pass": true
+    },
+    {
+      "name": "previous asset preserved /assets/antd-vendor-Cv3JrkhW.js",
+      "pass": true
+    },
+    {
+      "name": "previous asset preserved /assets/supabase-vendor-DoXvCMLf.js",
+      "pass": true
+    },
+    {
+      "name": "previous asset preserved /assets/react-vendor-BdxMnOeJ.js",
+      "pass": true
+    },
+    {
+      "name": "previous asset preserved /assets/antd-vendor-B5BXDqMa.css",
+      "pass": true
+    },
+    {
+      "name": "previous asset preserved /assets/index-BKzrsnuR.css",
+      "pass": true
+    },
+    {
+      "name": "public login visibly remains v2.3.5",
+      "pass": true
+    },
+    {
+      "name": "public browser no runtime errors",
+      "pass": true
+    }
+  ],
+  "limits": [
+    "Public smoke and served assets only; no authenticated real-candidate action."
+  ]
+}

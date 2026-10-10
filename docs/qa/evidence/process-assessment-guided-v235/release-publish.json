@@ -1,0 +1,18 @@
+{
+  "command": "publish",
+  "status": "GIT_PUBLISHED",
+  "sha": "3ed9cb4f7e52306c3eaa697175b17c59a1d78ff6",
+  "branch": "codex/assessment-guided-v235",
+  "web": "PUBLISHED",
+  "parserIa": "SKIPPED",
+  "profileSynthesis": "SKIPPED",
+  "mailForwarder": "SKIPPED",
+  "remaining": {
+    "database": [],
+    "edgeFunctions": [],
+    "web": false,
+    "parserIa": false,
+    "profileSynthesis": false,
+    "mailForwarder": false
+  }
+}

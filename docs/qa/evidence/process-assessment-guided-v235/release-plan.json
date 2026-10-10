@@ -1,0 +1,64 @@
+{
+  "command": "plan",
+  "plan": {
+    "version": "1.0.5",
+    "files": [
+      "FONTE_GPT_PRISMA.md",
+      "TUDO_SOBRE_PRISMA.md",
+      "docs/ai-context/PRISMA_CURRENT_STATE.md",
+      "docs/product/proposta-avaliacao-processo-2026-10-10/variacoes-secoes-guiadas/4a-azul-equilibrado.png",
+      "docs/product/ux-foundation.md",
+      "docs/qa/evidence/process-assessment-guided-v235/geometry-1448.json",
+      "docs/qa/evidence/process-assessment-guided-v235/geometry-320.json",
+      "docs/qa/evidence/process-assessment-guided-v235/geometry-390.json",
+      "docs/qa/evidence/process-assessment-guided-v235/geometry-768.json",
+      "docs/qa/evidence/process-assessment-guided-v235/guided-1448.png",
+      "docs/qa/evidence/process-assessment-guided-v235/guided-320.png",
+      "docs/qa/evidence/process-assessment-guided-v235/guided-390.png",
+      "docs/qa/evidence/process-assessment-guided-v235/guided-768.png",
+      "docs/qa/evidence/process-assessment-guided-v235/production-before.txt",
+      "docs/qa/evidence/process-assessment-guided-v235/regression/checks.json",
+      "docs/qa/evidence/process-assessment-guided-v235/visual-checks.json",
+      "docs/qa/process-assessment-guided-v235.md",
+      "tests/tooling/processAssessment.browser.mjs",
+      "tests/tooling/processAssessmentGuided.browser.mjs",
+      "tests/ui/process-assessment/main.tsx",
+      "web/src/config/releaseRegistry.ts",
+      "web/src/pages/ProcessAssessmentPage.tsx",
+      "web/src/pages/processAssessment.css"
+    ],
+    "impact": {
+      "surfaces": [
+        "context-pack",
+        "documentation",
+        "generated-context",
+        "hosting",
+        "tests",
+        "web"
+      ],
+      "edgeFunctions": [],
+      "migrations": [],
+      "modifiedMigrations": [],
+      "unknown": []
+    },
+    "validationCommands": [
+      "git diff --check",
+      "pnpm run generate:prisma-context",
+      "pnpm run check:prisma-context",
+      "pnpm run typecheck:web",
+      "pnpm run build:web",
+      "pnpm run test"
+    ],
+    "deployments": {
+      "git": true,
+      "database": [],
+      "edgeFunctions": [],
+      "web": true,
+      "parserIa": false,
+      "profileSynthesis": false,
+      "mailForwarder": false
+    },
+    "blockedReasons": [],
+    "publishable": true
+  }
+}
