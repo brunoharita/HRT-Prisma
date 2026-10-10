@@ -148,12 +148,14 @@ test("delivery relates only to own receipt; bounce cannot be overridden by late 
   f.forwarder.ingest(...signed(event({ email_id: SENT }, "email.delivered"))); assert.equal(f.store.get(ID).state, "bounced");
 });
 test("raw download prohibits private/foreign targets and redirects, enforces streaming byte limit", async () => {
-  for (const url of ["http://cdn.resend.com/x", "https://127.0.0.1/x", "https://evilresend.com/x", "https://cdn.resend.com.evil/x", "https://user:pass@cdn.resend.com/x"]) {
+  for (const url of ["http://cdn.resend.com/x", "https://127.0.0.1/x", "https://evilresend.com/x", "https://cdn.resend.com.evil/x", "https://user:pass@cdn.resend.com/x", "https://cdn.resend.app.evil/x", "https://evilcdn.resend.app/x", "https://other.resend.app/x", "http://cdn.resend.app/x", "https://cdn.resend.app:8443/x", "https://user:pass@cdn.resend.app/x"]) {
     await assert.rejects(downloadRaw(url), /raw_url_invalid/);
   }
   let seen;
   const raw = await downloadRaw("https://cdn.resend.com/x", { fetchImpl: async (_, options) => { seen = options; return new Response("safe synthetic"); } });
   assert.equal(raw.toString(), "safe synthetic"); assert.equal(seen.redirect, "error");
+  const actualCdn = await downloadRaw("https://cdn.resend.app/receiving/raw/synthetic", { fetchImpl: async (url, options) => { assert.equal(url.hostname, "cdn.resend.app"); assert.equal(options.redirect, "error"); return new Response("synthetic provider MIME"); } });
+  assert.equal(actualCdn.toString(), "synthetic provider MIME");
   await assert.rejects(downloadRaw("https://cdn.resend.com/x", { fetchImpl: async () => new Response("x", { headers: { "content-length": String(21 * 1024 * 1024) } }) }), /message_too_large/);
   await assert.rejects(downloadRaw("https://cdn.resend.com/x", { fetchImpl: async () => new Response(new Uint8Array(21 * 1024 * 1024)) }), /message_too_large/);
 });

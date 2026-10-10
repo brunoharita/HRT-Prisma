@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 423
-source_manifest_sha256: a401f4fa3ef0d90c7f20f2bb0d6696e300ead0e1a0a6d1e4f583905e15b1b0a5
+source_manifest_sha256: 4cb9ab3b8e500cbcd1712ab9dc4f6863a129403453a92f1001b3dbc458d094fb
 -->
 
 # Tudo sobre o Prisma
@@ -2626,16 +2626,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.63.0
+version: 2.64.0
 last_verified: 2026-10-09
 ---
 
 # Estado atual do Prisma
 
-## E-mail corporativo HRT: serviço publicado, DNS pendente
+## E-mail corporativo HRT: DNS verificado, correção de encaminhamento em rollout
 
-PO aprovou receber todos os endereços @hrtsolutions.com.br e encaminhar para seu Gmail pessoal. Serviço isolado1.0.1 publicado no SHA15db40625e636bd273e2cb78d99095e709737f57 em main/origin/VPS, sem alterar Prisma2.3.0, Supabase, frontend, IA ou chave de convites. SDK/parser oficiais, assinatura/destino privado com binding hash/API scope, SQLite de recibos sem corpo/endereços, idempotência/retry/reinício e reconciliação após24h;17testes Windows/CI Node24,16Docker inicial,21tooling PASS, contextos/lint em snapshot rastreado e audit sem vulnerabilidades. Full access separado concedido explicitamente pelo PO e config privada DPAPI/SSH stdin/UID1000mode400, nenhum secret exposto. Serviço healthy/zero reinícios, health200 e assinatura ausente401; seis containers preservam IDs/imagens/restarts e11HTTP site/portal/assets/gateways PASS. CIs branch38012643014/38012643034 e main38012751626/38012751674 success. Receiving enabled, sending DNS verified, mas MX raiz priority10 inbound-smtp.sa-east-1.amazonaws.com pending: sessão Registro.br expirou e aguarda login do PO. Nenhum e-mail real enviado/encaminhado; D-01/D-02/D-04 parciais, não é recebimento operacional comprovado. Cota Free100envios/dia3000/mês compartilhada com convites, nenhum plano pago. Destino apareceu no primeiro SHA públicodc13eee; removido dos arquivos atuais e privado na correção, mas permanece no histórico; PO informado. Acordo/execução v1.0.1, AoT hrt-email-forwarding, ADR-081 e operações registram gates/limites/rollback. Gmail SMTP/Enviar como e respostas automáticas fora do escopo.
-
+PO salvou o MX raiz10 inbound-smtp.sa-east-1.amazonaws.com em09/10/2026. DNS autoritativo/público e Resend verified em envio/recebimento; oito registros antigos preservados. Dois testes sintéticos chegaram com texto/HTML/anexo, mas1.0.1 bloqueou o download porque o host real cdn.resend.app estava ausente da lista. Correção1.0.2 permite apenas esse host exato adicional, preservando HTTPS, rejeição de redirects/portas/credenciais e limite20MiB;17testes Windows/QA Docker isolado PASS e audit sem vulnerabilidades. Rollout/retomada desses recibos e prova Gmail pendentes neste checkpoint. Destino privado com binding hash, assinatura/API scope, SQLite somente metadados, retry/idempotência/reinício/reconciliação preservados. Full access separado concedido pelo PO; config privada UID1000/mode400, nenhum secret exposto. Prisma2.3.0, convites/chave restrita, banco/IA/Score e runtimes existentes preservados. Cota Free100envios/dia3000/mês compartilhada, sem plano pago. Destino constou do primeiro SHA públicodc13eee; removido dos arquivos atuais, mas permanece no histórico e P-02 FAIL registrado no AoT. Acordo/execução v1.0.1, ADR-081 e operações; Gmail SMTP/Enviar como e respostas automáticas fora do escopo.
 ## Avaliação para Posição — v2.3.0 publicada
 
 Publicação integral autorizada pelo PO em09/10/2026; Agreement/Execution v0.5.0 congelados. Publicada2.3.0 no SHA funcional3e271e32d6e9c7b7bd3b77571507ccd71d037956 em main/origin/VPS. Cobre configuração/requisitos/distribuição exata, Banco/IA/Misto, revisão humana/cópia contextual, convites Resend com fila/claim/idempotência, portal resiliente com cinco alternativas, correção objetiva e resultado/atividade privados. Nada altera automaticamente Score/Perfil/Posição/etapa. Aviso final e expurgo temporal adiados, sem inventar base legal; exclusão explícita/direitos preservados. Resend domínio Verified, TLS oportunista e remetente suporte@hrtsolutions.com.br aprovados; credencial instalada em ciphertext backend-only/bootstrapping consumido, autenticação conferida com payload vazio422 sem mensagem. OpenAI Responses gpt-5.6-luna: máximo20questões/US$0,25pedido/US$10mês por empresa, reserva serializada e aprovação humana obrigatória.
@@ -9980,6 +9979,8 @@ Serviço Node isolado, runtime24, SQLite nativo para fila/recibos duráveis, Doc
 
 A API só oferece full_access e sending_access; leitura exige Full access, recurso mais amplo que o desejável, autorizado separadamente e armazenado apenas em secret privado do novo serviço. Chave de convites permanece restrita e separada. Contas/credenciais não chegam ao frontend ou aos outros workers. Resend/Gmail mantêm suas próprias cópias e limites; não há garantia de Inbox, ausência de spam ou entrega de anexos acima do limite. Cota Free compartilhada com convites, sem upgrade automático. Falhas ficam no recibo/fila e webhook pode ser reexecutado; não há resposta automática ao remetente. Rollback para serviço/MX anteriores mantém fila/recibos, demais serviços e registros DNS.
 
+Delta operacional1.0.2 em09/10/2026: a API autenticada de recebimento retornou o host exato `cdn.resend.app` para os dois testes sintéticos, com CNAME público para CloudFront. A [referência oficial de recebimento](https://resend.com/docs/api-reference/emails/retrieve-received-email) define raw.download_url como URL assinada CloudFront. Autorizar somente esse host exato adicional, sem liberar o sufixo resend.app, redirects, HTTP, credenciais em URL ou portas alternativas. Não altera destino, fornecedor, finalidade ou D/P/F do acordo; corrige o bloqueio raw_url_invalid anterior. Teste dirigido inclui host real e variantes maliciosas; retomar apenas os dois recibos sintéticos bloqueados, sem apagar histórico.
+
 ---
 
 ## Source: `docs/decisions/README.md`
@@ -10274,13 +10275,13 @@ Código: ref/artefato anterior. Migration: preferir forward fix; rollback destru
 
 # Recebimento e encaminhamento HRT
 
-Contrato docs/qa/agreement-hrt-email-forwarding.md v1.0.1, ADR-081. PO autorizou receber todos os endereços @hrtsolutions.com.br, incluindo bruno.harita e suporte, e encaminhar para seu Gmail pessoal. Prisma2.3.0 mantido; serviço corporativo1.0.1 independente. Serviço1.0.1 publicado/healthy no SHA15db406 em main/origin/VPS; CIs branch/main success. Recebimento habilitado mas MX ainda pendente; não declarar entrega operacional. Destino privado validado por binding hash, conforme correção1.0.1; ocorrência do SHA inicial registrada no AoT.
+Contrato docs/qa/agreement-hrt-email-forwarding.md v1.0.1, ADR-081. PO autorizou receber todos os endereços @hrtsolutions.com.br, incluindo bruno.harita e suporte, e encaminhar para seu Gmail pessoal. Prisma2.3.0 mantido; serviço corporativo1.0.2 independente. MX salvo pelo PO e verificado no DNS autoritativo/público e no Resend, com envio preservado. Dois testes sintéticos chegaram com texto/HTML/anexo; download do MIME bloqueado na1.0.1 porque o host real cdn.resend.app estava ausente da lista. Correção1.0.2 validada Windows/QA Docker, aguardando rollout e retomada desses dois recibos; não declarar entrega Gmail até esse teste. Destino privado validado por binding hash; ocorrência do SHA inicial registrada no AoT.
 
 ## Fluxo
 
 MX raiz Resend -> evento email.received -> HTTPS no Traefik existente -> hrt-mail-forwarder -> Resend send -> Gmail. Remetente do encaminhamento `HRT Solutions <encaminhamento@hrtsolutions.com.br>`; assunto/texto/HTML/anexos preservados, Reply-To original, X-Original-To registra destinatários do envelope (inclusive Bcc) e X-Original-From registra Reply-To/remetente. No Gmail, filtro `from:encaminhamento@hrtsolutions.com.br` identifica todos esses encaminhamentos; filtro/configuração do Gmail não integra esta execução. O endereço HRT é um alias de recebimento, sem caixa separada ou senha própria. Respostas continuam saindo pelo Gmail pessoal até futura configuração de cliente SMTP.
 
-Mensagens não são interpretadas nem executadas. SDK Resend6.32.1 e postal-mime2.7.6 (mesmo parser do SDK), Node24/SQLite nativo, lockfile isolado, Docker readonly/node/cap_drop/limites, secret privado e volume de recibos. API em endereço fixo HTTPS sem redirects; download MIME HTTPS somente em hosts Resend/AWS, máximo20MiB de mensagem bruta. Excesso permanece bloqueado no recibo e no provider, sem truncamento silencioso. Resend/Gmail têm limites adicionais e políticas de retenção próprias. Não há varredura antivírus própria: anexos permanecem conteúdo não confiável e são entregues para inspeção pelo Gmail/usuário.
+Mensagens não são interpretadas nem executadas. SDK Resend6.32.1 e postal-mime2.7.6 (mesmo parser do SDK), Node24/SQLite nativo, lockfile isolado, Docker readonly/node/cap_drop/limites, secret privado e volume de recibos. API em endereço fixo HTTPS sem redirects; download MIME HTTPS somente em hosts Resend/AWS e host exato cdn.resend.app, máximo20MiB de mensagem bruta. O endereço provém exclusivamente da API autenticada, nunca de links no corpo recebido. Excesso permanece bloqueado no recibo e no provider, sem truncamento silencioso. Resend/Gmail têm limites adicionais e políticas de retenção próprias. Não há varredura antivírus própria: anexos permanecem conteúdo não confiável e são entregues para inspeção pelo Gmail/usuário.
 
 Webhook assinado é autenticado pelo SDK e os destinatários reconfirmados pela API. Destino em config privada, validado contra SHA256 fixo no código, sem campo configurável por mensagem. Recibo SQLite guarda somente UUIDs, tempos, estado, contagem, código técnico e hash, nunca corpo/anexos/assunto/e-mail/secret. Eventos repetidos não recriam job; worker serial impede concorrência; persistência antes da API e mesma idempotencyKey/payload permitem retomar após falha/reinício. Após24h menos60s de tentativa sem recibo ou mudança de hash, estado reconcile exige intervenção e consulta ao provider, sem reenvio cego. accepted significa aceito pelo Resend; delivered significa evento de entrega ao servidor destinatário, não garante Inbox ou ausência de spam. Eventos de outros envios não alteram jobs corporativos.
 
@@ -17354,6 +17355,10 @@ PARTIAL. Correção de identidade entregue e validada; jornada hospedada chegou 
 ## Source: `docs/qa/aot-hrt-email-forwarding.md`
 
 # AoT: encaminhamento corporativo HRT
+
+## Atualização operacional1.0.2
+
+PO salvou o MX em09/10/2026. Nove entradas persistidas no Registro.br, preservando as oito anteriores; DNS autoritativo e1.1.1.1 confirmam root MX10 inbound-smtp.sa-east-1.amazonaws.com. Resend verified em envio/recebimento, tracking desabilitado. Dois e-mails sintéticos recebidos com texto/HTML/anexo; job bloqueado antes de enviar por raw_url_invalid. Causa provada: API autenticada entrega download em cdn.resend.app, ausente da lista inicial. Correção autoriza somente esse host exato adicional e mantém HTTP/portas/credenciais/redirecionamentos bloqueados. Mapa de impacto original preservado, com download CDN do mesmo provider diretamente afetado;17testes Windows e17QA Docker readonly/networknone/cap_drop PASS, audit sem vulnerabilidades. Rollout/retomada e prova Gmail ainda pendentes neste checkpoint; matriz abaixo é baseline e será fechada com a evidência real.
 
 Contrato docs/qa/agreement-hrt-email-forwarding.md v1.0.1 e execução correspondente, template aot-template.md. Baseline main2fe4e31, branch codex/hrt-email-forwarding, Prisma2.3.0 preservado. Em andamento: não declarar recebimento funcional antes da ativação/entrega. Primeiro SHA funcionaldc13eee publicado em main/origin/VPS, CI branch38012158752/38012158817 e main38012271121/38012271133 success. Serviço healthy/zero reinícios, assinatura ausente401; seis containers preservam IDs/imagens/restarts. Receiving enabled, DKIM/CNAMEs verified e MX pending; sessão Registro.br expirou e aguarda login do PO.
 

@@ -1,5 +1,9 @@
 # AoT: encaminhamento corporativo HRT
 
+## Atualização operacional1.0.2
+
+PO salvou o MX em09/10/2026. Nove entradas persistidas no Registro.br, preservando as oito anteriores; DNS autoritativo e1.1.1.1 confirmam root MX10 inbound-smtp.sa-east-1.amazonaws.com. Resend verified em envio/recebimento, tracking desabilitado. Dois e-mails sintéticos recebidos com texto/HTML/anexo; job bloqueado antes de enviar por raw_url_invalid. Causa provada: API autenticada entrega download em cdn.resend.app, ausente da lista inicial. Correção autoriza somente esse host exato adicional e mantém HTTP/portas/credenciais/redirecionamentos bloqueados. Mapa de impacto original preservado, com download CDN do mesmo provider diretamente afetado;17testes Windows e17QA Docker readonly/networknone/cap_drop PASS, audit sem vulnerabilidades. Rollout/retomada e prova Gmail ainda pendentes neste checkpoint; matriz abaixo é baseline e será fechada com a evidência real.
+
 Contrato docs/qa/agreement-hrt-email-forwarding.md v1.0.1 e execução correspondente, template aot-template.md. Baseline main2fe4e31, branch codex/hrt-email-forwarding, Prisma2.3.0 preservado. Em andamento: não declarar recebimento funcional antes da ativação/entrega. Primeiro SHA funcionaldc13eee publicado em main/origin/VPS, CI branch38012158752/38012158817 e main38012271121/38012271133 success. Serviço healthy/zero reinícios, assinatura ausente401; seis containers preservam IDs/imagens/restarts. Receiving enabled, DKIM/CNAMEs verified e MX pending; sessão Registro.br expirou e aguarda login do PO.
 
 ## Matriz de acordos

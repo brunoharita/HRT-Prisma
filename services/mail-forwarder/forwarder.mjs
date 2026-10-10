@@ -52,7 +52,7 @@ export async function downloadRaw(url, { fetchImpl = fetch, signal } = {}) {
   let parsed;
   try { parsed = new URL(url); } catch { throw fault("raw_url_invalid"); }
   if (parsed.protocol !== "https:" || parsed.username || parsed.password || (parsed.port && parsed.port !== "443") ||
-      ![".resend.com", ".amazonaws.com"].some(suffix => parsed.hostname.endsWith(suffix))) throw fault("raw_url_invalid");
+      !(parsed.hostname === "cdn.resend.app" || [".resend.com", ".amazonaws.com"].some(suffix => parsed.hostname.endsWith(suffix)))) throw fault("raw_url_invalid");
   const response = await fetchImpl(parsed, { signal, redirect: "error" });
   if (!response.ok) throw fault("raw_download_failed");
   if (Number(response.headers.get("content-length")) > MAX_RAW) { await response.body?.cancel(); throw fault("message_too_large"); }
