@@ -10,7 +10,7 @@ last_verified: 2026-10-10
 
 ## Identificação do Kanban — correção v2.3.5
 
-Correção do posicionamento dos quatro filhos da grade de três colunas do card: checkbox e avatar compartilham a região esquerda, identificação ocupa a coluna flexível e alça/score a direita. A seleção adicionada em2.3.2 deslocava nome/cargo para o track50px; a validação anterior não detectou o encolhimento. Conteúdo completo, score, seleção, detalhes e etapas preservados; somente CSS e versão patch2.3.5, sem backend/dados/IA. Contrato, mapa, execução e AoT em `docs/qa/kanban-identity-v235.md`. Publicação depende das evidências finais desse registro.
+Correção do posicionamento dos quatro filhos da grade de três colunas do card: checkbox e avatar compartilham a região esquerda, identificação ocupa a coluna flexível e alça/score a direita. A seleção adicionada em2.3.2 deslocava nome/cargo para o track50px; a validação anterior não detectou o encolhimento. Conteúdo completo, score, seleção, detalhes e etapas preservados; somente CSS e versão patch2.3.5, sem backend/dados/IA. Contrato, mapa, execução e AoT em `docs/qa/kanban-identity-v235.md`. Publicado em10/10/2026: main/origin/runtime web9212c5c5a865f22eff756ff516f6117e866a3567, v2.3.5. CI e22checks operacionais/18HTTP200 PASS; CSS/SHA/assets/rollback e serviços preservados, login público mostra a versão. Probe imediato404 durante recriação, estabilização comprovada sem rebuild. QA sintético em15 cenários e11testes Node; leitura real autenticada não foi realizada. Fechamento documental não reconstrói runtime. Evidência no AoT e pasta kanban-identity-v235.
 
 ## Prova comum por processo seletivo — v2.3.2 publicada
 

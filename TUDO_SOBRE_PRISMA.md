@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 439
-source_manifest_sha256: 2b1a9bb76227b476d9b197aa645c129c6d289b61cd62bae17349c017bcd33113
+source_manifest_sha256: 845ea0bf6bcfb915d97d4ecb963f2320b8a22202d3ad45f78f2e26efedc7b661
 -->
 
 # Tudo sobre o Prisma
@@ -2634,7 +2634,7 @@ last_verified: 2026-10-10
 
 ## Identificação do Kanban — correção v2.3.5
 
-Correção do posicionamento dos quatro filhos da grade de três colunas do card: checkbox e avatar compartilham a região esquerda, identificação ocupa a coluna flexível e alça/score a direita. A seleção adicionada em2.3.2 deslocava nome/cargo para o track50px; a validação anterior não detectou o encolhimento. Conteúdo completo, score, seleção, detalhes e etapas preservados; somente CSS e versão patch2.3.5, sem backend/dados/IA. Contrato, mapa, execução e AoT em `docs/qa/kanban-identity-v235.md`. Publicação depende das evidências finais desse registro.
+Correção do posicionamento dos quatro filhos da grade de três colunas do card: checkbox e avatar compartilham a região esquerda, identificação ocupa a coluna flexível e alça/score a direita. A seleção adicionada em2.3.2 deslocava nome/cargo para o track50px; a validação anterior não detectou o encolhimento. Conteúdo completo, score, seleção, detalhes e etapas preservados; somente CSS e versão patch2.3.5, sem backend/dados/IA. Contrato, mapa, execução e AoT em `docs/qa/kanban-identity-v235.md`. Publicado em10/10/2026: main/origin/runtime web9212c5c5a865f22eff756ff516f6117e866a3567, v2.3.5. CI e22checks operacionais/18HTTP200 PASS; CSS/SHA/assets/rollback e serviços preservados, login público mostra a versão. Probe imediato404 durante recriação, estabilização comprovada sem rebuild. QA sintético em15 cenários e11testes Node; leitura real autenticada não foi realizada. Fechamento documental não reconstrói runtime. Evidência no AoT e pasta kanban-identity-v235.
 
 ## Prova comum por processo seletivo — v2.3.2 publicada
 
@@ -26687,7 +26687,7 @@ Aplicar integralmente D/P/F/A deste arquivo v1.0.0. Preservar contrato anterior 
 
 ## AoT
 
-Implementação, evidências e rollout pendentes. Nenhum PASS operacional antes da verificação.
+Registro inicial antes de implementar: implementação, evidências e rollout pendentes. Fechamento operacional comprovado na seção final abaixo.
 
 ### Implementação e QA local
 
@@ -26698,10 +26698,19 @@ Grid scoped em positionFollowUp.css posiciona cada filho explicitamente: avatar/
 | D-01 | 15 cenários (2048/1448/768/390/320 × referência/longo/ausente), imagens mesma fixture/estado/viewport; identidade50px antes e158/162/478/200/130px depois | PASS local |
 | D-02 | checkbox, nome/cargo/cidade completos, score50×50, detalhes e alternativa de etapa; arraste real em1448 e Mover etapa em390 preservam scores; zero mutações passivas | PASS local |
 | P-01 / F-01 | CSS restrito ao card, registry e documentação; nenhum backend/IA/dado/permissão modificado | PASS local |
-| D-03 | tipos/build/contextos/plano/CI e rollout | NOT TESTED operacional |
+| D-03 | tipos/build/contextos/plano/CI, SHA/versão/CSS/assets/rollback e preservação de serviços | PASS operacional, evidências na seção final |
 
 Tipos web e build web PASS; avisos preexistentes de tamanho/import dinâmico permanecem. Browser PASS nos15 cenários, incluindo interação explícita. UI real, fixtures sintéticas existentes, zero uso de Pessoas reais ou IA. Evidência em evidence/kanban-identity-v235. Sem mudança de regra de negócio ou desvio material do acordo. Produção ainda2.3.4 até publicação confirmada.
 Regressão Node: 11 testes positionFollowUp/productRelease PASS. Root build, tipos web e build web PASS. Context Pack gerado/checker PASS em snapshot do index selecionado, preservando arquivos alheios não rastreados.
+
+### Fechamento operacional
+
+Publicado em10/10/2026, main/origin/runtime web `9212c5c5a865f22eff756ff516f6117e866a3567`, v2.3.5. CI branch38079903273 PASS. Plano/dry-run limitados ao web, nenhum backend.22 checks de produção e18 HTTP200 PASS: CSS posicionando identidade/checkbox/aside, versão e SHA no bundle, arquivos novos/anteriores preservados, rollback correspondente ao runtime2.3.4 e seis containers adjacentes com IDs/imagens/status/restarts/health idênticos. Login público real renderizou v2.3.5 sem erro. Evidências: release-plan/dry-run/verify, ci-branch, production-before/after/public-browser e screenshots.
+
+O probe imediato do dispatcher encontrou404 durante recriação (remoto22/local1); não houve recibo de publish bem-sucedido. Verificação independente após estabilização PASS, sem segundo build. release-recovery.json preserva esse limite; não se transforma a falha transitória em prova de sucesso do comando. Experimento paddle-vl-llama-test já estava unhealthy e permaneceu assim, sem intervenção.
+
+Todos os D/P aplicáveis PASS nos limites descritos; nenhum desvio material residual. Foi corrigida a falha da validação anterior com teste de largura e posicionamento da identidade. QA usa dados sintéticos; leitura real autenticada continua NOT TESTED, não se escreveu dado humano para demonstrar o visual. Fontes/decisões/Score não foram alterados. Fechamento documental integra/sincroniza por fast-forward sem rebuild; runtime funcional permanece9212c5c. Trabalho alheio preservado.
+CI main38079976474 também PASS para o mesmo SHA funcional; registro ci-main.json. Fechamento web-only confirmado.
 
 ---
 

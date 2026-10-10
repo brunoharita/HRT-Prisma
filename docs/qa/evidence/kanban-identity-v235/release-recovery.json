@@ -1,0 +1,11 @@
+{
+  "functionalSha": "9212c5c5a865f22eff756ff516f6117e866a3567",
+  "publisherExit": 1,
+  "remoteProbeExit": 22,
+  "immediateProbeHttpStatus": 404,
+  "publisherReceiptWritten": false,
+  "rebuildAfterProbeFailure": false,
+  "verifiedOperationalResult": "PUBLISHED",
+  "verification": ["production-after.json", "release-verify.json", "production-public-browser.json", "ci-branch.json"],
+  "note": "Build/recreation and main promotion completed. Immediate probe returned transient404; independent verification after stabilization confirmed SHA/assets/rollback and preserved services. This is a recovery record, not a successful dispatcher publish receipt."
+}

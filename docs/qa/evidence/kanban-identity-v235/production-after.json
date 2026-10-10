@@ -1,0 +1,237 @@
+{
+  "site": "https://prisma.hrtsolutions.com.br",
+  "host": "srv1038882",
+  "checkout": "9212c5c5a865f22eff756ff516f6117e866a3567",
+  "containers": [
+    {
+      "name": "/prisma-web",
+      "id": "9f47ec8555e5df80518d523efa4ceedec894e0db7fac6408dce05a6662b4134f",
+      "image": "sha256:2efad71a0780e6e7b720c8e3ed456b4019578aa416916353e7dfd1fc0c6b29ff",
+      "status": "running",
+      "restarts": 0,
+      "health": null
+    },
+    {
+      "name": "/hrt-mail-forwarder",
+      "id": "b257a83cbb370299dc3666d120a22b47f7fb5acfc4a73516a78b821ae43fea6a",
+      "image": "sha256:ffc0f2a53e093cec01c4a91e652b29b0ede4808ecc2f461df9e6faa52940cc31",
+      "status": "running",
+      "restarts": 0,
+      "health": "healthy"
+    },
+    {
+      "name": "/prisma-parser-ia",
+      "id": "311f8e4f4d0f2c3e24c96bbbd098fcc0212561eb0862f4da3529792d1681c2f1",
+      "image": "sha256:786219d08845036060d99ca06e441c1fde98923228f60e5db7b29422f208e752",
+      "status": "running",
+      "restarts": 0,
+      "health": "healthy"
+    },
+    {
+      "name": "/prisma-profile-synthesis",
+      "id": "db6c5c0ef238534ba2967dce3bbf80e9e8c94089ca7bb48b84f4e523961b00d7",
+      "image": "sha256:2fdccaea0fb50449f9f5e800ada1925c690fab319e4d3708ade0f831c7e99167",
+      "status": "running",
+      "restarts": 0,
+      "health": "healthy"
+    },
+    {
+      "name": "/prisma-paddle-gateway",
+      "id": "2eed2dd379eacf4ff58d83f034f5ff7a122792ba7fa7da3977cda580bc74e983",
+      "image": "sha256:d061cea3ae0a785f5cc0879704e1918666d22aa51236ec4ff7384b1387d2cf99",
+      "status": "running",
+      "restarts": 0,
+      "health": null
+    },
+    {
+      "name": "/paddle-vl-llama-test",
+      "id": "d991a574e45eb002ce05e6c0fc9e448f4a4ed5f6128aaac049ea8cbdb24e4b8f",
+      "image": "sha256:b15cd87030b2eb8a284d398c095e03c6ba8baf386b68e1b83ab8b46e9555ffe8",
+      "status": "running",
+      "restarts": 0,
+      "health": "unhealthy"
+    },
+    {
+      "name": "/traefik-traefik-1",
+      "id": "5e25fdc6d2e6fd3c622972310f67f640b80cac70538e17b42a529d1935488bc6",
+      "image": "sha256:f86a2cab1b5c649070c49f883c743dd32d8485a56e3368c5f93b9e91f1e91259",
+      "status": "running",
+      "restarts": 0,
+      "health": null
+    }
+  ],
+  "rollback": "sha256:f54c58245bdacb7f1f522f3e762db109789986d337c1bef0569eb0c7f2f063e2",
+  "assets": [
+    "/assets/index-DAxCd3bY.js",
+    "/assets/rolldown-runtime-C0FnF6B9.js",
+    "/assets/antd-vendor-Cv3JrkhW.js",
+    "/assets/supabase-vendor-DoXvCMLf.js",
+    "/assets/react-vendor-BdxMnOeJ.js",
+    "/assets/antd-vendor-B5BXDqMa.css",
+    "/assets/index-BKzrsnuR.css"
+  ],
+  "checks": [
+    {
+      "name": "host identity",
+      "pass": true
+    },
+    {
+      "name": "checkout SHA",
+      "pass": true
+    },
+    {
+      "name": "web updated and running",
+      "pass": true
+    },
+    {
+      "name": "other containers preserved",
+      "pass": true
+    },
+    {
+      "name": "rollback image preserved",
+      "pass": true
+    },
+    {
+      "name": "runtime SHA",
+      "pass": true
+    },
+    {
+      "name": "release 2.3.5",
+      "pass": true
+    },
+    {
+      "name": "published text: Já está no acompanhamento",
+      "pass": true
+    },
+    {
+      "name": "published text: Abrir acompanhamento",
+      "pass": true
+    },
+    {
+      "name": "published text: Revisar relação da trajetória",
+      "pass": true
+    },
+    {
+      "name": "published text: Consultar acompanhamento novamente",
+      "pass": true
+    },
+    {
+      "name": "published text: Processo atual",
+      "pass": true
+    },
+    {
+      "name": "published text: Ver cálculo do score",
+      "pass": true
+    },
+    {
+      "name": "published style: .pf-card-top>.pf-card-identity",
+      "pass": true
+    },
+    {
+      "name": "published style: .pf-card-top>.pf-card-aside",
+      "pass": true
+    },
+    {
+      "name": "published style: .pf-card-top>.ant-checkbox-wrapper",
+      "pass": true
+    },
+    {
+      "name": "published style: .prisma-candidate-toolbar",
+      "pass": true
+    },
+    {
+      "name": "published style: .prisma-candidate-buckets",
+      "pass": true
+    },
+    {
+      "name": "published style: .prisma-candidate-disclosure",
+      "pass": true
+    },
+    {
+      "name": "published style: .prisma-candidate-details[hidden]",
+      "pass": true
+    },
+    {
+      "name": "published style: .prisma-candidate-follow-up-notice",
+      "pass": true
+    },
+    {
+      "name": "old assets retained",
+      "pass": true
+    }
+  ],
+  "http": [
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-DAxCd3bY.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/rolldown-runtime-C0FnF6B9.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/antd-vendor-Cv3JrkhW.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/supabase-vendor-DoXvCMLf.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/react-vendor-BdxMnOeJ.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/antd-vendor-B5BXDqMa.css",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-BKzrsnuR.css",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-C2dfaVN2.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-DK5yn7O4.css",
+      "status": 200
+    },
+    {
+      "path": "/signin",
+      "status": 200
+    },
+    {
+      "path": "/profiles",
+      "status": 200
+    },
+    {
+      "path": "/vacancies",
+      "status": 200
+    },
+    {
+      "path": "/vacancies/position-fixture/people",
+      "status": 200
+    },
+    {
+      "path": "/vacancies/position-fixture/follow-up",
+      "status": 200
+    },
+    {
+      "path": "/vacancies/position-fixture/follow-up/processes/process-fixture/person-fixture",
+      "status": 200
+    },
+    {
+      "path": "/knowledge",
+      "status": 200
+    },
+    {
+      "path": "/settings",
+      "status": 200
+    }
+  ]
+}

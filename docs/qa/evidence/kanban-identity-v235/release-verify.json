@@ -1,0 +1,92 @@
+{
+  "command": "verify",
+  "local": "9212c5c5a865f22eff756ff516f6117e866a3567",
+  "originMain": "9212c5c5a865f22eff756ff516f6117e866a3567",
+  "gitAligned": true,
+  "site": {
+    "status": 200,
+    "ok": true
+  },
+  "plan": {
+    "version": "1.0.5",
+    "files": [
+      "FONTE_GPT_PRISMA.md",
+      "TUDO_SOBRE_PRISMA.md",
+      "docs/ai-context/PRISMA_CURRENT_STATE.md",
+      "docs/architecture/versioning.md",
+      "docs/product/ux-foundation.md",
+      "docs/qa/evidence/kanban-identity-v235/after-long-1448.png",
+      "docs/qa/evidence/kanban-identity-v235/after-long-2048.png",
+      "docs/qa/evidence/kanban-identity-v235/after-long-320.png",
+      "docs/qa/evidence/kanban-identity-v235/after-long-390.png",
+      "docs/qa/evidence/kanban-identity-v235/after-long-768.png",
+      "docs/qa/evidence/kanban-identity-v235/after-missing-1448.png",
+      "docs/qa/evidence/kanban-identity-v235/after-missing-2048.png",
+      "docs/qa/evidence/kanban-identity-v235/after-missing-320.png",
+      "docs/qa/evidence/kanban-identity-v235/after-missing-390.png",
+      "docs/qa/evidence/kanban-identity-v235/after-missing-768.png",
+      "docs/qa/evidence/kanban-identity-v235/after-reference-1448.png",
+      "docs/qa/evidence/kanban-identity-v235/after-reference-2048.png",
+      "docs/qa/evidence/kanban-identity-v235/after-reference-320.png",
+      "docs/qa/evidence/kanban-identity-v235/after-reference-390.png",
+      "docs/qa/evidence/kanban-identity-v235/after-reference-768.png",
+      "docs/qa/evidence/kanban-identity-v235/baseline.json",
+      "docs/qa/evidence/kanban-identity-v235/before-long-1448.png",
+      "docs/qa/evidence/kanban-identity-v235/before-long-2048.png",
+      "docs/qa/evidence/kanban-identity-v235/before-long-320.png",
+      "docs/qa/evidence/kanban-identity-v235/before-long-390.png",
+      "docs/qa/evidence/kanban-identity-v235/before-long-768.png",
+      "docs/qa/evidence/kanban-identity-v235/before-missing-1448.png",
+      "docs/qa/evidence/kanban-identity-v235/before-missing-2048.png",
+      "docs/qa/evidence/kanban-identity-v235/before-missing-320.png",
+      "docs/qa/evidence/kanban-identity-v235/before-missing-390.png",
+      "docs/qa/evidence/kanban-identity-v235/before-missing-768.png",
+      "docs/qa/evidence/kanban-identity-v235/before-reference-1448.png",
+      "docs/qa/evidence/kanban-identity-v235/before-reference-2048.png",
+      "docs/qa/evidence/kanban-identity-v235/before-reference-320.png",
+      "docs/qa/evidence/kanban-identity-v235/before-reference-390.png",
+      "docs/qa/evidence/kanban-identity-v235/before-reference-768.png",
+      "docs/qa/evidence/kanban-identity-v235/browser-results.json",
+      "docs/qa/evidence/kanban-identity-v235/production-before.txt",
+      "docs/qa/evidence/kanban-identity-v235/production-public-before.json",
+      "docs/qa/kanban-identity-v235.md",
+      "tests/productRelease.test.ts",
+      "tests/tooling/kanbanIdentity.browser.mjs",
+      "web/src/config/releaseRegistry.ts",
+      "web/src/pages/positionFollowUp.css"
+    ],
+    "impact": {
+      "surfaces": [
+        "context-pack",
+        "documentation",
+        "generated-context",
+        "hosting",
+        "tests",
+        "web"
+      ],
+      "edgeFunctions": [],
+      "migrations": [],
+      "modifiedMigrations": [],
+      "unknown": []
+    },
+    "validationCommands": [
+      "git diff --check",
+      "pnpm run generate:prisma-context",
+      "pnpm run check:prisma-context",
+      "pnpm run typecheck:web",
+      "pnpm run build:web",
+      "pnpm run test"
+    ],
+    "deployments": {
+      "git": true,
+      "database": [],
+      "edgeFunctions": [],
+      "web": true,
+      "parserIa": false,
+      "profileSynthesis": false,
+      "mailForwarder": false
+    },
+    "blockedReasons": [],
+    "publishable": true
+  }
+}
