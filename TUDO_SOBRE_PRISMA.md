@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 423
-source_manifest_sha256: 7377bd6ddcf1aef78a8440d071e96844d424fe812e80d9ed5bdc9e45acf1fc9c
+source_manifest_sha256: a401f4fa3ef0d90c7f20f2bb0d6696e300ead0e1a0a6d1e4f583905e15b1b0a5
 -->
 
 # Tudo sobre o Prisma
@@ -17369,7 +17369,7 @@ Contrato docs/qa/agreement-hrt-email-forwarding.md v1.0.1 e execução correspon
 
 ## Proibições
 
-P-01 PASS: texto de ataque fica só no corpo encaminhado, sem IA/comando/destino externo. P-02 PASS para conteúdo recebido/segredos/logs/SQLite; ocorrência de endereço de configuração em histórico público registrada abaixo, sem alegar remoção histórica. Segredo capturado DPAPI/SSH stdin e salvo UID1000/mode400. P-03 PASS local: idempotência/payload/expiração testados; aceitação separada de entrega. P-04 PASS: comparação pós-rollout preserva seis containers e suas imagens/restarts; nenhuma mudança de produto/banco/chave restrita ou plano.
+P-01 PASS: texto de ataque fica só no corpo encaminhado, sem IA/comando/destino externo. P-02 FAIL: endereço pessoal de configuração permanece no histórico público, conforme ocorrência registrada abaixo; arquivos atuais corrigidos, sem exposição de conteúdo recebido/segredos/logs/SQLite. A correção não elimina a violação histórica e impede declarar conformidade integral do movimento. Segredo capturado DPAPI/SSH stdin e salvo UID1000/mode400. P-03 PASS local: idempotência/payload/expiração testados; aceitação separada de entrega. P-04 PASS: comparação pós-rollout preserva seis containers e suas imagens/restarts; nenhuma mudança de produto/banco/chave restrita ou plano.
 
 ## Impacto e preservação
 

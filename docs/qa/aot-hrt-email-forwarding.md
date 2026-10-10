@@ -14,7 +14,7 @@ Contrato docs/qa/agreement-hrt-email-forwarding.md v1.0.1 e execução correspon
 
 ## Proibições
 
-P-01 PASS: texto de ataque fica só no corpo encaminhado, sem IA/comando/destino externo. P-02 PASS para conteúdo recebido/segredos/logs/SQLite; ocorrência de endereço de configuração em histórico público registrada abaixo, sem alegar remoção histórica. Segredo capturado DPAPI/SSH stdin e salvo UID1000/mode400. P-03 PASS local: idempotência/payload/expiração testados; aceitação separada de entrega. P-04 PASS: comparação pós-rollout preserva seis containers e suas imagens/restarts; nenhuma mudança de produto/banco/chave restrita ou plano.
+P-01 PASS: texto de ataque fica só no corpo encaminhado, sem IA/comando/destino externo. P-02 FAIL: endereço pessoal de configuração permanece no histórico público, conforme ocorrência registrada abaixo; arquivos atuais corrigidos, sem exposição de conteúdo recebido/segredos/logs/SQLite. A correção não elimina a violação histórica e impede declarar conformidade integral do movimento. Segredo capturado DPAPI/SSH stdin e salvo UID1000/mode400. P-03 PASS local: idempotência/payload/expiração testados; aceitação separada de entrega. P-04 PASS: comparação pós-rollout preserva seis containers e suas imagens/restarts; nenhuma mudança de produto/banco/chave restrita ou plano.
 
 ## Impacto e preservação
 
