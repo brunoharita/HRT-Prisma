@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 438
-source_manifest_sha256: 424df252ad15a78d8a2c13f8a3849479466f0d7087ef4cb11901d296a357eaa2
+source_manifest_sha256: 32c71738a7b8e2cc60ebd057e9aa61967359169f2022344b9e0dd3a086dc07e9
 -->
 
 # Tudo sobre o Prisma
@@ -3282,6 +3282,8 @@ Em 2026-09-04, a entrada `Processamento e revisões` da Central da Pessoa passou
 ## Pessoas para a Posição — cards compactos v2.3.4
 
 Implementação aprovada por Bruno em10/10/2026: primeira proposta de cards compactos em uma coluna, identificação/estado/score no cabeçalho, toolbar de consulta/acompanhamento, requisitos resumidos com conteúdo completo expansível, explicação e revisão humana separadas. Primeiro card aberto, demais recolhidos com controle acessível. Grupos/ordem/fórmulas/decisões preservados. Consulta agregada do processo atual por organização/Posição indica “Já está no acompanhamento” e “Abrir acompanhamento” com ciclo explícito, inclusive na reentrada/retorno à janela; histórico arquivado não conta como vínculo atual. Estado desconhecido impede inclusão sem impedir consulta de Perfil/evidências. Loading, falha/retry e processo encerrado tratados. Sem migration, backend, IA ou dependência nova. Registry2.3.4 com3pulado por pedido explícito. Acordo/execução/mapa/AoT `people-compact-v234`; publicação só é comprovada pelos recibos finais do AoT.
+
+Publicação comprovada em 10/10/2026: SHA funcional `07ab17334d7c8a499d989cb31360670918acddb1` em main/origin e runtime web na VPS. CI branch/main PASS; 19 verificações operacionais e 18 HTTP200, versão v2.3.4 visível no login público, rollback disponível e seis containers adjacentes preservados. Probe imediato do dispatcher falhou com404 durante recriação; estabilização e verificação posterior PASS sem rebuild. Evidência: `docs/qa/aot-people-compact-v234.md` e `docs/qa/evidence/people-compact-v234/`. Frontend com fixtures locais aprovado em1536/1448/768/390/320; não equivale a leitura autenticada do Diego real. Fechamento documental sincroniza checkout sem alterar o SHA do runtime.
 
 ---
 
@@ -20685,7 +20687,7 @@ D-01 a D-06 e P-01 a P-03 PASS com os limites de observação descritos. Importa
 
 # AoT — Pessoas compactas v2.3.4
 
-Contrato `agreement-people-compact-v234.md` v1.0.0 e execução integral; mapa `impact-people-compact-v234.md`. Bruno aprovou a primeira proposta e main/produção2.3.4 em10/10/2026. Baseline220b5034d951a83b9d353596604da5cdd856ff7c; branch codex/people-compact-v234. Estado deste registro antes do rollout: implementação e QA local concluídas; produção pendente. Não equivale a publicação.
+Contrato `agreement-people-compact-v234.md` v1.0.0 e execução integral; mapa `impact-people-compact-v234.md`. Bruno aprovou a primeira proposta e main/produção 2.3.4 em 10/10/2026. Baseline `220b5034d951a83b9d353596604da5cdd856ff7c`; branch `codex/people-compact-v234`. Entrega funcional `07ab17334d7c8a499d989cb31360670918acddb1` integrada em main/origin e publicada na VPS. CI e smoke posteriores PASS; fechamento documental separado não reconstrói o runtime.
 
 ## Matriz de Acordos
 
@@ -20696,7 +20698,7 @@ Contrato `agreement-people-compact-v234.md` v1.0.0 e execução integral; mapa `
 | D-03 | usePositionFollowUpMemberships, consulta agregada do ciclo atual, selo/abertura | atual/arquivado/reentrada/focus/scope race; uma leitura |91checks browser-results | PASS | sem consulta a Pessoa real |
 | D-04 | desconhecido bloqueia inclusão, conteúdo preservado, retry/closed/add e IDs explícitos | loading/failure/retry/add failure/success, current ID/tenant | browser-results | PASS | mocks no lugar do transporte remoto |
 | D-05 | seleção/Perfil/cálculo/recalcular/relação/curadoria/divergências e navegação preservados |96Node dirigidos, callbacks/browser, comparação e drawer | browser-results/action-results, testes descritos abaixo | PASS | sem decisão ou recálculo produtivo |
-| D-06 | registry2.3.4,3pulado; web-only/CI/main/VPS/rollback | local versão/build; CI/rollout/smoke pendentes | production-before/plano a gerar | NOT TESTED | publicação ainda não executada |
+| D-06 | registry 2.3.4, 3 pulado; web-only/CI/main/VPS/rollback | tipos/build/CI, SHA/assets/versão/saúde/rollback | release-plan/dry-run/verify/recovery, ci-branch/main, production-after/public-browser | PASS | runtime funcional 07ab173, produção pública; tela autenticada real não testada |
 
 ## Proibições verificadas
 
@@ -20718,8 +20720,8 @@ Mapa inicial lido antes da implementação. Descoberta: o novo Alert com retry l
 | Perfil/comparação/navegação | plausible_indirect | CSS restrito ao card; comparação1448/390, handlers e20regressões compartilhadas | compare-PNG/JSON/action-results/Node | PASS |
 | Matching/IA/fatos/scorepersistido | no_impact_identified | sem fórmula/contrato/persistência nova; snapshots e51domínio/registry | testes/diff/plano | PASS |
 | Prova/portal/convites/DB/Edge | no_impact_identified | chamadas de follow-up existentes, nenhum envio/migration/backend modificado | diff/tipos/plano | PASS |
-| Workers/Mail/Gateway/Traefik | no_impact_identified | baseline metadados coletado; pós-rollout pendente | production-before.txt | NOT TESTED |
-| Contextos/registry/release | direct |2.3.4, pulada3; checks/CI/smoke a completar | recibos posteriores | NOT TESTED |
+| Workers/Mail/Gateway/Traefik | no_impact_identified | mesmos IDs/imagens/restarts/status/health após rollout; experimento já unhealthy | production-before.txt/production-after.json | PASS |
+| Contextos/registry/release | direct | 2.3.4, pulada 3; checks/CI/smoke concluídos | recibos e CI | PASS |
 
 ### Novidade e preservação
 
@@ -20727,7 +20729,7 @@ Nova composição visual e estado agregado do acompanhamento atual. Capacidades 
 
 ## Fora de escopo preservado
 
-F-01: nenhum backend/schema/Edge/modelo/billing/aviso de candidato novo, nenhum envio real, nenhum redesenho de outra página. Diff delimitado e plano devem permanecer web/documentação/testes. PASS local.
+F-01: nenhum backend/schema/Edge/modelo/billing/aviso de candidato novo, nenhum envio real, nenhum redesenho de outra página. Diff e plano restritos a web/documentação/testes. Deploy somente prisma-web; serviços preservados. PASS.
 
 ## Evidência de fidelidade visual
 
@@ -20740,7 +20742,9 @@ Decoração, textos/menus ilustrativos da imagem e selos de revisão refletem os
 
 ## Desvios do contrato
 
-CI inicial38073319429 falhou em4asserções de apresentação anterior e revelou a remoção indevida da descrição de ausência de evidência. Descrição restaurada; asserções de título/classe/botão atualizadas conforme D-UX-01/A-UX-01;22testes afetados e71checks de render PASS. Nenhum desvio material residual identificado na revisão local dos D/P/F/A. Publicação ainda pendente, portanto D-06 não recebe PASS antes de prova. D-UX-01/02 supersedem a antiga localização dentro do Score conforme acordo; dados/proveniência/gates preservados.
+CI inicial 38073319429 falhou em quatro asserções de apresentação anterior e revelou a remoção indevida da descrição de ausência de evidência. Descrição restaurada; asserções de título/classe/botão atualizadas conforme D-UX-01/A-UX-01; 22 testes afetados e 71 checks de render PASS. CI do SHA corrigido PASS. Nenhum desvio material residual identificado nos D/P/F/A. D-UX-01/02 supersedem a antiga localização dentro do Score e o título longo conforme acordo; dados/proveniência/gates e explicação de ausência preservados.
+
+O dispatcher concluiu integração, build e recriação, mas falhou no HEAD imediato (404 transitório; probe remoto 22, comando local 1). Não gerou recibo de publish bem-sucedido. Verificação independente após estabilização confirmou runtime correto, assets e rollback, sem rebuild adicional. `release-recovery.json` registra a diferença entre falha do probe imediato e resultado operacional comprovado.
 
 ## Mudanças autorizadas durante a execução
 
@@ -20748,15 +20752,17 @@ Nenhuma decisão adicional do Product Owner. CSS scoped do Alert/avatares, uma c
 
 ## Validação final
 
-Local: build root, tipos web e build web PASS;96Node dirigidos (51vacancyIntelligence/positionFollowUp/productRelease,3rotas,20navigationHistory/stableMatching/trajectoryReviewModal/uxFoundation,22matchingEvidenceLabel/matchingScore).91checks funcionais/negativos de navegador PASS;71checks de render/estrutura finais PASS após ajuste visual mobile. 5checks adicionais do drawer/comparação PASS em action-results. Nenhuma chamada IA, dado real ou email. Contextos gerados/checker, lint e foundation PASS em snapshot do index selecionado, sem arquivos particulares não rastreados. CI/publicação ainda pendentes. Avisos de bundle/import dinâmico preexistentes permanecem.
+Local: build root, tipos web e build web PASS; 96 Node dirigidos (51 vacancyIntelligence/positionFollowUp/productRelease, 3 rotas, 20 navigationHistory/stableMatching/trajectoryReviewModal/uxFoundation, 22 matchingEvidenceLabel/matchingScore). 91 checks funcionais/negativos de navegador PASS; 71 checks de render/estrutura finais PASS após ajuste visual mobile. Cinco checks adicionais do drawer/comparação PASS em action-results. Nenhuma chamada IA, dado real ou email. Contextos gerados/checker, lint e foundation PASS em snapshot do index selecionado, sem arquivos particulares não rastreados. CI branch [38073841820](https://github.com/brunoharita/HRT-Prisma/actions/runs/38073841820) e main [38073933687](https://github.com/brunoharita/HRT-Prisma/actions/runs/38073933687) PASS, incluindo gates da fundação, ledger, deploy seletivo e dependências. Avisos de bundle/import dinâmico preexistentes permanecem.
+
+Produção: 19 verificações operacionais e 18 HTTP200 PASS; versão v2.3.4 visível no login real em Edge, sem erro de página/autenticação/mutação. Checkout e runtime SHA funcional confirmados. Arquivos anteriores preservados para abas abertas; imagem de rollback `prisma-web:rollback-before-07ab17334d7c` corresponde ao baseline. Metadados de seis containers adjacentes idênticos. HTTP200 de rotas protegidas comprova o fallback SPA, não a leitura autenticada de Pessoas.
 
 ## Git / QA / ambiente
 
-QA local via Vite5711 e Edge headless; baseline exato220b503 via transform de leitura em5712, mesmos dados/viewport. Serviços remotos originais conferidos em production-before.txt; experimento paddle-vl-llama-test já estava unhealthy, não é regressão deste movimento. Arquivos privados/não rastreados alheios preservados. Rollback/sincronização a registrar após publicação.
+QA local via Vite5711 e Edge headless; baseline exato220b503 via transform de leitura em5712, mesmos dados/viewport. VPS `srv1038882`, `/opt/prisma`, destino oficial `https://prisma.hrtsolutions.com.br`; serviços originais conferidos antes/depois. Experimento paddle-vl-llama-test já estava unhealthy, não é regressão deste movimento. Arquivos privados/não rastreados alheios preservados. Registro de sincronização funcional: release-verify e production-after. Fechamento documental integra por fast-forward e sincroniza checkout VPS sem novo deploy; SHA de runtime continua 07ab173.
 
 ## Conclusão
 
-Implementação/QA local PASS; D-06 e conclusão operacional pendentes. Este registro será atualizado com os recibos reais, sem converter limitações em PASS.
+Todos os D/P aplicáveis PASS nos limites descritos. v2.3.4 funcional em main/origin/produção com rollback e smoke comprovados. Leitura autenticada do Diego real continua NOT TESTED; não se fabricou decisão humana nem dado produtivo para validação.
 
 ---
 

@@ -1,0 +1,12 @@
+{
+  "functionalSha": "07ab17334d7c8a499d989cb31360670918acddb1",
+  "command": "release:publish --promote-main --wait-ci --execute",
+  "publisherExit": 1,
+  "remoteProbeExit": 22,
+  "immediateProbe": { "httpStatus": 404, "phase": "after container recreation" },
+  "publisherReceiptWritten": false,
+  "rebuildAfterProbeFailure": false,
+  "verifiedOperationalResult": "PUBLISHED",
+  "verification": ["production-after.json", "release-verify.json", "production-public-browser.json", "ci-branch.json", "ci-main.json"],
+  "note": "The dispatcher exited after the immediate HEAD probe. Subsequent independent checks confirmed the new runtime SHA, HTTP200, rollback and preserved services. This file records recovery; it is not a successful dispatcher publish receipt."
+}
