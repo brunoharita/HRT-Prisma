@@ -148,3 +148,10 @@ Resumo da Pessoa mantém pendências imediatas e acessos compactos a Documentos/
 Diagnóstico documental fica sob Detalhes técnicos e histórico, a legenda operacional sob Entender os estados, e versões/timeline de Verificações sob Método e histórico. Limitações e estados relevantes continuam imediatos. No Banco de Itens, similaridade/duplicidade permanecem na revisão humana; fingerprint/provedor/schema ficam sob Origem e detalhes técnicos. Avaliações anteriores ficam recolhidas inicialmente em todos os tamanhos, com quantidade e consulta. Essa regra substitui a abertura inicial no desktop do acordo visual2.3.5, mantendo sua composição guiada4A.
 
 Expansão e navegação nunca iniciam IA, recálculo, aprovação, envio ou publicação. Consulta secundária preserva rascunhos; falhas/pendências/confiança reduzida permanecem visíveis. Não há alteração de domínio, segurança, tenant, escritores, schema ou serviços. Comparações e limites de validação no AoT `docs/qa/aot-operational-focus-v241.md`.
+
+
+## Registros legíveis — correção 2.4.1
+
+Registros estruturados gerados pela aplicação devem aparecer em campos com rótulos, listas e expansões acessíveis, sem JSON bruto. Fonte, significado e conteúdo vêm antes dos identificadores e da rastreabilidade, que permanecem completos em uma expansão própria. Valores conhecidos recebem traduções determinísticas em português; campos novos e valores desconhecidos permanecem consultáveis sem significado inventado. Nulos, listas vazias, textos vazios, falsos e zero são distintos. Conteúdo histórico não é truncado.
+
+A apresentação compartilhada não consulta, recalcula nem escreve. Permissões, origem dos dados, decisões humanas e rascunhos permanecem nos fluxos existentes. Texto original fornecido pela pessoa, inclusive código literal de um documento, deve ser preservado. Referências/histórico ocupacional, critérios/evidências da verificação, acompanhamento, revisão e comparação de Perfil seguem essa regra. Contrato, inventário, evidências e limites: `docs/qa/readable-records-v241.md`.

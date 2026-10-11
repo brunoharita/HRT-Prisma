@@ -22,7 +22,7 @@ const workspace: ProfileReviewWorkspace = {
   id: "synthetic", personId: "synthetic", personName: "Pessoa sintética", personPrivateContact: { phone: null, email: null }, sourceKind: "document", sourceProfileId: null, sourceProfileVersion: null,
   documentId: "synthetic", documentName: "Sintético.pdf", documentVersion: 1, documentPageCount: 1, documentStoragePath: null, documentSourceType: "resume_pdf", processingAttemptId: "synthetic", state: "draft", lockVersion: 1, requiresContractUpgrade: false,
   extractedData: structuredClone(initial), reviewedData: structuredClone(initial), baseProfileVersion: null, approvedProfileId: null, approvedAt: null,
-  pages: [], revisions: [], changes: [], adaptationEvents: [], originalEvidence: [], spatialRegions: [], evidenceLinks: [], evidenceRefinements: [], evidenceEvents: [],
+  pages: [], revisions: [], changes: new URLSearchParams(location.search).get("case")==="readable-history"?[{id:1,fieldPath:"competencies",extractedValue:[],previousValue:[{label:"SQL",evidence:["Origem anterior completa"]}],reviewedValue:[{label:"SQL",evidence:["Registro integral "+"texto longo ".repeat(70)+"FIM PRESERVADO"]}],reason:"Revisão humana sintética",actorAuthUserId:"operator-synthetic",createdAt:"2026-10-08T16:00:00Z"}]:[], adaptationEvents: [], originalEvidence: [], spatialRegions: [], evidenceLinks: [], evidenceRefinements: [], evidenceEvents: [],
 };
 function Harness() {
   const [draft, setDraft] = useState(initial);

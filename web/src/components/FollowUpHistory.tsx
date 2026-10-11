@@ -1,4 +1,5 @@
 import {Empty} from "antd";
+import {ReadableRecord} from "../ui/ReadableRecord";
 import {followUpHistoryLabels, followUpStages, type FollowUpData} from "../domain/positionFollowUp";
 
 const labels: Record<string,string> = {
@@ -40,7 +41,7 @@ export function FollowUpHistory({history,operators}:{history:FollowUpData["histo
     const changed=Object.keys(labels).filter(key=>JSON.stringify(before[key])!==JSON.stringify(after[key]));
     return <article key={event.id}><h3>{followUpHistoryLabels[event.action]??"Alteração registrada"}</h3><p>{event.actor} · {new Date(event.at).toLocaleString("pt-BR")}</p>
       {changed.length?<dl>{changed.map(key=><div key={key}><dt>{labels[key]}</dt><dd><span>Anterior: {display(key,before[key],operators)}</span><span>Registrado: {display(key,after[key],operators)}</span></dd></div>)}</dl>:<p>{event.action==="add"?"Pessoa adicionada ao acompanhamento.":"Registro preservado neste processo."}</p>}
-      <details className="prisma-disclosure"><summary>Dados técnicos deste registro</summary><div><pre className="pf-audit">{JSON.stringify({anterior:event.before,registrado:event.after},null,2)}</pre></div></details>
+      <details className="prisma-disclosure"><summary>Consultar registro completo da alteração</summary><div><ReadableRecord value={{anterior:event.before,registrado:event.after}}/></div></details>
     </article>;
   })}</div>;
 }

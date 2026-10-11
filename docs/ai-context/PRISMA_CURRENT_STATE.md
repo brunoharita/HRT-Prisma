@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.71.1
+version: 2.71.2
 last_verified: 2026-10-11
 ---
 
 # Estado atual do Prisma
+
+## Registros legíveis — correção 2.4.1
+
+Correção autorizada em11/10/2026, sem nova entrada de versão. Nove apresentações de JSON/serialização no frontend passam a campos, listas e expansões: quatro origens/método/histórico ocupacional, duas regras/evidências de verificação, histórico do acompanhamento, revisão e comparação de Perfil. Conteúdo completo, campos desconhecidos, nulos/falsos/zero/listas e IDs permanecem disponíveis; valores conhecidos em português, identificadores em consulta própria. Texto literal de documentos e serializers de persistência são preservados. Sem backend/dados/IA/escritores alterados. Tipos/build,23Node dirigidos,2auditorias de render,72checks de apresentação/teclado e regressão do acompanhamento30checks PASS. Publicação e fechamento em andamento; contrato/mapa/AoT `docs/qa/readable-records-v241.md`.
 
 ## Foco operacional — v2.4.1
 

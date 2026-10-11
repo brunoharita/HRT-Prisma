@@ -1,0 +1,295 @@
+{
+  "checks": [
+    {
+      "name": "1448: taxonomy source relation IDs file and unknown metadata retained",
+      "pass": true
+    },
+    {
+      "name": "taxonomy/1448: no serialized blocks runtime errors external requests or overflow",
+      "pass": true
+    },
+    {
+      "name": "taxonomy/1448: no writes",
+      "pass": true
+    },
+    {
+      "name": "1448: method reference and historical snapshot readable",
+      "pass": true
+    },
+    {
+      "name": "taxonomy-method/1448: no serialized blocks runtime errors external requests or overflow",
+      "pass": true
+    },
+    {
+      "name": "taxonomy-method/1448: no writes",
+      "pass": true
+    },
+    {
+      "name": "1448: complete before after false zero future values",
+      "pass": true
+    },
+    {
+      "name": "followup/1448: no serialized blocks runtime errors external requests or overflow",
+      "pass": true
+    },
+    {
+      "name": "followup/1448: no writes",
+      "pass": true
+    },
+    {
+      "name": "1448: nested record opens with keyboard",
+      "pass": true
+    },
+    {
+      "name": "1448: inert text null empty list and long ID",
+      "pass": true
+    },
+    {
+      "name": "record/1448: no serialized blocks runtime errors external requests or overflow",
+      "pass": true
+    },
+    {
+      "name": "record/1448: no writes",
+      "pass": true
+    },
+    {
+      "name": "1448: verification evidence and unknown fields complete",
+      "pass": true
+    },
+    {
+      "name": "evidence/1448: no serialized blocks runtime errors external requests or overflow",
+      "pass": true
+    },
+    {
+      "name": "evidence/1448: no writes",
+      "pass": true
+    },
+    {
+      "name": "1448: rubric threshold dimensions and unknown rules retained",
+      "pass": true
+    },
+    {
+      "name": "rubric/1448: no serialized blocks runtime errors external requests or overflow",
+      "pass": true
+    },
+    {
+      "name": "rubric/1448: no writes",
+      "pass": true
+    },
+    {
+      "name": "1448: delta preserves fields and publication choice",
+      "pass": true
+    },
+    {
+      "name": "delta/1448: no serialized blocks runtime errors external requests or overflow",
+      "pass": true
+    },
+    {
+      "name": "delta/1448: no writes",
+      "pass": true
+    },
+    {
+      "name": "1448: profile history no truncation",
+      "pass": true
+    },
+    {
+      "name": "review/1448: no serialized blocks runtime errors external requests or overflow",
+      "pass": true
+    },
+    {
+      "name": "390: taxonomy source relation IDs file and unknown metadata retained",
+      "pass": true
+    },
+    {
+      "name": "taxonomy/390: no serialized blocks runtime errors external requests or overflow",
+      "pass": true
+    },
+    {
+      "name": "taxonomy/390: no writes",
+      "pass": true
+    },
+    {
+      "name": "390: method reference and historical snapshot readable",
+      "pass": true
+    },
+    {
+      "name": "taxonomy-method/390: no serialized blocks runtime errors external requests or overflow",
+      "pass": true
+    },
+    {
+      "name": "taxonomy-method/390: no writes",
+      "pass": true
+    },
+    {
+      "name": "390: complete before after false zero future values",
+      "pass": true
+    },
+    {
+      "name": "followup/390: no serialized blocks runtime errors external requests or overflow",
+      "pass": true
+    },
+    {
+      "name": "followup/390: no writes",
+      "pass": true
+    },
+    {
+      "name": "390: nested record opens with keyboard",
+      "pass": true
+    },
+    {
+      "name": "390: inert text null empty list and long ID",
+      "pass": true
+    },
+    {
+      "name": "record/390: no serialized blocks runtime errors external requests or overflow",
+      "pass": true
+    },
+    {
+      "name": "record/390: no writes",
+      "pass": true
+    },
+    {
+      "name": "390: verification evidence and unknown fields complete",
+      "pass": true
+    },
+    {
+      "name": "evidence/390: no serialized blocks runtime errors external requests or overflow",
+      "pass": true
+    },
+    {
+      "name": "evidence/390: no writes",
+      "pass": true
+    },
+    {
+      "name": "390: rubric threshold dimensions and unknown rules retained",
+      "pass": true
+    },
+    {
+      "name": "rubric/390: no serialized blocks runtime errors external requests or overflow",
+      "pass": true
+    },
+    {
+      "name": "rubric/390: no writes",
+      "pass": true
+    },
+    {
+      "name": "390: delta preserves fields and publication choice",
+      "pass": true
+    },
+    {
+      "name": "delta/390: no serialized blocks runtime errors external requests or overflow",
+      "pass": true
+    },
+    {
+      "name": "delta/390: no writes",
+      "pass": true
+    },
+    {
+      "name": "390: profile history no truncation",
+      "pass": true
+    },
+    {
+      "name": "review/390: no serialized blocks runtime errors external requests or overflow",
+      "pass": true
+    },
+    {
+      "name": "320: taxonomy source relation IDs file and unknown metadata retained",
+      "pass": true
+    },
+    {
+      "name": "taxonomy/320: no serialized blocks runtime errors external requests or overflow",
+      "pass": true
+    },
+    {
+      "name": "taxonomy/320: no writes",
+      "pass": true
+    },
+    {
+      "name": "320: method reference and historical snapshot readable",
+      "pass": true
+    },
+    {
+      "name": "taxonomy-method/320: no serialized blocks runtime errors external requests or overflow",
+      "pass": true
+    },
+    {
+      "name": "taxonomy-method/320: no writes",
+      "pass": true
+    },
+    {
+      "name": "320: complete before after false zero future values",
+      "pass": true
+    },
+    {
+      "name": "followup/320: no serialized blocks runtime errors external requests or overflow",
+      "pass": true
+    },
+    {
+      "name": "followup/320: no writes",
+      "pass": true
+    },
+    {
+      "name": "320: nested record opens with keyboard",
+      "pass": true
+    },
+    {
+      "name": "320: inert text null empty list and long ID",
+      "pass": true
+    },
+    {
+      "name": "record/320: no serialized blocks runtime errors external requests or overflow",
+      "pass": true
+    },
+    {
+      "name": "record/320: no writes",
+      "pass": true
+    },
+    {
+      "name": "320: verification evidence and unknown fields complete",
+      "pass": true
+    },
+    {
+      "name": "evidence/320: no serialized blocks runtime errors external requests or overflow",
+      "pass": true
+    },
+    {
+      "name": "evidence/320: no writes",
+      "pass": true
+    },
+    {
+      "name": "320: rubric threshold dimensions and unknown rules retained",
+      "pass": true
+    },
+    {
+      "name": "rubric/320: no serialized blocks runtime errors external requests or overflow",
+      "pass": true
+    },
+    {
+      "name": "rubric/320: no writes",
+      "pass": true
+    },
+    {
+      "name": "320: delta preserves fields and publication choice",
+      "pass": true
+    },
+    {
+      "name": "delta/320: no serialized blocks runtime errors external requests or overflow",
+      "pass": true
+    },
+    {
+      "name": "delta/320: no writes",
+      "pass": true
+    },
+    {
+      "name": "320: profile history no truncation",
+      "pass": true
+    },
+    {
+      "name": "review/320: no serialized blocks runtime errors external requests or overflow",
+      "pass": true
+    }
+  ],
+  "limits": [
+    "Actual components and synthetic records; no authenticated production mutations."
+  ]
+}

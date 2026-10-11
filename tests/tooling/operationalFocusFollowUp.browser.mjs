@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';import {createRequire} from 'node:module';import {mkdir,writeFile} from 'node:fs/promises';
 const {chromium}=createRequire(import.meta.url)(process.env.PRISMA_PLAYWRIGHT_PATH??'playwright');
-const browser=await chromium.launch({headless:true,executablePath:process.env.PRISMA_BROWSER_PATH}),dir='docs/qa/evidence/operational-focus-v241/detail',checks=[];
+const browser=await chromium.launch({headless:true,executablePath:process.env.PRISMA_BROWSER_PATH}),dir=process.env.PRISMA_FOLLOWUP_DETAIL_EVIDENCE??'docs/qa/evidence/operational-focus-v241/detail',checks=[];
 await mkdir(dir,{recursive:true});const check=(name,pass)=>{checks.push({name,pass:!!pass});assert.ok(pass,name);};
 try{for(const width of [1448,390,320]){
  const p=await browser.newPage({viewport:{width,height:980}}),errors=[],external=[];
@@ -19,10 +19,12 @@ try{for(const width of [1448,390,320]){
  await p.screenshot({path:`${dir}/analysis-${width}.png`,fullPage:true});await analysis.getByRole('button',{name:'Fechar',exact:true}).click();await analysis.waitFor({state:'hidden'});
  check(`${width}: analysis preserves operational draft`,await primary.getByLabel('Próxima ação',{exact:true}).inputValue()==='Rascunho preservado');
  await primary.getByRole('button',{name:'Histórico deste acompanhamento',exact:true}).click();const history=p.getByRole('dialog',{name:'Histórico deste acompanhamento',exact:true});await history.waitFor();
- check(`${width}: readable author and changed fields`,await history.getByText('Próxima ação',{exact:true}).isVisible()&&await history.getByText('Anterior: Revisar perfil',{exact:true}).isVisible()&&await history.getByText('Registrado: Agendar conversa',{exact:true}).isVisible()&&await history.getByText('Registrado: Bruno',{exact:true}).isVisible());
+ check(`${width}: readable author and changed fields`,await history.getByText('Próxima ação',{exact:true}).first().isVisible()&&await history.getByText('Anterior: Revisar perfil',{exact:true}).isVisible()&&await history.getByText('Registrado: Agendar conversa',{exact:true}).isVisible()&&await history.getByText('Registrado: Bruno',{exact:true}).isVisible());
  check(`${width}: interview history respects recorded timezone`,await history.getByText(/Registrado: Agendada.*12:00:00.*America\/New_York/).isVisible());
- check(`${width}: raw audit initially closed`,!await history.locator('pre').isVisible());await history.locator('summary').click();
- check(`${width}: original before and after snapshots retained`,await history.locator('pre').innerText().then(text=>text.includes('"anterior"')&&text.includes('"registrado"')&&text.includes('Agendar conversa'))&&await writes()===0);
+ check(`${width}: complete audit initially closed`,!await history.locator('.prisma-readable-record').first().isVisible());await history.getByText('Consultar registro completo da alteração',{exact:true}).click();
+ await history.locator('.prisma-record-nested > summary').first().click();
+ await history.locator('.prisma-record-nested > summary').filter({hasText:'Consultar informações do acompanhamento'}).first().click();
+ check(`${width}: original before and after snapshots retained as fields`,await history.getByText('Anterior',{exact:true}).isVisible()&&await history.getByText('Registrado',{exact:true}).isVisible()&&await history.getByText('Revisar perfil',{exact:true}).isVisible()&&await history.locator('pre').count()===0&&await writes()===0);
  await p.screenshot({path:`${dir}/history-${width}.png`,fullPage:true});await history.getByRole('button',{name:'Fechar',exact:true}).click();await history.waitFor({state:'hidden'});
  check(`${width}: history preserves draft and score`,await primary.getByLabel('Próxima ação',{exact:true}).inputValue()==='Rascunho preservado'&&await p.evaluate(()=>window.__followUpFixture.data.entries.find(e=>e.fullName==='Marina Costa').score)===78);
  check(`${width}: no errors external requests or overflow`,!errors.length&&!external.length&&await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));

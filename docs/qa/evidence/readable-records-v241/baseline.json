@@ -1,0 +1,6 @@
+{
+  "checks": [],
+  "limits": [
+    "Actual components and synthetic records; no authenticated production mutations."
+  ]
+}

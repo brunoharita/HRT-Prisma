@@ -1,0 +1,25 @@
+{
+  "baseline": "e606ca5ca787fcc4d899206d8da6affb99580c25",
+  "risk": "C frontend",
+  "root_build": "PASS",
+  "web_typecheck": "PASS",
+  "web_build": "PASS",
+  "directed_node_tests": 23,
+  "render_audits": 2,
+  "presentation_checks": 72,
+  "followup_regression_checks": 30,
+  "viewports": [
+    1448,
+    390,
+    320
+  ],
+  "screenshots": "before/ and after/",
+  "context_generation": "PASS on clean staged snapshot",
+  "context_check": "PASS on clean staged snapshot",
+  "lint": "PASS on clean staged snapshot",
+  "limits": [
+    "Synthetic data in real React components; no authenticated production mutations",
+    "No paid AI, DB, email or billing changes",
+    "Literal document text remains literal"
+  ]
+}

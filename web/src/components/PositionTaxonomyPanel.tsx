@@ -11,6 +11,8 @@ import { positionTaxonomyService } from "../infrastructure/supabase/positionTaxo
 import { knowledgeService } from "../infrastructure/supabase/knowledgeService.js";
 import type { CompetencySubgroupOption } from "../domain/profileCompetencyCuration.js";
 import { PrismaCard } from "../ui/PrismaCard.js";
+import {ReadableRecord} from "../ui/ReadableRecord";
+import {recordScalarLabel} from "../ui/readableRecordValues";
 
 interface Props {
   draft: VacancyDraft; membership: OrganizationMembership;
@@ -114,17 +116,17 @@ export function PositionTaxonomyPanel({ draft, membership, onChange, onEdit }: P
         { key: "version", label: "Versão da Posição", children: snapshot?.positionVersion ?? "Prévia, ainda não salva" },
       ]} />
       <h3>Referências utilizadas</h3><ReferenceList references={snapshot?.references ?? []} detailed />
-      <Collapse items={[{ key: "method", label: "Método, versões e decisão registrada", children: <pre className="prisma-taxonomy-provenance">{JSON.stringify(snapshot ? {
+      <Collapse items={[{ key: "method", label: "Método, versões e decisão registrada", children: <ReadableRecord value={snapshot ? {
         contractVersion: snapshot.contractVersion, originalTitle: snapshot.originalTitle, normalizedTerm: snapshot.normalizedTerm,
         conceptVersion: snapshot.concept?.version, matchedTerms: snapshot.matchedTerms, method: snapshot.method, actorId: snapshot.actorId, savedBy: snapshot.savedBy,
         organizationId: snapshot.organizationId, positionVersionId: snapshot.positionVersionId, decisionRecordedAt: snapshot.decisionRecordedAt,
-      } : { status: "historical_unrecorded" }, null, 2)}</pre> }]} />
+      } : { status: "historical_unrecorded" }} /> }]} />
       <h3>Histórico de interpretações</h3>
       {historyError ? <Alert type="warning" title={historyError} action={<Button onClick={() => setHistoryRetry((value) => value + 1)}>Consultar histórico novamente</Button>} /> : null}
       <List dataSource={history} locale={{ emptyText: "Nenhuma versão anterior carregada nesta edição." }} renderItem={(entry) => <List.Item>
         <Collapse className="prisma-taxonomy-history" items={[{ key: String(entry.version), label: `Definição v${entry.version} · ${entry.snapshot?.concept?.label ?? "Sem associação M7.1 registrada"}`,
           children: <><Typography.Paragraph>{entry.snapshot ? `${taxonomyMethodLabels[entry.snapshot.method] ?? entry.snapshot.method} · ${new Date(entry.snapshot.recordedAt).toLocaleString("pt-BR")}` : "Registro histórico preservado, sem reinterpretação."}</Typography.Paragraph>
-            {entry.snapshot ? <><Typography.Paragraph>Nome informado nesta versão: {entry.snapshot.originalTitle}</Typography.Paragraph><Collapse items={[{ key: "snapshot", label: "Interpretação e origens completas desta versão", children: <pre className="prisma-taxonomy-provenance">{JSON.stringify(entry.snapshot, null, 2)}</pre> }]} /></> : null}
+            {entry.snapshot ? <><Typography.Paragraph>Nome informado nesta versão: {entry.snapshot.originalTitle}</Typography.Paragraph><Collapse items={[{ key: "snapshot", label: "Interpretação e origens completas desta versão", children: <ReadableRecord value={entry.snapshot}/> }]} /></> : null}
             <ReferenceList references={entry.snapshot?.references ?? []} detailed />{entry.snapshot?.actorId ? <Typography.Text>Operador registrado: {entry.snapshot.actorId}</Typography.Text> : null}</> }]} />
       </List.Item>} />
       {draft.id ? <Space><Button disabled={historyPage === 1} onClick={() => setHistoryPage((value) => value - 1)}>Versões mais recentes</Button><Button disabled={history.length < 20} onClick={() => setHistoryPage((value) => value + 1)}>Versões anteriores</Button></Space> : null}
@@ -141,7 +143,7 @@ function ReferenceList({ references, detailed = false }: { references: TaxonomyR
   return <List className="prisma-taxonomy-references" dataSource={references} renderItem={(reference) => <List.Item>
     <div><Tag color="blue">{reference.source}</Tag><strong>{reference.label}</strong><p>{reference.externalId} · Versão {reference.sourceVersion}</p>
       <Typography.Text type="secondary">{({ exact: "Correspondência exata", close: "Correspondência aproximada", related: "Referência relacionada", broader: "Referência mais ampla", narrower: "Referência mais específica" } as Record<string, string>)[reference.mappingType] ?? reference.mappingType}</Typography.Text>
-      {detailed ? <Collapse items={[{ key: reference.mappingId, label: "Proveniência desta ligação", children: <pre className="prisma-taxonomy-provenance">{JSON.stringify(reference, null, 2)}</pre> }]} /> : null}
+      {detailed ? <Collapse items={[{ key: reference.mappingId, label: "Origem desta ligação", children: <ReadableRecord value={reference}/> }]} /> : null}
     </div>
   </List.Item>} />;
 }
@@ -169,11 +171,11 @@ export function TaxonomyOriginDetails({ item }: { item: TaxonomyItem }) {
     <Typography.Paragraph>Tipo publicado: {taxonomyGroups[item.conceptType]}. Medidas de importância e nível pertencem à fonte; não definem exigência ou proficiência Prisma.</Typography.Paragraph>
     {item.origins.map((origin, index) => <div key={origin.relationId ?? index}>
       <strong>{origin.reference ? `${origin.reference.source} · ${origin.reference.sourceVersion}` : "Knowledge da empresa"}</strong>
-      {origin.relationType ? <p>Relação na fonte: {origin.relationType}</p> : null}
+      {origin.relationType ? <p>Relação na fonte: {recordScalarLabel(origin.relationType,"relationType")}</p> : null}
       {origin.attributes?.relevance ? <p>Relevância na fonte: {String(origin.attributes.relevance)} (não é obrigatoriedade da Posição).</p> : null}
       {Array.isArray(origin.attributes?.measurements) ? <ul>{origin.attributes.measurements.map((measure: Record<string, unknown>, i: number) => <li key={i}>Escala {String(measure.scaleId)}: {String(measure.rawValue)} · valor original da fonte</li>)}</ul> : null}
     </div>)}
-    <Collapse items={[{ key: "technical", label: "Identificadores, método e proveniência completos", children: <pre className="prisma-taxonomy-provenance">{JSON.stringify(item, null, 2)}</pre> }]} />
+    <Collapse items={[{ key: "technical", label: "Consultar registro completo da origem", children: <ReadableRecord value={item}/> }]} />
   </> }]} />;
 }
 

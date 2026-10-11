@@ -30,6 +30,7 @@ import { competencyVerificationService } from "../infrastructure/supabase/compet
 import type { OrganizationMembership } from "../shared/access";
 import { PrismaState } from "../ui/PrismaState";
 import { PrismaDisclosure } from "../ui/PrismaDisclosure";
+import {ReadableRecord} from "../ui/ReadableRecord";
 import { interfaceText, resolveRequestedItem } from "../shared/uxFoundation";
 import { PrismaCard } from "../ui/PrismaCard";
 import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
@@ -408,7 +409,7 @@ function InstrumentPreview(props: Parameters<typeof PrepareFlow>[0]) {
         <Button onClick={() => props.onStepChange(1)}>Voltar</Button>
         <Button disabled={!props.selectedBlueprint || !props.selectedRubric} onClick={() => props.onStepChange(3)} type="primary">Avançar</Button>
       </Space>
-      <Drawer onClose={() => setPreview(null)} open={Boolean(preview)} title={preview === "blueprint" ? "Modelo de avaliação" : preview === "rubric" ? "Critérios de correção" : "Cobertura do Banco de Itens"} size="large">{preview === "blueprint" ? <Descriptions column={1} bordered size="small" items={[{ key: "items", label: "Questões", children: props.selectedBlueprint?.itemCount }, { key: "time", label: "Tempo estimado", children: `${props.selectedBlueprint?.estimatedMinutes ?? 0} min` }, { key: "mode", label: "Formato", children: "Múltipla escolha" }, { key: "dimensions", label: "Dimensões", children: props.selectedBlueprint?.dimensionDistribution.map((item) => `${labelAssessmentDimension(item.dimension)} (${item.count})`).join(", ") }]} /> : preview === "rubric" ? <><Typography.Text strong>Dimensões de correção</Typography.Text><ul>{props.selectedRubric?.correctionDimensions.map((item) => <li key={item}>{labelAssessmentDimension(item)}</li>)}</ul><PrismaDisclosure title="Regras técnicas versionadas"><pre>{JSON.stringify(props.selectedRubric?.passingRules ?? {}, null, 2)}</pre></PrismaDisclosure></> : <><Alert showIcon type="info" message="Os enunciados permanecem protegidos. Esta prévia mostra somente cobertura e origem." /><Descriptions column={1} bordered size="small" items={[{ key: "source", label: "Origem", children: bank?.source === "global" ? "Global Prisma" : "Privado da empresa" }, { key: "available", label: "Itens ativos", children: bank?.availableItems ?? 0 }, { key: "required", label: "Itens necessários", children: props.selectedBlueprint?.itemCount ?? 0 }]} /></>}</Drawer>
+      <Drawer onClose={() => setPreview(null)} open={Boolean(preview)} title={preview === "blueprint" ? "Modelo de avaliação" : preview === "rubric" ? "Critérios de correção" : "Cobertura do Banco de Itens"} size="large">{preview === "blueprint" ? <Descriptions column={1} bordered size="small" items={[{ key: "items", label: "Questões", children: props.selectedBlueprint?.itemCount }, { key: "time", label: "Tempo estimado", children: `${props.selectedBlueprint?.estimatedMinutes ?? 0} min` }, { key: "mode", label: "Formato", children: "Múltipla escolha" }, { key: "dimensions", label: "Dimensões", children: props.selectedBlueprint?.dimensionDistribution.map((item) => `${labelAssessmentDimension(item.dimension)} (${item.count})`).join(", ") }]} /> : preview === "rubric" ? <><Typography.Text strong>Dimensões de correção</Typography.Text><ul>{props.selectedRubric?.correctionDimensions.map((item) => <li key={item}>{labelAssessmentDimension(item)}</li>)}</ul><PrismaDisclosure title="Regras de correção registradas"><ReadableRecord value={props.selectedRubric?.passingRules ?? {}}/></PrismaDisclosure></> : <><Alert showIcon type="info" message="Os enunciados permanecem protegidos. Esta prévia mostra somente cobertura e origem." /><Descriptions column={1} bordered size="small" items={[{ key: "source", label: "Origem", children: bank?.source === "global" ? "Global Prisma" : "Privado da empresa" }, { key: "available", label: "Itens ativos", children: bank?.availableItems ?? 0 }, { key: "required", label: "Itens necessários", children: props.selectedBlueprint?.itemCount ?? 0 }]} /></>}</Drawer>
     </Space>
   );
 }
@@ -508,8 +509,8 @@ function EvidencePanel({ need }: { need: VerificationNeedView }) {
       <Typography.Title level={5}>Evidências do matching</Typography.Title>
       <List dataSource={matchingEvidence} locale={{ emptyText: "Nenhuma evidência suficiente foi localizada para este requisito." }} renderItem={(item) => <List.Item><List.Item.Meta title={String(item.label ?? "Evidência profissional")} description={`${String(item.source ?? "Perfil publicado")}${item.fieldPath ? ` · ${String(item.fieldPath)}` : ""}`} /></List.Item>} />
       <details className="prisma-technical-details">
-        <summary>Ver dados técnicos preservados</summary>
-        <pre>{JSON.stringify(need.evidenceSnapshot, null, 2)}</pre>
+        <summary>Consultar registro completo das evidências</summary>
+        <ReadableRecord value={need.evidenceSnapshot}/>
       </details>
     </PrismaCard>
   );

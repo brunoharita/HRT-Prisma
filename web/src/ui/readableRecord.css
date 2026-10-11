@@ -1,0 +1,21 @@
+.prisma-readable-record { margin: 0; width: 100%; min-width: 0; }
+.prisma-record-field { display: grid; grid-template-columns: minmax(120px, 32%) minmax(0, 1fr); gap: 12px; padding: 10px 0; border-bottom: 1px solid #e8edf5; }
+.prisma-record-field > dt { color: #53647e; font-weight: 600; overflow-wrap: anywhere; }
+.prisma-record-field > dd { margin: 0; min-width: 0; }
+.prisma-record-field:has(> dd > .prisma-record-nested) { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+.prisma-record-container { min-width: 0; }
+.prisma-record-identifiers { margin-top: 12px; }
+.prisma-record-value { white-space: pre-wrap; overflow-wrap: anywhere; }
+.prisma-record-list { margin: 0; padding-left: 22px; }
+.prisma-record-list > li { padding: 4px 0; min-width: 0; }
+.prisma-record-nested { min-width: 0; }
+.prisma-record-nested > summary { color: #1677ff; cursor: pointer; overflow-wrap: anywhere; }
+.prisma-record-nested > summary:focus-visible { outline: 2px solid #1677ff; outline-offset: 3px; }
+.prisma-record-nested > .prisma-readable-record, .prisma-record-nested > .prisma-record-list { margin-top: 8px; }
+.prisma-history-description { white-space: pre-wrap; }
+.prisma-delta-page { grid-template-columns: minmax(0, 1fr); }
+.prisma-delta-page .prisma-delta-publish-error { min-width: 0; overflow-wrap: anywhere; }
+.prisma-delta-record { width: 100%; min-width: 0; }
+@media (max-width: 600px) {
+  .prisma-record-field { grid-template-columns: minmax(0, 1fr); gap: 5px; }
+}

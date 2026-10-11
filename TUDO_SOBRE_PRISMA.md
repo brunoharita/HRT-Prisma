@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 448
-source_manifest_sha256: ba67f7ffbc6a2fc5ffe64bde269c54bda4d5e5fc97fd2967332b9282ab7f7b95
+documentation_source_count: 449
+source_manifest_sha256: 967b017d7fb897fe99e21cfe9df69e72f6df1d42a0962bb4482aa20a6a4d2857
 -->
 
 # Tudo sobre o Prisma
@@ -2630,11 +2630,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.71.1
+version: 2.71.2
 last_verified: 2026-10-11
 ---
 
 # Estado atual do Prisma
+
+## Registros legíveis — correção 2.4.1
+
+Correção autorizada em11/10/2026, sem nova entrada de versão. Nove apresentações de JSON/serialização no frontend passam a campos, listas e expansões: quatro origens/método/histórico ocupacional, duas regras/evidências de verificação, histórico do acompanhamento, revisão e comparação de Perfil. Conteúdo completo, campos desconhecidos, nulos/falsos/zero/listas e IDs permanecem disponíveis; valores conhecidos em português, identificadores em consulta própria. Texto literal de documentos e serializers de persistência são preservados. Sem backend/dados/IA/escritores alterados. Tipos/build,23Node dirigidos,2auditorias de render,72checks de apresentação/teclado e regressão do acompanhamento30checks PASS. Publicação e fechamento em andamento; contrato/mapa/AoT `docs/qa/readable-records-v241.md`.
 
 ## Foco operacional — v2.4.1
 
@@ -12472,6 +12476,13 @@ Resumo da Pessoa mantém pendências imediatas e acessos compactos a Documentos/
 Diagnóstico documental fica sob Detalhes técnicos e histórico, a legenda operacional sob Entender os estados, e versões/timeline de Verificações sob Método e histórico. Limitações e estados relevantes continuam imediatos. No Banco de Itens, similaridade/duplicidade permanecem na revisão humana; fingerprint/provedor/schema ficam sob Origem e detalhes técnicos. Avaliações anteriores ficam recolhidas inicialmente em todos os tamanhos, com quantidade e consulta. Essa regra substitui a abertura inicial no desktop do acordo visual2.3.5, mantendo sua composição guiada4A.
 
 Expansão e navegação nunca iniciam IA, recálculo, aprovação, envio ou publicação. Consulta secundária preserva rascunhos; falhas/pendências/confiança reduzida permanecem visíveis. Não há alteração de domínio, segurança, tenant, escritores, schema ou serviços. Comparações e limites de validação no AoT `docs/qa/aot-operational-focus-v241.md`.
+
+
+## Registros legíveis — correção 2.4.1
+
+Registros estruturados gerados pela aplicação devem aparecer em campos com rótulos, listas e expansões acessíveis, sem JSON bruto. Fonte, significado e conteúdo vêm antes dos identificadores e da rastreabilidade, que permanecem completos em uma expansão própria. Valores conhecidos recebem traduções determinísticas em português; campos novos e valores desconhecidos permanecem consultáveis sem significado inventado. Nulos, listas vazias, textos vazios, falsos e zero são distintos. Conteúdo histórico não é truncado.
+
+A apresentação compartilhada não consulta, recalcula nem escreve. Permissões, origem dos dados, decisões humanas e rascunhos permanecem nos fluxos existentes. Texto original fornecido pela pessoa, inclusive código literal de um documento, deve ser preservado. Referências/histórico ocupacional, critérios/evidências da verificação, acompanhamento, revisão e comparação de Perfil seguem essa regra. Contrato, inventário, evidências e limites: `docs/qa/readable-records-v241.md`.
 
 ---
 
@@ -28348,6 +28359,76 @@ Validar Central, Perfil, busca, resultado, comparação e versão histórica em 
 - a Central da Pessoa passou em `360x800`, `390x844`, `768x1024`, `1280x720` e `1440x900`, com zero overflow horizontal global ou em descendentes do conteúdo principal.
 
 Produção não é inferida a partir de QA.
+
+---
+
+## Source: `docs/qa/readable-records-v241.md`
+
+# Acordo, execução e AoT — Registros legíveis, correção 2.4.1
+
+Acordo v1.0.0, 11/10/2026. Bruno autorizou melhorar qualquer apresentação de JSON ao usuário. Baseline main/origin e606ca5ca787fcc4d899206d8da6affb99580c25. Correção da entrega 2.4.1, sem nova entrada no registro de versões. Risco C, apresentação web.
+
+## Acordo congelado e execução
+
+- D-01: substituir todos os registros serializados exibidos nas telas por campos/listas legíveis: referência e histórico ocupacional, origens dos requisitos, critérios/evidências da verificação, histórico do acompanhamento e valores anteriores/posteriores da revisão de Perfil. Buscar também outros usos de serialização no frontend.
+- D-02: nomes conhecidos e relações conhecidas em português; listas, valores nulos, falsos, zero, campos novos e identificadores completos preservados. Valores e categorias desconhecidos não ganham significado inventado. Registros aninhados consultáveis com teclado/mobile.
+- D-03: preservar informações, evidências, proveniência, histórico, permissões, callbacks, rascunhos, decisões humanas e loading. Abrir registros não causa consultas adicionais, IA ou escrita. Texto extraído de documentos continua literal, mesmo quando contenha código.
+- D-04: main/produção, apenas destinos derivados do diff; CI, visual desktop1448/mobile390/320, rollback, smoke e sincronização. Registrar limitações.
+- P-01: não apagar registros, truncar conteúdo histórico para simplificar, reinterpretar JSON interno de persistência, escolher decisões ou mudar backend/tenant/score/regras.
+- P-02: nenhum bloco JSON renderizado pela aplicação nos registros inventariados; texto original fornecido por pessoa não é um registro serializado pela aplicação.
+- F-01: novas regras de taxonomia, verificação, IA, schema ou integrações; ocultar erros/pendências; reformular toda a navegação.
+- A-01: reutilizar React, componentes Prisma/Ant Design e listas de definição acessíveis; componente compartilhado para campos aninhados e traduções determinísticas. Nenhuma dependência nova.
+- Q: nenhuma pendência. Screenshot é contraexemplo.
+- CA-01: inventário e verificação de todos os renderizadores JSON e respectivos acessos, inclusive teclado, valores desconhecidos e falsos/zero/nulos/listas.
+- CA-02: regressão dos componentes afetados; nenhum write na consulta; conteúdo completo e ausência de overflow, validação de tipos/build/testes dirigidos/contexto.
+- CA-03: CI e main/VPS confirmados, release2.4.1 servida, rollback e demais serviços preservados.
+
+Implementar D-01..04, vedar P-01/02, respeitar F-01; A-01 governa apenas apresentação. Autorização de Bruno nesta conversa, sem nova decisão de produto.
+
+## Mapa de impacto prévio
+
+| Capacidade | Relação | Baseline e prova proporcional |
+| --- | --- | --- |
+| Referência ocupacional/origens/histórico | direct | snapshot/seleção originais; registros legíveis, fonte/versão/ID e desconhecidos preservados, fixture real do painel |
+| Verificação: critérios e evidências | direct | limiares/dimensões/evidência originais; render legível e teste da página |
+| Acompanhamento: histórico | direct | antes/depois, ator/data, rascunho e score; fixture de follow-up e consulta sem escrita |
+| Revisão de Perfil: histórico | direct | valor anterior/posterior íntegro, eventos/formulários preservados; fixture person-unified |
+| Comparação para publicação de Perfil | direct | descoberta na busca de serializers: preview podia retornar JSON ou coerção de objetos; resumo legível e campos completos, escolhas de publicação/escritores preservados |
+| Componente/CSS compartilhado | plausible_indirect | estilos novos scoped, demais registros/widgets não alterados;1448/390/320 |
+| Auth/tenant/loading/dados | critical_transversal | sem alteração de serviços/escritores; nenhum write/query passivo e tráfego externo bloqueado nas fixtures |
+| Banco/Edge/Parser/Synthesis/mail/cobrança | no_impact_identified | nenhum arquivo/contrato dessas camadas alterado; release webonly e identidades remotas antes/depois |
+
+## AoT
+
+### Inventário e implementação
+
+| Apresentação anterior | Implementação |
+| --- | --- |
+| PositionTaxonomyPanel: método, referências, histórico de interpretações, origens dos conhecimentos (4) | ReadableRecord; relações conhecidas traduzidas, campos/versões/fontes completos |
+| CompetencyVerificationPage: regras da rubrica e snapshot de evidências (2) | ReadableRecord, mantendo as regras de correção e evidências originais |
+| FollowUpHistory: snapshots anterior/registrado (1) | Campos aninhados legíveis; resumo operacional e ator/data/fuso preservados |
+| StructuredReviewPanel: valores da alteração (1) | Valores anteriores/revisados íntegros; removida a truncagem anterior de180caracteres |
+| ProfileDeltaPage: preview serializado e fallback (1) | Resumo legível e expansão de campos completos de experiência/formação/outros; ações de publicação intactas |
+
+Busca de JSON.stringify/JSON.parse/pre/code no frontend: os demais serializers são persistência, fingerprints, igualdade e controle de rascunho. Texto extraído no PersonWorkspacePage é conteúdo literal do documento e permanece literal. Nenhuma dependência ou camada de dados alterada.
+
+ReadableRecord utiliza listas de definição, listas ordenadas e details nativos; preserva campos desconhecidos e todos os valores. Agrupa IDs em Identificadores e rastreabilidade. CSS scoped organiza objetos aninhados em largura completa e empilha os campos no celular. A validação descobriu que a grade implícita da comparação de Perfil podia crescer com o alerta de pendência em320px; track minmax(0,1fr) e min-width do alerta corrigem a leitura sem mudar seu conteúdo/ação.
+
+### Prova e preservação
+
+- Tipos web, build TypeScript e build web PASS;23testes Node dirigidos (registros/taxonomia/verificação/delta),2auditorias de fonte PASS. Logs locais em tmp/readable-records-*.log; relatório consolidado nesta pasta de evidências.
+- Regressão do acompanhamento30checks PASS em1448/390/320: ações, rascunho, score, histórico, fuso e ausência de writes preservados.
+- Cenários de apresentação e teclado72checks PASS em1448/390/320. Comparação antes/depois usa o mesmo registro sintético e viewport, com baseline e606ca5 imutável. Sem referência normativa nova; screenshot do usuário é contraexemplo. IDs completos ficam disponíveis sob demanda.
+- Dados sintéticos nos componentes reais, tráfego externo bloqueado. Sem banco, sessão autenticada de produção ou execução de IA. Backend/auth/tenant preservados por ausência de modificação nos escritores/serviços e consulta sem writes; smoke público e containers remotos ainda pendentes.
+
+| Regra | Implementação / evidência | Status |
+| --- | --- | --- |
+| D-01 | Inventário9contextos; componentes e auditoria de render | PASS local |
+| D-02 | Labels determinísticos e testes de null/zero/false/listas/unknown/IDs | PASS local |
+| D-03/P-01/P-02 | Escritores e escolhas intactos; sem writes; histórico completo; documento literal preservado | PASS local |
+| D-04 | Publicação, CI, rollback, smoke e sincronização | PARTIAL |
+
+Sem desvio de contrato. Publicação e fechamento permanecem pendentes.
 
 ---
 

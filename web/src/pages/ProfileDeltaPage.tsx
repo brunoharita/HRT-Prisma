@@ -1,4 +1,6 @@
 import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
+import {ReadableRecord} from "../ui/ReadableRecord";
+import {recordTextLabel} from "../ui/readableRecordValues";
 import { ProfileFilled as PrismaPageIcon } from "@ant-design/icons";
 import { useEffect, useMemo, useState } from "react";
 import { CheckCircleOutlined, FilePdfOutlined, SafetyCertificateOutlined } from "@ant-design/icons";
@@ -236,6 +238,7 @@ function DeltaSection({ actions, items, mode, onAction }: { actions: Map<string,
         {item.section === "competencies"
           ? <><strong className="prisma-delta-item-primary">{preview(item.after ?? item.before)}</strong><span className="prisma-delta-item-context">{item.label}</span><Tag>{provenanceLabel(item.provenance)}</Tag>{item.kind === "updated" ? <><small>Antes: {preview(item.before)}</small><small>Depois: {preview(item.after)}</small></> : null}</>
           : <><strong>{item.label}</strong><Tag>{provenanceLabel(item.provenance)}</Tag>{item.kind === "updated" ? <><small>Antes: {preview(item.before)}</small><small>Depois: {preview(item.after)}</small></> : <small>{preview(item.after ?? item.before)}</small>}</>}
+        {["experiences","education","others"].includes(item.section)?<details className="prisma-disclosure prisma-delta-record"><summary>Consultar campos completos de {item.label}</summary><div><h4>Perfil vigente</h4><ReadableRecord value={parseDeltaValue(item.before)}/><h4>Proposta revisada</h4><ReadableRecord value={parseDeltaValue(item.after)}/></div></details>:null}
       </div>
       <div className="prisma-delta-item-action"><Tag color={kindColor(kind)}>{kindBadge(kind)}</Tag>{item.section === "private_contact" ? <Typography.Text type="secondary">Atualizado no cadastro privado</Typography.Text> : <>{item.kind === "not_cited" ? <Typography.Text type="secondary">{mode === "merge" ? "Mantido por já estar aprovado" : "Não fará parte do novo perfil"}</Typography.Text> : null}<Select aria-label={`Ação para ${item.label}`} onChange={(value) => onAction(item, value)} options={blockActionOptions(item, mode)} value={actions.get(item.key) ?? defaultBlockAction(item, mode)} /></>}</div>
     </article>)}</section>;
@@ -246,7 +249,7 @@ function kindLabel(kind: ProfileDeltaKind): string { return ({ added: "ADICIONAD
 function kindBadge(kind: ProfileDeltaKind): string { return ({ added: "Novo registro", updated: "Dados atualizados", maintained: "Mantido", not_cited: "Preservado", explicit_removal: "Será removido" })[kind]; }
 function kindColor(kind: ProfileDeltaKind): string { return ({ added: "green", updated: "gold", maintained: "blue", not_cited: "default", explicit_removal: "red" })[kind]; }
 function provenanceLabel(value: ProfileDeltaItem["provenance"]): string { return ({ approved: "Já aprovado", explicit: "Explícita no currículo", normalized: "Termo normalizado", human: "Confirmada por pessoa" })[value]; }
-function preview(value: string | null): string { if (!value) return "Sem valor"; try { const parsed = JSON.parse(value) as Record<string, unknown>; return Object.entries(parsed).filter(([key]) => !["id", "source", "evidenceText", "page", "items"].includes(key)).map(([, item]) => String(item ?? "")).filter(Boolean).join(" · ") || value; } catch { return value; } }
+function preview(value: string | null): string { if (!value) return "Sem valor"; try { const parsed:unknown = JSON.parse(value); if(parsed!==null&&typeof parsed==="object"&&!Array.isArray(parsed))return recordTextLabel(Object.fromEntries(Object.entries(parsed).filter(([key])=>!["id","source","evidenceText","page","items"].includes(key))));return recordTextLabel(parsed); } catch { return value; } }
 function parseDeltaValue(value: string | null): unknown { if (!value) return null; try { return JSON.parse(value) as unknown; } catch { return value; } }
 function defaultBlockAction(item: ProfileDeltaItem, mode: ProfilePublicationMode): ProfileBlockAction {
   if (item.kind === "added") return "add";

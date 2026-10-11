@@ -1,4 +1,5 @@
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
+import {ReadableRecord} from "../../ui/ReadableRecord";
 import {
   ArrowLeftOutlined,
   ArrowRightOutlined,
@@ -850,24 +851,19 @@ function compactHistory(changes: ProfileReviewWorkspace["changes"], events: Prof
 
 function fullHistory(workspace: ProfileReviewWorkspace) {
   return [
-    ...workspace.changes.map((change) => ({ createdAt: change.createdAt, content: <HistoryEntry actor={change.actorAuthUserId} date={change.createdAt} description={`${change.reason}\nDe: ${formatHistoryValue(change.previousValue)}\nPara: ${formatHistoryValue(change.reviewedValue)}`} title={`Valor alterado · ${change.fieldPath}`} /> })),
+    ...workspace.changes.map((change) => ({ createdAt: change.createdAt, content: <HistoryEntry actor={change.actorAuthUserId} date={change.createdAt} description={<><p>{change.reason}</p><h4>Valor anterior</h4><ReadableRecord value={change.previousValue}/><h4>Valor revisado</h4><ReadableRecord value={change.reviewedValue}/></>} title={`Valor alterado · ${change.fieldPath}`} /> })),
     ...workspace.evidenceEvents.map((event) => ({ createdAt: event.createdAt, content: <HistoryEntry actor={event.actorAuthUserId} date={event.createdAt} description={event.reason} title={`${eventLabel(event.eventType)} · ${event.fieldPath}`} /> })),
     ...workspace.adaptationEvents.map((event) => ({ createdAt: event.createdAt, content: <HistoryEntry actor={event.actorAuthUserId} date={event.createdAt} description={`Origem: ${event.sourceFieldPath}\nPadrão: ${event.patternKey}\nCampos aceitos: ${event.acceptedSuggestions.map((item) => item.fieldPath).join(", ")}`} title="Aprendizado adaptativo aplicado" /> })),
     ...workspace.revisions.map((revision) => ({ createdAt: revision.createdAt, content: <HistoryEntry actor={revision.actorAuthUserId} date={revision.createdAt} description={revision.changeReason ?? "Revisão versionada."} title={`Revisão ${revision.revisionNumber}`} /> })),
   ].sort((left, right) => right.createdAt.localeCompare(left.createdAt)).map((item) => ({ content: item.content }));
 }
 
-function HistoryEntry({ title, date, actor, description }: { title: string; date: string; actor: string; description: string }) {
-  return <div className="prisma-history-entry"><strong>{title}</strong><small>{formatDate(date)} · {actor}</small><p>{description}</p></div>;
+function HistoryEntry({ title, date, actor, description }: { title: string; date: string; actor: string; description: ReactNode }) {
+  return <div className="prisma-history-entry"><strong>{title}</strong><small>{formatDate(date)} · {actor}</small><div className="prisma-history-description">{description}</div></div>;
 }
 
 function eventLabel(event: ProfileReviewWorkspace["evidenceEvents"][number]["eventType"]): string {
   return ({ human_region_added: "Evidência humana adicionada", review_evidence_replaced: "Evidência substituída", complementary_evidence_added: "Evidência complementar adicionada", new_information_created: "Nova informação criada", review_evidence_removed: "Evidência do revisor excluída" })[event];
-}
-
-function formatHistoryValue(value: unknown): string {
-  const rendered = typeof value === "string" ? value : JSON.stringify(value);
-  return rendered && rendered.length > 180 ? `${rendered.slice(0, 177)}...` : rendered ?? "Não identificado";
 }
 
 function formatDate(value: string): string {
