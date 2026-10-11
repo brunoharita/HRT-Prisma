@@ -1,0 +1,304 @@
+{
+  "checks": [
+    {
+      "name": "ten tables RLS and no direct roles access",
+      "pass": true
+    },
+    {
+      "name": "twelve internal functions inaccessible",
+      "pass": true
+    },
+    {
+      "name": "commercial RPC authenticated only",
+      "pass": true
+    },
+    {
+      "name": "new requests need quote and authenticated user",
+      "pass": true
+    },
+    {
+      "name": "assessment finish service only",
+      "pass": true
+    },
+    {
+      "name": "all exposed writers use empty search path",
+      "pass": true
+    },
+    {
+      "name": "synthesis explicit invocation guard",
+      "pass": true
+    },
+    {
+      "name": "initial catalog/rates exact",
+      "pass": true
+    },
+    {
+      "name": "no production commercial orders or debits during tests",
+      "pass": true
+    }
+  ],
+  "evidence": {
+    "rates": [
+      {
+        "tokens": 10000,
+        "function": "parser_ia"
+      },
+      {
+        "tokens": 2000,
+        "function": "position_assessment_items"
+      },
+      {
+        "tokens": 5000,
+        "function": "profile_synthesis"
+      }
+    ],
+    "orders": 0,
+    "tables": [
+      {
+        "rls": true,
+        "object": "prisma_synthesis_token_bindings",
+        "anon_any": false,
+        "service_any": false,
+        "authenticated_any": false
+      },
+      {
+        "rls": true,
+        "object": "prisma_token_accounts",
+        "anon_any": false,
+        "service_any": false,
+        "authenticated_any": false
+      },
+      {
+        "rls": true,
+        "object": "prisma_token_allocations",
+        "anon_any": false,
+        "service_any": false,
+        "authenticated_any": false
+      },
+      {
+        "rls": true,
+        "object": "prisma_token_lots",
+        "anon_any": false,
+        "service_any": false,
+        "authenticated_any": false
+      },
+      {
+        "rls": true,
+        "object": "prisma_token_movements",
+        "anon_any": false,
+        "service_any": false,
+        "authenticated_any": false
+      },
+      {
+        "rls": true,
+        "object": "prisma_token_orders",
+        "anon_any": false,
+        "service_any": false,
+        "authenticated_any": false
+      },
+      {
+        "rls": true,
+        "object": "prisma_token_packages",
+        "anon_any": false,
+        "service_any": false,
+        "authenticated_any": false
+      },
+      {
+        "rls": true,
+        "object": "prisma_token_quotes",
+        "anon_any": false,
+        "service_any": false,
+        "authenticated_any": false
+      },
+      {
+        "rls": true,
+        "object": "prisma_token_rates",
+        "anon_any": false,
+        "service_any": false,
+        "authenticated_any": false
+      },
+      {
+        "rls": true,
+        "object": "prisma_token_reservations",
+        "anon_any": false,
+        "service_any": false,
+        "authenticated_any": false
+      }
+    ],
+    "debited": 0,
+    "packages": [
+      {
+        "name": "Complemento",
+        "tokens": 1000000,
+        "priceCents": 4900,
+        "validityMonths": 12
+      },
+      {
+        "name": "Expansão",
+        "tokens": 3000000,
+        "priceCents": 12900,
+        "validityMonths": 12
+      },
+      {
+        "name": "Volume",
+        "tokens": 10000000,
+        "priceCents": 34900,
+        "validityMonths": 12
+      }
+    ],
+    "synthesisGuard": true,
+    "publicFunctions": [
+      {
+        "anon": true,
+        "config": [
+          "search_path=\"\""
+        ],
+        "definer": true,
+        "service": true,
+        "function": "complete_profile_synthesis",
+        "argumentCount": 10,
+        "authenticated": true
+      },
+      {
+        "anon": false,
+        "config": [
+          "search_path=\"\""
+        ],
+        "definer": true,
+        "service": true,
+        "function": "position_assessment_generation_finish",
+        "argumentCount": 5,
+        "authenticated": false
+      },
+      {
+        "anon": false,
+        "config": [
+          "search_path=\"\""
+        ],
+        "definer": true,
+        "service": false,
+        "function": "position_assessment_generation_request",
+        "argumentCount": 5,
+        "authenticated": true
+      },
+      {
+        "anon": false,
+        "config": [
+          "search_path=\"\""
+        ],
+        "definer": true,
+        "service": false,
+        "function": "prisma_tokens",
+        "argumentCount": 3,
+        "authenticated": true
+      },
+      {
+        "anon": true,
+        "config": [
+          "search_path=\"\""
+        ],
+        "definer": true,
+        "service": true,
+        "function": "record_ai_worker_history_v1",
+        "argumentCount": 3,
+        "authenticated": true
+      },
+      {
+        "anon": false,
+        "config": [
+          "search_path=\"\""
+        ],
+        "definer": true,
+        "service": false,
+        "function": "request_profile_synthesis",
+        "argumentCount": 4,
+        "authenticated": true
+      },
+      {
+        "anon": false,
+        "config": [
+          "search_path=\"\""
+        ],
+        "definer": true,
+        "service": false,
+        "function": "retry_profile_synthesis",
+        "argumentCount": 4,
+        "authenticated": true
+      }
+    ],
+    "privateFunctions": [
+      {
+        "anon": false,
+        "service": false,
+        "function": "complete_synthesis_before_tokens",
+        "authenticated": false
+      },
+      {
+        "anon": false,
+        "service": false,
+        "function": "enqueue_profile_synthesis",
+        "authenticated": false
+      },
+      {
+        "anon": false,
+        "service": false,
+        "function": "enqueue_synthesis_before_tokens",
+        "authenticated": false
+      },
+      {
+        "anon": false,
+        "service": false,
+        "function": "pa_generation_finish_before_tokens",
+        "authenticated": false
+      },
+      {
+        "anon": false,
+        "service": false,
+        "function": "pa_generation_request_before_tokens",
+        "authenticated": false
+      },
+      {
+        "anon": false,
+        "service": false,
+        "function": "prisma_token_balance",
+        "authenticated": false
+      },
+      {
+        "anon": false,
+        "service": false,
+        "function": "prisma_token_bind_synthesis",
+        "authenticated": false
+      },
+      {
+        "anon": false,
+        "service": false,
+        "function": "prisma_token_ensure",
+        "authenticated": false
+      },
+      {
+        "anon": false,
+        "service": false,
+        "function": "prisma_token_reserve",
+        "authenticated": false
+      },
+      {
+        "anon": false,
+        "service": false,
+        "function": "prisma_token_settle",
+        "authenticated": false
+      },
+      {
+        "anon": false,
+        "service": false,
+        "function": "request_synthesis_before_tokens",
+        "authenticated": false
+      },
+      {
+        "anon": false,
+        "service": false,
+        "function": "retry_synthesis_before_tokens",
+        "authenticated": false
+      }
+    ]
+  }
+}

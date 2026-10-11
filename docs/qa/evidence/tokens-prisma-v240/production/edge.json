@@ -1,0 +1,13 @@
+{
+  "name": "position-assessment",
+  "version": 3,
+  "status": "ACTIVE",
+  "verifyJwt": false,
+  "customAuthenticationPreserved": true,
+  "sourceEqual": true,
+  "files": [
+    "supabase/functions/position-assessment/index.ts",
+    "src/infrastructure/positionAssessmentEmailTransport.ts"
+  ],
+  "previousVersion": 2
+}

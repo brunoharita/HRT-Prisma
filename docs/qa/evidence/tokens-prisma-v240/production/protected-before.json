@@ -1,0 +1,22 @@
+{
+  "environment": "ioldpnqqvobprjiontre",
+  "sha": "f3fa07bed260f3bdac87f6faf10cf1ce6d90bea5",
+  "rows": [
+    {
+      "object": "people",
+      "count": 11,
+      "fingerprint": "96a3e4530c3c2506fe7db3b84fb19f4e"
+    },
+    {
+      "object": "professional_profiles",
+      "count": 15,
+      "fingerprint": "ee8716076fe8f1fa6462d4f676c53ecc"
+    },
+    {
+      "object": "position_assessments",
+      "count": 2,
+      "fingerprint": "9610dd09d24c4c5b76ef5315267f1197"
+    }
+  ],
+  "method": "count + md5 of ordered row digests; metadata only"
+}

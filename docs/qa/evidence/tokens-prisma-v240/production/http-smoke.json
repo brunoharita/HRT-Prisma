@@ -1,0 +1,134 @@
+{
+  "sha": "2998ea1ee05759562a9caa0c778a186161d33d57",
+  "checks": [
+    {
+      "name": "public SPA route /",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "public SPA route /sign-in",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "public SPA route /tokens",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "public SPA route /platform-tokens",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "public SPA route /people",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "public SPA route /positions",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "public SPA route /knowledge",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "public SPA route /assessment/synthetic-smoke",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "asset /assets/index-B5c5w9fD.js",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "asset /assets/rolldown-runtime-C0FnF6B9.js",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "asset /assets/antd-vendor-Cv3JrkhW.js",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "asset /assets/supabase-vendor-DoXvCMLf.js",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "asset /assets/react-vendor-BdxMnOeJ.js",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "asset /assets/antd-vendor-B5BXDqMa.css",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "asset /assets/index-4IgPGlVX.css",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "main bundle deployed SHA",
+      "pass": true
+    },
+    {
+      "name": "token routes and labels in bundle",
+      "pass": true
+    },
+    {
+      "name": "Tokens Prisma CSS deployed",
+      "pass": true
+    },
+    {
+      "name": "preserved worker / former asset /assets/pdf.worker.min-qwK7q_zL.mjs",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "PDF worker JavaScript MIME",
+      "pass": true
+    },
+    {
+      "name": "preserved worker / former asset /assets/index-Btvjl667.js",
+      "pass": true,
+      "detail": 200
+    },
+    {
+      "name": "anonymous blocked /parser-ia-hosted/readiness",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous blocked /parser-ia-hosted/parse",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous blocked /document-intelligence/layout-parsing",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous blocked /rest/v1/rpc/prisma_tokens",
+      "pass": true,
+      "detail": 401
+    },
+    {
+      "name": "anonymous blocked /functions/v1/position-assessment",
+      "pass": true,
+      "detail": 401
+    }
+  ],
+  "limits": [
+    "Public assets and negative auth smoke. No real authenticated commercial actions, no provider calls."
+  ]
+}

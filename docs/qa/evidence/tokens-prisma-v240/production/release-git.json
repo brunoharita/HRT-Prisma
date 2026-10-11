@@ -1,0 +1,24 @@
+{
+  "command": "publish",
+  "status": "GIT_PUBLISHED",
+  "sha": "2998ea1ee05759562a9caa0c778a186161d33d57",
+  "branch": "codex/tokens-prisma-v240",
+  "web": "PENDING_VPS_CONFIGURATION",
+  "parserIa": "PENDING_VPS_CONFIGURATION",
+  "profileSynthesis": "SKIPPED",
+  "mailForwarder": "SKIPPED",
+  "remaining": {
+    "database": [
+      "supabase/migrations/20261010180000_prisma_tokens.sql",
+      "supabase/migrations/20261010181000_prisma_tokens_consumers.sql"
+    ],
+    "edgeFunctions": [
+      "position-assessment"
+    ],
+    "web": true,
+    "paddleGateway": true,
+    "parserIa": true,
+    "profileSynthesis": false,
+    "mailForwarder": false
+  }
+}

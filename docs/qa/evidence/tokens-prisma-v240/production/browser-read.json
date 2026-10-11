@@ -1,0 +1,12 @@
+{
+  "method": "Codex in-app browser, real production UI; no stored authenticated session",
+  "routes": [
+    "/tokens",
+    "/platform-tokens"
+  ],
+  "visibleVersion": "v2.4.0",
+  "protectedRoutesRenderSignIn": true,
+  "realAuthenticatedJourney": "NOT TESTED",
+  "commercialWrites": 0,
+  "paidAiCalls": 0
+}

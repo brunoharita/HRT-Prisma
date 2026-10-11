@@ -1,0 +1,14 @@
+[
+  {
+    "version": "20261011012432",
+    "name": "prisma_tokens",
+    "statement_count": 1,
+    "statement_sha256": "49f670771a44d0a2a99236eee30e692d76cf61e4ee1fab715d66478125449d66"
+  },
+  {
+    "version": "20261011012443",
+    "name": "prisma_tokens_consumers",
+    "statement_count": 1,
+    "statement_sha256": "f8dbc0866e827ac4a2e43175cd70b55c0a3572395f3df4734c6989df956beab2"
+  }
+]
