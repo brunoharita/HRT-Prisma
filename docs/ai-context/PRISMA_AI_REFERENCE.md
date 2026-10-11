@@ -2,11 +2,15 @@
 prisma_context_id: ai-reference
 owner: ai-quality
 status: current
-version: 2.2.0
+version: 2.3.0
 last_verified: 2026-09-14
 ---
 
 # Referência de IA do Prisma
+
+## Tokens Prisma v2.4.0
+
+Unidade comercial própria, sem equivalência com tokens técnicos. Questão2.000, Parser10.000, síntese5.000; custos técnicos separados e não expostos ao cliente. Previsão discreta antes da ação, reserva e débito por entrega válida; cache/reuso/revisão/envio gratuitos. Nova síntese exige ação explícita com cotação, publicação/consulta não enfileira IA paga; resultados e trabalhos anteriores preservados sem cobrança retroativa. Não altera prompt/modelo nem matching/Knowledge. Ver ADR-083 e docs/product/prisma-tokens.md; estado operacional/evidência no PRISMA_CURRENT_STATE.
 
 ## Estado
 

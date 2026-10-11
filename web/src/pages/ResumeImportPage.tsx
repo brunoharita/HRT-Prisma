@@ -1,3 +1,4 @@
+import {TokenUsageHint} from "../ui/TokenUsageHint";
 import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
 import { FileTextFilled as PrismaPageIcon } from "@ant-design/icons";
 import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
@@ -171,7 +172,7 @@ export function ResumeImportPage({ activeMembership, onNavigate }: ResumeImportP
   }
 
   return <PrismaPage className={`prisma-resume-journey prisma-resume-journey--${phase}`}>
-    {phase === "upload" ? <UploadScreen busy={busy} error={error} fileList={fileList} onBack={() => onNavigate("/profiles")} onChange={setFileList} onImport={() => void handleImport()} progress={progress} readiness={readiness} onCheck={() => void refreshReadiness()} /> : null}
+    {phase === "upload" ? <UploadScreen organizationId={activeMembership.organizationId} busy={busy} error={error} fileList={fileList} onBack={() => onNavigate("/profiles")} onChange={setFileList} onImport={() => void handleImport()} progress={progress} readiness={readiness} onCheck={() => void refreshReadiness()} /> : null}
     {phase !== "upload" && !(phase === "processing" && error) && (processed?.parserIa?.status === "partial" || (processed && containsInvalidImportUnicode(processed.pages))) ? <Alert type={phase === "analysis" ? "warning" : "info"} showIcon message={phase === "analysis" ? "Há informações ou símbolos não identificados. Confira os campos na revisão antes de publicar." : "A leitura ficou parcial. A conferência dos campos ficará disponível após a identificação e o processamento."} action={phase === "analysis" ? <Button disabled={busy} onClick={() => void startReview()}>Conferir campos na revisão</Button> : undefined} /> : null}
     {phase === "identity" && intake ? <IdentityScreen busy={busy} error={error} identity={identity} intake={intake} onBack={() => setPhase("upload")} onCreate={handleCreateDespiteMatch} onIdentityReview={handleIdentityReview} onLink={(candidate) => void resolveIntake("link_existing_person", candidate.personId)} processed={processed} /> : null}
     {phase === "processing" ? <ProcessingScreen busy={busy} error={error} onBack={() => onNavigate("/profiles")} onWorkspace={processingProgress?.personId ? () => onNavigate(`/profiles/${processingProgress.personId}`) : null} onReplace={restartImport} onRetry={processingRecovery === "retry" && lastResolution ? () => void resolveIntake(lastResolution.action, lastResolution.personId) : null} processed={processed} progress={processingProgress} recovery={processingRecovery} /> : null}
@@ -179,7 +180,7 @@ export function ResumeImportPage({ activeMembership, onNavigate }: ResumeImportP
   </PrismaPage>;
 }
 
-function UploadScreen(props: { busy: boolean; error: string | null; fileList: UploadFile[]; progress: PdfProcessingProgress | null; onBack: () => void; onChange: (files: UploadFile[]) => void; onImport: () => void; readiness: ParserReadiness; onCheck: () => void }) {
+function UploadScreen(props: { organizationId: string; busy: boolean; error: string | null; fileList: UploadFile[]; progress: PdfProcessingProgress | null; onBack: () => void; onChange: (files: UploadFile[]) => void; onImport: () => void; readiness: ParserReadiness; onCheck: () => void }) {
   return <>
     <PrismaPageHeader icon={<PrismaPageIcon />} title="Importar currículo" description="Envie o currículo para iniciarmos a análise e a construção do Perfil Prisma." />
     <Button onClick={props.onBack} type="text">Ir para Pessoas</Button>
@@ -208,6 +209,7 @@ function UploadScreen(props: { busy: boolean; error: string | null; fileList: Up
         </>}
         action={<Button size="small" loading={props.readiness.state === "checking"} onClick={props.onCheck}>Verificar novamente</Button>}
       /></div> : null}
+      {parserIaEnabled()?<TokenUsageHint organizationId={props.organizationId} functionName="parser_ia"/>:null}
       <Button className="prisma-journey-upload-submit" disabled={!props.fileList.length || parserReadinessBlocksImport(props.readiness)} loading={props.busy} onClick={props.onImport} type="primary">Importar currículo</Button>
     </PrismaCard>
     <details className="prisma-m81-import-details"><summary>Como funciona e como os dados são protegidos</summary>

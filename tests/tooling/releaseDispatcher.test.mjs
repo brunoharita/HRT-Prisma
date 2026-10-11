@@ -167,3 +167,5 @@ test("writes one structured release receipt", async () => {
     await rm(directory, { recursive: true, force: true });
   }
 });
+
+test("gateway transport is released without touching Parser, web, mail or synthesis",()=>{for(const path of ["services/paddle-gateway/gateway.mjs","deploy/release-paddle-gateway.sh"]){const p=buildReleasePlan([change("M",path)]);assert.equal(p.deployments.paddleGateway,true);assert.equal(p.deployments.web,false);assert.equal(p.deployments.parserIa,false);assert.equal(p.deployments.mailForwarder,false);assert.equal(p.deployments.profileSynthesis,false);assert.equal(p.unknown?.length??p.impact.unknown.length,0);}});

@@ -175,3 +175,13 @@ test("M5.7 provider model survives transport, frontend validation and intake pro
     }
   }
 });
+
+
+test("commercial quote is reserved before provider; cache is free; denial calls no provider", async () => {
+  const quoteId="24000000-0000-4000-8000-000000000099",calls=[];let paid=0,deny=false;
+  const historyClient={rpc:async(_name,args)=>{calls.push(args);if(deny&&args.p_action==='open_request')return {error:{code:'42501'},data:null};return {error:null,data:args.p_action==='open_request'?{request:{id:crypto.randomUUID()}}:{acquired:true}};}};
+  const parse=createParserService({directory:await directory(),historyClient,keyProvider:async()=>"fixture",fetchImpl:async()=>{paid++;assert.equal(calls.at(-1).p_action,'begin_attempt');return Response.json(provider());}});
+  await parse({...input,tokenQuoteId:quoteId});assert.equal(calls[0].p_data.tokenQuoteId,quoteId);assert.equal(calls.at(-1).p_data.status,'succeeded');
+  const count=calls.length;await parse({...input,tokenQuoteId:quoteId});assert.equal(paid,1);assert.equal(calls[count].p_data.tokenQuoteId,undefined);assert.equal(calls[count+1].p_data.usageKind,'cache');
+  deny=true;await assert.rejects(parse({...input,organizationId:'different-commercial-org',tokenQuoteId:quoteId}));assert.equal(paid,1);
+});

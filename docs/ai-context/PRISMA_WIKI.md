@@ -2,11 +2,15 @@
 prisma_context_id: product-wiki
 owner: product
 status: current
-version: 2.1.1
+version: 2.2.0
 last_verified: 2026-09-18
 ---
 
 # Prisma Wiki
+
+## Tokens Prisma v2.4.0
+
+Administração da empresa consulta saldo/consumo/histórico/renovação/validade e solicita pacotes; super usuário configura preços/franquia/ciclo, acompanha pedidos, registra pagamento verificado e libera uma única vez. Franquia inicial1.000.000 mensal não acumulável, adicionais1m/R$49,3m/R$129,10m/R$349 válidos12meses. Operacional consulta saldo e próprio consumo; informação clara e discreta nas ações de IA. Não há compra automática. Contrato prisma-tokens-1.0.0, ADR-083 e docs/product/prisma-tokens.md. Escala grande representa créditos comerciais, sem esconder quantidade ou tabela.
 
 ## M7.1 — Taxonomia explicável de Posições
 

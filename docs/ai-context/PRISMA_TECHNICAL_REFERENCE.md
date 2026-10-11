@@ -2,11 +2,15 @@
 prisma_context_id: technical-reference
 owner: engineering-security
 status: current
-version: 1.13.0
+version: 1.14.0
 last_verified: 2026-09-16
 ---
 
 # Referência técnica do Prisma
+
+## Créditos comerciais de IA
+
+Contrato prisma-tokens-1.0.0, ADR-083. Carteira tenant em schema private, cotações/reservas/lotes/ledger próprios, RLS e RPC com papel ativo; reserva serializada por organização e liquidação junto da entrega autorizada. Ledger técnico ADR-080 separado. Banco precede Edge position-assessment, gateway/Parser e web. Writers antigos sem cotação não iniciam operação paga. Arquitetura e segurança em docs/decisions/ADR-083-prisma-tokens.md e docs/security/prisma-tokens.md; operação em docs/operations/prisma-tokens.md.
 
 ## Transporte Paddle hospedado temporário
 

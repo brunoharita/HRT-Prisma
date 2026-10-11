@@ -53,7 +53,9 @@ test('M5.7 recovers the same failed intake from original PDF and blocks mismatch
       } }; return builder;
     };
     client.storage.from = () => ({ download: async path => { assert.equal(path, 'org/source.pdf'); return { data: new Blob([download]), error: null }; } });
-    client.rpc = async (name, args) => {
+    const {getTokenQuote}=await vite.ssrLoadModule("/src/infrastructure/supabase/prismaTokensService.ts");
+    client.rpc = (name, args) => {
+      if(name==="prisma_tokens")return {abortSignal:async()=>({error:null,data:{contract:"prisma-token-quote-1.0.0",organizationId:"org",id:crypto.randomUUID(),functionName:"parser_ia",quantity:1,tokensPerUnit:10000,amount:10000,available:1000000,expiresAt:new Date(Date.now()+600000).toISOString()}})};
       mutations.push(name);
       if (name === 'record_resume_import_failure') {
         assert.equal(args.p_organization_id, 'org'); assert.equal(args.p_intake_id, 'intake');
@@ -84,14 +86,15 @@ test('M5.7 recovers the same failed intake from original PDF and blocks mismatch
       assert.equal(name, 'complete_resume_intake'); assert.equal(args.p_intake_id, 'intake'); return { data: 'ready_for_review', error: null };
     };
     const invalidPages = pages.map(page => ({ ...page, text: page.text + '\n\0', layoutLines: [...page.layoutLines, { ...page.layoutLines[0], text: '\0', y: 0.9 }] }));
-    globalThis.fetch = async (url, options) => { assert.equal(url, '/parser-ia-local/parse'); assert.equal(JSON.parse(options.body).sourceSha256, checksum); aiCalls++; return new Response(JSON.stringify({ pages: invalidPages, result, cached: true }), { status: 200 }); };
+    globalThis.fetch = async (url, options) => { assert.equal(url, '/parser-ia-local/parse'); assert.equal(JSON.parse(options.body).sourceSha256, checksum);assert.match(JSON.parse(options.body).tokenQuoteId,/^[a-f0-9-]{36}$/); aiCalls++; return new Response(JSON.stringify({ pages: invalidPages, result, cached: true }), { status: 200 }); };
+    await getTokenQuote('org','parser_ia',1,true);
     await service.resumeFailedAiIntake('org', 'person', 'doc');
     assert.deepEqual(mutations, ['persist_person_extraction', 'complete_resume_intake']);
     assert.equal(aiCalls, 1);
-    persistFailure = true;
+    persistFailure = true;await getTokenQuote('org','parser_ia',1,true);
     await assert.rejects(service.resumeFailedAiIntake('org', 'person', 'doc'), error => error.recovery === 'await-system-update');
     assert.deepEqual(mutations.slice(2), ['persist_person_extraction', 'record_resume_import_failure']);
-    diagnosticFailure = true;
+    diagnosticFailure = true;await getTokenQuote('org','parser_ia',1,true);
     await assert.rejects(service.resumeFailedAiIntake('org', 'person', 'doc'), error => error.recovery === 'await-system-update' && error.message.includes('diagnóstico não pôde ser sincronizado') && !error.message.includes('PRIVATE BACKEND'));
     persistFailure = false; diagnosticFailure = false;
     storagePath = 'other/source.pdf'; await assert.rejects(service.resumeFailedAiIntake('org', 'person', 'doc'), /origem/); storagePath = 'org/source.pdf';

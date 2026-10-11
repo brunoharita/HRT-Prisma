@@ -1,0 +1,9 @@
+# Operação de Tokens Prisma
+
+2.4.0 / ADR-083. Migrations prisma_tokens e prisma_tokens_consumers antecedem Edge position-assessment, gateway, Parser e web. Synthesis reutiliza RPCs compatíveis sem nova imagem. Ledger técnico separado; nenhum prompt/modelo alterado. Não usar db push geral ou replay de migrations históricas.
+
+Renovação/expiração são calculadas idempotentemente no servidor ao consultar/utilizar, sem cron de navegador. Somente período atual recebe franquia, sem compensar meses não visitados. Suspensão bloqueia reservas novas e preserva liquidação anterior. Reserva sobre lote vencido continua retida até conclusão/conciliação, sem voltar ao disponível. Resultado incerto exige evidência de entrega ou ausência de entrega, razão e super usuário após15min. Falha de worker encerrada fora da completion RPC pode deixar reserva para conciliação, nunca libera silenciosamente. Custo técnico do fornecedor pode existir mesmo sem entrega cobrável.
+
+Pedido assistido: solicitação, encaminhamento, verificação real do pagamento e referência para liberação. Sem fatura importada, cobrança automática ou dados comerciais produtivos fictícios nos testes. Conservação de schema/ledger/pedidos/reservas no rollback; imagens anteriores para recuperação, clientes antigos sem cotação recusados em nova geração. Publicar consumidor compatível, nunca reabrir writers sem proteção.
+
+A primeira versão retorna histórico completo com paginação visual. Carga em grandes volumes não foi medida; medir antes de escalar. Testes usam PostgreSQL17 local descartável e UI/transporte sintéticos sem IA paga. Há único Supabase remoto produtivo, sem QA separado. Smoke verifica SHA/versão, grants/RLS, fingerprint, funções, assets/health/rollback e preservação de Synthesis/mail/Paddle/Traefik. Evidence e limites no AoT.

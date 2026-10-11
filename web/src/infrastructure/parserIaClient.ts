@@ -1,4 +1,5 @@
 import type { ProcessedDocumentInput } from "../domain/personIngestion";
+import {takeTokenQuote} from "./supabase/prismaTokensService";
 import { PARSER_IA_VERSION, preparedParserIa, structureParserIa } from "../domain/parserIa";
 import { supabase } from "./supabase/client";
 import { decodeParserReadiness, type ParserReadiness } from "../domain/parserReadiness";
@@ -80,6 +81,7 @@ export async function prepareParserIa(input: ProcessedDocumentInput, organizatio
   try {
     const mode = parserIaMode();
     if (mode === "disabled") return input;
+    const quote = await takeTokenQuote(organizationId,"parser_ia",1).catch(()=>{throw Error("PARSER_USER_ERROR:Atualize a previsão de consumo antes de iniciar a IA.");});
     const bytes = new Uint8Array(await input.file.arrayBuffer());
     let binary = "";
     for (let offset = 0; offset < bytes.length; offset += 8192) binary += String.fromCharCode(...bytes.subarray(offset, offset + 8192));
@@ -95,7 +97,7 @@ export async function prepareParserIa(input: ProcessedDocumentInput, organizatio
     }
     const response = await fetch(endpoint, {
       method: "POST", headers,
-      body: JSON.stringify({ organizationId, sourceSha256: input.sha256, pdfBase64: btoa(binary) }), signal: controller.signal,
+      body: JSON.stringify({ organizationId, sourceSha256: input.sha256, pdfBase64: btoa(binary),tokenQuoteId:quote.id }), signal: controller.signal,
     });
     if (!response.ok) {
       const failure = await response.json().catch(() => null) as { error?: unknown } | null;

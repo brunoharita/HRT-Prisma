@@ -1,0 +1,37 @@
+{
+  "checks": [
+    {
+      "name": "1448: tokens-update keeps prior analysis and quote without automatic AI",
+      "pass": true
+    },
+    {
+      "name": "1448: tokens-update starts exactly one explicit quoted request",
+      "pass": true
+    },
+    {
+      "name": "1448: tokens-failed keeps prior analysis and quote without automatic AI",
+      "pass": true
+    },
+    {
+      "name": "1448: tokens-failed starts exactly one explicit quoted request",
+      "pass": true
+    },
+    {
+      "name": "390: tokens-update keeps prior analysis and quote without automatic AI",
+      "pass": true
+    },
+    {
+      "name": "390: tokens-update starts exactly one explicit quoted request",
+      "pass": true
+    },
+    {
+      "name": "390: tokens-failed keeps prior analysis and quote without automatic AI",
+      "pass": true
+    },
+    {
+      "name": "390: tokens-failed starts exactly one explicit quoted request",
+      "pass": true
+    }
+  ],
+  "environment": "Actual component with synthetic adapter. No provider or production data."
+}

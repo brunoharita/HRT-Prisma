@@ -1,0 +1,207 @@
+{
+  "checks": [
+    {
+      "name": "1448: shared balance / monthly / prices visible",
+      "pass": true
+    },
+    {
+      "name": "1448: refresh retains displayed balance",
+      "pass": true
+    },
+    {
+      "name": "1448: request discloses frozen terms and manual release",
+      "pass": true
+    },
+    {
+      "name": "1448: failed request retains modal for retry",
+      "pass": true
+    },
+    {
+      "name": "1448: retry reuses commercial idempotency id",
+      "pass": true
+    },
+    {
+      "name": "1448: no global horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "1448: operational role has own use and no buying",
+      "pass": true
+    },
+    {
+      "name": "1448: super-user registers package and price cents",
+      "pass": true
+    },
+    {
+      "name": "1448: super-user schedules next quota and renewal day",
+      "pass": true
+    },
+    {
+      "name": "manual release blocks missing payment evidence",
+      "pass": true
+    },
+    {
+      "name": "manual release sends explicit payment and reference",
+      "pass": true
+    },
+    {
+      "name": "1448: internal costs keep unknown status explicit",
+      "pass": true
+    },
+    {
+      "name": "1448: super screen has no global overflow",
+      "pass": true
+    },
+    {
+      "name": "1448: no runtime exceptions or external requests",
+      "pass": true
+    },
+    {
+      "name": "768: shared balance / monthly / prices visible",
+      "pass": true
+    },
+    {
+      "name": "768: refresh retains displayed balance",
+      "pass": true
+    },
+    {
+      "name": "768: request discloses frozen terms and manual release",
+      "pass": true
+    },
+    {
+      "name": "768: failed request retains modal for retry",
+      "pass": true
+    },
+    {
+      "name": "768: retry reuses commercial idempotency id",
+      "pass": true
+    },
+    {
+      "name": "768: no global horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "768: operational role has own use and no buying",
+      "pass": true
+    },
+    {
+      "name": "768: super-user registers package and price cents",
+      "pass": true
+    },
+    {
+      "name": "768: super-user schedules next quota and renewal day",
+      "pass": true
+    },
+    {
+      "name": "768: internal costs keep unknown status explicit",
+      "pass": true
+    },
+    {
+      "name": "768: super screen has no global overflow",
+      "pass": true
+    },
+    {
+      "name": "768: no runtime exceptions or external requests",
+      "pass": true
+    },
+    {
+      "name": "390: shared balance / monthly / prices visible",
+      "pass": true
+    },
+    {
+      "name": "390: refresh retains displayed balance",
+      "pass": true
+    },
+    {
+      "name": "390: request discloses frozen terms and manual release",
+      "pass": true
+    },
+    {
+      "name": "390: failed request retains modal for retry",
+      "pass": true
+    },
+    {
+      "name": "390: retry reuses commercial idempotency id",
+      "pass": true
+    },
+    {
+      "name": "390: no global horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "390: operational role has own use and no buying",
+      "pass": true
+    },
+    {
+      "name": "390: super-user registers package and price cents",
+      "pass": true
+    },
+    {
+      "name": "390: super-user schedules next quota and renewal day",
+      "pass": true
+    },
+    {
+      "name": "390: internal costs keep unknown status explicit",
+      "pass": true
+    },
+    {
+      "name": "390: super screen has no global overflow",
+      "pass": true
+    },
+    {
+      "name": "390: no runtime exceptions or external requests",
+      "pass": true
+    },
+    {
+      "name": "320: shared balance / monthly / prices visible",
+      "pass": true
+    },
+    {
+      "name": "320: refresh retains displayed balance",
+      "pass": true
+    },
+    {
+      "name": "320: request discloses frozen terms and manual release",
+      "pass": true
+    },
+    {
+      "name": "320: failed request retains modal for retry",
+      "pass": true
+    },
+    {
+      "name": "320: retry reuses commercial idempotency id",
+      "pass": true
+    },
+    {
+      "name": "320: no global horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "320: operational role has own use and no buying",
+      "pass": true
+    },
+    {
+      "name": "320: super-user registers package and price cents",
+      "pass": true
+    },
+    {
+      "name": "320: super-user schedules next quota and renewal day",
+      "pass": true
+    },
+    {
+      "name": "320: internal costs keep unknown status explicit",
+      "pass": true
+    },
+    {
+      "name": "320: super screen has no global overflow",
+      "pass": true
+    },
+    {
+      "name": "320: no runtime exceptions or external requests",
+      "pass": true
+    }
+  ],
+  "limits": [
+    "Real UI with synthetic transport. SQL validates server authority. No commercial production orders or paid AI."
+  ]
+}

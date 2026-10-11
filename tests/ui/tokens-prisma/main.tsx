@@ -1,0 +1,16 @@
+import {createRoot} from "react-dom/client";
+import {ConfigProvider} from "antd";
+import ptBR from "antd/locale/pt_BR";
+import {DatabaseOutlined} from "@ant-design/icons";
+import {TokensPrismaPage} from "../../../web/src/pages/TokensPrismaPage";
+import {PrismaAppShell} from "../../../web/src/ui/PrismaAppShell";
+import {PrismaViewStateProvider} from "../../../web/src/ui/PrismaNavigation";
+import {PrismaLoadingFeedback} from "../../../web/src/ui/PrismaLoadingFeedback";
+import {prismaTheme} from "../../../web/src/ui/theme";
+import {org} from "./fixture";
+import "antd/dist/reset.css";
+import "../../../web/src/styles.css";
+import "../../../web/src/ui/foundation.css";
+const platform=new URLSearchParams(location.search).get("role")==="super";
+const membership={organizationId:org,organizationName:"Empresa exemplo",role:"admin",groupId:null,groupName:null} as const;
+createRoot(document.getElementById("root")!).render(<ConfigProvider locale={ptBR} theme={prismaTheme}><PrismaViewStateProvider scope="tokens-fixture"><PrismaLoadingFeedback/><PrismaAppShell activeMembership={membership} memberships={[membership]} profileName="Pessoa exemplo" profileSubtitle={platform?"Super usuário":"Administrador"} navigationItems={[{path:"/tokens",label:"Tokens Prisma",icon:<DatabaseOutlined/>}]} selectedPath="/tokens" onNavigate={()=>{}} onOrganizationChange={()=>{}} onSignOut={()=>{}}><TokensPrismaPage organizationId={org} platform={platform}/></PrismaAppShell></PrismaViewStateProvider></ConfigProvider>);

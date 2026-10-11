@@ -1,4 +1,6 @@
 import { readProfileSynthesisView, readSynthesisSource, SynthesisFailure, synthesisDiagnostic, type ProfileSynthesisView, type SynthesisSource } from "../../../../src/domain/profileSynthesis";
+import {getTokenQuote,takeTokenQuote} from "./prismaTokensService";
+import type {TokenQuote} from "../../domain/prismaTokens";
 import { supabase } from "./client";
 import { supabaseOperationError } from "../../domain/reviewOperationErrors";
 
@@ -10,14 +12,17 @@ function readFailure(code: string, source = false): SynthesisFailure {
 
 export interface ProfileSynthesisAdapter {
   load(): Promise<ProfileSynthesisView>;
+  quote?():Promise<TokenQuote>;
   request(): Promise<ProfileSynthesisView>;
   source(analysisId: string, sourceId: string): Promise<SynthesisSource>;
   retry?(): Promise<ProfileSynthesisView>;
 }
 export function profileSynthesisService(organizationId: string, personId: string, profileId: string): ProfileSynthesisAdapter {
+  let confirmedQuote:TokenQuote|null=null;
   const args = { p_organization_id: organizationId, p_person_id: personId, p_profile_id: profileId };
   const read = async (name: string) => {
-    const { data, error } = await supabase.rpc(name as never, args as never).abortSignal(AbortSignal.timeout(20000));
+    const quote=name==="load_profile_synthesis"?null:await takeTokenQuote(organizationId,"profile_synthesis",1,confirmedQuote);
+    const { data, error } = await supabase.rpc(name as never, {...args,...(quote?{p_token_quote_id:quote.id}:{})} as never).abortSignal(AbortSignal.timeout(20000));
     if (error) throw readFailure(error.code);
     try {
       const view = readProfileSynthesisView(data, organizationId, personId);
@@ -25,7 +30,7 @@ export function profileSynthesisService(organizationId: string, personId: string
       return view;
     } catch { throw new SynthesisFailure(synthesisDiagnostic("read", "READ_INVALID")); }
   };
-  return { load: () => read("load_profile_synthesis"), request: () => read("request_profile_synthesis"), retry: () => read("retry_profile_synthesis"), source: async (analysisId, sourceId) => {
+  return {quote:async()=>{confirmedQuote=await getTokenQuote(organizationId,"profile_synthesis",1,true);return confirmedQuote;}, load: () => read("load_profile_synthesis"), request: () => read("request_profile_synthesis"), retry: () => read("retry_profile_synthesis"), source: async (analysisId, sourceId) => {
     const { data, error } = await supabase.rpc("load_profile_synthesis_source" as never, {
       p_organization_id: organizationId, p_person_id: personId, p_analysis_id: analysisId, p_source_id: sourceId,
     } as never).abortSignal(AbortSignal.timeout(20000));

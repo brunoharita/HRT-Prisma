@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.70.0
+version: 2.71.0
 last_verified: 2026-10-10
 ---
 
 # Estado atual do Prisma
+
+## Tokens Prisma — v2.4.0
+
+Implementação autorizada em10/10/2026, contrato prisma-tokens-1.0.0/ADR-083. Créditos comerciais por empresa, franquia inicial1.000.000/mês sem acumulação; questão2.000, Parser10.000, síntese5.000. Pacotes1m/R$49,3m/R$129,10m/R$349, validade12meses, configuráveis. Cotação discreta/versionada10min, reserva FEFO antes de execução, débito transacional por entrega válida, falha sem entrega libera e resultado incerto exige conciliação motivada. Owner/admin acompanham saldo/renovação/histórico/catálogo e solicitam; super configura franquia/ciclo/versões, bonifica/restitui e confirma pagamento verificado para liberar uma única vez. Operacional vê saldo e próprio consumo sem compra/custo técnico. Síntese nova depende de invocação explícita; publicar/consultar/invalidação não cria IA paga, análises anteriores e jobs pré-movimento preservados sem cobrança retroativa. Banco/cache/reuso/salvar/revisar/enviar gratuitos; matching/Knowledge fora da cobrança. Nenhum checkout/compra automática. Acordo/mapa/execução docs/qa/tokens-prisma-v240.md; evidências e limites no AoT. Publicação ainda pendente até verificação operacional.
 
 ## Avaliação com seções guiadas 4A — v2.3.5
 

@@ -1,4 +1,5 @@
 import { useLoadingFeedback, useLoadingTask } from "../../ui/PrismaLoadingFeedback";
+import {formatTokens,type TokenQuote} from "../../domain/prismaTokens";
 import { Component, useEffect, useRef, useState } from "react";
 import { ApartmentOutlined, BulbOutlined, CompassOutlined, FileSearchOutlined, FileTextOutlined, LinkOutlined, ReadOutlined, SearchOutlined, TeamOutlined, TrophyOutlined, RiseOutlined } from "@ant-design/icons";
 import { Alert, Button, Drawer, Grid, Skeleton, Space, Tag } from "antd";
@@ -91,6 +92,9 @@ function ProfileSynthesisBody({ adapter, onOriginal, onProfile, onOpenSource, or
     return () => { active = false; if (timer) clearTimeout(timer); };
   }, [adapter, queryAttempt]);
 
+  const [tokenQuote,setTokenQuote]=useState<TokenQuote|null>(null),[tokenError,setTokenError]=useState<string|null>(null),[tokenLoading,setTokenLoading]=useState(false),[tokenRefresh,setTokenRefresh]=useState(0);
+  useEffect(()=>{let active=true;setTokenQuote(null);setTokenError(null);if(!adapter.quote)return;setTokenLoading(true);void adapter.quote().then(q=>{if(active)setTokenQuote(q);}).catch(e=>{if(active)setTokenError(e instanceof Error?e.message:"Consumo indisponível.");}).finally(()=>{if(active)setTokenLoading(false);});return()=>{active=false;};},[adapter,queryAttempt,tokenRefresh]);
+  useLoadingFeedback({"Consultando consumo da síntese…":tokenLoading});
   const retry = async () => {
     const operation = view?.state === "not_requested" ? () => adapter.request() : adapter.retry ? () => adapter.retry!() : null;
     if (!operation || retryLock.current) return;
@@ -161,11 +165,12 @@ function ProfileSynthesisBody({ adapter, onOriginal, onProfile, onOpenSource, or
 
   return <section className={"prisma-synthesis" + (selected && !narrow ? " is-source-open" : "")} aria-label="Resumo profissional">
     {error ? <Alert showIcon type="warning" title={explainSynthesisFailure(error).explanation} description={explainSynthesisFailure(error).action} action={<Button onClick={() => setQueryAttempt(value => value + 1)}>Atualizar consulta</Button>} /> : null}
-    {showingPrevious ? <Alert showIcon type="info" title="As informações de base mudaram" description={"A síntese anterior está identificada abaixo e pode conter informações que mudaram. " + (view?.state === "failed" ? "A nova leitura não pôde ser concluída; o Perfil aprovado permanece disponível." : view?.state === "insufficient" ? "A base atual precisa de mais informações profissionais para uma nova síntese." : "A nova leitura está sendo preparada.")} /> : null}
+    {showingPrevious ? <Alert showIcon type="info" title="As informações de base mudaram" description={"A síntese anterior está identificada abaixo e pode conter informações que mudaram. " + (view?.state === "failed" ? "A nova leitura não pôde ser concluída; o Perfil aprovado permanece disponível." : view?.state === "insufficient" ? "A base atual precisa de mais informações profissionais para uma nova síntese." : view?.state === "not_requested" ? "A nova leitura depende da sua solicitação." : "A nova leitura está sendo preparada.")} /> : null}
+    {(!effective||view?.state==="not_requested"||view?.canRetry)?<>{adapter.quote?<p className="prisma-token-hint" role="status">{tokenLoading?"Consultando consumo…":tokenError??(tokenQuote?"Consumo por geração: "+formatTokens(tokenQuote.amount)+" Tokens Prisma."+(tokenQuote.amount>tokenQuote.available?" Saldo insuficiente. Consulte o administrador da empresa.":""):"Consumo indisponível.")} <Button type="link" onClick={()=>setTokenRefresh(n=>n+1)}>Atualizar consumo</Button></p>:null}
+      <Space wrap>{canGenerate && view?.canRetry && adapter.retry ? <Button disabled={!!adapter.quote&&(!tokenQuote||tokenLoading||tokenQuote.amount>tokenQuote.available)} loading={retrying} onClick={() => void retry()}>Gerar leitura novamente</Button> : null}{canGenerate && view?.state === "not_requested" ? <Button disabled={!!adapter.quote&&(!tokenQuote||tokenLoading||tokenQuote.amount>tokenQuote.available)} loading={retrying} onClick={() => void retry()}>Gerar síntese</Button> : null}<Button onClick={() => setQueryAttempt(value => value + 1)}>Atualizar consulta</Button></Space></>:null}
     {!effective ? <>
       {!view && !error ? <Skeleton active paragraph={{ rows: 2 }} /> : null}
       {view?.state === "failed" ? <p>Não foi possível concluir a leitura da IA. Você pode consultar as informações publicadas em cada seção abaixo.</p> : view?.state === "queued" || view?.state === "processing" ? <p>A leitura da IA está sendo preparada. Os dados publicados permanecem disponíveis.</p> : null}
-      <Space wrap>{canGenerate && view?.canRetry && adapter.retry ? <Button loading={retrying} onClick={() => void retry()}>Gerar leitura novamente</Button> : null}{canGenerate && view?.state === "not_requested" ? <Button loading={retrying} onClick={() => void retry()}>Gerar síntese</Button> : null}<Button onClick={() => setQueryAttempt(value => value + 1)}>Atualizar consulta</Button></Space>
       <PublishedSummary publishedProfile={publishedProfile} originalSummary={originalSummary} onOriginal={onOriginal} onProfile={onProfile} />
     </> : <div className="prisma-synthesis-reading">
       <header className="prisma-synthesis-heading">

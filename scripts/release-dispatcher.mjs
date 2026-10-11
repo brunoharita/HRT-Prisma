@@ -67,6 +67,7 @@ function printPlan(plan, options) {
   console.log(`Database: ${plan.deployments.database.join(", ") || "skip"}`);
   console.log(`Functions: ${plan.deployments.edgeFunctions.join(", ") || "skip"}`);
   console.log(`Web/VPS: ${plan.deployments.web ? "publish prisma-web only" : "skip"}`);
+  console.log(`Gateway/VPS: ${plan.deployments.paddleGateway ? "publish prisma-paddle-gateway only" : "skip"}`);
   console.log(`Parser/VPS: ${plan.deployments.parserIa ? "publish prisma-parser-ia only" : "skip"}`);
   console.log(`Mail/VPS: ${plan.deployments.mailForwarder ? "publish hrt-mail-forwarder only" : "skip"}`);
   console.log(`Validations: ${plan.validationCommands.join(" -> ")}`);
@@ -148,6 +149,12 @@ async function publish(plan, options) {
     runCommand("ssh", [options.vpsHost, remote]);
     parserIa = "PUBLISHED";
   }
+  let paddleGateway = plan.deployments.paddleGateway ? "PENDING_VPS_CONFIGURATION" : "SKIPPED";
+  if (plan.deployments.paddleGateway && options.promoteMain && options.vpsHost) {
+    if (!/^[A-Za-z0-9_.@:-]+$/.test(options.vpsHost) || !/^\/[A-Za-z0-9_./-]+$/.test(options.vpsPath)) throw new Error("Invalid VPS configuration");
+    runCommand("ssh", [options.vpsHost, `cd -- '${options.vpsPath}' && bash deploy/release-paddle-gateway.sh '${sha}'`]);
+    paddleGateway = "PUBLISHED";
+  }
   let web = plan.deployments.web ? "PENDING_VPS_CONFIGURATION" : "SKIPPED";
   let mailForwarder = plan.deployments.mailForwarder ? "PENDING_VPS_CONFIGURATION" : "SKIPPED";
   if (plan.deployments.mailForwarder && options.promoteMain && options.vpsHost) {
@@ -180,6 +187,7 @@ async function publish(plan, options) {
       database: plan.deployments.database,
       edgeFunctions: plan.deployments.edgeFunctions,
       web: web === "PENDING_VPS_CONFIGURATION",
+      paddleGateway: paddleGateway === "PENDING_VPS_CONFIGURATION",
       parserIa: parserIa === "PENDING_VPS_CONFIGURATION",
       profileSynthesis: profileSynthesis === "PENDING_VPS_CONFIGURATION",
       mailForwarder: mailForwarder === "PENDING_VPS_CONFIGURATION",

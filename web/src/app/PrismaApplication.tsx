@@ -1,5 +1,6 @@
 import { PositionFollowUpPage } from "../pages/PositionFollowUpPage";
 import { ProcessAssessmentPage } from "../pages/ProcessAssessmentPage";
+import { TokensPrismaPage } from "../pages/TokensPrismaPage";
 import { PositionAssessmentPortal } from "../pages/PositionAssessmentPortal";
 import { useEffect, useState, type ReactNode } from "react";
 import { useLoadingFeedback, useLoadingTask } from "../ui/PrismaLoadingFeedback";
@@ -118,6 +119,8 @@ interface SignInValues {
 const ACTIVE_ORGANIZATION_STORAGE_KEY = "prisma.activeOrganizationId";
 
 const routes: AppRoute[] = [
+  { path: "/tokens", label: "Tokens Prisma", icon: <DatabaseOutlined />, rule: {requiresAuth:true,requiresMembership:true,allowedRoles:["super_admin","owner","admin","recruiter","member"]} },
+  { path: "/platform-tokens", label: "Gestão de Tokens", icon: <DatabaseOutlined />, rule: {requiresAuth:true,requiresMembership:false,allowedRoles:["super_admin"]} },
   { path: "/", label: "Início", icon: <HomeOutlined />, rule: { requiresAuth: true, requiresMembership: true } },
   { path: "/profiles", label: "Pessoas", icon: <TeamOutlined />, rule: { requiresAuth: true, requiresMembership: true } },
   {
@@ -404,6 +407,8 @@ function renderRouteContent(
   if (["/not-found", "/organizations"].includes(route.path)) {
     return <PrismaPage><PrismaPageHeader title={route.path === "/not-found" ? "Página não encontrada" : "Área em preparação"} /><PrismaState kind="unavailable" description={route.path === "/not-found" ? "Este endereço não está disponível. Volte ao início para continuar." : "Esta área ainda não está disponível. As funcionalidades atuais continuam acessíveis pelo menu."} action={{ label: "Voltar ao início", onClick: () => onNavigate("/") }} /></PrismaPage>;
   }
+  if (route.path === "/tokens" && activeMembership) return <TokensPrismaPage organizationId={activeMembership.organizationId} />;
+  if (route.path === "/platform-tokens") return <TokensPrismaPage organizationId={null} platform />;
   if (route.path === "/" && activeMembership) {
     return <HomePage activeMembership={activeMembership} repository={prismaRepository} onNavigate={onNavigate} />;
   }

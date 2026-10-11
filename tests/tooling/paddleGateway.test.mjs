@@ -349,3 +349,12 @@ test("denies member, unknown role, blocked/inactive operator, other tenant and i
     { role: "super_admin", orgs: [] }, { user: { id: userId, is_anonymous: true } }, { user: {} },
   ]) await assert.rejects(authFixture(options).authorize(headers.Authorization, organizationId));
 });
+
+
+test("Parser commercial quote reaches loopback unchanged and invalid shape is rejected",async(t)=>{
+ const calls=[];const {send}=await fixture(t,{fetchImpl:async(url,init)=>{calls.push({url,body:JSON.parse(init.body)});return Response.json({synthetic:true});}});
+ const quoteId='24000000-0000-4000-8000-000000000099',pdf=Buffer.from(payload.file,'base64'),body={organizationId,pdfBase64:payload.file,sourceSha256:createHash('sha256').update(pdf).digest('hex'),tokenQuoteId:quoteId};
+ const request={headers:{...headers,'X-Prisma-Parser-Contract':PARSER_TRANSPORT_VERSION},body:JSON.stringify(body)};
+ assert.equal((await send(request,'/parser-ia-hosted/parse')).status,200);assert.deepEqual(calls[0].body,body);
+ assert.equal((await send({...request,body:JSON.stringify({...body,tokenQuoteId:'invalid'})},'/parser-ia-hosted/parse')).status,400);assert.equal(calls.length,1);
+});

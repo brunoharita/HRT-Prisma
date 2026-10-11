@@ -1,0 +1,1596 @@
+BEGIN
+DO
+TRUNCATE TABLE
+CREATE TABLE
+ALTER TABLE
+REVOKE
+        set_config         
+---------------------------
+ trajectory-evidence-1.2.0
+(1 row)
+
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+INSERT 0 1
+INSERT 0 2
+INSERT 0 4
+INSERT 0 4
+INSERT 0 4
+INSERT 0 1
+INSERT 0 2
+INSERT 0 1
+INSERT 0 1
+INSERT 0 2
+UPDATE 1
+CREATE TABLE
+CREATE INDEX
+ALTER TABLE
+CREATE INDEX
+ALTER TABLE
+DROP POLICY
+CREATE POLICY
+CREATE POLICY
+REVOKE
+GRANT
+REVOKE
+CREATE FUNCTION
+REVOKE
+CREATE FUNCTION
+REVOKE
+GRANT
+COMMENT
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE INDEX
+CREATE INDEX
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+REVOKE
+CREATE FUNCTION
+REVOKE
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE TABLE
+INSERT 0 1
+REVOKE
+CREATE TABLE
+CREATE INDEX
+CREATE TABLE
+CREATE INDEX
+CREATE TABLE
+CREATE INDEX
+CREATE TABLE
+CREATE INDEX
+CREATE TABLE
+CREATE INDEX
+CREATE TABLE
+CREATE INDEX
+DO
+REVOKE
+REVOKE
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+REVOKE
+REVOKE
+GRANT
+REVOKE
+GRANT
+CREATE TABLE
+REVOKE
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE TABLE
+REVOKE
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE FUNCTION
+REVOKE
+GRANT
+ALTER TABLE
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE FUNCTION
+REVOKE
+CREATE TRIGGER
+INSERT 0 1
+INSERT 0 1
+CREATE TABLE
+GRANT
+INSERT 0 1
+SELECT 1
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+SET
+ m83_reject 
+------------
+ 
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+RESET
+SET
+              set_config              
+--------------------------------------
+ fb5558da-3d02-d4f3-b8e3-459bd9f53ecf
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+              set_config              
+--------------------------------------
+ 72c08182-63ae-46f7-2888-124d9cf74e60
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           mutate_position_follow_up                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"entries": [{"id": "04e2ed40-d0ce-418b-b43a-263dc673cf87", "age": null, "match": null, "score": null, "stage": "awaiting_evaluation", "title": null, "details": {}, "fullName": "Pessoa sintética", "personId": "08b8e17c-c0c1-08fe-9002-600edf81ebe2", "revision": 1, "profileId": "fd2e7ad9-9c9c-b324-7a80-84b145cf6ef2", "scoreState": "unavailable", "evaluationId": null, "profileVersion": 2, "scoreProfileId": null, "scorePositionId": null, "sourceProfileId": "fd2e7ad9-9c9c-b324-7a80-84b145cf6ef2", "sourcePositionId": "c00907a4-c580-c875-a1d9-901c6ade3f69"}], "history": [{"at": "2026-10-10T21:49:09.280036-03:00", "id": "73bd3343-aec1-4492-a83d-ddf50fcb4249", "actor": "Synthetic recruiter", "after": {"stage": "awaiting_evaluation", "details": {}, "revision": 1}, "action": "add", "before": null, "entryId": "04e2ed40-d0ce-418b-b43a-263dc673cf87"}], "process": {"id": "761216d6-ef14-4011-bfa8-0659e4a8c48d", "name": "Avaliação 01", "status": "active", "revision": 2}, "contract": "position-follow-up-1.0.0", "operators": [{"id": "72c08182-63ae-46f7-2888-124d9cf74e60", "name": "Synthetic recruiter"}]}
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+INSERT 0 1
+ m83_assert 
+------------
+ 
+(1 row)
+
+INSERT 0 1
+ m83_reject 
+------------
+ 
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+INSERT 0 1
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+RESET
+INSERT 0 1
+SET
+ position_assessment_generation_finish 
+---------------------------------------
+ {"status": "succeeded"}
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+RESET
+SET
+              set_config              
+--------------------------------------
+ 72c08182-63ae-46f7-2888-124d9cf74e60
+(1 row)
+
+UPDATE 1
+ m83_reject 
+------------
+ 
+(1 row)
+
+DO
+UPDATE 1
+INSERT 0 1
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+              set_config              
+--------------------------------------
+ 7f695961-ba40-8230-f39d-8a15e2c1a712
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+RESET
+SET
+INSERT 0 1
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+INSERT 0 1
+INSERT 0 1
+ m83_assert 
+------------
+ 
+(1 row)
+
+UPDATE 1
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+INSERT 0 1
+UPDATE 1
+ m83_assert 
+------------
+ 
+(1 row)
+
+UPDATE 1
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+RESET
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+RESET
+SELECT 1
+ALTER TABLE
+ALTER TABLE
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+ALTER TABLE
+CREATE INDEX
+ALTER TABLE
+CREATE INDEX
+CREATE TABLE
+ALTER TABLE
+REVOKE
+CREATE FUNCTION
+REVOKE
+CREATE TRIGGER
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+REVOKE
+REVOKE
+CREATE FUNCTION
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+REVOKE
+GRANT
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+SET
+ m83_reject 
+------------
+ 
+(1 row)
+
+RESET
+SET
+              set_config              
+--------------------------------------
+ 7f695961-ba40-8230-f39d-8a15e2c1a712
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+              set_config              
+--------------------------------------
+ 72c08182-63ae-46f7-2888-124d9cf74e60
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+INSERT 0 1
+ m83_assert 
+------------
+ 
+(1 row)
+
+INSERT 0 1
+RESET
+SET
+ position_assessment_generation_finish 
+---------------------------------------
+ {"status": "succeeded"}
+(1 row)
+
+RESET
+SET
+              set_config              
+--------------------------------------
+ 72c08182-63ae-46f7-2888-124d9cf74e60
+(1 row)
+
+UPDATE 1
+ m83_reject 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+INSERT 0 1
+INSERT 0 1
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+RESET
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+SELECT 1
+SET
+              set_config              
+--------------------------------------
+ 72c08182-63ae-46f7-2888-124d9cf74e60
+(1 row)
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        mutate_position_follow_up                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"entries": [{"id": "ca751dc5-1d33-40ff-86f1-1194b822b99f", "age": null, "city": null, "match": null, "score": null, "stage": "awaiting_evaluation", "state": null, "title": null, "details": {}, "fullName": "Candidato sintético tardio", "personId": "ba81abe0-e8cc-015b-ad87-b306485247cc", "revision": 1, "profileId": "7d29b755-8068-c230-cdf9-1b852808c739", "scoreState": "unavailable", "evaluationId": null, "profileVersion": 1, "scoreProfileId": null, "scorePositionId": null, "sourceProfileId": "7d29b755-8068-c230-cdf9-1b852808c739", "sourcePositionId": "c00907a4-c580-c875-a1d9-901c6ade3f69"}, {"id": "04e2ed40-d0ce-418b-b43a-263dc673cf87", "age": null, "city": null, "match": null, "score": null, "stage": "awaiting_evaluation", "state": null, "title": null, "details": {}, "fullName": "Pessoa sintética", "personId": "08b8e17c-c0c1-08fe-9002-600edf81ebe2", "revision": 1, "profileId": "fd2e7ad9-9c9c-b324-7a80-84b145cf6ef2", "scoreState": "unavailable", "evaluationId": null, "profileVersion": 2, "scoreProfileId": null, "scorePositionId": null, "sourceProfileId": "fd2e7ad9-9c9c-b324-7a80-84b145cf6ef2", "sourcePositionId": "c00907a4-c580-c875-a1d9-901c6ade3f69"}], "history": [{"at": "2026-10-10T21:49:09.280036-03:00", "id": "5979c7ed-c074-40e9-82a1-c68fdb0ed548", "actor": "Synthetic recruiter", "after": {"stage": "awaiting_evaluation", "details": {}, "revision": 1}, "action": "add", "before": null, "entryId": "ca751dc5-1d33-40ff-86f1-1194b822b99f"}, {"at": "2026-10-10T21:49:09.280036-03:00", "id": "73bd3343-aec1-4492-a83d-ddf50fcb4249", "actor": "Synthetic recruiter", "after": {"stage": "awaiting_evaluation", "details": {}, "revision": 1}, "action": "add", "before": null, "entryId": "04e2ed40-d0ce-418b-b43a-263dc673cf87"}], "process": {"id": "761216d6-ef14-4011-bfa8-0659e4a8c48d", "name": "Avaliação 01", "status": "active", "revision": 3, "sequence": 1, "isCurrent": true}, "contract": "position-follow-up-1.0.0", "operators": [{"id": "72c08182-63ae-46f7-2888-124d9cf74e60", "name": "Synthetic recruiter"}], "processes": [{"id": "761216d6-ef14-4011-bfa8-0659e4a8c48d", "name": "Avaliação 01", "status": "active", "revision": 3, "sequence": 1, "isCurrent": true}]}
+(1 row)
+
+INSERT 0 1
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+RESET
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+SET
+INSERT 0 1
+INSERT 0 1
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+RESET
+SET
+              set_config              
+--------------------------------------
+ 72c08182-63ae-46f7-2888-124d9cf74e60
+(1 row)
+
+INSERT 0 1
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       mutate_position_follow_up_process                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"entries": [{"id": "ca751dc5-1d33-40ff-86f1-1194b822b99f", "age": null, "city": null, "match": null, "score": null, "stage": "awaiting_evaluation", "state": null, "title": null, "details": {}, "fullName": "Candidato sintético tardio", "personId": "ba81abe0-e8cc-015b-ad87-b306485247cc", "revision": 1, "profileId": "7d29b755-8068-c230-cdf9-1b852808c739", "scoreState": "unavailable", "evaluationId": null, "profileVersion": 1, "scoreProfileId": null, "scorePositionId": null, "sourceProfileId": "7d29b755-8068-c230-cdf9-1b852808c739", "sourcePositionId": "c00907a4-c580-c875-a1d9-901c6ade3f69"}, {"id": "04e2ed40-d0ce-418b-b43a-263dc673cf87", "age": null, "city": null, "match": null, "score": null, "stage": "awaiting_evaluation", "state": null, "title": null, "details": {}, "fullName": "Pessoa sintética", "personId": "08b8e17c-c0c1-08fe-9002-600edf81ebe2", "revision": 1, "profileId": "fd2e7ad9-9c9c-b324-7a80-84b145cf6ef2", "scoreState": "unavailable", "evaluationId": null, "profileVersion": 2, "scoreProfileId": null, "scorePositionId": null, "sourceProfileId": "fd2e7ad9-9c9c-b324-7a80-84b145cf6ef2", "sourcePositionId": "c00907a4-c580-c875-a1d9-901c6ade3f69"}], "history": [{"at": "2026-10-10T21:49:09.280036-03:00", "id": "550c5b25-074f-4b77-84cc-5f55bd9d3b12", "actor": "Synthetic recruiter", "after": {"status": "closed"}, "action": "close_process", "before": {"status": "active"}, "entryId": null}, {"at": "2026-10-10T21:49:09.280036-03:00", "id": "5979c7ed-c074-40e9-82a1-c68fdb0ed548", "actor": "Synthetic recruiter", "after": {"stage": "awaiting_evaluation", "details": {}, "revision": 1}, "action": "add", "before": null, "entryId": "ca751dc5-1d33-40ff-86f1-1194b822b99f"}, {"at": "2026-10-10T21:49:09.280036-03:00", "id": "73bd3343-aec1-4492-a83d-ddf50fcb4249", "actor": "Synthetic recruiter", "after": {"stage": "awaiting_evaluation", "details": {}, "revision": 1}, "action": "add", "before": null, "entryId": "04e2ed40-d0ce-418b-b43a-263dc673cf87"}], "process": {"id": "761216d6-ef14-4011-bfa8-0659e4a8c48d", "name": "Avaliação 01", "status": "closed", "revision": 4, "sequence": 1, "isCurrent": true}, "contract": "position-follow-up-1.0.0", "operators": [{"id": "72c08182-63ae-46f7-2888-124d9cf74e60", "name": "Synthetic recruiter"}], "processes": [{"id": "761216d6-ef14-4011-bfa8-0659e4a8c48d", "name": "Avaliação 01", "status": "closed", "revision": 4, "sequence": 1, "isCurrent": true}]}
+(1 row)
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          mutate_position_follow_up_process                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"entries": [{"id": "ca751dc5-1d33-40ff-86f1-1194b822b99f", "age": null, "city": null, "match": null, "score": null, "stage": "awaiting_evaluation", "state": null, "title": null, "details": {}, "fullName": "Candidato sintético tardio", "personId": "ba81abe0-e8cc-015b-ad87-b306485247cc", "revision": 1, "profileId": "7d29b755-8068-c230-cdf9-1b852808c739", "scoreState": "unavailable", "evaluationId": null, "profileVersion": 1, "scoreProfileId": null, "scorePositionId": null, "sourceProfileId": "7d29b755-8068-c230-cdf9-1b852808c739", "sourcePositionId": "c00907a4-c580-c875-a1d9-901c6ade3f69"}, {"id": "04e2ed40-d0ce-418b-b43a-263dc673cf87", "age": null, "city": null, "match": null, "score": null, "stage": "awaiting_evaluation", "state": null, "title": null, "details": {}, "fullName": "Pessoa sintética", "personId": "08b8e17c-c0c1-08fe-9002-600edf81ebe2", "revision": 1, "profileId": "fd2e7ad9-9c9c-b324-7a80-84b145cf6ef2", "scoreState": "unavailable", "evaluationId": null, "profileVersion": 2, "scoreProfileId": null, "scorePositionId": null, "sourceProfileId": "fd2e7ad9-9c9c-b324-7a80-84b145cf6ef2", "sourcePositionId": "c00907a4-c580-c875-a1d9-901c6ade3f69"}], "history": [{"at": "2026-10-10T21:49:09.280036-03:00", "id": "550c5b25-074f-4b77-84cc-5f55bd9d3b12", "actor": "Synthetic recruiter", "after": {"status": "closed"}, "action": "close_process", "before": {"status": "active"}, "entryId": null}, {"at": "2026-10-10T21:49:09.280036-03:00", "id": "5979c7ed-c074-40e9-82a1-c68fdb0ed548", "actor": "Synthetic recruiter", "after": {"stage": "awaiting_evaluation", "details": {}, "revision": 1}, "action": "add", "before": null, "entryId": "ca751dc5-1d33-40ff-86f1-1194b822b99f"}, {"at": "2026-10-10T21:49:09.280036-03:00", "id": "73bd3343-aec1-4492-a83d-ddf50fcb4249", "actor": "Synthetic recruiter", "after": {"stage": "awaiting_evaluation", "details": {}, "revision": 1}, "action": "add", "before": null, "entryId": "04e2ed40-d0ce-418b-b43a-263dc673cf87"}, {"at": "2026-10-10T21:49:09.280036-03:00", "id": "87027dba-667b-4ad3-838a-9bd4d16556f4", "actor": "Synthetic recruiter", "after": {"status": "active"}, "action": "reopen_process", "before": {"status": "closed"}, "entryId": null}], "process": {"id": "761216d6-ef14-4011-bfa8-0659e4a8c48d", "name": "Avaliação 01", "status": "active", "revision": 5, "sequence": 1, "isCurrent": true}, "contract": "position-follow-up-1.0.0", "operators": [{"id": "72c08182-63ae-46f7-2888-124d9cf74e60", "name": "Synthetic recruiter"}], "processes": [{"id": "761216d6-ef14-4011-bfa8-0659e4a8c48d", "name": "Avaliação 01", "status": "active", "revision": 5, "sequence": 1, "isCurrent": true}]}
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+UPDATE 1
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            mutate_position_follow_up_process                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"entries": [{"id": "ca751dc5-1d33-40ff-86f1-1194b822b99f", "age": null, "city": null, "match": null, "score": null, "stage": "awaiting_evaluation", "state": null, "title": null, "details": {}, "fullName": "Candidato sintético tardio", "personId": "ba81abe0-e8cc-015b-ad87-b306485247cc", "revision": 1, "profileId": "7d29b755-8068-c230-cdf9-1b852808c739", "scoreState": "unavailable", "evaluationId": null, "profileVersion": 1, "scoreProfileId": null, "scorePositionId": null, "sourceProfileId": "7d29b755-8068-c230-cdf9-1b852808c739", "sourcePositionId": "c00907a4-c580-c875-a1d9-901c6ade3f69"}, {"id": "04e2ed40-d0ce-418b-b43a-263dc673cf87", "age": null, "city": null, "match": null, "score": null, "stage": "awaiting_evaluation", "state": null, "title": null, "details": {}, "fullName": "Pessoa sintética", "personId": "08b8e17c-c0c1-08fe-9002-600edf81ebe2", "revision": 1, "profileId": "fd2e7ad9-9c9c-b324-7a80-84b145cf6ef2", "scoreState": "unavailable", "evaluationId": null, "profileVersion": 2, "scoreProfileId": null, "scorePositionId": null, "sourceProfileId": "fd2e7ad9-9c9c-b324-7a80-84b145cf6ef2", "sourcePositionId": "c00907a4-c580-c875-a1d9-901c6ade3f69"}], "history": [{"at": "2026-10-10T21:49:09.280036-03:00", "id": "550c5b25-074f-4b77-84cc-5f55bd9d3b12", "actor": "Synthetic recruiter", "after": {"status": "closed"}, "action": "close_process", "before": {"status": "active"}, "entryId": null}, {"at": "2026-10-10T21:49:09.280036-03:00", "id": "5979c7ed-c074-40e9-82a1-c68fdb0ed548", "actor": "Synthetic recruiter", "after": {"stage": "awaiting_evaluation", "details": {}, "revision": 1}, "action": "add", "before": null, "entryId": "ca751dc5-1d33-40ff-86f1-1194b822b99f"}, {"at": "2026-10-10T21:49:09.280036-03:00", "id": "73bd3343-aec1-4492-a83d-ddf50fcb4249", "actor": "Synthetic recruiter", "after": {"stage": "awaiting_evaluation", "details": {}, "revision": 1}, "action": "add", "before": null, "entryId": "04e2ed40-d0ce-418b-b43a-263dc673cf87"}, {"at": "2026-10-10T21:49:09.280036-03:00", "id": "87027dba-667b-4ad3-838a-9bd4d16556f4", "actor": "Synthetic recruiter", "after": {"status": "active"}, "action": "reopen_process", "before": {"status": "closed"}, "entryId": null}, {"at": "2026-10-10T21:49:09.280036-03:00", "id": "e447d68d-4c73-4fc9-919b-e479746e6c15", "actor": "Synthetic recruiter", "after": {"status": "closed"}, "action": "close_process", "before": {"status": "active"}, "entryId": null}], "process": {"id": "761216d6-ef14-4011-bfa8-0659e4a8c48d", "name": "Avaliação 01", "status": "closed", "revision": 6, "sequence": 1, "isCurrent": true}, "contract": "position-follow-up-1.0.0", "operators": [{"id": "72c08182-63ae-46f7-2888-124d9cf74e60", "name": "Synthetic recruiter"}], "processes": [{"id": "761216d6-ef14-4011-bfa8-0659e4a8c48d", "name": "Avaliação 01", "status": "closed", "revision": 6, "sequence": 1, "isCurrent": true}]}
+(1 row)
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                       start_position_selection_process                                                                                                                                                                                                                                                                                                                                                                                                                                       
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"entries": [], "history": [{"at": "2026-10-10T21:49:09.280036-03:00", "id": "74b4d874-96cd-4120-a692-20e5b11fce54", "actor": "Synthetic recruiter", "after": {"previousProcessId": "761216d6-ef14-4011-bfa8-0659e4a8c48d"}, "action": "start_process", "before": null, "entryId": null}], "process": {"id": "0eaf7782-9e7f-4305-99b7-bf51523e7fa9", "name": "Acompanhamento 02", "status": "active", "revision": 1, "sequence": 2, "isCurrent": true}, "contract": "position-follow-up-1.0.0", "operators": [{"id": "72c08182-63ae-46f7-2888-124d9cf74e60", "name": "Synthetic recruiter"}], "processes": [{"id": "0eaf7782-9e7f-4305-99b7-bf51523e7fa9", "name": "Acompanhamento 02", "status": "active", "revision": 1, "sequence": 2, "isCurrent": true}, {"id": "761216d6-ef14-4011-bfa8-0659e4a8c48d", "name": "Avaliação 01", "status": "closed", "revision": 7, "sequence": 1, "isCurrent": false}]}
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    process_assessment_reuse                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"id": "1f5b9dc1-ea7a-4dbf-b0b1-9a8507034b61", "config": {"mode": "ai", "level": 1, "quantity": 10, "distribution": {"level": 1, "counts": {"easy": 6, "hard": 1, "medium": 3}, "version": "position-assessment-distribution-1.0.0", "quantity": 10, "percentages": {"easy": 60, "hard": 10, "medium": 30}}, "durationMinutes": 60}, "status": "draft", "revision": 1, "person_id": null, "questions": [{"id": "741dc5aa-5ab7-4fe7-104a-f2bb41ca413f", "stem": "Synthetic question 1", "review": "approved", "source": "ai", "options": [{"id": "A", "label": "Alpha"}, {"id": "B", "label": "Beta"}, {"id": "C", "label": "Gamma"}, {"id": "D", "label": "Delta"}, {"id": "E", "label": "Epsilon"}], "version": "pa-item-1.0.0", "language": "pt-BR", "approvedAt": "2026-10-10T21:49:09.280036-03:00", "approvedBy": "72c08182-63ae-46f7-2888-124d9cf74e60", "difficulty": "easy", "provenance": {"method": "synthetic-qa", "version": "pa-method-1.0.0", "authorId": null}, "explanation": "Synthetic evidence", "competencyKey": "JavaScript", "requirementId": "7219b369-250d-7f3e-1ba2-85cd4fc08224", "organizationId": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe", "correctOptionId": "A"}, {"id": "c123f9db-3aca-0798-971f-4b41c8b8f9fa", "stem": "Synthetic question 2", "review": "approved", "source": "ai", "options": [{"id": "A", "label": "Alpha"}, {"id": "B", "label": "Beta"}, {"id": "C", "label": "Gamma"}, {"id": "D", "label": "Delta"}, {"id": "E", "label": "Epsilon"}], "version": "pa-item-1.0.0", "language": "pt-BR", "approvedAt": "2026-10-10T21:49:09.280036-03:00", "approvedBy": "72c08182-63ae-46f7-2888-124d9cf74e60", "difficulty": "easy", "provenance": {"method": "synthetic-qa", "version": "pa-method-1.0.0", "authorId": null}, "explanation": "Synthetic evidence", "competencyKey": "JavaScript", "requirementId": "7219b369-250d-7f3e-1ba2-85cd4fc08224", "organizationId": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe", "correctOptionId": "A"}, {"id": "47e35fb2-4d3a-a495-fa61-28df56d2fa7f", "stem": "Synthetic question 3", "review": "approved", "source": "ai", "options": [{"id": "A", "label": "Alpha"}, {"id": "B", "label": "Beta"}, {"id": "C", "label": "Gamma"}, {"id": "D", "label": "Delta"}, {"id": "E", "label": "Epsilon"}], "version": "pa-item-1.0.0", "language": "pt-BR", "approvedAt": "2026-10-10T21:49:09.280036-03:00", "approvedBy": "72c08182-63ae-46f7-2888-124d9cf74e60", "difficulty": "easy", "provenance": {"method": "synthetic-qa", "version": "pa-method-1.0.0", "authorId": null}, "explanation": "Synthetic evidence", "competencyKey": "JavaScript", "requirementId": "7219b369-250d-7f3e-1ba2-85cd4fc08224", "organizationId": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe", "correctOptionId": "A"}, {"id": "bb922112-743b-6724-cbaa-1f8d5d3e388d", "stem": "Synthetic question 4", "review": "approved", "source": "ai", "options": [{"id": "A", "label": "Alpha"}, {"id": "B", "label": "Beta"}, {"id": "C", "label": "Gamma"}, {"id": "D", "label": "Delta"}, {"id": "E", "label": "Epsilon"}], "version": "pa-item-1.0.0", "language": "pt-BR", "approvedAt": "2026-10-10T21:49:09.280036-03:00", "approvedBy": "72c08182-63ae-46f7-2888-124d9cf74e60", "difficulty": "easy", "provenance": {"method": "synthetic-qa", "version": "pa-method-1.0.0", "authorId": null}, "explanation": "Synthetic evidence", "competencyKey": "JavaScript", "requirementId": "7219b369-250d-7f3e-1ba2-85cd4fc08224", "organizationId": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe", "correctOptionId": "A"}, {"id": "baaffad5-68d3-0616-0d36-715885998fa5", "stem": "Synthetic question 5", "review": "approved", "source": "ai", "options": [{"id": "A", "label": "Alpha"}, {"id": "B", "label": "Beta"}, {"id": "C", "label": "Gamma"}, {"id": "D", "label": "Delta"}, {"id": "E", "label": "Epsilon"}], "version": "pa-item-1.0.0", "language": "pt-BR", "approvedAt": "2026-10-10T21:49:09.280036-03:00", "approvedBy": "72c08182-63ae-46f7-2888-124d9cf74e60", "difficulty": "easy", "provenance": {"method": "synthetic-qa", "version": "pa-method-1.0.0", "authorId": null}, "explanation": "Synthetic evidence", "competencyKey": "JavaScript", "requirementId": "7219b369-250d-7f3e-1ba2-85cd4fc08224", "organizationId": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe", "correctOptionId": "A"}, {"id": "e40a5e51-1665-d07e-78a6-edd382784d06", "stem": "Synthetic question 6", "review": "approved", "source": "ai", "options": [{"id": "A", "label": "Alpha"}, {"id": "B", "label": "Beta"}, {"id": "C", "label": "Gamma"}, {"id": "D", "label": "Delta"}, {"id": "E", "label": "Epsilon"}], "version": "pa-item-1.0.0", "language": "pt-BR", "approvedAt": "2026-10-10T21:49:09.280036-03:00", "approvedBy": "72c08182-63ae-46f7-2888-124d9cf74e60", "difficulty": "easy", "provenance": {"method": "synthetic-qa", "version": "pa-method-1.0.0", "authorId": null}, "explanation": "Synthetic evidence", "competencyKey": "JavaScript", "requirementId": "7219b369-250d-7f3e-1ba2-85cd4fc08224", "organizationId": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe", "correctOptionId": "A"}, {"id": "4877c11b-0b98-6867-af53-fea12e226af1", "stem": "Synthetic question 7", "review": "approved", "source": "ai", "options": [{"id": "A", "label": "Alpha"}, {"id": "B", "label": "Beta"}, {"id": "C", "label": "Gamma"}, {"id": "D", "label": "Delta"}, {"id": "E", "label": "Epsilon"}], "version": "pa-item-1.0.0", "language": "pt-BR", "approvedAt": "2026-10-10T21:49:09.280036-03:00", "approvedBy": "72c08182-63ae-46f7-2888-124d9cf74e60", "difficulty": "medium", "provenance": {"method": "synthetic-qa", "version": "pa-method-1.0.0", "authorId": null}, "explanation": "Synthetic evidence", "competencyKey": "JavaScript", "requirementId": "7219b369-250d-7f3e-1ba2-85cd4fc08224", "organizationId": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe", "correctOptionId": "A"}, {"id": "4adfe1db-2715-0c0e-6f44-73a714badb30", "stem": "Synthetic question 8", "review": "approved", "source": "ai", "options": [{"id": "A", "label": "Alpha"}, {"id": "B", "label": "Beta"}, {"id": "C", "label": "Gamma"}, {"id": "D", "label": "Delta"}, {"id": "E", "label": "Epsilon"}], "version": "pa-item-1.0.0", "language": "pt-BR", "approvedAt": "2026-10-10T21:49:09.280036-03:00", "approvedBy": "72c08182-63ae-46f7-2888-124d9cf74e60", "difficulty": "medium", "provenance": {"method": "synthetic-qa", "version": "pa-method-1.0.0", "authorId": null}, "explanation": "Synthetic evidence", "competencyKey": "JavaScript", "requirementId": "7219b369-250d-7f3e-1ba2-85cd4fc08224", "organizationId": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe", "correctOptionId": "A"}, {"id": "4037cd37-ff1f-c330-ab28-ef993cf03460", "stem": "Synthetic question 9", "review": "approved", "source": "ai", "options": [{"id": "A", "label": "Alpha"}, {"id": "B", "label": "Beta"}, {"id": "C", "label": "Gamma"}, {"id": "D", "label": "Delta"}, {"id": "E", "label": "Epsilon"}], "version": "pa-item-1.0.0", "language": "pt-BR", "approvedAt": "2026-10-10T21:49:09.280036-03:00", "approvedBy": "72c08182-63ae-46f7-2888-124d9cf74e60", "difficulty": "medium", "provenance": {"method": "synthetic-qa", "version": "pa-method-1.0.0", "authorId": null}, "explanation": "Synthetic evidence", "competencyKey": "JavaScript", "requirementId": "7219b369-250d-7f3e-1ba2-85cd4fc08224", "organizationId": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe", "correctOptionId": "A"}, {"id": "1c6a2e97-ad60-88e5-613a-044954d4b2ed", "stem": "Synthetic question 10", "review": "approved", "source": "ai", "options": [{"id": "A", "label": "Alpha"}, {"id": "B", "label": "Beta"}, {"id": "C", "label": "Gamma"}, {"id": "D", "label": "Delta"}, {"id": "E", "label": "Epsilon"}], "version": "pa-item-1.0.0", "language": "pt-BR", "approvedAt": "2026-10-10T21:49:09.280036-03:00", "approvedBy": "72c08182-63ae-46f7-2888-124d9cf74e60", "difficulty": "hard", "provenance": {"method": "synthetic-qa", "version": "pa-method-1.0.0", "authorId": null}, "explanation": "Synthetic evidence", "competencyKey": "JavaScript", "requirementId": "7219b369-250d-7f3e-1ba2-85cd4fc08224", "organizationId": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe", "correctOptionId": "A"}], "created_at": "2026-10-10T21:49:09.280036-03:00", "created_by": "72c08182-63ae-46f7-2888-124d9cf74e60", "process_id": "0eaf7782-9e7f-4305-99b7-bf51523e7fa9", "updated_at": "2026-10-10T21:49:09.280036-03:00", "vacancy_id": "aadb77a3-9949-d53f-5764-dc3cb785d385", "requirements": [{"id": "7219b369-250d-7f3e-1ba2-85cd4fc08224", "label": "JavaScript", "competencyKey": "JavaScript"}], "organization_id": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe", "contract_version": "position-assessment-2.0.0", "position_version_id": "c00907a4-c580-c875-a1d9-901c6ade3f69"}
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+INSERT 0 1
+UPDATE 1
+UPDATE 1
+INSERT 0 1
+UPDATE 1
+ m83_assert 
+------------
+ 
+(1 row)
+
+UPDATE 1
+ m83_assert 
+------------
+ 
+(1 row)
+
+              set_config              
+--------------------------------------
+ fb5558da-3d02-d4f3-b8e3-459bd9f53ecf
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+              set_config              
+--------------------------------------
+ 72c08182-63ae-46f7-2888-124d9cf74e60
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+RESET
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+DO
+DO
+ALTER TABLE
+ALTER TABLE
+CREATE FUNCTION
+REVOKE
+ALTER TABLE
+ALTER TABLE
+CREATE FUNCTION
+REVOKE
+ALTER FUNCTION
+ALTER FUNCTION
+REVOKE
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE FUNCTION
+ALTER TABLE
+ALTER TABLE
+CREATE FUNCTION
+CREATE FUNCTION
+REVOKE
+REVOKE
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+REVOKE
+CREATE FUNCTION
+REVOKE
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE INDEX
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE INDEX
+CREATE TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+REVOKE
+REVOKE
+INSERT 0 3
+INSERT 0 3
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+REVOKE
+GRANT
+REVOKE
+ALTER FUNCTION
+ALTER FUNCTION
+REVOKE
+CREATE FUNCTION
+REVOKE
+GRANT
+ALTER FUNCTION
+ALTER FUNCTION
+REVOKE
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE FUNCTION
+CREATE TABLE
+ALTER TABLE
+REVOKE
+CREATE FUNCTION
+REVOKE
+ALTER FUNCTION
+REVOKE
+CREATE FUNCTION
+REVOKE
+ALTER FUNCTION
+ALTER FUNCTION
+ALTER FUNCTION
+ALTER FUNCTION
+REVOKE
+CREATE FUNCTION
+CREATE FUNCTION
+REVOKE
+GRANT
+ALTER FUNCTION
+ALTER FUNCTION
+REVOKE
+CREATE FUNCTION
+REVOKE
+GRANT
+RESET
+ set_config 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+CREATE TABLE
+GRANT
+INSERT 0 3
+INSERT 0 3
+INSERT 0 2
+SELECT 1
+SET
+ m83_reject 
+------------
+ 
+(1 row)
+
+RESET
+SET
+              set_config              
+--------------------------------------
+ 1c84eaeb-a2c3-d1ec-df63-34dd2093d9a2
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+              set_config              
+--------------------------------------
+ 7f695961-ba40-8230-f39d-8a15e2c1a712
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+              set_config              
+--------------------------------------
+ 72c08182-63ae-46f7-2888-124d9cf74e60
+(1 row)
+
+INSERT 0 1
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+INSERT 0 1
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+              set_config              
+--------------------------------------
+ fb5558da-3d02-d4f3-b8e3-459bd9f53ecf
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+              set_config              
+--------------------------------------
+ addc9509-100b-16c2-dd3b-11c766e8bd03
+(1 row)
+
+INSERT 0 1
+INSERT 0 1
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+              set_config              
+--------------------------------------
+ 66e77899-6cb3-ef95-70ed-82713bdca594
+(1 row)
+
+                                                                                                                                  prisma_tokens                                                                                                                                  
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"id": "79a7a178-5ce9-4989-8b6e-047a65d67b42", "name": "Complemento", "active": false, "tokens": 1000000, "created_at": "2026-10-10T21:49:10.707007-03:00", "created_by": null, "price_cents": 4900, "effective_at": "2026-10-10T21:49:09.280036-03:00", "validity_months": 12}
+(1 row)
+
+                                                                                                                                                  prisma_tokens                                                                                                                                                  
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"id": "04671a42-0e07-46aa-8faf-438df23f0fce", "name": "Nova versão", "active": true, "tokens": 1000000, "created_at": "2026-10-10T21:49:10.932818-03:00", "created_by": "66e77899-6cb3-ef95-70ed-82713bdca594", "price_cents": 5900, "effective_at": "2026-10-10T21:49:09.280036-03:00", "validity_months": 6}
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+                                                                                                                                                                                                                                                                                  prisma_tokens                                                                                                                                                                                                                                                                                   
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"id": "8e69e801-bf1c-6e5b-c525-7290e3cc912e", "reason": null, "status": "awaiting_payment", "tokens": 1000000, "actor_id": "addc9509-100b-16c2-dd3b-11c766e8bd03", "created_at": "2026-10-10T21:49:09.280036-03:00", "package_id": "79a7a178-5ce9-4989-8b6e-047a65d67b42", "price_cents": 4900, "released_at": null, "resolved_by": "66e77899-6cb3-ef95-70ed-82713bdca594", "package_name": "Complemento", "organization_id": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe", "validity_months": 12, "offer_expires_at": "2026-10-17T21:49:09.280036-03:00", "payment_reference": null}
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+                                                                                                                                                                                                                                                                                                      prisma_tokens                                                                                                                                                                                                                                                                                                       
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"id": "8e69e801-bf1c-6e5b-c525-7290e3cc912e", "reason": null, "status": "released", "tokens": 1000000, "actor_id": "addc9509-100b-16c2-dd3b-11c766e8bd03", "created_at": "2026-10-10T21:49:09.280036-03:00", "package_id": "79a7a178-5ce9-4989-8b6e-047a65d67b42", "price_cents": 4900, "released_at": "2026-10-10T21:49:09.280036-03:00", "resolved_by": "66e77899-6cb3-ef95-70ed-82713bdca594", "package_name": "Complemento", "organization_id": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe", "validity_months": 12, "offer_expires_at": "2026-10-17T21:49:09.280036-03:00", "payment_reference": "synthetic-local-only"}
+(1 row)
+
+                                                                                                                                                                                                                                                                                                      prisma_tokens                                                                                                                                                                                                                                                                                                       
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"id": "8e69e801-bf1c-6e5b-c525-7290e3cc912e", "reason": null, "status": "released", "tokens": 1000000, "actor_id": "addc9509-100b-16c2-dd3b-11c766e8bd03", "created_at": "2026-10-10T21:49:09.280036-03:00", "package_id": "79a7a178-5ce9-4989-8b6e-047a65d67b42", "price_cents": 4900, "released_at": "2026-10-10T21:49:09.280036-03:00", "resolved_by": "66e77899-6cb3-ef95-70ed-82713bdca594", "package_name": "Complemento", "organization_id": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe", "validity_months": 12, "offer_expires_at": "2026-10-17T21:49:09.280036-03:00", "payment_reference": "synthetic-local-only"}
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+   prisma_tokens    
+--------------------
+ {"recorded": true}
+(1 row)
+
+    prisma_tokens    
+---------------------
+ {"recorded": false}
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+   prisma_tokens    
+--------------------
+ {"recorded": true}
+(1 row)
+
+                                                                                                                         prisma_tokens                                                                                                                         
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"active": true, "next_period": "2026-11-10", "cycle_anchor": "2026-10-10", "current_period": "2026-10-10", "monthly_tokens": 1000000, "organization_id": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe", "pending_cycle_day": 15, "pending_monthly_tokens": 1500000}
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+                                                                                                                           prisma_tokens                                                                                                                            
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"id": "4c022aa7-67d9-46d8-9bb8-a684fe6031ff", "created_at": "2026-10-10T21:49:11.021094-03:00", "created_by": "66e77899-6cb3-ef95-70ed-82713bdca594", "effective_at": "2026-10-10T21:49:09.280036-03:00", "function_name": "parser_ia", "tokens_per_unit": 12000}
+(1 row)
+
+RESET
+ set_config 
+------------
+ 
+(1 row)
+
+         prisma_token_reserve         
+--------------------------------------
+ e0368ad6-9135-41db-add2-d35ed8ec0f05
+(1 row)
+
+         prisma_token_reserve         
+--------------------------------------
+ e0368ad6-9135-41db-add2-d35ed8ec0f05
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+ prisma_token_settle 
+---------------------
+ 
+(1 row)
+
+ prisma_token_settle 
+---------------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+              set_config              
+--------------------------------------
+ addc9509-100b-16c2-dd3b-11c766e8bd03
+(1 row)
+
+INSERT 0 1
+         prisma_token_reserve         
+--------------------------------------
+ 8ae5b66d-e4f2-4a2a-81a8-15ba5b37cb71
+(1 row)
+
+ prisma_token_settle 
+---------------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+UPDATE 1
+ m83_reject 
+------------
+ 
+(1 row)
+
+              set_config              
+--------------------------------------
+ 66e77899-6cb3-ef95-70ed-82713bdca594
+(1 row)
+
+                                                                                                                         prisma_tokens                                                                                                                          
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"active": false, "next_period": "2026-11-10", "cycle_anchor": "2026-10-10", "current_period": "2026-10-10", "monthly_tokens": 1000000, "organization_id": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe", "pending_cycle_day": 15, "pending_monthly_tokens": 1500000}
+(1 row)
+
+INSERT 0 1
+ m83_reject 
+------------
+ 
+(1 row)
+
+                                                                                                                         prisma_tokens                                                                                                                         
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"active": true, "next_period": "2026-11-10", "cycle_anchor": "2026-10-10", "current_period": "2026-10-10", "monthly_tokens": 1000000, "organization_id": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe", "pending_cycle_day": 15, "pending_monthly_tokens": 1500000}
+(1 row)
+
+ set_config 
+------------
+ 
+(1 row)
+
+INSERT 0 1
+ prisma_token_ensure 
+---------------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+UPDATE 1
+ prisma_token_ensure 
+---------------------
+ 
+(1 row)
+
+ prisma_token_ensure 
+---------------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+UPDATE 1
+ prisma_token_ensure 
+---------------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+ prisma_token_ensure 
+---------------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+UPDATE 3
+UPDATE 1
+              set_config              
+--------------------------------------
+ 66e77899-6cb3-ef95-70ed-82713bdca594
+(1 row)
+
+INSERT 0 1
+ m83_reject 
+------------
+ 
+(1 row)
+
+              set_config              
+--------------------------------------
+ addc9509-100b-16c2-dd3b-11c766e8bd03
+(1 row)
+
+INSERT 0 1
+         prisma_token_reserve         
+--------------------------------------
+ fdbad4a0-f791-4846-8c53-3167f33940fe
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+              set_config              
+--------------------------------------
+ 66e77899-6cb3-ef95-70ed-82713bdca594
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+UPDATE 1
+   prisma_tokens    
+--------------------
+ {"recorded": true}
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+              set_config              
+--------------------------------------
+ 72c08182-63ae-46f7-2888-124d9cf74e60
+(1 row)
+
+INSERT 0 1
+ m83_reject 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+INSERT 0 1
+                                                                                                                                                                                                                                                                                            position_assessment_generation_request                                                                                                                                                                                                                                                                                            
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"id": "d4751fa8-3c48-0020-bd6e-f18b6c3532bd", "status": "reserved", "actor_id": "72c08182-63ae-46f7-2888-124d9cf74e60", "revision": 6, "actual_usd": null, "created_at": "2026-10-10T21:49:09.280036-03:00", "finished_at": null, "distribution": [{"quantity": 1, "difficulty": "easy", "requirementId": "7219b369-250d-7f3e-1ba2-85cd4fc08224"}], "requirements": [{"id": "7219b369-250d-7f3e-1ba2-85cd4fc08224", "label": "JavaScript", "competencyKey": "JavaScript"}], "reserved_usd": 0.25000000, "assessment_id": "1f5b9dc1-ea7a-4dbf-b0b1-9a8507034b61", "organization_id": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe"}
+(1 row)
+
+RESET
+SET
+ position_assessment_generation_finish 
+---------------------------------------
+ {"status": "succeeded"}
+(1 row)
+
+ position_assessment_generation_finish 
+---------------------------------------
+ {"status": "succeeded"}
+(1 row)
+
+RESET
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+                                                                                                                                                                                                                                                                                            position_assessment_generation_request                                                                                                                                                                                                                                                                                            
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"id": "614bd740-431b-3598-d5e3-eb80342ff83b", "status": "reserved", "actor_id": "72c08182-63ae-46f7-2888-124d9cf74e60", "revision": 7, "actual_usd": null, "created_at": "2026-10-10T21:49:09.280036-03:00", "finished_at": null, "distribution": [{"quantity": 1, "difficulty": "easy", "requirementId": "7219b369-250d-7f3e-1ba2-85cd4fc08224"}], "requirements": [{"id": "7219b369-250d-7f3e-1ba2-85cd4fc08224", "label": "JavaScript", "competencyKey": "JavaScript"}], "reserved_usd": 0.25000000, "assessment_id": "1f5b9dc1-ea7a-4dbf-b0b1-9a8507034b61", "organization_id": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe"}
+(1 row)
+
+SET
+ position_assessment_generation_finish 
+---------------------------------------
+ {"status": "failed"}
+(1 row)
+
+RESET
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+INSERT 0 1
+              set_config              
+--------------------------------------
+ addc9509-100b-16c2-dd3b-11c766e8bd03
+(1 row)
+
+INSERT 0 1
+ set_config 
+------------
+ 
+(1 row)
+
+INSERT 0 1
+              record_ai_worker_history_v1              
+-------------------------------------------------------
+ {"eventId": 36, "acquired": true, "attemptNumber": 1}
+(1 row)
+
+    record_ai_worker_history_v1    
+-----------------------------------
+ {"eventId": 36, "recorded": true}
+(1 row)
+
+                                                                                                                                                                                                                                                                                                                               record_ai_worker_history_v1                                                                                                                                                                                                                                                                                                                               
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"request": {"id": "8ccf3b49-9647-477a-a9fe-d34fc4a9a053", "scope": "organization", "status": "succeeded", "actor_id": null, "created_at": "2026-10-10T21:49:11.271396-03:00", "completed_at": "2026-10-10T21:49:11.297869-03:00", "operation_id": "343763cd-3f89-3c2b-b588-507752324495", "function_name": "parser_ia", "error_category": null, "source_version": "synthetic-1", "idempotency_key": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "organization_id": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe", "contract_version": "ai-request-1.0.0", "input_fingerprint": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"}, "recorded": true}
+(1 row)
+
+                                                                                                                                                                                                                                                                                                                               record_ai_worker_history_v1                                                                                                                                                                                                                                                                                                                                
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"request": {"id": "8ccf3b49-9647-477a-a9fe-d34fc4a9a053", "scope": "organization", "status": "succeeded", "actor_id": null, "created_at": "2026-10-10T21:49:11.271396-03:00", "completed_at": "2026-10-10T21:49:11.297869-03:00", "operation_id": "343763cd-3f89-3c2b-b588-507752324495", "function_name": "parser_ia", "error_category": null, "source_version": "synthetic-1", "idempotency_key": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "organization_id": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe", "contract_version": "ai-request-1.0.0", "input_fingerprint": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"}, "recorded": false}
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+INSERT 0 1
+ m83_reject 
+------------
+ 
+(1 row)
+
+              record_ai_worker_history_v1              
+-------------------------------------------------------
+ {"eventId": 38, "acquired": true, "attemptNumber": 1}
+(1 row)
+
+    record_ai_worker_history_v1    
+-----------------------------------
+ {"eventId": 38, "recorded": true}
+(1 row)
+
+                                                                                                                                                                                                                                                                                                                               record_ai_worker_history_v1                                                                                                                                                                                                                                                                                                                               
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"request": {"id": "e7753e68-45da-4e6a-a090-c5134fd4c2f4", "scope": "organization", "status": "succeeded", "actor_id": null, "created_at": "2026-10-10T21:49:11.309508-03:00", "completed_at": "2026-10-10T21:49:11.324405-03:00", "operation_id": "4d2fe09a-e37e-a4ad-6baa-8b45f78b71d6", "function_name": "parser_ia", "error_category": null, "source_version": "synthetic-1", "idempotency_key": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", "organization_id": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe", "contract_version": "ai-request-1.0.0", "input_fingerprint": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"}, "recorded": true}
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+ m83_assert 
+------------
+ 
+(1 row)
+
+              set_config              
+--------------------------------------
+ fb5558da-3d02-d4f3-b8e3-459bd9f53ecf
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+INSERT 0 1
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      request_profile_synthesis                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"jobId": "e3c03b48-4ea1-4a53-81a5-0ae6b73034da", "model": null, "state": "queued", "result": null, "sources": [{"id": "experiences.experience_synthetic0.description", "label": "Experiência profissional", "nature": "published_fact", "reviewId": null, "fieldPath": "experiences.experience_synthetic0.description", "documentId": null, "pageNumber": null}, {"id": "experiences.experience_synthetic0.organization", "label": "Experiência profissional", "nature": "published_fact", "reviewId": null, "fieldPath": "experiences.experience_synthetic0.organization", "documentId": null, "pageNumber": null}, {"id": "experiences.experience_synthetic0.role", "label": "Experiência profissional", "nature": "published_fact", "reviewId": null, "fieldPath": "experiences.experience_synthetic0.role", "documentId": null, "pageNumber": null}, {"id": "professionalObjective", "label": "Objetivo declarado", "nature": "published_fact", "reviewId": null, "fieldPath": "professionalObjective", "documentId": null, "pageNumber": null}], "attempts": 0, "canRetry": false, "personId": "fb6bd29e-8667-c32f-e072-de5d5ca33099", "previous": null, "basisHash": "df023bdd1bbb9d6b3e43481f71ba319858b836406f55b424243db291df540152", "errorCode": null, "profileId": "79d4b454-c370-c4cd-1450-2af4fb49d3d8", "analysisId": null, "diagnostic": null, "generatedAt": null, "organizationId": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe", "profileVersion": 1}
+(1 row)
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      request_profile_synthesis                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"jobId": "e3c03b48-4ea1-4a53-81a5-0ae6b73034da", "model": null, "state": "queued", "result": null, "sources": [{"id": "experiences.experience_synthetic0.description", "label": "Experiência profissional", "nature": "published_fact", "reviewId": null, "fieldPath": "experiences.experience_synthetic0.description", "documentId": null, "pageNumber": null}, {"id": "experiences.experience_synthetic0.organization", "label": "Experiência profissional", "nature": "published_fact", "reviewId": null, "fieldPath": "experiences.experience_synthetic0.organization", "documentId": null, "pageNumber": null}, {"id": "experiences.experience_synthetic0.role", "label": "Experiência profissional", "nature": "published_fact", "reviewId": null, "fieldPath": "experiences.experience_synthetic0.role", "documentId": null, "pageNumber": null}, {"id": "professionalObjective", "label": "Objetivo declarado", "nature": "published_fact", "reviewId": null, "fieldPath": "professionalObjective", "documentId": null, "pageNumber": null}], "attempts": 0, "canRetry": false, "personId": "fb6bd29e-8667-c32f-e072-de5d5ca33099", "previous": null, "basisHash": "df023bdd1bbb9d6b3e43481f71ba319858b836406f55b424243db291df540152", "errorCode": null, "profileId": "79d4b454-c370-c4cd-1450-2af4fb49d3d8", "analysisId": null, "diagnostic": null, "generatedAt": null, "organizationId": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe", "profileVersion": 1}
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+INSERT 0 1
+DO
+              set_config              
+--------------------------------------
+ 72c08182-63ae-46f7-2888-124d9cf74e60
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+              set_config              
+--------------------------------------
+ 66e77899-6cb3-ef95-70ed-82713bdca594
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+DELETE 1
+ m83_assert 
+------------
+ 
+(1 row)
+
+ROLLBACK
+
+psql:tmp/tokens-prisma-local.sql:2: NOTICE:  truncate cascades to table "profile_synthesis_attempts"
+psql:tmp/tokens-prisma-local.sql:957: NOTICE:  PASS: distribution exact 20 level3
+psql:tmp/tokens-prisma-local.sql:958: NOTICE:  PASS: denied (22023)
+psql:tmp/tokens-prisma-local.sql:959: NOTICE:  PASS: denied (22023)
+psql:tmp/tokens-prisma-local.sql:961: NOTICE:  PASS: denied (42501)
+psql:tmp/tokens-prisma-local.sql:962: NOTICE:  PASS: denied (42501)
+psql:tmp/tokens-prisma-local.sql:966: NOTICE:  PASS: denied (42501)
+psql:tmp/tokens-prisma-local.sql:968: NOTICE:  PASS: denied (42501)
+psql:tmp/tokens-prisma-local.sql:970: NOTICE:  PASS: denied (42501)
+psql:tmp/tokens-prisma-local.sql:971: NOTICE:  PASS: denied (42501)
+psql:tmp/tokens-prisma-local.sql:973: NOTICE:  PASS: read does not create assessments
+psql:tmp/tokens-prisma-local.sql:975: NOTICE:  PASS: denied (22023)
+psql:tmp/tokens-prisma-local.sql:976: NOTICE:  PASS: denied (40001)
+psql:tmp/tokens-prisma-local.sql:978: NOTICE:  PASS: same generation request replays without new reservation
+psql:tmp/tokens-prisma-local.sql:979: NOTICE:  PASS: denied (40001)
+psql:tmp/tokens-prisma-local.sql:984: NOTICE:  PASS: denied (42501)
+psql:tmp/tokens-prisma-local.sql:989: NOTICE:  PASS: denied (22023)
+psql:tmp/tokens-prisma-local.sql:993: NOTICE:  PASS: invite is queued, never invented sent
+psql:tmp/tokens-prisma-local.sql:994: NOTICE:  PASS: operator does not receive raw personal token
+psql:tmp/tokens-prisma-local.sql:996: NOTICE:  PASS: denied (42501)
+psql:tmp/tokens-prisma-local.sql:1000: NOTICE:  PASS: backend acquires persisted first attempt and lease
+psql:tmp/tokens-prisma-local.sql:1001: NOTICE:  PASS: duplicate dispatch does not acquire lease
+psql:tmp/tokens-prisma-local.sql:1004: NOTICE:  PASS: questions absent before explicit start
+psql:tmp/tokens-prisma-local.sql:1006: NOTICE:  PASS: start exposes exactly five alternatives per question
+psql:tmp/tokens-prisma-local.sql:1007: NOTICE:  PASS: portal exposes no answer key or explanation
+psql:tmp/tokens-prisma-local.sql:1008: NOTICE:  PASS: denied (22023)
+psql:tmp/tokens-prisma-local.sql:1011: NOTICE:  PASS: autosave replay idempotent after lost response
+psql:tmp/tokens-prisma-local.sql:1013: NOTICE:  PASS: candidate receives completion receipt only
+psql:tmp/tokens-prisma-local.sql:1014: NOTICE:  PASS: submission replay preserves receipt
+psql:tmp/tokens-prisma-local.sql:1016: NOTICE:  PASS: backend deterministic correction
+psql:tmp/tokens-prisma-local.sql:1017: NOTICE:  PASS: profiles preserved
+psql:tmp/tokens-prisma-local.sql:1018: NOTICE:  PASS: matching and score preserved
+psql:tmp/tokens-prisma-local.sql:1019: NOTICE:  PASS: position status and definition preserved
+psql:tmp/tokens-prisma-local.sql:1020: NOTICE:  PASS: all assessment tables have RLS
+psql:tmp/tokens-prisma-local.sql:1623: NOTICE:  PASS: legacy assessment unchanged
+psql:tmp/tokens-prisma-local.sql:1624: NOTICE:  PASS: legacy attempts unchanged
+psql:tmp/tokens-prisma-local.sql:1626: NOTICE:  PASS: denied (42501)
+psql:tmp/tokens-prisma-local.sql:1630: NOTICE:  PASS: denied (42501)
+psql:tmp/tokens-prisma-local.sql:1632: NOTICE:  PASS: denied (42501)
+psql:tmp/tokens-prisma-local.sql:1633: NOTICE:  PASS: denied (22023)
+psql:tmp/tokens-prisma-local.sql:1634: NOTICE:  PASS: denied (40001)
+psql:tmp/tokens-prisma-local.sql:1635: NOTICE:  PASS: denied (40001)
+psql:tmp/tokens-prisma-local.sql:1637: NOTICE:  PASS: new proof belongs to process, never individual
+psql:tmp/tokens-prisma-local.sql:1647: NOTICE:  PASS: denied (22023)
+psql:tmp/tokens-prisma-local.sql:1648: NOTICE:  PASS: invalid batch does not approve/freeze
+psql:tmp/tokens-prisma-local.sql:1651: NOTICE:  PASS: batch queues personal invitations without exposing token
+psql:tmp/tokens-prisma-local.sql:1652: NOTICE:  PASS: lost batch response replays without duplicate invitation
+psql:tmp/tokens-prisma-local.sql:1653: NOTICE:  PASS: denied (22023)
+psql:tmp/tokens-prisma-local.sql:1654: NOTICE:  PASS: legacy individual workspace remains available
+psql:tmp/tokens-prisma-local.sql:1656: NOTICE:  PASS: batch replay creates exactly one application
+psql:tmp/tokens-prisma-local.sql:1657: NOTICE:  PASS: one human action approves complete common proof
+psql:tmp/tokens-prisma-local.sql:1663: NOTICE:  PASS: individual workspace includes legacy and own shared application only
+psql:tmp/tokens-prisma-local.sql:1664: NOTICE:  PASS: individual workspace cannot leak another candidate application
+psql:tmp/tokens-prisma-local.sql:1666: NOTICE:  PASS: late candidate receives exactly frozen common proof
+psql:tmp/tokens-prisma-local.sql:1667: NOTICE:  PASS: legacy history survives shared send
+psql:tmp/tokens-prisma-local.sql:1671: NOTICE:  PASS: shared proof preserves public portal v1
+psql:tmp/tokens-prisma-local.sql:1672: NOTICE:  PASS: shared public portal uses individual application identity
+psql:tmp/tokens-prisma-local.sql:1679: NOTICE:  PASS: reopening existing process preserves its exact proof
+psql:tmp/tokens-prisma-local.sql:1683: NOTICE:  PASS: new process preserves historical cycle
+psql:tmp/tokens-prisma-local.sql:1684: NOTICE:  PASS: new process does not copy candidates or human decisions
+psql:tmp/tokens-prisma-local.sql:1685: NOTICE:  PASS: denied (40001)
+psql:tmp/tokens-prisma-local.sql:1686: NOTICE:  PASS: historical process remains readable
+psql:tmp/tokens-prisma-local.sql:1688: NOTICE:  PASS: reuse copies proof only, never answers/invitations
+psql:tmp/tokens-prisma-local.sql:1694: NOTICE:  PASS: canonical bank version preserves its actual human approval
+psql:tmp/tokens-prisma-local.sql:1696: NOTICE:  PASS: edited bank creates new contextual copy requiring human review
+psql:tmp/tokens-prisma-local.sql:1698: NOTICE:  PASS: denied (42501)
+psql:tmp/tokens-prisma-local.sql:1700: NOTICE:  PASS: denied (42501)
+psql:tmp/tokens-prisma-local.sql:1701: NOTICE:  PASS: denied (42501)
+psql:tmp/tokens-prisma-local.sql:1702: NOTICE:  PASS: denied (42501)
+psql:tmp/tokens-prisma-local.sql:1703: NOTICE:  PASS: denied (22023)
+psql:tmp/tokens-prisma-local.sql:1705: NOTICE:  PASS: profiles preserved
+psql:tmp/tokens-prisma-local.sql:1706: NOTICE:  PASS: matching preserved
+psql:tmp/tokens-prisma-local.sql:1707: NOTICE:  PASS: positions preserved
+psql:tmp/tokens-prisma-local.sql:1713: NOTICE:  PASS: explicit person erasure removes own applications
+psql:tmp/tokens-prisma-local.sql:1713: NOTICE:  PASS: explicit erasure removes personal batch receipts
+psql:tmp/tokens-prisma-local.sql:1713: NOTICE:  PASS: erasure of participant preserves common test
+psql:tmp/tokens-prisma-local.sql:1732: NOTICE:  PASS: denied (40001)
+psql:tmp/tokens-prisma-local.sql:1732: NOTICE:  PASS: denied (42501)
+psql:tmp/tokens-prisma-local.sql:1732: NOTICE:  PASS: closed context rejects late generation without overwriting draft
+psql:tmp/tokens-prisma-local.sql:1732: NOTICE:  PASS: denied (22023)
+psql:tmp/tokens-prisma-local.sql:2455: NOTICE:  PASS: commercial schema deployed locally
+psql:tmp/tokens-prisma-local.sql:2465: NOTICE:  PASS: denied (42501)
+psql:tmp/tokens-prisma-local.sql:2468: NOTICE:  PASS: denied (42501)
+psql:tmp/tokens-prisma-local.sql:2470: NOTICE:  PASS: denied (42501)
+psql:tmp/tokens-prisma-local.sql:2473: NOTICE:  PASS: operational role sees balance and own history without financial catalog or internal cost
+psql:tmp/tokens-prisma-local.sql:2474: NOTICE:  PASS: denied (42501)
+psql:tmp/tokens-prisma-local.sql:2475: NOTICE:  PASS: denied (42501)
+psql:tmp/tokens-prisma-local.sql:2476: NOTICE:  PASS: denied (42501)
+psql:tmp/tokens-prisma-local.sql:2477: NOTICE:  PASS: denied (42501)
+psql:tmp/tokens-prisma-local.sql:2478: NOTICE:  PASS: denied (42501)
+psql:tmp/tokens-prisma-local.sql:2479: NOTICE:  PASS: denied (22023)
+psql:tmp/tokens-prisma-local.sql:2481: NOTICE:  PASS: commercial scale is large and quote freezes server tariff
+psql:tmp/tokens-prisma-local.sql:2482: NOTICE:  PASS: preview is free
+psql:tmp/tokens-prisma-local.sql:2484: NOTICE:  PASS: denied (42501)
+psql:tmp/tokens-prisma-local.sql:2485: NOTICE:  PASS: existing member synthesis permission preserved
+psql:tmp/tokens-prisma-local.sql:2489: NOTICE:  PASS: lost purchase-request response replays one order
+psql:tmp/tokens-prisma-local.sql:2490: NOTICE:  PASS: denied (42501)
+psql:tmp/tokens-prisma-local.sql:2491: NOTICE:  PASS: request alone does not release tokens
+psql:tmp/tokens-prisma-local.sql:2495: NOTICE:  PASS: commercial order preserves offered conditions
+psql:tmp/tokens-prisma-local.sql:2496: NOTICE:  PASS: denied (22023)
+psql:tmp/tokens-prisma-local.sql:2498: NOTICE:  PASS: denied (22023)
+psql:tmp/tokens-prisma-local.sql:2501: NOTICE:  PASS: verified manual release credits exactly once
+psql:tmp/tokens-prisma-local.sql:2502: NOTICE:  PASS: denied (22023)
+psql:tmp/tokens-prisma-local.sql:2505: NOTICE:  PASS: denied (40001)
+psql:tmp/tokens-prisma-local.sql:2508: NOTICE:  PASS: new franchise does not mutate current grant
+psql:tmp/tokens-prisma-local.sql:2513: NOTICE:  PASS: reservation freezes old rate and duplicate request does not reserve twice
+psql:tmp/tokens-prisma-local.sql:2514: NOTICE:  PASS: nearest-expiry lot consumed first
+psql:tmp/tokens-prisma-local.sql:2517: NOTICE:  PASS: settlement replay debits once
+psql:tmp/tokens-prisma-local.sql:2518: NOTICE:  PASS: denied (22023)
+psql:tmp/tokens-prisma-local.sql:2523: NOTICE:  PASS: failed delivery releases without debit
+psql:tmp/tokens-prisma-local.sql:2524: NOTICE:  PASS: failure releases available balance
+psql:tmp/tokens-prisma-local.sql:2525: NOTICE:  PASS: denied (42501)
+psql:tmp/tokens-prisma-local.sql:2527: NOTICE:  PASS: denied (22023)
+psql:tmp/tokens-prisma-local.sql:2531: NOTICE:  PASS: denied (42501)
+psql:tmp/tokens-prisma-local.sql:2537: NOTICE:  PASS: short month preserves original day 31
+psql:tmp/tokens-prisma-local.sql:2541: NOTICE:  PASS: next-cycle franchise and month-end renewal applied
+psql:tmp/tokens-prisma-local.sql:2542: NOTICE:  PASS: renewal once and no skipped-month backfill
+psql:tmp/tokens-prisma-local.sql:2545: NOTICE:  PASS: configured day applies after current cycle and preserves current lot
+psql:tmp/tokens-prisma-local.sql:2547: NOTICE:  PASS: transition period does not grant twice
+psql:tmp/tokens-prisma-local.sql:2553: NOTICE:  PASS: denied (22023)
+psql:tmp/tokens-prisma-local.sql:2558: NOTICE:  PASS: uncertain result stays visibly reserved
+psql:tmp/tokens-prisma-local.sql:2560: NOTICE:  PASS: denied (22023)
+psql:tmp/tokens-prisma-local.sql:2563: NOTICE:  PASS: verified reconciliation releases uncertain balance
+psql:tmp/tokens-prisma-local.sql:2564: NOTICE:  PASS: commercial actions preserve profiles
+psql:tmp/tokens-prisma-local.sql:2565: NOTICE:  PASS: commercial actions preserve matching
+psql:tmp/tokens-prisma-local.sql:2566: NOTICE:  PASS: commercial actions preserve position states
+psql:tmp/tokens-prisma-local.sql:2572: NOTICE:  PASS: denied (42501)
+psql:tmp/tokens-prisma-local.sql:2573: NOTICE:  PASS: missing commercial quote rolls back generation claim
+psql:tmp/tokens-prisma-local.sql:2580: NOTICE:  PASS: valid assessment delivery debits only delivered chunk once
+psql:tmp/tokens-prisma-local.sql:2581: NOTICE:  PASS: tokenized generation preserves human review and five alternatives
+psql:tmp/tokens-prisma-local.sql:2586: NOTICE:  PASS: failed assessment chunk releases its reservation
+psql:tmp/tokens-prisma-local.sql:2587: NOTICE:  PASS: partitioned quote cannot exceed confirmed quantity
+psql:tmp/tokens-prisma-local.sql:2598: NOTICE:  PASS: Parser delivers and bills actor bound to approved quote
+psql:tmp/tokens-prisma-local.sql:2600: NOTICE:  PASS: denied (22023)
+psql:tmp/tokens-prisma-local.sql:2604: NOTICE:  PASS: Parser cache has no commercial debit or reservation
+psql:tmp/tokens-prisma-local.sql:2605: NOTICE:  PASS: denied (42501)
+psql:tmp/tokens-prisma-local.sql:2612: NOTICE:  PASS: publishing profile does not start billable synthesis
+psql:tmp/tokens-prisma-local.sql:2614: NOTICE:  PASS: consulting historical facts does not start synthesis
+psql:tmp/tokens-prisma-local.sql:2615: NOTICE:  PASS: denied (42501)
+psql:tmp/tokens-prisma-local.sql:2616: NOTICE:  PASS: missing synthesis quote rolls back enqueue
+psql:tmp/tokens-prisma-local.sql:2620: NOTICE:  PASS: repeat synthesis request shares one reservation
+psql:tmp/tokens-prisma-local.sql:2640: NOTICE:  PASS: denied (40001)
+psql:tmp/tokens-prisma-local.sql:2640: NOTICE:  PASS: valid synthesis persists and debits exactly one operation
+psql:tmp/tokens-prisma-local.sql:2640: NOTICE:  PASS: persisted synthesis remains readable
+psql:tmp/tokens-prisma-local.sql:2640: NOTICE:  PASS: stored synthesis reuse is free
+psql:tmp/tokens-prisma-local.sql:2640: NOTICE:  PASS: new factual basis waits for explicit quoted action
+psql:tmp/tokens-prisma-local.sql:2640: NOTICE:  PASS: invalid synthesis releases credit while preserving previous result
+psql:tmp/tokens-prisma-local.sql:2640: NOTICE:  PASS: failed new synthesis preserves prior analysis
+psql:tmp/tokens-prisma-local.sql:2642: NOTICE:  PASS: operational commercial history excludes other actors
+psql:tmp/tokens-prisma-local.sql:2644: NOTICE:  PASS: only platform response includes technical cost aggregate
+psql:tmp/tokens-prisma-local.sql:2647: NOTICE:  PASS: person erasure preserves existing cascade across derived binding

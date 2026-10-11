@@ -23,7 +23,7 @@ async function dispatch(id:string,org:string){
 async function generate(user:any,body:Record<string,any>){
  const org=text(body.organizationId),id=text(body.assessmentId),requestId=text(body.requestId);
  if(!uuid.test(org)||!uuid.test(id)||!uuid.test(requestId))throw Error("PA_REQUEST_INVALID");
- const generation=await rpc(user,"position_assessment_generation_request",{p_organization_id:org,p_assessment_id:id,p_request_id:requestId,p_distribution:body.distribution});
+ const generation=await rpc(user,"position_assessment_generation_request",{p_organization_id:org,p_assessment_id:id,p_request_id:requestId,p_distribution:body.distribution,p_token_quote_id:body.tokenQuoteId??null});
  const fingerprint=await hash(JSON.stringify({requirements:generation.requirements,distribution:generation.distribution,revision:generation.revision}));
  const logical=await rpc(server,"record_ai_history_v1",{p_action:"open_request",p_data:{scope:"organization",organizationId:org,functionName:"position_assessment_items",operationId:requestId,actorId:generation.actor_id,sourceVersion:"pa-generation-1.0.0",inputFingerprint:fingerprint,idempotencyKey:await hash(requestId)}});
  const attemptId=requestId;

@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 440
-source_manifest_sha256: c5aa0459c623871473aa8f6f4049a7c7be30e21e87bdf2c79e406e5bb1181b21
+documentation_source_count: 446
+source_manifest_sha256: c62985c71ed10142121efafbde8835011a7c9b0f631c8799f62bc971bc7d9f01
 -->
 
 # Tudo sobre o Prisma
@@ -2457,11 +2457,15 @@ Versão: 1.0.0. Decisão do Product Owner em 2026-09-20: classificar Hard/Soft c
 prisma_context_id: ai-reference
 owner: ai-quality
 status: current
-version: 2.2.0
+version: 2.3.0
 last_verified: 2026-09-14
 ---
 
 # Referência de IA do Prisma
+
+## Tokens Prisma v2.4.0
+
+Unidade comercial própria, sem equivalência com tokens técnicos. Questão2.000, Parser10.000, síntese5.000; custos técnicos separados e não expostos ao cliente. Previsão discreta antes da ação, reserva e débito por entrega válida; cache/reuso/revisão/envio gratuitos. Nova síntese exige ação explícita com cotação, publicação/consulta não enfileira IA paga; resultados e trabalhos anteriores preservados sem cobrança retroativa. Não altera prompt/modelo nem matching/Knowledge. Ver ADR-083 e docs/product/prisma-tokens.md; estado operacional/evidência no PRISMA_CURRENT_STATE.
 
 ## Estado
 
@@ -2626,11 +2630,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.70.0
+version: 2.71.0
 last_verified: 2026-10-10
 ---
 
 # Estado atual do Prisma
+
+## Tokens Prisma — v2.4.0
+
+Implementação autorizada em10/10/2026, contrato prisma-tokens-1.0.0/ADR-083. Créditos comerciais por empresa, franquia inicial1.000.000/mês sem acumulação; questão2.000, Parser10.000, síntese5.000. Pacotes1m/R$49,3m/R$129,10m/R$349, validade12meses, configuráveis. Cotação discreta/versionada10min, reserva FEFO antes de execução, débito transacional por entrega válida, falha sem entrega libera e resultado incerto exige conciliação motivada. Owner/admin acompanham saldo/renovação/histórico/catálogo e solicitam; super configura franquia/ciclo/versões, bonifica/restitui e confirma pagamento verificado para liberar uma única vez. Operacional vê saldo e próprio consumo sem compra/custo técnico. Síntese nova depende de invocação explícita; publicar/consultar/invalidação não cria IA paga, análises anteriores e jobs pré-movimento preservados sem cobrança retroativa. Banco/cache/reuso/salvar/revisar/enviar gratuitos; matching/Knowledge fora da cobrança. Nenhum checkout/compra automática. Acordo/mapa/execução docs/qa/tokens-prisma-v240.md; evidências e limites no AoT. Publicação ainda pendente até verificação operacional.
 
 ## Avaliação com seções guiadas 4A — v2.3.5
 
@@ -3301,11 +3309,15 @@ Publicação comprovada em 10/10/2026: SHA funcional `07ab17334d7c8a499d989cb313
 prisma_context_id: technical-reference
 owner: engineering-security
 status: current
-version: 1.13.0
+version: 1.14.0
 last_verified: 2026-09-16
 ---
 
 # Referência técnica do Prisma
+
+## Créditos comerciais de IA
+
+Contrato prisma-tokens-1.0.0, ADR-083. Carteira tenant em schema private, cotações/reservas/lotes/ledger próprios, RLS e RPC com papel ativo; reserva serializada por organização e liquidação junto da entrega autorizada. Ledger técnico ADR-080 separado. Banco precede Edge position-assessment, gateway/Parser e web. Writers antigos sem cotação não iniciam operação paga. Arquitetura e segurança em docs/decisions/ADR-083-prisma-tokens.md e docs/security/prisma-tokens.md; operação em docs/operations/prisma-tokens.md.
 
 ## Transporte Paddle hospedado temporário
 
@@ -3383,11 +3395,15 @@ Telemetria básica e eventos operacionais de ingestão/revisão existem. Auditor
 prisma_context_id: product-wiki
 owner: product
 status: current
-version: 2.1.1
+version: 2.2.0
 last_verified: 2026-09-18
 ---
 
 # Prisma Wiki
+
+## Tokens Prisma v2.4.0
+
+Administração da empresa consulta saldo/consumo/histórico/renovação/validade e solicita pacotes; super usuário configura preços/franquia/ciclo, acompanha pedidos, registra pagamento verificado e libera uma única vez. Franquia inicial1.000.000 mensal não acumulável, adicionais1m/R$49,3m/R$129,10m/R$349 válidos12meses. Operacional consulta saldo e próprio consumo; informação clara e discreta nas ações de IA. Não há compra automática. Contrato prisma-tokens-1.0.0, ADR-083 e docs/product/prisma-tokens.md. Escala grande representa créditos comerciais, sem esconder quantidade ou tabela.
 
 ## M7.1 — Taxonomia explicável de Posições
 
@@ -4480,7 +4496,7 @@ Responses API, schema estrito, `store:false`, modelo reutilizado `gpt-5.6-luna`,
 
 Benchmark inicial, três chamadas sintéticas: currículo detalhado/pobre/injeção, 7–14s, 2933 tokens de entrada/2956 de saída no total. Conferência qualitativa: atividades/Excel ancorados; nenhum preenchimento por cargo no caso pobre; injeção não produziu gerente, verificação ou ganho de80%. Amostra pequena não estabelece qualidade universal, fairness ou comportamento de Pessoa real. Valores financeiros seguem a conta/projeto existente; não foi criada franquia paralela. Mudança de prompt/modelo exige reavaliar antes de ativar.
 
-Publicação enfileira; worker independente processa fora da transação, sem bloquear publicação humana. Histórico sem análise é solicitado na primeira abertura, sem backfill em massa. Chave tenant/Perfil/hash das fontes/contrato/prompt/modelo guarda um resultado aceito. Visita, aba e rascunho não chamam IA. Evidência nova/invalidação enfileira nova base para Perfil já analisado; expiração é percebida na consulta. Base anterior fica identificada durante atualização; resultado que chega com base alterada é obsoleto. Histórico não é sobrescrito. Contato não muda o hash.
+Desde 2.4.0 (ADR-083), nova geração exige ação explícita com cotação de Tokens Prisma. Publicação e abertura somente consultam/preservam fatos e análises; não enfileiram IA paga. Worker independente processa somente trabalho já solicitado, fora da transação, sem bloquear publicação humana. Não há backfill em massa. Chave tenant/Perfil/hash das fontes/contrato/prompt/modelo guarda um resultado aceito. Visita, aba e rascunho não chamam IA. Evidência nova/invalidação identifica nova base para Perfil já analisado, aguardando ação explícita; expiração é percebida na consulta. Base anterior fica identificada durante atualização; resultado que chega com base alterada é obsoleto. Histórico não é sobrescrito. Contato não muda o hash.
 
 Resultados/jobs/tentativas são tabelas distintas, com RLS, RPCs autenticadas por tenant e credencial restrita de worker. Lease3min, SKIP LOCKED, três tentativas por base, retry espaçado só para indisponibilidade/rate limit. Sem fonte suficiente: zero IA. Exclusão da Pessoa/Perfil remove registros derivados por FK cascade. Não se promete cobrança externa exatamente uma vez diante de pane/retry.
 
@@ -10064,6 +10080,30 @@ Prova distinta por Pessoa impediria equivalência do instrumento e repetiria cus
 
 ---
 
+## Source: `docs/decisions/ADR-083-prisma-tokens.md`
+
+# ADR-083 — Créditos comerciais Tokens Prisma
+
+Status: aceito por Bruno em 10/10/2026; Agreement/Execution `docs/qa/tokens-prisma-v240.md` v1.0.0, produto 2.4.0. Classes D/E.
+
+## Decisão e alternativas
+
+Reutilizar PostgreSQL/Supabase, autorização por empresa, ledger técnico ADR-080, workers e componentes Prisma. Acrescentar uma camada comercial privada de créditos por empresa, sem equivalência com tokens técnicos do fornecedor. Escala comercial em milhões com tarifas inteiras por operação. A proposta aprovada dispensa checkout: o administrador solicita e o super usuário confirma pagamento verificado antes de liberar.
+
+Uma carteira externa de pagamentos introduziria integração, custo e autoridade não aprovados. Reutilizar o ledger técnico diretamente confundiria gasto do fornecedor com preço comercial e não ofereceria reserva transacional por entrega. A camada própria se justifica por essas regras específicas; nenhuma biblioteca, fornecedor ou serviço novo.
+
+## Contrato e consequências
+
+Contrato `prisma-tokens-1.0.0`, cotação `prisma-token-quote-1.0.0`. Tabelas no schema private com RLS, sem DML/EXECUTE direto para clientes. RPC pública autentica usuário ativo, papel e empresa. Reserva e liquidação serializam pela organização, com chave única de operação e alocação por lote/validade. Franquia mensal sem acumulação, aniversário ancorado, sem compensação de meses não utilizados; créditos adicionais vencem individualmente. Saldo disponível subtrai reservas. Cotação congela tarifa por 10 minutos; oferta solicitada congela condições por sete dias.
+
+Os escritores existentes permanecem autoridades da entrega. Avaliação debita questões válidas persistidas em lotes; Parser debita resultado válido (inclusive parcial legítimo); síntese debita análise aceita. Falha confirmada libera, retorno incerto conserva reserva e exige conciliação motivada após 15 minutos. Estados terminais divergentes falham. Custos técnicos continuam separados e desconhecidos continuam desconhecidos.
+
+Publicação/consulta/invalidação do Perfil deixam de criar novas sínteses automaticamente: a entrada de geração exige ação explícita cotada. Análises e trabalhos anteriores permanecem válidos e legíveis; trabalhos anteriores sem vínculo comercial terminam sem cobrança retroativa. Alteração de fonte preserva análise anterior e aguarda solicitação. Claims/retries transitórios de um trabalho explicitamente solicitado preservam a mesma reserva. Pane que termine trabalho fora da completion RPC pode manter reserva para conciliação; nunca libera silenciosamente uma entrega não verificada.
+
+Rollback de aplicação deve conservar schema, ledger, pedidos e reservas. Clientes antigos sem cotação continuam consultando/reutilizando, mas nova execução paga é recusada. Não reverter para escritores sem reserva nem apagar a migration para recuperar disponibilidade. Publicar banco antes de Edge/gateway/Parser/web; imagens anteriores preservadas para recuperação com a proteção comercial ainda ativa.
+
+---
+
 ## Source: `docs/decisions/README.md`
 
 # Architectural Decision Records
@@ -10950,6 +10990,20 @@ O `pg_dump` fornece snapshot consistente do banco, mas a cópia de arquivos ocor
 
 ---
 
+## Source: `docs/operations/prisma-tokens.md`
+
+# Operação de Tokens Prisma
+
+2.4.0 / ADR-083. Migrations prisma_tokens e prisma_tokens_consumers antecedem Edge position-assessment, gateway, Parser e web. Synthesis reutiliza RPCs compatíveis sem nova imagem. Ledger técnico separado; nenhum prompt/modelo alterado. Não usar db push geral ou replay de migrations históricas.
+
+Renovação/expiração são calculadas idempotentemente no servidor ao consultar/utilizar, sem cron de navegador. Somente período atual recebe franquia, sem compensar meses não visitados. Suspensão bloqueia reservas novas e preserva liquidação anterior. Reserva sobre lote vencido continua retida até conclusão/conciliação, sem voltar ao disponível. Resultado incerto exige evidência de entrega ou ausência de entrega, razão e super usuário após15min. Falha de worker encerrada fora da completion RPC pode deixar reserva para conciliação, nunca libera silenciosamente. Custo técnico do fornecedor pode existir mesmo sem entrega cobrável.
+
+Pedido assistido: solicitação, encaminhamento, verificação real do pagamento e referência para liberação. Sem fatura importada, cobrança automática ou dados comerciais produtivos fictícios nos testes. Conservação de schema/ledger/pedidos/reservas no rollback; imagens anteriores para recuperação, clientes antigos sem cotação recusados em nova geração. Publicar consumidor compatível, nunca reabrir writers sem proteção.
+
+A primeira versão retorna histórico completo com paginação visual. Carga em grandes volumes não foi medida; medir antes de escalar. Testes usam PostgreSQL17 local descartável e UI/transporte sintéticos sem IA paga. Há único Supabase remoto produtivo, sem QA separado. Smoke verifica SHA/versão, grants/RLS, fingerprint, funções, assets/health/rollback e preservação de Synthesis/mail/Paddle/Traefik. Evidence e limites no AoT.
+
+---
+
 ## Source: `docs/operations/process-assessment-v232.md`
 
 # Operação seletiva da2.3.2
@@ -11018,6 +11072,8 @@ Synthesis recebe ASSESSMENT_DISPATCHER_SECRET distinto para drenar somente convi
 ## Objetivo
 
 Executar somente validações e publicações exigidas pelo diff. A unidade de release é um SHA validado; documentação, banco, Edge Functions, web e Parser hospedado são destinos independentes.
+
+Dispatcher1.0.6 também reconhece `services/paddle-gateway/` e `deploy/release-paddle-gateway.sh` como destino independente `paddleGateway`, com testes de transporte e rollback próprio. Recria somente gateway; não recria Paddle, Traefik, mail ou Synthesis por proximidade. No movimento Tokens Prisma, banco antecede Edge, gateway/Parser e web.
 
 Dispatcher1.0.5 reconhece `services/mail-forwarder/`, `deploy/mail-forwarder.compose.yml` e `deploy/release-mail-forwarder.sh` como destino independente `mailForwarder`. Esses arquivos não publicam web, Parser, Synthesis, banco ou funções. Testes e auditoria de dependências usam o pacote isolado. A publicação exige config privada já instalada e SHA validado; recebimento/DNS só após saúde do serviço. Recibo diferencia destino pendente/publicado.
 
@@ -11900,6 +11956,24 @@ Validar se uma base de currículos pode ser transformada em conhecimento profiss
 `RISK: EXTRACTION_NOT_VALIDATED_AGAINST_REAL_CLIENT_DATA`
 
 A amostra atual é sintética e representativa. Ela permite comprovar a mecânica do Movimento 0, mas não congela o schema de perfil nem demonstra qualidade para dados reais de cliente.
+
+---
+
+## Source: `docs/product/prisma-tokens.md`
+
+# Tokens Prisma — gestão de uso de IA
+
+Produto 2.4.0; contrato `prisma-tokens-1.0.0`, ADR-083. Tokens Prisma são créditos comerciais próprios. Não correspondem a tokens de entrada/saída da OpenAI ou Anthropic.
+
+Cada empresa começa com 1.000.000 tokens mensais, sem acumulação. Questão gerada custa 2.000; importação por Parser IA custa 10.000; síntese profissional custa 5.000. Cache, banco aprovado, consulta, revisão, gravação e envio não consomem novamente. O consumo aparece como texto secundário antes da ação. Reserva reduz o disponível; entrega válida confirma o débito, falha sem entrega libera. Saldo baixo gera aviso discreto; insuficiência preserva rascunho e ações manuais.
+
+Em Administração → Tokens Prisma (`/tokens`), owner/admin acompanham saldo por origem, reservas, consumo, renovação, validade, tabela de consumo, histórico por mês/função/usuário e solicitações. Recruiter/member veem saldo compartilhado e próprio consumo, sem catálogo financeiro nem pedidos; member conserva autorização de síntese, sem ganhar acesso ao Parser ou gerador de questões.
+
+Pacotes iniciais: Complemento 1.000.000 / R$49; Expansão 3.000.000 / R$129; Volume 10.000.000 / R$349. Validade 12 meses após liberação. São condições comerciais aprovadas e configuráveis, sem alegação de margem financeira validada. Solicitar não cobra nem libera saldo. Super usuário encaminha para pagamento, verifica recebimento e informa referência para liberar uma única vez. Cancelamento/recusa exigem motivo. Oferta de pedido solicitado vale sete dias; o preço permanece congelado ao encaminhar para pagamento.
+
+Em Plataforma → Gestão de Tokens (`/platform-tokens`), super usuário administra Pacotes e preços, Empresas, Solicitações, Consumo e movimentações. Mudanças de preço/tarifa criam versões com vigência; cotação válida conserva tarifa anterior. Franquia e novo dia do ciclo são agendados para a próxima renovação; o ciclo de transição termina na primeira ocorrência posterior do dia escolhido, podendo ser mais curto, e meses curtos usam último dia sem perder a âncora. Suspensão bloqueia novas reservas, preservando entrega pendente, saldo e histórico. Bonificações/restituições são lançamentos motivados, sem edição direta de saldo. Reservas incertas são conciliadas com evidência e motivo, nunca disparando IA.
+
+Não há compra automática, checkout, e-mail de cobrança ou cobrança retroativa. Matching, Knowledge e serviços internos não foram incluídos nas tarifas deste movimento.
 
 ---
 
@@ -22379,6 +22453,78 @@ A verificar. Referenciar a decisão do Product Owner ou confirmar ausência apó
 
 ---
 
+## Source: `docs/qa/aot-tokens-prisma-v240.md`
+
+# AoT — Tokens Prisma v2.4.0
+
+Contrato: `docs/qa/tokens-prisma-v240.md` Agreement/Execution v1.0.0, aprovação explícita de Bruno, incluindo escala ×1.000 e versão final2.4.0. Baseline f3fa07bed260f3bdac87f6faf10cf1ce6d90bea5. Risco D/E; ADR-083. Este fechamento separa fixtures de rollout produtivo.
+
+## Matriz de Acordos
+
+| ID | Implementação | Teste / evidência | Status | Limite |
+| --- | --- | --- | --- | --- |
+| D-01 | Conta tenant, franquia1m, tipos/formatadores | SQL71novos, browser50 | PASS | Unidade comercial, sem equivalência técnica |
+| D-02 | Catálogo3pacotes e tarifas versionadas, cotação/pedido congelados | SQL catálogo/pricefreeze; cadastro browser | PASS | Oferta configurável, margem não aferida |
+| D-03 | Ensure privado, aniversário/mês curto, período atual apenas, pending quota/day | SQL ciclos/skipmonth/dia31/transição; disputa renovação | PASS | Consulta calcula reposição, sem backfill |
+| D-04 | Modal avaliação, hints de upload/recovery/documento, síntese explícita; wrappers3consumidores | SQL3consumidores, Node transporte/cache/Synthesis, Deno5, browser avaliação80/síntese8 | PASS | Sem provider pago; hints/readiness não executam IA |
+| D-05 | Locks org→objeto, FEFO, reserva/débito/release/reconcile | SQL negativo/falha/entrega/quotes/15min;5disputas | PASS | Worker que encerra fora da completion pode exigir conciliação |
+| D-06 | /tokens, saldo/origens/validade/tarifas/filters/tabela desktop/lista mobile | SQL papel/ownhistory; browser4viewports | PASS | Grandes volumes históricos não aferidos |
+| D-07 | Pedido assistido e estados; pagamento explícito com referência | SQL state/pay/replay; browser bloqueio sem confirmação e liberação sintética | PASS | Nenhum pedido/pagamento produtivo de teste |
+| D-08 | /platform-tokens,4abas, versões/franquia/ciclo/concessões/conciliação/custos | SQL super-only; browser cadastro/configuração/payment; técnico desconhecido explícito | PASS | Super registra verificação comercial real |
+| D-09 | Warning<20%, quote10min, loading/drafts/fail/retry/idempotency | SQL insuficiência/expiry; browser refresh preserva conteúdo, erro conserva modal, mesma chave; quoteService dedup/binding | PASS | Resposta incerta nunca vira zero |
+| D-UX-01/02 | Shell, saldo dominante, métricas secundárias, funções/como funciona/histórico, modal discreto/mobile | visual/reference-state-1513.png,company390 e token-confirm390; comparação abaixo | PASS | Adaptações de escala/ênfase/pacote autorizadas |
+| D-10 | Ownerdocs/ADR/contextos/testes, publicação seletiva2.4.0 | Publicação e sincronização pendentes | PARTIAL | Atualizar somente após rollout/smoke |
+
+## Proibições verificadas
+
+| ID | Prova negativa | Evidência | Status |
+| --- | --- | --- | --- |
+| P-01 | Consultar/publicar Perfil não enfileira; Score/Perfil/Posição preservados; questões5alternativas/revisão humana; navegar não gera | SQL79baseline+71novo, Node assessment/synthesis, browser80, Deno | PASS |
+| P-02 | Anon/inativo/role/tenant/DML/quote/lease/payment negados; não backfill; payload minimizado/segredos sanitizados | SQL/concorrência/transporte; hash produtivo pendente | PASS | |
+| P-03 | Nome próprio, tabela/quantidade acessível, escala sem alegar token fornecedor | UI/ownerdocs | PASS |
+
+## Mapa de Impacto e Preservação final
+
+| Área | Relação | Baseline e regressão | Evidência / status |
+| --- | --- | --- | --- |
+| Créditos/catálogo/RPC | direct | Nova camada privada;71SQLnovos,5disputas, quoteService | PASS local |
+| Assessment/geração/modal/Edge/portal | direct | v2.3.5;79SQLbaseline,28Nodeassessment,5Deno,80browser | PASS sintético |
+| Parser/cache/transporte/todas entradas | direct | Cache e original preservados; worker/recovery/hosted/gateway/benchmark | PASS sintético, runtime pendente |
+| Synthesis/queue/request/complete | direct | Modelo/perguntas/fontes intactos;40Node+SQLcompletions/publicação/consulta/lease/retry/erasure | PASS sintético, imagem preservada a conferir |
+| Shell/navigation/loading | critical_transversal | Tipos/build,9Nodeestado/navegação/coverage, browser4larguras | PASS sintético |
+| Ledger técnico/matching/Knowledge | plausible_indirect | Private history reutilizado, meta somente, matching/global sem inclusão comercial | SQL/server review e Nodehistory PASS |
+| Convites/e-mail/candidatos | plausible_indirect | Portal1,5alternativas/outbox/lease preservados | SQLbaseline,assessmentNode/Deno/browser PASS |
+| Gateway | direct (reclassificado) | Quote precisa atravessar proxy; publicação isolada adicionada | Gateway/tooling PASS |
+| Paddle/mail/Traefik | no_impact_identified | Sem alteração de arquivo/config e publicação--no-deps; IDs/imagens/restarts antes/depois | Baseline registrado; conferência final pendente |
+| Dados históricos/trabalho alheio | critical_transversal | Migration aditiva/sem backfill; root untracked preservados; hashes agregados produtivos | Local PASS; remoto pendente |
+| Release/versão/contexto | direct |2.4.0, plano SHA, checks próprios, Context Pack | Local PASS; rollout pendente |
+
+Descoberta principal: síntese anteriormente enfileirava durante publicação/consulta. Guard novo evita execução paga sem ação explícita. Member conserva direito de síntese, sem ampliar gerador/Parser. Cotação de síntese ligada à versão exibida pelo adapter; previews concorrentes compartilhados e hints sincronizados. Transporte gateway foi reclassificado antes de publicar. Uma análise anterior continua visível enquanto nova base aguarda solicitação; ação explícita de gerar/retry e cotação acessíveis também nesse estado (8checks browser). Nenhum serviço novo, lib/provider/modelo novo ou checkout.
+
+## Fora de escopo
+
+F-01 preservado: diff não inclui checkout/cobrança automática/e-mail novo/mensalidade SaaS/matching/Knowledge/infra nova. PASS.
+
+## Fidelidade visual
+
+Referências originais são inspiração de conteúdo, normativas de topologia; estão em visual/reference-01-administracao.png/02-avaliacao.png/03-mobile.png. Screenshot financeiro anexado é contraexemplo do problema. Dados ilustrativos, sem autoridade de pagamento.
+
+Comparação mesma viewport1513×1033 e estado: saldo5.800×1.000, plano3.800×1.000, adicionais2.000×1.000, consumo1.200×1.000, franquia5.000×1.000, renovação01/11; funções650/350/200×1.000. Histórico preserva40/10/0×1.000 com linhas anteriores que explicam o agregado, sem dados reais. Render visual/reference-state-1513.png. Saldo à esquerda dominante, métricas secundárias à direita, funções/como funciona lado a lado, filtros no cabeçalho/tabela abaixo. Em390/320, saldo completo e métricas2col com títulos completos, cards/filtros empilhados e histórico em lista; sem overflow global. Referência mobile transformada ao shell atual. Confirmação avaliação80checks e token-confirm1448/390/320: quantidade/déficit, consumo em texto secundário, ação abaixo, sem dinheiro.
+
+Adaptações autorizadas: escala×1.000, consumo menos destacado, Comprar→Solicitar pacote, shell/acessibilidade real, catálogo/pedidos/validade abaixo do histórico. Indicador geral do plano suprimido para reduzir ênfase conforme PO; barras por função conservadas. Sem desvio material não aprovado.
+
+## Validação local
+
+150SQLPASS (79históricos+71comerciais),5disputas PostgreSQL17 descartável (DB própria removida), Node dirigidos143+9+10+5=167PASS,5DenoPASS,50browserTokens+80browseravaliação+8browserSíntesePASS. Types raiz/web/Parser, builds raiz/web, lint, foundation, Context Pack/ledger PASS. Ledger histórico divergente mantém dbPushAllowed=false. Dispatcher é roteador; pnpm test integral sugerido pelo plano substituído pela regressão dirigida conforme AGENTS§10, sem executar validate integral local. CI remoto existente será acompanhado.
+
+Avisos conhecidos: chunks web grandes/import estático+dínamico e PDFfontwarnings de fixtures. Não são regressões deste movimento. Sem chamadas pagas, sem perfil/pagamento/decisão real fictícia. Sem QA remoto separado; provas sensíveis executadas no local descartável antes da produção autorizada.
+
+## Git / produção / conclusão
+
+Worktree codex/tokens-prisma-v240 isolado. Publicação ainda não concluída; D-10 permanece PARTIAL até evidência operacional. Relatório final deverá registrar SHA/CI/fingerprints/Edge/runtimes/rollback/smoke/sincronização e limites reais autenticados.
+
+---
+
 ## Source: `docs/qa/aot-trajectory-evidence-recovery.md`
 
 # AoT — recuperação da evidência semântica
@@ -28521,6 +28667,66 @@ Movimentos materiais usam o [Contrato de Acordos](agreement-contract-template.md
 
 ---
 
+## Source: `docs/qa/tokens-prisma-v240.md`
+
+# V2M4 — Tokens Prisma v2.4.0
+Contrato/Execution v1.0.0, congelado em 10/10/2026 pela aprovação explícita do PO nesta conversa. Supersede a escala 1.000/2/10/5 da proposta: multiplicação por 1.000, sem alterar preços ou capacidade relativa. Supersede destaque visual de consumo e Compra direta: informação discreta e Solicitar pacote. Versão final corrigida pelo PO: 2.4.0.
+
+## Agreement
+- D-01: unidade própria Tokens Prisma, valores inteiros grandes; franquia inicial 1.000.000 mensal por empresa. Não prometer equivalência com tokens técnicos.
+- D-02: catálogo Complemento1.000.000/R$49, Expansão3.000.000/R$129, Volume10.000.000/R$349; validade adicional12meses. Super usuário cadastra novas versões de pacotes/preços e consumo; preço vigente e condições congeladas no pedido.
+- D-03: reposição idempotente por ciclo mensal, não acumulável; próximos ciclos usam a franquia configurada. Alteração mensal aplica só no próximo ciclo; concessões imediatas separadas/motivadas. Primeiro ciclo começa na ativação; aniversário mensal com mês curto preserva âncora. Reposição calculada pelo servidor quando consultar/utilizar; nunca exige clique humano de recarga.
+- D-04: consumo inicial questão2.000/unidade, Parser10.000/operação, síntese5.000/operação. Serviços internos, matching e Knowledge não entram automaticamente. Banco/cache/reuso sem chamada externa, salvar/revisar/enviar não debitam. Todas as entradas dessas três funções devem apresentar consumo antes de executar.
+- D-05: saldo compartilhado/tenant, reserva transacional antes de IA, utilização por vencimento mais próximo, débito após entrega válida e não duplicado. Falha sem entrega libera; entrega parcial de lotes de avaliação debita somente lotes efetivamente entregues; resultado parcial legítimo do Parser segue seu contrato e vale uma operação. Retorno incerto mantém reserva para conciliação, nunca presume zero. Super usuário pode conciliar com motivo/evidência, sem disparar IA.
+- D-06: administração da empresa consulta saldo/origens/consumo/período/renovação/vencimentos, histórico filtrado por função/usuário/período, tabela de consumo, catálogo e solicitações. Usuário operacional vê saldo/cotação e próprio histórico, sem preços de compra/consumo alheio.
+- D-07: solicitações Solicitado -> Aguardando pagamento -> Liberado; alternativas Cancelado/Recusado com motivo. Apenas super usuário confirma pagamento/liberação; registro obrigatório, único, sem pagamento/decisão fictícios. Catálogo/condições explícitos antes de solicitar; sem compra automática.
+- D-08: super usuário tem abas Pacotes e preços, Empresas, Solicitações, Consumo e movimentações; cadastra franquia/ciclo por empresa, versões de tarifas e pacotes; bonificação/restituição motivadas com histórico, sem editar saldo diretamente. Custos técnicos separados, estimados/desconhecidos explícitos.
+- D-09: aviso discreto abaixo20% e orientação de insuficiência; preservar rascunho e fluxo manual. Loading até conclusão/erro/cancelamento; desconhecido não vira zero. Cotações versionadas/expiráveis não aumentam silenciosamente.
+- D-UX-01: referência administrativa aprovada01-administracao, saldo dominante/origens, resumo mensal, funções, histórico e ações no cabeçalho; shell existente. Ajuste autorizado: escala grande, menor ênfase no consumo.
+- D-UX-02: avaliação mantém modal/quantidade/revisão; consumo em texto secundário simples junto da ação, sem caixa gigante ou dinheiro; mobile empilha cards/histórico em lista e confirmação adaptável. Fundo ilustrativo não autoriza redesenhar avaliação.
+- D-10: documentação owner, ADR comercial, Context Pack, testes dirigidos local descartável/negativos/concorrência/browser, main/produção/smoke/sincronização v2.4.0.
+- P-01: não alterar Score/Perfil/Posição/decisões/revisão/exatamente5alternativas; não disparar IA pela navegação/consulta de consumo ou por loading.
+- P-02: não confiar em empresa/crédito/custo/autor/estado do cliente; não cruzar tenants, expor segredos ou custos internos ao cliente; não apagar histórico, fazer backfill/cobrar uso passado, fabricar pagamento ou publicar Perfil.
+- P-03: não vender Tokens Prisma como tokens OpenAI/Anthropic; não ocultar tabela/quantidade para dificultar compreensão. Escala muda representação, não transparência.
+- F-01: gateway de pagamentos/checkout automático, e-mail externo de cobrança, nova mensalidade SaaS, migração de outros consumidores para cobrança, infraestrutura nova, alterações de matching/Knowledge.
+- A-01: reutilizar Postgres/Supabase e UI/ledger atuais; detalhes de schema/RPC/índices/locks, política de expiração de cotação10min e validade da oferta solicitada7dias, implementação segura de conciliação e layout responsivo. Sem biblioteca nova.
+- Q: nenhuma decisão material pendente para escopo aprovado. Preços iniciais são configuráveis e aprovação é autorização para oferta, não certificação de margem.
+- CA-01/02/03: testes de escala, catálogo/versionamento/pedido congelado, ciclos/mês curto/franquia seguinte/expiração/idempotência, UI real.
+- CA-04/05: provas por consumidor, cache/validação/falha/entrega, rejeição de saldo/quote/tenant/replay, disputas simultâneas e conciliação.
+- CA-06/07/08/09: negativos de papel/empresa/anon e DML, cadastro/solicitar/pagar/liberar/motivos/filtros/loading/falha em browser; nenhuma escrita de pedido comercial na produção durante testes.
+- CA-UX: comparação desktop1448/mobile390 e320 com estrutura de referência, escala explicitamente atualizada por PO; contraste/teclado/overflow e confirmação discreta.
+- CA-10: planos seletivos, SHA/CI/migrations/serviços/versão/rollback/smoke, AoT separa runtime de fixtures.
+
+## Mapa de impacto inicial GOV-01
+Baseline: main f3fa07bed260f3bdac87f6faf10cf1ce6d90bea5, v2.3.5. Supabase ioldpnqqvobprjiontre verificado ACTIVE_HEALTHY; único remoto produção, sem QA remoto. Worktree isolado codex/tokens-prisma-v240 evita cópias/untracked alheios interferindo em typecheck.
+
+| Área | Relação | Capacidade protegida / prova proporcional |
+| --- | --- | --- |
+| Novo saldo/catálogo/RPC/permissões | direct | localSQL+negativos+concorrência; sem cobrança retroativa |
+| Assessment generation/modal/Edge | direct | banco/IA/déficit/revisão/5alternativas/versão/envio/portal; regressão existente |
+| Parser/cache/gateway/client/todas entradas | direct | cache0, prévia/reserva/falha/PII/tenant; transporte+ingestão dirigida |
+| Synthesis request/complete/queue/fontes | direct | persistência/lease/retry/resultados e leitura manual preservados; SQL/worker/browser dirigidos |
+| Shell/navigation/loading | critical_transversal | rotas/perfis/empresa ativa/retorno/feedback; browser e authnegativos |
+| Ledger técnico/global | plausible_indirect | writer novo preserva histórico e platform; regressão genérica/cache |
+| Matching/Knowledge/curadoria | plausible_indirect | helpers/transversal; não cobrança por origem/global, sem chamadas para testar |
+| E-mail/convites/portal/candidatos | plausible_indirect | preservar dispatcher/schema/5alternativas; regressão assessment, sem e-mail externo |
+| Gateway de transporte Parser | direct | quoteId validado/preservado; regressão gateway e release seletivo próprio |
+| Paddle/Traefik/mail | no_impact_identified | configuração/runtimes alheios preservados por IDs/imagens/restarts |
+| Release/versão/contexto | direct | v2.4.0, plano pelo diff, migrations individualmente, SHA/CI/rollback/smoke |
+| Dados antigos e trabalho alheio | critical_transversal | migration aditiva/sem backfill, untracked preservados; gitdiff review |
+
+## Execution congelado
+Implementar todos os D/P/F/A/CA deste arquivo v1.0.0 integralmente. Este arquivo é acordo e execução do movimento autorizado, sem novo ponto administrativo de aprovação. Reutilizar ledger e componentes, construir apenas camada comercial específica; solicitação assistida dispensa novo fornecedor. Decisão comercial nova registrada em ADR sem substituir ADR-080. Testes sem provider pago/dados produtivos; ativação da franquia padrão necessária faz parte da implementação autorizada, pagamentos nunca inventados. Atualizar mapa para novas superfícies reais antes de publicar.
+
+## AoT
+A preencher em aot-tokens-prisma-v240.md. Status inicial dos requisitos: NOT TESTED.
+
+
+## Revisão do mapa antes da publicação
+Descobertas: transporte exige repasse da cotação e publicação seletiva do gateway, reclassificado direct; síntese possuía enfileiramento automático em publicação/consulta, agora guardado por invocação explícita conforme D-04/P-01. Autorização anterior member/síntese preservada, sem ampliar Parser/avaliação. Restituições/bonificações e pedidos compartilham chave estável por modal para repetir retorno perdido. Locks ordenados organização antes de assessment/history/job evitam inversão entre solicitação e conclusão. Alteração do dia mensal entra na próxima renovação, com transição explícita na UI/documentação.
+
+---
+
 ## Source: `docs/security/authorization-model.md`
 
 # Modelo de autorização
@@ -28720,6 +28926,20 @@ Tecnologia assistiva não pode ser classificada automaticamente como comportamen
 ## Retenção
 
 Questões abertas antes de implementação: prazo de retenção de respostas, tentativas incompletas, telemetria, itens expostos, convites expirados, logs, flags de integridade, dados usados para calibração, backup e exclusão por titular.
+
+---
+
+## Source: `docs/security/prisma-tokens.md`
+
+# Segurança de Tokens Prisma
+
+ADR-083 / contrato prisma-tokens-1.0.0. Autenticação ativa e autorização por empresa são obrigatórias fora do frontend. Tabelas privadas com RLS e privilégios revogados; função pública é o único acesso comercial. Owner/admin consultam histórico de sua empresa e solicitam pacotes; operação comum recebe apenas próprias movimentações e nenhum preço de pacote, pedido de terceiros ou custo técnico. Member apenas solicita síntese como antes. Super usuário administra plataforma; cliente nunca confirma pagamento.
+
+Tarifa, preço, validade, saldo, autor e estados são determinados pelo servidor. UUID enviado é apenas chave idempotente, não autoridade. Cotação liga empresa/ator/função/quantidade/versão/validade; reserva revalida papel ativo e saldo com lock por empresa. Uma quote de avaliação pode ser particionada apenas até a quantidade confirmada. FEFO e bloqueio evitam gasto concorrente. Liquidação integra a transação autorizada da entrega, sem repetição de débito. Credenciais restritas de worker/lease são preservadas; metadados comerciais não incluem prompt, currículo ou resposta integral.
+
+Reconciliação só por super usuário, reserva com pelo menos 15 minutos, entrega explicitamente verificada e motivo/referência da evidência (10–500 caracteres). Não resolve automaticamente resultados incertos nem chama o fornecedor. Pagamento exige estado aguardando_pagamento, confirmação explícita e referência (3–200 caracteres). Adição imediata exige motivo e chave idempotente estável; operação com outras condições conflita.
+
+Testes locais descartáveis cobrem anon/inativo/tenant alheio/papel inadequado/DML privado/cotação falsificada ou expirada/saldo insuficiente/pagamento não confirmado/replay/leases/concorrência. Nenhum pedido, pagamento ou decisão humana produtiva é fabricado para validar. Evidence: docs/qa/evidence/tokens-prisma-v240.
 
 ---
 

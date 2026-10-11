@@ -5,7 +5,7 @@ export type NavigationGroup = typeof navigationGroups[number];
 
 export function navigationGroup(path: string): NavigationGroup {
   if (path === "/knowledge" || path === "/item-bank") return "Curadoria";
-  if (path === "/users") return "Administração";
+  if (["/users", "/tokens", "/platform-tokens"].includes(path)) return "Administração";
   return "Operação";
 }
 

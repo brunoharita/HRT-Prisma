@@ -1,0 +1,9 @@
+# Segurança de Tokens Prisma
+
+ADR-083 / contrato prisma-tokens-1.0.0. Autenticação ativa e autorização por empresa são obrigatórias fora do frontend. Tabelas privadas com RLS e privilégios revogados; função pública é o único acesso comercial. Owner/admin consultam histórico de sua empresa e solicitam pacotes; operação comum recebe apenas próprias movimentações e nenhum preço de pacote, pedido de terceiros ou custo técnico. Member apenas solicita síntese como antes. Super usuário administra plataforma; cliente nunca confirma pagamento.
+
+Tarifa, preço, validade, saldo, autor e estados são determinados pelo servidor. UUID enviado é apenas chave idempotente, não autoridade. Cotação liga empresa/ator/função/quantidade/versão/validade; reserva revalida papel ativo e saldo com lock por empresa. Uma quote de avaliação pode ser particionada apenas até a quantidade confirmada. FEFO e bloqueio evitam gasto concorrente. Liquidação integra a transação autorizada da entrega, sem repetição de débito. Credenciais restritas de worker/lease são preservadas; metadados comerciais não incluem prompt, currículo ou resposta integral.
+
+Reconciliação só por super usuário, reserva com pelo menos 15 minutos, entrega explicitamente verificada e motivo/referência da evidência (10–500 caracteres). Não resolve automaticamente resultados incertos nem chama o fornecedor. Pagamento exige estado aguardando_pagamento, confirmação explícita e referência (3–200 caracteres). Adição imediata exige motivo e chave idempotente estável; operação com outras condições conflita.
+
+Testes locais descartáveis cobrem anon/inativo/tenant alheio/papel inadequado/DML privado/cotação falsificada ou expirada/saldo insuficiente/pagamento não confirmado/replay/leases/concorrência. Nenhum pedido, pagamento ou decisão humana produtiva é fabricado para validar. Evidence: docs/qa/evidence/tokens-prisma-v240.

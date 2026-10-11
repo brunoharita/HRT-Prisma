@@ -69,7 +69,8 @@ export function validatePayload(payload) {
 
 export function validateParserPayload(payload, organizationId) {
   if (!payload || typeof payload !== "object" || Array.isArray(payload)
-    || Object.keys(payload).sort().join() !== "organizationId,pdfBase64,sourceSha256"
+    || !["organizationId,pdfBase64,sourceSha256","organizationId,pdfBase64,sourceSha256,tokenQuoteId"].includes(Object.keys(payload).sort().join())
+    || (payload.tokenQuoteId !== undefined && (typeof payload.tokenQuoteId !== "string" || !UUID.test(payload.tokenQuoteId)))
     || payload.organizationId !== organizationId
     || typeof payload.pdfBase64 !== "string" || payload.pdfBase64.length === 0 || payload.pdfBase64.length % 4 !== 0
     || !/^[A-Za-z0-9+/]+={0,2}$/.test(payload.pdfBase64)

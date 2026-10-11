@@ -118,7 +118,7 @@ export function providerFailureCode(status, rawBody = "") {
 
 export function createParserService({ directory = resolve("tmp/m57-parser-ia"), lockDirectory = directory, fetchImpl = fetch, keyProvider = loadParserSecret, timeoutMs = 120000, allowNetwork = true, historyClient = null } = {}) {
   let busy = false;
-  const parse = async function parse({ bytes, organizationId, sourceSha256 }) {
+  const parse = async function parse({ bytes, organizationId, sourceSha256, tokenQuoteId }) {
     if (busy) throw new Error("PARSER_BUSY");
     if (!/^[a-zA-Z0-9_-]{1,80}$/.test(organizationId ?? "") || !/^[a-f0-9]{64}$/.test(sourceSha256 ?? "")) throw new Error("PARSER_BINDING_INVALID");
     if (createHash("sha256").update(bytes).digest("hex") !== sourceSha256) throw new Error("PARSER_SOURCE_MISMATCH");
@@ -162,7 +162,8 @@ export function createParserService({ directory = resolve("tmp/m57-parser-ia"), 
         await writeFile(cachePath, JSON.stringify({ organizationId, sourceSha256, payload: parsed.payload, result }, null, 2), { flag: "wx" });
         return { pages, result, cached: false };
         };
-        return historyClient?await withAiHistory(historyClient,historyScope,perform,fetchImpl):await perform(fetchImpl);
+        const quotedHistory=historyClient&&tokenQuoteId?{rpc:(name,args)=>historyClient.rpc(name,{...args,p_data:args.p_action==='open_request'?{...args.p_data,tokenQuoteId}:args.p_data})}:historyClient;
+        return quotedHistory?await withAiHistory(quotedHistory,historyScope,perform,fetchImpl):await perform(fetchImpl);
       } catch (error) {
         if (controller.signal.aborted) throw new Error("PARSER_TIMEOUT");
         throw new Error(safeParserError(error));
@@ -230,8 +231,8 @@ export function createParserHttpServer(parse = createParserService(), port = 878
       let total = 0; const chunks = [];
       for await (const chunk of req) { total += chunk.length; if (total > 22 * 1024 * 1024) throw new Error("PARSER_INVALID_PDF"); chunks.push(chunk); }
       const input = JSON.parse(Buffer.concat(chunks).toString("utf8"));
-      if (typeof input.pdfBase64 !== "string" || !/^[A-Za-z0-9+/]+={0,2}$/.test(input.pdfBase64) || Object.keys(input).sort().join() !== "organizationId,pdfBase64,sourceSha256") throw new Error("PARSER_INVALID_PDF");
-      const output = await parse({ bytes: Buffer.from(input.pdfBase64, "base64"), organizationId: input.organizationId, sourceSha256: input.sourceSha256 });
+      if (typeof input.pdfBase64 !== "string" || !/^[A-Za-z0-9+/]+={0,2}$/.test(input.pdfBase64) || !["organizationId,pdfBase64,sourceSha256","organizationId,pdfBase64,sourceSha256,tokenQuoteId"].includes(Object.keys(input).sort().join()) || (input.tokenQuoteId!==undefined&&!/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(input.tokenQuoteId))) throw new Error("PARSER_INVALID_PDF");
+      const output = await parse({ bytes: Buffer.from(input.pdfBase64, "base64"), organizationId: input.organizationId, sourceSha256: input.sourceSha256,tokenQuoteId:input.tokenQuoteId });
       res.writeHead(200, { "Content-Type": "application/json" }); res.end(JSON.stringify(output));
       report(200, "PARSER_OK");
     } catch (error) { const code = safeParserError(error); res.writeHead(422, { "Content-Type": "application/json" }); res.end(JSON.stringify({ error: code })); report(422, code); }
