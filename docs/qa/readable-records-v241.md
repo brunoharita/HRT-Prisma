@@ -53,13 +53,19 @@ ReadableRecord utiliza listas de definição, listas ordenadas e details nativos
 - Tipos web, build TypeScript e build web PASS;23testes Node dirigidos (registros/taxonomia/verificação/delta),2auditorias de fonte PASS. Logs locais em tmp/readable-records-*.log; relatório consolidado nesta pasta de evidências.
 - Regressão do acompanhamento30checks PASS em1448/390/320: ações, rascunho, score, histórico, fuso e ausência de writes preservados.
 - Cenários de apresentação e teclado72checks PASS em1448/390/320. Comparação antes/depois usa o mesmo registro sintético e viewport, com baseline e606ca5 imutável. Sem referência normativa nova; screenshot do usuário é contraexemplo. IDs completos ficam disponíveis sob demanda.
-- Dados sintéticos nos componentes reais, tráfego externo bloqueado. Sem banco, sessão autenticada de produção ou execução de IA. Backend/auth/tenant preservados por ausência de modificação nos escritores/serviços e consulta sem writes; smoke público e containers remotos ainda pendentes.
+- Dados sintéticos nos componentes reais, tráfego externo bloqueado. Sem banco, sessão autenticada de produção ou execução de IA. Backend/auth/tenant preservados por ausência de modificação nos escritores/serviços e consulta sem writes; smoke público e preservação de containers confirmados abaixo.
 
 | Regra | Implementação / evidência | Status |
 | --- | --- | --- |
-| D-01 | Inventário9contextos; componentes e auditoria de render | PASS local |
-| D-02 | Labels determinísticos e testes de null/zero/false/listas/unknown/IDs | PASS local |
-| D-03/P-01/P-02 | Escritores e escolhas intactos; sem writes; histórico completo; documento literal preservado | PASS local |
-| D-04 | Publicação, CI, rollback, smoke e sincronização | PARTIAL |
+| D-01 | Inventário9contextos; componentes, auditoria e72checks de apresentação; bundle publicado | PASS |
+| D-02 | Labels, valores completos e teclado/mobile comprovados em72checks | PASS |
+| D-03/P-01/P-02 | Escritores e escolhas intactos; sem writes; histórico completo; documento literal preservado | PASS |
+| D-04 | CI branch/main, SHA/bundle,23HTTP, login1448/390/320, rollback,209assets e9serviços preservados; Git/VPS alinhados | PASS |
 
-Sem desvio de contrato. Publicação e fechamento permanecem pendentes.
+### Publicação e fechamento
+
+Main/origin/VPS no SHA funcional b485676f6af225971ba6807f55c52eff8bc3eb7b. CI branch38184842811 e main38184944260 success,890testes. Site https://prisma.hrtsolutions.com.br serve2.4.1 e o SHA funcional no bundle; classes/textos novos confirmados em assets públicos.23HTTP200, login nos três viewports sem erro/overflow.16checks operacionais de preservação PASS: runtime novo running/zero restarts, rollback igual à imagem80ab8f1b anterior,209assets byte a byte preservados;212assets após a entrega. Os nove outros containers mantêm identidade/imagem/estado/health/restarts/início, incluindo Paddle unhealthy/exited preexistentes.
+
+O smoke imediato do publisher retornou404 na recriação do container (exit22); validações posteriores comprovaram estabilização. Nenhum segundo rebuild. Recibo, baseline/after, CI, hashes públicos, screenshots e testes do bundle em `docs/qa/evidence/readable-records-v241/production/`. Fechamento documental sincroniza fontes em main/origin/VPS sem reconstruir runtime. Arquivos alheios preservados e servidores de fixture encerrados.
+
+Limite: jornadas autenticadas com candidatos reais NOT TESTED. A prova funcional/visual utiliza dados sintéticos nos componentes reais; o smoke de produção é público e de infraestrutura. Sem IA paga, escrita de negócio ou alteração de banco/Edge/serviços. Nenhum desvio de contrato.

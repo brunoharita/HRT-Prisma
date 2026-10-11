@@ -1,0 +1,18 @@
+{
+  "checks": [
+    {
+      "name": "functional SHA in public bundle",
+      "pass": true
+    },
+    {
+      "name": "readable origin and identifiers in public bundle",
+      "pass": true
+    },
+    {
+      "name": "scoped field styles in public CSS",
+      "pass": true
+    }
+  ],
+  "source": "public entry assets",
+  "limitations": "Static delivery proof; not an authenticated candidate journey"
+}

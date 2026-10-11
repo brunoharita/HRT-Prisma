@@ -1,0 +1,11 @@
+{
+  "verifiedAt": "2026-10-11T23:39:15.503704+00:00",
+  "branch": "main",
+  "localSha": "b485676f6af225971ba6807f55c52eff8bc3eb7b",
+  "originMainSha": "b485676f6af225971ba6807f55c52eff8bc3eb7b",
+  "vpsCheckoutSha": "b485676f6af225971ba6807f55c52eff8bc3eb7b",
+  "aligned": true,
+  "trackedStatus": "M docs/ai-context/PRISMA_CURRENT_STATE.md\n M docs/qa/readable-records-v241.md",
+  "functionalRuntimeSha": "b485676f6af225971ba6807f55c52eff8bc3eb7b",
+  "documentationDoesNotRebuildRuntime": true
+}

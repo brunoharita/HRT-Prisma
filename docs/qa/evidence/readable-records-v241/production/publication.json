@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "verifiedAt": "2026-10-11T23:39:12.515451+00:00",
+  "functionalSha": "b485676f6af225971ba6807f55c52eff8bc3eb7b",
+  "version": "2.4.1",
+  "webImage": "sha256:0efd266a5ace2c5eee2e322da6cec9f9feb97fd094c6bae1552035612a9ac4e3",
+  "webStartedAt": "2026-10-11T23:37:41.137831923Z",
+  "destinations": [
+    "prisma-web"
+  ],
+  "database": "SKIPPED",
+  "edgeFunctions": "SKIPPED",
+  "otherNineContainers": "PRESERVED",
+  "publisherInitialSmoke": {
+    "exitCode": 22,
+    "http": 404,
+    "phase": "container recreation",
+    "recovery": "23HTTP200, 3 public browser viewports and bundle SHA verified after stabilization; no second build"
+  },
+  "ciBranch": 38184842811,
+  "ciMain": 38184944260,
+  "foundationTests": 890,
+  "httpChecks": 23,
+  "authenticatedRealJourney": "NOT TESTED",
+  "paidAiCalls": 0,
+  "realBusinessMutations": 0
+}
