@@ -6,7 +6,7 @@ Contrato: `docs/qa/tokens-prisma-v240.md` Agreement/Execution v1.0.0, aprovaçã
 
 | ID | Implementação | Teste / evidência | Status | Limite |
 | --- | --- | --- | --- | --- |
-| D-01 | Conta tenant, franquia1m, tipos/formatadores | SQL71novos, browser50 | PASS | Unidade comercial, sem equivalência técnica |
+| D-01 | Conta tenant, franquia1m, tipos/formatadores | SQL71novos, browser54 | PASS | Unidade comercial, sem equivalência técnica |
 | D-02 | Catálogo3pacotes e tarifas versionadas, cotação/pedido congelados | SQL catálogo/pricefreeze; cadastro browser | PASS | Oferta configurável, margem não aferida |
 | D-03 | Ensure privado, aniversário/mês curto, período atual apenas, pending quota/day | SQL ciclos/skipmonth/dia31/transição; disputa renovação | PASS | Consulta calcula reposição, sem backfill |
 | D-04 | Modal avaliação, hints de upload/recovery/documento, síntese explícita; wrappers3consumidores | SQL3consumidores, Node transporte/cache/Synthesis, Deno5, browser avaliação80/síntese8 | PASS | Sem provider pago; hints/readiness não executam IA |
@@ -58,10 +58,12 @@ Adaptações autorizadas: escala×1.000, consumo menos destacado, Comprar→Soli
 
 ## Validação local
 
-150SQLPASS (79históricos+71comerciais),5disputas PostgreSQL17 descartável (DB própria removida), Node dirigidos143+9+10+5=167PASS,5DenoPASS,50browserTokens+80browseravaliação+8browserSíntesePASS. Types raiz/web/Parser, builds raiz/web, lint, foundation, Context Pack/ledger PASS. Ledger histórico divergente mantém dbPushAllowed=false. Dispatcher é roteador; pnpm test integral sugerido pelo plano substituído pela regressão dirigida conforme AGENTS§10, sem executar validate integral local. CI remoto existente será acompanhado.
+150SQLPASS (79históricos+71comerciais),5disputas PostgreSQL17 descartável (DB própria removida), Node dirigidos143+9+10+5+3=170PASS,5DenoPASS,54browserTokens+80browseravaliação+8browserSíntesePASS. Types raiz/web/Parser, builds raiz/web, lint, foundation, Context Pack/ledger PASS. Ledger histórico divergente mantém dbPushAllowed=false. Dispatcher é roteador; pnpm test integral sugerido pelo plano substituído pela regressão dirigida conforme AGENTS§10, sem executar validate integral local. CI remoto existente será acompanhado.
 
 Avisos conhecidos: chunks web grandes/import estático+dínamico e PDFfontwarnings de fixtures. Não são regressões deste movimento. Sem chamadas pagas, sem perfil/pagamento/decisão real fictícia. Sem QA remoto separado; provas sensíveis executadas no local descartável antes da produção autorizada.
 
 ## Git / produção / conclusão
 
 Worktree codex/tokens-prisma-v240 isolado. Publicação ainda não concluída; D-10 permanece PARTIAL até evidência operacional. Relatório final deverá registrar SHA/CI/fingerprints/Edge/runtimes/rollback/smoke/sincronização e limites reais autenticados.
+
+A CI inicial38101216159 detectou aviso novo sem ação contextual. Corrigido: falha da consulta oferece nova tentativa; falha comercial aparece no próprio modal e permite repetir com a mesma chave. Auditoria de79avisos (3Node) e54checks browser nas4larguras PASS; tipos/build web repetidos PASS. O primeiro SHA não foi publicado em produção.

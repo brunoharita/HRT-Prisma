@@ -17,6 +17,10 @@
       "pass": true
     },
     {
+      "name": "1448: failure has explicit retry within modal",
+      "pass": true
+    },
+    {
       "name": "1448: retry reuses commercial idempotency id",
       "pass": true
     },
@@ -73,6 +77,10 @@
       "pass": true
     },
     {
+      "name": "768: failure has explicit retry within modal",
+      "pass": true
+    },
+    {
       "name": "768: retry reuses commercial idempotency id",
       "pass": true
     },
@@ -121,6 +129,10 @@
       "pass": true
     },
     {
+      "name": "390: failure has explicit retry within modal",
+      "pass": true
+    },
+    {
       "name": "390: retry reuses commercial idempotency id",
       "pass": true
     },
@@ -166,6 +178,10 @@
     },
     {
       "name": "320: failed request retains modal for retry",
+      "pass": true
+    },
+    {
+      "name": "320: failure has explicit retry within modal",
       "pass": true
     },
     {
