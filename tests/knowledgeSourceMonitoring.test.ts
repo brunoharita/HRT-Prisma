@@ -95,8 +95,10 @@ test("source publication is an explicit Super Admin action and remains batch-bas
   assert.match(service, /batchSize: 5000/);
 });
 
-test("Home exposes version, release date and latest check through the repository boundary", async () => {
-  const page = await readFile("web/src/pages/HomePage.tsx", "utf8");
+test("Knowledge exposes version, release date and latest check through the repository boundary", async () => {
+  const page = await readFile("web/src/components/KnowledgeSourceMonitor.tsx", "utf8");
+  const knowledge = await readFile("web/src/pages/KnowledgePage.tsx", "utf8");
+  const home = await readFile("web/src/pages/HomePage.tsx", "utf8");
   const repository = await readFile("web/src/infrastructure/supabase/prismaRepository.ts", "utf8");
   assert.match(page, /Bases de conhecimento/);
   assert.match(page, /Data da versão/);
@@ -106,6 +108,9 @@ test("Home exposes version, release date and latest check through the repository
   assert.match(page, /preparada e comparada/);
   assert.match(page, /Resolver pendências/);
   assert.match(page, /Revisar o que mudou/);
+  assert.match(knowledge, /isGlobal\s*&&\s*organizationId/);
+  assert.match(knowledge, /<KnowledgeSourceMonitor/);
+  assert.doesNotMatch(home, /<KnowledgeSourceMonitor|Checar agora/);
   assert.match(repository, /functions\.invoke\("knowledge-source-monitor"/);
   assert.doesNotMatch(page, /\.from\(/);
   assert.match(repository, /\.from\("knowledge_sources"\)/);

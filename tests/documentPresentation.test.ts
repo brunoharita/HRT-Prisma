@@ -153,7 +153,9 @@ test("M5.1 operational surfaces use explainable, responsive, and user-facing pre
   assert.match(itemBank, /label: "Governança"/);
   assert.match(itemBank, /label: "Lacunas"/);
   assert.doesNotMatch(itemBank, /<Tabs activeKey=\{surface\}/);
-  assert.match(home, /Confiança em cada etapa/);
+  assert.match(home, /Como o Prisma trabalha/);
+  assert.match(home, /<Drawer open=\{help\}/);
+  assert.match(home, /Decisão humana/);
   assert.doesNotMatch(home, /Supabase QA|tenant ativo|RLS/);
   assert.doesNotMatch(people, /políticas RLS/);
   assert.doesNotMatch(profile, /conexão com o Supabase/);
