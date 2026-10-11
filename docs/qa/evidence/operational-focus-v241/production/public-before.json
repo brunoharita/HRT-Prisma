@@ -1,0 +1,62 @@
+{
+  "phase": "before",
+  "base": "https://prisma.hrtsolutions.com.br",
+  "root": {
+    "path": "/",
+    "status": 200,
+    "bytes": 811,
+    "sha256": "09d20e6c62d34eaec60091f889b7fdda7b001eff1b4e12810d20d339754454c8",
+    "contentType": "text/html"
+  },
+  "assets": [
+    {
+      "path": "/assets/index-B5c5w9fD.js",
+      "status": 200,
+      "bytes": 1137509,
+      "sha256": "7627c8c94da22c7dcb7cd7cfa3e668a1616c05ffd02849afa0ff0ec3b59faa51",
+      "contentType": "application/javascript"
+    },
+    {
+      "path": "/assets/rolldown-runtime-C0FnF6B9.js",
+      "status": 200,
+      "bytes": 1291,
+      "sha256": "e0a79ad36c6ca1ffbc796c80aa5661803a9d1bc684e29d1587f48b4ba9a82714",
+      "contentType": "application/javascript"
+    },
+    {
+      "path": "/assets/antd-vendor-Cv3JrkhW.js",
+      "status": 200,
+      "bytes": 1279441,
+      "sha256": "8dfa8786bd1bb39ec7ddec0741b8f269630bb02eace25d3c5f64d2fa722e21ef",
+      "contentType": "application/javascript"
+    },
+    {
+      "path": "/assets/supabase-vendor-DoXvCMLf.js",
+      "status": 200,
+      "bytes": 208137,
+      "sha256": "eb17416e1cf28455937e96c08d469cd658f3cf88ebb0d156ebb076e1bc183ba5",
+      "contentType": "application/javascript"
+    },
+    {
+      "path": "/assets/react-vendor-BdxMnOeJ.js",
+      "status": 200,
+      "bytes": 435,
+      "sha256": "58a473314db4571ac72867e4485c45c440a8bce86396a9433d650c3831b03067",
+      "contentType": "application/javascript"
+    },
+    {
+      "path": "/assets/antd-vendor-B5BXDqMa.css",
+      "status": 200,
+      "bytes": 2987,
+      "sha256": "6b734531b94fda9950119646124dccee1ee7e70e91b3e5be988c378ca9f9f98d",
+      "contentType": "text/css"
+    },
+    {
+      "path": "/assets/index-4IgPGlVX.css",
+      "status": 200,
+      "bytes": 468493,
+      "sha256": "ccf37247433c732c5a88245f63020f3e2e73315a1ccdbddeb286b36ecefc9fea",
+      "contentType": "text/css"
+    }
+  ]
+}

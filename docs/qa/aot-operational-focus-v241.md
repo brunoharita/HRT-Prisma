@@ -25,7 +25,7 @@ Evidências em `docs/qa/evidence/operational-focus-v241/`. As fixtures usam comp
 | D-15 | Sem navegação/abas vazias de Settings | operational-checks; sem editor fictício/abas indisponíveis | PASS |
 | D-16 | KnowledgeStructure, ajuda contextual, /settings compatível | operational-checks/operationalFocus.test; mesma autoridade, negativos member/recruiter/anônimo | PASS |
 | D-17 | Fontes por fato, pendências, conflitos, atividade por questão e revisão mantidas | regression-person/people/process/follow-up/score; revisão própria do diff | PASS |
-| D-18 | Responsive/loading/rascunhos/navegação, release2.4.1 | provas locais PASS; integração/publicação/smoke pendentes | PARTIAL |
+| D-18 | Responsive/loading/rascunhos/navegação, release2.4.1 | provas locais, CI branch/main e smoke público1448/390/320 PASS; production/public-browser.json | PASS |
 | P-01 | Domínio, serviços, auth/tenant e dados sem alteração | diff/plan; escritores/handlers preservados e papéis negativos | PASS |
 | P-02 | Consulta não inicia IA/envio/recálculo/publicação | tráfego externo bloqueado e chamadas sintéticas verificadas; pendências imediatas | PASS |
 | P-03 | Sem dependências/custos/novos destinos/arquivos alheios | package/lock/services/migrations fora do diff, untracked alheios preservados | PASS |
@@ -41,14 +41,14 @@ Evidências em `docs/qa/evidence/operational-focus-v241/`. As fixtures usam comp
 | Provas/Verificações/Banco | direct | regras de preparação, revisão, envio, resultados e limites | 64checks process +operational, PASS |
 | Shell/shared CSS | plausible_indirect | 18combinações de páginas/tamanhos +3Pessoa; menu/esc/overflow/destaques | regression-shell, PASS |
 | Tokens Prisma | plausible_indirect | shell/quote/solicitação/falha preservados | regression-tokens13checks mobile, PASS |
-| Acesso/loading/navegação | critical_transversal | roles negativos, callbacks, guardas e loading | Node e fixtures, PASS local; smoke produtivo pendente |
-| Banco/Edge/Parser/Synthesis/mail | no_impact_identified | nenhum diff nessas camadas, nenhuma mutação real; identidade/estado remoto ainda a verificar | PARTIAL operacional |
+| Acesso/loading/navegação | critical_transversal | roles negativos, callbacks, guardas e loading | Node/fixtures e login público responsivo PASS; jornada autenticada real NOT TESTED |
+| Banco/Edge/Parser/Synthesis/mail | no_impact_identified | nenhum diff nessas camadas, nenhuma mutação real; somente web publicado e nove outros containers preservados | runtime-preservation.json PASS para preservação; Paddle unhealthy/exited preexistentes permanecem, sem alegar saúde geral |
 
 ## Validação e limites
 
 - Types web, build web e compilação raiz PASS. Avisos de tamanho de chunks/dynamic import preexistentes não alteram resultado.
-- Node dirigido PASS: 20testes de follow-up/navegação/loading/rotas/alias, mais5 de registro de versão. 114checks operacionais e30 de detalhe; 15cenários de Pessoa, 106checks descoberta, 34acompanhamento, 64avaliação, 54score, 21combinações shell e13Tokens. Contexto/checker/lint/foundation PASS em snapshot revisado.
-- Global lint encontrou whitespace em `output/pa-concurrency-baseline.sql` alheio/untracked. Não foi alterado. Lint do snapshot revisado PASS (1361arquivos); CI em checkout limpo será registrado; não declarar global lint local PASS.
+- Node dirigido PASS: 20testes de follow-up/navegação/loading/rotas/alias, mais5 de registro de versão e14 de apresentação/monitoramento. 114checks operacionais e30 de detalhe; 15cenários de Pessoa, 106checks descoberta, 34acompanhamento, 64avaliação, 54score, 21combinações shell e13Tokens. Contexto/checker/lint/foundation PASS em snapshot revisado. CI do workflow existente passou884testes, golden/demo, tipos/build, contexto/lint/foundation, ledger, sintaxe de deploy e audit de dependências.
+- Global lint encontrou whitespace em `output/pa-concurrency-baseline.sql` alheio/untracked. Não foi alterado. Lint do snapshot revisado PASS (1361arquivos) e CI em checkout limpo PASS; não declarar global lint local PASS.
 - Ajustes das fixtures antigas acompanharam acessos agora compactados e estado já-em-acompanhamento. Asserções de regras foram mantidas. Corrigidos locators com nomes de ícones e espera de fechamento/animação antes de novas ações.
 - Context Pack deve ser gerado/conferido numa cópia determinística dos arquivos revisados, excluindo documentos locais alheios não versionados. Isso evita incorporá-los ou criar divergência em CI. Nenhum arquivo alheio será movido/apagado.
 - Jornada real autenticada e operações reais de IA/envio/publicação de fontes: NOT TESTED e fora da necessidade desta reorganização.
@@ -64,4 +64,10 @@ Nenhuma decisão de produto adicional. Alinhamento de radios e ícones corrigido
 
 ## Git / QA / produção
 
-Branch codex/operational-focus-v241. Commit, CI, plano, produção, rollback, smoke e sincronização pendentes. Não declarar a publicação concluída até essa prova.
+Implementação26945e7c4fce4c3d70aa842dc47ca843ddc67159 e ajuste de verificações9a09fd12c7904934e98697466ff83d6868d67824 na branch codex/operational-focus-v241, integrados por fast-forward em main/origin. O primeiro CI38140936004 falhou em duas asserções históricas que exigiam os blocos na Home; foram alinhadas aos acessos aprovados, mantendo provas de autoridade/publicação. CI branch38141322619 e main38141395448 success, SHA funcional9a09fd12c7904934e98697466ff83d6868d67824. Evidências production/ci-*.json e publication.json.
+
+Plano desde baseline a085c6eb9ca1ac276569a8b5cdce547038daa062: publicar somente prisma-web. Produção srv1038882, /opt/prisma, remoto existente conferido; web imagem sha256:80ab8f1b8bdf035cd3055cdfe9314c66ddbd155c3513b625efae123e0bde1bac, running/zero reinícios, iniciada2026-10-11T13:01:06Z. Parser/gateway/Synthesis/mail/Traefik e quatro containers Paddle preservam identidade, imagem, estado, saúde e início. Parser/Synthesis/mail healthy; Paddle unhealthy/exited preexistentes sem alteração. Banco/Edge não publicados nem consultados para dados reais neste movimento.
+
+O deploy reconstruiu o web uma única vez. O primeiro HEAD durante a troca retornou404 e encerrou o comando com22; após estabilização,23HTTP200,16checks de preservação/rollback/assets e login real público1448/390/320 PASS, v2.4.1 visível, sem erro de runtime/overflow. Nenhum segundo rebuild. Os205arquivos anteriores permanecem byte a byte no container, e entradas anteriores continuam HTTP200. Rollback prisma-web:rollback-before-9a09fd12c790 corresponde à imagem anterior sha256:2a593110add306ee2969b8b42dedf143cf5136328d99a05f396a3d211409eb21.
+
+Fechamento documental/contexto/evidências em commit próprio, sem reconstruir a imagem funcional validada. Sincronização do SHA funcional local/main/origin/VPS registrada em production/synchronization.json; a documentação posterior não muda o SHA de runtime. O smoke público confirma distribuição e login; a regressão das telas internas utiliza componentes reais com fixtures, sem sessão produtiva autenticada. Nenhuma IA paga, envio real, decisão humana fictícia ou alteração de dados de negócio.

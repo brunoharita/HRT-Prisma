@@ -1,0 +1,76 @@
+{
+  "expectedFunctionalSha": "9a09fd12c7904934e98697466ff83d6868d67824",
+  "rollbackTag": "prisma-web:rollback-before-9a09fd12c790",
+  "rollbackImage": "sha256:2a593110add306ee2969b8b42dedf143cf5136328d99a05f396a3d211409eb21",
+  "previousAssetCount": 205,
+  "afterAssetCount": 209,
+  "checks": [
+    {
+      "name": "runtime checkout equals validated functional SHA",
+      "pass": true
+    },
+    {
+      "name": "same approved host root remote and clean tracked checkout",
+      "pass": true
+    },
+    {
+      "name": "prisma-parser-ia unchanged identity image state health restarts start",
+      "pass": true
+    },
+    {
+      "name": "prisma-paddle-gateway unchanged identity image state health restarts start",
+      "pass": true
+    },
+    {
+      "name": "hrt-mail-forwarder unchanged identity image state health restarts start",
+      "pass": true
+    },
+    {
+      "name": "prisma-profile-synthesis unchanged identity image state health restarts start",
+      "pass": true
+    },
+    {
+      "name": "paddle-vl-llama-test unchanged identity image state health restarts start",
+      "pass": true
+    },
+    {
+      "name": "paddle-vl-prisma-test unchanged identity image state health restarts start",
+      "pass": true
+    },
+    {
+      "name": "paddle-structure-1 unchanged identity image state health restarts start",
+      "pass": true
+    },
+    {
+      "name": "paddle-vision-recovery-1 unchanged identity image state health restarts start",
+      "pass": true
+    },
+    {
+      "name": "traefik-traefik-1 unchanged identity image state health restarts start",
+      "pass": true
+    },
+    {
+      "name": "web replaced running zero restarts",
+      "pass": true
+    },
+    {
+      "name": "rollback image matches previous production web image",
+      "pass": true
+    },
+    {
+      "name": "all 205 previous runtime assets preserved byte for byte",
+      "pass": true
+    },
+    {
+      "name": "public index changed",
+      "pass": true
+    },
+    {
+      "name": "public current and previous entry assets and eight routes HTTP200",
+      "pass": true
+    }
+  ],
+  "preexistingLimit": "paddle-vl-llama-test unhealthy and exited Paddle test containers unchanged",
+  "authenticatedJourney": "NOT TESTED",
+  "realWrites": 0
+}

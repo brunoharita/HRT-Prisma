@@ -1,0 +1,11 @@
+{
+  "verifiedAt": "2026-10-11T13:04:22.338469+00:00",
+  "branch": "main",
+  "localSha": "9a09fd12c7904934e98697466ff83d6868d67824",
+  "originMainSha": "9a09fd12c7904934e98697466ff83d6868d67824",
+  "vpsCheckoutSha": "9a09fd12c7904934e98697466ff83d6868d67824",
+  "aligned": true,
+  "trackedStatus": "M docs/ai-context/PRISMA_CURRENT_STATE.md\n M docs/qa/aot-operational-focus-v241.md",
+  "functionalRuntimeSha": "9a09fd12c7904934e98697466ff83d6868d67824",
+  "documentationDoesNotRebuildRuntime": true
+}

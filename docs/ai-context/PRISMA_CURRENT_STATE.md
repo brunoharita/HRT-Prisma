@@ -2,15 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.71.0
-last_verified: 2026-10-10
+version: 2.71.1
+last_verified: 2026-10-11
 ---
 
 # Estado atual do Prisma
 
 ## Foco operacional — v2.4.1
 
-Implementação autorizada em11/10/2026: 16 reorganizações de apresentação para priorizar ações, pendências e decisões humanas, com fontes/histórico/diagnóstico completos sob demanda. Início com três indicadores e ajuda por botão; Fontes e estrutura em Conhecimento; /settings preservado como acesso legado à estrutura com as mesmas permissões. Pessoa com acessos compactos, descoberta com detalhes de análise expansíveis e recálculo manual em Outras ações; acompanhamento com contadores compactos e formulários prioritários, análise e histórico em drawers. Documento, processamento, Verificações e Banco de Itens mantêm ações/limitações primárias e metadados secundários; histórico de avaliações fechado inicialmente em desktop/mobile. Sem banco/Edge/IA/matching/envio/cobrança/dados alterados. Contrato/mapa/execução `docs/qa/agreement-operational-focus-v241.md`, AoT `docs/qa/aot-operational-focus-v241.md`. Validação e publicação em andamento; não constitui prova de rollout.
+Implementação autorizada em11/10/2026: 16 reorganizações de apresentação para priorizar ações, pendências e decisões humanas, com fontes/histórico/diagnóstico completos sob demanda. Início com três indicadores e ajuda por botão; Fontes e estrutura em Conhecimento; /settings preservado como acesso legado à estrutura com as mesmas permissões. Pessoa com acessos compactos, descoberta com detalhes de análise expansíveis e recálculo manual em Outras ações; acompanhamento com contadores compactos e formulários prioritários, análise e histórico em drawers. Documento, processamento, Verificações e Banco de Itens mantêm ações/limitações primárias e metadados secundários; histórico de avaliações fechado inicialmente em desktop/mobile. Sem banco/Edge/IA/matching/envio/cobrança/dados alterados. Contrato/mapa/execução `docs/qa/agreement-operational-focus-v241.md`, AoT `docs/qa/aot-operational-focus-v241.md`. Publicada em11/10/2026, SHA funcional9a09fd12c7904934e98697466ff83d6868d67824 em main/origin/VPS; CI branch38141322619/main38141395448 success (884testes). Types/build,39Node dirigidos,114checks operacionais,30de detalhe,15cenários Pessoa e regressões descoberta/acompanhamento/avaliação/score/shell/Tokens PASS. Web80ab8f1b running0, rollback2a593110 conferido;205assets antigos preservados,23HTTP200 e login2.4.1 em1448/390/320 PASS. Nove outros containers mantêm identidade/imagem/estado, incluindo Paddle unhealthy/exited preexistentes.404 transitório estabilizou sem novo rebuild. Fechamento documental sincroniza fontes sem reconstruir runtime; jornada autenticada real NOT TESTED, conforme AoT.
 
 ## Tokens Prisma — v2.4.0
 

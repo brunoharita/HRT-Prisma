@@ -1,0 +1,37 @@
+{
+  "status": "PASS",
+  "verifiedAt": "2026-10-11T13:02:51.149546+00:00",
+  "functionalSha": "9a09fd12c7904934e98697466ff83d6868d67824",
+  "version": "2.4.1",
+  "webImage": "sha256:80ab8f1b8bdf035cd3055cdfe9314c66ddbd155c3513b625efae123e0bde1bac",
+  "webStartedAt": "2026-10-11T13:01:06.026360872Z",
+  "destinations": [
+    "prisma-web"
+  ],
+  "database": "SKIPPED",
+  "edgeFunctions": "SKIPPED",
+  "runtimeServices": "PRESERVED",
+  "publisherInitialSmoke": {
+    "exitCode": 22,
+    "http": 404,
+    "phase": "container recreation",
+    "recovery": "HTTP200 and browser version verified after stabilization; no second build"
+  },
+  "ciInitialFailure": {
+    "run": 38140936004,
+    "tests": [
+      "documentPresentation: historical Home help title",
+      "knowledgeSourceMonitoring: monitor moved from Home to Knowledge"
+    ],
+    "correctedTests": 14,
+    "pass": 14,
+    "fail": 0
+  },
+  "ciBranch": 38141322619,
+  "ciMain": 38141395448,
+  "foundationTests": 884,
+  "httpChecks": 23,
+  "authenticatedRealJourney": "NOT TESTED",
+  "paidAiCalls": 0,
+  "realBusinessMutations": 0
+}

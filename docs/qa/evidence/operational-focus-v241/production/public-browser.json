@@ -1,0 +1,27 @@
+{
+  "checks": [
+    {
+      "width": 1448,
+      "http": 200,
+      "version": true,
+      "runtimeErrors": [],
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "http": 200,
+      "version": true,
+      "runtimeErrors": [],
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "http": 200,
+      "version": true,
+      "runtimeErrors": [],
+      "overflow": false
+    }
+  ],
+  "authenticated": false,
+  "mutations": 0
+}
