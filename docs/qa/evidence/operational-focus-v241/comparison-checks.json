@@ -1,0 +1,31 @@
+{
+  "checks": [
+    {
+      "name": "home/1448: comparison no overflow",
+      "pass": true
+    },
+    {
+      "name": "person/1448: comparison no overflow",
+      "pass": true
+    },
+    {
+      "name": "follow-up/1448: comparison no overflow",
+      "pass": true
+    },
+    {
+      "name": "home/390: comparison no overflow",
+      "pass": true
+    },
+    {
+      "name": "person/390: comparison no overflow",
+      "pass": true
+    },
+    {
+      "name": "follow-up/390: comparison no overflow",
+      "pass": true
+    }
+  ],
+  "limits": [
+    "Actual components with deterministic synthetic services; no production candidate data or external AI/email."
+  ]
+}

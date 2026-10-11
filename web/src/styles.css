@@ -7074,3 +7074,16 @@ textarea {
   .prisma-vacancy-match-card .prisma-vacancy-avatar { display: grid; width: 40px; height: 40px; flex: 0 0 40px; }
   .prisma-vacancy-people-page .prisma-page-header h1 { font-size: 1.4rem; }
 }
+
+/* v2.4.1: operational content first, contextual detail on demand. */
+.prisma-m81-home .prisma-dashboard-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.prisma-m81-home .prisma-status-card p{margin:8px 0 0;color:#53637d;font-size:14px}
+.prisma-person-compact-access>.ant-card>.ant-card-body{display:grid;gap:10px}
+.prisma-person-compact-actions{display:grid;gap:6px}
+.prisma-person-follow-ups-access{margin-top:8px}
+.prisma-person-follow-ups-access>summary{cursor:pointer;color:#155eef;font-weight:600;line-height:1.5}
+.prisma-document-technical>div{display:grid;gap:16px}
+.prisma-operation-help{align-self:flex-start}
+.prisma-operation-help>.prisma-disclosure-body,.prisma-operation-help>div{margin-top:12px}
+.prisma-disclosure summary:focus-visible{outline:3px solid #155eef;outline-offset:3px}
+@media(max-width:760px){.prisma-m81-home .prisma-dashboard-grid{grid-template-columns:1fr}.prisma-person-compact-access{align-self:stretch}}

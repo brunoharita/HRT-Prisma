@@ -1,0 +1,104 @@
+[
+  {
+    "width": 1280,
+    "scenario": "normal",
+    "checks": {
+      "betaUnchanged": true,
+      "savedInitial": true,
+      "reloadSame": true,
+      "reviewOnlyAlfa": true,
+      "reviewDoesNotReloadBeta": true,
+      "loadingFeedback": true,
+      "priorWhileUpdating": true,
+      "explicitOnlyAlfa": true,
+      "failureRetains82": true,
+      "comparisonRetainsBeta": true,
+      "comparisonRetainsAlfa": true,
+      "noRuntimeErrors": true,
+      "noExternalCalls": true
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "width": 1280,
+    "scenario": "member",
+    "checks": {
+      "betaUnchanged": true,
+      "savedInitial": true,
+      "reloadSame": true,
+      "noRecalculate": true,
+      "comparisonRetainsBeta": true,
+      "comparisonRetainsAlfa": true,
+      "noRuntimeErrors": true,
+      "noExternalCalls": true
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "width": 1280,
+    "scenario": "partial",
+    "checks": {
+      "betaUnchanged": true,
+      "partialNotice": true,
+      "manualProfile": true,
+      "noInventedScore": true,
+      "noRuntimeErrors": true,
+      "noExternalCalls": true
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "width": 390,
+    "scenario": "normal",
+    "checks": {
+      "betaUnchanged": true,
+      "savedInitial": true,
+      "reloadSame": true,
+      "reviewOnlyAlfa": true,
+      "reviewDoesNotReloadBeta": true,
+      "loadingFeedback": true,
+      "priorWhileUpdating": true,
+      "explicitOnlyAlfa": true,
+      "failureRetains82": true,
+      "comparisonRetainsBeta": true,
+      "comparisonRetainsAlfa": true,
+      "noRuntimeErrors": true,
+      "noExternalCalls": true
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "width": 390,
+    "scenario": "member",
+    "checks": {
+      "betaUnchanged": true,
+      "savedInitial": true,
+      "reloadSame": true,
+      "noRecalculate": true,
+      "comparisonRetainsBeta": true,
+      "comparisonRetainsAlfa": true,
+      "noRuntimeErrors": true,
+      "noExternalCalls": true
+    },
+    "errors": [],
+    "external": []
+  },
+  {
+    "width": 390,
+    "scenario": "partial",
+    "checks": {
+      "betaUnchanged": true,
+      "partialNotice": true,
+      "manualProfile": true,
+      "noInventedScore": true,
+      "noRuntimeErrors": true,
+      "noExternalCalls": true
+    },
+    "errors": [],
+    "external": []
+  }
+]

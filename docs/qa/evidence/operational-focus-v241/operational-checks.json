@@ -1,0 +1,463 @@
+{
+  "checks": [
+    {
+      "name": "1448: only operational home metrics",
+      "pass": true
+    },
+    {
+      "name": "1448: product help by keyboard without writes",
+      "pass": true
+    },
+    {
+      "name": "home/1448: no external requests or runtime errors",
+      "pass": true
+    },
+    {
+      "name": "home/1448: no document horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "1448: legacy opens actual structure without placeholders",
+      "pass": true
+    },
+    {
+      "name": "1448: definitions and examples remain consultable",
+      "pass": true
+    },
+    {
+      "name": "settings/1448: no external requests or runtime errors",
+      "pass": true
+    },
+    {
+      "name": "settings/1448: no document horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "1448: document pending review remains immediate",
+      "pass": true
+    },
+    {
+      "name": "1448: document diagnostics initially secondary",
+      "pass": true
+    },
+    {
+      "name": "1448: document identifier attempts and audit remain accessible",
+      "pass": true
+    },
+    {
+      "name": "1448: expansion has no document writes",
+      "pass": true
+    },
+    {
+      "name": "document/1448: no external requests or runtime errors",
+      "pass": true
+    },
+    {
+      "name": "document/1448: no document horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "1448: legend initially secondary",
+      "pass": true
+    },
+    {
+      "name": "1448: legend can expand without writes",
+      "pass": true
+    },
+    {
+      "name": "operations/1448: no external requests or runtime errors",
+      "pass": true
+    },
+    {
+      "name": "operations/1448: no document horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "1448: verification result and limitations remain primary",
+      "pass": true
+    },
+    {
+      "name": "1448: verification method initially secondary",
+      "pass": true
+    },
+    {
+      "name": "1448: verification provenance and timeline remain accessible",
+      "pass": true
+    },
+    {
+      "name": "verification/1448: no external requests or runtime errors",
+      "pass": true
+    },
+    {
+      "name": "verification/1448: no document horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "1448: bank similarity immediate and diagnostics closed",
+      "pass": true
+    },
+    {
+      "name": "1448: bank provenance remains accessible without approval",
+      "pass": true
+    },
+    {
+      "name": "explicit human approval invokes original writer exactly once",
+      "pass": true
+    },
+    {
+      "name": "bank/1448: no external requests or runtime errors",
+      "pass": true
+    },
+    {
+      "name": "bank/1448: no document horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "1448: contextual group choice is not preselected",
+      "pass": true
+    },
+    {
+      "name": "1448: group help reuses definitions without selection or writes",
+      "pass": true
+    },
+    {
+      "name": "classification/1448: no external requests or runtime errors",
+      "pass": true
+    },
+    {
+      "name": "classification/1448: no document horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "390: only operational home metrics",
+      "pass": true
+    },
+    {
+      "name": "390: product help by keyboard without writes",
+      "pass": true
+    },
+    {
+      "name": "home/390: no external requests or runtime errors",
+      "pass": true
+    },
+    {
+      "name": "home/390: no document horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "390: legacy opens actual structure without placeholders",
+      "pass": true
+    },
+    {
+      "name": "390: definitions and examples remain consultable",
+      "pass": true
+    },
+    {
+      "name": "settings/390: no external requests or runtime errors",
+      "pass": true
+    },
+    {
+      "name": "settings/390: no document horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "390: document pending review remains immediate",
+      "pass": true
+    },
+    {
+      "name": "390: document diagnostics initially secondary",
+      "pass": true
+    },
+    {
+      "name": "390: document identifier attempts and audit remain accessible",
+      "pass": true
+    },
+    {
+      "name": "390: expansion has no document writes",
+      "pass": true
+    },
+    {
+      "name": "document/390: no external requests or runtime errors",
+      "pass": true
+    },
+    {
+      "name": "document/390: no document horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "390: legend initially secondary",
+      "pass": true
+    },
+    {
+      "name": "390: legend can expand without writes",
+      "pass": true
+    },
+    {
+      "name": "operations/390: no external requests or runtime errors",
+      "pass": true
+    },
+    {
+      "name": "operations/390: no document horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "390: verification result and limitations remain primary",
+      "pass": true
+    },
+    {
+      "name": "390: verification method initially secondary",
+      "pass": true
+    },
+    {
+      "name": "390: verification provenance and timeline remain accessible",
+      "pass": true
+    },
+    {
+      "name": "verification/390: no external requests or runtime errors",
+      "pass": true
+    },
+    {
+      "name": "verification/390: no document horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "390: bank similarity immediate and diagnostics closed",
+      "pass": true
+    },
+    {
+      "name": "390: bank provenance remains accessible without approval",
+      "pass": true
+    },
+    {
+      "name": "bank/390: no external requests or runtime errors",
+      "pass": true
+    },
+    {
+      "name": "bank/390: no document horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "390: contextual group choice is not preselected",
+      "pass": true
+    },
+    {
+      "name": "390: group help reuses definitions without selection or writes",
+      "pass": true
+    },
+    {
+      "name": "classification/390: no external requests or runtime errors",
+      "pass": true
+    },
+    {
+      "name": "classification/390: no document horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "320: only operational home metrics",
+      "pass": true
+    },
+    {
+      "name": "320: product help by keyboard without writes",
+      "pass": true
+    },
+    {
+      "name": "home/320: no external requests or runtime errors",
+      "pass": true
+    },
+    {
+      "name": "home/320: no document horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "320: legacy opens actual structure without placeholders",
+      "pass": true
+    },
+    {
+      "name": "320: definitions and examples remain consultable",
+      "pass": true
+    },
+    {
+      "name": "settings/320: no external requests or runtime errors",
+      "pass": true
+    },
+    {
+      "name": "settings/320: no document horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "320: document pending review remains immediate",
+      "pass": true
+    },
+    {
+      "name": "320: document diagnostics initially secondary",
+      "pass": true
+    },
+    {
+      "name": "320: document identifier attempts and audit remain accessible",
+      "pass": true
+    },
+    {
+      "name": "320: expansion has no document writes",
+      "pass": true
+    },
+    {
+      "name": "document/320: no external requests or runtime errors",
+      "pass": true
+    },
+    {
+      "name": "document/320: no document horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "320: legend initially secondary",
+      "pass": true
+    },
+    {
+      "name": "320: legend can expand without writes",
+      "pass": true
+    },
+    {
+      "name": "operations/320: no external requests or runtime errors",
+      "pass": true
+    },
+    {
+      "name": "operations/320: no document horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "320: verification result and limitations remain primary",
+      "pass": true
+    },
+    {
+      "name": "320: verification method initially secondary",
+      "pass": true
+    },
+    {
+      "name": "320: verification provenance and timeline remain accessible",
+      "pass": true
+    },
+    {
+      "name": "verification/320: no external requests or runtime errors",
+      "pass": true
+    },
+    {
+      "name": "verification/320: no document horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "320: bank similarity immediate and diagnostics closed",
+      "pass": true
+    },
+    {
+      "name": "320: bank provenance remains accessible without approval",
+      "pass": true
+    },
+    {
+      "name": "bank/320: no external requests or runtime errors",
+      "pass": true
+    },
+    {
+      "name": "bank/320: no document horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "320: contextual group choice is not preselected",
+      "pass": true
+    },
+    {
+      "name": "320: group help reuses definitions without selection or writes",
+      "pass": true
+    },
+    {
+      "name": "classification/320: no external requests or runtime errors",
+      "pass": true
+    },
+    {
+      "name": "classification/320: no document horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "member has no import action",
+      "pass": true
+    },
+    {
+      "name": "member-home/390: no external requests or runtime errors",
+      "pass": true
+    },
+    {
+      "name": "member-home/390: no document horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "company has structure without source mutation controls",
+      "pass": true
+    },
+    {
+      "name": "company-knowledge/390: no external requests or runtime errors",
+      "pass": true
+    },
+    {
+      "name": "company-knowledge/390: no document horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "source monitoring moved with unresolved status and no automatic checks",
+      "pass": true
+    },
+    {
+      "name": "source resolution retains steps without publication",
+      "pass": true
+    },
+    {
+      "name": "source resolution opens existing review without automatic publication",
+      "pass": true
+    },
+    {
+      "name": "source dialogs close back to monitoring",
+      "pass": true
+    },
+    {
+      "name": "checking shows continuous loading and preserves prior source",
+      "pass": true
+    },
+    {
+      "name": "failed source check preserves card and explicit retry",
+      "pass": true
+    },
+    {
+      "name": "source-monitor/1448: no external requests or runtime errors",
+      "pass": true
+    },
+    {
+      "name": "source-monitor/1448: no document horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "home/1448: comparison no overflow",
+      "pass": true
+    },
+    {
+      "name": "person/1448: comparison no overflow",
+      "pass": true
+    },
+    {
+      "name": "follow-up/1448: comparison no overflow",
+      "pass": true
+    },
+    {
+      "name": "home/390: comparison no overflow",
+      "pass": true
+    },
+    {
+      "name": "person/390: comparison no overflow",
+      "pass": true
+    },
+    {
+      "name": "follow-up/390: comparison no overflow",
+      "pass": true
+    }
+  ],
+  "limits": [
+    "Actual components with deterministic synthetic services; no production candidate data or external AI/email."
+  ]
+}

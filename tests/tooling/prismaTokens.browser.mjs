@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';import {createRequire} from 'node:module';import {mkdir,writeFile} from 'node:fs/promises';
 const {chromium}=createRequire(import.meta.url)(process.env.PRISMA_PLAYWRIGHT_PATH??'playwright');
-const browser=await chromium.launch({headless:true,executablePath:process.env.PRISMA_BROWSER_PATH}),base='http://127.0.0.1:5711',dir='docs/qa/evidence/tokens-prisma-v240/browser',checks=[];let currentPage;await mkdir(dir,{recursive:true});
+const browser=await chromium.launch({headless:true,executablePath:process.env.PRISMA_BROWSER_PATH}),base=process.env.PRISMA_TOKENS_BASE??'http://127.0.0.1:5711',dir=process.env.PRISMA_TOKENS_EVIDENCE??'docs/qa/evidence/tokens-prisma-v240/browser',checks=[];let currentPage;await mkdir(dir,{recursive:true});
 const check=(name,pass)=>{checks.push({name,pass:!!pass});assert.ok(pass,name);};
 try{
  for(const width of (process.env.TOKEN_BROWSER_WIDTH?[Number(process.env.TOKEN_BROWSER_WIDTH)]:[1448,768,390,320])){

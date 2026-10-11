@@ -4,7 +4,7 @@ import {createRequire} from "node:module";
 import {mkdir,writeFile} from "node:fs/promises";
 const {chromium}=createRequire(import.meta.url)(process.env.PRISMA_PLAYWRIGHT_PATH??"playwright");
 const browser=await chromium.launch({headless:true,executablePath:process.env.PRISMA_BROWSER_PATH});
-const evidence="docs/qa/evidence/visual-option4-v211";
+const evidence=process.env.PRISMA_VISUAL_EVIDENCE??"docs/qa/evidence/visual-option4-v211";
 await mkdir(evidence,{recursive:true});
 const results=[];
 try {
@@ -22,10 +22,10 @@ try {
     return {overflow:document.documentElement.scrollWidth>innerWidth+1,titleSize:parseFloat(getComputedStyle(title).fontSize),iconWidth:icon?.getBoundingClientRect().width,values};
    });
    const checks={noRuntimeErrors:errors.length===0,noExternalCalls:external.length===0,noHorizontalOverflow:!measures.overflow,pageTitleAtLeast30:measures.titleSize>=30,substantialPageIcon:measures.iconWidth>=56};
-   if(area==="/"){checks.factualMetrics=measures.values.map(v=>v.text).join(",")==="24,6,18,0";checks.metricHierarchy=measures.values.every(v=>v.size>=28);}
+   if(area==="/"){checks.factualMetrics=measures.values.map(v=>v.text).join(",")==="24,6,18";checks.metricHierarchy=measures.values.every(v=>v.size>=28);}
    if(width===1516||width===390)await page.screenshot({path:evidence+"/area-"+(area.replaceAll("/","-")||"home")+"-"+width+".png",fullPage:true});
    if(area==="/profiles"){await page.getByRole("button",{name:/Importar currículo/}).click();await page.waitForTimeout(200);checks.actionWorks=(await page.locator("h1").innerText())==="Olá!";}
-   if(area==="/settings"){await page.getByRole("tab",{name:"Geral",exact:true}).click();checks.tabWorks=await page.getByText("Configurações gerais ainda não estão disponíveis nesta área.",{exact:true}).count()===1;}
+   if(area==="/settings"){checks.tabWorks=await page.getByRole("tab",{name:"Estrutura de competências",exact:true}).getAttribute("aria-selected")==="true"&&await page.getByRole("tab",{name:"Geral",exact:true}).count()===0;}
    if(width===390){await page.getByRole("button",{name:"Abrir navegação",exact:true}).click();const dialog=page.getByRole("dialog");await dialog.waitFor({state:"visible"});await page.waitForTimeout(600);checks.mobileMenu=await dialog.count()===1;await page.keyboard.press("Tab");await page.keyboard.press("Escape");await dialog.waitFor({state:"hidden"});checks.menuEscape=await page.getByRole("dialog").count()===0;}
    results.push({area,width,checks,measures,errors,external});
    console.log(area,width,checks);

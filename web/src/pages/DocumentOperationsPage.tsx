@@ -158,12 +158,6 @@ export function DocumentOperationsPage({ activeMembership, personId, onNavigate 
         ) : <Button onClick={() => onNavigate("/profiles")}>Ir para Pessoas</Button>}
       />
 
-      <PrismaCard className="prisma-operation-legend">
-        <LegendItem icon={<CheckCircleOutlined />} label="Processado" description="Documento processado com sucesso e disponível." tone="success" />
-        <LegendItem icon={<ClockCircleOutlined />} label="Requer revisão" description="Conteúdo recuperado, revisão humana necessária." tone="review" />
-        <LegendItem icon={<CloseCircleOutlined />} label="Falha técnica" description="Erro no processamento. Nova tentativa necessária." tone="danger" />
-      </PrismaCard>
-
       <div className="prisma-operations-stats">
         <OperationMetric icon={<FileSearchOutlined />} label="Recebidos" value={counts.received} tone="neutral" />
         <OperationMetric icon={<SyncOutlined spin={counts.processing > 0} />} label="Processando" value={counts.processing} tone="processing" />
@@ -171,6 +165,13 @@ export function DocumentOperationsPage({ activeMembership, personId, onNavigate 
         <OperationMetric icon={<CheckCircleOutlined />} label="Concluídos" value={counts.completed} tone="success" />
         <OperationMetric icon={<CloseCircleOutlined />} label="Falha técnica" value={counts.failed} tone="danger" />
       </div>
+      <details className="prisma-disclosure prisma-operation-help"><summary>Entender os estados</summary><div>      <PrismaCard className="prisma-operation-legend">
+        <LegendItem icon={<CheckCircleOutlined />} label="Processado" description="Documento processado com sucesso e disponível." tone="success" />
+        <LegendItem icon={<ClockCircleOutlined />} label="Requer revisão" description="Conteúdo recuperado, revisão humana necessária." tone="review" />
+        <LegendItem icon={<CloseCircleOutlined />} label="Falha técnica" description="Erro no processamento. Nova tentativa necessária." tone="danger" />
+      </PrismaCard>
+
+</div></details>
       <PrismaCard className="prisma-operations-toolbar">
         <Input.Search allowClear onChange={(event) => setSearch(event.target.value)} placeholder={personId ? "Buscar documento desta Pessoa..." : "Buscar por pessoa, documento ou organização..."} value={search} />
         <Select

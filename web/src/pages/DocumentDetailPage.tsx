@@ -135,15 +135,6 @@ export function DocumentDetailPage({ activeMembership, personId, documentId, onN
       <Button onClick={() => onNavigate("/profiles/processes")} type="text">Ir para Processamento e revisões</Button>
       {error ? <Alert closable title={error} onClose={() => setError(null)} showIcon type="error" action={<Button onClick={() => { void refresh().catch(() => setError("O documento não pôde ser consultado. Tente atualizar a consulta novamente.")); }}>Consultar documento</Button>} /> : null}
       <div className="prisma-document-summary-grid">
-        <PrismaCard title="Informações do documento">
-          <Descriptions column={1} size="small">
-            <Descriptions.Item label="Documento ID">{document.id}</Descriptions.Item>
-            <Descriptions.Item label="Origem">{document.sourceType === "resume_pdf" ? "Upload de currículo" : "Texto manual"}</Descriptions.Item>
-            <Descriptions.Item label="Tamanho">{formatBytes(document.byteSize)}</Descriptions.Item>
-            <Descriptions.Item label="Páginas">{document.pageCount ?? "Não informado"}</Descriptions.Item>
-            <Descriptions.Item label="Recebido em">{formatDate(document.createdAt)}</Descriptions.Item>
-          </Descriptions>
-        </PrismaCard>
         <PrismaCard title="Situação atual">
           <Space orientation="vertical">
             <OperationalStatusTag document={document} />
@@ -157,12 +148,21 @@ export function DocumentDetailPage({ activeMembership, personId, documentId, onN
           <Button block onClick={() => onNavigate(`/profiles/${personId}/versions`)}>Comparar versões do perfil</Button>
         </PrismaCard>
       </div>
+      <details className="prisma-disclosure prisma-document-technical"><summary>Detalhes técnicos e histórico</summary><div>        <PrismaCard title="Informações do documento">
+          <Descriptions column={1} size="small">
+            <Descriptions.Item label="Documento ID">{document.id}</Descriptions.Item>
+            <Descriptions.Item label="Origem">{document.sourceType === "resume_pdf" ? "Upload de currículo" : "Texto manual"}</Descriptions.Item>
+            <Descriptions.Item label="Tamanho">{formatBytes(document.byteSize)}</Descriptions.Item>
+            <Descriptions.Item label="Páginas">{document.pageCount ?? "Não informado"}</Descriptions.Item>
+            <Descriptions.Item label="Recebido em">{formatDate(document.createdAt)}</Descriptions.Item>
+          </Descriptions>
+        </PrismaCard>
       <PrismaCard title="Tentativas de processamento">
         <Table columns={attemptColumns} dataSource={attempts} pagination={false} rowKey="id" scroll={{ x: 900 }} />
       </PrismaCard>
       <PrismaCard title={<span><AuditOutlined /> Auditoria operacional</span>}>
         {events.length ? <Timeline items={events.map((event) => ({ color: event.result === "failure" ? "red" : "green", content: <div><strong>{event.eventType}</strong><p>{formatDate(event.createdAt)} · {event.result}{event.errorCode ? ` · ${event.errorCode}` : ""}</p><small>Ator: {event.actorAuthUserId ?? "sistema"}</small></div> }))} /> : <Empty description="Nenhum evento auditável registrado." image={Empty.PRESENTED_IMAGE_SIMPLE} />}
-      </PrismaCard>
+      </PrismaCard></div></details>
     </PrismaPage>
   );
 }

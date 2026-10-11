@@ -3,7 +3,7 @@ import { createRequire } from "node:module";
 import { mkdir, writeFile } from "node:fs/promises";
 const { chromium } = createRequire(import.meta.url)(process.env.PRISMA_PLAYWRIGHT_PATH ?? "playwright");
 const browser = await chromium.launch({ headless: true, executablePath: process.env.PRISMA_BROWSER_PATH });
-const base = process.env.PRISMA_PEOPLE_BASE_URL ?? "http://127.0.0.1:5711", dir = "docs/qa/evidence/people-compact-v234", results = [];
+const base = process.env.PRISMA_PEOPLE_BASE_URL ?? "http://127.0.0.1:5711", dir = process.env.PRISMA_PEOPLE_EVIDENCE ?? "docs/qa/evidence/people-compact-v234", results = [];
 const baseline = process.argv.includes("--baseline");
 const visualOnly = process.argv.includes("--visual-only");
 await mkdir(dir, { recursive: true });
@@ -107,7 +107,8 @@ try {
     await card(actions).getByText("Relação com a Posição confirmada por você", { exact: true }).waitFor();
     check("human decision: explicit handler and no follow-up write", (await calls(actions)).some(c => c.name === "decision" && c.args === "confirmed") && !(await calls(actions)).some(c => c.name === "add-follow-up"));
     await card(actions).getByRole("button", { name: "Enviar relação à curadoria", exact: true }).click();
-    await card(actions).getByRole("button", { name: "Recalcular score", exact: true }).click();
+    await card(actions).getByRole("button", { name: "Outras ações", exact: true }).click();
+    await actions.getByRole("menuitem", { name: "Recalcular score", exact: true }).click();
     check("curation/recalculation: explicit handlers retained", (await calls(actions)).some(c => c.name === "curation") && (await calls(actions)).some(c => c.name === "recalculate"));
     await actions.close();
     for (const width of [1448, 390]) { const compare = await open(width, "compare"); check(`${width}: comparison CSS preserved`, await compare.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)); await compare.screenshot({ path: `${dir}/compare-${width}.png`, fullPage: true }); await compare.close(); }

@@ -17,12 +17,15 @@ try{for(const width of [1280,390])for(const scenario of ["normal","member","part
   await p.getByRole("button",{name:"Reabrir tela",exact:true}).click();await p.getByText("73/100",{exact:true}).waitFor();checks.reloadSame=true;
   if(scenario==="member")checks.noRecalculate=await p.getByRole("button",{name:"Recalcular score",exact:true}).count()===0;
   else{
+   const alphaReview=p.locator(".prisma-vacancy-match-card").filter({hasText:"Pessoa Alfa"});
+   if(await alphaReview.getByRole("button",{name:"Expandir Pessoa Alfa",exact:true}).isVisible())await alphaReview.getByRole("button",{name:"Expandir Pessoa Alfa",exact:true}).click();
+   await alphaReview.locator(".prisma-candidate-review > summary").click();
    await p.getByRole("button",{name:"Revisar divergências",exact:true}).click();await p.getByRole("radio",{name:"Atuação direta",exact:true}).check();await p.getByRole("button",{name:"Salvar revisão",exact:true}).click();
    await p.getByText("78/100",{exact:true}).waitFor();checks.reviewOnlyAlfa=await p.getByText("61/100",{exact:true}).count()===1;
    const calls=await p.evaluate(()=>window.__stableFixture.calls);checks.reviewDoesNotReloadBeta=calls.filter(c=>c.profileId.endsWith("000000000007")).length===2;
    const alfa=p.locator(".prisma-vacancy-match-card").filter({hasText:"Pessoa Alfa"});
-   await alfa.getByRole("button",{name:"Recalcular score",exact:true}).click();checks.loadingFeedback=await p.locator(".prisma-loading-feedback").isVisible();checks.priorWhileUpdating=await p.getByText("78/100",{exact:true}).count()===1;await p.getByText("82/100",{exact:true}).waitFor();checks.explicitOnlyAlfa=await p.getByText("61/100",{exact:true}).count()===1;
-   await p.evaluate(()=>{window.__stableFixture.fail=true;});await alfa.getByRole("button",{name:"Recalcular score",exact:true}).click();await p.getByText("Atualização não concluída · resultado anterior preservado",{exact:true}).waitFor();checks.failureRetains82=await p.getByText("82/100",{exact:true}).count()===1;
+   await alfa.getByRole("button",{name:"Outras ações",exact:true}).click();await p.getByRole("menuitem",{name:"Recalcular score",exact:true}).click();checks.loadingFeedback=await p.locator(".prisma-loading-feedback").isVisible();checks.priorWhileUpdating=await p.getByText("78/100",{exact:true}).count()===1;await p.getByText("82/100",{exact:true}).waitFor();checks.explicitOnlyAlfa=await p.getByText("61/100",{exact:true}).count()===1;
+   await p.evaluate(()=>{window.__stableFixture.fail=true;});await alfa.getByRole("button",{name:"Outras ações",exact:true}).click();await p.getByRole("menuitem",{name:"Recalcular score",exact:true}).click();await p.getByText("Atualização não concluída · resultado anterior preservado",{exact:true}).waitFor();checks.failureRetains82=await p.getByText("82/100",{exact:true}).count()===1;
   }
   await p.getByRole("button",{name:"Alternar comparação",exact:true}).click();await p.getByRole("heading",{name:"Comparar pessoas",exact:true}).waitFor();await p.getByText("Pessoa Beta",{exact:true}).first().waitFor();await p.getByText("61/100",{exact:true}).waitFor();checks.comparisonRetainsBeta=await p.getByText("61/100",{exact:true}).count()===1;checks.comparisonRetainsAlfa=await p.getByText(scenario==="normal"?"82/100":"73/100",{exact:true}).count()===1;
  }

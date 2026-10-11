@@ -11,6 +11,12 @@ test("every page declares loading feedback; synchronous assisted description has
   for(const n of tree.statements){if(!ts.isFunctionDeclaration(n)||!n.name?.text.endsWith("Page")||!n.body)continue;
    const name=n.name.text,body=n.body.getText(tree);
    if(name==="VacancyAssistPage"){assert.doesNotMatch(body,/\bawait\b|\.then\(/);continue;}
+   if(name==="SettingsPage"){
+    assert.doesNotMatch(body,/\bawait\b|\.then\(/,"legacy alias has no independent pending operation");
+    assert.match(body,/return <KnowledgePage/);
+    assert.match(await readFile("web/src/pages/KnowledgePage.tsx","utf8"),/useLoadingFeedback\(/,"delegated page owns visible loading");
+    audited.push(name);continue;
+   }
    assert.match(body,/useLoadingFeedback\(|useLoadingTask\(/,`${name} must register visible pending operations`);audited.push(name);
   }
  }

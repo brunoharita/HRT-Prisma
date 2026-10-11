@@ -137,3 +137,14 @@ A seleção para avaliação compartilha a região esquerda com o avatar. Nome, 
 ## Avaliação do processo — seções guiadas 4A, 2.3.5
 
 Referência aprovada: `docs/product/proposta-avaliacao-processo-2026-10-10/variacoes-secoes-guiadas/4a-azul-equilibrado.png`. Configuração e Requisitos da Posição aparecem simultaneamente. Desktop usa faixa numerada azul suave à esquerda e controles à direita, quatro campos em linha, composição abaixo e requisitos em chips. Mobile empilha cabeçalhos e conteúdo, campos2×2 e lista legível; ação Montar avaliação abaixo e histórico independente. A numeração não cria um wizard. Personalização continua explícita; requisitos escolhidos ficam visíveis fora da edição. Cores/tokens, shell, navegação, loading e handlers reutilizam o sistema. Avaliação e regras de IA/revisão/envio/dados não mudam. Acordo e AoT `process-assessment-guided-v235`.
+
+
+## Foco operacional e consulta sob demanda — v2.4.1
+
+Por decisão de Bruno em11/10/2026, o acordo `docs/qa/agreement-operational-focus-v241.md` v1.0.0 reorganiza 16 superfícies, preservando funções e regras. Início concentra Pessoas/Posições/Perfis e a importação; princípios de confiança ficam em Como o Prisma trabalha. Monitoramento e resolução de fontes ficam na aba Fontes de Conhecimento, sob a mesma autoridade super_admin. A estrutura consultiva de competências fica em Conhecimento, com definições reutilizadas na classificação. O endereço legado /settings mantém a autorização de Conhecimento e abre Estrutura de competências, sem um segundo item no menu.
+
+Resumo da Pessoa mantém pendências imediatas e acessos compactos a Documentos/Histórico/ações. Pessoas encontradas preserva trajetória, cobertura e vínculo atual; método/revisão detalhados em Entender a análise e recálculo manual em Outras ações. Acompanhamento usa contadores compactos e prioriza próxima ação, entrevista e decisão. Análise e evidências completas e histórico permanecem em botões próprios; histórico apresenta autor, data e alterações legíveis, com snapshots técnicos disponíveis em detalhe.
+
+Diagnóstico documental fica sob Detalhes técnicos e histórico, a legenda operacional sob Entender os estados, e versões/timeline de Verificações sob Método e histórico. Limitações e estados relevantes continuam imediatos. No Banco de Itens, similaridade/duplicidade permanecem na revisão humana; fingerprint/provedor/schema ficam sob Origem e detalhes técnicos. Avaliações anteriores ficam recolhidas inicialmente em todos os tamanhos, com quantidade e consulta. Essa regra substitui a abertura inicial no desktop do acordo visual2.3.5, mantendo sua composição guiada4A.
+
+Expansão e navegação nunca iniciam IA, recálculo, aprovação, envio ou publicação. Consulta secundária preserva rascunhos; falhas/pendências/confiança reduzida permanecem visíveis. Não há alteração de domínio, segurança, tenant, escritores, schema ou serviços. Comparações e limites de validação no AoT `docs/qa/aot-operational-focus-v241.md`.

@@ -1,0 +1,59 @@
+{
+  "checks": [
+    {
+      "name": "390: shared balance / monthly / prices visible",
+      "pass": true
+    },
+    {
+      "name": "390: refresh retains displayed balance",
+      "pass": true
+    },
+    {
+      "name": "390: request discloses frozen terms and manual release",
+      "pass": true
+    },
+    {
+      "name": "390: failed request retains modal for retry",
+      "pass": true
+    },
+    {
+      "name": "390: failure has explicit retry within modal",
+      "pass": true
+    },
+    {
+      "name": "390: retry reuses commercial idempotency id",
+      "pass": true
+    },
+    {
+      "name": "390: no global horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "390: operational role has own use and no buying",
+      "pass": true
+    },
+    {
+      "name": "390: super-user registers package and price cents",
+      "pass": true
+    },
+    {
+      "name": "390: super-user schedules next quota and renewal day",
+      "pass": true
+    },
+    {
+      "name": "390: internal costs keep unknown status explicit",
+      "pass": true
+    },
+    {
+      "name": "390: super screen has no global overflow",
+      "pass": true
+    },
+    {
+      "name": "390: no runtime exceptions or external requests",
+      "pass": true
+    }
+  ],
+  "limits": [
+    "Real UI with synthetic transport. SQL validates server authority. No commercial production orders or paid AI."
+  ]
+}

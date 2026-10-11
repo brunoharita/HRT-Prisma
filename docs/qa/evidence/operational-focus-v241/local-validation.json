@@ -1,0 +1,55 @@
+{
+  "reports": {
+    "comparison-checks.json": {
+      "total": 6,
+      "failed": 0
+    },
+    "operational-checks.json": {
+      "total": 114,
+      "failed": 0
+    },
+    "source-checks.json": {
+      "total": 8,
+      "failed": 0
+    },
+    "detail\\checks.json": {
+      "total": 30,
+      "failed": 0
+    },
+    "regression-follow-up\\browser-results.json": {
+      "total": 34,
+      "failed": 0
+    },
+    "regression-people\\browser-results.json": {
+      "total": 106,
+      "failed": 0
+    },
+    "regression-person\\browser-results.json": {
+      "total": 180,
+      "failed": 0
+    },
+    "regression-process\\visual-checks.json": {
+      "total": 64,
+      "failed": 0
+    },
+    "regression-score\\browser-results.json": {
+      "total": 54,
+      "failed": 0
+    },
+    "regression-shell\\visual-results.json": {
+      "total": 141,
+      "failed": 0
+    },
+    "regression-tokens\\checks.json": {
+      "total": 13,
+      "failed": 0
+    }
+  },
+  "typecheckWeb": "PASS",
+  "buildWeb": "PASS",
+  "rootBuild": "PASS",
+  "nodeTests": 25,
+  "contextAndFoundation": "PASS in staged snapshot",
+  "lint": "PASS in staged snapshot; local untracked output has preexisting whitespace",
+  "limits": "Synthetic UI, no real authenticated journey or paid AI/email"
+}

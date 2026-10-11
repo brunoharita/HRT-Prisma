@@ -3,7 +3,7 @@ import {createRequire} from 'node:module';
 import {mkdir,writeFile} from 'node:fs/promises';
 const {chromium}=createRequire(import.meta.url)(process.env.PRISMA_PLAYWRIGHT_PATH??'playwright');
 const browser=await chromium.launch({headless:true,executablePath:process.env.PRISMA_BROWSER_PATH});
-const dir='docs/qa/evidence/process-assessment-guided-v235',base='http://127.0.0.1:5710',checks=[];
+const dir=process.env.PRISMA_PROCESS_EVIDENCE??'docs/qa/evidence/process-assessment-guided-v235',base='http://127.0.0.1:5710',checks=[];
 await mkdir(dir,{recursive:true});
 const check=(name,pass)=>{checks.push({name,pass:!!pass});assert.ok(pass,name);};
 try {
@@ -51,7 +51,8 @@ try {
   check(`${width}: failure preserves draft and offers retry`,await quantity.inputValue()==='20'&&await page.getByRole('button',{name:'Atualizar dados',exact:true}).count()===1);
   await page.evaluate(()=>{window.__processFixture.fail=false;});
   const history=page.locator('.process-assessment-history');
-  if(!await history.getByRole('button',{name:'Consultar · Pessoa exemplo · Rascunho',exact:true}).isVisible())await page.getByRole('button',{name:/Avaliações individuais anteriores/}).click();
+  check(`${width}: legacy history initially closed`,!await history.getByRole('button',{name:'Consultar · Pessoa exemplo · Rascunho',exact:true}).isVisible());
+  if(!await history.getByRole('button',{name:'Consultar · Pessoa exemplo · Rascunho',exact:true}).isVisible())await page.getByRole('button',{name:/Histórico de avaliações anteriores/}).click();
   await history.getByRole('button',{name:'Consultar · Pessoa exemplo · Rascunho',exact:true}).click();
   await page.getByRole('dialog').getByText('20 questões · 60 minutos',{exact:true}).waitFor();
   check(`${width}: historical assessment remains consultable`,await page.getByRole('dialog').getByRole('button',{name:'Montar avaliação',exact:true}).count()===0);

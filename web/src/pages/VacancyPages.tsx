@@ -788,7 +788,7 @@ function CandidateMatchCard({ followUp, followUpStatus, initiallyExpanded = true
     </header>
     <div className="prisma-candidate-toolbar">
       <section className="prisma-vacancy-action-group is-consult" aria-label="Consultar">
-        <Space wrap>{profileButton}{analysisButton}{canReview && onRecalculate ? <Button loading={match.stableResult?.state === "updating"} onClick={onRecalculate}>Recalcular score</Button> : null}</Space>
+        <Space wrap>{profileButton}{analysisButton}{canReview && onRecalculate ? <Dropdown trigger={["click"]} menu={{items:[{key:"recalculate",label:"Recalcular score",disabled:match.stableResult?.state==="updating"}],onClick:()=>onRecalculate()}}><Button loading={match.stableResult?.state === "updating"}>Outras ações</Button></Dropdown> : null}</Space>
       </section>
       {followUpAction}
     </div>
@@ -815,7 +815,7 @@ function CandidateMatchCard({ followUp, followUpStatus, initiallyExpanded = true
       <MatchingScoreSummary match={match} />
       <Button className="prisma-candidate-expand" type="text" icon={<DownOutlined rotate={expanded ? 180 : 0} />} aria-label={`${expanded ? "Recolher" : "Expandir"} ${match.candidate.fullName}`} aria-expanded={expanded} aria-controls={`candidate-details-${match.candidate.personId}`} onClick={() => setExpanded(value => !value)} />
         <Space className="prisma-position-relation-tags" wrap>
-          <MatchRelationTags match={match} />
+          <MatchRelationTags match={match} compact />
           {match.positionDecision === "confirmed" ? <Tag className="prisma-position-decision-tag" color="green">Relação com a Posição confirmada por você</Tag>
             : match.positionDecision === "dismissed" ? <Tag className="prisma-position-decision-tag">Relação com a Posição desconsiderada por você</Tag> : null}
           <DetailedStatusTag match={match} />
@@ -825,7 +825,7 @@ function CandidateMatchCard({ followUp, followUpStatus, initiallyExpanded = true
     <div className="prisma-candidate-details" id={`candidate-details-${match.candidate.personId}`} hidden={!expanded}>
     <div className="prisma-candidate-toolbar">
       <section className="prisma-vacancy-action-group is-consult" aria-label="Consultar">
-        <Space wrap>{profileButton}{analysisButton}{canReview && onRecalculate ? <Button loading={match.stableResult?.state === "updating"} onClick={onRecalculate}>Recalcular score</Button> : null}</Space>
+        <Space wrap>{profileButton}{analysisButton}{canReview && onRecalculate ? <Dropdown trigger={["click"]} menu={{items:[{key:"recalculate",label:"Recalcular score",disabled:match.stableResult?.state==="updating"}],onClick:()=>onRecalculate()}}><Button loading={match.stableResult?.state === "updating"}>Outras ações</Button></Dropdown> : null}</Space>
       </section>
       {followUpAction}
     </div>
@@ -845,7 +845,7 @@ function CandidateMatchCard({ followUp, followUpStatus, initiallyExpanded = true
     <details className="prisma-candidate-explanation prisma-candidate-disclosure" open>
       <summary><strong><FileSearchOutlined aria-hidden="true" /> Por que esta Pessoa aparece</strong></summary>
       <Typography.Paragraph>{match.trajectoryAssessment.explanation}</Typography.Paragraph>
-      <details className="prisma-candidate-sources"><summary>Ver todas as evidências da trajetória</summary>
+      <details className="prisma-candidate-sources"><summary>Entender a análise</summary><Space wrap><MatchRelationTags match={match}/></Space>
         {match.areaRelation.status !== "none" ? <><Typography.Text strong>Área profissional observada</Typography.Text><Typography.Paragraph>{match.areaRelation.explanation}</Typography.Paragraph></> : null}
         <Typography.Text strong>Proximidade do cargo</Typography.Text><Typography.Paragraph>{match.positionRelation.explanation}</Typography.Paragraph>
         {match.candidate.profileData.summary ? <><Typography.Text strong>Resumo profissional</Typography.Text><Typography.Paragraph>{match.candidate.profileData.summary}</Typography.Paragraph></> : null}
@@ -943,8 +943,9 @@ function ScoreItemTag({ status }: { status: MatchingScoreItemStatus }) {
   return <Tag color={values[status][0]}>{values[status][1]}</Tag>;
 }
 
-function MatchRelationTags({ match }: { match: VacancyCandidateMatch }) {
+function MatchRelationTags({ match, compact=false }: { match: VacancyCandidateMatch;compact?:boolean }) {
   if (match.semanticAssessment && match.semanticAssessment.status !== "complete") return <Tag>Análise pendente</Tag>;
+  if(compact)return <><DiscoveryGroupTag group={match.discoveryGroup}/>{isSemanticTriageEligible(match) && !match.semanticAssessment && !match.semanticFallback ? <Tag color="processing">Relação plausível · interpretação pendente</Tag>:null}{match.semanticFallback?<Tag color="warning">{semanticFallbackBadge(match.semanticFallback)}</Tag>:null}</>;
   return <><DiscoveryGroupTag group={match.discoveryGroup} /><AreaRelationTag status={match.areaRelation.status} /><PositionRelationTag status={match.positionRelation.status} />{match.semanticAssessment?.resolutionSource === "human_review" ? <Tag color="green">Trajetória revisada por pessoa autorizada</Tag> : null}{isSemanticTriageEligible(match) && !match.semanticAssessment && !match.semanticFallback ? <Tag color="processing">Relação plausível · interpretação pendente</Tag> : null}{match.semanticFallback ? <Tag color="warning">{semanticFallbackBadge(match.semanticFallback)}</Tag> : null}</>;
 }
 

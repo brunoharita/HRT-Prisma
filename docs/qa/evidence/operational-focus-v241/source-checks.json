@@ -1,0 +1,39 @@
+{
+  "checks": [
+    {
+      "name": "source monitoring moved with unresolved status and no automatic checks",
+      "pass": true
+    },
+    {
+      "name": "source resolution retains steps without publication",
+      "pass": true
+    },
+    {
+      "name": "source resolution opens existing review without automatic publication",
+      "pass": true
+    },
+    {
+      "name": "source dialogs close back to monitoring",
+      "pass": true
+    },
+    {
+      "name": "checking shows continuous loading and preserves prior source",
+      "pass": true
+    },
+    {
+      "name": "failed source check preserves card and explicit retry",
+      "pass": true
+    },
+    {
+      "name": "source-monitor/1448: no external requests or runtime errors",
+      "pass": true
+    },
+    {
+      "name": "source-monitor/1448: no document horizontal overflow",
+      "pass": true
+    }
+  ],
+  "limits": [
+    "Actual components with deterministic synthetic services; no production candidate data or external AI/email."
+  ]
+}

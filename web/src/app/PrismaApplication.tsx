@@ -165,12 +165,6 @@ const routes: AppRoute[] = [
     icon: <BookOutlined />,
     rule: { requiresAuth: true, requiresMembership: false, allowedRoles: ["super_admin", "owner", "admin"] },
   },
-  {
-    path: "/settings",
-    label: "Configurações",
-    icon: <SettingOutlined />,
-    rule: { requiresAuth: true, requiresMembership: false, allowedRoles: ["super_admin", "owner", "admin"] },
-  },
   { path: "/change-password", rule: { requiresAuth: true, requiresMembership: false } },
   { path: "/sign-in", rule: { requiresAuth: false, requiresMembership: false } },
   { path: "/access-denied", rule: { requiresAuth: true, requiresMembership: false } },
@@ -373,7 +367,7 @@ export function PrismaApplication() {
       onSignOut={() => void handleSignOut()}
       profileName={profileName}
       profileSubtitle={profileSubtitle}
-      selectedPath={route.profileId ? "/profiles" : route.vacancyId || route.vacancyView ? "/vacancies" : route.userId ? "/users" : route.path.startsWith("/matching") ? "/verifications" : route.path.startsWith("/verifications") ? "/verifications" : route.path}
+      selectedPath={route.path === "/settings" ? "/knowledge" : route.profileId ? "/profiles" : route.vacancyId || route.vacancyView ? "/vacancies" : route.userId ? "/users" : route.path.startsWith("/matching") ? "/verifications" : route.path.startsWith("/verifications") ? "/verifications" : route.path}
     >
       {state.errorMessage || state.infoMessage ? (
         <Alert
@@ -496,7 +490,7 @@ function renderRouteContent(
     return <PlaceholderPage title="Organizações" description="Gestão estrutural de grupos e empresas permanece fora deste movimento." />;
   }
   if (route.path === "/settings") {
-    return <SettingsPage organizationId={activeMembership?.organizationId ?? null} />;
+    return <SettingsPage profile={currentOperator?.profile ?? "member"} activeMembership={activeMembership} />;
   }
   if (route.path === "/access-denied") {
     return <AccessResult activeMembership={activeMembership} currentOperator={currentOperator} unauthorized={false} />;
@@ -631,6 +625,8 @@ function findRoute(pathname: string): AppRoute {
   if (participantMatch?.[1]) return { path: "/verify", participantToken: participantMatch[1], rule: { requiresAuth: false, requiresMembership: false } };
   const selfDataMatch = /^\/my-data\/([A-Za-z0-9_-]{40,200})$/.exec(normalized);
   if (selfDataMatch?.[1]) return { path: "/my-data", selfDataToken: selfDataMatch[1], rule: { requiresAuth: false, requiresMembership: false } };
+  // Legacy bookmarks keep the same access rule as Conhecimento, without a second menu entry.
+  if (normalized === "/settings") return {path:"/settings",rule:routes.find(route=>route.path==="/knowledge")!.rule};
   const exact = routes.find((route) => route.path === normalized);
   if (exact) return exact;
   const reviewerRule = { requiresAuth: true, requiresMembership: true, allowedRoles: ["super_admin", "owner", "admin", "recruiter"] as const };

@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 446
-source_manifest_sha256: d42d46bed8216c73dd601036ee24f311150ec5a5abf5f42574c53c571f814386
+documentation_source_count: 448
+source_manifest_sha256: ad50925812f5c01e663f31b05f134590cd6b1762367e171549266d8619fbcda7
 -->
 
 # Tudo sobre o Prisma
@@ -2635,6 +2635,10 @@ last_verified: 2026-10-10
 ---
 
 # Estado atual do Prisma
+
+## Foco operacional — v2.4.1
+
+Implementação autorizada em11/10/2026: 16 reorganizações de apresentação para priorizar ações, pendências e decisões humanas, com fontes/histórico/diagnóstico completos sob demanda. Início com três indicadores e ajuda por botão; Fontes e estrutura em Conhecimento; /settings preservado como acesso legado à estrutura com as mesmas permissões. Pessoa com acessos compactos, descoberta com detalhes de análise expansíveis e recálculo manual em Outras ações; acompanhamento com contadores compactos e formulários prioritários, análise e histórico em drawers. Documento, processamento, Verificações e Banco de Itens mantêm ações/limitações primárias e metadados secundários; histórico de avaliações fechado inicialmente em desktop/mobile. Sem banco/Edge/IA/matching/envio/cobrança/dados alterados. Contrato/mapa/execução `docs/qa/agreement-operational-focus-v241.md`, AoT `docs/qa/aot-operational-focus-v241.md`. Validação e publicação em andamento; não constitui prova de rollout.
 
 ## Tokens Prisma — v2.4.0
 
@@ -12458,6 +12462,17 @@ A seleção para avaliação compartilha a região esquerda com o avatar. Nome, 
 
 Referência aprovada: `docs/product/proposta-avaliacao-processo-2026-10-10/variacoes-secoes-guiadas/4a-azul-equilibrado.png`. Configuração e Requisitos da Posição aparecem simultaneamente. Desktop usa faixa numerada azul suave à esquerda e controles à direita, quatro campos em linha, composição abaixo e requisitos em chips. Mobile empilha cabeçalhos e conteúdo, campos2×2 e lista legível; ação Montar avaliação abaixo e histórico independente. A numeração não cria um wizard. Personalização continua explícita; requisitos escolhidos ficam visíveis fora da edição. Cores/tokens, shell, navegação, loading e handlers reutilizam o sistema. Avaliação e regras de IA/revisão/envio/dados não mudam. Acordo e AoT `process-assessment-guided-v235`.
 
+
+## Foco operacional e consulta sob demanda — v2.4.1
+
+Por decisão de Bruno em11/10/2026, o acordo `docs/qa/agreement-operational-focus-v241.md` v1.0.0 reorganiza 16 superfícies, preservando funções e regras. Início concentra Pessoas/Posições/Perfis e a importação; princípios de confiança ficam em Como o Prisma trabalha. Monitoramento e resolução de fontes ficam na aba Fontes de Conhecimento, sob a mesma autoridade super_admin. A estrutura consultiva de competências fica em Conhecimento, com definições reutilizadas na classificação. O endereço legado /settings mantém a autorização de Conhecimento e abre Estrutura de competências, sem um segundo item no menu.
+
+Resumo da Pessoa mantém pendências imediatas e acessos compactos a Documentos/Histórico/ações. Pessoas encontradas preserva trajetória, cobertura e vínculo atual; método/revisão detalhados em Entender a análise e recálculo manual em Outras ações. Acompanhamento usa contadores compactos e prioriza próxima ação, entrevista e decisão. Análise e evidências completas e histórico permanecem em botões próprios; histórico apresenta autor, data e alterações legíveis, com snapshots técnicos disponíveis em detalhe.
+
+Diagnóstico documental fica sob Detalhes técnicos e histórico, a legenda operacional sob Entender os estados, e versões/timeline de Verificações sob Método e histórico. Limitações e estados relevantes continuam imediatos. No Banco de Itens, similaridade/duplicidade permanecem na revisão humana; fingerprint/provedor/schema ficam sob Origem e detalhes técnicos. Avaliações anteriores ficam recolhidas inicialmente em todos os tamanhos, com quantidade e consulta. Essa regra substitui a abertura inicial no desktop do acordo visual2.3.5, mantendo sua composição guiada4A.
+
+Expansão e navegação nunca iniciam IA, recálculo, aprovação, envio ou publicação. Consulta secundária preserva rascunhos; falhas/pendências/confiança reduzida permanecem visíveis. Não há alteração de domínio, segurança, tenant, escritores, schema ou serviços. Comparações e limites de validação no AoT `docs/qa/aot-operational-focus-v241.md`.
+
 ---
 
 ## Source: `docs/product/vacancy-intelligence.md`
@@ -15500,6 +15515,77 @@ Baseline local main 79f12a54eb727c42ab237304a7e1ce9c251a3ec2; levantamento de de
 | Backend/Score/modelos/Resend/Parser/Synthesis/Mail | no_impact_identified | Nenhuma mudança de contrato, dados ou chamada de negócio; release web isolado | Revisão do diff/plano e IDs/imagens/restarts dos serviços |
 
 Sem referência visual normativa fornecida; posição superior esquerda é requisito explícito, demais detalhes seguem o design system.
+
+---
+
+## Source: `docs/qa/agreement-operational-focus-v241.md`
+
+# Contrato de Acordos — Foco operacional v2.4.1
+
+Versão 1.0.0, agreed em 2026-10-11. Autoridade: Bruno aprovou implementar os 16 pontos da análise de UX e utilidade, integrar em main e publicar 2.4.1. Baseline local/origin main a085c6eb9ca1ac276569a8b5cdce547038daa062, produto 2.4.0. Risco C: reorganização integrada de apresentação, sem alteração de domínio/backend.
+
+## DEVE
+
+- D-01: retirar aviso M8 do Início; manter informação útil em ajuda, com linguagem de produto.
+- D-02: retirar contador de Conhecimento e monitoramento de fontes do Início; preservar consulta, checagem explícita e resolução em Conhecimento → Fontes, com a mesma autoridade. Não inventar impacto operacional para exibir alerta no Início.
+- D-03: princípios de confiança acessíveis pelo botão Como o Prisma trabalha, sem bloco permanente.
+- D-04: no Resumo da Pessoa, trocar prévias de documentos, atividade e ações rápidas por acessos compactos a Documentos/Histórico/ações existentes. Pendências acionáveis permanecem imediatas.
+- D-05: lista Pessoas encontradas mantém trajetória, cobertura, pendência relevante e situação no acompanhamento. Método/revisão/detalhes secundários ficam em Entender a análise, preservando decisões e acesso às fontes.
+- D-06: Recalcular score fica em Outras ações, com loading e indicação contextual das condições já conhecidas, sem recálculo automático.
+- D-07: indicadores do acompanhamento em faixa compacta; contagens e filtros preservados.
+- D-08: detalhe do acompanhamento prioriza próximos passos/entrevista/decisão; resumo de score/cobertura e alertas permanecem. Explicação/versões/fontes sob Consultar análise e evidências.
+- D-09: histórico do acompanhamento acessível por botão; mostrar autor, data e campos alterados em linguagem humana. Dados técnicos anteriores/posteriores preservados em detalhe adicional.
+- D-10: detalhe documental prioriza situação e recuperação/revisão; ID, tentativas e auditoria ficam sob Detalhes técnicos e histórico. Dados e ações existentes preservados.
+- D-11: legenda de Processamento e revisões sob Entender os estados, próxima aos filtros; estados e pendências permanecem.
+- D-12: avaliações individuais anteriores fechadas inicialmente em todos os viewports, com quantidade e consulta preservadas.
+- D-13: versões/método/linha do tempo de Verificações sob Método e histórico; resultado/limitações e ações do convite permanecem imediatos.
+- D-14: revisão no Banco de Itens mantém duplicidade/similaridade imediatas; fingerprint/provedor/schema sob Origem e detalhes técnicos.
+- D-15: remover da navegação de Configurações abas vazias e controle Editar estrutura indisponível; não criar capacidades fictícias.
+- D-16: estrutura consultiva de competências em Conhecimento → Estrutura de competências; ajuda contextual na classificação reutiliza definições existentes. Compatibilidade do endereço antigo preservada sem duplicar a área na navegação.
+- D-17: preservar áreas já adequadas: evidências por informação, pendências/conflitos, atividade por questão e suas limitações, governança especializada e revisão humana de questões.
+- D-18: responsivo/teclado/loading/rascunhos/retorno preservados; main + release 2.4.1, rollback e smoke de destinos derivados do diff.
+
+## PROIBIDO
+
+- P-01: apagar histórico/evidências, ampliar autoridade/tenant, mudar score/matching/IA/tarifa/envio/regras de prova ou criar escolhas humanas automáticas.
+- P-02: abertura/expansão/navegação iniciar IA, recálculo, envio ou mutação; esconder pendência, conflito ou limitação material para simplificar a tela.
+- P-03: novos destinos, bibliotecas, custos ou alteração de serviços por proximidade; tocar arquivos alheios.
+
+## FORA DE ESCOPO
+
+- F-01: redesenhar regras de taxonomia, cobrança, auth, backend ou dados. Auditoria UI não autoriza limpeza de registros.
+- F-02: novas integrações, funcionalidades planejadas, sugestões inventadas, alteração do conteúdo de currículos e revisão de toda a navegação do sistema.
+
+## AUTONOMIA
+
+- A-01: reutilizar Ant Design/PrismaDisclosure, componentes e serviços existentes; escolher drawer/collapse/modal acessível, espaçamento e nomes claros dentro dos destinos aprovados.
+- A-02: fixtures sintéticas, testes dirigidos e alias de URL legado; nenhuma operação com Pessoa real necessária para essa mudança.
+
+Q: nenhuma pendência material. Screenshots anteriores são contraexemplos, não um novo alvo visual; comparar baseline/resultado com mesmas fixtures e viewports 1448 e 390, também 320 para quebra de layout.
+
+## Critérios de aceite
+
+- CA-01: cada D-01..D-16 tem prova de ausência no local antigo e acesso/conteúdo no novo, inclusive teclado e mobile.
+- CA-02: D-17/P-01/P-02: regressão dos callbacks, seleção/rascunho, decisões não pré-marcadas, falha/loading, fontes e histórico; nenhum write passivo ou tráfego externo nas fixtures.
+- CA-03: D-18: tipos/build/contextos, revisão integral do diff, CI branch/main, SHA servido/2.4.1/HTTPS/rollback/serviços preservados.
+
+## Mapa de impacto prévio
+
+| Área/capacidade | Relação | Baseline/regressão proporcional |
+| --- | --- | --- |
+| Início e Conhecimento/estrutura | direct | Componentes existentes, fontes/checar/resolver/escopo; fixtures de role e tabs, alias antigo |
+| Pessoa: Resumo/Documentos/Histórico | direct | Perfil vigente separado de Documento/Tentativa; fixture person-unified, pendências e navegação |
+| Descoberta e acompanhamento | direct | stable-score/follow-up, mesma composição/dados; expansão/fontes/score/formulários/filtros/drag/rascunhos |
+| Documento/processamento | direct | person-unified/detalhe; recuperar/revisar/reprocessar/diagnóstico e histórico |
+| Avaliação/processo/verificações/banco | direct | fixtures de provas e governança, seleção/revisão/envio/resultados/legacy/limitações |
+| Componentes compartilhados e shell | plausible_indirect | CSS scoped + registro de navegação; mobile/overflow/retorno e versão |
+| Acesso/tenant/loading | critical_transversal | Não muda escritores/services/gates; negativos de role e ausência de writes passivos; loading regressão |
+| Banco/Edge/Parser/Synthesis/mail e dados produtivos | no_impact_identified | Reorganização JSX/CSS; conferir diff/plano e identidades de serviços antes/depois, sem novas escritas |
+| Tokens Prisma | plausible_indirect | App shell compartilhado; tela/quote/mensagens preservadas por regressão dirigida |
+
+## Execução congelada
+
+Implementar integralmente este contrato v1.0.0 aprovado, sem nova aprovação administrativa. Registrar cada D/P no AoT com implementação, teste, evidência e limites. Não declarar PASS com prova necessária ausente. Publicar somente destinos exigidos pelo diff comprometido.
 
 ---
 
@@ -20697,6 +20783,78 @@ CI inicial38045473960 bloqueou promoção:872/873, expectativa estática antiga 
 Dispatcher publicou a unidade, mas seu smoke imediato terminou exit22/HTTP404 durante recriação. A verificação independente após estabilização passou, sem reconstruir/republicar nem contornar gate. Recibo publication-preservation.json conserva essa distinção. Rollback prisma-web:rollback-before-96c912d8eeb6 corresponde à imagem anterior b53ee95bb7b8. Seis demais containers mantiveram IDs/imagens/restarts/status; Parser/Synthesis/Mail continuam healthy. O experimento paddle-vl-llama-test já estava unhealthy no baseline e permaneceu assim: não é capacidade validada ou alterada neste movimento.
 
 Fechamento documental e Context Pack seguem em commit posterior, sem reconstrução do runtime funcional. D-01..05 e P-01..03 PASS; nenhuma divergência do escopo aprovado. Jornada autenticada real continua NOT TESTED. Arquivos alheios e worktrees preexistentes preservados; avisos locais de prune com Permission denied não impediram commit/fetch e não foram tratados por exclusão. Evidências: ci-branch/main.json, release-plan.json, production-after.json, publication-preservation.json e production-browser.json. Nenhuma migration, função, runtime IA ou mail publicado.
+
+---
+
+## Source: `docs/qa/aot-operational-focus-v241.md`
+
+# AoT — Foco operacional v2.4.1
+
+Acordo congelado: agreement-operational-focus-v241.md v1.0.0, decisão de Bruno11/10/2026. Mapa prévio e execução no mesmo contrato. Baseline main/origin a085c6eb9ca1ac276569a8b5cdce547038daa062, v2.4.0. Risco C, somente apresentação web/documentação. Não há novo domínio, escritor, schema, serviço ou destino.
+
+## Acordos → implementação → teste → evidência
+
+Evidências em `docs/qa/evidence/operational-focus-v241/`. As fixtures usam componentes reais e dados/transportes sintéticos; não provam jornadas autenticadas com candidatos reais.
+
+| ID | Implementação | Prova local | Status |
+| --- | --- | --- | --- |
+| D-01 | HomePage sem aviso M8, ajuda com linguagem de produto | operational-checks; ausência e ajuda por teclado | PASS |
+| D-02 | KnowledgeSourceMonitor em Fontes, mesma autoridade, resolução para revisão existente | source-checks; erro/loading/retry, nenhuma publicação passiva | PASS |
+| D-03 | Como o Prisma trabalha → Drawer | operational-checks; ajuda acessível sem escrita | PASS |
+| D-04 | PersonProfessionalEvidenceMap/PersonWorkspacePage, acessos compactos | regression-person, 15 cenários; pendências/falhas/evidências preservadas | PASS |
+| D-05 | CandidateMatchCard, tags compactas + Entender a análise | regression-people 106checks, perfil/relação/curadoria/inclusão | PASS |
+| D-06 | Outras ações → Recalcular score | regression-score; explícito, só Pessoa escolhida, resultado anterior em loading/falha | PASS |
+| D-07 | pf-metrics, contadores compactos | detail/checks e before/after; mesmos4/1/0, mobile sem overflow | PASS |
+| D-08 | FollowUpDetail: resumo/alertas → formulários → análise secundaria | detail/checks; consulta preserva rascunho/score | PASS |
+| D-09 | FollowUpHistory, antes/depois legíveis + snapshots expansíveis | detail/checks; autor/data/campos, nomes de responsáveis e JSON preservados | PASS |
+| D-10 | DocumentDetailPage, Detalhes técnicos e histórico | operational-checks; revisão imediata e ID/tentativas/auditoria acessíveis | PASS |
+| D-11 | DocumentOperationsPage, Entender os estados | operational-checks; legenda/contagens/filtros sem escrita passiva | PASS |
+| D-12 | ProcessAssessmentPage, histórico recolhido com quantidade | regression-process 64checks, 1448/768/390/320, consulta mantida | PASS |
+| D-13 | VerificationOperationsPage, Método e histórico | operational-checks; resultado/limitações imediatos, método/timeline acessíveis | PASS |
+| D-14 | AssessmentItemBankPage, Origem e detalhes técnicos | operational-checks; similaridade primária, diagnóstico secundário, aprovação explícita | PASS |
+| D-15 | Sem navegação/abas vazias de Settings | operational-checks; sem editor fictício/abas indisponíveis | PASS |
+| D-16 | KnowledgeStructure, ajuda contextual, /settings compatível | operational-checks/operationalFocus.test; mesma autoridade, negativos member/recruiter/anônimo | PASS |
+| D-17 | Fontes por fato, pendências, conflitos, atividade por questão e revisão mantidas | regression-person/people/process/follow-up/score; revisão própria do diff | PASS |
+| D-18 | Responsive/loading/rascunhos/navegação, release2.4.1 | provas locais PASS; integração/publicação/smoke pendentes | PARTIAL |
+| P-01 | Domínio, serviços, auth/tenant e dados sem alteração | diff/plan; escritores/handlers preservados e papéis negativos | PASS |
+| P-02 | Consulta não inicia IA/envio/recálculo/publicação | tráfego externo bloqueado e chamadas sintéticas verificadas; pendências imediatas | PASS |
+| P-03 | Sem dependências/custos/novos destinos/arquivos alheios | package/lock/services/migrations fora do diff, untracked alheios preservados | PASS |
+
+## Mapa de impacto e preservação
+
+| Capacidade | Relação | Baseline e regressão | Evidência/status |
+| --- | --- | --- | --- |
+| Home/Knowledge/estrutura | direct | componentes/fontes/papéis anteriores; novo acesso + retry e revisão explícitos | operational/source-checks, PASS |
+| Pessoa/documentos/histórico | direct | Pessoa≠Documento≠Tentativa; perfil vigente, pendências e falhas | regression-person, PASS |
+| Descoberta/acompanhamento | direct | score salvo, alça/filtros/entrevista/decisão/inclusão/rascunho | 106checks people +34 follow-up +54 score +30 detail, PASS |
+| Documento/processamento | direct | diagnóstico/revisão/recuperação mantendo callbacks | operational-checks e regression-person, PASS |
+| Provas/Verificações/Banco | direct | regras de preparação, revisão, envio, resultados e limites | 64checks process +operational, PASS |
+| Shell/shared CSS | plausible_indirect | 18combinações de páginas/tamanhos +3Pessoa; menu/esc/overflow/destaques | regression-shell, PASS |
+| Tokens Prisma | plausible_indirect | shell/quote/solicitação/falha preservados | regression-tokens13checks mobile, PASS |
+| Acesso/loading/navegação | critical_transversal | roles negativos, callbacks, guardas e loading | Node e fixtures, PASS local; smoke produtivo pendente |
+| Banco/Edge/Parser/Synthesis/mail | no_impact_identified | nenhum diff nessas camadas, nenhuma mutação real; identidade/estado remoto ainda a verificar | PARTIAL operacional |
+
+## Validação e limites
+
+- Types web, build web e compilação raiz PASS. Avisos de tamanho de chunks/dynamic import preexistentes não alteram resultado.
+- Node dirigido PASS: 20testes de follow-up/navegação/loading/rotas/alias, mais5 de registro de versão. 114checks operacionais e30 de detalhe; 15cenários de Pessoa, 106checks descoberta, 34acompanhamento, 64avaliação, 54score, 21combinações shell e13Tokens. Contexto/checker/lint/foundation PASS em snapshot revisado.
+- Global lint encontrou whitespace em `output/pa-concurrency-baseline.sql` alheio/untracked. Não foi alterado. Lint do snapshot revisado PASS (1361arquivos); CI em checkout limpo será registrado; não declarar global lint local PASS.
+- Ajustes das fixtures antigas acompanharam acessos agora compactados e estado já-em-acompanhamento. Asserções de regras foram mantidas. Corrigidos locators com nomes de ícones e espera de fechamento/animação antes de novas ações.
+- Context Pack deve ser gerado/conferido numa cópia determinística dos arquivos revisados, excluindo documentos locais alheios não versionados. Isso evita incorporá-los ou criar divergência em CI. Nenhum arquivo alheio será movido/apagado.
+- Jornada real autenticada e operações reais de IA/envio/publicação de fontes: NOT TESTED e fora da necessidade desta reorganização.
+- F-01/F-02 preservados: sem nova regra de taxonomia, cobrança, auth, backend, integração, dado pessoal ou funcionalidade planejada.
+
+## Comparação visual
+
+Screenshots fornecidos são contraexemplos, não alvo normativo novo. Baseline e resultado com mesmas fixtures e viewports1448/390: before/home/person/follow-up e after/comparison-*. Inspeção: Home sem bloco técnico permanente; Pessoa com pendências imediatas e rail compacto; acompanhamento reduz faixa de indicadores e mantém identificação, seleção e colunas. Detalhe prioriza operação, análise/histórico separados. Evidências de detalhe1448/390/320 e demais telas em after/. Sem substituição da composição guiada4A. No celular, indicadores refluem em linhas e leitura permanece vertical; rolagem horizontal do Kanban desktop é local e já existia.
+
+## Desvios e decisões
+
+Nenhuma decisão de produto adicional. Alinhamento de radios e ícones corrigido no escopo de apresentação dos formulários/indicadores. Sem escolha humana automática. As expansões não gravam dados; autor/data/valores técnicos completos preservados no histórico.
+
+## Git / QA / produção
+
+Branch codex/operational-focus-v241. Commit, CI, plano, produção, rollback, smoke e sincronização pendentes. Não declarar a publicação concluída até essa prova.
 
 ---
 

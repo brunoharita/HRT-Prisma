@@ -13,12 +13,14 @@ import type { KnowledgeConceptSuggestion, KnowledgeConceptView, KnowledgeDashboa
 import { knowledgeService } from "../infrastructure/supabase/knowledgeService";
 import type { CompetencySubgroupOption } from "../domain/profileCompetencyCuration";
 import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
+import {KnowledgeStructure} from "../components/KnowledgeStructure";
+import {KnowledgeSourceMonitor} from "../components/KnowledgeSourceMonitor";
 import { PrismaCard } from "../ui/PrismaCard";
 
-interface Props { profile: PlatformAccessProfile; activeMembership: OrganizationMembership | null; }
+interface Props { profile: PlatformAccessProfile; activeMembership: OrganizationMembership | null; initialTab?:string; }
 
-export function KnowledgePage({ profile, activeMembership }: Props) {
-  const [activeTab, setActiveTab] = useViewState("tab", "overview");
+export function KnowledgePage({ profile, activeMembership, initialTab="overview" }: Props) {
+  const [activeTab, setActiveTab] = useViewState("tab", initialTab);
   const [dashboard, setDashboard] = useState<KnowledgeDashboard | null>(null);
   const [selectedConcept, setSelectedConcept] = useState<KnowledgeConceptView | null>(null);
   const [selectedInbox, setSelectedInbox] = useState<KnowledgeInboxView | null>(null);
@@ -74,6 +76,7 @@ export function KnowledgePage({ profile, activeMembership }: Props) {
   if (error && !dashboard) return <PrismaPage><Alert message={error} type="error" showIcon action={<Button onClick={() => void load()}>Tentar novamente</Button>} /></PrismaPage>;
   const tabs = isGlobal ? [
     { key: "overview", label: "Visão Geral", children: overviewPanel() },
+    { key: "structure", label: "Estrutura de competências", children: <KnowledgeStructure organizationId={organizationId}/> },
     { key: "global", label: "Base global de conhecimento", children: conceptsPanel() },
     { key: "sources", label: "Fontes", children: sourcesPanel() },
     { key: "inbox", label: "Termos para revisar", children: inboxPanel() },
@@ -81,6 +84,7 @@ export function KnowledgePage({ profile, activeMembership }: Props) {
     { key: "impacts", label: "Impactos", children: impactsPanel() },
   ] : [
     { key: "overview", label: "Visão Geral", children: overviewPanel() },
+    { key: "structure", label: "Estrutura de competências", children: <KnowledgeStructure organizationId={organizationId}/> },
     { key: "organization", label: "Conhecimento da empresa", children: conceptsPanel("organization") },
     { key: "global", label: "Base Prisma", children: conceptsPanel("global") },
     { key: "inbox", label: "Termos para revisar", children: inboxPanel() },
@@ -186,7 +190,7 @@ export function KnowledgePage({ profile, activeMembership }: Props) {
       <Table rowKey="id" loading={loading} dataSource={rows} columns={conceptColumns} locale={{ emptyText: <Empty description="Nenhum conceito publicado nesta camada." /> }} pagination={{ pageSize: 10 }} scroll={{ x: 760 }} /></>;
   }
   function sourcesPanel() {
-    return <Table rowKey="id" loading={loading} dataSource={dashboard?.sources ?? []} pagination={{ pageSize: 10 }} scroll={{ x: 850 }} columns={[
+    return <>{isGlobal&&organizationId?<KnowledgeSourceMonitor key={organizationId} organizationId={organizationId} onRefresh={()=>void load()} onGovernance={sourceId=>{const source=dashboard?.sources.find(item=>item.id===sourceId);if(source?.pendingVersion)setSelectedSource(source);else focusNoticeTarget(".prisma-source-governance");}}/>:null}<div className="prisma-source-governance" tabIndex={-1} aria-label="Fontes e versões"><Table rowKey="id" loading={loading} dataSource={dashboard?.sources ?? []} pagination={{ pageSize: 10 }} scroll={{ x: 850 }} columns={[
       { title: "Fonte", dataIndex: "name", render: (value: string) => <Space><SafetyCertificateOutlined />{value}</Space> },
       { title: "Versão publicada", render: (_, row) => row.currentVersion?.externalVersion ?? "Nenhuma" },
       { title: "Versão preparada", render: (_, row) => row.pendingVersion ? <Space direction="vertical" size={0}><Typography.Text>{row.pendingVersion.externalVersion}</Typography.Text><Button type="link" size="small" onClick={() => setSelectedSource(row)}>Revisar e publicar</Button></Space> : "Nenhuma" },
@@ -196,7 +200,7 @@ export function KnowledgePage({ profile, activeMembership }: Props) {
       { title: "SHA-256", render: (_, row) => row.currentVersion?.checksumSha256 ? <Typography.Text code copyable>{row.currentVersion.checksumSha256.slice(0, 12)}…</Typography.Text> : "Não disponível" },
       { title: "Licença", dataIndex: "license", render: (value: string | null) => value ?? "Revisão por fonte" },
       { title: "Status da fonte", dataIndex: "status", render: statusTag },
-    ]} />;
+    ]} /></div></>;
   }
   function inboxPanel() {
     return <Table rowKey="id" loading={loading} dataSource={dashboard?.inbox ?? []} scroll={{ x: 820 }} columns={[

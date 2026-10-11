@@ -11,6 +11,7 @@ import { PrismaCard } from "../ui/PrismaCard";
 import { PrismaBriefcaseIcon } from "../ui/PrismaBriefcaseIcon";
 import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
 import { useUnsavedChanges, useViewState } from "../ui/PrismaNavigation";
+import {FollowUpHistory} from "../components/FollowUpHistory";
 import "./positionFollowUp.css";
 
 interface Props { activeMembership: OrganizationMembership; vacancyId: string; personId?: string; processId?:string; onNavigate: (path: string) => void; }
@@ -150,6 +151,7 @@ function MoveStage({entry,disabled,onMove}:{entry:FollowUpEntry;disabled:boolean
 }
 
 function FollowUpDetail({entry,data,vacancy,requestedForm,disabled,saving,error,refreshing,onRefresh,onClose,onNavigate,onMutate}:{entry:FollowUpEntry;data:FollowUpData;vacancy:VacancyDetail|null;requestedForm:"schedule"|"decision"|null;disabled:boolean;saving:boolean;error:string|null;refreshing:boolean;onRefresh:()=>void;onClose:()=>void;onNavigate:(path:string)=>void;onMutate:(action:string,payload?:object)=>Promise<boolean>}){
+  const [analysisOpen,setAnalysisOpen]=useState(false),[historyOpen,setHistoryOpen]=useState(false);
   const [draft,setDraft]=useState<FollowUpDetails>(structuredClone(entry.details));
   const [draftRevision,setDraftRevision]=useState(entry.revision);
   const [outcome,setOutcome]=useState<string|null>(null),[rationale,setRationale]=useState("");
@@ -179,7 +181,10 @@ function FollowUpDetail({entry,data,vacancy,requestedForm,disabled,saving,error,
     {error?<Alert type="error" showIcon title={error} action={<Button loading={refreshing} onClick={onRefresh}>Atualizar dados</Button>} />:null}
     {localError?<Alert type="error" showIcon title={localError} action={<Button onClick={()=>{const form=({details:detailsForm,interview:interviewForm,decision:decisionForm})[errorForm.current].current;form?.scrollIntoView({block:"center"});form?.querySelector<HTMLElement>("input:not([disabled]),textarea:not([disabled]),button:not([disabled])")?.focus();}}>Revisar campos</Button>} />:null}
     {conflict?<Alert showIcon type="warning" title="Há uma versão mais recente deste acompanhamento" description="Seu rascunho foi preservado. Ao carregar o estado atual, as alterações locais serão substituídas." action={<Button onClick={()=>Modal.confirm({title:"Substituir o rascunho pelos dados atuais?",okText:"Carregar estado atual",cancelText:"Manter rascunho",onOk:()=>{setDraft(structuredClone(entry.details));initial.current=JSON.stringify(entry.details);setDraftRevision(entry.revision);setOutcome(null);setRationale("");setInterviewAt("");setParticipants("");markSaved();}})}>Carregar estado atual</Button>} />:null}
-    <PrismaCard title="Score, cobertura e versões"><div className="pf-detail-score"><span>Score Prisma</span><strong>{entry.score??"Indisponível"}</strong><span>{scoreNotice(entry)}</span></div>
+    <div className="pf-analysis-summary"><div className="pf-detail-score"><span>Score Prisma</span><strong>{entry.score??"Indisponível"}</strong><span>{scoreNotice(entry)}</span>{match?.score?<span>Cobertura: {match.score.coveragePercent}%</span>:null}</div><Button onClick={()=>setAnalysisOpen(true)}>Consultar análise e evidências</Button></div>
+    {match?.score&&(entry.profileId!==entry.scoreProfileId||vacancy?.versionId!==entry.scorePositionId)?<Alert type="info" showIcon title="Perfil ou definição mudou após este resultado" description="O resultado anterior foi preservado. Consulte as versões atuais em Pessoas encontradas antes de uma nova análise."/>:null}
+    {(entry.sourceProfileId!==entry.profileId||entry.sourcePositionId!==vacancy?.versionId)?<p>As versões atuais diferem das consultadas na inclusão. As referências anteriores foram preservadas.</p>:null}
+    <Drawer title="Análise e evidências" open={analysisOpen} onClose={()=>setAnalysisOpen(false)} size="large">    <PrismaCard title="Análise, fontes e versões"><div className="pf-detail-score"><span>Score Prisma</span><strong>{entry.score??"Indisponível"}</strong><span>{scoreNotice(entry)}</span></div>
       {match?.score?<><p>Cobertura das evidências: {match.score.coveragePercent}% · referência {match.score.referenceDate}</p><p>Score consultado: Perfil v{match.score.profileVersionNumber} · Definição v{match.score.positionVersionNumber}</p>
       {(entry.profileId!==entry.scoreProfileId||vacancy?.versionId!==entry.scorePositionId)?<Alert type="info" showIcon title="Perfil ou definição mudou após este resultado" description="O resultado anterior foi preservado. Consulte as versões atuais em Pessoas encontradas antes de uma nova análise." />:null}
       <details><summary>Como o score foi calculado e suas evidências</summary>{match.score.provisionalReasons?.map(reason=><p key={reason}>{reason}</p>)}{match.score.dimensions?.map(dim=><section key={dim.key}><h3>{({area:"Área profissional",position:"Proximidade da função",required:"Requisitos obrigatórios",desired:"Requisitos desejáveis",duration:"Duração da experiência",recency:"Recência da experiência"})[dim.key]}</h3><p>{dim.explanation}</p>{dim.evidence.map(ev=><p key={ev.reference}>{ev.label} · {ev.source}{ev.sourceVersion?` · ${ev.sourceVersion}`:""}</p>)}</section>)}{match.requirements?.map(r=><section key={r.requirement.stableId}><h3>{r.requirement.label}</h3><p>{r.explanation}</p></section>)}<p>Matching: {match.score.matchingContractVersion} · Score: {match.score.scoreContractVersion}</p></details></>:<p>Nenhum resultado salvo disponível. Consulte Pessoas encontradas para analisar as evidências.</p>}
@@ -187,6 +192,7 @@ function FollowUpDetail({entry,data,vacancy,requestedForm,disabled,saving,error,
       {(entry.sourceProfileId!==entry.profileId||entry.sourcePositionId!==vacancy?.versionId)?<p>As versões atuais diferem das consultadas na inclusão. As referências anteriores foram preservadas no acompanhamento.</p>:null}
       <details><summary>Referências preservadas na inclusão</summary><p>Perfil: {entry.sourceProfileId??"Indisponível"}</p><p>Definição: {entry.sourcePositionId??"Indisponível"}</p></details>
     </PrismaCard>
+    </Drawer>
     <PrismaCard title="Próximos passos"><form ref={detailsForm} onSubmit={e=>{e.preventDefault();void save("details",{nextAction:draft.nextAction??"",assignee:draft.assignee||null,dueDate:draft.dueDate||null,notes:draft.notes??""});}}>
       <label>Próxima ação<Input maxLength={1000} disabled={disabled} value={draft.nextAction??""} onChange={e=>setDraft({...draft,nextAction:e.target.value})} /></label>
       <label>Responsável<Select allowClear aria-label="Responsável pelo acompanhamento" disabled={disabled} value={draft.assignee??null} onChange={value=>setDraft({...draft,assignee:value??null})} options={data.operators.map(o=>({value:o.id,label:o.name}))} placeholder="Sem responsável" /></label>
@@ -209,7 +215,8 @@ function FollowUpDetail({entry,data,vacancy,requestedForm,disabled,saving,error,
         <Button htmlType="submit" type="primary" disabled={disabled||conflict} loading={saving}>Registrar decisão</Button>
       </form>
     </PrismaCard>
-    <PrismaCard title="Histórico deste acompanhamento">{data.history.filter(h=>h.entryId===entry.id||h.entryId===null).map(h=><details key={h.id}><summary>{followUpHistoryLabels[h.action]??h.action} · {h.actor} · {date(h.at)}</summary><pre className="pf-audit">{JSON.stringify({anterior:h.before,registrado:h.after},null,2)}</pre></details>)}</PrismaCard>
+    <Button onClick={()=>setHistoryOpen(true)}>Histórico deste acompanhamento</Button>
+    <Drawer title="Histórico deste acompanhamento" open={historyOpen} onClose={()=>setHistoryOpen(false)} size="large"><FollowUpHistory history={data.history.filter(h=>h.entryId===entry.id||h.entryId===null)} operators={data.operators}/></Drawer>
     <Button disabled={data.process?.status==="closed"||saving||dirty||conflict} onClick={()=>Modal.confirm({title:entry.stage==="closed"?"Reabrir acompanhamento?":"Concluir acompanhamento desta Pessoa?",content:"Concluir sem decisão permanece distinto de não prosseguir. A ocupação da Posição e as outras Pessoas permanecem preservadas.",okText:entry.stage==="closed"?"Reabrir":"Concluir",cancelText:"Cancelar",onOk:()=>save(entry.stage==="closed"?"reopen":"close")} )}>{entry.stage==="closed"?"Reabrir acompanhamento":"Concluir acompanhamento"}</Button>
   </Drawer>;
 }

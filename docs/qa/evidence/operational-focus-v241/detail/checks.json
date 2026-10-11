@@ -1,0 +1,127 @@
+{
+  "checks": [
+    {
+      "name": "1448: compact counters retain 4, 1, 0",
+      "pass": true
+    },
+    {
+      "name": "1448: operational fields primary and full analysis secondary",
+      "pass": true
+    },
+    {
+      "name": "1448: analysis sources and versions available without mutations",
+      "pass": true
+    },
+    {
+      "name": "1448: analysis preserves operational draft",
+      "pass": true
+    },
+    {
+      "name": "1448: readable author and changed fields",
+      "pass": true
+    },
+    {
+      "name": "1448: interview history respects recorded timezone",
+      "pass": true
+    },
+    {
+      "name": "1448: raw audit initially closed",
+      "pass": true
+    },
+    {
+      "name": "1448: original before and after snapshots retained",
+      "pass": true
+    },
+    {
+      "name": "1448: history preserves draft and score",
+      "pass": true
+    },
+    {
+      "name": "1448: no errors external requests or overflow",
+      "pass": true
+    },
+    {
+      "name": "390: compact counters retain 4, 1, 0",
+      "pass": true
+    },
+    {
+      "name": "390: operational fields primary and full analysis secondary",
+      "pass": true
+    },
+    {
+      "name": "390: analysis sources and versions available without mutations",
+      "pass": true
+    },
+    {
+      "name": "390: analysis preserves operational draft",
+      "pass": true
+    },
+    {
+      "name": "390: readable author and changed fields",
+      "pass": true
+    },
+    {
+      "name": "390: interview history respects recorded timezone",
+      "pass": true
+    },
+    {
+      "name": "390: raw audit initially closed",
+      "pass": true
+    },
+    {
+      "name": "390: original before and after snapshots retained",
+      "pass": true
+    },
+    {
+      "name": "390: history preserves draft and score",
+      "pass": true
+    },
+    {
+      "name": "390: no errors external requests or overflow",
+      "pass": true
+    },
+    {
+      "name": "320: compact counters retain 4, 1, 0",
+      "pass": true
+    },
+    {
+      "name": "320: operational fields primary and full analysis secondary",
+      "pass": true
+    },
+    {
+      "name": "320: analysis sources and versions available without mutations",
+      "pass": true
+    },
+    {
+      "name": "320: analysis preserves operational draft",
+      "pass": true
+    },
+    {
+      "name": "320: readable author and changed fields",
+      "pass": true
+    },
+    {
+      "name": "320: interview history respects recorded timezone",
+      "pass": true
+    },
+    {
+      "name": "320: raw audit initially closed",
+      "pass": true
+    },
+    {
+      "name": "320: original before and after snapshots retained",
+      "pass": true
+    },
+    {
+      "name": "320: history preserves draft and score",
+      "pass": true
+    },
+    {
+      "name": "320: no errors external requests or overflow",
+      "pass": true
+    }
+  ],
+  "limits": [
+    "Synthetic history and original follow-up components; no actual user mutations."
+  ]
+}
