@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 451
-source_manifest_sha256: 32ad05a8983ac8f17519dc97239e4020e95bf178e209c3e067d575e3f4c95b1a
+source_manifest_sha256: f160b2f94bb0ae7a3f38e3f802a33a026c8d20a7b9bc8b157a76a1814df58619
 -->
 
 # Tudo sobre o Prisma
@@ -2638,7 +2638,7 @@ last_verified: 2026-10-11
 
 ## Tempo e orientações do participante — correção 2.4.1
 
-Implementação autorizada em11/10/2026: portal com contador em dias/horas/minutos sem segundos, data limite de acesso em Brasília e prazo efetivo de conclusão após início. Instruções agrupam tempo, como responder e atividade/privacidade; reforçam aba/janela ativas, conhecimento próprio, sincronização/revisão/envio e relógio contínuo, com limites da coleta real e análise humana. Disponíveis também durante a prova. Sem telemetria/IA/punição automática/gravação/contrato de dados/backend novos; não certifica conformidade jurídica ou substitui aviso final. Local18Node,70checks novos e38regressões browser PASS, incluindo quatro viewports/fuso Tokyo, menos de1minuto/expiração, confirmação/recibo e falha/buffer/retry; tipos/build PASS. Publicação pendente. Contrato/mapa/AoT `docs/qa/assessment-portal-guidance-v241.md`.
+Implementação autorizada em11/10/2026: portal com contador em dias/horas/minutos sem segundos, data limite de acesso em Brasília e prazo efetivo de conclusão após início. Instruções agrupam tempo, como responder e atividade/privacidade; reforçam aba/janela ativas, conhecimento próprio, sincronização/revisão/envio e relógio contínuo, com limites da coleta real e análise humana. Disponíveis também durante a prova. Sem telemetria/IA/punição automática/gravação/contrato de dados/backend novos; não certifica conformidade jurídica ou substitui aviso final. Local18Node,70checks novos e38regressões browser PASS, incluindo quatro viewports/fuso Tokyo, menos de1minuto/expiração, confirmação/recibo e falha/buffer/retry; tipos/build/lint/contextos PASS. Publicada em main/origin/VPS no SHA funcional2a393c2da5f7839f24ff354851c514d0aafa11c4, CI branch38189209551/main38189308472 success (898testes).24HTTP200 incluindo /assessment/, três checks bundle/SHA/CSS e login2.4.1 em1448/390/320 PASS;16checks de preservação, rollback3baff4b5,215assets anteriores íntegros (218após) e nove outros containers intactos.404imediato estabilizou sem outro deploy; fechamento documental sincroniza Git sem rebuild. Jornada autenticada real NOT TESTED. Contrato/mapa/AoT `docs/qa/assessment-portal-guidance-v241.md`.
 
 ## Prazo e mensagem dos convites — correção 2.4.1
 
@@ -23195,7 +23195,7 @@ Referência pública para redação: [LGPD compilada, arts.6º e9º](https://www
 | Página individual de preparação/resultado e stylesheet compartilhado | plausible_indirect | CSS somente pa-portal/newclasses; browser existente com override de evidência para não sobrescrever histórico |
 | Prova comum/convites/backend/tenant/IA/serviços | no_impact_identified | sem alteração de writers/schema/serviços, contrato de token/limite mantido; plano webonly, runtime/rollback/assets preservados |
 
-Baseline operacional será conferido antes do deploy. Dados sintéticos; nenhum acesso ao token pessoal mostrado na imagem, que é dado de exemplo privado e não autorização para responder/iniciar a tentativa.
+Baseline operacional conferido antes do deploy: srv1038882,/opt/prisma,origin aprovado, checkout03372cd limpo; web3baff4b5 running0,215assets e nove outros containers. Identidades/imagens/estados/restarts e assets comparados após publicação. Dados sintéticos; nenhum acesso ao token pessoal mostrado na imagem, que é dado de exemplo privado e não autorização para responder/iniciar a tentativa.
 
 ## AoT
 
@@ -23204,10 +23204,12 @@ Baseline operacional será conferido antes do deploy. Dados sintéticos; nenhum 
 | D-01/02 | assessmentPortalPresentation e região de tempo do portal, deadline original preservado | 3testes puros de unidades/limite/invalidade/datas; browser70checks em1448/768/390/320 com clock/fuso Tokyo, tempo de acesso/início/último minuto/expiração | PASS |
 | D-03/04 | AssessmentParticipantGuidance e orientação persistente durante questões | texto/ciência/finalidade/limites/keyboard disclosure, ausência de início/coleta/escrita por leitura; confirmação completa/cancelamento/recibo e consulta durante prova | PASS |
 | D-UX-05 | classes pa-portal-time/pa-guidance/pa-number, sem alterar shell individual | imagens instructions/expired/receipt em browser/; revisão visual1448/390 e overflow negativo nas4larguras. Corrigido corte de2px na grade numérica320px, sem mudar navegação | PASS |
-| D-06 | entrega principal e documentação | local18Node+70browser+38regressão/tipos/build PASS; CI/produção/contextos pendentes | PARTIAL |
-| P-01/02/03 | handlers/trackers/IO/escritores/backend intactos; formatação somente visual | 18Node (presentation+positionAssessment+Activity),70novos checks;38regressões de configuração/composição/revisão/convite/portal/resultado, falha/buffer/retry; nenhum envio real/IA paga | PASS local |
+| D-06 | entrega principal e documentação | local18Node+70browser+38regressão/tipos/build/lint/contextos PASS; SHA funcional2a393c2da5f7839f24ff354851c514d0aafa11c4 em main/origin/VPS; CI branch38189209551/main38189308472 success,898testes;24HTTP200, bundle/SHA/CSS, login2.4.1 e16checks de preservação | PASS |
+| P-01/02/03 | handlers/trackers/IO/escritores/backend intactos; formatação somente visual | 18Node (presentation+positionAssessment+Activity),70novos checks;38regressões de configuração/composição/revisão/convite/portal/resultado, falha/buffer/retry; nenhum envio real/IA paga; plano sem database/Edge/serviços, nove outros containers e assets anteriores intactos | PASS |
 
 Evidências em `docs/qa/evidence/assessment-portal-v241/{browser,regression}`. Fonte do contador é o deadline do servidor; acesso e conclusão não são intercambiáveis. Detalhes técnicos de coleta fechados inicialmente, acessíveis por teclado; essenciais permanecem visíveis. Screenshot do PO é contraexemplo, mantendo topologia/contexto e os elementos existentes, com dados fictícios nas provas. Jornada autenticada de candidato real NOT TESTED; token privado da imagem não acessado. Sem desvio de contrato identificado.
+
+Produção/evidências em production/ e local-validation.json: web ee19fcf9 running/zero reinícios, rollback-before-2a393c2da5f7 igual à imagem anterior3baff4b5;215assets anteriores preservados byte a byte,218após. Nove outros containers idênticos, incluindo Paddle unhealthy/exited preexistentes. Publicação somente web;24HTTP200 incluem /assessment/, rotas e arquivos atuais/anteriores, três checks do bundle e login em1448/390/320 PASS. Publisher saiu1 após SSH22/HTTP404 no smoke imediato; estabilização conferida sem nova build/deploy. Nenhuma escrita de negócio remota. Fechamento documental/contextos em snapshot limpo sincroniza main/origin/VPS sem reconstrução de runtime; SHA documental final é distinto do SHA funcional. A validação local é proporcional e dirigida; gate integral somente na CI existente.
 
 ---
 

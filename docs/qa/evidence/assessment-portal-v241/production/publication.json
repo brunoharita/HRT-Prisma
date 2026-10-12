@@ -1,0 +1,51 @@
+{
+  "verifiedAt": "2026-10-12T00:47:53.045138+00:00",
+  "functionalSha": "2a393c2da5f7839f24ff354851c514d0aafa11c4",
+  "baselineSha": "03372cde8be187cc5b548c5018d7724d3ec1e78f",
+  "host": "srv1038882",
+  "root": "/opt/prisma",
+  "remote": "git@github.com:brunoharita/HRT-Prisma.git",
+  "ci": [
+    {
+      "conclusion": "success",
+      "databaseId": 38189209551,
+      "headSha": "2a393c2da5f7839f24ff354851c514d0aafa11c4",
+      "status": "completed",
+      "url": "https://github.com/brunoharita/HRT-Prisma/actions/runs/38189209551"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 38189308472,
+      "headSha": "2a393c2da5f7839f24ff354851c514d0aafa11c4",
+      "status": "completed",
+      "url": "https://github.com/brunoharita/HRT-Prisma/actions/runs/38189308472"
+    }
+  ],
+  "ciTests": 898,
+  "deployments": {
+    "web": true,
+    "database": false,
+    "edge": false,
+    "otherServices": false
+  },
+  "runtime": {
+    "id": "2e4a84295a7526e09bf25b83ba397ecf034a5da54378757e93ca76dd71e41b98",
+    "image": "sha256:ee19fcf99c7522dfa7c6b8f81877ab34c25e84c3c96b0131d86cee4ff96ad636",
+    "state": "running",
+    "restarts": "0",
+    "health": "",
+    "startedAt": "2026-10-12T00:47:05.210293207Z"
+  },
+  "httpChecks": 24,
+  "transientFailure": {
+    "publisherExit": 1,
+    "sshExit": 22,
+    "cause": "Immediate public smoke HTTP404 following container recreation",
+    "recovery": "Stabilized HTTP200, bundle and container preservation verified; no second deployment"
+  },
+  "authenticatedJourney": "NOT TESTED",
+  "realEmailSends": 0,
+  "paidAiCalls": 0,
+  "realBusinessWrites": 0,
+  "closure": "Documentation-only final commit synchronizes Git without rebuilding runtime"
+}

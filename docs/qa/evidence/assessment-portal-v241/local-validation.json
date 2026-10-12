@@ -1,0 +1,14 @@
+{
+ "baseline": "03372cde8be187cc5b548c5018d7724d3ec1e78f",
+ "functionalSha": "2a393c2da5f7839f24ff354851c514d0aafa11c4",
+ "node": {"tests": 18, "failed": 0, "suites": ["assessmentPortalPresentation", "positionAssessment", "positionAssessmentActivity"]},
+ "browser": {"newChecks": 70, "regressionChecks": 38, "failed": 0, "widths": [1448,768,390,320], "newChecksTimezone": "Asia/Tokyo", "syntheticServices": true},
+ "typecheckWeb": "PASS",
+ "buildTypeScript": "PASS",
+ "buildVite": "PASS after final CSS edit",
+ "contextGenerateAndCheck": "PASS in staged clean snapshot",
+ "lint": "PASS",
+ "sourceReview": "Coleta e handlers de foco, mouse, escala e atalhos preservados. Nenhum writer, backend, migration ou contrato de dados alterado.",
+ "validationRouting": "Comandos do dispatcher deduplicados, Node dirigidos e browser das capacidades direta e indiretamente afetadas; sem full validate local. Gate integral da CI existente.",
+ "limits": ["No real candidate journey", "No real invitation token used", "No real email or paid AI", "No remote business write", "Operational instructions do not certify legal compliance"]
+}

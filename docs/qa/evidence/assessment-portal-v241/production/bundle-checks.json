@@ -1,0 +1,18 @@
+{
+  "checks": [
+    {
+      "name": "validated functional SHA in public bundle",
+      "pass": true
+    },
+    {
+      "name": "countdown date and instruction labels in public bundle",
+      "pass": true
+    },
+    {
+      "name": "portal presentation styles in public CSS",
+      "pass": true
+    }
+  ],
+  "source": "public entry assets",
+  "limitations": "Static delivery proof; not an authenticated candidate journey"
+}
