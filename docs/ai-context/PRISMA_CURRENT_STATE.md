@@ -10,7 +10,7 @@ last_verified: 2026-10-12
 
 ## Ações da avaliação — correção sem mudança de versão
 
-Aprovado em12/10/2026: Revisar avaliação no cabeçalho com progresso; rodapé da questão somente Anterior/Próxima. Revisão com Voltar às questões e Enviar avaliação; modal Confirmar envio e encerrar. Sem mudança de app2.5.1, submit/save/telemetria/backend/prazos/correção. Acordo/mapa/execução/AoT `docs/qa/assessment-review-placement.md`;82checks browser1448/768/390/320, tipos e build PASS. Publicação web em andamento; evidência sintética, sem candidato real ou mutação remota de negócio.
+Aprovado em12/10/2026: Revisar avaliação no cabeçalho com progresso; rodapé da questão somente Anterior/Próxima. Revisão com Voltar às questões e Enviar avaliação; modal Confirmar envio e encerrar. Sem mudança de app2.5.1, submit/save/telemetria/backend/prazos/correção. Acordo/mapa/execução/AoT `docs/qa/assessment-review-placement.md`;82checks browser1448/768/390/320, tipos e build PASS. Publicado em main/origin/VPS no SHA funcional69fa152dd900be6e473f9d5da85d7eb1978bfbce; CI branch38307056824/main38307246482 success. Web16ddc874 running0, rollback anterior confirmado,221assets top-level antigos e nove outros containers preservados. Rotas/assets HTTP200 e login2.5.1 em1448/390/320 PASS.404 de recreate estabilizou sem reconstrução adicional. Evidência sintética, jornada de candidato real NOT TESTED, sem mutação remota de negócio; fechamento documental sem rebuild.
 
 ## Tokens Prisma — tarifas não redondas
 

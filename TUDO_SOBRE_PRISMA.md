@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 463
-source_manifest_sha256: 26a3682567fd985bf7a90f037a575e031887ae319a505f24833b6740f08220c4
+source_manifest_sha256: cae9f2a17b835206bf977219e095baf60ace97f246ce4d035f2fd572fc2006d3
 -->
 
 # Tudo sobre o Prisma
@@ -2638,7 +2638,7 @@ last_verified: 2026-10-12
 
 ## Ações da avaliação — correção sem mudança de versão
 
-Aprovado em12/10/2026: Revisar avaliação no cabeçalho com progresso; rodapé da questão somente Anterior/Próxima. Revisão com Voltar às questões e Enviar avaliação; modal Confirmar envio e encerrar. Sem mudança de app2.5.1, submit/save/telemetria/backend/prazos/correção. Acordo/mapa/execução/AoT `docs/qa/assessment-review-placement.md`;82checks browser1448/768/390/320, tipos e build PASS. Publicação web em andamento; evidência sintética, sem candidato real ou mutação remota de negócio.
+Aprovado em12/10/2026: Revisar avaliação no cabeçalho com progresso; rodapé da questão somente Anterior/Próxima. Revisão com Voltar às questões e Enviar avaliação; modal Confirmar envio e encerrar. Sem mudança de app2.5.1, submit/save/telemetria/backend/prazos/correção. Acordo/mapa/execução/AoT `docs/qa/assessment-review-placement.md`;82checks browser1448/768/390/320, tipos e build PASS. Publicado em main/origin/VPS no SHA funcional69fa152dd900be6e473f9d5da85d7eb1978bfbce; CI branch38307056824/main38307246482 success. Web16ddc874 running0, rollback anterior confirmado,221assets top-level antigos e nove outros containers preservados. Rotas/assets HTTP200 e login2.5.1 em1448/390/320 PASS.404 de recreate estabilizou sem reconstrução adicional. Evidência sintética, jornada de candidato real NOT TESTED, sem mutação remota de negócio; fechamento documental sem rebuild.
 
 ## Tokens Prisma — tarifas não redondas
 
@@ -23624,9 +23624,11 @@ Execução: implementar D-01/03 na região de contexto do cabeçalho e CSS local
 | D-02 | Revisão, retorno, cancelamento, envio final, expiração e recibo em82checks browser. Relógio continua; incompleta bloqueada. | PASS |
 | D-03 UX | Instruções atualizadas, quatro larguras sem overflow, revisão visual desktop1448/mobile390. Tipos/build PASS; versão registry intacta. | PASS |
 | P-01 | Diff sem handlers, serviços, schema, trackers, correção e versionamento alterados;82checks sintéticos, sem IO externo. | PASS |
-| D-03 publicação | Plano, produção e sincronização pendentes; não são PASS nesta etapa. | NOT TESTED |
+| D-03 publicação | SHA funcional69fa152dd900be6e473f9d5da85d7eb1978bfbce em main/origin/VPS. CI branch38307056824/main38307246482 success. Plano somente web;16preservações/3bundlechecks e login2.5.1 em1448/390/320 PASS. | PASS |
 
 Evidência em docs/qa/evidence/assessment-review-placement. Baseline remoto: srv1038882,/opt/prisma,origin aprovado,83f3731; web72517b3e/d95867a1 running0; nove demais containers registrados em snapshot privado tmp/assessment-review/production-baseline.json. Lint raiz encontrou whitespace em output/pa-concurrency-baseline.sql alheio; preservar arquivo e executar lint/contexto em snapshot limpo da tarefa. Não foi usado token pessoal nem candidato real.
+
+Produção: web16ddc874/1fb41740 running0, rollback-before-69fa152dd900 igual à imagem anterior d95867a1.221assets top-level antigos preservados byte a byte,224após; arquivos públicos atuais/anteriores e nove rotas HTTP200. Nove demais containers iguais, inclusive Paddle unhealthy/exited preexistentes. Bundle contém SHA funcional e nomes novos, CSS dedicado; smoke público sem erro/overflow. Publisher recebeu404 transitório imediato após recreate; estabilização comprovada sem rebuild adicional. Lint/contextos PASS no snapshot limpo, mantendo output alheio. Fechamento documental/contextos não reconstrói runtime. Jornada de candidato real NOT TESTED; testes locais usam fixture, sem token privado, envio real ou IA paga. Sem desvio do acordo.
 
 ---
 
