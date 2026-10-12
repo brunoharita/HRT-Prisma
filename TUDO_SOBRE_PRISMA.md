@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 449
-source_manifest_sha256: 8bac8d467b6f42ebc34bab620d5326bf79d522f501271e61aed0235813f0b652
+documentation_source_count: 450
+source_manifest_sha256: 941433c35cc0a57bf2e81868f6d0ca88ee5679b84f1f5ad93fd8d4c093eee100
 -->
 
 # Tudo sobre o Prisma
@@ -2630,11 +2630,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.71.2
+version: 2.71.3
 last_verified: 2026-10-11
 ---
 
 # Estado atual do Prisma
+
+## Prazo e mensagem dos convites — correção 2.4.1
+
+Implementação autorizada em11/10/2026: prazo por1/3/7/14/30dias (padrão7) ou data, sempre até23:59 em Brasília incluindo segundos finais; mensagem padrão com a Posição; CTA em rodapé separado e responsivo. Aplicações não submetidas após o menor limite entre duração e acesso mostram Não realizada · prazo encerrado, sem mudar status persistido, respostas, histórico ou recibos concluídos. Reutiliza proteção PostgreSQL existente, sem migration/Edge/serviços/dependências novos. Local:15Node dirigidos,87SQL transacionais com rollback,56checks novos e84regressões browser em1448/768/390/320 e fuso Tokyo PASS; tipos/build PASS. Publicação e fechamento operacional pendentes. Contrato/mapa/AoT `docs/qa/assessment-invite-deadline-v241.md`.
 
 ## Registros legíveis — correção 2.4.1
 
@@ -11999,6 +12003,8 @@ Na segunda superfície, **Revisar avaliação**, confira questões, cinco altern
 
 Os contatos cadastrados são preenchidos. Alterar **E-mail do convite** não altera o cadastro. **Prazo de acesso** é explícito e separado da duração iniciada pelo participante. **Personalizar assunto e mensagem** contém ajustes opcionais. O backend valida o lote inteiro antes de gravar aprovação, tokens ou fila. Na fila/aceito pelo provedor/erro/conciliação são estados distintos; aceitação não comprova entrega/abertura. Repetição do pedido ou lote concorrente não cria nova aplicação para a mesma Pessoa.
 
+O prazo oferece **1, 3, 7, 14 ou 30 dias** (padrão 7) e **Escolher uma data**, sempre até **23:59 do dia escolhido, horário de Brasília**, incluindo os segundos finais. A data resolvida permanece fixa ao atualizar ou repetir um envio. O candidato precisa concluir e enviar as respostas antes do menor limite entre duração da prova e prazo de acesso. Aplicações ainda não submetidas aparecem como **Não realizada · prazo encerrado** após esse limite; respostas parciais e histórico são preservados, sem criar resultado ou alterar retroativamente uma conclusão. A mensagem padrão especifica o nome da Posição e continua personalizável. A ação de aprovação/envio fica em rodapé separado, à direita no desktop e em largura disponível no celular. Acordo e AoT `docs/qa/assessment-invite-deadline-v241.md`.
+
 A prova fica fixada no primeiro envio: questões, versões, ordem, duração e correção permanecem comuns para candidatos adicionados depois. **Consultar avaliação do processo** abre a prova e **Ver resultado e atividade** consulta cada aplicação. Correção objetiva, respostas e sinais observados não modificam Score, Perfil, etapas, ocupação ou decisão humana. Sinais parciais não comprovam pesquisa, captura ou fraude.
 
 **Reabrir processo** mantém a prova existente. Depois de **Encerrar processo**, **Novo processo seletivo** cria um ciclo vazio, conservando o anterior em **Processo seletivo**. O novo ciclo pode montar outra prova ou **Reutilizar prova** compatível anterior, sem copiar aplicações/respostas/decisões. Ciclos anteriores são somente consulta. **Avaliações individuais anteriores** preserva o histórico anterior à2.3.2; não declara equivalência retroativa.
@@ -12465,6 +12471,8 @@ A seleção para avaliação compartilha a região esquerda com o avatar. Nome, 
 ## Avaliação do processo — seções guiadas 4A, 2.3.5
 
 Referência aprovada: `docs/product/proposta-avaliacao-processo-2026-10-10/variacoes-secoes-guiadas/4a-azul-equilibrado.png`. Configuração e Requisitos da Posição aparecem simultaneamente. Desktop usa faixa numerada azul suave à esquerda e controles à direita, quatro campos em linha, composição abaixo e requisitos em chips. Mobile empilha cabeçalhos e conteúdo, campos2×2 e lista legível; ação Montar avaliação abaixo e histórico independente. A numeração não cria um wizard. Personalização continua explícita; requisitos escolhidos ficam visíveis fora da edição. Cores/tokens, shell, navegação, loading e handlers reutilizam o sistema. Avaliação e regras de IA/revisão/envio/dados não mudam. Acordo e AoT `process-assessment-guided-v235`.
+
+Nos convites, preservar candidatos → prazo → personalização → aprovação/envio. O prazo usa opções de dias ou data sem edição de hora, com resumo destacado até23:59 em Brasília. A mensagem padrão identifica a Posição. O rodapé tem separação visual e pelo menos20px do painel anterior, com CTA à direita no desktop e largura disponível no celular. Acordo/AoT `assessment-invite-deadline-v241`; a composição4A da preparação permanece.
 
 
 ## Foco operacional e consulta sob demanda — v2.4.1
@@ -23087,6 +23095,58 @@ Branch `codex/visual-fidelity-governance`. Entrega local e documental. QA, Supab
 ## Conclusão
 
 PASS local. A regra está ativa nas fontes e nos artefatos gerados; sua eficácia visual será comprovada em cada futura entrega que use referência normativa.
+
+---
+
+## Source: `docs/qa/assessment-invite-deadline-v241.md`
+
+# Acordo, execução e AoT — Prazo e mensagem do convite, correção2.4.1
+
+Acordo v1.0.0,11/10/2026. Autorização explícita de Bruno nesta conversa; baseline a33e3db5347c677e6ee78156b9d6fa9f0f560f80. Risco C: frontend com reaproveitamento da proteção existente no servidor; testes negativos locais da fronteira. Sem migration/Edge novas e sem nova entrada no registro de versões.
+
+## Acordo congelado e execução
+
+- D-01: Prazo de acesso por1/3/7/14/30dias (padrão7), ou data específica. Dias são calendários a partir da escolha; data resolvida fica fixa, inclusive em retry. Até23:59 no horário de Brasília, incluindo segundos finais do dia; armazenar23:59:59.999 com fuso convertido corretamente. Sem edição de hora. Preservar validação de futuro e máximo90dias do servidor.
+- D-02: Candidato deve concluir e enviar dentro do menor limite entre duração iniciada e acesso. Sem submissão concluída, mostrar Não realizada · prazo encerrado quando esse limite terminar; preservar estado persistido, respostas parciais/histórico e avaliações submetidas/canceladas. Servidor continua autoridade; consulta não cria decisão ou escrita.
+- D-03: Mensagem padrão especifica o nome da Posição do workspace. Permitir personalizar e preservar texto editado ao atualizar/falhar/repetir; contexto novo recomeça com a Posição correta. Nome fornecido é texto, nunca HTML.
+- D-UX-04: Preservar seleção/tabela de candidatos, prazo, personalização e CTA nessa ordem; adicionar rodapé com separação visual e espaçamento pelo menos20px do painel anterior, CTA à direita no desktop e largura disponível no celular. Screenshot é contraexemplo do espaçamento, não proposta de recomposição total.
+- D-05: main/produção, destinos derivados do diff, CI, rollback, smoke e sincronização; provas desktop1448/768/mobile390/320 e limites explícitos.
+- P-01: não mudar duração, prova comum, requisitos, regras de IA/cobrança, escolha humana, tenant, escritores, contratos persistidos ou histórico; não enviar/gerar automaticamente, nem considerar resposta parcial concluída.
+- P-02: não alterar convites já emitidos, truncar mensagem, sobrescrever personalização no refresh ou mudar data resolvida no retry; não usar fuso do navegador para interpretar o limite.
+- F-01: expurgo/avisos legais, alteração de SMTP/Resend, expiração persistida/agendamento, novos fornecedores ou redesign de toda a preparação.
+- A-01: reutilizar Select/Input/date, CSS Prisma e conversão IANA interviewInstant existentes; rótulos, testes sintéticos e timer local de apresentação delegados. Nenhuma dependência nova.
+- Q: nenhuma pendência.
+- CA-01: datas, virada de mês/ano, calendário inválido, relógio/fuso do navegador, retry e limites em testes dirigidos; SQL rejeita start/load/save/submit vencidos sem resultado e preserva recibo concluído.
+- CA-02: posição e personalização, seleção/lote/idempotência, nunca IA/envio por consulta, layout/teclado/mobile, tipos/build/contexto/CI; publicação e preservação operacional.
+
+Implementar D-01..05, impedir P-01/02, preservar F-01; A-01 somente execução. D-01/02/03 refinam D-07/08 do acordo process-assessment-v232 v1.0.0; composição4A da preparação e prova comum permanecem.
+
+## Mapa de impacto antes da implementação
+
+| Capacidade | Relação | Baseline / preservação e prova |
+| --- | --- | --- |
+| Processo: convites/prazo/mensagem/CTA | direct | seleção/lote/retry e prazo explícito; fixture real, novos controles, mensagem/spacing e negativos |
+| Aplicações/resultados individuais | direct | status/resposta/correção não mudam; indicação derivada de vencimento, recibo/cancelado preservados |
+| Resultado compartilhado/avaliação individual legada | plausible_indirect | mesmo componente; testes de estados/data/respostas históricas |
+| Conversão de fuso da entrevista | plausible_indirect | helper reutilizado, sem mudança em sua implementação; testes de conversão |
+| Portal/servidor/tenant | critical_transversal | PostgreSQL já calcula least(expires_at,started_at+duration) e bloqueia antes de mutações; teste SQL descartável de rejeição e recibo |
+| Preparação/IA/prova comum/cobrança/nav/loading | plausible_indirect | página compartilhada; regressão processAssessment dirigida, nenhum writer alterado/consulta gera envio |
+| Banco/Edge/Parser/Synthesis/mail/serviços | no_impact_identified | sem alteração runtime dessas camadas; plano webonly e identidade operacional preservada |
+
+PostgreSQL local verificado: import_evidence_v202,127.0.0.1:55479,prisma_v202_qa,people0 e position_assessments ausente. Fixture/rollback locais, sem dados reais. Baseline operacional de produção será revalidado antes de publicar.
+
+## AoT
+
+| Regra | Implementação | Teste / evidência | Estado |
+| --- | --- | --- | --- |
+| D-01 | assessmentInvitations, controles date/Select e conversão IANA existente | 5testes novos de calendário/fuso/limites/estado, browser56checks e regressão84checks, data no payload/retry/fuso Tokyo | PASS |
+| D-02 | startedAt já emitido pelo RPC tipado; apresentação derivada e relógio sem IO, servidor preservado | 87asserts SQL locais com rollback, incluindo rejeição PA_EXPIRED em load/start/save/submit sem mudança de respostas/status/resultado e recibo concluído; browser atualiza status sem reload | PASS |
+| D-03 | defaultAssessmentMessage(positionTitle), inicialização por contexto e preservação no refresh | mensagem padrão e personalizada/payload/retry nos quatro viewports; texto literal em teste Node | PASS |
+| D-UX-04 | deadline-summary e footer process-assessment-send | imagens invitation/expired em browser/, medição gap≥20px e CTA mobile; revisão visual1448/390, sem overflow em4larguras | PASS |
+| D-05 | publicação web derivada do diff | CI/produção/rollback/smoke/sincronização pendentes | PARTIAL |
+| P-01/02 | nenhum writer/migration/Edge alterado; date/message estáveis, relógio somente visual | 15Node dirigidos (novos+processAssessment+positionFollowUp), SQL87 e browser56+84; IA/cancelamento/revisão/prova fixada/histórico/loading/retry preservados | PASS local |
+
+Tipos frontend, build TypeScript e build Vite PASS. Evidências em `docs/qa/evidence/assessment-invite-v241/{browser,regression,sql}`. Screenshot fornecido é contraexemplo; comparação confirma ordem preservada e separação do CTA. Dados fictícios, sem envio real, chamada paga de IA ou escrita remota. Jornada autenticada de candidato real NOT TESTED. Sem desvio de contrato identificado; baseline/preservação operacionais aguardam publicação. Sem nova entrada de versão; correção2.4.1 conforme convenção do registro.
 
 ---
 

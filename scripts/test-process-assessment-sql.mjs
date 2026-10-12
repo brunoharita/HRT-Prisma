@@ -11,7 +11,7 @@ values(m83_id('late-profile'),m83_id('a'),m83_id('late-person'),'{}','fixture','
 sql+=await readFile('supabase/qa/position_assessment_verification.sql','utf8');
 sql+='\nreset role; create temp table v232_legacy as select to_jsonb(a) data from public.position_assessments a;\n';
 sql+=await readFile('supabase/migrations/20261010120000_process_assessment.sql','utf8');
-sql+=await readFile('supabase/qa/process_assessment_verification.sql','utf8');sql+='\nrollback;';
-const dir='docs/qa/evidence/process-assessment-v232/sql';await mkdir(dir,{recursive:true});await mkdir('tmp',{recursive:true});await writeFile('tmp/process-assessment-local.sql',sql);
+sql+=await readFile('supabase/qa/process_assessment_verification.sql','utf8');if(process.argv.includes('--invitation-deadline'))sql+=await readFile('supabase/qa/assessment_invite_deadline_verification.sql','utf8');sql+='\nrollback;';
+const dir=process.env.PRISMA_ASSESSMENT_SQL_EVIDENCE??'docs/qa/evidence/process-assessment-v232/sql';await mkdir(dir,{recursive:true});await mkdir('tmp',{recursive:true});await writeFile('tmp/process-assessment-local.sql',sql);
 const r=spawnSync('C:/Program Files/PostgreSQL/17/bin/psql.exe',['-X','-h','127.0.0.1','-p','55479','-U','prisma_v202_qa','-d','import_evidence_v202','-v','ON_ERROR_STOP=1','-f','tmp/process-assessment-local.sql'],{encoding:'utf8',windowsHide:true});
 const output=(r.stdout+'\n'+r.stderr).replaceAll('\r\n','\n');await writeFile(`${dir}/sql.txt`,output);console.log(output.slice(-6500));process.exitCode=r.status??1;

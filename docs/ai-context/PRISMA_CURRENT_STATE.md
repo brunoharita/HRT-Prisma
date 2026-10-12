@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.71.2
+version: 2.71.3
 last_verified: 2026-10-11
 ---
 
 # Estado atual do Prisma
+
+## Prazo e mensagem dos convites — correção 2.4.1
+
+Implementação autorizada em11/10/2026: prazo por1/3/7/14/30dias (padrão7) ou data, sempre até23:59 em Brasília incluindo segundos finais; mensagem padrão com a Posição; CTA em rodapé separado e responsivo. Aplicações não submetidas após o menor limite entre duração e acesso mostram Não realizada · prazo encerrado, sem mudar status persistido, respostas, histórico ou recibos concluídos. Reutiliza proteção PostgreSQL existente, sem migration/Edge/serviços/dependências novos. Local:15Node dirigidos,87SQL transacionais com rollback,56checks novos e84regressões browser em1448/768/390/320 e fuso Tokyo PASS; tipos/build PASS. Publicação e fechamento operacional pendentes. Contrato/mapa/AoT `docs/qa/assessment-invite-deadline-v241.md`.
 
 ## Registros legíveis — correção 2.4.1
 

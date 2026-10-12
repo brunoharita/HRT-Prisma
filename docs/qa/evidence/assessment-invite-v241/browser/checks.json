@@ -1,0 +1,231 @@
+{
+  "checks": [
+    {
+      "name": "1448: default message specifies position",
+      "pass": true
+    },
+    {
+      "name": "1448: 1 calendar days in Brasília",
+      "pass": true
+    },
+    {
+      "name": "1448: 3 calendar days in Brasília",
+      "pass": true
+    },
+    {
+      "name": "1448: 7 calendar days in Brasília",
+      "pass": true
+    },
+    {
+      "name": "1448: 14 calendar days in Brasília",
+      "pass": true
+    },
+    {
+      "name": "1448: 30 calendar days in Brasília",
+      "pass": true
+    },
+    {
+      "name": "1448: custom date no editable hour",
+      "pass": true
+    },
+    {
+      "name": "1448: refresh retains custom message selection and date",
+      "pass": true
+    },
+    {
+      "name": "1448: CTA spacing and mobile width",
+      "pass": true
+    },
+    {
+      "name": "1448: invalid past deadline prevents send",
+      "pass": true
+    },
+    {
+      "name": "1448: editing never generates AI or sends",
+      "pass": true
+    },
+    {
+      "name": "1448: custom message and EOD in batch",
+      "pass": true
+    },
+    {
+      "name": "1448: expiry automatically displays non-performed with preserved draft",
+      "pass": true
+    },
+    {
+      "name": "1448: no external requests runtime errors or horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "768: default message specifies position",
+      "pass": true
+    },
+    {
+      "name": "768: 1 calendar days in Brasília",
+      "pass": true
+    },
+    {
+      "name": "768: 3 calendar days in Brasília",
+      "pass": true
+    },
+    {
+      "name": "768: 7 calendar days in Brasília",
+      "pass": true
+    },
+    {
+      "name": "768: 14 calendar days in Brasília",
+      "pass": true
+    },
+    {
+      "name": "768: 30 calendar days in Brasília",
+      "pass": true
+    },
+    {
+      "name": "768: custom date no editable hour",
+      "pass": true
+    },
+    {
+      "name": "768: refresh retains custom message selection and date",
+      "pass": true
+    },
+    {
+      "name": "768: CTA spacing and mobile width",
+      "pass": true
+    },
+    {
+      "name": "768: invalid past deadline prevents send",
+      "pass": true
+    },
+    {
+      "name": "768: editing never generates AI or sends",
+      "pass": true
+    },
+    {
+      "name": "768: custom message and EOD in batch",
+      "pass": true
+    },
+    {
+      "name": "768: expiry automatically displays non-performed with preserved draft",
+      "pass": true
+    },
+    {
+      "name": "768: no external requests runtime errors or horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "390: default message specifies position",
+      "pass": true
+    },
+    {
+      "name": "390: 1 calendar days in Brasília",
+      "pass": true
+    },
+    {
+      "name": "390: 3 calendar days in Brasília",
+      "pass": true
+    },
+    {
+      "name": "390: 7 calendar days in Brasília",
+      "pass": true
+    },
+    {
+      "name": "390: 14 calendar days in Brasília",
+      "pass": true
+    },
+    {
+      "name": "390: 30 calendar days in Brasília",
+      "pass": true
+    },
+    {
+      "name": "390: custom date no editable hour",
+      "pass": true
+    },
+    {
+      "name": "390: refresh retains custom message selection and date",
+      "pass": true
+    },
+    {
+      "name": "390: CTA spacing and mobile width",
+      "pass": true
+    },
+    {
+      "name": "390: invalid past deadline prevents send",
+      "pass": true
+    },
+    {
+      "name": "390: editing never generates AI or sends",
+      "pass": true
+    },
+    {
+      "name": "390: custom message and EOD in batch",
+      "pass": true
+    },
+    {
+      "name": "390: expiry automatically displays non-performed with preserved draft",
+      "pass": true
+    },
+    {
+      "name": "390: no external requests runtime errors or horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "320: default message specifies position",
+      "pass": true
+    },
+    {
+      "name": "320: 1 calendar days in Brasília",
+      "pass": true
+    },
+    {
+      "name": "320: 3 calendar days in Brasília",
+      "pass": true
+    },
+    {
+      "name": "320: 7 calendar days in Brasília",
+      "pass": true
+    },
+    {
+      "name": "320: 14 calendar days in Brasília",
+      "pass": true
+    },
+    {
+      "name": "320: 30 calendar days in Brasília",
+      "pass": true
+    },
+    {
+      "name": "320: custom date no editable hour",
+      "pass": true
+    },
+    {
+      "name": "320: refresh retains custom message selection and date",
+      "pass": true
+    },
+    {
+      "name": "320: CTA spacing and mobile width",
+      "pass": true
+    },
+    {
+      "name": "320: invalid past deadline prevents send",
+      "pass": true
+    },
+    {
+      "name": "320: editing never generates AI or sends",
+      "pass": true
+    },
+    {
+      "name": "320: custom message and EOD in batch",
+      "pass": true
+    },
+    {
+      "name": "320: expiry automatically displays non-performed with preserved draft",
+      "pass": true
+    },
+    {
+      "name": "320: no external requests runtime errors or horizontal overflow",
+      "pass": true
+    }
+  ],
+  "limits": [
+    "Real components, synthetic services, Tokyo browser timezone; no real email or paid AI"
+  ]
+}
