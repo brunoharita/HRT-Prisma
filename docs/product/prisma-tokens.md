@@ -2,7 +2,7 @@
 
 Produto 2.4.0; contrato `prisma-tokens-1.0.0`, ADR-083. Tokens Prisma são créditos comerciais próprios. Não correspondem a tokens de entrada/saída da OpenAI ou Anthropic.
 
-Cada empresa começa com 1.000.000 tokens mensais, sem acumulação. Questão gerada custa 2.000; importação por Parser IA custa 10.000; síntese profissional custa 5.000. Cache, banco aprovado, consulta, revisão, gravação e envio não consomem novamente. O consumo aparece como texto secundário antes da ação. Reserva reduz o disponível; entrega válida confirma o débito, falha sem entrega libera. Saldo baixo gera aviso discreto; insuficiência preserva rascunho e ações manuais.
+Cada empresa começa com 1.000.000 tokens mensais, sem acumulação. Nas novas cotações, questão gerada custa 2.347; importação por Parser IA custa 14.785; síntese profissional custa 6.193. Cache, banco aprovado, consulta, revisão, gravação e envio não consomem novamente. O consumo aparece como texto secundário antes da ação. Reserva reduz o disponível; entrega válida confirma o débito, falha sem entrega libera. Saldo baixo gera aviso discreto; insuficiência preserva rascunho e ações manuais.
 
 Em Administração → Tokens Prisma (`/tokens`), owner/admin acompanham saldo por origem, reservas, consumo, renovação, validade, tabela de consumo, histórico por mês/função/usuário e solicitações. Recruiter/member veem saldo compartilhado e próprio consumo, sem catálogo financeiro nem pedidos; member conserva autorização de síntese, sem ganhar acesso ao Parser ou gerador de questões.
 
@@ -13,3 +13,7 @@ Em Administração → Gestão de Tokens (`/platform-tokens`), super usuário ad
 Não há compra automática, checkout, e-mail de cobrança ou cobrança retroativa. Matching, Knowledge e serviços internos não foram incluídos nas tarifas deste movimento.
 
 No Banco de questões 2.5.0, a integração externa M5.1C também exige a cotação comercial existente para `position_assessment_items`, reserva antes de execução e settlement/liberação pelo mesmo ledger. Replays não iniciam outra chamada paga, jobs anteriores não recebem cobrança retroativa e publicação/revisão/simulação continuam gratuitas. Política produtiva do banco desativada não é ativada pela integração.
+
+## Tarifas não redondas — 12/10/2026
+
+Configuração `prisma-token-tariffs-2026-10-12`, autorizada pelo Product Owner: valores comerciais fixos por função, sem arredondamento nem aleatoriedade. Vinte questões custam 46.940 Tokens Prisma. Inclui geração pelo processo e pelo Banco de questões. Três revisões aditivas preservam tarifas anteriores, cotações válidas e reservas com seus valores congelados; franquia, pacotes, preços e permissões permanecem. A interface existente consulta a tarifa vigente, formata em pt-BR e conserva consumo secundário. Não há correspondência inventada com uso medido do provedor. Acordo e evidências: `docs/qa/tokens-nonround-rates.md` e AoT correspondente.

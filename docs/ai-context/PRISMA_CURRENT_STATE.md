@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.73.0
+version: 2.74.0
 last_verified: 2026-10-12
 ---
 
 # Estado atual do Prisma
+
+## Tokens Prisma — tarifas não redondas
+
+Decisão de12/10/2026: novas cotações usam2.347 por questão,14.785 por Parser IA e6.193 por síntese;20questões=46.940. Créditos comerciais fixos configuráveis, sem simular tokens medidos do provedor. Migration aditiva preserva valores históricos/cotações/reservas e não muda pacotes/franquia/preços/papéis/IA. Mesmo app2.5.1 e contratos RPC existentes; publicação somente banco e docs, sem rebuild. Acordo/mapa/execução `docs/qa/tokens-nonround-rates.md`, evidência operacional no AoT correspondente. Ativação produtiva ainda em validação neste snapshot.
 
 ## Questões privadas reutilizáveis — v2.5.1
 

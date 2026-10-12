@@ -13,7 +13,17 @@ sql+='\nreset role; create temp table v232_legacy as select to_jsonb(a) data fro
 sql+=await readFile('supabase/migrations/20261010120000_process_assessment.sql','utf8');
 sql+=await readFile('supabase/qa/process_assessment_verification.sql','utf8');
 for(const name of ['20261005013000_profile_synthesis_diagnostics','20261005034000_profile_synthesis_sections','20261005034500_profile_synthesis_retry_upgrade','20261010180000_prisma_tokens','20261010181000_prisma_tokens_consumers']) sql+=await readFile(`supabase/migrations/${name}.sql`,'utf8');
-sql+=await readFile('supabase/qa/prisma_tokens_verification.sql','utf8');sql+='\nrollback;';
-const dir='docs/qa/evidence/tokens-prisma-v240/sql';await mkdir(dir,{recursive:true});await mkdir('tmp',{recursive:true});await writeFile('tmp/tokens-prisma-local.sql',sql);
+const nonround=process.argv.includes('--nonround-rates');
+if(nonround){
+ sql+=await readFile('supabase/qa/prisma_token_nonround_before.sql','utf8');
+ const migration=await readFile('supabase/migrations/20261012130000_prisma_token_nonround_rates.sql','utf8');
+ sql+=`update private.prisma_token_rates set tokens_per_unit=12345 where function_name='parser_ia';\nselect m83_reject($nr_migration$${migration}$nr_migration$,'P0001');\nupdate private.prisma_token_rates set tokens_per_unit=10000 where function_name='parser_ia';\n`;
+ sql+=`insert into private.prisma_token_rates(function_name,tokens_per_unit,effective_at) values('parser_ia',9999,now()+interval '1 day');\nselect m83_reject($nr_migration$${migration}$nr_migration$,'P0001');\ndelete from private.prisma_token_rates where effective_at>now();\n`;
+ sql+=migration;
+ sql+=await readFile('supabase/qa/prisma_token_nonround_after.sql','utf8');
+ sql+=`select m83_reject($nr_migration$${migration}$nr_migration$,'P0001');\nselect m83_assert((select count(*)=6 from private.prisma_token_rates),'replay rejected without extra revisions');\n`;
+}else sql+=await readFile('supabase/qa/prisma_tokens_verification.sql','utf8');
+sql+='\nrollback;';
+const dir=nonround?'docs/qa/evidence/tokens-nonround-rates/sql':'docs/qa/evidence/tokens-prisma-v240/sql';await mkdir(dir,{recursive:true});await mkdir('tmp',{recursive:true});await writeFile('tmp/tokens-prisma-local.sql',sql);
 const r=spawnSync('C:/Program Files/PostgreSQL/17/bin/psql.exe',['-X','-h','127.0.0.1','-p','55479','-U','prisma_v202_qa','-d','import_evidence_v202','-v','ON_ERROR_STOP=1','-f','tmp/tokens-prisma-local.sql'],{encoding:'utf8',windowsHide:true});
 const output=(r.stdout+'\n'+r.stderr).replaceAll('\r\n','\n');await writeFile(`${dir}/sql.txt`,output);console.log(output.slice(-6500));process.exitCode=r.status??1;

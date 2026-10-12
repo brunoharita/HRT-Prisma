@@ -1,0 +1,297 @@
+{
+  "date": "2026-10-12",
+  "projectRef": "ioldpnqqvobprjiontre",
+  "git": "65c555f2cf44e12f0c87d6c21202f33b1f1b26ac",
+  "protectedData": [
+    {
+      "evidence": [
+        {
+          "count": 11,
+          "object": "people",
+          "fingerprint": "96a3e4530c3c2506fe7db3b84fb19f4e"
+        },
+        {
+          "count": 2,
+          "object": "position_assessments",
+          "fingerprint": "214e97617a651833ec09a1888fbd6376"
+        },
+        {
+          "count": 2,
+          "object": "prisma_token_accounts",
+          "fingerprint": "a0f7dd2891cb4fe1285871f7c21cdb2a"
+        },
+        {
+          "count": 2,
+          "object": "prisma_token_lots",
+          "fingerprint": "286a941d8339ffbcca32d0433c2e79c5"
+        },
+        {
+          "count": 3,
+          "object": "prisma_token_movements",
+          "fingerprint": "a02598a5e41d00fdbbf56fb59defb64f"
+        },
+        {
+          "count": 0,
+          "object": "prisma_token_orders",
+          "fingerprint": "d41d8cd98f00b204e9800998ecf8427e"
+        },
+        {
+          "count": 3,
+          "object": "prisma_token_packages",
+          "fingerprint": "2b0e8c32ed9427b252e9fa4555721761"
+        },
+        {
+          "count": 6,
+          "object": "prisma_token_quotes",
+          "fingerprint": "7aea01c786667a4640a0d77029672ad5"
+        },
+        {
+          "count": 1,
+          "object": "prisma_token_reservations",
+          "fingerprint": "32b83cd2d21c462cf60836e0e4db3c20"
+        },
+        {
+          "count": 15,
+          "object": "professional_profiles",
+          "fingerprint": "ee8716076fe8f1fa6462d4f676c53ecc"
+        }
+      ]
+    }
+  ],
+  "security": [
+    {
+      "evidence": {
+        "rates": [
+          {
+            "id": "58f65c57-9730-41ae-9b9a-040102a3c492",
+            "created_at": "2026-10-11T01:24:32.71485+00:00",
+            "created_by": null,
+            "effective_at": "2026-10-11T01:24:32.383689+00:00",
+            "function_name": "parser_ia",
+            "tokens_per_unit": 10000
+          },
+          {
+            "id": "9ada3cd6-5d68-433d-9e94-86e592f8afd2",
+            "created_at": "2026-10-11T01:24:32.708793+00:00",
+            "created_by": null,
+            "effective_at": "2026-10-11T01:24:32.383689+00:00",
+            "function_name": "position_assessment_items",
+            "tokens_per_unit": 2000
+          },
+          {
+            "id": "b4cb2050-ac86-45a7-a0a7-1ee64bf6a9a6",
+            "created_at": "2026-10-11T01:24:32.714881+00:00",
+            "created_by": null,
+            "effective_at": "2026-10-11T01:24:32.383689+00:00",
+            "function_name": "profile_synthesis",
+            "tokens_per_unit": 5000
+          }
+        ],
+        "tables": [
+          {
+            "acl": "{postgres=arwdDxtm/postgres}",
+            "rls": true,
+            "name": "private.prisma_token_accounts"
+          },
+          {
+            "acl": "{postgres=arwdDxtm/postgres}",
+            "rls": true,
+            "name": "private.prisma_token_allocations"
+          },
+          {
+            "acl": "{postgres=arwdDxtm/postgres}",
+            "rls": true,
+            "name": "private.prisma_token_lots"
+          },
+          {
+            "acl": "{postgres=arwdDxtm/postgres}",
+            "rls": true,
+            "name": "private.prisma_token_movements"
+          },
+          {
+            "acl": "{postgres=arwdDxtm/postgres}",
+            "rls": true,
+            "name": "private.prisma_token_orders"
+          },
+          {
+            "acl": "{postgres=arwdDxtm/postgres}",
+            "rls": true,
+            "name": "private.prisma_token_packages"
+          },
+          {
+            "acl": "{postgres=arwdDxtm/postgres}",
+            "rls": true,
+            "name": "private.prisma_token_quotes"
+          },
+          {
+            "acl": "{postgres=arwdDxtm/postgres}",
+            "rls": true,
+            "name": "private.prisma_token_rates"
+          },
+          {
+            "acl": "{postgres=arwdDxtm/postgres}",
+            "rls": true,
+            "name": "private.prisma_token_reservations"
+          }
+        ],
+        "policies": [],
+        "functions": [
+          {
+            "acl": "{postgres=X/postgres,service_role=X/postgres}",
+            "body": "7a6cf02831f9ec687f04a7d56e81e0cf",
+            "signature": "complete_m51c_external_generation(uuid,jsonb,jsonb)",
+            "securityDefiner": true
+          },
+          {
+            "acl": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+            "body": "2c6ef1dbb6d6e1ffc9f05d79793f8379",
+            "signature": "complete_profile_synthesis(text,uuid,uuid,jsonb,text,integer,integer,integer,text,jsonb)",
+            "securityDefiner": true
+          },
+          {
+            "acl": "{postgres=X/postgres,service_role=X/postgres}",
+            "body": "b12278364628fe87e566a0ab15ecd0e7",
+            "signature": "fail_m51c_external_generation(uuid,text)",
+            "securityDefiner": true
+          },
+          {
+            "acl": "{postgres=X/postgres,service_role=X/postgres}",
+            "body": "cbc362849c5094cd86706b78c6946156",
+            "signature": "position_assessment_generation_finish(uuid,uuid,jsonb,numeric,boolean)",
+            "securityDefiner": true
+          },
+          {
+            "acl": "{postgres=X/postgres,authenticated=X/postgres}",
+            "body": "8de90153352f347b85a153bb5b4e7037",
+            "signature": "position_assessment_generation_request(uuid,uuid,uuid,jsonb,uuid)",
+            "securityDefiner": true
+          },
+          {
+            "acl": "{postgres=X/postgres,authenticated=X/postgres}",
+            "body": "7e34fe2bd3ada61d0da629b37e5f9e12",
+            "signature": "prisma_tokens(text,uuid,jsonb)",
+            "securityDefiner": true
+          },
+          {
+            "acl": "{postgres=X/postgres}",
+            "body": "0f465e8a8ebbb789dc34b675217fff69",
+            "signature": "private.company_question_request_before_v251(uuid,uuid,integer,text,integer,text,uuid)",
+            "securityDefiner": true
+          },
+          {
+            "acl": "{postgres=X/postgres}",
+            "body": "0bf6b6d4de1aaa9298c36e34403127b6",
+            "signature": "private.enqueue_profile_synthesis(uuid)",
+            "securityDefiner": true
+          },
+          {
+            "acl": "{postgres=X/postgres}",
+            "body": "971fdb9a06ce091ed8233bda996ece15",
+            "signature": "private.prisma_token_balance(uuid)",
+            "securityDefiner": false
+          },
+          {
+            "acl": "{postgres=X/postgres}",
+            "body": "54ece21e14a8cf117a59be6b2590b145",
+            "signature": "private.prisma_token_bind_synthesis(uuid,jsonb,uuid)",
+            "securityDefiner": true
+          },
+          {
+            "acl": "{postgres=X/postgres}",
+            "body": "4bdf2a20c495cf5366ccc783c7aecc09",
+            "signature": "private.prisma_token_ensure(uuid,timestamp with time zone)",
+            "securityDefiner": true
+          },
+          {
+            "acl": "{postgres=X/postgres}",
+            "body": "50a4b1e72a79167cd1c43e94b9f8a02d",
+            "signature": "private.prisma_token_reserve(uuid,text,uuid,uuid,integer)",
+            "securityDefiner": true
+          },
+          {
+            "acl": "{postgres=X/postgres}",
+            "body": "951eecafe4976674df271cd6c89429e2",
+            "signature": "private.prisma_token_settle(uuid,text,uuid,boolean,text)",
+            "securityDefiner": true
+          },
+          {
+            "acl": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+            "body": "8051406d4bed8145f05d5dddca1d00dd",
+            "signature": "record_ai_worker_history_v1(text,text,jsonb)",
+            "securityDefiner": true
+          },
+          {
+            "acl": "{postgres=X/postgres,authenticated=X/postgres}",
+            "body": "43ca2a983668343033366a967fa3b04e",
+            "signature": "request_profile_synthesis(uuid,uuid,uuid,uuid)",
+            "securityDefiner": true
+          },
+          {
+            "acl": "{postgres=X/postgres,authenticated=X/postgres}",
+            "body": "3bb9683306d095e4db459d3d2ba86b23",
+            "signature": "retry_profile_synthesis(uuid,uuid,uuid,uuid)",
+            "securityDefiner": true
+          }
+        ]
+      }
+    }
+  ],
+  "services": [
+    {
+      "name": "/prisma-web",
+      "id": "72517b3e07f879e80bdb7e1c1b32d0f11edeba2cc7d636b56545d573a6f1a4e3",
+      "image": "sha256:d95867a15e438bbd434a116073cca983873de045748f3650460384ab9f490eae",
+      "status": "running",
+      "health": null,
+      "restarts": 0
+    },
+    {
+      "name": "/prisma-parser-ia",
+      "id": "e8bc778c8c00e1f25f54bc1df7e0a78fd0c31f324d847125ff87ded81f1a5fd5",
+      "image": "sha256:8542b81cebc337e052b89bcf9b1ba459ecf0824a0a4a993d8feb614401615039",
+      "status": "running",
+      "health": "healthy",
+      "restarts": 0
+    },
+    {
+      "name": "/prisma-paddle-gateway",
+      "id": "8fb76416f61cd0baf27b14a4fe4e2692e6384487f740337ba5f424145f104653",
+      "image": "sha256:cf414afdb189d3906df09633566e75d56a56dc7779e21a73e80830b0b71c9b73",
+      "status": "running",
+      "health": null,
+      "restarts": 0
+    },
+    {
+      "name": "/hrt-mail-forwarder",
+      "id": "b257a83cbb370299dc3666d120a22b47f7fb5acfc4a73516a78b821ae43fea6a",
+      "image": "sha256:ffc0f2a53e093cec01c4a91e652b29b0ede4808ecc2f461df9e6faa52940cc31",
+      "status": "running",
+      "health": "healthy",
+      "restarts": 0
+    },
+    {
+      "name": "/prisma-profile-synthesis",
+      "id": "db6c5c0ef238534ba2967dce3bbf80e9e8c94089ca7bb48b84f4e523961b00d7",
+      "image": "sha256:2fdccaea0fb50449f9f5e800ada1925c690fab319e4d3708ade0f831c7e99167",
+      "status": "running",
+      "health": "healthy",
+      "restarts": 0
+    },
+    {
+      "name": "/paddle-vl-llama-test",
+      "id": "d991a574e45eb002ce05e6c0fc9e448f4a4ed5f6128aaac049ea8cbdb24e4b8f",
+      "image": "sha256:b15cd87030b2eb8a284d398c095e03c6ba8baf386b68e1b83ab8b46e9555ffe8",
+      "status": "running",
+      "health": "unhealthy",
+      "restarts": 0
+    },
+    {
+      "name": "/traefik-traefik-1",
+      "id": "5e25fdc6d2e6fd3c622972310f67f640b80cac70538e17b42a529d1935488bc6",
+      "image": "sha256:f86a2cab1b5c649070c49f883c743dd32d8485a56e3368c5f93b9e91f1e91259",
+      "status": "running",
+      "health": null,
+      "restarts": 0
+    }
+  ]
+}

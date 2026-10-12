@@ -1,0 +1,95 @@
+{
+  "checks": [
+    {
+      "name": "1448: tariff 2.347",
+      "pass": true
+    },
+    {
+      "name": "1448: tariff 14.785",
+      "pass": true
+    },
+    {
+      "name": "1448: tariff 6.193",
+      "pass": true
+    },
+    {
+      "name": "1448: action quote 14.785",
+      "pass": true
+    },
+    {
+      "name": "1448: action quote 46.940",
+      "pass": true
+    },
+    {
+      "name": "1448: action quote 6.193",
+      "pass": true
+    },
+    {
+      "name": "1448: no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "1448: super tariff 2.347",
+      "pass": true
+    },
+    {
+      "name": "1448: super tariff 14.785",
+      "pass": true
+    },
+    {
+      "name": "1448: super tariff 6.193",
+      "pass": true
+    },
+    {
+      "name": "1448: no exceptions or external requests",
+      "pass": true
+    },
+    {
+      "name": "390: tariff 2.347",
+      "pass": true
+    },
+    {
+      "name": "390: tariff 14.785",
+      "pass": true
+    },
+    {
+      "name": "390: tariff 6.193",
+      "pass": true
+    },
+    {
+      "name": "390: action quote 14.785",
+      "pass": true
+    },
+    {
+      "name": "390: action quote 46.940",
+      "pass": true
+    },
+    {
+      "name": "390: action quote 6.193",
+      "pass": true
+    },
+    {
+      "name": "390: no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "390: super tariff 2.347",
+      "pass": true
+    },
+    {
+      "name": "390: super tariff 14.785",
+      "pass": true
+    },
+    {
+      "name": "390: super tariff 6.193",
+      "pass": true
+    },
+    {
+      "name": "390: no exceptions or external requests",
+      "pass": true
+    }
+  ],
+  "limits": [
+    "Real components, synthetic transport. No paid AI or production mutations."
+  ]
+}

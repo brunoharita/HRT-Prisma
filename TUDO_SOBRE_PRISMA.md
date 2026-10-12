@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 460
-source_manifest_sha256: 3b84505d83b9608552995a3e1ee659a72a6cfd753276c5e7251e44b9b5f7b406
+documentation_source_count: 462
+source_manifest_sha256: fddb61ee43846c23d24daa75ae383911a0f904fe9e320c8fa0a73dc969ae518c
 -->
 
 # Tudo sobre o Prisma
@@ -2630,11 +2630,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.73.0
+version: 2.74.0
 last_verified: 2026-10-12
 ---
 
 # Estado atual do Prisma
+
+## Tokens Prisma — tarifas não redondas
+
+Decisão de12/10/2026: novas cotações usam2.347 por questão,14.785 por Parser IA e6.193 por síntese;20questões=46.940. Créditos comerciais fixos configuráveis, sem simular tokens medidos do provedor. Migration aditiva preserva valores históricos/cotações/reservas e não muda pacotes/franquia/preços/papéis/IA. Mesmo app2.5.1 e contratos RPC existentes; publicação somente banco e docs, sem rebuild. Acordo/mapa/execução `docs/qa/tokens-nonround-rates.md`, evidência operacional no AoT correspondente. Ativação produtiva ainda em validação neste snapshot.
 
 ## Questões privadas reutilizáveis — v2.5.1
 
@@ -11032,6 +11036,10 @@ Pedido assistido: solicitação, encaminhamento, verificação real do pagamento
 
 A primeira versão retorna histórico completo com paginação visual. Carga em grandes volumes não foi medida; medir antes de escalar. Testes usam PostgreSQL17 local descartável e UI/transporte sintéticos sem IA paga. Há único Supabase remoto produtivo, sem QA separado. Smoke verifica SHA/versão, grants/RLS, fingerprint, funções, assets/health/rollback e preservação de Synthesis/mail/Paddle/Traefik. Evidence e limites no AoT.
 
+## Revisão de tarifas de 12/10/2026
+
+Migration `20261012130000_prisma_token_nonround_rates.sql`: insere três revisões, sem atualizar histórico/schema/permissões. Bloqueia aplicação se a baseline vigente diferir de 2.000/10.000/5.000 ou houver vigência futura cadastrada, evitando substituir decisão comercial concorrente. Publicação somente banco e documentação; consumidores e UI já leem tarifas versionadas, sem rebuild/restart. Configuração `prisma-token-tariffs-2026-10-12`; app 2.5.1 e envelopes RPC existentes mantidos. Rollback operacional por novas versões 2.000/10.000/5.000 na Gestão de Tokens, preservando histórico, cotações e reservas. QA local: `node scripts/test-prisma-tokens-sql.mjs --nonround-rates` em baseline vazia descartável, transação com rollback; UI com tarifas sintéticas iguais em dois viewports. Verificar hashes agregados de dados protegidos, corpos/grants/RLS, fingerprint da migration e identidade dos serviços antes/depois.
+
 ---
 
 ## Source: `docs/operations/process-assessment-v232.md`
@@ -11999,7 +12007,7 @@ A amostra atual é sintética e representativa. Ela permite comprovar a mecânic
 
 Produto 2.4.0; contrato `prisma-tokens-1.0.0`, ADR-083. Tokens Prisma são créditos comerciais próprios. Não correspondem a tokens de entrada/saída da OpenAI ou Anthropic.
 
-Cada empresa começa com 1.000.000 tokens mensais, sem acumulação. Questão gerada custa 2.000; importação por Parser IA custa 10.000; síntese profissional custa 5.000. Cache, banco aprovado, consulta, revisão, gravação e envio não consomem novamente. O consumo aparece como texto secundário antes da ação. Reserva reduz o disponível; entrega válida confirma o débito, falha sem entrega libera. Saldo baixo gera aviso discreto; insuficiência preserva rascunho e ações manuais.
+Cada empresa começa com 1.000.000 tokens mensais, sem acumulação. Nas novas cotações, questão gerada custa 2.347; importação por Parser IA custa 14.785; síntese profissional custa 6.193. Cache, banco aprovado, consulta, revisão, gravação e envio não consomem novamente. O consumo aparece como texto secundário antes da ação. Reserva reduz o disponível; entrega válida confirma o débito, falha sem entrega libera. Saldo baixo gera aviso discreto; insuficiência preserva rascunho e ações manuais.
 
 Em Administração → Tokens Prisma (`/tokens`), owner/admin acompanham saldo por origem, reservas, consumo, renovação, validade, tabela de consumo, histórico por mês/função/usuário e solicitações. Recruiter/member veem saldo compartilhado e próprio consumo, sem catálogo financeiro nem pedidos; member conserva autorização de síntese, sem ganhar acesso ao Parser ou gerador de questões.
 
@@ -12010,6 +12018,10 @@ Em Administração → Gestão de Tokens (`/platform-tokens`), super usuário ad
 Não há compra automática, checkout, e-mail de cobrança ou cobrança retroativa. Matching, Knowledge e serviços internos não foram incluídos nas tarifas deste movimento.
 
 No Banco de questões 2.5.0, a integração externa M5.1C também exige a cotação comercial existente para `position_assessment_items`, reserva antes de execução e settlement/liberação pelo mesmo ledger. Replays não iniciam outra chamada paga, jobs anteriores não recebem cobrança retroativa e publicação/revisão/simulação continuam gratuitas. Política produtiva do banco desativada não é ativada pela integração.
+
+## Tarifas não redondas — 12/10/2026
+
+Configuração `prisma-token-tariffs-2026-10-12`, autorizada pelo Product Owner: valores comerciais fixos por função, sem arredondamento nem aleatoriedade. Vinte questões custam 46.940 Tokens Prisma. Inclui geração pelo processo e pelo Banco de questões. Três revisões aditivas preservam tarifas anteriores, cotações válidas e reservas com seus valores congelados; franquia, pacotes, preços e permissões permanecem. A interface existente consulta a tarifa vigente, formata em pt-BR e conserva consumo secundário. Não há correspondência inventada com uso medido do provedor. Acordo e evidências: `docs/qa/tokens-nonround-rates.md` e AoT correspondente.
 
 ---
 
@@ -22943,6 +22955,62 @@ A verificar. Referenciar a decisão do Product Owner ou confirmar ausência apó
 
 ---
 
+## Source: `docs/qa/aot-tokens-nonround-rates.md`
+
+# AoT — Tokens Prisma: tarifas não redondas
+
+Contrato e execução `docs/qa/tokens-nonround-rates.md` 1.0.0, decisão explícita de Bruno em12/10/2026. Baseline main/origin/VPS `65c555f2cf44e12f0c87d6c21202f33b1f1b26ac`, runtime web2.5.1 `47c9b09`. Branch `codex/tokens-nonround`, risco D. Configuração `prisma-token-tariffs-2026-10-12`, sem mudança do app/envelope RPC. Evidências `docs/qa/evidence/tokens-nonround-rates/`.
+
+## Matriz de Acordos
+
+| ID | Implementação | Teste / evidência | Status |
+| --- | --- | --- | --- |
+| D-01 | Três revisões 2.347/14.785/6.193 no catálogo existente | SQL valores exatos/unidades não redondas; UI tabela e cotações | PASS |
+| D-02 | INSERT aditivo; guard baseline/vigência futura e lock do catálogo | SQL snapshots de tarifas/cotações/reservas e saldos/pacotes/pedidos; reserva antiga10.000 e cotação antiga40.000 | PASS |
+| D-03 | Mesma UI/RPC dinâmica, pt-BR e texto secundário; sem aleatoriedade | Browser22checks em1448/390;20questões46.940; revisão visual mobile | PASS |
+| D-04 | Local rollback e negativas, publicação seletiva, preservação e documentação | Local PASS; produção e sincronização pendentes | PARTIAL |
+
+## Proibições verificadas
+
+P-01 PASS local: migration histórica/corpos/grants/RLS/escritores intactos no diff; snapshots e replay SQL preservam histórico. P-02 PASS: nenhuma mudança de runtime/IA/modelo/prompt/cache/reuso/Score/Perfil/Posição; dados protegidos intactos no SQL. Produção ainda NOT TESTED.
+
+## Mapa de Impacto e Preservação
+
+Mapa final igual ao inicial, sem dependência nova. Novidade: três tarifas. Preservação:
+
+| Capacidade / relação | Baseline e regressão | Status |
+| --- | --- | --- |
+| Tarifas/cotação/reserva/débito — direct | Valores iniciais; snapshots, versões, total, liquidação antiga/nova/replay/falha/expiração | PASS local |
+| Avaliação/Banco de questões — direct | Mesmo código consulta `position_assessment_items`;79 asserts processo/portal legados e cotação/reserva20questões | PASS local; corpos produtivos pendentes |
+| Parser/Síntese — direct | Mesmas RPCs e funções; cotação/reserva/liquidação e permissão member | PASS local; corpos produtivos pendentes |
+| Informação UI — direct | Mesmos componentes reais com transporte sintético;22 checks desktop/mobile e capturas | PASS |
+| Autorização/tenant/RLS — critical_transversal | Anônimo, tenant errado, DML privado, edição operacional, member/Parser negados | PASS local; metadados produtivos pendentes |
+| Franquia/lotes/pacotes/pedidos/dados humanos — critical_transversal | Snapshot exato SQL; dez hashes produtivos baseline capturados | PASS local; produção pendente |
+| Cache/banco/reuso/Score/matching/Knowledge — plausible_indirect | Diff sem mudança runtime; SQL snapshots e regressão de reutilização/portal | PASS local |
+| Serviços/Edge/web/portal/mail — no_impact_identified | Somente catálogo SQL; sete containers baseline capturados, sem rebuild/restart previsto | NOT TESTED produção |
+
+## Fora de escopo preservado
+
+F-01 PASS: nenhum pacote, preço, franquia, layout, provedor, infraestrutura ou regra de cobrança alterado. A única referência visual desta solicitação é o exemplo textual14.785; não há nova composição normativa. Capturas mostram componentes existentes e cotações reais sobre transporte sintético, não uma nova tela produtiva.
+
+## Desvios e mudanças autorizadas
+
+Nenhum desvio identificado na revisão local. Valores concretos delegados à engenharia; revisão substitui somente tarifas iniciais do acordo2.4.0. Não muda significado de contrato persistido, por isso app2.5.1 mantido.
+
+## Validação e limites
+
+PostgreSQL17 LOCAL descartável em127.0.0.1:55479/import_evidence_v202, baseline sem Pessoas/avaliações/tabelas comerciais, transação com ROLLBACK. Testes sintéticos sem IA paga, pedidos comerciais ou dados humanos produtivos. Não existe QA remoto separado. Browser22, serviço de cotação1 PASS; SQL/evidências incluem teste de baseline inesperada, tarifa futura e reexecução negada. Jornada real autenticada NOT TESTED. Context Pack valida somente checkout isolado limpo; arquivos locais alheios no root preservados.
+
+## Git / QA / ambiente
+
+Publicação ainda pendente. Rollback por novas versões via Gestão de Tokens, preservando cotações/reservas. Supabase produtivo Prisma ioldpnqqvobprjiontre ACTIVE_HEALTHY verificado; sete serviços running/restarts0, Parser/Síntese/mail healthy, Paddle experimental unhealthy preexistente.
+
+## Conclusão
+
+Implementação local validada, fechamento produtivo pendente.
+
+---
+
 ## Source: `docs/qa/aot-tokens-prisma-v240.md`
 
 # AoT — Tokens Prisma v2.4.0
@@ -29432,6 +29500,46 @@ Registrar commit, ambiente, versões, fixtures, comando, resultado, falhas, corr
 ## Rastreabilidade de acordos
 
 Movimentos materiais usam o [Contrato de Acordos](agreement-contract-template.md) antes do Prompt Mestre e encerram com o [AoT](aot-template.md). Todo `D-*` possui critério de aceite e evidência; todo `P-*` material e testável possui prova negativa. Consulte o [protocolo de rastreabilidade](product-agreement-traceability.md) para estados, supersessão e critérios que impedem concluir uma entrega.
+
+---
+
+## Source: `docs/qa/tokens-nonround-rates.md`
+
+# Tokens Prisma — tarifas não redondas
+
+Agreement/Execution 1.0.0, aprovado pelo pedido explícito de Bruno em 12/10/2026. Delta do acordo `tokens-prisma-v240.md`: supersede apenas as quantidades iniciais de D-04; regras de saldo, ciclo, pacote, autoridade e UX continuam. Baseline main/origin/VPS `65c555f2cf44e12f0c87d6c21202f33b1f1b26ac`, app v2.5.1. Supabase produtivo ioldpnqqvobprjiontre ACTIVE_HEALTHY, tarifas atuais 2.000/10.000/5.000; sem tarifas futuras. PostgreSQL17 local descartável 127.0.0.1:55479/import_evidence_v202, vazio, verificado. Risco D limitado à atualização versionada de dados comerciais.
+
+## Agreement
+
+- D-01: novas tarifas fixas inteiras não múltiplas de dez: questão 2.347, Parser IA 14.785, síntese 6.193. Aplicam a novas cotações por ambos os geradores de questões e demais consumidores da mesma tabela.
+- D-02: criar três novas versões na tabela existente, sem alterar versões antigas, cotações/reservas/consumos emitidos. Cotação anterior conserva sua quantidade até expirar; reserva anterior conserva o débito combinado. Preservar franquias, saldos, pacotes/preços, pedidos e dados humanos.
+- D-03: informar números reais da tarifa, com separador pt-BR, em texto discreto e tabela de consumo; quantidade do lote usa multiplicação exata. Tarifa é crédito comercial Prisma; nunca número aleatório/medição técnica fabricada.
+- D-04: validar localmente números/cotação/reserva/débito/replay e negativos de acesso; conferir render responsivo e ativação remota, Context Pack/AoT/ledger e main/VPS. Não usar chamadas pagas nem pedidos reais para teste.
+- P-01: não editar migrations históricas, esconder tabela, mudar wrappers/grants/RLS ou charge retrospectivo.
+- P-02: não simular tokens do fornecedor; preservar cache/banco/reuso gratuito e autoridade humana/Score/Perfil/Posição.
+- F-01: alterar pacotes/franquia/preços, distribuição aleatória de tarifas, providers/prompts, layout, infraestrutura ou mecanismos de cobrança.
+- A-01: seleção das quantidades concretas acima, migration aditiva e evidência proporcional reutilizando a tabela e componentes existentes. Não exige ADR novo: ADR-083 já prevê tarifas versionadas/configuráveis.
+- Q: nenhum.
+- CA-01: três tarifas ativas novas e divisibilidade negativa por dez; UI exibe 2.347/14.785/6.193 e lote20=46.940.
+- CA-02: versões/cotações/reservas antigas iguais antes/depois; liquidação/replay pelo valor antigo; nova cotação/reserva/débito pelo valor novo. Hashes remotos preservados, três linhas novas apenas.
+- CA-03/04: SQL negativo e comercial dirigido, render1448/390, CI/plano/migration/fingerprint/grants/runtime/sincronização e AoT com limites.
+
+## Mapa de Impacto e Preservação GOV-01
+
+| Área | Relação | Baseline/capacidade | Prova proporcional |
+| --- | --- | --- | --- |
+| Tarifas/quotes/reservas/ledger | direct | Tarifas atuais verificadas; wrappers inalterados | SQL de migração, freeze/reserve/settle/replay/isolamento; hashes remotos |
+| Geração avaliação e Banco de questões | direct | Ambos usam position_assessment_items/cotação e reserve existentes | Rastreio dos wrappers, quote20 e reserva pelo total exato; sem novo código consumidor |
+| Parser/síntese | direct | Ambos usam tarifas centrais | Quote/reserva dos três tipos; hint render; sem provider |
+| Informação UI/gestão | direct | Componentes leem dados RPC, formatTokens pt-BR | Render com transporte sintético nos2viewports; nenhum layout/bundle produtivo muda |
+| Auth/tenant/RLS | critical_transversal | Permissões existentes | Negativas local e grants/bodyhash remoto iguais |
+| Pacotes/saldos/pedidos/ciclo/dados humanos | critical_transversal | Estado produtivo agregado capturado | Hashes antes/depois; nenhuma atualização dessas tabelas |
+| Cache/banco/reuso/Score/matching/Knowledge | plausible_indirect | Sem alteração de rotinas ou código | Diff restrito a INSERT de tarifas; wrappers/bodyhash preservados |
+| Serviços/Edge/web/portal/mail | no_impact_identified | Nova configuração SQL consumida pela UI existente | Plano exige somente database/docs; IDs/imagens/restarts iguais, nenhum rebuild/restart |
+
+## Execution congelado
+
+Implementar integralmente D/P/F/A/CA acima. Reutilizar tabela/RPC e componentes, adicionar versões sem UPDATE/DELETE de tarifas. Publicação já autorizada no pedido e AGENTS§7. Versão de configuração `prisma-token-tariffs-2026-10-12`; envelopes prisma-tokens-1.0.0/quote-1.0.0 e app v2.5.1 permanecem porque não há alteração de protocolo ou bundle. Não reabrir escritores antigos nem retroagir saldo. AoT em `aot-tokens-nonround-rates.md`.
 
 ---
 
