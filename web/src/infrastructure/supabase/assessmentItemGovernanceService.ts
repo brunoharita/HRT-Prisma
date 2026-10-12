@@ -1,14 +1,17 @@
 import type { ItemBankGovernanceWorkspace } from "../../domain/assessmentItemGovernanceData";
 import { supabaseFunctionOperationError, supabaseOperationError } from "../../domain/reviewOperationErrors";
 import { supabase } from "./client";
+import { takeTokenQuote } from "./prismaTokensService";
+import type { TokenQuote } from "../../domain/prismaTokens";
 
 export const assessmentItemGovernanceService = {
   async loadWorkspace(organizationId: string): Promise<ItemBankGovernanceWorkspace> {
     const { data, error } = await supabase.rpc("load_m51c_item_bank_workspace" as never, { p_organization_id: organizationId } as never);
-    if (error) throw supabaseOperationError(error, "Não foi possível carregar o Banco de Itens.");
-    if (!isRecord(data)) throw new Error("Resposta inválida do Banco de Itens.");
+    if (error) throw supabaseOperationError(error, "Não foi possível carregar o Banco de questões.");
+    if (!isRecord(data)) throw new Error("Resposta inválida do Banco de questões.");
     const payload: Record<string, unknown> = data;
     return {
+      ...(isRecord(payload.permissions) ? {permissions: payload.permissions as NonNullable<ItemBankGovernanceWorkspace["permissions"]>} : {}),
       versions: isRecord(payload.versions) ? payload.versions as unknown as ItemBankGovernanceWorkspace["versions"] : { gapAnalysis: "unknown", analytics: "unknown", calibration: "unknown", budget: "unknown", proposal: "unknown" },
       gaps: asArray(payload.gaps), items: asArray(payload.items), requests: asArray(payload.requests), proposals: asArray(payload.proposals),
       policy: isRecord(payload.policy) ? payload.policy as unknown as ItemBankGovernanceWorkspace["policy"] : {
@@ -28,11 +31,27 @@ export const assessmentItemGovernanceService = {
     return isRecord(data) ? data : {};
   },
 
-  async requestExternalGeneration(input: { organizationId: string; generationNeedId: string; quantity: number; targetScope: "global" | "organization" }) {
+  async prepareGeneration(input: { organizationId: string; blueprintId: string; dimension: string }) {
+    const {data, error} = await supabase.rpc("prepare_question_bank_generation" as never, {p_organization_id: input.organizationId, p_blueprint_id: input.blueprintId, p_dimension: input.dimension} as never);
+    if (error) throw supabaseOperationError(error, "Não foi possível confirmar a necessidade de complementação.");
+    const value: unknown = data;
+    if (!isRecord(value) || typeof value.generationNeedId !== "string") throw Error("Necessidade indisponível. Atualize a cobertura.");
+    return value.generationNeedId;
+  },
+
+  async requestExternalGeneration(input: { organizationId: string; generationNeedId: string; quantity: number; targetScope: "global" | "organization"; idempotencyKey: string; quote: TokenQuote }) {
+    const {quote, ...request} = input;
+    const confirmed = await takeTokenQuote(input.organizationId, "position_assessment_items", input.quantity, quote);
     const { data, error } = await supabase.functions.invoke("assessment-item-generator", {
-      body: { schemaVersion: "m51c-assessment-item-generation-request-1.0.0", ...input, idempotencyKey: crypto.randomUUID() },
+      body: { schemaVersion: "m51c-assessment-item-generation-request-2.0.0", ...request, tokenQuoteId: confirmed.id },
     });
     if (error) throw await supabaseFunctionOperationError(error, "Não foi possível solicitar a geração externa.");
+    return isRecord(data) ? data : {};
+  },
+
+  async approveAndPublish(organizationId: string, proposalId: string, rationale: string) {
+    const {data, error} = await supabase.rpc("approve_and_publish_question_bank_proposal" as never, {p_organization_id: organizationId, p_proposal_id: proposalId, p_rationale: rationale} as never);
+    if (error) throw supabaseOperationError(error, "Não foi possível aprovar e disponibilizar. A operação inteira foi preservada.");
     return isRecord(data) ? data : {};
   },
 

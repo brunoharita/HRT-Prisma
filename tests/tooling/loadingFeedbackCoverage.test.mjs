@@ -17,6 +17,13 @@ test("every page declares loading feedback; synchronous assisted description has
     assert.match(await readFile("web/src/pages/KnowledgePage.tsx","utf8"),/useLoadingFeedback\(/,"delegated page owns visible loading");
     audited.push(name);continue;
    }
+   if(name==="AssessmentItemBankPage"){
+    assert.doesNotMatch(body,/\bawait\b|\.then\(/,"scoped wrapper owns no independent operation");
+    assert.match(body,/return <QuestionBankWorkspace key=\{activeMembership.organizationId\}/);
+    const workspace=tree.statements.find(s=>ts.isFunctionDeclaration(s)&&s.name?.text==="QuestionBankWorkspace");
+    assert.match(workspace.body.getText(tree),/useLoadingFeedback\(/,"organization-scoped workspace owns actual visible loading");
+    audited.push(name);continue;
+   }
    assert.match(body,/useLoadingFeedback\(|useLoadingTask\(/,`${name} must register visible pending operations`);audited.push(name);
   }
  }

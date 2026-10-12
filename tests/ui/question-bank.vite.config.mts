@@ -1,0 +1,3 @@
+import {defineConfig} from "vite";
+import react from "@vitejs/plugin-react";
+export default defineConfig({root:"tests/ui",cacheDir:"../../tmp/vite-question-bank",plugins:[{name:"question-bank-synthetic-services",enforce:"pre",transform(_code,id){const f=id.replaceAll("\\","/");if(f.endsWith("/infrastructure/supabase/assessmentItemGovernanceService.ts"))return 'export {bank as assessmentItemGovernanceService} from "../../../../tests/ui/question-bank/fixture";';if(f.endsWith("/infrastructure/supabase/client.ts"))return 'export {supabase} from "../../../../tests/ui/question-bank/fixture";';}},react()],server:{host:"127.0.0.1",port:5785,strictPort:true,fs:{allow:["../.."]}}});

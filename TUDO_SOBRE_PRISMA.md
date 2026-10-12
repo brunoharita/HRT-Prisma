@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 451
-source_manifest_sha256: f160b2f94bb0ae7a3f38e3f802a33a026c8d20a7b9bc8b157a76a1814df58619
+documentation_source_count: 456
+source_manifest_sha256: 8823f09c30f93370eaed3e82892c1b7120e15838d3f464df7a550b44454405bb
 -->
 
 # Tudo sobre o Prisma
@@ -2630,11 +2630,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.71.4
-last_verified: 2026-10-11
+version: 2.72.0
+last_verified: 2026-10-12
 ---
 
 # Estado atual do Prisma
+
+## Banco de questões — v2.5.0
+
+Implementação autorizada em12/10/2026, acordo1.0.0: Questões e Para revisar, detalhe completo protegido, filtros/paginação, comparação humana, histórico por família real e rascunhos por organização. Aprovar e disponibilizar é transacional/idempotente com auditorias separadas; justificativa opcional somente aprovação comum, motivos obrigatórios nas exceções/rejeição/ajustes. Cobertura separa composição/reserva e geração reúne contexto/quantidade/destino/Tokens Prisma em confirmação explícita. Integração M5.1C e ledger/tarifa existentes reaproveitados, sem novo provedor/modelo/prompt ou ativação; políticas produtivas verificadas desativadas. Simulação/preview sintético em ferramentas administrativas, métricas nulas e limites de calibração preservados. Owner `docs/product/question-bank.md`, mapa/execução/AoT em docs/qa. Validação e rollout em andamento; não presumir publicação nem jornada produtiva autenticada a partir de fixtures.
 
 ## Tempo e orientações do participante — correção 2.4.1
 
@@ -4958,6 +4962,8 @@ Implementação deve ser separada em movimentos menores: contratos e versões, s
 
 # Catálogo de contratos
 
+Banco de questões 2.5.0: delta `question-bank-human-review-2.0.0`, com justificativa vazia permitida somente na aprovação comum; motivos nas exceções/rejeição/ajustes, autoria/snapshot/auditoria obrigatórios. `approve_and_publish_question_bank_proposal` compõe aprovação/publicação existentes em transação idempotente, sem novos papéis. Workspace M5.1C ganha campos aditivos completos e permissões calculadas no servidor; nulos de snapshot preservados. Request externo mantém schema/prompt histórico e acrescenta `tokenQuoteId`, utilizando `prisma-tokens-1.0.0` e a tarifa existente de questões. Replays não invocam novamente o fornecedor. Owner: `docs/product/question-bank.md`; acordo1.0.0 e AoT2.5.0.
+
 `position-follow-up-1.0.0` (v2.2.0): processo/entrada/histórico por organização e Posição, independente do resultado profissional. Duas RPCs autenticadas, campos operacionais validados, revisão otimista, inclusão vinculada às versões consultadas e histórico atômico. Score vem exclusivamente do snapshot estável; notas/decisões/entrevistas não recalculam. ADR-079, acordo1.0.0 e AoT2.2.0 especificam autoridade/UX/limites; contratos de matching preservados.
 
 Delta operacional de 03/10/2026: ADR-075 e `parser-ia-kvm2-1.0.0` hospedam o Parser privado na KVM2; os contratos de Parser, transporte e readiness preservam versões. Referências a PC/túnel abaixo são históricas do piloto. Estado efetivo no AoT `docs/qa/aot-parser-ia-kvm2.md`.
@@ -5074,6 +5080,8 @@ Tipos TypeScript provam contrato de código local. Migration prova intenção ex
 Não existe API HTTP nem event bus no estado atual. O M2-C persiste eventos operacionais/auditoria no banco, mas eles não constituem um barramento público. Nenhum consumidor externo deve assumir sua existência.
 
 O M5.1B autoriza somente execução sintética local/QA pela fronteira tokenizada. Não autoriza Pessoas reais, provider externo, produção, geração por IA, proctoring, certificação ou decisão automática.
+
+Boundary externo `m51c-assessment-item-generator-2.0.0`, requisição `m51c-assessment-item-generation-request-2.0.0`: cotação explícita e destino válido obrigatórios. Requisição1.0.0 é aceita somente com os mesmos campos obrigatórios e guardas; cliente antigo sem cotação falha sem cobrar. Schema de proposta/prompt históricos permanecem. Uso do fornecedor ausente não vira zero nem entrega gratuita; a falha libera reserva comercial e mantém histórico técnico do custo conhecido ou indisponível.
 
 ---
 
@@ -11724,6 +11732,10 @@ Métricas de qualidade: cobertura de blueprint, distribuição de dificuldade, t
 - Sem proctoring invasivo no MVP.
 - Pessoa não vira Usuário para realizar assessment.
 
+## Banco de questões 2.5.0
+
+A experiência M5.1C foi reorganizada em Questões e Para revisar, com detalhe completo, comparação, cobertura e administração secundárias. Revisão comum dispensa justificativa genérica, mantendo motivo nas exceções, rejeição e ajustes, auditorias separadas e autoridade existente. Geração reaproveita o backend do banco e o ledger comercial existente; política produtiva desativada permanece indisponível. Owner atual da experiência: `docs/product/question-bank.md`; acordo e evidências em `docs/qa/aot-question-bank-v250.md`. O contrato histórico de alternativas permanece distinto do contrato da avaliação por processo.
+
 ---
 
 ## Source: `docs/product/person-center-redesign-spec.md`
@@ -11990,6 +12002,8 @@ Pacotes iniciais: Complemento 1.000.000 / R$49; Expansão 3.000.000 / R$129; Vol
 Em Administração → Gestão de Tokens (`/platform-tokens`), super usuário administra Pacotes e preços, Empresas, Solicitações, Consumo e movimentações. Mudanças de preço/tarifa criam versões com vigência; cotação válida conserva tarifa anterior. Franquia e novo dia do ciclo são agendados para a próxima renovação; o ciclo de transição termina na primeira ocorrência posterior do dia escolhido, podendo ser mais curto, e meses curtos usam último dia sem perder a âncora. Suspensão bloqueia novas reservas, preservando entrega pendente, saldo e histórico. Bonificações/restituições são lançamentos motivados, sem edição direta de saldo. Reservas incertas são conciliadas com evidência e motivo, nunca disparando IA.
 
 Não há compra automática, checkout, e-mail de cobrança ou cobrança retroativa. Matching, Knowledge e serviços internos não foram incluídos nas tarifas deste movimento.
+
+No Banco de questões 2.5.0, a integração externa M5.1C também exige a cotação comercial existente para `position_assessment_items`, reserva antes de execução e settlement/liberação pelo mesmo ledger. Replays não iniciam outra chamada paga, jobs anteriores não recebem cobrança retroativa e publicação/revisão/simulação continuam gratuitas. Política produtiva do banco desativada não é ativada pela integração.
 
 ---
 
@@ -12333,6 +12347,32 @@ F-01: implementação, produção, envio efetivo de e-mails, chamadas de geraç�
 ## Fidelidade visual proposta
 
 Referências do Perfil/sidebar são normativas para linguagem visual, não conteúdo pessoal. Fluxo proposto usa cabeçalho com contexto, etapas Configuração/Questões/Revisão/Convite, formulário principal2/3 e sidebar contextual1/3; card branco, borda fina, destaques azul-claro, ícones centrados. Portal do candidato remove navegação administrativa; resultado volta ao shell e oferece tabela/timeline por questão. Propostas ainda aguardam validação visual do Product Owner. Não há prompt final de implementação enquanto Qs materiais estiverem abertas.
+
+---
+
+## Source: `docs/product/question-bank.md`
+
+# Banco de questões — v2.5.0
+
+Acordo aprovado: `docs/qa/agreement-question-bank-v250.md` v1.0.0; execução e mapa em `docs/qa/execution-question-bank-v250.md` e `docs/qa/impact-question-bank-v250.md`. A página `/item-bank` serve para consultar questões e revisar novos conteúdos para avaliações. Usa as capacidades M5.1C, a autoridade existente e os componentes Prisma.
+
+Questões é a entrada padrão: catálogo único das questões globais e da empresa, com busca por conteúdo/competência/código, filtros, origem e ordenação previsível, sem ranking de qualidade. O detalhe apresenta enunciado, alternativas, gabarito e explicação completos antes de contexto e metadados. Origem e revisão, Uso e qualidade e Histórico ficam em expansões. Famílias são identificadas por `family_id`, sem inferência pelo nome ou limite de oito famílias. Conteúdo de cada versão disponível pode ser consultado. Disponibilidade preserva as diferenças entre estados persistidos e não declara elegibilidade para qualquer avaliação.
+
+Para revisar mostra pendências reais e permite consultar registros encerrados pelos filtros. Nenhuma decisão ou justificativa favorável é preenchida. Rascunhos são preservados por organização nesta sessão. Aprovação comum pode ter justificativa vazia; rejeição, ajustes e exceções de duplicidade exigem motivo de pelo menos dez caracteres após trim. A versão de revisão é `question-bank-human-review-2.0.0`. A ação Aprovar e disponibilizar usa uma transação, preservando fatos e auditorias separados, autoridade, versão e idempotência. A disponibilização em lote exige seleção explícita de propostas já aprovadas, informa quantidade/destinos/origem sintética e não publica as demais.
+
+O servidor continua exigindo governança M5.1C ativa: owner/admin/super_admin conforme as relações existentes da organização; destino global exige super_admin. Gabarito e conteúdo completo vêm somente do workspace autorizado. Flags ausentes não concedem permissão na interface. A configuração administrativa é consultiva: a administração central gerencia backend e limites pelo fluxo controlado de operação. Não existem novos papéis ou um editor de política nesta entrega.
+
+Consultar cobertura é secundário e usa modelos ativos por competência, com contexto reconhecível, composição necessária, duas questões adicionais por dimensão como reserva, elegíveis e déficit separados. Reserva insuficiente não prova impossibilidade da prova. Complementação parte da necessidade selecionada; uma confirmação reúne quantidade, destino permitido e consumo. Cancelar não dispara geração. Necessidade já em geração ou revisão exige consultar andamento/propostas; não há retry pago automático.
+
+A integração externa própria do banco é reaproveitada com a tarifa e o ledger existentes de Tokens Prisma (`position_assessment_items`). A confirmação usa cotação versionada, reserva transacional e settlement por entrega válida ou liberação por falha sem entrega. O custo e o orçamento do fornecedor permanecem separados do consumo comercial. Nenhum provedor, modelo, prompt, tarifa ou ativação novos foram escolhidos. As políticas produtivas verificadas estão desativadas e sem provedor/modelo: a interface comunica indisponibilidade. A geração de avaliações por processo tem contrato diferente e não foi substituída. M5.1C histórico admite duas a seis alternativas; avaliação por processo exige exatamente cinco. Conteúdo histórico de quatro alternativas é preservado, sem torná-lo elegível artificialmente.
+
+Geração concluída oferece acesso à revisão; consulta/histórico não reinvocam IA. O histórico distingue quantidade solicitada e produzida, data, contexto, destino e situação; UUID/categorias técnicas são detalhes. Teste determinístico e preview sintético permanecem em ferramentas administrativas explicitamente identificadas e exigem seleção própria, independente do detalhe de consulta.
+
+Uso e qualidade reúne estatísticas/calibração. Snapshot ausente mantém nulos e indisponibilidade, sem concluir nunca utilizada. Zero observado permanece zero. Amostra sintética não comprova calibração real. Amostra, método, data, flags e evidências existentes acompanham as métricas; observações válidas/período de coleta ausentes são explicitamente indisponíveis. Taxa de acerto não tem meta/barra de aprovação; tempo usa minutos/segundos; mudança de resposta não prova fraude. P25/P75 são explicados. O índice aritmético `1 − taxa de acerto` não recebe significado psicométrico. Nada altera Score, Perfil ou decisões sobre Pessoas.
+
+Loading corresponde às operações reais e preserva conteúdo, rascunhos e filtros. Drawers mantêm consulta/retorno e oferecem fechamento por teclado; celular usa a largura disponível e comparação vertical. Validação proporcional e limites, inclusive ausência de jornada autenticada real e calibração empírica, constam no AoT `docs/qa/aot-question-bank-v250.md`.
+
+Boundary externo `m51c-assessment-item-generator-2.0.0`, requisição `m51c-assessment-item-generation-request-2.0.0`: cotação explícita e destino válido obrigatórios. Requisição1.0.0 é aceita somente com os mesmos campos obrigatórios e guardas; cliente antigo sem cotação falha sem cobrar. Schema de proposta/prompt históricos permanecem. Uso do fornecedor ausente não vira zero nem entrega gratuita; a falha libera reserva comercial e mantém histórico técnico do custo conhecido ou indisponível.
 
 ---
 
@@ -16652,6 +16692,79 @@ Versão 1.0.0, agreed, 2026-10-04. Autoridade: Bruno autoriza a única nova tent
 ## Prompt congelado
 
 Implementar D-R01/R02 sob P-R01/F-R01/A-R01 e registrar implementação, testes e evidência no AoT. Resultado failed explicitamente diagnosticado atende à recuperação controlada, mas nunca pode ser declarado síntese recuperada. A autorização é para uma chamada adicional, não repetição ilimitada. Preservar a evidência histórica do bloqueio anterior.
+
+---
+
+## Source: `docs/qa/agreement-question-bank-v250.md`
+
+ACORDO DE PRODUTO APROVADO — V2M5 / BANCO DE QUESTÕES, versão 1.0.0
+Este acordo incorpora o inventário completo da primeira análise e as simplificações da segunda. Quando houver diferença, o refinamento abaixo prevalece. Registre este acordo em docs/qa com versão, o prompt de execução e mapa de impacto antes de materialmente implementar, sem pedir aprovação novamente para o conteúdo já autorizado.
+
+DEVE (D-*)
+D-01 — Renomear a experiência para “Banco de questões” e explicar sua função em linguagem operacional: consultar questões e revisar novos conteúdos para avaliações. Usar visual padrão Prisma. Títulos internos sem numeração residual de storyboard.
+D-02 — Duas áreas principais: “Questões”, entrada padrão, e “Para revisar”, com contador de pendências reais. Cobertura, histórico de solicitações e configurações são acessos secundários; não criar nove abas nem cartões vazios de indicadores.
+D-03 — “Questões” unifica consulta global/empresa, sem alterar propriedade ou isolamento. Filtro de origem “Todas / Da empresa / Globais” acessível em Mais filtros; somente opções permitidas e úteis. Contadores compactos e contextuais em listas/filtros.
+D-04 — Lista identifica por trecho legível do enunciado e competência/assunto. Expor dificuldade (Fácil/Média/Difícil), disponibilidade compreensível, origem do banco discreta e ação “Ver questão”. Código, versão, estatísticas e proveniência secundários no detalhe. Disponibilidade não pode colapsar diferenças materiais dos estados persistidos nem inventar elegibilidade.
+D-05 — Busca por assunto/competência/enunciado/código; filtros principais busca, competência, dificuldade e disponibilidade; demais em “Mais filtros”. Mostrar filtros aplicados e “Limpar filtros”, paginação e ordenação previsível sem ranking de melhores questões. Busca/paginação proporcional ao tamanho e serviço existente.
+D-06 — Um detalhe completo: primeiro enunciado, alternativas, correta, explicação, competência, dificuldade e disponibilidade. Informação secundária em acessos/expansões “Origem e revisão”, “Uso e qualidade”, “Histórico”. Não abrir detalhes de desempenho como única visão da questão. Respeitar permissão de acesso a gabarito e conteúdo fora do frontend.
+D-07 — Desktop pode usar drawer com largura apropriada; celular usa tela disponível. Preservar filtros, seleção, posição da lista e contexto ao retornar, fechar e atualizar. Seleção não abre outra camada inesperada; separar estado de seleção do de abertura. A seta de voltar retorna imediatamente ao contexto anterior.
+D-08 — “Para revisar” é fila de trabalho com pendências primeiro e consulta a aprovadas/publicadas/histórico. Contadores não confundem total histórico e pendências. Busca, filtros situação/competência/origem e paginação. Proposta identificada por conteúdo/assunto, código secundário, contexto com competência, dimensão, nível e dificuldade sem confundir nível de competência com dificuldade.
+D-09 — Revisão mostra conteúdo completo, cinco alternativas/uma correta quando este contrato aplicar, gabarito, explicação, contexto, origem e destino. Proposta publicada/encerrada oferece “Consultar”, sem ações aparentando redecisão sobre registro bloqueado. Seleção por checkbox somente para ação em lote válida.
+D-10 — Validação estrutural indica razões concretas e não significa correção do conteúdo. Alertas de similaridade são apoio humano, não aprovação/rejeição. Sem candidato relevante, indicação discreta; com possível duplicidade, “Comparar questões” com enunciados/alternativas e diferenças legíveis. Método e percentual lexical secundários, sem selo de garantia de originalidade.
+D-11 — Nunca preencher justificativa com conclusão favorável, nunca preselecionar decisão humana. Campo rotulado “Justificativa da decisão” com orientação. Rejeitar e solicitar ajustes exigem motivo útil; preservar rascunho ao trocar/fechar ou comunicar perda de forma apropriada.
+D-12 — Refinamento autorizado: ação principal “Aprovar e disponibilizar” quando o ator pode revisar e publicar e o destino está explícito. Backend preserva aprovação e publicação como fatos/auditoria separados, operação consistente, idempotente e segura. Quem pode somente revisar usa aprovação e recebe explicação do estado seguinte, sem bypass da publicação. Reutilizar autoridade existente; não inventar novos papéis ou responsáveis.
+D-13 — Refinamento autorizado: aprovação comum pode dispensar texto obrigatório genérico, mantendo decisão humana explícita, autoria, objeto/versão e auditoria. Ajustar somente a exigência de justificativa genérica neste fluxo se necessário; regras obrigatórias de exceções e limites de segurança permanecem. Rejeição, pedido de ajustes e exceções exigem motivo. Se uma exigência normativa material não puder ser reconciliada, expor conflito específico; não enfraquecer silenciosamente nem pedir autorização administrativa repetida.
+D-14 — Lotes não implicam revisão feita pelo sistema. Disponibilização apresenta quantidade, destino(s) e efeito, respeita autoridade global, privada e status permitido. Aprovados não selecionados não são publicados por surpresa. Resultado informa o que foi disponibilizado e acesso à lista. Registrar origem sintética claramente; não deixar conteúdo de teste parecer real validado.
+D-15 — “Consultar cobertura” é acesso secundário em Questões. Pendências por competência/modelo e situação; mostrar nome reconhecível, dimensão/assunto, nível da competência, elegíveis, necessário para composição, reserva adicional e déficit separados. Reserva insuficiente não aparenta necessariamente impossibilidade da prova. Explicar elegibilidade e diversidade sob demanda. Cobertura satisfeita comunica isso sem botão Gerar inútil. Busca/filtros/paginação quando necessário.
+D-16 — Complementação começa de necessidade concreta, com contexto existente já carregado. Só exige revisar escolhas com efeito real: quantidade, destino entre opções permitidas, consumo e confirmação. Não fazer o usuário reconfirmar idioma/competência/parâmetros herdados sem necessidade. Eliminar três passos que repetem dados; preservar cancelar/voltar/rascunho.
+D-17 — Reutilizar fluxo operacional de IA existente após verificar compatibilidade. Não criar segunda arquitetura de geração, orçamento, billing ou prompts divergentes. Confirmar consumo Tokens Prisma antes de ação paga, respeitar limites e chamada explícita; não ocultar tetos reais nem mostrar custo falso R$0 para IA operacional. Custos globais/provider separados do consumo comercial.
+D-18 — Simulação determinística e preview sintético saem da navegação cotidiana, mantendo capacidade autorizada de teste/administração claramente identificada. Trocar rótulo não torna geração fake em IA real. Se integração existente tiver lacuna material, identificar seu efeito antes de selecionar nova alternativa arquitetural; prosseguir nas partes independentes.
+D-19 — Geração confirma resultado e oferece “Abrir propostas para revisão”. Novos conteúdos não ficam disponíveis automaticamente sem decisão humana. Histórico de solicitações é acesso secundário: data, competência/contexto, quantidade, destino e situação compreensível; UUID/provedor técnico no detalhe. Diferenciar solicitado/produzido se dados válidos existirem, andamento e erros com próxima ação. Paginação e filtros situação/período; histórico preservado.
+D-20 — Desempenho e calibração integram “Uso e qualidade” do detalhe, sem abas duplicando catálogo. Situações: estatísticas indisponíveis; dados existentes com limitações; revisão real de qualidade pendente com razão/evidência conforme critérios existentes aprovados. Não inventar critérios/limiares de revisão ou calibrar ausência de dados.
+D-21 — Métricas contextualizadas por origem, amostra, período e versão quando disponíveis. Aplicações versus observações válidas e incidentes técnicos distinguidos quando há dados. Sem snapshot não equivale automaticamente a nunca utilizada; null não vira zero taxa de acerto. Sem dados usa mensagem compacta, não cartões enormes.
+D-22 — Taxa de acerto sem barra/meta de aprovação; mediana formatada minutos/segundos, omissão como questões sem resposta, mudança de resposta sem associação automática a fraude. P25/P75 e método como detalhe explicado. Índice 1-correctRate não recebe significado de dificuldade real calibrada nem score inventado. Estado de calibração acompanha razões, amostra real/sintética e limites; sem decisões sobre Pessoas.
+D-23 — História de versões fica no detalhe, com disponibilidade atual, mudanças, data/autoria/motivo se registros suportam. Relação de família/versão pela identidade real, não heurística de nome. Não limitar silenciosamente a oito famílias. Preservar versões usadas anteriormente, conteúdo e histórico, sem reconstruir autoria ausente.
+D-24 — Configurações via botão/menu administrativo conforme permissões. Explicar capacidade real, motivo de indisponibilidade e caminho/responsável real de gerenciamento se só consulta. Serviço/modelo, limites diários/pedido, cooldown, orçamento e versão da política são administrativos/diagnóstico. Operador vê consequências relevantes na ação. Revisão obrigatória não vira opção para bypass.
+D-25 — Sem limite configurado, mensagem clara de indisponibilidade, sem barra vazia com aparência de erro financeiro. Dados financeiros: período, gasto/limite compreensíveis; custos fornecedor distintos Tokens Prisma. Privacidade com tratamento verdadeiro/limites e política existente sob demanda, sem certificação jurídica inventada.
+D-26 — Padrão visual Prisma: hierarquia conteúdo/decisão antes de diagnóstico, densidade equilibrada, sem espaços em branco desproporcionais, códigos secundários, azul ação principal, sem cores/scores inventando qualidade. Uma ação principal por contexto e rodapé separado/harmônico; tabelas legíveis, badges discretos, contraste e foco acessíveis.
+D-27 — Loading real na região afetada até conclusão/erro/cancelamento; preservar conteúdo prévio, rascunhos e filtros. Sucesso com resultado/próximo passo; erros com operação afetada, preservação e tentativa pertinente; não acumular alertas enormes. Estados vazio/sem resultado/sem pendência/sem estatística diferentes. Português completo para estados, sem provider/schema/JSON expostos no fluxo.
+D-28 — Responsividade, teclado, foco, leitores de tela e acesso explícito aos detalhes. Não apenas ocultar conteúdo necessário ou comprimir métricas. Comparação visual desktop/mobile e estados com mesmo dado/viewport; testar composição funcional além de texto.
+D-29 — Preservar tenant, autorizações servidor, revisão humana, fatos/inferência separados, versionamento, origem, dados/histórico e funcionalidades existentes protegidas. Prova por processo, composição, uso de banco, revisão/envio, portal/correção, orçamento/Tokens e shell/navegação precisam de regressão proporcional onde demonstravelmente afetados.
+D-30 — Entregar versão 2.5.0 em main/origin e produção existente, com acordo/prompt/mapa/AoT, fontes/context pack atualizados, validação dirigida, release:plan por diff comprometido, publish SHA explícito só superfícies requeridas, rollback/smoke/sincronização e relatório honesto. Não declarar jornada real ou calibração/fairness provada com testes sintéticos.
+
+PROIBIDO (P-*)
+P-01 — Decisão humana preselecionada, justificativa favorável pré-preenchida, aprovação automática ou publicação de proposta sem revisão.
+P-02 — Alterar isolamento, conceder novos papéis/autoridade global, expor gabarito/conteúdo protegido por autorização somente frontend, permitir sensitive mutation por ausência de contrato.
+P-03 — Apagar, reescrever ou fabricar histórico/versão/autoria/dados; converter simulação em evidência real; apagar fixtures ou dados de produção como “limpeza”.
+P-04 — Métrica ausente vira zero indevido, ausência de evidência vira conclusão negativa, taxa/índice vira dificuldade calibrada ou decisão sobre Pessoas/Score.
+P-05 — Novo serviço/fornecedor/arquitetura/billing/prompt material selecionado sem discussão se reutilização segura não atender; IA paga automática, retry pago sem ação explícita, custo inesperado ou ampliação de escopo.
+P-06 — JSON, fingerprints, UUIDs, schema/provedor técnico como conteúdo primário operacional; indicadores vazios, nav duplicada, perda silenciosa de rascunho/seleção ao fechar/atualizar.
+P-07 — Alterar fluxos adjacentes fora de dependência demonstrada, overwrites de trabalho alheio, force push, destinos novos, secrets/PII em logs ou públicos.
+P-08 — Alegar todas as telas produtivas validadas com fixture, screenshot isolado ou docs históricos.
+
+FORA DE ESCOPO (F-*)
+F-01 — Redesenho geral de Configurações e demais módulos.
+F-02 — Calibração estatística real, novos limiares psicométricos, ranking/contratação automática, nova coleta/telemetria ou alteração de Score.
+F-03 — Novos provedores, política comercial, arquitetura AI independente, criação arbitrária de modelos/blueprints, novas permissões/papéis ou fluxo de edição/republicação não aprovado.
+F-04 — Limpeza destrutiva de dados, migração/exclusão de histórico e criação de testes com mutações de Pessoas reais em produção.
+F-05 — Novos mockups por IA pagos, suite integral automática sem justificativa/autorização conforme AGENTS.
+
+AUTONOMIA (A-*)
+A-01 — Reutilizar componentes Prisma e serviços existentes, organização interna, layout de drawer responsivo, filtros/paginação e textos claros.
+A-02 — Adaptações técnicas mínimas para campos/consulta/contratos e execução consistente de aprovação/disponibilização, preservando contrato histórico e compatibilidade. Supabase/auth/RLS/migration são sensíveis: skills, testes negativos, QA-first e rollout obrigatório conforme AGENTS.
+A-03 — Decoração, tamanho responsivo e escolhas de componentes acessíveis dentro da topologia aprovada. Esta conversa não fornece mockup normativo final: screenshot anterior é CONTRAEXEMPLO. Não exigir pixel identity com screenshot ruim.
+A-04 — Geração/preview e custos reaproveitam soluções maduras aprovadas; não reiniciar pesquisa ampla se solução Prisma adequada já existir.
+
+CRITÉRIOS DE ACEITE (CA-*)
+CA-01 — D-01 a D-07: catálogo padrão, duas áreas, identificação por conteúdo, filtros/paginação, detalhe completo protegido, voltar/fechar preservam contexto; captura e teste dirigido desktop/mobile/teclado.
+CA-02 — D-08 a D-14: fila e revisão real do conteúdo/correta/explicação, comparação, nenhuma conclusão prefill; aprovar/disponibilizar pela autoridade existente, motivos e histórico; testes positivos/negativos/idempotência/lote/permissão/global/cross-tenant aplicáveis.
+CA-03 — D-15 a D-19: cobertura ligada ao modelo e reserva separada, geração contextual explícita com consumo/custos corretos e serviço reaproveitado, simulação isolada, histórico reconhecível; teste cobertura atendida/insuficiente, cancelar/erro/pendência/permissão/consumo conforme fluxo.
+CA-04 — D-20 a D-25: null/sem snapshot/sintético/real não confundidos, métricas e histórico explicáveis, config pela autoridade, nenhum índice como calibração; fixtures negativas e rastreabilidade server/serviço.
+CA-05 — D-26 a D-29: regressão visual com mesmos dados/estados em desktop e 390/320 ou equivalentes, loading/errors/empty/longo, teclado/mobile e capacidades protegidas do mapa. Testes não dependem de LLM vivo ou mutações em produção.
+CA-06 — D-30: cada D e P aplicável mapeado a implementação/teste/evidência/status no AoT; nenhuma declaração PASS sem prova requerida. Release 2.5.0 Git/CI/prod SHA/assets/health/rollback/smoke e compatibilidade necessários verificados. Limites explicitados.
+
+PENDÊNCIAS (Q-*)
+Não há pendência de produto conhecida para a topologia e fluxo acima. As condições de compatibilidade, permissão e contrato não são convite a pedir autorização para passos já aprovados. Se descobrir conflito material com invariante de segurança ou opção arquitetural nova, formule somente a questão específica e continue trabalho independente; não silencie conflito.
 
 ---
 
@@ -22215,6 +22328,103 @@ Evidência segura `docs/qa/evidence/profile-synthesis-v206/runtime-verification.
 
 ---
 
+## Source: `docs/qa/aot-question-bank-v250.md`
+
+# AoT — Banco de questões 2.5.0
+
+Contrato congelado: `docs/qa/agreement-question-bank-v250.md` v1.0.0, integral; execução `docs/qa/execution-question-bank-v250.md`. Mapa prévio `docs/qa/impact-question-bank-v250.md`. Baseline main `a23d82edd317ca109b9ea20ef4d53f86767d92ec`; branch `codex/v2m5-question-bank`. Risco D. Evidências em `docs/qa/evidence/question-bank-v250/`.
+
+## Matriz de acordos
+
+| ID | Implementação | Teste/evidência | Status | Ambiente e limite |
+| --- | --- | --- | --- | --- |
+| D-01 | Rótulo e descrição operacional, componentes Prisma | browser/catalog quatro larguras; rota e registro de release | PASS | Componentes reais/fixtures |
+| D-02 | Questões padrão, Para revisar com pendências; acessos secundários | browser/two main areas, pending excludes closed | PASS | Sem nove abas/indicadores vazios |
+| D-03 | Catálogo autorizado global/empresa; filtro secundário | browser/combined filters; SQL/owner/global/cross-tenant | PASS | Nenhum novo papel |
+| D-04 | Identificação por conteúdo, estados discretos completos | domain/availability; catalog quatro larguras | PASS | Disponibilidade não inventa elegibilidade |
+| D-05 | Busca normalizada, filtros/limpar, paginação estável | browser/search/filter/pagination; domain/search | PASS | Consulta em memória proporcional ao workspace existente |
+| D-06 | Conteúdo completo antes de metadados; gabarito no RPC protegido | SQL/full content e negativas anon/member/tenant; browser/detail | PASS | Acesso não depende só da interface |
+| D-07 | Drawers responsivos; contexto/seleção/retorno separados | browser/close/Escape/pagination/drafts, states/scope | PASS | Rascunho preservado na sessão por organização |
+| D-08 | Fila pendente e filtros para histórico encerrado | browser/pending; states/closed proposal | PASS | Nível da competência distinto da dificuldade |
+| D-09 | Revisão integral, consulta encerrada, checkbox só aprovado | browser/review e batch; SQL/locked/valid content | PASS | Histórico2..6, processo exatamente5, sem conversão artificial |
+| D-10 | Validação estrutural e razões; comparação completa | browser/comparison desktop/mobile; SQL/invalid/duplicate | PASS | Similaridade lexical secundária, sem garantia |
+| D-11 | Nenhum prefill/decisão; motivos e rascunhos preservados | browser/empty rationale/disabled/draft; SQL/min10 | PASS | Sem conclusão humana fabricada |
+| D-12 | RPC transacional aprovar/publicar, auditorias separadas | SQL/audit/idempotence/global; concurrency2conexões; browser/review-only | PASS | Reutiliza governança existente |
+| D-13 | Aprovação comum vazia; exceções/rejeição/ajustes motivados | SQL/ordinary/exception/invalid atomic; browser/common | PASS | Revisão versionada2.0.0 |
+| D-14 | Lote explícito com quantidade/destinos/origem | browser/batch; SQL/mixed tenant/status/rollback | PASS | Aprovados não selecionados preservados |
+| D-15 | Cobertura/modelo, composição e reserva separadas | SQL/coverage; browser/coverage; states/admin | PASS | Reserva não prova impossibilidade |
+| D-16 | Uma confirmação contextual, escolhas com efeito real | browser/generation; states/quantity/cancel | PASS | Cancelar não prepara/cobra/gera |
+| D-17 | Boundary e ledger/tarifa existentes, cotação antes da ação | SQL/quote/reserve/settle/expiry/balance; Deno/usage/replay; browser/tokens | PASS | Nenhuma IA viva paga; fluxo condicionado à política |
+| D-18 | Fake/preview em ferramentas administrativas identificadas | states/settings/explicit selection; SQL/fake4alternatives | PASS | Política produtiva desativada preservada |
+| D-19 | Resultado/histórico reconhecíveis, pedido/produção separados | SQL/history; browser/history; Deno/replays | PASS | Andamento consulta sem retry automático |
+| D-20 | Qualidade no detalhe com flags/evidência existentes | states/quality-review; SQL/snapshot enrichment | PASS | Sem novos limiares |
+| D-21 | Null≠zero, amostra/método/data/limites | domain/absence; states/actual zero/synthetic/real-shaped | PASS | Período/observações válidas ausentes explicitamente |
+| D-22 | Taxas sem metas, mediana min/s, limites de quantis/índice | states/quality e domain/time/rates | PASS | Sem inferência de fraude ou decisão sobre Pessoas |
+| D-23 | Família real, conteúdo/autor/data por versão | browser/history e detail; SQL/preserved rows | PASS | Sem heurística de código/limite de oito; autoria ausente não reconstruída |
+| D-24 | Configurações pela autoridade, consulta verdadeira | SQL/permissions; states/configuration/admin | PASS | Gerenciamento central pelo fluxo operacional existente |
+| D-25 | Sem teto comunica indisponibilidade; finanças distintas | states/configuration; browser/generation unavailable | PASS | Sem barra vazia/preço falso/certificação jurídica |
+| D-26 | Hierarquia conteúdo/decisão, ações azuis e rodapé | capturas catalog/detail/review/comparison/settings; inspeção | PASS | Mesmo conjunto de dados em1448/768/390/320 |
+| D-27 | Loading real, preservação, estados/erros/recuperação | browser/hold/failure/empty; states; errors+loading coverage | PASS | Nenhum loading cria consulta/IA/recalculo |
+| D-28 | Responsividade, teclado, labels e abertura explícita | browser/Escape/Enter/overflow; long detail desktop/390/320 | PASS | Sem referência normativa final de pixels |
+| D-29 | Governança/tenant/histórico e consumidores preservados | regression-sql131; process64/portal38; navigation/loading/UX/Tokens | PASS | Evidência local sintética, sem Pessoas produtivas mutadas |
+| D-30 | Versão, fontes, Context Pack, rollout e sincronização | Plano/CI/banco/Edge/web/smoke ainda em fechamento | PARTIAL | Atualizar somente após prova operacional |
+
+## Proibições verificadas
+
+| ID | Guardrail e teste negativo | Evidência | Status |
+| --- | --- | --- | --- |
+| P-01 | Nenhuma decisão/prefill/auto-publicação; motivos e seleção humana | browser/drafts/batch; SQL/no orphan review/no automatic publication | PASS |
+| P-02 | Anon/member/inativo/outsider/global indevido/cross-tenant negados | SQL52 e integração131; grants e governança existente | PASS |
+| P-03 | Versões/histórico preservados; origem sintética explícita | SQL/preserved items/legacy snapshots; browser/history/test tools | PASS |
+| P-04 | Null distinto de zero, amostra/índice com limites | domain/metrics; states/quality | PASS |
+| P-05 | Sem arquitetura/provider/prompt/tarifa novos, geração explícita, sem retry pago | diff; Deno/all statuses replay/no quote/unknown usage; SQL/budget | PASS |
+| P-06 | Diagnóstico secundário, rascunhos/seleção/contexto preservados | browser/detail/history/drafts/pagination/loading | PASS |
+| P-07 | Somente diff autorizado; sem force/destruição/PII | revisão do diff, hashes agregados produtivos e plano limitado | PASS |
+| P-08 | Fixtures não apresentadas como jornada real/calibração | limites deste AoT e evidências de browser/SQL | PASS |
+
+## Mapa final de impacto e preservação
+
+| Capacidade | Relação | Baseline e regressão | Evidência/status |
+| --- | --- | --- | --- |
+| Catálogo/detalhe/versões | direct | M5.1C completo e autorizado, família real, null; sem destruir linhas | SQL/browser/states, PASS |
+| Revisão/comparação/publicação | direct | Auditorias e autoridade existentes; transação, validação e motivos | SQL/concorrência/browser, PASS |
+| Cobertura/geração/admin | direct | Elegibilidade e reserva existentes, fake histórico; política desativada | SQL/cancel/quote/admin, PASS |
+| Tokens/orçamento/história IA | critical_transversal | ADR-083 e mesma tarifa/ledger; replays e falhas | SQL negativos/settlement, Deno e serviço Tokens, PASS |
+| Processo/composição/revisão/envio | plausible_indirect | Banco canônico/five-choice/novo contexto/freeze/convites | regression-sql131 e regression-process64, PASS |
+| Portal/correção/prova fixada | critical_transversal | Portal v1 compartilhado, autosave/revisão/envio/recibo e legado | regression-sql e regression-portal38, PASS |
+| Shell/navegação/loading/foco | plausible_indirect | Rótulo da rota e CSS isolado, retorno/escopo/teclado | Node/navigation/UX/loading e browser, PASS |
+| Pessoa/Perfil/Score/Posições | no_impact_identified | Sem escritor modificado; snapshots QA preservados | regression-sql/preservation e diff, PASS |
+| Parser/Synthesis/mail/Paddle/Traefik | no_impact_identified | Nenhum diff dessas superfícies; baseline operacional capturado | production/runtime-before; verificar preservação após rollout |
+| Outras Configurações/Knowledge | no_impact_identified | Sem redesign/taxonomia/novo blueprint/modelo | diff e operational source guards, PASS |
+
+Nova entrega comprovada: topologia Questões/Para revisar, revisão contextual e consulta completa, geração cotada e administração secundária. Preservação é evidência separada do comportamento novo. Descoberta relevante: M5.1C tem contrato histórico diferente do processo; preservados ambos. Configuração externa produtiva ausente foi exposta, sem selecionar/ativar alternativa.
+
+Limitação de baseline: o PostgreSQL descartável original tem arquivo físico ausente de `profile_synthesis_jobs`, observado no cenário de exclusão durante regressão de processo. Não foi reparado/mutado. A regressão completa foi executada em clone próprio de schema, com apenas sementes técnicas locais;131verificações passaram. A concorrência usa duas conexões no mesmo clone, com fixture sintética e justificativa de exceção explícita; uma revisão e uma versão publicadas. Clone removido ao final. Testes somente banco52 também passaram com rollback no baseline original. Sete definições runtime produtivas e locais são canonicamente iguais (diferenças só de formatação), conforme production/compatibility.json.
+
+## Fora de escopo
+
+F-01 a F-05 preservados: sem redesign de outros módulos, calibração real/limiares/Score, provedor/modelo/arquitetura nova, permissões adicionais, limpeza de dados, Pessoas reais para teste, mockup pago ou suíte integral local. Nenhum novo pacote/dependência. Reuso dos componentes Prisma, M5.1C e ADR-083; adaptações mínimas autorizadas A-01..A-04.
+
+## Fidelidade e evidência visual
+
+Não há mockup normativo final, conforme A-03; screenshot anterior foi classificado como contraexemplo. Comparação estrutural utiliza mesmos dados/estados de fixtures em1448/768/390/320, catalog/detail/review/comparison/coverage/history/error/generation-unavailable e states/long/quality/settings. Catálogo prioriza conteúdo, detalhe usa largura apropriada, comparação vira sequência no celular, filtros/retorno/ações permanecem. Corrigidos overflow de aviso sintético e perda de largura das abas no mobile. Sem alegação de identidade de pixels ou validação real a partir de screenshot.
+
+## Desvios e decisões
+
+Nenhum desvio de produto identificado após comparação D/P/F/A. Nenhuma nova decisão material. Boundary versionado2.0.0 incorpora cotação obrigatória, destino explícito e custo desconhecido indisponível; aceita requisição1.0.0 apenas com as mesmas guardas, sem novo prompt/schema de proposta. Contrato de revisão2.0.0 explicita justificativa comum opcional, sem retirar obrigações de exceções.
+
+## Validação final e limites
+
+UI principal191verificações; estados30; processo64; portal38. SQL52 + integração131 e uma disputa concorrente. Deno5testes (inclui cinco estados replay, modelo divergente, cotação ausente, entrega válida e uso desconhecido). Node dirigido:39domínio/serviço/erros e23navegação/UX/registro/loading/operational. Types/build web/raiz e checks de contexto serão registrados no fechamento. Nenhum LLM vivo, e-mail real ou decisão sobre Pessoas em produção. Não existe QA remoto separado; QA-first local isolado verificado. Jornada autenticada real e calibração empírica: NOT TESTED, fora da prova pretendida deste redesenho.
+
+## Git / QA / produção
+
+Rollout pendente de fechamento: publicar somente duas migrations novas, Edge `assessment-item-generator`, web e documentação/contexto, conforme plano por diff comprometido. Backend antes do web. Baseline: projeto Prisma `ioldpnqqvobprjiontre` ACTIVE_HEALTHY; Edge7 ACTIVE/JWT obrigatório; VPS `prisma-vps` `/opt/prisma` remoto autorizado, SHA a23d82e,10containers/218assets. Dados produtivos apenas por contagens/hashes agregados:11Pessoas,15Perfis,2avaliações,17questões,3propostas/solicitações/revisões e2políticas. Sem dados pessoais em evidências.
+
+Não declarar D-30 PASS nem conclusão operacional até conferir CI, migrations/grants/definições, Edge, SHA/runtime/assets/rollback, smoke público, dados agregados e sincronização.
+
+---
+
 ## Source: `docs/qa/aot-release-efficiency.md`
 
 # AoT — Publicação eficiente por impacto
@@ -26838,6 +27048,27 @@ Não declarar conclusão se qualquer D-* obrigatório não estiver `PASS`, se um
 
 ---
 
+## Source: `docs/qa/execution-question-bank-v250.md`
+
+# Execução V2M5 - Banco de questões 2.5.0
+
+Contrato integral congelado: docs/qa/agreement-question-bank-v250.md v1.0.0.
+
+PROMPT DE EXECUÇÃO
+1. Leia AGENTS completo e os donos relevantes, verifique baseline/git e preserve untracked. Comunique entendimento conciso dos D/P/F/A sem reabrir aprovação.
+2. Persistir o acordo acima, Execution Prompt fiel e Mapa de Impacto antes de implementação. Mapear direct/plausible_indirect/critical_transversal/no_impact_identified, capacidades protegidas, baseline por ambiente/SHA, regressão, rollback e AoT. Descobertas atualizam mapa. Não criar microtarefas separadas para commit/test/deploy deste objetivo.
+3. Inicie branch codex/ isolada conhecida; local primeiro. Só use worktree se reduz colisão, conforme AGENTS. Este thread foi criado no projeto local canônico, não no antigo projeto “Prisma 2”.
+4. Inventarie capacidades reais que serão reaproveitadas: conteúdo seguro de questão, família/versão, autoridades backend, processo de geração/contextual/consumo, cobertura e governança. Não confunda endpoint existir com configuração/ativação verificada.
+5. Implemente o escopo completo com diferenças históricas preservadas. Serviços, contratos e schemas apenas quando necessários. Carregamento, draft preservation e permissões exigem teste, não apenas CSS.
+6. Use pnpm e dispatcher/release plan para checks dirigidos deduplicados. Não rodar pnpm validate/suite local integral por hábito; obter aprovação fundamentada se realmente necessário. D sensível requer negativos e QA-first com evidência. Não subdelegar automaticamente: só subagentes quando autorizado/instruído.
+7. Capture prova visual e functional regressions com fixtures não pessoais. Provar casos sem dados/reais identificados/longos/origem privada/global/permissão reduzida e contexto de retorno. Sem produção real mutation só para teste.
+8. Atualize docs donos, PRISMA_CURRENT_STATE, version metadata 2.5.0, Context Pack e exports pelos geradores. Se untracked contaminarem o gerador, use checkout temporário controlado do snapshot da tarefa sem removê-los; gere exatamente fontes finais e check.
+9. Faça own-diff review, coherent commit/push/integrate main em origin verificado. release:plan define superfícies; publique um SHA validado explícito com --execute e standing authorization. Frontend/DB/Edge apenas se exigidos pelo plano, migrations forward, compatibilidade e rollback. Attach PR se criar.
+10. Smoke produção após estabilização, assets/rotas/health/versão/SHA; preserve rollback e serviços não afetados. 404 temporário de recreate não é fracasso final nem justifica reconstruir sem diagnóstico.
+11. AoT com PASS/FAIL/PARTIAL/BLOCKED/NOT TESTED, novo comportamento vs preservação, desvios e provas. Final conciso PT-BR com release/SHA/surfaces/testes e limites. Persistir até conclusão; não parar no plano.
+
+---
+
 ## Source: `docs/qa/execution-release-efficiency.md`
 
 # Execução — Publicação eficiente por impacto
@@ -27024,6 +27255,37 @@ Risco D/E: unidade persistida de prova e ciclo de processo, confiança/tenant/PI
 | Parser/Synthesis/Mail/Gateway/Traefik/Paddle | no_impact_identified | Sem mudança de runtime ou prompts próprios; plano seletivo, IDs/imagens/restarts/controles remotos antes/depois |
 
 Nova descoberta revisa mapa e prova antes do fechamento. Sem suíte integral local por padrão; CI configurado do repositório permanece obrigatório. Baseline operacional será capturado antes do rollout; nenhuma alegação de candidato real ou justiça empírica a partir de fixture.
+
+---
+
+## Source: `docs/qa/impact-question-bank-v250.md`
+
+# Mapa de impacto — Banco de questões 2.5.0
+
+Acordo congelado: `agreement-question-bank-v250.md` v1.0.0. Execução: `execution-question-bank-v250.md`. Risco D: conteúdo protegido, decisões humanas, contratos RPC e consumo de IA. Baseline local `a23d82edd317ca109b9ea20ef4d53f86767d92ec`, main, tracked limpo; untracked alheios preservados. Branch `codex/v2m5-question-bank`.
+
+## Mapa anterior à implementação
+
+| Área/capacidade protegida | Relação | Baseline, impacto e regressão proporcional |
+| --- | --- | --- |
+| Catálogo global/empresa, detalhe e versões | direct | Workspace M5.1C autorizado por servidor; falta conteúdo completo/família e snapshot ausente vira zero. Reutilizar RPC, ampliar leitura protegida; testes SQL de autorização/tenant/null/família e browser de filtros/retorno. |
+| Revisão humana, comparação e disponibilização | direct | Revisão e publicação são fatos separados; ambas exigem governança existente, global exige super_admin. Composição transacional, idempotência e justificativa vazia somente aprovação comum; negativos, auditoria/lote/rollback e estados bloqueados. |
+| Cobertura por Blueprint e reserva | direct | Ativos, dimensão, nível, idioma, dificuldade; required inclui duas de reserva. Separar composição/reserva sem alterar elegibilidade; suficientes, insuficientes e sem modelo. |
+| Solicitação/geração/administração | direct | Simulação determinística cotidiana; boundary externa existe e políticas de produção desativadas (2 políticas, 0 ativas, modelo/provedor nulos, verificado 12/10). Manter indisponibilidade verdadeira, reaproveitar boundary/prompt existente e consumo comercial; nenhum provedor/ativação novos. Testar configuração ausente, cotação, cancelamento, erro, idempotência, limites. |
+| Tokens Prisma, orçamento e história de IA | critical_transversal | Ledger/tarifa/reserva existentes; banco ainda sem integração comercial. Envolver boundary existente com reserva/settlement, separar unidade comercial e custo fornecedor; negativos saldo/cotação/tenant, nenhuma IA paga nos testes. |
+| Avaliação por processo: composição/banco/revisão/envio | plausible_indirect | Usa assessment_items aprovado e cinco alternativas; banco contém formatos históricos. Não modificar escritor de processo; executar regressão dirigida de montagem, cópia contextual, preservação e envio. |
+| Portal/correção/prova fixada | critical_transversal | Conteúdo publicado pode ser consumido pelo processo. Regressão determinística de portal/correção, sem dados reais ou e-mails produtivos. |
+| Shell/navegação/loading/foco | plausible_indirect | Rota /item-bank, governança owner/admin/super_admin; alterar rótulo e usar componentes existentes. Testar seta/fechar/filtros/rascunho, teclado, loading/error em1448/390/320. |
+| Pessoa/Perfil/Score/matching/Parser/mail/Paddle | no_impact_identified | Governança lê conteúdo técnico do banco, sem mutar pessoas/perfis/score ou serviços. Revisar plano/diff e identidades operacionais; não reconstruir serviços adjacentes. |
+| Outras Configurações/Knowledge | no_impact_identified | Somente rótulo de rota do banco no shell; sem redesign, mudança de taxonomia ou novos modelos. Verificação do diff. |
+
+## Ambiente e rollback
+
+Produção: projeto `ioldpnqqvobprjiontre`, nome Prisma, ACTIVE_HEALTHY, PostgreSQL17.6, confirmado pelo conector. Não existe QA remoto separado (owner `docs/operations/environments.md`); evidência QA-first será PostgreSQL local descartável e fixtures sintéticas. Reconfirmar baseline local antes de SQL e VPS antes de rollout. Migrations novas forward/compatíveis; não reescrever histórico. Frontend mantém imagem anterior e assets antigos. Funções preservam boundary/autoridade existentes; rollback de código não desfaz revisão/histórico. Rollback de dados destrutivo não autorizado.
+
+## Evidência e fechamento
+
+AoT `aot-question-bank-v250.md`: cada D/P aplicável e capacidade protegida com implementação/teste/evidência e status honesto. Prova visual com mesmos dados em desktop/390/320 e estados sem dados/longos/erro/permissão reduzida. Screenshot anterior é contraexemplo; nenhuma referência normativa de pixel. Build/tipos e testes dirigidos, contexto em snapshot controlado se untracked interferirem. Release plan por diff comprometido define somente destinos necessários. Nenhuma chamada LLM viva, envio real ou mutação de Pessoas em produção para teste.
 
 ---
 

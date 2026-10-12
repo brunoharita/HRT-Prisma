@@ -1,214 +1,206 @@
-import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
-import { usePrismaScreenState } from "../ui/PrismaNavigation";
-import { AppstoreFilled as PrismaPageIcon } from "@ant-design/icons";
-import { PrismaMetric } from "../ui/PrismaState";
-import { observedMetric } from "../shared/uxFoundation";
-import { useEffect, useMemo, useState } from "react";
-import type { ReactNode } from "react";
-import {
-  ApiOutlined, BarChartOutlined, BranchesOutlined, CheckCircleOutlined, ExperimentOutlined,
-  GlobalOutlined, RobotOutlined, SafetyCertificateOutlined, SettingOutlined,
-} from "@ant-design/icons";
-import { Alert, Button, Descriptions, Divider, Drawer, Empty, Input, InputNumber, Modal, Progress, Radio, Select, Skeleton, Space, Statistic, Steps, Table, Tag, Typography } from "antd";
-import type { ColumnsType } from "antd/es/table";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { AppstoreFilled, ArrowLeftOutlined, SettingOutlined } from "@ant-design/icons";
+import { Alert, Button, Descriptions, Divider, Drawer, Empty, Input, InputNumber, Modal, Pagination, Select, Skeleton, Space, Tabs, Tag, Typography } from "antd";
 import type { GenerationProposalView, GovernedItemView, ItemBankGapView, ItemBankGovernanceWorkspace } from "../domain/assessmentItemGovernanceData";
 import { labelAssessmentDimension, labelLevel } from "../domain/competencyVerificationData";
-import { assessmentItemGovernanceService } from "../infrastructure/supabase/assessmentItemGovernanceService";
+import { bankReasonName, bankTextMatches, difficultyName, formatQuestionTime, pendingProposal, proposalSituation, questionAvailability, questionRate, requestSituation, reviewableProposal, scopeName } from "../domain/questionBankPresentation";
+import { formatTokens } from "../domain/prismaTokens";
+import { assessmentItemGovernanceService as service } from "../infrastructure/supabase/assessmentItemGovernanceService";
 import type { OrganizationMembership } from "../shared/access";
 import { PrismaCard } from "../ui/PrismaCard";
+import { PrismaDisclosure } from "../ui/PrismaDisclosure";
+import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
+import { usePrismaScreenBack, useViewState } from "../ui/PrismaNavigation";
 import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
-import { PrismaStatusTag, type PrismaStatusTone } from "../ui/PrismaStatusTag";
+import { ReadableRecord } from "../ui/ReadableRecord";
+import { useTokenQuote } from "../ui/TokenUsageHint";
 
-interface Props { activeMembership: OrganizationMembership; }
-type Surface = "gaps" | "generation" | "proposals" | "global" | "analytics" | "calibration" | "versions" | "organization" | "settings";
+type Filters = { search: string; competency: string; difficulty: string; situation: string; scope: string; page: number; sort: string };
+const initialFilters: Filters = {search:"",competency:"",difficulty:"",situation:"",scope:"",page:1,sort:"recent"};
+const pageSize = 10;
+const date = (v?: string|null) => v ? new Intl.DateTimeFormat("pt-BR",{dateStyle:"short",timeStyle:"short",timeZone:"America/Sao_Paulo"}).format(new Date(v)) : "Não registrado";
+const calibrationNames = {uncalibrated:"Não calibrada",collecting_data:"Coletando dados",calibration_eligible:"Elegível para calibração",calibrated:"Calibrada",calibration_review_required:"Revisão de calibração necessária"};
 
-export function AssessmentItemBankPage({ activeMembership }: Props) {
-  const [workspace, setWorkspace] = useState<ItemBankGovernanceWorkspace | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [info, setInfo] = useState<string | null>(null);
-  const [surface, setSurface] = usePrismaScreenState<Surface>("gaps");
-  const [generationGap, setGenerationGap] = useState<ItemBankGapView | null>(null);
-  const [generationStep, setGenerationStep, replaceGenerationStep] = usePrismaScreenState(0, surface === "generation");
-  const [quantity, setQuantity] = useState(1);
-  const [targetScope, setTargetScope] = useState<"global" | "organization">("organization");
-  const [reviewProposal, setReviewProposal] = useState<GenerationProposalView | null>(null);
-  const [reviewRationale, setReviewRationale] = useState("Aderente ao modelo de avaliação e pronto para uso sintético controlado.");
-  const [selectedProposalIds, setSelectedProposalIds] = useState<string[]>([]);
-  const [selectedItem, setSelectedItem] = useState<GovernedItemView | null>(null);
-  useLoadingFeedback({ "Carregando Banco de Itens…": loading, "Salvando Banco de Itens…": saving });
+export function AssessmentItemBankPage({activeMembership}: {activeMembership: OrganizationMembership}) {
+  return <QuestionBankWorkspace key={activeMembership.organizationId} activeMembership={activeMembership}/>;
+}
+function QuestionBankWorkspace({activeMembership}: {activeMembership: OrganizationMembership}) {
+  const org = activeMembership.organizationId;
+  const [workspace,setWorkspace] = useState<ItemBankGovernanceWorkspace|null>(null);
+  const [loading,setLoading] = useState(true), [operation,setOperation] = useState<string|null>(null);
+  const [error,setError] = useState<string|null>(null), [result,setResult] = useState<string|null>(null);
+  const [tab,setTab] = useViewState<"questions"|"review">(`bank-tab-${org}`,"questions");
+  const [catalog,setCatalog] = useViewState<Filters>(`bank-filters-${org}`,initialFilters);
+  const [queue,setQueue] = useViewState<Filters>(`bank-review-filters-${org}`,{...initialFilters,situation:"pending"});
+  const [drafts,setDrafts] = useViewState<Record<string,string>>(`bank-review-drafts-${org}`,{});
+  const [itemId,setItemId] = useState<string|null>(null), [itemOpen,setItemOpen] = useState(false);
+  const [proposalId,setProposalId] = useState<string|null>(null);
+  const [selectedIds,setSelectedIds] = useState<string[]>([]);
+  const [secondary,setSecondary] = useState<"coverage"|"history"|"settings"|null>(null);
+  const [generationGap,setGenerationGap] = useState<ItemBankGapView|null>(null);
+  const [quantity,setQuantity] = useState(1), [target,setTarget] = useState<"organization"|"global">("organization");
+  const [generationKey,setGenerationKey] = useState(()=>crypto.randomUUID());
+  const [compare,setCompare] = useState(false), [publishConfirm,setPublishConfirm] = useState(false);
+  const scope = useRef(org); scope.current = org;
+  const loadSequence = useRef(0), mounted = useRef(true);
+  const permissions = workspace?.permissions;
+  const canPublish = (p: GenerationProposalView) => p.targetScope === "global" ? permissions?.canPublishGlobal === true : p.targetScope === "organization" && permissions?.canPublishOrganization === true;
+  const proposal = workspace?.proposals.find(p=>p.id===proposalId) ?? null;
+  const item = workspace?.items.find(i=>i.id===itemId) ?? null;
+  const availableGeneration = Boolean(generationGap && workspace?.policy.generationEnabled && workspace.policy.provider && workspace.policy.model && workspace.policy.monthlyLimitCents && workspace.policy.maximumCostPerRequestCents);
+  const tokens = useTokenQuote(org,"position_assessment_items",quantity,availableGeneration);
+  useLoadingFeedback({"Carregando Banco de questões…":loading,"Consultando consumo…":tokens.loading,...(operation ? {[operation]:true} : {})});
+  usePrismaScreenBack(Boolean(secondary),()=>setSecondary(null));
+  usePrismaScreenBack(Boolean(generationGap),()=>setGenerationGap(null));
+  usePrismaScreenBack(itemOpen,()=>setItemOpen(false));
+  usePrismaScreenBack(Boolean(proposalId),()=>setProposalId(null));
+  usePrismaScreenBack(compare,()=>setCompare(false));
 
   async function refresh() {
+    const atOrg = org, sequence = ++loadSequence.current;
     setLoading(true); setError(null);
-    try {
-      const nextWorkspace = await assessmentItemGovernanceService.loadWorkspace(activeMembership.organizationId);
-      setWorkspace(nextWorkspace);
-      setSelectedItem((current) => current ? nextWorkspace.items.find((item) => item.id === current.id) ?? null : null);
-    }
-    catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível carregar o Banco de Itens."); }
-    finally { setLoading(false); }
+    try { const next = await service.loadWorkspace(atOrg); if (!mounted.current || scope.current!==atOrg || sequence!==loadSequence.current) return;
+      setWorkspace(next); setSelectedIds(ids=>ids.filter(id=>next.proposals.some(p=>p.id===id&&p.status==="approved")));
+    } catch(e) { if(mounted.current&&scope.current===atOrg&&sequence===loadSequence.current) setError(e instanceof Error?e.message:"Não foi possível atualizar o banco. O conteúdo anterior foi preservado."); }
+    finally { if(mounted.current&&scope.current===atOrg&&sequence===loadSequence.current) setLoading(false); }
   }
-  useEffect(() => {
-    setGenerationGap(null);
-    setTargetScope("organization");
-    setSelectedProposalIds([]);
-    setSelectedItem(null);
-    void refresh();
-  }, [activeMembership.organizationId]);
+  useEffect(()=>{ mounted.current=true; setWorkspace(null); setItemId(null); setItemOpen(false); setProposalId(null); setGenerationGap(null); setSecondary(null); setSelectedIds([]); setError(null); setResult(null); void refresh(); return()=>{mounted.current=false;loadSequence.current++;}; },[org]);
 
-  async function runFakeGeneration() {
-    if (!generationGap) return;
-    setSaving(true); setError(null);
-    try {
-      await assessmentItemGovernanceService.createFakeGeneration({ organizationId: activeMembership.organizationId, blueprintId: generationGap.blueprintId, dimension: generationGap.dimension, quantity, targetScope });
-      setGenerationStep(2); setInfo(`${quantity} proposta(s) sintética(s) criada(s), sem modelo externo, sem dados pessoais e sem custo externo.`); await refresh();
-    } catch (caught) { setError(caught instanceof Error ? caught.message : "Falha na geração sintética."); }
-    finally { setSaving(false); }
+  async function execute(label: string, action: ()=>Promise<unknown>, success: string, after?: ()=>void) {
+    if(operation) return;
+    const atOrg=org; setOperation(label); setError(null); setResult(null);
+    try { await action(); if(!mounted.current||scope.current!==atOrg) return; setResult(success); after?.(); await refresh(); }
+    catch(e) {if(mounted.current&&scope.current===atOrg) setError(e instanceof Error?e.message:`Não foi possível concluir: ${label}. O rascunho foi preservado.`);}
+    finally { if(mounted.current&&scope.current===atOrg) setOperation(null); }
   }
-
-  async function decideProposal(decision: "approve" | "reject" | "request_changes") {
-    if (!reviewProposal) return;
-    setSaving(true); setError(null);
-    try {
-      await assessmentItemGovernanceService.reviewProposal(reviewProposal.id, decision, reviewRationale);
-      setReviewProposal(null); setInfo("Revisão humana registrada com histórico preservado."); await refresh();
-    } catch (caught) { setError(caught instanceof Error ? caught.message : "Falha ao revisar proposta."); }
-    finally { setSaving(false); }
+  const decision = (kind:"approve"|"reject"|"request_changes") => {
+    if(!proposal) return;
+    const p=proposal, rationale=drafts[p.id]??"", publish=kind==="approve"&&canPublish(p);
+    void execute(publish?"Aprovando e disponibilizando…":"Registrando decisão humana…",()=>publish?service.approveAndPublish(org,p.id,rationale):service.reviewProposal(p.id,kind,rationale),publish?`Questão aprovada e disponibilizada no banco ${scopeName(p.targetScope).toLocaleLowerCase("pt-BR")}. Consulte em Questões.`:kind==="approve"?"Aprovação registrada. A questão aguarda disponibilização por ator autorizado.":"Decisão registrada; conteúdo e histórico preservados.",()=>{setProposalId(null);setDrafts(current=>{const next={...current};delete next[p.id];return next;});});
+  };
+  const selected = workspace?.proposals.filter(p=>selectedIds.includes(p.id)&&p.status==="approved"&&canPublish(p))??[];
+  async function generate() {
+    if(!generationGap||!tokens.quote||!availableGeneration) return;
+    const gap=generationGap, quote=tokens.quote;
+    await execute("Gerando propostas por IA…",async()=>{const generationNeedId=await service.prepareGeneration({organizationId:org,blueprintId:gap.blueprintId,dimension:gap.dimension});return service.requestExternalGeneration({organizationId:org,generationNeedId,quantity,targetScope:target,idempotencyKey:generationKey,quote});},"Solicitação registrada. Consulte o andamento e abra as propostas produzidas para revisão humana.",()=>{setGenerationGap(null);setSecondary("history");});
   }
+  function complement(gap:ItemBankGapView) {setGenerationGap(gap);setQuantity(Math.max(1,Math.min(gap.deficit,workspace?.policy.maximumItemsPerRequest??1,20)));setGenerationKey(crypto.randomUUID());setTarget("organization");}
 
-  async function publishSelected() {
-    setSaving(true); setError(null);
-    try {
-      await assessmentItemGovernanceService.publishApproved(activeMembership.organizationId, selectedProposalIds);
-      setSelectedProposalIds([]); setInfo("Itens aprovados publicados com proveniência e aprovação humana preservadas."); await refresh();
-    } catch (caught) { setError(caught instanceof Error ? caught.message : "Falha ao publicar propostas."); }
-    finally { setSaving(false); }
-  }
-
-  async function refreshSyntheticAnalytics(item: GovernedItemView) {
-    setSaving(true); setError(null);
-    try {
-      await assessmentItemGovernanceService.refreshSyntheticAnalytics(activeMembership.organizationId, item.id);
-      setInfo("Prévia analítica sintética atualizada. Ela não promove calibração real.");
-      await refresh();
-    } catch (caught) { setError(caught instanceof Error ? caught.message : "Falha ao atualizar a prévia analítica."); }
-    finally { setSaving(false); }
-  }
-
-  if (loading && !workspace) return <PrismaPage className="prisma-m51c-page"><Skeleton active paragraph={{ rows: 12 }} /></PrismaPage>;
-  if (!workspace) return <PrismaPage className="prisma-m51c-page"><PrismaPageHeader icon={<PrismaPageIcon />} title="Banco de Itens" description="Governança, escala e calibração." />{error ? <Alert message={error} type="error" showIcon action={<Button onClick={() => void refresh()}>Consultar banco de itens</Button>} /> : <Empty />}</PrismaPage>;
-
-  const surfaceGroups: Array<{ label: string; items: Array<{ key: Surface; label: string; icon: ReactNode }> }> = [{
-    label: "Operação",
-    items: [
-    { key: "gaps", label: "Lacunas", icon: <BranchesOutlined /> },
-    { key: "generation", label: "Geração", icon: <RobotOutlined /> },
-    { key: "proposals", label: "Revisão", icon: <SafetyCertificateOutlined /> },
-    ],
-  }, {
-    label: "Governança",
-    items: [
-    { key: "global", label: "Banco global", icon: <GlobalOutlined /> },
-    { key: "analytics", label: "Desempenho", icon: <BarChartOutlined /> },
-    { key: "calibration", label: "Calibração", icon: <ExperimentOutlined /> },
-    { key: "versions", label: "Versões", icon: <ApiOutlined /> },
-    { key: "organization", label: "Banco privado", icon: <GlobalOutlined /> },
-    { key: "settings", label: "Configurações", icon: <SettingOutlined /> },
-    ],
-  }];
-  return (
-    <PrismaPage className="prisma-m51c-page">
-      <PrismaPageHeader icon={<PrismaPageIcon />} title="Banco de Itens" description="IA, escala, governança e calibração com revisão humana obrigatória." actions={<Button onClick={() => void refresh()}>Atualizar</Button>} />
-      {error ? <Alert closable message={error} onClose={() => setError(null)} showIcon type="error" action={<Button onClick={() => void refresh()}>Consultar banco de itens</Button>} /> : null}
-      {info ? <Alert closable message={info} onClose={() => setInfo(null)} showIcon type="success" /> : null}
-      <PrismaCard className="prisma-m51c-navigation">
-        {surfaceGroups.map((group) => <div className="prisma-m51c-navigation__group" key={group.label}><span>{group.label}</span><div>{group.items.map((item) => <button aria-current={surface === item.key ? "page" : undefined} className={surface === item.key ? "is-active" : ""} key={item.key} onClick={() => setSurface(item.key)} type="button">{item.icon}{item.label}</button>)}</div></div>)}
-      </PrismaCard>
-      {surface === "gaps" ? <GapSurface gaps={workspace.gaps} onGenerate={(gap) => { setGenerationGap(gap); setQuantity(Math.min(Math.max(gap.deficit, 1), 5)); replaceGenerationStep(0, true); setSurface("generation"); }} /> : null}
-      {surface === "generation" ? <GenerationSurface canPublishGlobal={activeMembership.role === "super_admin"} gap={generationGap ?? workspace.gaps.find((gap) => gap.deficit > 0) ?? null} onBack={() => setSurface("gaps")} onRun={runFakeGeneration} onStep={setGenerationStep} quantity={quantity} saving={saving} setQuantity={setQuantity} setTargetScope={setTargetScope} step={generationStep} targetScope={targetScope} policy={workspace.policy} requests={workspace.requests} /> : null}
-      {surface === "proposals" ? <ProposalSurface proposals={workspace.proposals} selectedIds={selectedProposalIds} onReview={setReviewProposal} onSelection={setSelectedProposalIds} onPublish={() => void publishSelected()} saving={saving} /> : null}
-      {surface === "global" ? <BankSurface items={workspace.items.filter((item) => item.scope === "global")} title="Banco de itens global" onSelect={setSelectedItem} /> : null}
-      {surface === "analytics" ? <AnalyticsSurface items={workspace.items} onSelect={setSelectedItem} /> : null}
-      {surface === "calibration" ? <CalibrationSurface item={selectedItem ?? workspace.items[0] ?? null} onRefresh={(item) => void refreshSyntheticAnalytics(item)} onSelect={setSelectedItem} items={workspace.items} saving={saving} /> : null}
-      {surface === "versions" ? <VersionsSurface items={workspace.items} /> : null}
-      {surface === "organization" ? <BankSurface items={workspace.items.filter((item) => item.scope === "organization")} notice="Itens da empresa não são compartilhados com outras organizações e não são promovidos automaticamente ao banco global." title="Banco privado da empresa" onSelect={setSelectedItem} /> : null}
-      {surface === "settings" ? <SettingsSurface workspace={workspace} /> : null}
-      <ProposalReviewModal proposal={reviewProposal} rationale={reviewRationale} saving={saving} onRationale={setReviewRationale} onClose={() => setReviewProposal(null)} onDecision={(decision) => void decideProposal(decision)} />
-      <ItemAnalyticsDrawer item={selectedItem} onClose={() => setSelectedItem(null)} />
-    </PrismaPage>
-  );
+  if(!workspace) return <PrismaPage className="prisma-question-bank"><PrismaPageHeader icon={<AppstoreFilled/>} title="Banco de questões" description="Consulte questões e revise novos conteúdos para avaliações."/>{loading?<Skeleton active paragraph={{rows:8}}/>:<Alert type="error" showIcon message={error??"Banco indisponível."} action={<Button onClick={()=>void refresh()}>Tentar novamente</Button>}/>}</PrismaPage>;
+  const pending = workspace.proposals.filter(pendingProposal).length;
+  return <PrismaPage className="prisma-question-bank">
+    <PrismaPageHeader icon={<AppstoreFilled/>} title="Banco de questões" description="Consulte questões e revise novos conteúdos para avaliações." actions={<Space wrap><Button loading={loading} disabled={Boolean(operation)} onClick={()=>void refresh()}>Atualizar</Button>{permissions?.canAdminister?<Button icon={<SettingOutlined aria-hidden/>} onClick={()=>setSecondary("settings")}>Configurações</Button>:null}</Space>}/>
+    {error?<Alert role="alert" showIcon closable type="error" message={error} onClose={()=>setError(null)} action={<Button disabled={Boolean(operation)} onClick={()=>void refresh()}>Atualizar consulta</Button>}/>:null}
+    {result?<Alert showIcon closable type="success" message={result} onClose={()=>setResult(null)} action={<Button onClick={()=>{setTab("questions");setSecondary(null);}}>Abrir questões</Button>}/>:null}
+    <div className="prisma-bank-navigation"><Tabs activeKey={tab} onChange={value=>setTab(value as typeof tab)} items={[{key:"questions",label:"Questões"},{key:"review",label:`Para revisar (${pending})`}]}/><Button onClick={()=>setSecondary("history")}>Histórico de solicitações</Button></div>
+    <section aria-busy={loading}>
+      {loading?<p role="status" className="prisma-bank-muted">Atualizando questões; o conteúdo anterior permanece disponível…</p>:null}
+      {tab==="questions"?<Catalog items={workspace.items} filters={catalog} setFilters={setCatalog} onOpen={i=>{setItemId(i.id);setItemOpen(true);}} onCoverage={()=>setSecondary("coverage")}/>:<ReviewQueue proposals={workspace.proposals} filters={queue} setFilters={setQueue} selectedIds={selectedIds} onSelection={setSelectedIds} canPublish={canPublish} onOpen={p=>setProposalId(p.id)} onPublish={()=>setPublishConfirm(true)} saving={Boolean(operation)}/>}
+    </section>
+    <Drawer closable={{"aria-label":"Fechar"}} className="prisma-bank-drawer" size={820} open={itemOpen} onClose={()=>setItemOpen(false)} title="Consultar questão" extra={<Button icon={<ArrowLeftOutlined aria-hidden/>} onClick={()=>setItemOpen(false)}>Voltar à lista</Button>}>
+      {item?<ItemDetail item={item} items={workspace.items}/>:<Empty description="Esta questão não está disponível na consulta atual."/>}
+    </Drawer>
+    <Drawer closable={{"aria-label":"Fechar"}} className="prisma-bank-drawer" size={880} open={Boolean(proposalId)} onClose={()=>setProposalId(null)} title={proposal&&reviewableProposal(proposal)?"Revisar questão":"Consultar proposta"} extra={<Button icon={<ArrowLeftOutlined aria-hidden/>} onClick={()=>setProposalId(null)}>Voltar à fila</Button>}>
+      {proposal?<ProposalDetail proposal={proposal} rationale={drafts[proposal.id]??""} onRationale={value=>setDrafts(current=>({...current,[proposal.id]:value}))} canReview={permissions?.canReview===true&&(proposal.targetScope!=="global"||permissions.canPublishGlobal)} canPublish={canPublish(proposal)} saving={Boolean(operation)} onDecision={decision} onCompare={()=>setCompare(true)}/>:<Empty description="Proposta não disponível."/>}
+      {operation?<p role="status">{operation}</p>:null}{error?<Alert type="error" showIcon message={error}/>:null}
+    </Drawer>
+    <Drawer closable={{"aria-label":"Fechar"}} className="prisma-bank-drawer" size={1040} open={compare} onClose={()=>setCompare(false)} title="Comparar questões">
+      {proposal?<Comparison proposal={proposal} workspace={workspace}/>:null}
+    </Drawer>
+    <Drawer closable={{"aria-label":"Fechar"}} className="prisma-bank-drawer" size={1000} open={Boolean(secondary)} onClose={()=>setSecondary(null)} title={secondary==="coverage"?"Consultar cobertura":secondary==="history"?"Histórico de solicitações":"Configurações do banco"}>
+      {secondary==="coverage"?<Coverage gaps={workspace.gaps} onGenerate={complement}/>:secondary==="history"?<RequestHistory requests={workspace.requests} onProposals={()=>{setQueue({...initialFilters,situation:"pending"});setTab("review");setSecondary(null);}}/>:secondary==="settings"&&permissions?.canAdminister?<BankSettings workspace={workspace} organizationId={org} onRefresh={refresh} operation={operation} execute={execute}/>:null}
+    </Drawer>
+    <Modal closable={{"aria-label":"Fechar"}} className="prisma-bank-modal" open={Boolean(generationGap)} onCancel={()=>setGenerationGap(null)} title="Complementar cobertura" footer={null} width={660}>
+      {generationGap?<><Context competency={generationGap.competencyLabel??generationGap.competencyKey} dimension={generationGap.dimension} level={generationGap.targetLevel} difficulty={generationGap.definedDifficulty}/><p>Modelo: {generationGap.blueprintName??generationGap.blueprintKey}. Faltam {generationGap.deficit} questões, incluindo a reserva adicional.</p>
+      <div className="prisma-bank-filter-grid"><label>Quantidade<InputNumber aria-label="Quantidade" min={1} max={Math.max(1,Math.min(generationGap.deficit,workspace.policy.maximumItemsPerRequest,20))} value={quantity} onChange={v=>{setQuantity(Number(v??1));setGenerationKey(crypto.randomUUID());}} disabled={Boolean(operation)}/></label><label>Destino<Select aria-label="Destino" value={target} onChange={v=>{setTarget(v);setGenerationKey(crypto.randomUUID());}} disabled={Boolean(operation)} options={[{value:"organization",label:"Da empresa"},...(permissions?.canPublishGlobal?[{value:"global",label:"Global"}]:[])]}/></label></div>
+      {availableGeneration?<p role="status">{tokens.loading?"Consultando consumo…":tokens.error??(tokens.quote?`Consumo ao gerar: ${formatTokens(tokens.quote.amount)} Tokens Prisma. Saldo disponível: ${formatTokens(tokens.quote.available)}.`:"Consumo indisponível.")} <Button type="link" onClick={tokens.refresh}>Atualizar consumo</Button></p>:<Alert type="info" showIcon message="Geração por IA indisponível neste banco." description="O banco possui integração própria, mas sua política, modelo e orçamento precisam estar configurados pela administração central. A geração de avaliações por processo tem outro contrato. Nenhuma chamada paga será feita aqui enquanto os requisitos do banco estiverem indisponíveis."/>}
+      <p className="prisma-bank-muted">Novos conteúdos irão para revisão humana. Consulta, revisão e uso de questões existentes não consomem Tokens Prisma.</p><div className="prisma-bank-footer"><Button onClick={()=>setGenerationGap(null)}>Cancelar</Button><Button type="primary" loading={Boolean(operation)} disabled={!availableGeneration||!tokens.quote||tokens.quote.available<tokens.quote.amount} onClick={()=>void generate()}>Confirmar e gerar propostas</Button></div>{error?<Alert type="error" showIcon message={error}/>:null}</>:null}
+    </Modal>
+    <Modal open={publishConfirm} onCancel={()=>setPublishConfirm(false)} title="Disponibilizar questões revisadas" cancelText="Cancelar" okText="Disponibilizar selecionadas" confirmLoading={Boolean(operation)} okButtonProps={{disabled:!selected.length}} onOk={()=>void execute("Disponibilizando questões…",()=>service.publishApproved(org,selected.map(p=>p.id)),`${selected.length} questão(ões) disponibilizada(s). Consulte em Questões.`,()=>{setPublishConfirm(false);setSelectedIds([]);})}>
+      <p>{selected.length} questão(ões) já aprovada(s) serão disponibilizada(s): {Array.from(new Set(selected.map(p=>scopeName(p.targetScope)))).join(", ")}. Somente as selecionadas serão publicadas; a revisão humana registrada será preservada.</p>{selected.some(p=>p.provenance.synthetic)?<Alert type="warning" showIcon message="O lote inclui conteúdo sintético de teste. Essa origem permanecerá identificada; não representa validação real."/>:null}{error?<Alert type="error" message={error}/>:null}
+    </Modal>
+  </PrismaPage>;
 }
 
-function GapSurface({ gaps, onGenerate }: { gaps: ItemBankGapView[]; onGenerate: (gap: ItemBankGapView) => void }) {
-  const columns: ColumnsType<ItemBankGapView> = [
-    { title: "Modelo", dataIndex: "blueprintKey", ellipsis: true, width: 160 }, { title: "Dimensão", dataIndex: "dimension", render: labelAssessmentDimension, width: 170 },
-    { title: "Nível", dataIndex: "targetLevel", render: labelLevel, responsive: ["md"], width: 100 }, { title: "Disponíveis", dataIndex: "eligibleItems", responsive: ["lg"], width: 100 },
-    { title: "Necessários", dataIndex: "requiredItems", responsive: ["lg"], width: 100 }, { title: "Faltantes", dataIndex: "deficit", render: (value) => <PrismaStatusTag compact label={String(value)} tone={value > 0 ? "danger" : "success"} />, width: 100 },
-    { title: "Ação", render: (_, gap) => <Button disabled={gap.deficit === 0} onClick={() => onGenerate(gap)} type="primary">Gerar</Button>, width: 86 },
-  ];
-  return <PrismaCard title="1. Lacunas do banco de itens" extra={<PrismaStatusTag compact label="Prioriza reutilização" tone="info" />}><Typography.Paragraph type="secondary">A lacuna considera apenas itens ativos, compatíveis e elegíveis. A reserva de diversidade evita montar instrumentos sempre com o mesmo conjunto.</Typography.Paragraph><Table className="prisma-responsive-table" columns={columns} dataSource={gaps} pagination={false} rowKey="key" tableLayout="fixed" /></PrismaCard>;
+function FilterBar({filters,setFilters,competencies,situations,review=false}: {filters:Filters;setFilters:(value:Filters)=>void;competencies:Array<{value:string;label:string}>;situations:Array<{value:string;label:string}>;review?:boolean}) {
+  const [more,setMore] = useState(false);
+  const change=(key:keyof Filters,value:string)=>setFilters({...filters,[key]:value,page:1});
+  const applied=[filters.search&&`Busca: ${filters.search}`,filters.competency&&`Competência: ${competencies.find(c=>c.value===filters.competency)?.label??filters.competency}`,filters.difficulty&&`Dificuldade: ${difficultyName(filters.difficulty)}`,filters.situation&&`Situação: ${situations.find(s=>s.value===filters.situation)?.label??"Não informada"}`,filters.scope&&`Origem: ${scopeName(filters.scope)}`].filter(Boolean);
+  return <><div className="prisma-bank-filter-grid">
+    <label className="prisma-bank-search">Buscar<Input allowClear placeholder="Assunto, competência, enunciado ou código" value={filters.search} onChange={e=>change("search",e.target.value)}/></label>
+    <label>Competência<Select aria-label="Competência" value={filters.competency||undefined} allowClear placeholder="Todas" onChange={v=>change("competency",v??"")} options={competencies}/></label>
+    {!review?<label>Dificuldade<Select aria-label="Dificuldade" value={filters.difficulty||undefined} allowClear placeholder="Todas" onChange={v=>change("difficulty",v??"")} options={["low","medium","high"].map(v=>({value:v,label:difficultyName(v)}))}/></label>:null}
+    <label>{review?"Situação":"Disponibilidade"}<Select aria-label={review?"Situação":"Disponibilidade"} value={filters.situation||undefined} allowClear placeholder="Todas" onChange={v=>change("situation",v??"")} options={situations}/></label>
+    <Button aria-expanded={more} onClick={()=>setMore(!more)}>Mais filtros</Button>
+  </div>{more?<div className="prisma-bank-filter-grid"><label>Origem<Select aria-label="Origem" value={filters.scope||undefined} placeholder="Todas" allowClear options={[{value:"organization",label:"Da empresa"},{value:"global",label:"Globais"}]} onChange={v=>change("scope",v??"")}/></label><label>Ordenação<Select aria-label="Ordenação" value={filters.sort} onChange={v=>change("sort",v)} options={[{value:"recent",label:review?"Pendências primeiro":"Mais recentes"},{value:"content",label:"Enunciado (A–Z)"}]}/></label></div>:null}
+  {applied.length?<div className="prisma-bank-applied" aria-label="Filtros aplicados">{applied.map(v=><Tag key={String(v)}>{v}</Tag>)}<Button type="link" onClick={()=>setFilters({...initialFilters})}>Limpar filtros</Button></div>:null}</>;
 }
-
-function GenerationSurface(props: { canPublishGlobal: boolean; gap: ItemBankGapView | null; step: number; onStep: (value: number) => void; quantity: number; setQuantity: (value: number) => void; targetScope: "global" | "organization"; setTargetScope: (value: "global" | "organization") => void; saving: boolean; onRun: () => Promise<void>; onBack: () => void; policy: ItemBankGovernanceWorkspace["policy"]; requests: ItemBankGovernanceWorkspace["requests"] }) {
-  if (!props.gap) return <PrismaCard title="2. Solicitar geração por IA"><Empty description="Nenhuma lacuna elegível para geração." /></PrismaCard>;
-  return <Space direction="vertical" size={16} className="prisma-m51c-full">
-    <PrismaCard title="2. Solicitar geração por IA"><Steps current={props.step} items={[{ title: "Definição" }, { title: "Parâmetros" }, { title: "Revisão" }]} /></PrismaCard>
-    {props.step === 0 ? <PrismaCard title="Modelo de avaliação e contexto"><Descriptions column={{ xs: 1, md: 2 }} items={[{ key: "blueprint", label: "Modelo", children: props.gap.blueprintKey }, { key: "dimension", label: "Dimensão", children: labelAssessmentDimension(props.gap.dimension) }, { key: "level", label: "Nível", children: labelLevel(props.gap.targetLevel) }, { key: "gap", label: "Itens faltantes", children: props.gap.deficit }]} /><Button onClick={() => props.onStep(1)} type="primary">Próximo</Button></PrismaCard> : null}
-    {props.step === 1 ? <PrismaCard title="Parâmetros e política"><Space direction="vertical" size={14}><Typography.Text>Quantidade de itens</Typography.Text><InputNumber min={1} max={Math.min(props.gap.deficit, 5)} value={props.quantity} onChange={(value) => props.setQuantity(Number(value ?? 1))} /><Typography.Text>Escopo de publicação proposto</Typography.Text><Radio.Group value={props.targetScope} onChange={(event) => props.setTargetScope(event.target.value)}><Radio value="organization">Banco privado da empresa</Radio><Radio disabled={!props.canPublishGlobal} value="global">Banco global, somente administração central</Radio></Radio.Group><Alert message="Dados pessoais e pesquisa externa permanecem bloqueados. Toda proposta exige revisão humana." type="info" showIcon /><Space><Button onClick={() => props.onStep(0)}>Voltar</Button><Button onClick={() => props.onStep(2)} type="primary">Revisar</Button></Space></Space></PrismaCard> : null}
-    {props.step === 2 ? <PrismaCard title="3. Geração e revisão do pedido"><Descriptions column={{ xs: 1, md: 2 }} items={[{ key: "provider", label: "Modo da demonstração", children: "Simulação determinística" }, { key: "cost", label: "Custo externo", children: "R$ 0,00" }, { key: "quantity", label: "Quantidade", children: props.quantity }, { key: "scope", label: "Destino proposto", children: props.targetScope === "global" ? "Banco global" : "Banco privado da empresa" }]} /><Alert message={props.policy.generationEnabled ? "A geração externa está autorizada, mas esta demonstração continua usando uma simulação sem custo." : "A geração externa está desativada. A simulação permite validar o fluxo sem enviar dados a um modelo externo."} type="warning" showIcon /><Space><Button onClick={() => props.onStep(1)}>Voltar</Button><Button loading={props.saving} onClick={() => void props.onRun()} type="primary">Gerar propostas sintéticas</Button></Space></PrismaCard> : null}
-    {props.requests.length ? <PrismaCard title="Gerações recentes"><Table dataSource={props.requests} pagination={false} rowKey="id" columns={[{ title: "Pedido", dataIndex: "id", ellipsis: true }, { title: "Provedor", dataIndex: "provider" }, { title: "Quantidade", dataIndex: "quantity" }, { title: "Status", dataIndex: "status", render: statusTag }]} /></PrismaCard> : null}
-  </Space>;
+function competencies(items:Array<{competencyKey:string;competencyLabel?:string|undefined}>) {return Array.from(new Map(items.map(i=>[i.competencyKey,{value:i.competencyKey,label:i.competencyLabel??i.competencyKey}])).values()).sort((a,b)=>a.label.localeCompare(b.label,"pt-BR"));}
+function Pager({count,filters,setFilters}: {count:number;filters:Filters;setFilters:(v:Filters)=>void}) {return count>0?<Pagination className="prisma-bank-pager" current={Math.min(filters.page,Math.max(1,Math.ceil(count/pageSize)))} pageSize={pageSize} total={count} showSizeChanger={false} responsive onChange={page=>setFilters({...filters,page})} showTotal={total=>`${total} resultado(s)`}/>:null;}
+function pageSlice<T>(items:T[],page:number) {const current=Math.min(page,Math.max(1,Math.ceil(items.length/pageSize)));return items.slice((current-1)*pageSize,current*pageSize);}
+function Catalog({items,filters,setFilters,onOpen,onCoverage}: {items:GovernedItemView[];filters:Filters;setFilters:(v:Filters)=>void;onOpen:(i:GovernedItemView)=>void;onCoverage:()=>void}) {
+  const list = useMemo(()=>items.filter(i=>bankTextMatches(filters.search,[i.stem,i.competencyKey,i.competencyLabel,i.dimension,i.key])&&(!filters.competency||i.competencyKey===filters.competency)&&(!filters.difficulty||i.definedDifficulty===filters.difficulty)&&(!filters.situation||i.state===filters.situation)&&(!filters.scope||i.scope===filters.scope)).sort((a,b)=>filters.sort==="content"?a.stem.localeCompare(b.stem,"pt-BR")||(a.id.localeCompare(b.id)):(b.createdAt??"").localeCompare(a.createdAt??"")||a.id.localeCompare(b.id)),[items,filters]);
+  return <PrismaCard title="Questões" extra={<Button onClick={onCoverage}>Consultar cobertura</Button>}><FilterBar filters={filters} setFilters={setFilters} competencies={competencies(items)} situations={Object.entries(questionAvailability).map(([value,label])=>({value,label}))}/>
+    <p className="prisma-bank-muted">{list.length} questão(ões) nesta consulta. A disponibilidade registrada não garante elegibilidade para qualquer avaliação.</p>
+    <div className="prisma-bank-list">{pageSlice(list,filters.page).map(i=><article className="prisma-bank-row" data-question-id={i.id} key={i.id}><div><Typography.Paragraph className="prisma-bank-stem" ellipsis={{rows:3}}>{i.stem}</Typography.Paragraph><p className="prisma-bank-muted">{i.competencyLabel??i.competencyKey} · {labelAssessmentDimension(i.dimension)}</p><Space wrap size={6}><Tag>{difficultyName(i.definedDifficulty)}</Tag><Tag>{questionAvailability[i.state]}</Tag><span className="prisma-bank-muted">{scopeName(i.scope)}</span>{i.provenance?.synthetic===true?<Tag>Teste sintético</Tag>:null}</Space></div><Button onClick={()=>onOpen(i)}>Ver questão</Button></article>)}</div>
+    {!list.length?<Empty description={items.length?"Nenhuma questão corresponde aos filtros.":"Ainda não há questões neste banco."}/>:null}<Pager count={list.length} filters={filters} setFilters={setFilters}/></PrismaCard>;
 }
-
-function ProposalSurface(props: { proposals: GenerationProposalView[]; selectedIds: string[]; onSelection: (ids: string[]) => void; onReview: (proposal: GenerationProposalView) => void; onPublish: () => void; saving: boolean }) {
-  const approved = props.proposals.filter((proposal) => proposal.status === "approved").map((proposal) => proposal.id);
-  const columns: ColumnsType<GenerationProposalView> = [
-    { title: "Item", render: (_, proposal) => <Space direction="vertical" size={2}><Typography.Text strong>{proposal.item.key}</Typography.Text><Typography.Text ellipsis type="secondary">{proposal.item.stem}</Typography.Text></Space> },
-    { title: "Dimensão", dataIndex: ["item", "dimension"], render: labelAssessmentDimension, width: 160 }, { title: "Nível", dataIndex: ["item", "targetLevel"], render: labelLevel, width: 100 },
-    { title: "Validação", render: (_, proposal) => <Space wrap><Tag color={proposal.validation.valid ? "green" : "red"}>{proposal.validation.valid ? "Estrutura válida" : "Inválido"}</Tag>{proposal.status === "duplicate_candidate" ? <Tag color="orange">Duplicidade forte</Tag> : proposal.similarity >= 0.65 ? <Tag color="gold">Similaridade possível</Tag> : <Tag>Sem duplicidade forte</Tag>}</Space> },
-    { title: "Status", dataIndex: "status", render: statusTag }, { title: "Ações", render: (_, proposal) => <Button onClick={() => props.onReview(proposal)}>Revisar</Button> },
-  ];
-  return <Space direction="vertical" size={16} className="prisma-m51c-full"><PrismaCard title="4. Itens gerados pela IA" extra={<PrismaStatusTag compact label={`${props.proposals.length} propostas`} tone="info" />}><Alert message="Uma proposta só se torna item ativo depois da aprovação humana e da publicação." type="info" showIcon /><Table className="prisma-responsive-table" columns={columns} dataSource={props.proposals} pagination={false} rowKey="id" rowSelection={{ selectedRowKeys: props.selectedIds, onChange: (keys) => props.onSelection(keys.map(String)), getCheckboxProps: (proposal) => ({ disabled: proposal.status !== "approved" }) }} tableLayout="fixed" /></PrismaCard><PrismaCard title="6. Aprovação e publicação"><Space wrap><Typography.Text>{approved.length} aprovado(s), {props.proposals.filter((proposal) => proposal.status === "proposed").length} aguardando revisão.</Typography.Text><Button disabled={props.selectedIds.length === 0} loading={props.saving} onClick={props.onPublish} type="primary">Publicar aprovados ({props.selectedIds.length})</Button></Space></PrismaCard></Space>;
+function ReviewQueue({proposals,filters,setFilters,selectedIds,onSelection,canPublish,onOpen,onPublish,saving}: {proposals:GenerationProposalView[];filters:Filters;setFilters:(v:Filters)=>void;selectedIds:string[];onSelection:(v:string[])=>void;canPublish:(p:GenerationProposalView)=>boolean;onOpen:(p:GenerationProposalView)=>void;onPublish:()=>void;saving:boolean}) {
+  const list=proposals.filter(p=>bankTextMatches(filters.search,[p.item.stem,p.item.competencyKey,p.competencyLabel,p.item.dimension,p.item.key])&&(!filters.competency||p.item.competencyKey===filters.competency)&&(!filters.scope||p.targetScope===filters.scope)&&(!filters.situation||(filters.situation==="pending"?pendingProposal(p):p.status===filters.situation))).sort((a,b)=>filters.sort==="content"?a.item.stem.localeCompare(b.item.stem,"pt-BR")||a.id.localeCompare(b.id):Number(pendingProposal(b))-Number(pendingProposal(a))||b.createdAt.localeCompare(a.createdAt)||a.id.localeCompare(b.id));
+  const count=proposals.filter(p=>selectedIds.includes(p.id)&&p.status==="approved"&&canPublish(p)).length;
+  return <PrismaCard title="Para revisar"><FilterBar review filters={filters} setFilters={setFilters} competencies={competencies(proposals.map(p=>({competencyKey:p.item.competencyKey,competencyLabel:p.competencyLabel})))} situations={[{value:"pending",label:"Pendências"},...Object.entries(proposalSituation).map(([value,label])=>({value,label}))]}/><p className="prisma-bank-muted">{proposals.filter(pendingProposal).length} pendência(s) · {list.length} resultado(s) nesta consulta. Novos conteúdos exigem decisão humana.</p>
+  <div className="prisma-bank-list">{pageSlice(list,filters.page).map(p=><article className="prisma-bank-row" key={p.id}>
+    {p.status==="approved"&&canPublish(p)?<label className="prisma-bank-checkbox"><input type="checkbox" aria-label={`Selecionar para disponibilizar: ${p.item.stem}`} checked={selectedIds.includes(p.id)} disabled={saving} onChange={e=>onSelection(e.target.checked?[...selectedIds,p.id]:selectedIds.filter(id=>id!==p.id))}/></label>:null}
+    <div><Typography.Paragraph className="prisma-bank-stem" ellipsis={{rows:3}}>{p.item.stem}</Typography.Paragraph><p className="prisma-bank-muted">{p.competencyLabel??p.item.competencyKey} · {labelAssessmentDimension(p.item.dimension)} · Nível da competência: {labelLevel(p.item.targetLevel)}</p><Space wrap><Tag>{difficultyName(p.item.difficulty)}</Tag><Tag>{proposalSituation[p.status]}</Tag><span className="prisma-bank-muted">{scopeName(p.targetScope)}</span>{p.provenance.synthetic?<Tag>Teste sintético</Tag>:null}</Space></div><Button onClick={()=>onOpen(p)}>{reviewableProposal(p)?"Revisar":"Consultar"}</Button>
+  </article>)}</div>{!list.length?<Empty description={filters.situation==="pending"&&!proposals.filter(pendingProposal).length?"Nenhuma pendência de revisão. Consulte aprovadas e histórico nos filtros.":"Nenhuma proposta corresponde à consulta."}/>:null}<Pager count={list.length} filters={filters} setFilters={setFilters}/>
+  {count>0?<div className="prisma-bank-footer"><span>{count} aprovada(s) selecionada(s)</span><Button type="primary" disabled={saving} onClick={onPublish}>Disponibilizar selecionadas</Button></div>:null}</PrismaCard>;
 }
-
-function ProposalReviewModal(props: { proposal: GenerationProposalView | null; rationale: string; saving: boolean; onRationale: (value: string) => void; onClose: () => void; onDecision: (decision: "approve" | "reject" | "request_changes") => void }) {
-  return <Modal footer={null} onCancel={props.onClose} open={Boolean(props.proposal)} title="5. Revisão e comparação" width={920}>{props.proposal ? <Space direction="vertical" className="prisma-m51c-full" size={14}><div className="prisma-m51c-compare"><PrismaCard title="Proposta"><Typography.Paragraph strong>{props.proposal.item.stem}</Typography.Paragraph>{props.proposal.item.options.map((option) => <div key={option.id}>{option.id}. {option.label}</div>)}</PrismaCard><PrismaCard title="Duplicidade e similaridade"><Descriptions column={1} size="small" items={[{ key: "similarity", label: "Similaridade máxima", children: `${Math.round(props.proposal.similarity * 100)}%` }, { key: "duplicate", label: "Candidatos similares", children: props.proposal.duplicateCandidates?.length ? props.proposal.duplicateCandidates.map((candidate) => `${candidate.code} (${Math.round(candidate.similarity * 100)}%)`).join(", ") : "Nenhuma duplicidade forte" }]} /><details className="prisma-disclosure"><summary>Origem e detalhes técnicos</summary><div><Descriptions column={1} size="small" items={[{key:"fingerprint",label:"Fingerprint",children:props.proposal.fingerprint},{key:"provider",label:"Provedor",children:props.proposal.provenance.provider},{key:"schema",label:"Schema",children:props.proposal.provenance.schemaVersion}]}/></div></details></PrismaCard></div><Input.TextArea onChange={(event) => props.onRationale(event.target.value)} rows={3} value={props.rationale} /><Space wrap><Button danger loading={props.saving} onClick={() => props.onDecision("reject")}>Rejeitar</Button><Button loading={props.saving} onClick={() => props.onDecision("request_changes")}>Pedir ajustes</Button><Button icon={<CheckCircleOutlined />} loading={props.saving} onClick={() => props.onDecision("approve")} type="primary">Aprovar</Button></Space></Space> : null}</Modal>;
+function Context({competency,dimension,level,difficulty}: {competency:string;dimension:string;level:GovernedItemView["targetLevel"];difficulty:string}) {return <div className="prisma-bank-context"><span><strong>Competência/assunto:</strong> {competency}</span><span><strong>Dimensão:</strong> {labelAssessmentDimension(dimension)}</span><span><strong>Nível da competência:</strong> {labelLevel(level)}</span><span><strong>Dificuldade:</strong> {difficultyName(difficulty)}</span></div>;}
+function QuestionContent({stem,options,correct,explanation}: {stem:string;options?:Array<{id:string;label:string}>|undefined;correct?:string|null|undefined;explanation?:string|undefined}) {return <div className="prisma-bank-content"><Typography.Title level={4}>{stem}</Typography.Title>{options?.length?<ol className="prisma-bank-options">{options.map(o=><li key={o.id}><span className="prisma-bank-option-id">{o.id}</span><span>{o.label}</span>{correct===o.id?<Tag>Correta</Tag>:null}</li>)}</ol>:<p>Alternativas não disponíveis nesta consulta.</p>}<p><strong>Gabarito:</strong> {correct??"Não disponível"}</p><div className="prisma-bank-explanation"><strong>Explicação</strong><p>{explanation||"Não disponível nesta consulta."}</p></div></div>;}
+function ItemDetail({item,items}: {item:GovernedItemView;items:GovernedItemView[]}) {
+  const family=item.familyId?items.filter(i=>i.familyId===item.familyId).sort((a,b)=>(b.createdAt??"").localeCompare(a.createdAt??"")):[];
+  return <Space direction="vertical" size={18} className="prisma-bank-full"><QuestionContent stem={item.stem} options={item.options} correct={item.correctOptionId} explanation={item.explanation}/><Context competency={item.competencyLabel??item.competencyKey} dimension={item.dimension} level={item.targetLevel} difficulty={item.definedDifficulty}/><p><strong>Disponibilidade:</strong> {questionAvailability[item.state]}. Elegibilidade depende do modelo e do contrato de composição.</p>
+  <PrismaDisclosure title="Origem e revisão"><Descriptions column={1} items={[{key:"source",label:"Banco",children:scopeName(item.scope)},{key:"synthetic",label:"Conteúdo sintético",children:item.provenance?.synthetic===true?"Sim, conteúdo de teste":item.provenance?.synthetic===false?"Não, conforme origem registrada":"Não informado na origem"},{key:"approved",label:"Aprovação humana registrada",children:date(item.approvedAt)},{key:"author",label:"Identificador do autor da aprovação",children:item.approvedBy??"Não registrado"},{key:"code",label:"Código",children:item.key},{key:"version",label:"Versão",children:item.version}]}/><PrismaDisclosure title="Referências da origem"><ReadableRecord value={item.provenance??{}}/></PrismaDisclosure></PrismaDisclosure>
+  <PrismaDisclosure title="Uso e qualidade"><UsageQuality item={item}/></PrismaDisclosure>
+  <PrismaDisclosure title="Histórico"><p>Criada em {date(item.createdAt)}. Última atualização registrada: {date(item.updatedAt)}.</p>{family.length?<ul className="prisma-bank-history">{family.map(i=><li key={i.id}><strong>{i.version}</strong> · {questionAvailability[i.state]} · {date(i.createdAt)}<p>{i.stem}</p><span className="prisma-bank-muted">Aprovação: {date(i.approvedAt)} · Autor: {i.approvedBy??"Não registrado"}</span><PrismaDisclosure title="Consultar conteúdo desta versão"><QuestionContent stem={i.stem} options={i.options} correct={i.correctOptionId} explanation={i.explanation}/></PrismaDisclosure></li>)}</ul>:<p>Identidade da família não disponível; não é possível inferir versões pelo código.</p>}<p className="prisma-bank-muted">Motivos ou autoria ausentes não são reconstruídos. Versões anteriormente usadas e conteúdo permanecem preservados.</p></PrismaDisclosure></Space>;
 }
-
-function BankSurface({ items, title, notice, onSelect }: { items: GovernedItemView[]; title: string; notice?: string; onSelect: (item: GovernedItemView) => void }) {
-  return <PrismaCard title={title}>{notice ? <Alert message={notice} type="info" showIcon /> : null}<div className="prisma-m51c-stat-grid"><Statistic title="Itens" value={items.length} /><Statistic title="Ativos" value={items.filter((item) => item.state === "active").length} /><Statistic title="Em calibração" value={items.filter((item) => item.calibrationState === "collecting_data").length} /><Statistic title="Calibrados" value={items.filter((item) => item.calibrationState === "calibrated").length} /></div><ItemTable items={items} onSelect={onSelect} /></PrismaCard>;
+function UsageQuality({item}: {item:GovernedItemView}) {return <>
+  <p><strong>Calibração:</strong> {calibrationNames[item.calibrationState]??"Estado não disponível"}.</p>
+  {item.sampleKind===null?<p className="prisma-bank-muted">Estatísticas indisponíveis nesta consulta. Ausência de snapshot não prova que a questão nunca foi utilizada.</p>:<><p>Amostra {item.sampleKind==="synthetic_qa"?"sintética de teste, sem calibração real":"real anonimizada, com os limites do método registrado"}. Calculada em {date(item.analyticsAt)}.</p><Descriptions column={{xs:1,sm:2}} items={[{key:"applications",label:"Aplicações na amostra",children:item.applicationCount??"Não disponível"},{key:"rate",label:"Taxa de acerto",children:questionRate(item.correctRate)},{key:"time",label:"Tempo mediano",children:formatQuestionTime(item.medianTimeSeconds)},{key:"omission",label:"Questões sem resposta",children:questionRate(item.omissionRate)},{key:"change",label:"Mudança de resposta",children:questionRate(item.answerChangeRate)},{key:"incidents",label:"Incidentes técnicos excluídos",children:item.excludedTechnicalIncidentCount??"Não disponível"}]}/><p className="prisma-bank-muted">Aplicações na amostra e incidentes excluídos são contagens distintas. A contagem de observações válidas e o intervalo de coleta não estão disponíveis neste contrato. Mudança de resposta não comprova fraude.</p></>}
+  {item.qualityFlags?.length?<><strong>Revisão de qualidade pendente</strong>{item.qualityFlags.map((f,index)=><div key={index}><p>{bankReasonName(f.code)} · {date(f.createdAt)}</p><ReadableRecord value={f.evidence}/></div>)}</>:null}
+  {item.analyticsReasonCodes.length?<ul>{item.analyticsReasonCodes.map(c=><li key={c}>{bankReasonName(c)}</li>)}</ul>:<p className="prisma-bank-muted">Razões adicionais de calibração não registradas nesta consulta.</p>}
+  <PrismaDisclosure title="Método e detalhes da amostra"><p>P25: {formatQuestionTime(item.p25TimeSeconds)} · P75: {formatQuestionTime(item.p75TimeSeconds)}. São os tempos abaixo dos quais estão 25% e 75% da amostra.</p><p>Índice aritmético (1 − taxa de acerto): {item.observedDifficulty??"Não disponível"}. Não representa dificuldade empiricamente calibrada.</p><p>Versão do método: {item.analyticsVersion??"Não registrada"}. Referências: {item.analyticsReasonCodes.join(", ")||"Não registradas"}.</p></PrismaDisclosure><p className="prisma-bank-muted">Métricas apoiam revisão humana; não alteram dificuldade, Score ou decisões sobre Pessoas.</p>
+  </>;}
+function ProposalDetail({proposal:p,rationale,onRationale,canReview,canPublish,saving,onDecision,onCompare}: {proposal:GenerationProposalView;rationale:string;onRationale:(v:string)=>void;canReview:boolean;canPublish:boolean;saving:boolean;onDecision:(v:"approve"|"reject"|"request_changes")=>void;onCompare:()=>void}) {
+  const exception=p.status==="duplicate_candidate"||p.validation.reasonCodes.some(c=>["EXACT_DUPLICATE_REVIEW_REQUIRED","STRONG_SIMILARITY_REVIEW_REQUIRED"].includes(c));
+  const valid = p.validation.valid&&p.item.options.length>=2&&p.item.options.length<=6&&new Set(p.item.options.map(o=>o.id)).size===p.item.options.length&&p.item.options.some(o=>o.id===p.item.correctOptionId)&&Boolean(p.item.explanation.trim())&&Boolean(p.item.stem.trim())&&p.item.options.every(o=>Boolean(o.id.trim())&&Boolean(o.label.trim()));
+  const needsReason = rationale.trim().length<10;
+  return <Space direction="vertical" size={16} className="prisma-bank-full"><QuestionContent stem={p.item.stem} options={p.item.options} correct={p.item.correctOptionId} explanation={p.item.explanation}/><Context competency={p.competencyLabel??p.item.competencyKey} dimension={p.item.dimension} level={p.item.targetLevel} difficulty={p.item.difficulty}/><p><strong>Destino:</strong> {scopeName(p.targetScope)} · <strong>Situação:</strong> {proposalSituation[p.status]}</p>{p.provenance.synthetic?<Tag>Conteúdo sintético de teste, sem validação real</Tag>:null}
+  <div><strong>{valid?"Estrutura válida":"Estrutura precisa de correção"}</strong><p className="prisma-bank-muted">Esta validação verifica formato e campos; não garante correção do conteúdo. {p.item.options.length} alternativas registradas, com uma correta. O formato histórico do banco não substitui o contrato de cinco alternativas da avaliação por processo.</p>{!valid?<ul>{p.validation.reasonCodes.map(c=><li key={c}>{bankReasonName(c)}</li>)}</ul>:null}</div>
+  {(p.duplicateCandidates?.length??0)>0?<><Alert type="warning" showIcon message="Possível duplicidade: compare o conteúdo antes de decidir."/><Button onClick={onCompare}>Comparar questões</Button></>:<p className="prisma-bank-muted">Nenhum candidato relevante à comparação foi registrado. Isso não garante originalidade.</p>}
+  <PrismaDisclosure title="Origem e revisão"><p>Criada em {date(p.createdAt)}. Código: {p.item.key}.</p><p>Origem {p.provenance.synthetic?"sintética de teste":"externa conforme registro"}. Destino: {scopeName(p.targetScope)}.</p><PrismaDisclosure title="Referências de geração e similaridade"><p>Método lexical: {Math.round(p.similarity*100)}% de sobreposição registrada. Apoio à comparação humana, sem decisão automática.</p><ReadableRecord value={p.provenance}/><p>Referências de validação: {p.validation.reasonCodes.join(", ")||"Não registradas"}.</p></PrismaDisclosure></PrismaDisclosure>
+  <PrismaDisclosure title="Histórico">{p.reviews?.length?<ul className="prisma-bank-history">{p.reviews.map((r,i)=><li key={i}><strong>{({approve:"Aprovação",reject:"Rejeição",request_changes:"Pedido de ajustes"})[r.decision]??"Decisão registrada"}</strong> · {date(r.createdAt)}<p>{r.rationale||"Sem justificativa adicional; decisão explícita registrada."}</p><span className="prisma-bank-muted">Autor: {r.actorId} · Versão: {r.version}</span></li>)}</ul>:<p>Não há revisões registradas nesta consulta.</p>}</PrismaDisclosure>
+  {reviewableProposal(p)&&canReview?<><label className="prisma-bank-rationale">Justificativa da decisão<Input.TextArea aria-label="Justificativa da decisão" value={rationale} disabled={saving} onChange={e=>onRationale(e.target.value)} rows={3} placeholder="Explique o motivo de rejeição, ajustes ou exceção. Na aprovação comum, observações são opcionais."/></label><p className="prisma-bank-muted">Seu rascunho é preservado ao fechar ou trocar de proposta nesta sessão. {exception?"A possível duplicidade exige justificativa de exceção (mínimo 10 caracteres).":"Rejeição e pedido de ajustes exigem motivo útil (mínimo 10 caracteres)."}</p><div className="prisma-bank-footer"><Button danger disabled={needsReason||saving} onClick={()=>onDecision("reject")}>Rejeitar</Button><Button disabled={needsReason||saving} onClick={()=>onDecision("request_changes")}>Solicitar ajustes</Button><Button type="primary" loading={saving} disabled={!valid||(exception&&needsReason)||!p.targetScope} onClick={()=>onDecision("approve")}>{canPublish?"Aprovar e disponibilizar":"Aprovar"}</Button></div>{!canPublish?<p>A aprovação será registrada; a disponibilização ainda exige ator autorizado para o destino.</p>:null}</>:<p className="prisma-bank-muted">Consulta do registro e de suas decisões. {canReview?"Esta proposta está encerrada ou já aprovada.":"Seu acesso não permite uma decisão sobre este destino."}</p>}</Space>;
 }
-
-function AnalyticsSurface({ items, onSelect }: { items: GovernedItemView[]; onSelect: (item: GovernedItemView) => void }) {
-  return <PrismaCard title="8. Desempenho dos itens"><Alert message="Dificuldade definida e observada permanecem separadas. Dados sintéticos nunca promovem calibração real." type="info" showIcon /><ItemTable items={items} onSelect={onSelect} /></PrismaCard>;
+function Comparison({proposal,workspace}: {proposal:GenerationProposalView;workspace:ItemBankGovernanceWorkspace}) {
+  return <><p>Compare enunciados, alternativas, gabarito e explicação. As diferenças permanecem legíveis lado a lado no desktop e em sequência no celular; similaridade lexical é somente apoio.</p>{proposal.duplicateCandidates?.map(c=>{const other=c.kind==="item"?workspace.items.find(i=>i.id===c.id):workspace.proposals.find(p=>p.id===c.id)?.item;return <div className="prisma-bank-comparison" key={c.id}><div><h3>Proposta em revisão</h3><QuestionContent stem={proposal.item.stem} options={proposal.item.options} correct={proposal.item.correctOptionId} explanation={proposal.item.explanation}/></div><div><h3>Questão para comparação</h3>{other?<QuestionContent stem={other.stem} options={other.options} correct={"correctOptionId" in other?other.correctOptionId:null} explanation={other.explanation}/>:<p>O candidato registrado não está disponível nesta consulta autorizada.</p>}<PrismaDisclosure title="Referência da comparação"><p>Código: {c.code}. {c.exact?"Conteúdo identificado como idêntico pelo método registrado.":"Possível similaridade textual."} Sobreposição lexical: {Math.round(c.similarity*100)}%.</p></PrismaDisclosure></div></div>;})}</>;
 }
-
-function CalibrationSurface({ item, items, onSelect, onRefresh, saving }: { item: GovernedItemView | null; items: GovernedItemView[]; onSelect: (item: GovernedItemView) => void; onRefresh: (item: GovernedItemView) => void; saving: boolean }) {
-  return <PrismaCard title="9. Calibração: dificuldade e tempo"><Space wrap><Select className="prisma-m51c-item-select" value={item?.id} onChange={(id) => { const selected = items.find((candidate) => candidate.id === id); if (selected) onSelect(selected); }} options={items.map((candidate) => ({ value: candidate.id, label: candidate.key }))} /><Button disabled={!item} loading={saving} onClick={() => item && onRefresh(item)}>Atualizar prévia sintética</Button></Space>{item ? <div className="prisma-m51c-calibration-grid"><Descriptions column={1} title="Definido" items={[{ key: "difficulty", label: "Dificuldade", children: difficultyLabel(item.definedDifficulty) }, { key: "state", label: "Estado", children: calibrationTag(item.calibrationState) }]} /><Descriptions column={1} title="Observado" items={[{ key: "kind", label: "Amostra", children: item.sampleKind === "synthetic_qa" ? "Sintética de teste" : item.sampleKind === "real_anonymized" ? "Real anonimizada" : "Ainda não calculada" }, { key: "applications", label: "Aplicações", children: item.applicationCount }, { key: "correct", label: "Taxa de acerto", children: formatRate(item.correctRate) }, { key: "omission", label: "Taxa de omissão", children: formatRate(item.omissionRate) }, { key: "changes", label: "Mudança de resposta", children: formatRate(item.answerChangeRate) }, { key: "difficulty", label: "Índice observado", children: item.observedDifficulty ?? "Aguardando dados" }, { key: "time", label: "Tempo P25 / mediana / P75", children: item.medianTimeSeconds === null ? "Aguardando dados" : `${observedMetric(item.p25TimeSeconds, " s")} / ${observedMetric(item.medianTimeSeconds, " s")} / ${observedMetric(item.p75TimeSeconds, " s")}` }, { key: "excluded", label: "Incidentes técnicos excluídos", children: item.excludedTechnicalIncidentCount }]} /></div> : <Empty /> }<Divider /><Alert message={item?.sampleKind === "synthetic_qa" ? "Esta prévia usa somente dados sintéticos de teste, que nunca produzem calibração real." : "Ajuste manual exige nova evidência, justificativa e revisão; ausência de amostra não vira calibração."} type="warning" showIcon /></PrismaCard>;
+function Coverage({gaps,onGenerate}: {gaps:ItemBankGapView[];onGenerate:(g:ItemBankGapView)=>void}) {
+  const [query,setQuery]=useState(""),[situation,setSituation]=useState("pending"),[page,setPage]=useState(1);
+  const list=gaps.filter(g=>bankTextMatches(query,[g.blueprintName,g.blueprintKey,g.competencyLabel,g.competencyKey,g.dimension])&&(situation==="all"||(situation==="pending"?g.deficit>0:g.deficit===0)));
+  return <><div className="prisma-bank-filter-grid"><label>Buscar competência ou modelo<Input value={query} onChange={e=>{setQuery(e.target.value);setPage(1);}}/></label><label>Situação<Select aria-label="Situação da cobertura" value={situation} onChange={v=>{setSituation(v);setPage(1);}} options={[{value:"pending",label:"Pendências"},{value:"satisfied",label:"Cobertura satisfeita"},{value:"all",label:"Todas"}]}/></label></div><p>A cobertura considera modelos ativos de avaliação por competência, conforme o contrato existente. Não representa todas as necessidades de qualquer Posição.</p><PrismaDisclosure title="Como elegibilidade e reserva são calculadas"><p>Elegíveis: questões ativas da empresa ou globais, com competência, nível, dimensão, dificuldade, formato e idioma compatíveis. O modelo requer questões para composição e duas adicionais por dimensão como reserva de diversidade. Reserva insuficiente, por si só, não significa impossibilidade da prova; a composição também segue suas próprias regras.</p></PrismaDisclosure>
+  {pageSlice(list,page).map(g=><article className="prisma-bank-coverage" key={g.key}><h3>{g.blueprintName??g.blueprintKey}</h3><Context competency={g.competencyLabel??g.competencyKey} dimension={g.dimension} level={g.targetLevel} difficulty={g.definedDifficulty}/><div className="prisma-bank-counts"><span>Elegíveis: <strong>{g.eligibleItems}</strong></span><span>Composição: <strong>{g.compositionItems??"Não disponível"}</strong></span><span>Reserva adicional: <strong>{g.diversityReserve??"Não disponível"}</strong></span><span>Déficit com reserva: <strong>{g.deficit}</strong></span></div>{g.deficit>0?<><p>{g.compositionItems!==undefined&&g.eligibleItems>=g.compositionItems?"A composição está coberta; falta completar a reserva.":"Cobertura insuficiente para este modelo, incluindo a reserva."}</p><Button type="primary" onClick={()=>onGenerate(g)}>Complementar questões</Button></>:<p>Cobertura satisfeita.</p>}</article>)}{!list.length?<Empty description={!gaps.length?"Nenhum modelo ativo disponível para consultar cobertura.":situation==="pending"?"Cobertura satisfeita: nenhuma pendência nesta consulta.":"Nenhum modelo corresponde aos filtros."}/>:null}<Pagination className="prisma-bank-pager" total={list.length} pageSize={pageSize} current={Math.min(page,Math.max(1,Math.ceil(list.length/pageSize)))} onChange={setPage} showSizeChanger={false} responsive hideOnSinglePage/></>;
 }
-
-function VersionsSurface({ items }: { items: GovernedItemView[] }) {
-  const families = useMemo(() => Object.values(items.reduce<Record<string, GovernedItemView[]>>((groups, item) => { const family = item.key.replace(/-V\d+$/i, ""); (groups[family] ??= []).push(item); return groups; }, {})), [items]);
-  return <PrismaCard title="10. Versões e variantes do item"><div className="prisma-m51c-version-grid">{families.slice(0, 8).map((family) => <PrismaCard key={family[0]?.key} title={family[0]?.key}><Typography.Text>{family.length} versão(ões)</Typography.Text>{family.map((item) => <div key={item.id}><Tag color={item.state === "active" ? "green" : "default"}>{item.version}</Tag>{calibrationTag(item.calibrationState)}</div>)}</PrismaCard>)}</div></PrismaCard>;
+function RequestHistory({requests,onProposals}: {requests:ItemBankGovernanceWorkspace["requests"];onProposals:()=>void}) {
+  const [status,setStatus]=useState(""),[period,setPeriod]=useState(""),[page,setPage]=useState(1);
+  const list=requests.filter(r=>(!status||r.status===status)&&(!period||Date.parse(r.createdAt)>=Date.now()-Number(period)*86400000));
+  return <><div className="prisma-bank-filter-grid"><label>Situação<Select aria-label="Situação" placeholder="Todas" value={status||undefined} allowClear onChange={v=>{setStatus(v??"");setPage(1);}} options={Object.entries(requestSituation).map(([value,label])=>({value,label}))}/></label><label>Período<Select aria-label="Período" placeholder="Todo o histórico" value={period||undefined} allowClear onChange={v=>{setPeriod(v??"");setPage(1);}} options={[{value:"7",label:"Últimos 7 dias"},{value:"30",label:"Últimos 30 dias"},{value:"90",label:"Últimos 90 dias"}]}/></label></div>
+  {pageSlice(list,page).map(r=><article className="prisma-bank-coverage" key={r.id}><h3>{r.competencyLabel??r.competencyKey??"Contexto não disponível"}</h3><p>{date(r.createdAt)} · {scopeName(r.targetScope)} · {requestSituation[r.status]??"Situação não disponível"}</p><p>{r.quantity} solicitada(s) · {r.producedQuantity??"Quantidade não disponível"} produzida(s). {r.blueprintName}</p>{r.provider==="fake-deterministic"?<Tag>Simulação sintética de teste</Tag>:null}{r.status==="completed"?<Button onClick={onProposals}>Abrir propostas para revisão</Button>:r.status==="failed"||r.status==="budget_blocked"?<p>Solicitação não concluída. O conteúdo anterior foi preservado. Consulte a cobertura e as condições antes de confirmar um novo pedido.</p>:r.status==="queued"||r.status==="processing"?<p role="status">Solicitação em andamento. Atualize a consulta para acompanhar; consultar não dispara novamente a IA.</p>:null}<PrismaDisclosure title="Detalhes da solicitação"><p>Referência: {r.id}. Origem técnica: {r.provider==="fake-deterministic"?"Simulação determinística":"Integração externa"}.</p>{r.errorClass?<p>Categoria registrada: {r.errorClass}</p>:null}</PrismaDisclosure></article>)}{!list.length?<Empty description={requests.length?"Nenhuma solicitação corresponde aos filtros.":"Ainda não há solicitações."}/>:null}<Pagination className="prisma-bank-pager" total={list.length} pageSize={pageSize} current={Math.min(page,Math.max(1,Math.ceil(list.length/pageSize)))} onChange={setPage} showSizeChanger={false} responsive hideOnSinglePage/></>;
 }
-
-function SettingsSurface({ workspace }: { workspace: ItemBankGovernanceWorkspace }) {
-  const policy = workspace.policy; const limit = policy.monthlyLimitCents ?? 0; const percentage = limit > 0 ? Math.min(100, Math.round((policy.spentCents / limit) * 100)) : 0;
-  return <Space direction="vertical" size={16} className="prisma-m51c-full"><PrismaCard title="12. Configurações de IA e orçamento"><Descriptions column={{ xs: 1, md: 2 }} items={[{ key: "flag", label: "Geração assistida", children: <PrismaStatusTag compact label={policy.generationEnabled ? "Ativa" : "Desativada"} tone={policy.generationEnabled ? "success" : "neutral"} /> }, { key: "provider", label: "Serviço e modelo", children: policy.provider && policy.model ? `${policy.provider} / ${policy.model}` : "Não aprovados" }, { key: "review", label: "Revisão humana", children: policy.requireHumanReview ? "Obrigatória" : "Configuração inválida" }, { key: "privacy", label: "Privacidade", children: "Dados pessoais e pesquisa externa bloqueados" }, { key: "daily", label: "Limite diário", children: `${policy.maximumRequestsPerDay} pedidos` }, { key: "request", label: "Teto por pedido", children: policy.maximumCostPerRequestCents ? formatMoney(policy.maximumCostPerRequestCents) : "Não aprovado" }, { key: "cooldown", label: "Intervalo entre pedidos", children: `${policy.cooldownSeconds}s` }, { key: "version", label: "Versão da política", children: policy.version }]} /><Divider /><Typography.Text strong>Orçamento mensal</Typography.Text><Progress percent={percentage} status={limit === 0 ? "exception" : percentage >= policy.budgetAlertPercent ? "exception" : "normal"} /><Typography.Text type="secondary">{limit === 0 ? "Sem limite aprovado: chamadas externas permanecem bloqueadas." : `${formatMoney(policy.spentCents)} de ${formatMoney(limit)}`}</Typography.Text></PrismaCard><Alert message="Alterar o serviço, o modelo, a retenção ou o orçamento exige avaliação de qualidade, privacidade e aprovação específica." type="warning" showIcon /></Space>;
+function BankSettings({workspace,organizationId,operation,execute}: {workspace:ItemBankGovernanceWorkspace;organizationId:string;onRefresh:()=>Promise<void>;operation:string|null;execute:(label:string,action:()=>Promise<unknown>,success:string,after?:()=>void)=>Promise<void>}) {
+  const policy=workspace.policy,[testGap,setTestGap]=useState<string|undefined>(),[testItem,setTestItem]=useState<string|undefined>(),[toolsOpen,setToolsOpen]=useState(false);
+  const gap=workspace.gaps.find(g=>g.key===testGap),item=workspace.items.find(i=>i.id===testItem);
+  const money=(c:number)=>new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL"}).format(c/100);
+  return <><p>Consulta administrativa da política do banco. A administração central gerencia configuração de backend e limites pelo fluxo controlado de operação. Esta tela não altera políticas.</p><Descriptions column={{xs:1,sm:2}} items={[{key:"enabled",label:"Geração por IA",children:policy.generationEnabled?"Habilitada na política; depende da configuração operacional":"Indisponível: desativada na política"},{key:"model",label:"Serviço/modelo",children:policy.provider&&policy.model?`${policy.provider} / ${policy.model}`:"Não configurados"},{key:"review",label:"Revisão humana",children:"Obrigatória; sem opção de bypass"},{key:"daily",label:"Limite diário",children:`${policy.maximumRequestsPerDay} pedidos`},{key:"items",label:"Limite por pedido",children:`${policy.maximumItemsPerRequest} questões`},{key:"cost",label:"Teto de custo fornecedor por pedido",children:policy.maximumCostPerRequestCents?money(policy.maximumCostPerRequestCents):"Não configurado; geração indisponível"},{key:"cooldown",label:"Intervalo entre pedidos",children:formatQuestionTime(policy.cooldownSeconds)},{key:"version",label:"Versão da política",children:policy.version}]}/><Divider/><p><strong>Orçamento do fornecedor, mês corrente da política</strong></p>{policy.monthlyLimitCents?<p>{money(policy.spentCents)} registrado(s) em uso/reservas de {money(policy.monthlyLimitCents)} de limite, conforme unidade monetária da política histórica. Esse orçamento não é o saldo de Tokens Prisma.</p>:<p>Sem limite configurado. Geração por IA indisponível; nenhuma barra financeira será apresentada.</p>}<PrismaDisclosure title="Tratamento e privacidade"><p>A geração do banco usa somente contexto técnico, sem nomes, currículos ou dados de candidatos e sem pesquisa externa. Propostas são validadas e exigem decisão humana. Configuração, histórico, retenção e limites seguem a política existente do Prisma; isso não constitui certificação jurídica.</p></PrismaDisclosure>
+  <Button className="prisma-bank-admin-tools" aria-expanded={toolsOpen} onClick={()=>setToolsOpen(!toolsOpen)}>Ferramentas de teste administrativo</Button>{toolsOpen?<PrismaCard title="Teste sintético"><Alert type="warning" showIcon message="Somente simulação e prévia sintética. Não representam IA real, validação do conteúdo ou calibração empírica."/><label>Necessidade para simular<Select aria-label="Necessidade para simular" value={testGap} onChange={setTestGap} placeholder="Selecione uma necessidade" options={workspace.gaps.filter(g=>g.deficit>0).map(g=>({value:g.key,label:`${g.blueprintName??g.blueprintKey} · ${labelAssessmentDimension(g.dimension)}`}))}/></label><Button disabled={!gap||Boolean(operation)} onClick={()=>gap&&void execute("Gerando teste sintético…",()=>service.createFakeGeneration({organizationId,blueprintId:gap.blueprintId,dimension:gap.dimension,quantity:1,targetScope:"organization"}),"Uma proposta sintética de teste foi criada, sem chamada externa. Origem preservada na fila de revisão.")}>Criar uma proposta sintética</Button><Divider/><label>Questão para prévia sintética<Select aria-label="Questão para prévia sintética" value={testItem} onChange={setTestItem} placeholder="Selecione uma questão" options={workspace.items.map(i=>({value:i.id,label:i.stem}))}/></label><Button disabled={!item||Boolean(operation)} onClick={()=>item&&void execute("Atualizando prévia sintética…",()=>service.refreshSyntheticAnalytics(organizationId,item.id),"Prévia sintética atualizada; nenhuma calibração real ou dificuldade foi alterada.")}>Atualizar prévia sintética</Button></PrismaCard>:null}</>;
 }
-
-function ItemTable({ items, onSelect }: { items: GovernedItemView[]; onSelect: (item: GovernedItemView) => void }) {
-  return <Table className="prisma-responsive-table prisma-item-bank-table" dataSource={items} pagination={{ pageSize: 10 }} rowKey="id" onRow={(item) => ({ onClick: () => onSelect(item) })} tableLayout="fixed" columns={[{ title: "Código", dataIndex: "key", ellipsis: true, width: 130 }, { title: "Dimensão", dataIndex: "dimension", render: labelAssessmentDimension, width: 170 }, { title: "Dificuldade", dataIndex: "definedDifficulty", render: difficultyLabel, responsive: ["sm"], width: 110 }, { title: "Versão", dataIndex: "version", responsive: ["xl"], width: 80 }, { title: "Uso", dataIndex: "applicationCount", responsive: ["lg"], width: 70 }, { title: "Acerto", dataIndex: "correctRate", render: (value) => value === null ? "-" : `${Math.round(value * 100)}%`, responsive: ["lg"], width: 80 }, { title: "Calibração", dataIndex: "calibrationState", render: calibrationTag, responsive: ["md"], width: 150 }, { title: "Status", dataIndex: "state", render: statusTag, width: 110 }]} />;
-}
-
-function ItemAnalyticsDrawer({ item, onClose }: { item: GovernedItemView | null; onClose: () => void }) {
-  const correctPercent = item?.correctRate === null || item?.correctRate === undefined ? null : Math.round(item.correctRate * 100);
-  return <Drawer onClose={onClose} open={Boolean(item)} title="Desempenho do item" width={520}>{item ? <Space direction="vertical" size={16} className="prisma-m51c-full"><Typography.Title level={4}>{item.key}</Typography.Title><Typography.Paragraph>{item.stem}</Typography.Paragraph><div className="prisma-m51c-stat-grid"><Statistic title="Aplicações" value={item.applicationCount} /><PrismaMetric suffix="%" title="Taxa de acerto" value={correctPercent} /><PrismaMetric suffix=" s" title="Tempo mediano" value={item.medianTimeSeconds} /></div>{correctPercent === null ? null : <Progress percent={correctPercent} />}<Descriptions column={1} items={[{ key: "defined", label: "Dificuldade definida", children: difficultyLabel(item.definedDifficulty) }, { key: "observed", label: "Dificuldade observada", children: item.observedDifficulty ?? "Sem amostra real suficiente" }, { key: "calibration", label: "Estado de calibração", children: calibrationTag(item.calibrationState) }]} /><Alert message="Métricas apoiam revisão humana. Elas não alteram automaticamente dificuldade, status ou decisão sobre Pessoas." type="info" showIcon /></Space> : null}</Drawer>;
-}
-
-function statusTag(value: unknown) { const status = String(value); const success = ["active", "approved", "completed", "published"].includes(status); const danger = ["failed", "rejected", "compromised", "validation_failed"].includes(status); const labels: Record<string, string> = { active: "Ativo", approved: "Aprovado", completed: "Concluído", published: "Publicado", proposed: "Proposto", duplicate_candidate: "Possível duplicidade", validation_failed: "Validação falhou", in_review: "Em revisão", queued: "Na fila", rejected: "Rejeitado", failed: "Falhou", compromised: "Comprometido", superseded: "Substituído", inactive: "Inativo", retired: "Retirado" }; return <PrismaStatusTag compact label={labels[status] ?? status.replaceAll("_", " ")} tone={success ? "success" : danger ? "danger" : "warning"} />; }
-function calibrationTag(value: GovernedItemView["calibrationState"]) { const labels = { uncalibrated: "Não calibrada", collecting_data: "Coletando dados", calibration_eligible: "Elegível para calibração", calibrated: "Calibrada", calibration_review_required: "Revisão necessária" }; const tones: Record<GovernedItemView["calibrationState"], PrismaStatusTone> = { uncalibrated: "neutral", collecting_data: "info", calibration_eligible: "purple", calibrated: "success", calibration_review_required: "warning" }; return <PrismaStatusTag compact label={labels[value]} tone={tones[value]} />; }
-function difficultyLabel(value: GovernedItemView["definedDifficulty"]) { return ({ low: "Baixa", medium: "Média", high: "Alta" })[value]; }
-function formatRate(value: number | null) { return value === null ? "Aguardando dados" : `${Math.round(value * 100)}%`; }
-function formatMoney(cents: number) { return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(cents / 100); }

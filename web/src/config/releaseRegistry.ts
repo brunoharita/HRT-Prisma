@@ -98,7 +98,7 @@ export const PRISMA_RELEASE_HISTORY = [{
   firstDeliveryNumber: 0,
   deliveries: ["2.3.0: Avaliação para Posição, convites e histórico genérico de IA", "2.3.1: seta de retorno à tela anterior e atalhos de destino preservados", "2.3.2: prova comum por processo seletivo, montagem automática e convites em lote", "2.3.4: cards compactos de Pessoas e acompanhamento atual identificado", "2.3.5: identificação legível no Kanban e avaliação com seções guiadas 4A"],
   skippedDeliveryNumbers: [3],
-} , {productGeneration:2,movement:4,firstDeliveryNumber:0,deliveries:["2.4.0: Tokens Prisma, franquia mensal, pacotes e gestão de consumo", "2.4.1: Foco operacional e acesso contextual a fontes, histórico e diagnóstico"]}] as const satisfies readonly ProductMovementRelease[];
+} , {productGeneration:2,movement:4,firstDeliveryNumber:0,deliveries:["2.4.0: Tokens Prisma, franquia mensal, pacotes e gestão de consumo", "2.4.1: Foco operacional e acesso contextual a fontes, histórico e diagnóstico"]}, {productGeneration:2,movement:5,firstDeliveryNumber:0,deliveries:["2.5.0: Banco de questões, consulta completa e revisão humana contextual"]}] as const satisfies readonly ProductMovementRelease[];
 
 export function calculateProductRelease(history: readonly ProductMovementRelease[]) {
   const current = history.at(-1);

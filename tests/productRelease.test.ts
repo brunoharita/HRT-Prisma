@@ -10,26 +10,27 @@ test("accepted deliveries determine the displayed version and a new movement res
   assert.equal(current.deliveries.length, 2);
 });
 
-test("registro oficial expõe v2.4.1 e preserva entregas históricas", () => {
-  assert.equal(PRISMA_RELEASE.displayVersion, "v2.4.1");
-  assert.equal(PRISMA_RELEASE.movement, 4);
-  assert.equal(PRISMA_RELEASE.delivery, 1);
-  assert.equal(calculateProductRelease(PRISMA_RELEASE_HISTORY.slice(0, -1)).version, "2.3.5");
-  const selection = PRISMA_RELEASE_HISTORY.at(-2)!;
+test("registro oficial expõe v2.5.0 e preserva entregas históricas", () => {
+  assert.equal(PRISMA_RELEASE.displayVersion, "v2.5.0");
+  assert.equal(PRISMA_RELEASE.movement, 5);
+  assert.equal(PRISMA_RELEASE.delivery, 0);
+  assert.equal(calculateProductRelease(PRISMA_RELEASE_HISTORY.slice(0, -1)).version, "2.4.1");
+  assert.equal(calculateProductRelease(PRISMA_RELEASE_HISTORY.slice(0, -2)).version, "2.3.5");
+  const selection = PRISMA_RELEASE_HISTORY.at(-3)!;
   assert.ok("skippedDeliveryNumbers" in selection);
   assert.deepEqual(selection.skippedDeliveryNumbers, [3]);
   assert.equal(calculateProductRelease([{ ...selection, deliveries: selection.deliveries.slice(0, 4) }]).version, "2.3.4");
   assert.equal(calculateProductRelease([{ ...selection, skippedDeliveryNumbers: [], deliveries: selection.deliveries.slice(0, 3) }]).version, "2.3.2");
-  const launch = PRISMA_RELEASE_HISTORY.at(-3)!;
+  const launch = PRISMA_RELEASE_HISTORY.at(-4)!;
   assert.equal(calculateProductRelease([{...launch,deliveries:launch.deliveries.slice(0,1)}]).version, "2.2.0");
-  const current = PRISMA_RELEASE_HISTORY.at(-4)!;
+  const current = PRISMA_RELEASE_HISTORY.at(-5)!;
   assert.equal(calculateProductRelease([{...current,skippedDeliveryNumbers:[],deliveries:current.deliveries.slice(0,1)}]).version, "2.1.0");
   assert.equal(calculateProductRelease([{...current,skippedDeliveryNumbers:[],deliveries:current.deliveries.slice(0,2)}]).version, "2.1.1");
   assert.equal(calculateProductRelease([{...current,skippedDeliveryNumbers:[],deliveries:current.deliveries.slice(0,3)}]).version, "2.1.2");
   assert.equal(calculateProductRelease([{...current,deliveries:[...current.deliveries,"Next"]}]).version, "2.1.8");
-  assert.equal(calculateProductRelease(PRISMA_RELEASE_HISTORY.slice(0, -2)).version, "2.2.1");
-  assert.equal(calculateProductRelease(PRISMA_RELEASE_HISTORY.slice(0, -3)).version, "2.1.7");
-  assert.equal(calculateProductRelease(PRISMA_RELEASE_HISTORY.slice(0, -4)).version, "2.0.12");
+  assert.equal(calculateProductRelease(PRISMA_RELEASE_HISTORY.slice(0, -3)).version, "2.2.1");
+  assert.equal(calculateProductRelease(PRISMA_RELEASE_HISTORY.slice(0, -4)).version, "2.1.7");
+  assert.equal(calculateProductRelease(PRISMA_RELEASE_HISTORY.slice(0, -5)).version, "2.0.12");
   assert.equal(calculateProductRelease([{productGeneration:2,movement:1,firstDeliveryNumber:0,deliveries:["Launch","Next"]}]).version,"2.1.1");
   assert.throws(() => calculateProductRelease([{productGeneration:2,movement:1,firstDeliveryNumber:2 as 1,deliveries:["Invalid"]}]), /Invalid official/);
 });

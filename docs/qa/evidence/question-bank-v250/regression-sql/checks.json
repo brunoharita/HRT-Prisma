@@ -1,0 +1,15 @@
+{
+  "environment": "Owned LOCAL PostgreSQL17 schema-only clone; technical seed only; removed after run",
+  "baselineLimitation": "Original disposable baseline has a missing physical profile_synthesis_jobs relation file, observed during deletion regression; it was preserved and not repaired.",
+  "checks": [
+    {
+      "name": "question-bank plus legacy/shared process, canonical bank, portal/correction and preservation SQL",
+      "pass": true,
+      "sqlChecks": 131
+    },
+    {
+      "name": "two independent connections approve/publish exactly one review and one bank version",
+      "pass": true
+    }
+  ]
+}

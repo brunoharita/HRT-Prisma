@@ -435,8 +435,11 @@ function knownDomainOperationError(error: ReviewOperationError, technicalMessage
   if (/m51c_generation_need_not_available/.test(technicalMessage)) {
     return asOperationError(error, "Esta lacuna já foi atendida ou está sendo processada. Atualize a lista antes de criar outro pedido.", "stale-state", "reload");
   }
+  if (/m51c_pending_proposals_review_required|m51c_generation_in_progress/.test(technicalMessage)) {
+    return asOperationError(error, "Esta necessidade possui geração em andamento ou propostas aguardando revisão. Consulte o histórico e a fila Para revisar antes de confirmar outro pedido.", "stale-state", "reload");
+  }
   if (/m51c_ai_generation_disabled/.test(technicalMessage)) {
-    return asOperationError(error, "A geração por IA está desativada para esta organização. Ative-a nas configurações antes de criar o pedido.", "validation", "none");
+    return asOperationError(error, "A geração por IA está desativada para esta organização. A administração central precisa configurar a política do banco antes de um novo pedido.", "validation", "none");
   }
   if (/m51c_competency_not_allowed/.test(technicalMessage)) {
     return asOperationError(error, "A competência selecionada não está autorizada pela política de geração desta organização.", "authorization", "none");
@@ -462,11 +465,20 @@ function knownDomainOperationError(error: ReviewOperationError, technicalMessage
   if (/m51c_no_proposals_selected/.test(technicalMessage)) {
     return asOperationError(error, "Selecione ao menos um item aprovado para publicar.", "validation", "review-fields");
   }
+  if (/m51c_review_reason_required|m51c_exception_reason_required/.test(technicalMessage)) {
+    return asOperationError(error, "Explique o motivo da decisão ou da exceção na Justificativa da decisão (mínimo 10 caracteres). Seu rascunho foi preservado.", "validation", "review-fields");
+  }
+  if (/m51c_invalid_proposal_content/.test(technicalMessage)) {
+    return asOperationError(error, "A estrutura da questão não permite disponibilização. Revise enunciado, alternativas, gabarito e explicação e solicite ajustes antes de aprovar.", "validation", "review-fields");
+  }
   if (/m51c_invalid_review/.test(technicalMessage)) {
     return asOperationError(error, "Escolha aprovar, rejeitar ou solicitar ajustes e registre a decisão antes de continuar.", "validation", "review-fields");
   }
   if (/m51c_proposal_not_found|m51c_published_item_not_found|m51c_item_not_available/.test(technicalMessage)) {
     return asOperationError(error, "O item selecionado não está mais disponível. Atualize o banco de itens para carregar o estado atual.", "stale-state", "reload");
+  }
+  if (/m51c_proposal_locked/.test(technicalMessage)) {
+    return asOperationError(error, "Esta proposta está encerrada e não aceita nova decisão. Atualize a fila para consultar o registro e seu histórico.", "stale-state", "reload");
   }
   if (/m51c_published_proposal_locked|m51c_append_only_ledger/.test(technicalMessage)) {
     return asOperationError(error, "Este item já foi publicado e seu histórico não pode ser alterado. Crie uma nova versão para propor mudanças.", "validation", "none");

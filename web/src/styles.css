@@ -7087,3 +7087,71 @@ textarea {
 .prisma-operation-help>.prisma-disclosure-body,.prisma-operation-help>div{margin-top:12px}
 .prisma-disclosure summary:focus-visible{outline:3px solid #155eef;outline-offset:3px}
 @media(max-width:760px){.prisma-m81-home .prisma-dashboard-grid{grid-template-columns:1fr}.prisma-person-compact-access{align-self:stretch}}
+/* Banco de questões: content first, preserved list context and full mobile detail. */
+.prisma-question-bank { --bank-gap: 16px; }
+.prisma-question-bank .ant-tabs-nav { margin-bottom: 12px; }
+.prisma-bank-full { width: 100%; }
+.prisma-bank-muted { color: var(--prisma-text-secondary, #52637a); font-size: 13px; line-height: 1.5; margin: 6px 0; }
+.prisma-bank-filter-grid { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; margin: 12px 0; }
+.prisma-bank-filter-grid > label { display: flex; flex-direction: column; gap: 6px; flex: 1 1 155px; min-width: 0; font-size: 13px; }
+.prisma-bank-filter-grid > .prisma-bank-search { flex: 2 1 280px; }
+.prisma-bank-filter-grid .ant-select, .prisma-bank-filter-grid .ant-input-number { width: 100%; }
+.prisma-bank-applied { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 8px 0; }
+.prisma-bank-applied .ant-tag { white-space: normal; overflow-wrap: anywhere; }
+.prisma-bank-row { display: flex; align-items: center; gap: 18px; padding: 18px 0; border-bottom: 1px solid #e4e9f0; }
+.prisma-bank-row > div { flex: 1; min-width: 0; }
+.prisma-bank-row > .ant-btn { flex-shrink: 0; }
+.prisma-bank-row .prisma-bank-stem { font-weight: 600; font-size: 15px; line-height: 1.6; margin-bottom: 4px; color: #17304f; }
+.prisma-bank-pager { margin-top: 20px; }
+.prisma-bank-context { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px 20px; font-size: 13px; color: #52637a; }
+.prisma-bank-context span { overflow-wrap: anywhere; }
+.prisma-bank-content h4 { line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; }
+.prisma-bank-options { padding: 0; list-style: none; margin: 18px 0; }
+.prisma-bank-options li { display: flex; gap: 12px; padding: 12px 14px; border: 1px solid #e0e7ef; border-radius: 8px; margin: 8px 0; align-items: start; }
+.prisma-bank-options li > span:nth-child(2) { flex: 1; min-width: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.prisma-bank-option-id { flex-shrink: 0; font-weight: 600; }
+.prisma-bank-explanation { padding: 14px 16px; background: #f5f8fc; border-radius: 8px; }
+.prisma-bank-explanation p { margin: 6px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.prisma-bank-footer { display: flex; align-items: center; justify-content: end; gap: 12px; flex-wrap: wrap; border-top: 1px solid #e1e7ef; padding-top: 20px; margin-top: 20px; width: 100%; }
+.prisma-bank-rationale { display: flex; flex-direction: column; gap: 6px; width: 100%; }
+.prisma-bank-comparison { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 24px; border-bottom: 1px solid #e1e7ef; padding: 16px 0; }
+.prisma-bank-comparison > div { min-width: 0; }
+.prisma-bank-history { padding-left: 18px; }
+.prisma-bank-history li { padding: 10px 0; border-bottom: 1px solid #e1e7ef; overflow-wrap: anywhere; }
+.prisma-bank-coverage { padding: 18px 0; border-bottom: 1px solid #e1e7ef; }
+.prisma-bank-coverage h3 { font-size: 16px; margin-bottom: 12px; }
+.prisma-bank-counts { display: flex; flex-wrap: wrap; gap: 12px 24px; margin-top: 12px; font-size: 13px; }
+.prisma-bank-drawer .ant-drawer-content-wrapper { max-width: 100vw; }
+.prisma-bank-drawer .ant-descriptions-item-content { overflow-wrap: anywhere; }
+.prisma-bank-checkbox { flex-shrink: 0; padding: 10px 0; }
+.prisma-bank-checkbox input { width: 18px; height: 18px; accent-color: #1677ff; }
+.prisma-bank-admin-tools { margin: 18px 0; }
+.prisma-bank-drawer .prisma-disclosure { width: 100%; }
+@media (max-width: 600px) {
+  .prisma-question-bank .ant-tabs-nav { flex-wrap: wrap; gap: 8px; }
+  .prisma-question-bank .ant-tabs-extra-content { width: 100%; }
+  .prisma-bank-row { flex-wrap: wrap; gap: 12px; align-items: start; }
+  .prisma-bank-row > div { flex-basis: calc(100% - 35px); }
+  .prisma-bank-row > .ant-btn { width: 100%; }
+  .prisma-bank-context, .prisma-bank-comparison { grid-template-columns: minmax(0,1fr); }
+  .prisma-bank-footer { align-items: stretch; flex-direction: column; }
+  .prisma-bank-footer > .ant-btn { width: 100%; white-space: normal; height: auto; min-height: 34px; }
+  .prisma-bank-drawer .ant-drawer-body { padding: 18px 16px; }
+  .prisma-bank-drawer .ant-drawer-header { padding: 14px 12px; }
+  .prisma-bank-drawer .ant-drawer-header-title { min-width: 0; }
+  .prisma-bank-drawer .ant-drawer-title { font-size: 15px; }
+  .prisma-bank-drawer .ant-drawer-extra .ant-btn { font-size: 12px; padding-inline: 8px; }
+  .prisma-bank-options li { flex-wrap: wrap; padding: 10px; gap: 8px; }
+  .prisma-bank-filter-grid > label { flex-basis: 100%; }
+}
+
+.prisma-bank-navigation { display: flex; align-items: center; gap: 16px; }
+.prisma-bank-navigation > .ant-tabs { flex: 1; min-width: 0; }
+@media (max-width: 600px) {
+  .prisma-bank-navigation { flex-direction: column; align-items: stretch; gap: 0; margin-bottom: 12px; }
+  .prisma-bank-navigation > .ant-tabs { width: 100%; }
+  .prisma-bank-navigation > button { align-self: flex-end; }
+}
+
+.prisma-bank-drawer .ant-tag, .prisma-bank-modal .ant-tag { white-space: normal; overflow-wrap: anywhere; max-width: 100%; }
+.prisma-bank-full > .ant-space-item { min-width: 0; }

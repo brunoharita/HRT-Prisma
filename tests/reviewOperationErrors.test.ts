@@ -202,3 +202,10 @@ test("Supabase service boundaries cannot throw raw backend messages", async () =
   }
   assert.deepEqual(violations, [], `Mensagens técnicas expostas em: ${violations.join(", ")}`);
 });
+
+ test("Banco de questões traduz pendências, motivos e estrutura sem expor códigos",()=>{
+  assert.match(supabaseOperationError({message:"M51C_PENDING_PROPOSALS_REVIEW_REQUIRED"},"Falha.").message,/Para revisar/);
+  for(const message of ["M51C_REVIEW_REASON_REQUIRED","M51C_EXCEPTION_REASON_REQUIRED"])assert.match(supabaseOperationError({message},"Falha.").message,/Justificativa da decisão/);
+  assert.match(supabaseOperationError({message:"M51C_INVALID_PROPOSAL_CONTENT"},"Falha.").message,/estrutura/);
+  assert.equal(supabaseOperationError({message:"M51C_PROPOSAL_LOCKED"},"Falha.").recovery,"reload");
+ });

@@ -1,5 +1,7 @@
 # Catálogo de contratos
 
+Banco de questões 2.5.0: delta `question-bank-human-review-2.0.0`, com justificativa vazia permitida somente na aprovação comum; motivos nas exceções/rejeição/ajustes, autoria/snapshot/auditoria obrigatórios. `approve_and_publish_question_bank_proposal` compõe aprovação/publicação existentes em transação idempotente, sem novos papéis. Workspace M5.1C ganha campos aditivos completos e permissões calculadas no servidor; nulos de snapshot preservados. Request externo mantém schema/prompt histórico e acrescenta `tokenQuoteId`, utilizando `prisma-tokens-1.0.0` e a tarifa existente de questões. Replays não invocam novamente o fornecedor. Owner: `docs/product/question-bank.md`; acordo1.0.0 e AoT2.5.0.
+
 `position-follow-up-1.0.0` (v2.2.0): processo/entrada/histórico por organização e Posição, independente do resultado profissional. Duas RPCs autenticadas, campos operacionais validados, revisão otimista, inclusão vinculada às versões consultadas e histórico atômico. Score vem exclusivamente do snapshot estável; notas/decisões/entrevistas não recalculam. ADR-079, acordo1.0.0 e AoT2.2.0 especificam autoridade/UX/limites; contratos de matching preservados.
 
 Delta operacional de 03/10/2026: ADR-075 e `parser-ia-kvm2-1.0.0` hospedam o Parser privado na KVM2; os contratos de Parser, transporte e readiness preservam versões. Referências a PC/túnel abaixo são históricas do piloto. Estado efetivo no AoT `docs/qa/aot-parser-ia-kvm2.md`.
@@ -116,3 +118,5 @@ Tipos TypeScript provam contrato de código local. Migration prova intenção ex
 Não existe API HTTP nem event bus no estado atual. O M2-C persiste eventos operacionais/auditoria no banco, mas eles não constituem um barramento público. Nenhum consumidor externo deve assumir sua existência.
 
 O M5.1B autoriza somente execução sintética local/QA pela fronteira tokenizada. Não autoriza Pessoas reais, provider externo, produção, geração por IA, proctoring, certificação ou decisão automática.
+
+Boundary externo `m51c-assessment-item-generator-2.0.0`, requisição `m51c-assessment-item-generation-request-2.0.0`: cotação explícita e destino válido obrigatórios. Requisição1.0.0 é aceita somente com os mesmos campos obrigatórios e guardas; cliente antigo sem cotação falha sem cobrar. Schema de proposta/prompt históricos permanecem. Uso do fornecedor ausente não vira zero nem entrega gratuita; a falha libera reserva comercial e mantém histórico técnico do custo conhecido ou indisponível.

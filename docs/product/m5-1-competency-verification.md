@@ -260,3 +260,7 @@ Métricas de qualidade: cobertura de blueprint, distribuição de dificuldade, t
 - Resultado bruto, integridade, qualidade e confiança são eixos distintos.
 - Sem proctoring invasivo no MVP.
 - Pessoa não vira Usuário para realizar assessment.
+
+## Banco de questões 2.5.0
+
+A experiência M5.1C foi reorganizada em Questões e Para revisar, com detalhe completo, comparação, cobertura e administração secundárias. Revisão comum dispensa justificativa genérica, mantendo motivo nas exceções, rejeição e ajustes, auditorias separadas e autoridade existente. Geração reaproveita o backend do banco e o ledger comercial existente; política produtiva desativada permanece indisponível. Owner atual da experiência: `docs/product/question-bank.md`; acordo e evidências em `docs/qa/aot-question-bank-v250.md`. O contrato histórico de alternativas permanece distinto do contrato da avaliação por processo.

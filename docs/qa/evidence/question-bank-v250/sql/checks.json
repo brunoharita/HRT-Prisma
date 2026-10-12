@@ -1,0 +1,11 @@
+{
+  "environment": {
+    "host": "127.0.0.1",
+    "port": "55479",
+    "user": "prisma_v202_qa",
+    "database": "import_evidence_v202"
+  },
+  "transaction": "rollback, synthetic fixtures only",
+  "checks": 52,
+  "exitCode": 0
+}

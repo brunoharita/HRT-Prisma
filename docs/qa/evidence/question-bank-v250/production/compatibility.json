@@ -1,0 +1,16 @@
+{
+  "project": "ioldpnqqvobprjiontre",
+  "verifiedAt": "2026-10-12",
+  "canonicalDefinitionsEqualToLocalBaseline": [
+    "complete_m51c_external_generation",
+    "fail_m51c_external_generation",
+    "load_m51c_item_bank_workspace",
+    "m51c_require_governance",
+    "publish_m51c_approved_proposals",
+    "request_m51c_item_generation",
+    "review_m51c_item_proposal"
+  ],
+  "method": "Compare live pg_get_functiondef with LOCAL disposable baseline after removing formatting whitespace and identifier quotes; raw definitions kept only in ignored tmp for rollback review.",
+  "edgeBaseline": {"version": 7, "verifyJwt": true, "files": ["supabase/functions/assessment-item-generator/index.ts", "src/infrastructure/aiHistory.ts"]},
+  "limits": "Definition compatibility is not authenticated real-user journey evidence."
+}

@@ -143,7 +143,7 @@ const routes: AppRoute[] = [
   },
   {
     path: "/item-bank",
-    label: "Banco de Itens",
+    label: "Banco de questões",
     icon: <DatabaseOutlined />,
     rule: { requiresAuth: true, requiresMembership: true, allowedRoles: ["super_admin", "owner", "admin"] },
   },

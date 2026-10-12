@@ -1,8 +1,8 @@
 import {withAiHistory} from "../../../src/infrastructure/aiHistory.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.112.3";
 
-const BOUNDARY_VERSION = "m51c-assessment-item-generator-1.0.0";
-const REQUEST_SCHEMA_VERSION = "m51c-assessment-item-generation-request-1.0.0";
+const BOUNDARY_VERSION = "m51c-assessment-item-generator-2.0.0";
+const REQUEST_SCHEMA_VERSION = "m51c-assessment-item-generation-request-2.0.0";
 const MAX_BODY_BYTES = 32 * 1024;
 const memoryRateWindow = new Map<string, number[]>();
 
@@ -13,6 +13,7 @@ interface GenerationBody {
   quantity?: number;
   targetScope?: "global" | "organization";
   idempotencyKey?: string;
+  tokenQuoteId?: string;
 }
 
 Deno.serve(async (request) => {
@@ -30,12 +31,13 @@ Deno.serve(async (request) => {
     enforceMemoryRateLimit(user.id);
     requireEnabledConfiguration();
     const body = await request.json() as GenerationBody;
-    if (body.schemaVersion !== REQUEST_SCHEMA_VERSION) throw new HttpError(409, "Versão de requisição não suportada.");
+    if (![REQUEST_SCHEMA_VERSION,"m51c-assessment-item-generation-request-1.0.0"].includes(body.schemaVersion??"")) throw new HttpError(409, "Versão de requisição não suportada.");
     const organizationId = requireUuid(body.organizationId, "organizationId");
     const generationNeedId = requireUuid(body.generationNeedId, "generationNeedId");
     const quantity = Number(body.quantity ?? 0);
     if (!Number.isInteger(quantity) || quantity < 1 || quantity > 20) throw new HttpError(400, "Quantidade inválida.");
-    const targetScope = body.targetScope === "global" ? "global" : "organization";
+    if (body.targetScope !== "global" && body.targetScope !== "organization") throw new HttpError(400, "Destino inválido.");
+    const targetScope = body.targetScope;
     const estimatedCostCents = quantity * readPositiveIntegerEnv("M51C_ESTIMATED_COST_CENTS_PER_ITEM");
     const idempotencyKey = requireIdempotencyKey(body.idempotencyKey);
     const { data: queued, error: queueError } = await userClient.rpc("request_m51c_item_generation", {
@@ -45,16 +47,18 @@ Deno.serve(async (request) => {
       p_target_scope: targetScope,
       p_estimated_cost_cents: estimatedCostCents,
       p_idempotency_key: idempotencyKey,
+      p_token_quote_id: requireUuid(body.tokenQuoteId, "tokenQuoteId"),
     });
     if (queueError) throw queueError;
     const queuedResult = asRecord(queued);
     const requestId = String(queuedResult.requestId ?? "");
-    if (queuedResult.replayed === true && queuedResult.status === "completed") {
-      return jsonResponse(200, { requestId, status: "completed", replayed: true, boundaryVersion: BOUNDARY_VERSION }, headers);
+    if (queuedResult.replayed === true) {
+      return jsonResponse(200, { requestId, status: queuedResult.status, replayed: true, boundaryVersion: BOUNDARY_VERSION }, headers);
     }
     const serviceClient = createServiceClient();
     try {
       const context = await readGenerationContext(serviceClient, requestId, organizationId);
+      if (context.request.model !== readRequiredEnv("M51C_GENERATION_MODEL")) throw new HttpError(409, "Modelo configurado diverge da política aprovada.");
       const bytes=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(JSON.stringify({need:context.need,directives:context.request.directives})));
       const providerResult = await withAiHistory(serviceClient,{organizationId,functionName:"assessment_item_generation",operationId:requestId,sourceVersion:String(context.request.prompt_version),inputFingerprint:Array.from(new Uint8Array(bytes),b=>b.toString(16).padStart(2,"0")).join(""),actorId:user.id},fetcher=>generateProposals(context,quantity,fetcher));
       const { data, error } = await serviceClient.rpc("complete_m51c_external_generation", {
@@ -120,8 +124,9 @@ async function generateProposals(context: Awaited<ReturnType<typeof readGenerati
   if (!Array.isArray(parsed.items) || parsed.items.length !== quantity) throw new HttpError(502, "Provider retornou quantidade incompatível.");
   validateProviderItems(parsed.items, context);
   const usage = asRecord(payload.usage);
-  const inputTokens = Number(usage.input_tokens ?? 0);
-  const outputTokens = Number(usage.output_tokens ?? 0);
+  const inputTokens = usage.input_tokens;
+  const outputTokens = usage.output_tokens;
+  if (typeof inputTokens !== "number" || typeof outputTokens !== "number" || !Number.isSafeInteger(inputTokens) || !Number.isSafeInteger(outputTokens) || inputTokens < 0 || outputTokens < 0) throw new HttpError(502, "Uso do fornecedor não disponível; custo não pode ser calculado com segurança.");
   const costCents = Math.ceil((inputTokens * readPositiveIntegerEnv("M51C_INPUT_COST_CENTS_PER_MILLION")
     + outputTokens * readPositiveIntegerEnv("M51C_OUTPUT_COST_CENTS_PER_MILLION")) / 1_000_000);
   return { items: parsed.items, usage: { inputTokens, outputTokens, costCents, provider: "openai-responses", model: readRequiredEnv("M51C_GENERATION_MODEL"), providerRequestId: String(payload.id ?? "") } };

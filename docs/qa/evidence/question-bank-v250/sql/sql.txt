@@ -1,0 +1,543 @@
+BEGIN
+DO
+CREATE TABLE
+CREATE INDEX
+ALTER TABLE
+CREATE INDEX
+ALTER TABLE
+DROP POLICY
+CREATE POLICY
+CREATE POLICY
+REVOKE
+GRANT
+REVOKE
+CREATE FUNCTION
+REVOKE
+CREATE FUNCTION
+REVOKE
+GRANT
+COMMENT
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE INDEX
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE INDEX
+CREATE TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+REVOKE
+REVOKE
+INSERT 0 3
+INSERT 0 3
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+REVOKE
+GRANT
+REVOKE
+ALTER FUNCTION
+ALTER FUNCTION
+REVOKE
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE FUNCTION
+REVOKE
+CREATE FUNCTION
+ALTER FUNCTION
+ALTER FUNCTION
+REVOKE
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE FUNCTION
+ALTER FUNCTION
+ALTER FUNCTION
+REVOKE
+CREATE FUNCTION
+REVOKE
+GRANT
+ALTER FUNCTION
+ALTER FUNCTION
+REVOKE
+CREATE FUNCTION
+REVOKE
+GRANT
+ALTER FUNCTION
+ALTER FUNCTION
+REVOKE
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+INSERT 0 2
+INSERT 0 2
+INSERT 0 6
+INSERT 0 6
+INSERT 0 5
+CREATE TABLE
+GRANT
+SELECT 15
+SET
+ qb_reject
+-----------
+
+(1 row)
+
+ qb_reject
+-----------
+
+(1 row)
+
+RESET
+SET
+ set_config
+------------
+
+(1 row)
+
+ qb_reject
+-----------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ d0fe3fef-03e6-3907-1c94-1540c65f2db1
+(1 row)
+
+ qb_reject
+-----------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ d234af08-9db4-a477-b967-6c216507b18f
+(1 row)
+
+ qb_reject
+-----------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ dcc51257-1d62-b5d8-4d88-39b92b59e3aa
+(1 row)
+
+ qb_reject
+-----------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 57ff3026-e9b6-019f-15ae-ff1c3da766db
+(1 row)
+
+INSERT 0 1
+ qb_assert
+-----------
+
+(1 row)
+
+ qb_assert
+-----------
+
+(1 row)
+
+ qb_assert
+-----------
+
+(1 row)
+
+ qb_assert
+-----------
+
+(1 row)
+
+INSERT 0 1
+INSERT 0 1
+ qb_assert
+-----------
+
+(1 row)
+
+ qb_reject
+-----------
+
+(1 row)
+
+ qb_reject
+-----------
+
+(1 row)
+
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+ qb_assert
+-----------
+
+(1 row)
+
+ qb_assert
+-----------
+
+(1 row)
+
+ qb_reject
+-----------
+
+(1 row)
+
+ qb_reject
+-----------
+
+(1 row)
+
+RESET
+UPDATE 1
+UPDATE 1
+SET
+ qb_reject
+-----------
+
+(1 row)
+
+ qb_reject
+-----------
+
+(1 row)
+
+RESET
+UPDATE 1
+SET
+ qb_reject
+-----------
+
+(1 row)
+
+RESET
+ qb_assert
+-----------
+
+(1 row)
+
+UPDATE 1
+SET
+ qb_reject
+-----------
+
+(1 row)
+
+INSERT 0 1
+ qb_assert
+-----------
+
+(1 row)
+
+ qb_assert
+-----------
+
+(1 row)
+
+ qb_reject
+-----------
+
+(1 row)
+
+                                    review_m51c_item_proposal
+-------------------------------------------------------------------------------------------------
+ {"status": "approved", "replayed": false, "proposalId": "63d72180-d105-44b2-abbe-84e6adf70865"}
+(1 row)
+
+ qb_reject
+-----------
+
+(1 row)
+
+RESET
+ qb_assert
+-----------
+
+(1 row)
+
+ qb_assert
+-----------
+
+(1 row)
+
+ qb_assert
+-----------
+
+(1 row)
+
+ qb_assert
+-----------
+
+(1 row)
+
+ qb_assert
+-----------
+
+(1 row)
+
+ qb_assert
+-----------
+
+(1 row)
+
+SET
+              set_config
+--------------------------------------
+ 000e73cd-327f-9fb1-5995-56963a9973d0
+(1 row)
+
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+ qb_assert
+-----------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 57ff3026-e9b6-019f-15ae-ff1c3da766db
+(1 row)
+
+ qb_reject
+-----------
+
+(1 row)
+
+ qb_reject
+-----------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ dcc51257-1d62-b5d8-4d88-39b92b59e3aa
+(1 row)
+
+ qb_assert
+-----------
+
+(1 row)
+
+ qb_reject
+-----------
+
+(1 row)
+
+RESET
+UPDATE 1
+UPDATE 1
+SET
+              set_config
+--------------------------------------
+ 57ff3026-e9b6-019f-15ae-ff1c3da766db
+(1 row)
+
+ qb_reject
+-----------
+
+(1 row)
+
+INSERT 0 1
+INSERT 0 1
+ qb_assert
+-----------
+
+(1 row)
+
+RESET
+ qb_assert
+-----------
+
+(1 row)
+
+SET
+INSERT 0 1
+                                      complete_m51c_external_generation
+-------------------------------------------------------------------------------------------------------------
+ {"replayed": true, "costCents": 1, "requestId": "ab74551b-7bf4-4270-a7f2-b222239b4ec3", "proposalCount": 1}
+(1 row)
+
+RESET
+ qb_assert
+-----------
+
+(1 row)
+
+ qb_assert
+-----------
+
+(1 row)
+
+ qb_assert
+-----------
+
+(1 row)
+
+ qb_assert
+-----------
+
+(1 row)
+
+UPDATE 1
+SET
+              set_config
+--------------------------------------
+ 57ff3026-e9b6-019f-15ae-ff1c3da766db
+(1 row)
+
+ qb_reject
+-----------
+
+(1 row)
+
+ qb_reject
+-----------
+
+(1 row)
+
+INSERT 0 1
+RESET
+UPDATE 1
+SET
+ qb_reject
+-----------
+
+(1 row)
+
+RESET
+UPDATE 1
+UPDATE 1
+SET
+ qb_reject
+-----------
+
+(1 row)
+
+RESET
+UPDATE 1
+UPDATE 1
+SET
+ qb_reject
+-----------
+
+(1 row)
+
+RESET
+UPDATE 1
+SET
+INSERT 0 1
+RESET
+SET
+                                fail_m51c_external_generation
+----------------------------------------------------------------------------------------------
+ {"status": "failed", "replayed": false, "requestId": "a1fa0236-e8e8-4698-8e36-5a5e71b4a997"}
+(1 row)
+
+                                fail_m51c_external_generation
+---------------------------------------------------------------------------------------------
+ {"status": "failed", "replayed": true, "requestId": "a1fa0236-e8e8-4698-8e36-5a5e71b4a997"}
+(1 row)
+
+RESET
+ qb_assert
+-----------
+
+(1 row)
+
+ qb_assert
+-----------
+
+(1 row)
+
+ qb_assert
+-----------
+
+(1 row)
+
+ROLLBACK
+
+psql:tmp/question-bank-local.sql:870: NOTICE:  PASS: denied 42501
+psql:tmp/question-bank-local.sql:871: NOTICE:  PASS: denied 42501
+psql:tmp/question-bank-local.sql:874: NOTICE:  PASS: denied 42501
+psql:tmp/question-bank-local.sql:876: NOTICE:  PASS: denied 42501
+psql:tmp/question-bank-local.sql:878: NOTICE:  PASS: denied 42501
+psql:tmp/question-bank-local.sql:880: NOTICE:  PASS: denied 42501
+psql:tmp/question-bank-local.sql:883: NOTICE:  PASS: owner retains company authority, policy consultation and cannot publish global
+psql:tmp/question-bank-local.sql:884: NOTICE:  PASS: authorized catalog includes actual family, full content and answer
+psql:tmp/question-bank-local.sql:885: NOTICE:  PASS: missing snapshot remains null, never zero applications/incidents
+psql:tmp/question-bank-local.sql:886: NOTICE:  PASS: coverage uses recognizable model and separates composition/reserve
+psql:tmp/question-bank-local.sql:889: NOTICE:  PASS: preparation reuses same concrete need without AI
+psql:tmp/question-bank-local.sql:890: NOTICE:  PASS: denied 42501
+psql:tmp/question-bank-local.sql:891: NOTICE:  PASS: denied M51C_GENERATION_NEED_NOT_AVAILABLE
+psql:tmp/question-bank-local.sql:896: NOTICE:  PASS: synthetic origin/destination and historical four-choice content preserved
+psql:tmp/question-bank-local.sql:897: NOTICE:  PASS: history includes context, date, requested/produced counts
+psql:tmp/question-bank-local.sql:898: NOTICE:  PASS: denied M51C_REVIEW_REASON_REQUIRED
+psql:tmp/question-bank-local.sql:899: NOTICE:  PASS: denied M51C_REVIEW_REASON_REQUIRED
+psql:tmp/question-bank-local.sql:905: NOTICE:  PASS: denied 42501
+psql:tmp/question-bank-local.sql:906: NOTICE:  PASS: denied M51C_EXCEPTION_REASON_REQUIRED
+psql:tmp/question-bank-local.sql:910: NOTICE:  PASS: denied M51C_INVALID_PROPOSAL_CONTENT
+psql:tmp/question-bank-local.sql:912: NOTICE:  PASS: failed combined operation cannot leave an approval behind
+psql:tmp/question-bank-local.sql:915: NOTICE:  PASS: denied M51C_HUMAN_REVIEW_REQUIRED
+psql:tmp/question-bank-local.sql:917: NOTICE:  PASS: explicit approve/dispose accepts empty ordinary rationale
+psql:tmp/question-bank-local.sql:918: NOTICE:  PASS: replay returns same publication
+psql:tmp/question-bank-local.sql:919: NOTICE:  PASS: denied M51C_PROPOSAL_LOCKED
+psql:tmp/question-bank-local.sql:921: NOTICE:  PASS: denied M51C_PROPOSAL_SCOPE_MISMATCH
+psql:tmp/question-bank-local.sql:923: NOTICE:  PASS: one explicit empty-rationale human review with snapshot/version, idempotent
+psql:tmp/question-bank-local.sql:924: NOTICE:  PASS: approval and publication remain separate audited facts
+psql:tmp/question-bank-local.sql:925: NOTICE:  PASS: invalid batch rolls back and leaves unselected/unpublished approved proposal intact
+psql:tmp/question-bank-local.sql:926: NOTICE:  PASS: one published version only
+psql:tmp/question-bank-local.sql:927: NOTICE:  PASS: existing item content/state/history untouched
+psql:tmp/question-bank-local.sql:928: NOTICE:  PASS: private legacy reader and anonymous content access revoked
+psql:tmp/question-bank-local.sql:934: NOTICE:  PASS: super retains existing global authority
+psql:tmp/question-bank-local.sql:936: NOTICE:  PASS: denied 42501
+psql:tmp/question-bank-local.sql:937: NOTICE:  PASS: denied 42501
+psql:tmp/question-bank-local.sql:939: NOTICE:  PASS: company content excluded from other tenant catalog
+psql:tmp/question-bank-local.sql:940: NOTICE:  PASS: denied 42501
+psql:tmp/question-bank-local.sql:946: NOTICE:  PASS: denied PT_QUOTE_REQUIRED
+psql:tmp/question-bank-local.sql:949: NOTICE:  PASS: request idempotency reuses reservation without new paid call
+psql:tmp/question-bank-local.sql:951: NOTICE:  PASS: exactly one existing tariff reservation of 2000 Tokens Prisma
+psql:tmp/question-bank-local.sql:956: NOTICE:  PASS: valid delivery settles commercial reservation
+psql:tmp/question-bank-local.sql:957: NOTICE:  PASS: delivery replay cannot double charge
+psql:tmp/question-bank-local.sql:958: NOTICE:  PASS: generation never automatically publishes proposals
+psql:tmp/question-bank-local.sql:959: NOTICE:  PASS: client cannot settle or bypass token reservation
+psql:tmp/question-bank-local.sql:963: NOTICE:  PASS: denied M51C_UNKNOWN_COST
+psql:tmp/question-bank-local.sql:964: NOTICE:  PASS: denied M51C_REQUEST_COST_CEILING_EXCEEDED
+psql:tmp/question-bank-local.sql:968: NOTICE:  PASS: denied PT_QUOTE_EXPIRED
+psql:tmp/question-bank-local.sql:972: NOTICE:  PASS: denied PT_ACCOUNT_DISABLED
+psql:tmp/question-bank-local.sql:976: NOTICE:  PASS: denied PT_INSUFFICIENT_BALANCE
+psql:tmp/question-bank-local.sql:984: NOTICE:  PASS: failure without delivery releases commercial reservation
+psql:tmp/question-bank-local.sql:985: NOTICE:  PASS: failure replay records one release only
+psql:tmp/question-bank-local.sql:986: NOTICE:  PASS: denied generation rolls back request, budget reservation and commercial mutation

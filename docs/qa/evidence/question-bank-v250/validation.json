@@ -1,0 +1,25 @@
+{
+  "environment": "LOCAL, synthetic fixtures and actual Prisma components",
+  "checks": {
+    "nodeDirected": 62,
+    "denoBoundaryTests": 5,
+    "questionBankSqlRollback": 52,
+    "integratedSqlInOwnedClone": 131,
+    "twoConnectionReviewPublishDispute": 1,
+    "questionBankBrowser": 191,
+    "questionBankAdditionalStates": 30,
+    "processBrowserRegression": 64,
+    "portalBrowserRegression": 38,
+    "typecheckWeb": "PASS",
+    "rootBuild": "PASS",
+    "webBuild": "PASS",
+    "reviewedSnapshotLint": "PASS, 1449 files",
+    "reviewedSnapshotFoundation": "PASS"
+  },
+  "limits": [
+    "No paid live AI, real email or production human decision used for tests.",
+    "No separate remote QA exists; sensitive validation ran locally before rollout.",
+    "Original disposable baseline has missing physical profile_synthesis_jobs file; preserved without repair; complete integration ran in owned schema clone removed after run.",
+    "Production authenticated real-user journey and empirical calibration NOT TESTED."
+  ]
+}

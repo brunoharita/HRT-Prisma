@@ -1,0 +1,771 @@
+{
+  "checks": [
+    {
+      "name": "1448: two main areas and default content catalog",
+      "pass": true
+    },
+    {
+      "name": "1448: initial consultation performs no writes",
+      "pass": true
+    },
+    {
+      "name": "catalog-1448: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "catalog-1448: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "1448: full question with five choices, answer and explanation",
+      "pass": true
+    },
+    {
+      "name": "1448: absent snapshot is unavailable, not zero/never-used",
+      "pass": true
+    },
+    {
+      "name": "1448: actual family shows historical version even with unrelated code",
+      "pass": true
+    },
+    {
+      "name": "detail-1448: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "detail-1448: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "1448: close returns catalog without changing filters",
+      "pass": true
+    },
+    {
+      "name": "1448: accent-insensitive search finds content",
+      "pass": true
+    },
+    {
+      "name": "1448: combined filters are visible and effective",
+      "pass": true
+    },
+    {
+      "name": "1448: pagination/list context survives Escape",
+      "pass": true
+    },
+    {
+      "name": "1448: pending count excludes approved and closed history",
+      "pass": true
+    },
+    {
+      "name": "1448: human rationale starts empty and decisions are not chosen",
+      "pass": true
+    },
+    {
+      "name": "1448: correct choice and explanation available before decision",
+      "pass": true
+    },
+    {
+      "name": "1448: human draft preserved on close/reopen",
+      "pass": true
+    },
+    {
+      "name": "review-1448: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "review-1448: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "1448: duplicate exception cannot be approved without rationale",
+      "pass": true
+    },
+    {
+      "name": "1448: comparison shows both full question/choices",
+      "pass": true
+    },
+    {
+      "name": "comparison-1448: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "comparison-1448: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "1448: reserve/composition separated without implying impossible proof",
+      "pass": true
+    },
+    {
+      "name": "coverage-1448: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "coverage-1448: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "1448: one contextual confirmation, blocked real generation isn't called fake AI",
+      "pass": true
+    },
+    {
+      "name": "generation-unavailable-1448: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "generation-unavailable-1448: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "1448: readable context and requested/produced history pagination",
+      "pass": true
+    },
+    {
+      "name": "history-1448: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "history-1448: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "1448: consulting all surfaces still doesn't write",
+      "pass": true
+    },
+    {
+      "name": "1448: loading persists and catalog remains",
+      "pass": true
+    },
+    {
+      "name": "1448: failed refresh retains previous list and recovery",
+      "pass": true
+    },
+    {
+      "name": "error-1448: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "error-1448: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "no browser exceptions",
+      "pass": true
+    },
+    {
+      "name": "no external network/paid model",
+      "pass": true
+    },
+    {
+      "name": "768: two main areas and default content catalog",
+      "pass": true
+    },
+    {
+      "name": "768: initial consultation performs no writes",
+      "pass": true
+    },
+    {
+      "name": "catalog-768: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "catalog-768: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "768: full question with five choices, answer and explanation",
+      "pass": true
+    },
+    {
+      "name": "768: absent snapshot is unavailable, not zero/never-used",
+      "pass": true
+    },
+    {
+      "name": "768: actual family shows historical version even with unrelated code",
+      "pass": true
+    },
+    {
+      "name": "detail-768: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "detail-768: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "768: close returns catalog without changing filters",
+      "pass": true
+    },
+    {
+      "name": "768: accent-insensitive search finds content",
+      "pass": true
+    },
+    {
+      "name": "768: combined filters are visible and effective",
+      "pass": true
+    },
+    {
+      "name": "768: pagination/list context survives Escape",
+      "pass": true
+    },
+    {
+      "name": "768: pending count excludes approved and closed history",
+      "pass": true
+    },
+    {
+      "name": "768: human rationale starts empty and decisions are not chosen",
+      "pass": true
+    },
+    {
+      "name": "768: correct choice and explanation available before decision",
+      "pass": true
+    },
+    {
+      "name": "768: human draft preserved on close/reopen",
+      "pass": true
+    },
+    {
+      "name": "review-768: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "review-768: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "768: duplicate exception cannot be approved without rationale",
+      "pass": true
+    },
+    {
+      "name": "768: comparison shows both full question/choices",
+      "pass": true
+    },
+    {
+      "name": "comparison-768: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "comparison-768: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "768: reserve/composition separated without implying impossible proof",
+      "pass": true
+    },
+    {
+      "name": "coverage-768: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "coverage-768: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "768: one contextual confirmation, blocked real generation isn't called fake AI",
+      "pass": true
+    },
+    {
+      "name": "generation-unavailable-768: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "generation-unavailable-768: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "768: readable context and requested/produced history pagination",
+      "pass": true
+    },
+    {
+      "name": "history-768: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "history-768: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "768: consulting all surfaces still doesn't write",
+      "pass": true
+    },
+    {
+      "name": "768: loading persists and catalog remains",
+      "pass": true
+    },
+    {
+      "name": "768: failed refresh retains previous list and recovery",
+      "pass": true
+    },
+    {
+      "name": "error-768: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "error-768: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "no browser exceptions",
+      "pass": true
+    },
+    {
+      "name": "no external network/paid model",
+      "pass": true
+    },
+    {
+      "name": "390: two main areas and default content catalog",
+      "pass": true
+    },
+    {
+      "name": "390: initial consultation performs no writes",
+      "pass": true
+    },
+    {
+      "name": "catalog-390: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "catalog-390: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "390: full question with five choices, answer and explanation",
+      "pass": true
+    },
+    {
+      "name": "390: absent snapshot is unavailable, not zero/never-used",
+      "pass": true
+    },
+    {
+      "name": "390: actual family shows historical version even with unrelated code",
+      "pass": true
+    },
+    {
+      "name": "detail-390: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "detail-390: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "390: close returns catalog without changing filters",
+      "pass": true
+    },
+    {
+      "name": "390: accent-insensitive search finds content",
+      "pass": true
+    },
+    {
+      "name": "390: combined filters are visible and effective",
+      "pass": true
+    },
+    {
+      "name": "390: pagination/list context survives Escape",
+      "pass": true
+    },
+    {
+      "name": "390: pending count excludes approved and closed history",
+      "pass": true
+    },
+    {
+      "name": "390: human rationale starts empty and decisions are not chosen",
+      "pass": true
+    },
+    {
+      "name": "390: correct choice and explanation available before decision",
+      "pass": true
+    },
+    {
+      "name": "390: human draft preserved on close/reopen",
+      "pass": true
+    },
+    {
+      "name": "review-390: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "review-390: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "390: duplicate exception cannot be approved without rationale",
+      "pass": true
+    },
+    {
+      "name": "390: comparison shows both full question/choices",
+      "pass": true
+    },
+    {
+      "name": "comparison-390: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "comparison-390: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "390: reserve/composition separated without implying impossible proof",
+      "pass": true
+    },
+    {
+      "name": "coverage-390: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "coverage-390: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "390: one contextual confirmation, blocked real generation isn't called fake AI",
+      "pass": true
+    },
+    {
+      "name": "generation-unavailable-390: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "generation-unavailable-390: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "390: readable context and requested/produced history pagination",
+      "pass": true
+    },
+    {
+      "name": "history-390: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "history-390: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "390: consulting all surfaces still doesn't write",
+      "pass": true
+    },
+    {
+      "name": "390: loading persists and catalog remains",
+      "pass": true
+    },
+    {
+      "name": "390: failed refresh retains previous list and recovery",
+      "pass": true
+    },
+    {
+      "name": "error-390: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "error-390: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "no browser exceptions",
+      "pass": true
+    },
+    {
+      "name": "no external network/paid model",
+      "pass": true
+    },
+    {
+      "name": "320: two main areas and default content catalog",
+      "pass": true
+    },
+    {
+      "name": "320: initial consultation performs no writes",
+      "pass": true
+    },
+    {
+      "name": "catalog-320: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "catalog-320: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "320: full question with five choices, answer and explanation",
+      "pass": true
+    },
+    {
+      "name": "320: absent snapshot is unavailable, not zero/never-used",
+      "pass": true
+    },
+    {
+      "name": "320: actual family shows historical version even with unrelated code",
+      "pass": true
+    },
+    {
+      "name": "detail-320: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "detail-320: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "320: close returns catalog without changing filters",
+      "pass": true
+    },
+    {
+      "name": "320: accent-insensitive search finds content",
+      "pass": true
+    },
+    {
+      "name": "320: combined filters are visible and effective",
+      "pass": true
+    },
+    {
+      "name": "320: pagination/list context survives Escape",
+      "pass": true
+    },
+    {
+      "name": "320: pending count excludes approved and closed history",
+      "pass": true
+    },
+    {
+      "name": "320: human rationale starts empty and decisions are not chosen",
+      "pass": true
+    },
+    {
+      "name": "320: correct choice and explanation available before decision",
+      "pass": true
+    },
+    {
+      "name": "320: human draft preserved on close/reopen",
+      "pass": true
+    },
+    {
+      "name": "review-320: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "review-320: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "320: duplicate exception cannot be approved without rationale",
+      "pass": true
+    },
+    {
+      "name": "320: comparison shows both full question/choices",
+      "pass": true
+    },
+    {
+      "name": "comparison-320: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "comparison-320: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "320: reserve/composition separated without implying impossible proof",
+      "pass": true
+    },
+    {
+      "name": "coverage-320: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "coverage-320: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "320: one contextual confirmation, blocked real generation isn't called fake AI",
+      "pass": true
+    },
+    {
+      "name": "generation-unavailable-320: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "generation-unavailable-320: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "320: readable context and requested/produced history pagination",
+      "pass": true
+    },
+    {
+      "name": "history-320: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "history-320: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "320: consulting all surfaces still doesn't write",
+      "pass": true
+    },
+    {
+      "name": "320: loading persists and catalog remains",
+      "pass": true
+    },
+    {
+      "name": "320: failed refresh retains previous list and recovery",
+      "pass": true
+    },
+    {
+      "name": "error-320: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "error-320: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "no browser exceptions",
+      "pass": true
+    },
+    {
+      "name": "no external network/paid model",
+      "pass": true
+    },
+    {
+      "name": "empty-390: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "empty-390: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "empty catalog has its own state",
+      "pass": true
+    },
+    {
+      "name": "no browser exceptions",
+      "pass": true
+    },
+    {
+      "name": "no external network/paid model",
+      "pass": true
+    },
+    {
+      "name": "long-390: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "long-390: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "no browser exceptions",
+      "pass": true
+    },
+    {
+      "name": "no external network/paid model",
+      "pass": true
+    },
+    {
+      "name": "readonly-390: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "readonly-390: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "read-only authority offers consultation without decision controls",
+      "pass": true
+    },
+    {
+      "name": "no browser exceptions",
+      "pass": true
+    },
+    {
+      "name": "no external network/paid model",
+      "pass": true
+    },
+    {
+      "name": "review-only-390: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "review-only-390: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "review-only authority explains next state",
+      "pass": true
+    },
+    {
+      "name": "review-only action does not publish",
+      "pass": true
+    },
+    {
+      "name": "no browser exceptions",
+      "pass": true
+    },
+    {
+      "name": "no external network/paid model",
+      "pass": true
+    },
+    {
+      "name": "approval/publication requires one explicit human click with empty rationale",
+      "pass": true
+    },
+    {
+      "name": "batch confirms count, destination and synthetic origin",
+      "pass": true
+    },
+    {
+      "name": "batch publishes only explicitly selected approved id",
+      "pass": true
+    },
+    {
+      "name": "no browser exceptions",
+      "pass": true
+    },
+    {
+      "name": "no external network/paid model",
+      "pass": true
+    },
+    {
+      "name": "operational AI requires commercial quote and explicit confirmation",
+      "pass": true
+    },
+    {
+      "name": "tokens-confirmation-390: document does not overflow",
+      "pass": true
+    },
+    {
+      "name": "tokens-confirmation-390: visible drawer/modal body does not overflow",
+      "pass": true
+    },
+    {
+      "name": "contextual generation reuses need/quantity/destination/quote",
+      "pass": true
+    },
+    {
+      "name": "no browser exceptions",
+      "pass": true
+    },
+    {
+      "name": "no external network/paid model",
+      "pass": true
+    },
+    {
+      "name": "keyboard explicitly opens full detail",
+      "pass": true
+    },
+    {
+      "name": "keyboard closes to list",
+      "pass": true
+    },
+    {
+      "name": "no browser exceptions",
+      "pass": true
+    },
+    {
+      "name": "no external network/paid model",
+      "pass": true
+    }
+  ],
+  "limits": [
+    "Actual components with synthetic service fixtures; no production users, paid models or business mutations."
+  ]
+}

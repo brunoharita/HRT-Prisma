@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.71.4
-last_verified: 2026-10-11
+version: 2.72.0
+last_verified: 2026-10-12
 ---
 
 # Estado atual do Prisma
+
+## Banco de questões — v2.5.0
+
+Implementação autorizada em12/10/2026, acordo1.0.0: Questões e Para revisar, detalhe completo protegido, filtros/paginação, comparação humana, histórico por família real e rascunhos por organização. Aprovar e disponibilizar é transacional/idempotente com auditorias separadas; justificativa opcional somente aprovação comum, motivos obrigatórios nas exceções/rejeição/ajustes. Cobertura separa composição/reserva e geração reúne contexto/quantidade/destino/Tokens Prisma em confirmação explícita. Integração M5.1C e ledger/tarifa existentes reaproveitados, sem novo provedor/modelo/prompt ou ativação; políticas produtivas verificadas desativadas. Simulação/preview sintético em ferramentas administrativas, métricas nulas e limites de calibração preservados. Owner `docs/product/question-bank.md`, mapa/execução/AoT em docs/qa. Validação e rollout em andamento; não presumir publicação nem jornada produtiva autenticada a partir de fixtures.
 
 ## Tempo e orientações do participante — correção 2.4.1
 

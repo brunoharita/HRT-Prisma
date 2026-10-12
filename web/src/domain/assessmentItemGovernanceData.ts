@@ -1,9 +1,14 @@
-import type { VerificationLevel } from "./competencyVerificationData";
+import type { VerificationLevel } from "./competencyVerificationData.js";
 
 export interface ItemBankGapView {
   key: string;
   blueprintId: string;
   blueprintKey: string;
+  blueprintName?: string;
+  competencyLabel?: string;
+  compositionItems?: number;
+  diversityReserve?: number;
+  generationNeedId?: string | null;
   competencyKey: string;
   targetLevel: VerificationLevel;
   definedDifficulty: "low" | "medium" | "high";
@@ -20,6 +25,19 @@ export interface GovernedItemView {
   id: string;
   key: string;
   version: string;
+  familyId?: string;
+  competencyLabel?: string;
+  options?: Array<{ id: string; label: string }>;
+  correctOptionId?: string | null;
+  explanation?: string;
+  provenance?: Record<string, unknown>;
+  approvedAt?: string | null;
+  approvedBy?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
+  analyticsAt?: string | null;
+  analyticsVersion?: string | null;
+  qualityFlags?: Array<{ code: string; evidence: Record<string, unknown>; createdAt: string }>;
   scope: "global" | "organization";
   organizationId: string | null;
   competencyKey: string;
@@ -29,14 +47,14 @@ export interface GovernedItemView {
   definedDifficulty: "low" | "medium" | "high";
   calibrationState: "uncalibrated" | "collecting_data" | "calibration_eligible" | "calibrated" | "calibration_review_required";
   stem: string;
-  applicationCount: number;
+  applicationCount: number | null;
   correctRate: number | null;
   medianTimeSeconds: number | null;
   p25TimeSeconds: number | null;
   p75TimeSeconds: number | null;
   omissionRate: number | null;
   answerChangeRate: number | null;
-  excludedTechnicalIncidentCount: number;
+  excludedTechnicalIncidentCount: number | null;
   sampleKind: "synthetic_qa" | "real_anonymized" | null;
   analyticsReasonCodes: string[];
   observedDifficulty: number | null;
@@ -49,6 +67,11 @@ export interface GenerationRequestView {
   quantity: number;
   targetScope: "global" | "organization";
   createdAt: string;
+  competencyKey?: string;
+  competencyLabel?: string;
+  blueprintName?: string;
+  producedQuantity?: number;
+  errorClass?: string | null;
 }
 
 export interface GenerationProposalView {
@@ -74,6 +97,9 @@ export interface GenerationProposalView {
   validation: { valid: boolean; reasonCodes: string[] };
   provenance: { provider: string; model: string; synthetic: boolean; promptVersion: string; schemaVersion: string };
   createdAt: string;
+  targetScope?: "global" | "organization";
+  competencyLabel?: string;
+  reviews?: Array<{ decision: string; rationale: string; actorId: string; createdAt: string; version: string }>;
 }
 
 export interface AssessmentAiPolicyView {
@@ -94,6 +120,7 @@ export interface AssessmentAiPolicyView {
 }
 
 export interface ItemBankGovernanceWorkspace {
+  permissions?: { canReview: boolean; canPublishOrganization: boolean; canPublishGlobal: boolean; canAdminister: boolean };
   versions: { gapAnalysis: string; analytics: string; calibration: string; budget: string; proposal: string };
   gaps: ItemBankGapView[];
   items: GovernedItemView[];
