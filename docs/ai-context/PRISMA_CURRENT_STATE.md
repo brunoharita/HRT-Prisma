@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.74.0
+version: 2.74.1
 last_verified: 2026-10-12
 ---
 
 # Estado atual do Prisma
+
+## Ações da avaliação — correção sem mudança de versão
+
+Aprovado em12/10/2026: Revisar avaliação no cabeçalho com progresso; rodapé da questão somente Anterior/Próxima. Revisão com Voltar às questões e Enviar avaliação; modal Confirmar envio e encerrar. Sem mudança de app2.5.1, submit/save/telemetria/backend/prazos/correção. Acordo/mapa/execução/AoT `docs/qa/assessment-review-placement.md`;82checks browser1448/768/390/320, tipos e build PASS. Publicação web em andamento; evidência sintética, sem candidato real ou mutação remota de negócio.
 
 ## Tokens Prisma — tarifas não redondas
 

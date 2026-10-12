@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 462
-source_manifest_sha256: 4d48f3457688bb4f56bb7948368ed85c52394e2f92a96dcd87fa717986bf9400
+documentation_source_count: 463
+source_manifest_sha256: 26a3682567fd985bf7a90f037a575e031887ae319a505f24833b6740f08220c4
 -->
 
 # Tudo sobre o Prisma
@@ -2630,11 +2630,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.74.0
+version: 2.74.1
 last_verified: 2026-10-12
 ---
 
 # Estado atual do Prisma
+
+## Ações da avaliação — correção sem mudança de versão
+
+Aprovado em12/10/2026: Revisar avaliação no cabeçalho com progresso; rodapé da questão somente Anterior/Próxima. Revisão com Voltar às questões e Enviar avaliação; modal Confirmar envio e encerrar. Sem mudança de app2.5.1, submit/save/telemetria/backend/prazos/correção. Acordo/mapa/execução/AoT `docs/qa/assessment-review-placement.md`;82checks browser1448/768/390/320, tipos e build PASS. Publicação web em andamento; evidência sintética, sem candidato real ou mutação remota de negócio.
 
 ## Tokens Prisma — tarifas não redondas
 
@@ -12051,6 +12055,8 @@ No portal do candidato, o contador mostra dias, horas e minutos sem segundos, co
 
 
 Reaproveitamento privado2.5.1: aprovação individual ou em conjunto projeta automaticamente questões criadas/adaptadas no banco exclusivo da empresa na mesma transação. Questões pendentes aguardam a decisão humana. Outra avaliação da mesma empresa pode usar conteúdo aprovado compatível; outra empresa não obtém acesso. Recuperação de aprovações históricas não modifica prova emitida, autor/data originais, aplicações, resultados ou convites. A antiga opção individual de salvar no banco foi substituída por essa regra aprovada. Acordo1.0.0 e AoT `company-question-reuse-v251`, owner `question-bank.md`; contrato de prova/portal preservado.
+
+No portal, **Revisar avaliação** fica no cabeçalho junto ao progresso; o rodapé da questão contém somente **Anterior** e **Próxima**. Na revisão, **Voltar às questões** preserva a questão ativa e **Enviar avaliação** abre a confirmação **Confirmar envio e encerrar**. Revisar não conclui nem pausa o tempo; a conclusão exige respostas completas, sincronização e confirmação, com comprovante. Correção sem alterar2.5.1; acordo/AoT `docs/qa/assessment-review-placement.md`.
 
 ---
 
@@ -23579,6 +23585,48 @@ Baseline operacional conferido antes do deploy: srv1038882,/opt/prisma,origin ap
 Evidências em `docs/qa/evidence/assessment-portal-v241/{browser,regression}`. Fonte do contador é o deadline do servidor; acesso e conclusão não são intercambiáveis. Detalhes técnicos de coleta fechados inicialmente, acessíveis por teclado; essenciais permanecem visíveis. Screenshot do PO é contraexemplo, mantendo topologia/contexto e os elementos existentes, com dados fictícios nas provas. Jornada autenticada de candidato real NOT TESTED; token privado da imagem não acessado. Sem desvio de contrato identificado.
 
 Produção/evidências em production/ e local-validation.json: web ee19fcf9 running/zero reinícios, rollback-before-2a393c2da5f7 igual à imagem anterior3baff4b5;215assets anteriores preservados byte a byte,218após. Nove outros containers idênticos, incluindo Paddle unhealthy/exited preexistentes. Publicação somente web;24HTTP200 incluem /assessment/, rotas e arquivos atuais/anteriores, três checks do bundle e login em1448/390/320 PASS. Publisher saiu1 após SSH22/HTTP404 no smoke imediato; estabilização conferida sem nova build/deploy. Nenhuma escrita de negócio remota. Fechamento documental/contextos em snapshot limpo sincroniza main/origin/VPS sem reconstrução de runtime; SHA documental final é distinto do SHA funcional. A validação local é proporcional e dirigida; gate integral somente na CI existente.
+
+---
+
+## Source: `docs/qa/assessment-review-placement.md`
+
+# Acordo, execução e AoT — Revisão da avaliação no cabeçalho
+
+Acordo v1.0.0, 12/10/2026. Bruno aprovou executar rapidamente sem mudar a versão: manter 2.5.1. Baseline 83f37310f38b52331a49462b4c3172a3583a3186. Risco B, apresentação do portal; publicação autorizada por AGENTS §7. Screenshot é contraexemplo da posição/nome do botão, mantendo composição restante.
+
+## Acordo e execução
+
+- D-01: mover a ação para o cabeçalho, junto ao progresso X de Y respondidas, com nome Revisar avaliação. Rodapé da questão contém somente Anterior e Próxima.
+- D-02: revisão tem Voltar às questões e Enviar avaliação. Confirmação final usa Confirmar envio e encerrar, explicando irreversibilidade. Revisão pode abrir incompleta, envio continua bloqueado quando incompleta/expirada; relógio segue correndo.
+- D-03: orientar com nomes atualizados; responsividade sem overflow, contexto/respostas preservados ao voltar. Manter versão 2.5.1 e publicar somente superfícies necessárias.
+- P-01: sem alteração de submit/save/telemetria/backend/prazos/correção/tenant, envio automático ou remoção da confirmação; sem alterações alheias.
+- F-01: redesign total, Banco de Questões, mudança de versão e schema/coleta.
+- A-01: classes locais e componentes existentes, região de progresso no contexto do cabeçalho; rodapé de revisão separado. Q: nenhuma.
+- CA-01: browser dirigido desktop/768/390/320 prova ação global, progresso, anterior/próxima, revisão incompleta, retorno, marcação, confirmação/cancelamento/recibo e relógio; tipos/build e smoke de publicação sem versão alterada.
+
+Execução: implementar D-01/03 na região de contexto do cabeçalho e CSS local; D-02 nos controles da revisão/modal; reaproveitar fixture de portal e checks existentes com acréscimos relevantes. Context Pack e documentos donos no mesmo movimento; release plan por SHA comprometido, produção somente web, rollback/smoke/sincronização. Não usar token pessoal da imagem nem mutações de negócio em produção.
+
+## Mapa de impacto
+
+| Área/capacidade | Relação | Baseline e prova proporcional |
+| --- | --- | --- |
+| Portal: navegação, revisão, envio explícito | direct | baseline acima; fixture com 20 questões e serviços sintéticos, browser positivo/negativo e captura mesma largura/estado |
+| CSS e orientação compartilhados do portal | direct | classes locais, instruções pre-início/execução; tipos/build e 4 viewports |
+| Autosave, marcação, prazo e recibo | plausible_indirect | handlers intactos; fixture verifica preservação, confirmação, expirado e contador |
+| Preparação, Banco de Questões, backend/tenant/IA | no_impact_identified | nenhuma alteração de serviços/contratos/writers; inspeção de diff e plano web-only; sem banco ou IA pagos |
+| Publicação e navegação pública | critical_transversal | SHA/versão/rotas/assets/health/rollback antes/depois; sem escrita real |
+
+## AoT
+
+| Regra | Implementação / evidência | Estado |
+| --- | --- | --- |
+| D-01 | Cabeçalho com progresso e Revisar avaliação; footer somente navegação. Capturas question-1448/768/390/320 e asserts de localização. | PASS |
+| D-02 | Revisão, retorno, cancelamento, envio final, expiração e recibo em82checks browser. Relógio continua; incompleta bloqueada. | PASS |
+| D-03 UX | Instruções atualizadas, quatro larguras sem overflow, revisão visual desktop1448/mobile390. Tipos/build PASS; versão registry intacta. | PASS |
+| P-01 | Diff sem handlers, serviços, schema, trackers, correção e versionamento alterados;82checks sintéticos, sem IO externo. | PASS |
+| D-03 publicação | Plano, produção e sincronização pendentes; não são PASS nesta etapa. | NOT TESTED |
+
+Evidência em docs/qa/evidence/assessment-review-placement. Baseline remoto: srv1038882,/opt/prisma,origin aprovado,83f3731; web72517b3e/d95867a1 running0; nove demais containers registrados em snapshot privado tmp/assessment-review/production-baseline.json. Lint raiz encontrou whitespace em output/pa-concurrency-baseline.sql alheio; preservar arquivo e executar lint/contexto em snapshot limpo da tarefa. Não foi usado token pessoal nem candidato real.
 
 ---
 
