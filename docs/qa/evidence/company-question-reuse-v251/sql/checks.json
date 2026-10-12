@@ -1,0 +1,17 @@
+{
+  "environment": "Owned LOCAL PostgreSQL17 schema-only clone; synthetic fixtures; removed after test",
+  "checks": [
+    {
+      "name": "sensitive private reuse plus existing bank/process/portal regression",
+      "pass": true,
+      "sqlChecks": 158
+    },
+    {
+      "name": "two simultaneous projections do not duplicate item or approval",
+      "pass": true
+    }
+  ],
+  "limits": [
+    "Original disposable baseline preserved; no real production mutation, paid AI or email used."
+  ]
+}

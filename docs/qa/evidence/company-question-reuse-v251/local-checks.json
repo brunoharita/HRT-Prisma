@@ -1,0 +1,24 @@
+{
+  "status": "PASS",
+  "sqlAssertions": 158,
+  "twoConnectionConcurrency": true,
+  "bankBrowser": 191,
+  "bankStates": 34,
+  "processBrowser": 64,
+  "portalBrowser": 38,
+  "directedNodeTests": 49,
+  "messageLoadingNavigationShellRegression": 31,
+  "loadingNoticeGuards": 5,
+  "releaseContextTests": 22,
+  "webTypes": true,
+  "typescriptBuild": true,
+  "webBuild": true,
+  "trackedSnapshotLint": true,
+  "contextCheck": true,
+  "ledgerCheck": true,
+  "limits": [
+    "Synthetic QA; no remote QA exists.",
+    "Authenticated real-person production journey and empirical calibration NOT TESTED.",
+    "Original LOCAL baseline and unrelated untracked files preserved."
+  ]
+}

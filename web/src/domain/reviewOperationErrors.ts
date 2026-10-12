@@ -84,6 +84,10 @@ export function reviewOperationError(error: ReviewOperationError, fallback: stri
     return asOperationError(error, PERIOD_FORMAT_MESSAGES[actionable.reason === "review_period_reversed" ? "reversed" : "invalid_date"], "validation", "review-fields", actionable.fieldPath);
   }
 
+  if (/qb_company_private_required/.test(technicalMessage)) {
+    return asOperationError(error, "Questões criadas pela empresa têm uso exclusivo no seu banco privado. O conteúdo foi preservado; selecione o destino da empresa.", "validation", "review-fields");
+  }
+
   const known = operatorFeedback(actionable?.reason ?? "") ?? operatorFeedback(technicalMessage.trim());
   if (known) {
     return asOperationError(error, known.message, known.category, known.recovery, known.fieldPath

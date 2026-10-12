@@ -1,0 +1,22 @@
+# Acordo aprovado: questões privadas reutilizáveis 2.5.1
+
+Versão 1.0.0, decisão explícita de Bruno em 12/10/2026 nesta conversa: implementar reaproveitamento, recuperar as 20 questões já aprovadas e limitar conteúdo produzido pela empresa ao uso na mesma empresa. Risco D. Baseline d4109b2524e2e3cb68a616650ab7328aa5a2837d.
+
+- D-01: Toda questão nova ou adaptada dentro da avaliação, depois da aprovação humana, integra o banco privado da empresa automaticamente na mesma transação da aprovação/envio. Geração e rascunho sem aprovação não disponibilizam questões. Não exigir outra decisão humana repetida.
+- D-02: Organização é obtida do registro autorizado no servidor; conteúdo privado não aparece no catálogo/composição/consulta de outra empresa, inclusive com ID conhecido. Nenhuma publicação de conteúdo de empresa como global. As questões globais institucionais já existentes continuam consultáveis, sem reescrever propriedade/histórico.
+- D-03: Revisão individual e aprovação do conjunto usam a capacidade de gravação existente, adaptada para idempotência. Replays, reenvio a outro participante e aprovação repetida não duplicam questão/família nem alteram versão já usada; conflitos reais não são escondidos.
+- D-04: Recuperar questões históricas com aprovação humana persistida, inclusive as 20 da prova Bruno/Diego. Conservar conteúdo, cinco alternativas, correta, explicação, competência/dificuldade/idioma, origem, versão, autor e data originais da aprovação. Projeção técnica não inventa nova aprovação. Registros pendentes ou sem evidência de aprovação não são promovidos.
+- D-05: Prova enviada, aplicações, respostas, resultados, convites, histórico e Pessoas/Perfis/Score permanecem inalterados. Reutilização exige compatibilidade existente; conteúdo inativo/comprometido não é reativado automaticamente. Não gerar IA ou enviar novo convite durante recuperação.
+- D-06: Na interface, explicar uso exclusivo da empresa e reaproveitamento depois da aprovação. Retirar a antiga opção individual de salvar no banco: aprovação aprovada por este acordo já determina a gravação privada. Destino de geração de empresa é privado, validado também pelo servidor.
+- D-07: Reusar tabelas, autoridade, validação, composição, publicação e custos existentes. Sem novo provedor/modelo/prompt, serviço, tarifa, papel ou dependência. Auditar a projeção e separar execução backend de decisão humana original.
+- D-08: Entregar 2.5.1 em main/origin/produção com mapa prévio, testes negativos dirigidos e regressões de banco/composição/envio/portal, documentação, Context Pack, plano seletivo, rollback, smoke, preservação e AoT. Limites de evidência explícitos.
+
+PROIBIDO: P-01 compartilhar/promover conteúdo privado entre empresas; P-02 aprovar pendência/fabricar autor ou data; P-03 modificar prova emitida, aplicações ou dados humanos; P-04 cobrar/regerar IA ou reenviar convites na recuperação; P-05 reativar versão bloqueada/duplicar por replay; P-06 editar trabalho alheio ou publicar destino não exigido.
+
+FORA DE ESCOPO: F-01 novo banco global/curadoria institucional; F-02 critérios de calibração/Score; F-03 redesign adjacente, novo contrato de avaliação ou transporte de e-mail; F-04 criação de testes com Pessoas reais em produção.
+
+AUTONOMIA: A-01 wrappers/rotina interna reutilizando persistência existente e migration nova; A-02 layout/textos mecânicos coerentes com o Prisma; A-03 seleção proporcional de testes e recuperação técnica auditada das aprovações comprovadas.
+
+ACEITE: CA-01 D-01/03/04: QA aprovação individual/conjunto, backfill, autoria/data/conteúdo e replay/concorrência; produção 20/20 recuperadas sem mudar prova. CA-02 D-02/05: QA empresas A/B, IDs cruzados, negativos, estado bloqueado e preservação; produção hashes agregados e global intactos. CA-03 D-06/07: browser/tipos/build, fontes e rastreabilidade da gravação/auditoria; nenhum consumo/envio adicional. CA-04 D-08: AoT, CI, migrations/Edge se necessário, web/rollback/smoke e sincronização.
+
+Supersessões explícitas: D-UX-03 do acordo position-assessment-v230 somente na opção de salvar no banco, agora automática após aprovação e privada. D-06 do acordo process-assessment-v232 permanece revisão humana em conjunto, acrescida da projeção privada. D-12/D-16/D-24 do acordo question-bank-v250 são restringidos pelo destino privado de conteúdos de empresa; não constituem autorização de compartilhar novas questões da empresa como globais. Nenhum Q material pendente.

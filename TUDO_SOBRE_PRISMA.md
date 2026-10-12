@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 456
-source_manifest_sha256: 5674307e4abcb4c20dd901590f8d13d3c6b5670d457b197cbd21c92dfd928ee7
+documentation_source_count: 460
+source_manifest_sha256: a5e9b9bd749d7dabed16a86e2afa0e5faec32fb23e645f4e48b9ad434665bd82
 -->
 
 # Tudo sobre o Prisma
@@ -2630,11 +2630,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.72.0
+version: 2.73.0
 last_verified: 2026-10-12
 ---
 
 # Estado atual do Prisma
+
+## Questões privadas reutilizáveis — v2.5.1
+
+Implementação autorizada em12/10/2026, acordo1.0.0: toda questão criada/adaptada em avaliação integra automaticamente o banco privado após aprovação humana. Outra empresa não consulta nem reutiliza; geração/publicação global de empresa negadas no servidor. Globais institucionais preservadas. Integração `company-question-reuse-1.0.0`, original item1.0.0 e prova/portal mantidos; autor/data/proveniência originais, replay/concorrência sem duplicar/reativar bloqueado; auditoria backend sem nova decisão humana. Migration nova recupera aprovações persistidas sem alterar prova/aplicações/convites/Pessoas/Perfis/Score ou invocar IA/cobrar/enviar. QA local PASS: SQL158 e concorrência real, banco191+34 estados, processo64/portal38, Node49 e regressões31/guards5, tipos/build/lint/contexto/ledger/release-tooling22. Publicação ainda pendente; jornada produtiva autenticada e calibração empírica NOT TESTED. Owners question-bank/process-assessment/contracts; acordo/mapa/execução/AoT `company-question-reuse-v251`.
 
 ## Banco de questões — v2.5.0
 
@@ -4961,6 +4965,8 @@ Implementação deve ser separada em movimentos menores: contratos e versões, s
 ## Source: `docs/architecture/contracts.md`
 
 # Catálogo de contratos
+
+`company-question-reuse-1.0.0` (v2.5.1): integração privada após aprovação humana, incluindo recuperação de decisões persistidas. Conteúdo produzido pela empresa permanece exclusivo da organização; servidor nega geração/publicação global e mantém as globais institucionais existentes. Projeção transacional/idempotente, evidência original, auditoria backend sem nova decisão humana, sem IA/convite/cobrança. Contratos de prova/portal e item1.0.0 preservados; proveniência mantém versão original da questão. Owner `docs/product/question-bank.md`, acordo1.0.0 e AoT2.5.1.
 
 Banco de questões 2.5.0: delta `question-bank-human-review-2.0.0`, com justificativa vazia permitida somente na aprovação comum; motivos nas exceções/rejeição/ajustes, autoria/snapshot/auditoria obrigatórios. `approve_and_publish_question_bank_proposal` compõe aprovação/publicação existentes em transação idempotente, sem novos papéis. Workspace M5.1C ganha campos aditivos completos e permissões calculadas no servidor; nulos de snapshot preservados. Request externo mantém schema/prompt histórico e acrescenta `tokenQuoteId`, utilizando `prisma-tokens-1.0.0` e a tarifa existente de questões. Replays não invocam novamente o fornecedor. Owner: `docs/product/question-bank.md`; acordo1.0.0 e AoT2.5.0.
 
@@ -12031,6 +12037,9 @@ Nenhum aviso final ou expurgo temporal foi introduzido. Exclusão explícita de 
 
 No portal do candidato, o contador mostra dias, horas e minutos sem segundos, com data limite em horário de Brasília. Antes de iniciar refere-se ao acesso; depois, ao menor prazo efetivo de conclusão recebido do servidor. **Antes de começar** orienta tempo contínuo, conhecimentos próprios, aba/janela ativas, navegação, sincronização, revisão e envio definitivo. **Atividade e privacidade** explica finalidade, sinais efetivamente registrados, limites e análise humana; detalhes ficam disponíveis também durante a prova. Nenhuma gravação de tela, keylogging, punição automática ou coleta adicional foi introduzida; ciência operacional não é consentimento jurídico. Acordo/AoT `docs/qa/assessment-portal-guidance-v241.md`.
 
+
+Reaproveitamento privado2.5.1: aprovação individual ou em conjunto projeta automaticamente questões criadas/adaptadas no banco exclusivo da empresa na mesma transação. Questões pendentes aguardam a decisão humana. Outra avaliação da mesma empresa pode usar conteúdo aprovado compatível; outra empresa não obtém acesso. Recuperação de aprovações históricas não modifica prova emitida, autor/data originais, aplicações, resultados ou convites. A antiga opção individual de salvar no banco foi substituída por essa regra aprovada. Acordo1.0.0 e AoT `company-question-reuse-v251`, owner `question-bank.md`; contrato de prova/portal preservado.
+
 ---
 
 ## Source: `docs/product/product-scope.md`
@@ -12352,7 +12361,10 @@ Referências do Perfil/sidebar são normativas para linguagem visual, não conte
 
 ## Source: `docs/product/question-bank.md`
 
-# Banco de questões — v2.5.0
+# Banco de questões — v2.5.1
+A partir de2.5.1, questões novas ou adaptadas em avaliações integram automaticamente o banco da mesma empresa depois da aprovação humana, na mesma transação. Geração/rascunho pendente não disponibiliza conteúdo. Questões da empresa têm uso exclusivo nessa empresa; catálogo, consulta por ID e composição de outra empresa negam acesso no servidor. As globais institucionais existentes permanecem; nenhuma nova questão de empresa pode ser publicada como global. Reutilização conserva compatibilidade e disponibilidade existentes.
+
+Integração `company-question-reuse-1.0.0`: usa validação/fingerprint/família e versão de item existentes, lock da empresa, replays sem duplicar nem reativar inativo/comprometido. Recupera somente aprovações persistidas, conservando autor/data/conteúdo/proveniência/versão. `company_question_bank_projected` registra execução backend, autor causal original e `humanDecisionCreated=false`, distinguindo-a da decisão humana. Prova/aplicações/convites não mudam; recuperação não invoca IA, cobra ou envia e-mail. Acordo integral1.0.0 `docs/qa/agreement-company-question-reuse-v251.md`, supersessões explícitas, execução/mapa e AoT2.5.1.
 
 Acordo aprovado: `docs/qa/agreement-question-bank-v250.md` v1.0.0; execução e mapa em `docs/qa/execution-question-bank-v250.md` e `docs/qa/impact-question-bank-v250.md`. A página `/item-bank` serve para consultar questões e revisar novos conteúdos para avaliações. Usa as capacidades M5.1C, a autoridade existente e os componentes Prisma.
 
@@ -12360,7 +12372,7 @@ Questões é a entrada padrão: catálogo único das questões globais e da empr
 
 Para revisar mostra pendências reais e permite consultar registros encerrados pelos filtros. Nenhuma decisão ou justificativa favorável é preenchida. Rascunhos são preservados por organização nesta sessão. Aprovação comum pode ter justificativa vazia; rejeição, ajustes e exceções de duplicidade exigem motivo de pelo menos dez caracteres após trim. A versão de revisão é `question-bank-human-review-2.0.0`. A ação Aprovar e disponibilizar usa uma transação, preservando fatos e auditorias separados, autoridade, versão e idempotência. A disponibilização em lote exige seleção explícita de propostas já aprovadas, informa quantidade/destinos/origem sintética e não publica as demais.
 
-O servidor continua exigindo governança M5.1C ativa: owner/admin/super_admin conforme as relações existentes da organização; destino global exige super_admin. Gabarito e conteúdo completo vêm somente do workspace autorizado. Flags ausentes não concedem permissão na interface. A configuração administrativa é consultiva: a administração central gerencia backend e limites pelo fluxo controlado de operação. Não existem novos papéis ou um editor de política nesta entrega.
+O servidor continua exigindo governança M5.1C ativa: owner/admin/super_admin conforme as relações existentes da organização; a criação e a publicação de conteúdo da empresa aceitam somente destino privado, inclusive para super_admin. Gabarito e conteúdo completo vêm somente do workspace autorizado. Flags ausentes não concedem permissão na interface. A configuração administrativa é consultiva: a administração central gerencia backend e limites pelo fluxo controlado de operação. Não existem novos papéis ou um editor de política nesta entrega.
 
 Consultar cobertura é secundário e usa modelos ativos por competência, com contexto reconhecível, composição necessária, duas questões adicionais por dimensão como reserva, elegíveis e déficit separados. Reserva insuficiente não prova impossibilidade da prova. Complementação parte da necessidade selecionada; uma confirmação reúne quantidade, destino permitido e consumo. Cancelar não dispara geração. Necessidade já em geração ou revisão exige consultar andamento/propostas; não há retry pago automático.
 
@@ -12834,6 +12846,33 @@ CA-01: comparação visual mesma fixture/dados/viewport antes/depois 1448/390, a
 | Release/contexto | direct | 2.2.1, plano migration+web, CI/smoke/rollback/serviços preservados |
 
 Sem QA remoto separado. SQL local usa PostgreSQL17 localhost55479/import_evidence_v202 vazio e rollback. Browser é sintético; smoke público não comprova operação autenticada real.
+
+---
+
+## Source: `docs/qa/agreement-company-question-reuse-v251.md`
+
+# Acordo aprovado: questões privadas reutilizáveis 2.5.1
+
+Versão 1.0.0, decisão explícita de Bruno em 12/10/2026 nesta conversa: implementar reaproveitamento, recuperar as 20 questões já aprovadas e limitar conteúdo produzido pela empresa ao uso na mesma empresa. Risco D. Baseline d4109b2524e2e3cb68a616650ab7328aa5a2837d.
+
+- D-01: Toda questão nova ou adaptada dentro da avaliação, depois da aprovação humana, integra o banco privado da empresa automaticamente na mesma transação da aprovação/envio. Geração e rascunho sem aprovação não disponibilizam questões. Não exigir outra decisão humana repetida.
+- D-02: Organização é obtida do registro autorizado no servidor; conteúdo privado não aparece no catálogo/composição/consulta de outra empresa, inclusive com ID conhecido. Nenhuma publicação de conteúdo de empresa como global. As questões globais institucionais já existentes continuam consultáveis, sem reescrever propriedade/histórico.
+- D-03: Revisão individual e aprovação do conjunto usam a capacidade de gravação existente, adaptada para idempotência. Replays, reenvio a outro participante e aprovação repetida não duplicam questão/família nem alteram versão já usada; conflitos reais não são escondidos.
+- D-04: Recuperar questões históricas com aprovação humana persistida, inclusive as 20 da prova Bruno/Diego. Conservar conteúdo, cinco alternativas, correta, explicação, competência/dificuldade/idioma, origem, versão, autor e data originais da aprovação. Projeção técnica não inventa nova aprovação. Registros pendentes ou sem evidência de aprovação não são promovidos.
+- D-05: Prova enviada, aplicações, respostas, resultados, convites, histórico e Pessoas/Perfis/Score permanecem inalterados. Reutilização exige compatibilidade existente; conteúdo inativo/comprometido não é reativado automaticamente. Não gerar IA ou enviar novo convite durante recuperação.
+- D-06: Na interface, explicar uso exclusivo da empresa e reaproveitamento depois da aprovação. Retirar a antiga opção individual de salvar no banco: aprovação aprovada por este acordo já determina a gravação privada. Destino de geração de empresa é privado, validado também pelo servidor.
+- D-07: Reusar tabelas, autoridade, validação, composição, publicação e custos existentes. Sem novo provedor/modelo/prompt, serviço, tarifa, papel ou dependência. Auditar a projeção e separar execução backend de decisão humana original.
+- D-08: Entregar 2.5.1 em main/origin/produção com mapa prévio, testes negativos dirigidos e regressões de banco/composição/envio/portal, documentação, Context Pack, plano seletivo, rollback, smoke, preservação e AoT. Limites de evidência explícitos.
+
+PROIBIDO: P-01 compartilhar/promover conteúdo privado entre empresas; P-02 aprovar pendência/fabricar autor ou data; P-03 modificar prova emitida, aplicações ou dados humanos; P-04 cobrar/regerar IA ou reenviar convites na recuperação; P-05 reativar versão bloqueada/duplicar por replay; P-06 editar trabalho alheio ou publicar destino não exigido.
+
+FORA DE ESCOPO: F-01 novo banco global/curadoria institucional; F-02 critérios de calibração/Score; F-03 redesign adjacente, novo contrato de avaliação ou transporte de e-mail; F-04 criação de testes com Pessoas reais em produção.
+
+AUTONOMIA: A-01 wrappers/rotina interna reutilizando persistência existente e migration nova; A-02 layout/textos mecânicos coerentes com o Prisma; A-03 seleção proporcional de testes e recuperação técnica auditada das aprovações comprovadas.
+
+ACEITE: CA-01 D-01/03/04: QA aprovação individual/conjunto, backfill, autoria/data/conteúdo e replay/concorrência; produção 20/20 recuperadas sem mudar prova. CA-02 D-02/05: QA empresas A/B, IDs cruzados, negativos, estado bloqueado e preservação; produção hashes agregados e global intactos. CA-03 D-06/07: browser/tipos/build, fontes e rastreabilidade da gravação/auditoria; nenhum consumo/envio adicional. CA-04 D-08: AoT, CI, migrations/Edge se necessário, web/rollback/smoke e sincronização.
+
+Supersessões explícitas: D-UX-03 do acordo position-assessment-v230 somente na opção de salvar no banco, agora automática após aprovação e privada. D-06 do acordo process-assessment-v232 permanece revisão humana em conjunto, acrescida da projeção privada. D-12/D-16/D-24 do acordo question-bank-v250 são restringidos pelo destino privado de conteúdos de empresa; não constituem autorização de compartilhar novas questões da empresa como globais. Nenhum Q material pendente.
 
 ---
 
@@ -17437,6 +17476,46 @@ Local: 8 testes de domínio/rotas, 34 checks de regressão browser e 12 cenário
 Publicado no SHA funcional 86c7397a87377de74c439285e9d6c518e606f8ce, produto 2.2.1: migration de leitura mínima aplicada e frontend atualizado. CI branch 37875709632/main 37875828019 success. Host srv1038882; web sha256:51c85201a67fa4e4d1f3facacf267ecddafca040c01598641ccfafbba75befec, running/zero reinícios; 16HTTP200 e 16 checks de SHA/versão/layout/etapas/assets/infra PASS. Rollback sha256:033c370c167e5d52a77e7df148ebb89fe343ab31d1c455b41ead4cb814a925cc confirmado; Parser/Synthesis/gateway preservam IDs/imagens e workers healthy. Verificação de corpo/grants/RLS do banco em backend-release.json e rls-after.json. Fechamento documental sincroniza main/origin/VPS sem rebuild. Smoke público, jornada autenticada real NOT TESTED.
 
 Dispatcher derivou migration+web; migration foi aplicada pelo fluxo Supabase revisado e conferida antes do frontend. Validação genérica pnpm test do plano foi substituída localmente por 8 testes dirigidos +48 verificações SQL +46 browser, conforme impacto; 19 testes de tooling/contexto também PASS. CI existente executou seu gate completo. Executor SQL canônico atualizado para aplicar a projeção antes da fixture, reproduzido com rollback. Probe imediato do deploy retornou404/SSH22; verificação independente após estabilização passou sem reconstruir nem repetir deploy, consolidada em publication-consolidated.json. Nenhuma pendência de produto; limitações autenticadas permanecem explícitas.
+
+---
+
+## Source: `docs/qa/aot-company-question-reuse-v251.md`
+
+# AoT — Questões privadas reutilizáveis 2.5.1
+
+Acordo integral1.0.0 `agreement-company-question-reuse-v251.md`, execução e mapa prévios correspondentes. Decisão explícita de Bruno em12/10/2026; baseline main/origin/VPS d4109b2524e2e3cb68a616650ab7328aa5a2837d, runtime web e16151ec657264ab403aa2eda9fe439ee2ad0ab3. Branch `codex/company-question-reuse`, risco D. Evidências em `docs/qa/evidence/company-question-reuse-v251/`.
+
+## Acordos, implementação, teste e evidência
+
+| ID | Implementação | Evidência | Status |
+| --- | --- | --- | --- |
+| D-01 | Wrappers de aprovação individual e conjunto; rotina privada lê decisão persistida e grava na mesma transação | SQL158: pendência ausente, aprovação mesmo com saveToBank=false, conjunto10, revisão original; processo64 | PASS |
+| D-02 | Tenant obtido do registro autorizado; destino privado guardado antes de reserva/publicação; workspace sem destino global | SQL empresas A/B, IDs cruzados/anon, super_admin privado, global negado e rollback; states34 | PASS |
+| D-03 | Fingerprint/família/versionamento existentes; lock de empresa; replay sem recriar ou duplicar | SQL replay, contagens/auditoria e duas conexões simultâneas com item ausente | PASS |
+| D-04 | Backfill de aprovação persistida; conteúdo/5 alternativas/key/explicação/competência/dificuldade/idioma/origem/version/autor/data conservados | SQL recuperação10 e campos originais; preflight produtivo20 válidas; recuperação produtiva pendente | PARTIAL |
+| D-05 | Sem escritor de provas/aplicações/convites/Pessoas/Perfis/Score; estado comprometido permanece bloqueado | SQL snapshots e global intactos, processo/portal; portal38; hashes produtivos antes coletados, depois pendentes | PARTIAL |
+| D-06 | Textos de uso exclusivo/reutilização, checkbox legado retirado; seleção de destino somente empresa | Browser banco191+states34, processo64, portal38; inspeção visual390; tipos/build; error/release tests | PASS |
+| D-07 | Tabelas/auth/validação/custos atuais; auditoria backend explicitamente sem decisão humana criada | SQL audit payload e grants privados; diff sem provedor/modelo/prompt/serviço/tarifa/papel/dependência novos | PASS |
+| D-08 | Versão2.5.1, owner docs/contexto, publicação seletiva e fechamento | Local validado; CI/backend/web/rollback/smoke/sincronização pendentes | PARTIAL |
+
+## Proibições e capacidades protegidas
+
+P-01 PASS local: empresaB/ID conhecido negados, publicação global bloqueada até para privilegiado. P-02 PASS: rascunho pendente não publicado; autoria/data vêm da aprovação persistida; auditoria técnica `humanDecisionCreated=false`, `executionKind=backend-projection`, autor causal original. P-03/P-04 PARTIAL até comparação produtiva: snapshots SQL, convite/portal/correção e hashes antes; nenhuma IA viva/e-mail/teste com Pessoa produtiva. P-05 PASS: replay/concorrência idempotentes, comprometido não reativado. P-06 PARTIAL até plano/rollout: alterações próprias isoladas, untracked alheios preservados, nenhum destino adjacente previsto.
+
+## Validação proporcional e limites
+
+LOCAL PostgreSQL17:158 asserts da regressão conjunta existente banco/processo/portal mais privados, e corrida real de duas conexões. Harness clona somente schema e seed técnico da baseline descartável vazia, recria fixtures sintéticas e remove exclusivamente sua própria clone ao terminar. A baseline original não foi alterada; limitações físicas antigas permanecem, conforme AoT2.5.0. Nenhum QA remoto separado existe.
+
+Browser com componentes reais/serviços sintéticos: banco191, estados34 incluindo destino privado para super_admin, processo64, avaliação/portal38, em desktop/celular e com negativas de falha/loading/rascunho/retry. Node dirigido49 testes e31 checks de regressão de mensagens/loading/navegação/shell (mensagens compartilhadas repetidas somente após correção). Cinco guards de loading/avisos e22 testes de release/contexto PASS. Lint do snapshot de arquivos rastreados, Context Pack e ledger PASS. Tipos web, build TypeScript e build web PASS; revisão visual de geração390 sem overflow. Mensagem de erro dedicada precede fallback interno e preserva a prioridade de autorização. Testes não certificam calibração empírica nem jornada produtiva autenticada, ambos NOT TESTED.
+
+Baseline produtiva verificada: Supabase Prisma ioldpnqqvobprjiontre ACTIVE_HEALTHY/PG17.6.1.155, uma avaliação emitida com20 questões aprovadas/13 tópicos e20 aprovações originais válidas. Validator atual confirmou20/20. Banco antes17 (16 institucionais globais,1 da empresa). Quinze fingerprints agregados antes cobrem dados/convites/generação/Tokens/globais, sem exportar conteúdo pessoal. VPS checkout d4109b2, dez containers e222 assets registrados; nove serviços adjacentes a preservar. Edge/configuração/políticas de IA não precisam mudar.
+
+## Publicação e encerramento
+
+PENDENTE. Migration nova `20261012060000_company_question_reuse.sql` conserva implementações anteriores em funções privadas sem grants de cliente. Rollback da aplicação usa imagem anterior; eventual reversão controlada de funções não apaga itens históricos nem inventa decisão humana. Desvios do acordo: nenhum identificado; aceites produtivos ainda não declarados PASS.
+
+
+Roteamento do dispatcher: validação completa `pnpm run test` substituída pelas suítes dirigidas acima conforme AGENTS10; CI existente mantém seu gate normal. Snapshot do index exclui cópias untracked alheias, sem mudar os guards. Warnings de bundles/dynamic import e garbage collection de worktrees são anteriores; não foram incorporados ao escopo.
 
 ---
 
@@ -23805,6 +23884,16 @@ Implementar integralmente `docs/qa/agreement-compact-follow-up-cards.md` v1.0.0,
 
 ---
 
+## Source: `docs/qa/execution-company-question-reuse-v251.md`
+
+# Execução 2.5.1
+
+Contrato congelado integral: `docs/qa/agreement-company-question-reuse-v251.md` v1.0.0. Ler integralmente antes de implementar. D-01..D-08, P-01..P-06, F-01..F-04, A-01..A-03 e CA-01..CA-04 são vinculantes, sem reinterpretação. Preservar invariantes/autoridade dos contratos existentes fora das supersessões explícitas. Mapa prévio em `impact-company-question-reuse-v251.md`; fechamento no AoT da mesma entrega.
+
+Reusar gravação privada existente, adicionar migration compatível e wrappers/integração mínima. Backfill somente de aprovação persistida. QA local isolado antes de produção; verificar live baseline e preservar snapshots. Checks dirigidos, sem suíte integral local por hábito; CI existente permanece. Commit/plano por diff; publicar somente migration/web/documentação e eventual Edge demonstravelmente exigida. Recuperação não usa IA nem cria convite/decisão. Standing authorization cobre integração/main/produção desta melhoria. Persistir até smoke/sincronização.
+
+---
+
 ## Source: `docs/qa/execution-competency-curation-persistence.md`
 
 # Execução da persistência de curadoria
@@ -27172,6 +27261,27 @@ Versão 1.0.0. Autorizada por Bruno em 2026-09-18. Ler integralmente `docs/qa/ag
 Implementar a regra no contrato do agente, owner de UX, templates de acordo/AoT, protocolo de rastreabilidade, ADR e roteamento do Context Pack. Projetar a seção canônica de fidelidade visual diretamente na fonte compacta do GPT, protegê-la com checker e teste e regenerar os dois artefatos derivados. Não editar artefatos gerados manualmente.
 
 Validar `check:foundation`, o teste de tooling do Context Pack, geração e verificação dos artefatos. Revisar diff e manifesto. Este movimento não altera telas, código de produto, banco, Supabase, IA de runtime, QA ou produção.
+
+---
+
+## Source: `docs/qa/impact-company-question-reuse-v251.md`
+
+# Mapa prévio: reaproveitamento privado 2.5.1
+
+Baseline main/origin/VPS checkout d4109b2; runtime web e16151e, Supabase Prisma ioldpnqqvobprjiontre, sem QA remoto separado. QA local schema clone descartável; manter baseline original com limitação física documentada no AoT2.5.0.
+
+| Capacidade | Relação | Preservação e regressão |
+| --- | --- | --- |
+| Aprovação individual/conjunto e persistência privada | direct | Mesma aprovação humana, auditorias/conteúdo/autor/data; atomicidade, replay, concorrência e inválidos |
+| Banco catálogo/detalhe/cobertura e publicação | direct | Globais existentes intactas; empresa isolada; destino privado servidor/interface; testes A/B/ID, global negado e consulta histórica |
+| Composição de outra avaliação | direct | Só aprovadas compatíveis da própria empresa/globais institucionais; mesmas distribuições/cinco alternativas/sem duplicar |
+| Convites/aplicações/portal/correção | critical_transversal | Snapshot emitido/convites/resultado intocados; regressão processo/portal e hashes produtivos |
+| Tokens/orçamento/generação | plausible_indirect | Reuso gratuito e sem IA; guardas anteriores, cotação/settlement/replay; geração sem compartilhamento |
+| Loading/navegação/shell | plausible_indirect | Apenas explicação/checkbox removido/versão; types/build, testes dirigidos e browser responsive |
+| Pessoas/Perfis/Score/Posições | no_impact_identified | Sem escritor alterado; produto apenas lê contexto existente; hashes antes/depois |
+| Parser/gateway/Synthesis/mail/Paddle/Traefik | no_impact_identified | Sem código/configuração; não reconstruir, comparar containers após rollout |
+
+Rollback: imagem web anterior/Edge inalterada se plano não exigir; wrappers conservam implementações antigas inacessíveis para revisão/reversão de código controlada. Dados aprovados recuperados não são apagados por rollback; sem downgrade destrutivo. Nova projeção usa snapshots originais, sem mudar contratos de prova/portal. Descobertas revisam mapa/validação antes de fechar.
 
 ---
 

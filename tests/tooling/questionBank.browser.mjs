@@ -3,7 +3,7 @@ import {createRequire} from 'node:module';
 import {mkdir,writeFile} from 'node:fs/promises';
 const {chromium}=createRequire(import.meta.url)(process.env.PRISMA_PLAYWRIGHT_PATH??'playwright');
 const browser=await chromium.launch({headless:true,executablePath:process.env.PRISMA_BROWSER_PATH});
-const base='http://127.0.0.1:5785',dir='docs/qa/evidence/question-bank-v250/browser',checks=[];
+const base='http://127.0.0.1:5785',dir=process.env.PRISMA_BANK_EVIDENCE??'docs/qa/evidence/question-bank-v250/browser',checks=[];
 await mkdir(dir,{recursive:true});
 const check=(name,value)=>{checks.push({name,pass:!!value});assert.ok(value,name);};
 async function open(width,state='default',role='super_admin'){const p=await browser.newPage({viewport:{width,height:980}});p.errors=[];p.external=[];p.on('pageerror',e=>p.errors.push(e.message));await p.route('**/*',r=>r.request().url().startsWith(base+'/')?r.continue():(p.external.push(r.request().url()),r.abort()));await p.goto(`${base}/question-bank.html?state=${state}&role=${role}`);await p.getByRole('heading',{name:'Banco de questões',exact:true}).waitFor();await p.getByRole('button',{name:'Consultar cobertura',exact:true}).waitFor();return p;}

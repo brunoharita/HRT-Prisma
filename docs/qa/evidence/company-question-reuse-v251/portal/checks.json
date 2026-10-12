@@ -1,0 +1,154 @@
+[
+  {
+    "name": "configuration/1448 no horizontal overflow",
+    "pass": true
+  },
+  {
+    "name": "configuration/1448 no implicit generation or send",
+    "pass": true
+  },
+  {
+    "name": "composition/1448 no horizontal overflow",
+    "pass": true
+  },
+  {
+    "name": "composition/1448 no implicit generation or send",
+    "pass": true
+  },
+  {
+    "name": "review/1448 no horizontal overflow",
+    "pass": true
+  },
+  {
+    "name": "review/1448 no implicit generation or send",
+    "pass": true
+  },
+  {
+    "name": "invitation/1448 no horizontal overflow",
+    "pass": true
+  },
+  {
+    "name": "invitation/1448 no implicit generation or send",
+    "pass": true
+  },
+  {
+    "name": "portal/1448 no horizontal overflow",
+    "pass": true
+  },
+  {
+    "name": "portal/1448 exactly five options",
+    "pass": true
+  },
+  {
+    "name": "portal/1448 no answer key or shell",
+    "pass": true
+  },
+  {
+    "name": "portal/1448 autosave explicit choice",
+    "pass": true
+  },
+  {
+    "name": "result/1448 no horizontal overflow",
+    "pass": true
+  },
+  {
+    "name": "result/1448 no implicit generation or send",
+    "pass": true
+  },
+  {
+    "name": "portal/1448 failed save keeps choice",
+    "pass": true
+  },
+  {
+    "name": "portal/1448 failed save buffer retained",
+    "pass": true
+  },
+  {
+    "name": "portal/1448 retry keeps selected response",
+    "pass": true
+  },
+  {
+    "name": "browser/1448 no runtime exceptions",
+    "pass": true
+  },
+  {
+    "name": "browser/1448 no external requests",
+    "pass": true
+  },
+  {
+    "name": "configuration/390 no horizontal overflow",
+    "pass": true
+  },
+  {
+    "name": "configuration/390 no implicit generation or send",
+    "pass": true
+  },
+  {
+    "name": "composition/390 no horizontal overflow",
+    "pass": true
+  },
+  {
+    "name": "composition/390 no implicit generation or send",
+    "pass": true
+  },
+  {
+    "name": "review/390 no horizontal overflow",
+    "pass": true
+  },
+  {
+    "name": "review/390 no implicit generation or send",
+    "pass": true
+  },
+  {
+    "name": "invitation/390 no horizontal overflow",
+    "pass": true
+  },
+  {
+    "name": "invitation/390 no implicit generation or send",
+    "pass": true
+  },
+  {
+    "name": "portal/390 no horizontal overflow",
+    "pass": true
+  },
+  {
+    "name": "portal/390 exactly five options",
+    "pass": true
+  },
+  {
+    "name": "portal/390 no answer key or shell",
+    "pass": true
+  },
+  {
+    "name": "portal/390 autosave explicit choice",
+    "pass": true
+  },
+  {
+    "name": "result/390 no horizontal overflow",
+    "pass": true
+  },
+  {
+    "name": "result/390 no implicit generation or send",
+    "pass": true
+  },
+  {
+    "name": "portal/390 failed save keeps choice",
+    "pass": true
+  },
+  {
+    "name": "portal/390 failed save buffer retained",
+    "pass": true
+  },
+  {
+    "name": "portal/390 retry keeps selected response",
+    "pass": true
+  },
+  {
+    "name": "browser/390 no runtime exceptions",
+    "pass": true
+  },
+  {
+    "name": "browser/390 no external requests",
+    "pass": true
+  }
+]

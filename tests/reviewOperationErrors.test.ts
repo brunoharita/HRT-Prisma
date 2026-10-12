@@ -209,3 +209,15 @@ test("Supabase service boundaries cannot throw raw backend messages", async () =
   assert.match(supabaseOperationError({message:"M51C_INVALID_PROPOSAL_CONTENT"},"Falha.").message,/estrutura/);
   assert.equal(supabaseOperationError({message:"M51C_PROPOSAL_LOCKED"},"Falha.").recovery,"reload");
  });
+
+
+test("company questions reject global destination with safe recovery", () => {
+  const error = reviewOperationError({ code: "22023", message: "QB_COMPANY_PRIVATE_REQUIRED" }, "Falha.");
+  assert.equal(error.category, "validation");
+  assert.equal(error.recovery, "review-fields");
+  assert.match(error.message, /uso exclusivo/);
+  assert.match(error.message, /conteúdo foi preservado/);
+  assert.doesNotMatch(error.message, /QB_COMPANY/);
+  assert.equal(supabaseOperationError({ code: "22023", message: "QB_COMPANY_PRIVATE_REQUIRED" }, "Falha.").message, error.message);
+  assert.equal(reviewOperationError({ code: "42501", message: "QB_COMPANY_PRIVATE_REQUIRED" }, "Falha.").category, "authorization");
+});

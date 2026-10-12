@@ -1,0 +1,143 @@
+{
+  "checks": [
+    {
+      "name": "actual zero rate differs from unavailable and synthetic sample identified",
+      "pass": true
+    },
+    {
+      "name": "median uses minutes seconds and applications/incidents separate",
+      "pass": true
+    },
+    {
+      "name": "arithmetic index and quantiles limits explicit",
+      "pass": true
+    },
+    {
+      "name": "synthetic-quality-390: no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "real-shaped fixture retains actual flag evidence and method limits",
+      "pass": true
+    },
+    {
+      "name": "quality-review-390: no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "closed proposal has consultation without apparent redecision",
+      "pass": true
+    },
+    {
+      "name": "configuration accurately explains unavailable provider and absent ceiling",
+      "pass": true
+    },
+    {
+      "name": "no synthetic tools in ordinary navigation or automatically selected",
+      "pass": true
+    },
+    {
+      "name": "synthetic controls need their own deliberate selection",
+      "pass": true
+    },
+    {
+      "name": "choosing test need does not open detail",
+      "pass": true
+    },
+    {
+      "name": "only deliberate admin synthetic action called, no real generation",
+      "pass": true
+    },
+    {
+      "name": "settings-390: no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "no external requests/runtime errors",
+      "pass": true
+    },
+    {
+      "name": "privileged company generation defaults to exclusive company destination",
+      "pass": true
+    },
+    {
+      "name": "privileged actor cannot select global destination",
+      "pass": true
+    },
+    {
+      "name": "changed quantity refreshes commercial consequence",
+      "pass": true
+    },
+    {
+      "name": "cancelled generation does not prepare request or call AI",
+      "pass": true
+    },
+    {
+      "name": "no external requests/runtime errors",
+      "pass": true
+    },
+    {
+      "name": "company admin has no global generation destination",
+      "pass": true
+    },
+    {
+      "name": "no external requests/runtime errors",
+      "pass": true
+    },
+    {
+      "name": "long-detail-1448: no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "long full content survives explicit opening",
+      "pass": true
+    },
+    {
+      "name": "no external requests/runtime errors",
+      "pass": true
+    },
+    {
+      "name": "long-detail-390: no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "long full content survives explicit opening",
+      "pass": true
+    },
+    {
+      "name": "no external requests/runtime errors",
+      "pass": true
+    },
+    {
+      "name": "long-detail-320: no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "long full content survives explicit opening",
+      "pass": true
+    },
+    {
+      "name": "no external requests/runtime errors",
+      "pass": true
+    },
+    {
+      "name": "organization change does not leak private review draft",
+      "pass": true
+    },
+    {
+      "name": "failed human decision preserves draft and contextual recovery",
+      "pass": true
+    },
+    {
+      "name": "review recovery is consultation, without new human mutation",
+      "pass": true
+    },
+    {
+      "name": "no external requests/runtime errors",
+      "pass": true
+    }
+  ],
+  "limits": [
+    "Synthetic services and real-shaped metrics are test data, not empirical calibration."
+  ]
+}

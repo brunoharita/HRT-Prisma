@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.72.0
+version: 2.73.0
 last_verified: 2026-10-12
 ---
 
 # Estado atual do Prisma
+
+## Questões privadas reutilizáveis — v2.5.1
+
+Implementação autorizada em12/10/2026, acordo1.0.0: toda questão criada/adaptada em avaliação integra automaticamente o banco privado após aprovação humana. Outra empresa não consulta nem reutiliza; geração/publicação global de empresa negadas no servidor. Globais institucionais preservadas. Integração `company-question-reuse-1.0.0`, original item1.0.0 e prova/portal mantidos; autor/data/proveniência originais, replay/concorrência sem duplicar/reativar bloqueado; auditoria backend sem nova decisão humana. Migration nova recupera aprovações persistidas sem alterar prova/aplicações/convites/Pessoas/Perfis/Score ou invocar IA/cobrar/enviar. QA local PASS: SQL158 e concorrência real, banco191+34 estados, processo64/portal38, Node49 e regressões31/guards5, tipos/build/lint/contexto/ledger/release-tooling22. Publicação ainda pendente; jornada produtiva autenticada e calibração empírica NOT TESTED. Owners question-bank/process-assessment/contracts; acordo/mapa/execução/AoT `company-question-reuse-v251`.
 
 ## Banco de questões — v2.5.0
 
