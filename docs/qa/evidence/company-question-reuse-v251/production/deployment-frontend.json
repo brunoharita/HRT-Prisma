@@ -1,0 +1,20 @@
+{
+  "status": "PASS",
+  "sha": "47c9b09ebdf768c50f78a955ec4842441c802a5e",
+  "version": "2.5.1",
+  "surfaces": [
+    "one new migration",
+    "prisma-web",
+    "documentation"
+  ],
+  "publisherInitialSmoke": "HTTP404 immediately after container recreation; command exited22",
+  "recovery": "Stabilized without another deployment; independent production smoke34/34 PASS",
+  "rollbackImagePreserved": true,
+  "previousAssetsPreserved": 222,
+  "currentAssets": 224,
+  "adjacentContainersPreserved": 9,
+  "mainCi": "38246084483 success",
+  "limits": [
+    "Public distribution/login smoke; real-person authenticated journey NOT TESTED."
+  ]
+}

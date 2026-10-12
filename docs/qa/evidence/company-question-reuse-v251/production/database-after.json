@@ -1,0 +1,77 @@
+[
+  {
+    "surface": "public.people",
+    "records": 11,
+    "fingerprint": "a37e6d0f4b021bc51e9a3d930ced6f9d"
+  },
+  {
+    "surface": "public.professional_profiles",
+    "records": 15,
+    "fingerprint": "6c95647f235a01863837d734410bbd71"
+  },
+  {
+    "surface": "public.position_assessments",
+    "records": 2,
+    "fingerprint": "214e97617a651833ec09a1888fbd6376"
+  },
+  {
+    "surface": "public.position_assessment_attempts",
+    "records": 2,
+    "fingerprint": "ea7ab17f45aaabb24810775c72ee4ba6"
+  },
+  {
+    "surface": "public.position_assessment_deliveries",
+    "records": 2,
+    "fingerprint": "8f1bf2f201d662b71457e34735a97278"
+  },
+  {
+    "surface": "public.position_assessment_events",
+    "records": 0,
+    "fingerprint": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  {
+    "surface": "public.position_assessment_batches",
+    "records": 1,
+    "fingerprint": "5ca18a7429c285fa5f3a384bf6c0def1"
+  },
+  {
+    "surface": "public.position_assessment_generation",
+    "records": 2,
+    "fingerprint": "6e80023bd2d51b1c3a32692d7e3175c2"
+  },
+  {
+    "surface": "public.assessment_item_generation_proposals",
+    "records": 3,
+    "fingerprint": "114d8e855f6b57d699a77dc6acc91d85"
+  },
+  {
+    "surface": "public.assessment_item_generation_requests",
+    "records": 3,
+    "fingerprint": "a72e234cfb1a7828187d20918b629ada"
+  },
+  {
+    "surface": "public.assessment_item_generation_reviews",
+    "records": 3,
+    "fingerprint": "c8515b0063670bd48f75610b2946a6b5"
+  },
+  {
+    "surface": "public.assessment_ai_policies",
+    "records": 2,
+    "fingerprint": "c8ac8cf5cf0d841a5c707744ab5eec93"
+  },
+  {
+    "surface": "private.prisma_token_movements",
+    "records": 3,
+    "fingerprint": "a02598a5e41d00fdbbf56fb59defb64f"
+  },
+  {
+    "surface": "private.prisma_token_reservations",
+    "records": 1,
+    "fingerprint": "32b83cd2d21c462cf60836e0e4db3c20"
+  },
+  {
+    "surface": "global_items",
+    "records": 16,
+    "fingerprint": "5659012b98ed2e92971bd842ff347173"
+  }
+]

@@ -1454,6 +1454,16 @@
       "localStatementSha256": "a86d98f7a9149debeb497e7254147b07a8b368ef5c255f368cdd30a514111967",
       "remoteStatementSha256": "a86d98f7a9149debeb497e7254147b07a8b368ef5c255f368cdd30a514111967",
       "verifiedAt": "2026-10-12"
+    },
+    {
+      "name": "company_question_reuse",
+      "localVersion": "20261012060000",
+      "remoteVersion": "20261012115641",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localStatementSha256": "8f84138e49c67ccc0bd66eb3f3d974b8adfe7a616755af364b78193cdeb941e0",
+      "remoteStatementSha256": "8f84138e49c67ccc0bd66eb3f3d974b8adfe7a616755af364b78193cdeb941e0",
+      "verifiedAt": "2026-10-12"
     }
   ],
   "localOnly": [
@@ -1494,12 +1504,11 @@
   ],
   "lastIncrementalVerification": {
     "date": "2026-10-12",
-    "movement": "question-bank-v250",
+    "movement": "company-question-reuse-v251",
     "names": [
-      "question_bank_workspace_and_review",
-      "question_bank_tokens"
+      "company_question_reuse"
     ],
-    "evidence": "docs/qa/evidence/question-bank-v250/production/statement-fingerprint.json",
+    "evidence": "docs/qa/evidence/company-question-reuse-v251/production/statement-fingerprint.json",
     "historicalSnapshotVerifiedAtUnchanged": true
   }
 }
