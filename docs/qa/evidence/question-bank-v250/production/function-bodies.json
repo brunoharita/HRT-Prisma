@@ -1,0 +1,52 @@
+[
+  {
+    "schema": "private",
+    "proname": "question_bank_valid_content",
+    "body_sha256": "1574476b928bdf3818a4fdbdb45a2c26acd2db231a2e4f646eaab6df6ea8a90d"
+  },
+  {
+    "schema": "public",
+    "proname": "approve_and_publish_question_bank_proposal",
+    "body_sha256": "d9986f580dcc420f43851cac1bc10a73519303c46ca77a3d1da7a4e384e4e7da"
+  },
+  {
+    "schema": "public",
+    "proname": "complete_m51c_external_generation",
+    "body_sha256": "5b50cf641f6250899708387a2d76d6ede8653f57f4f091bc9db3efa4f14cfdd2"
+  },
+  {
+    "schema": "public",
+    "proname": "create_m51c_fake_generation_request",
+    "body_sha256": "548e68cb13cc80820c2b97c9fd3c84ffbf3ad6e5bcb16a156df0ef2cef777204"
+  },
+  {
+    "schema": "public",
+    "proname": "fail_m51c_external_generation",
+    "body_sha256": "a6121e6d2e548fbca0ddcbeafacf899a1050b491032ecfe29aa700f504bdc4d9"
+  },
+  {
+    "schema": "public",
+    "proname": "load_m51c_item_bank_workspace",
+    "body_sha256": "1684057fc71b2dbb87acf0925e92ebc06fad6a0b381b74a3467e20c26a1e4bec"
+  },
+  {
+    "schema": "public",
+    "proname": "prepare_question_bank_generation",
+    "body_sha256": "a2aa14c5bdd1ea46ddd9ce37ec413ee889434a072cb6a7b7e19b96e7e4e78519"
+  },
+  {
+    "schema": "public",
+    "proname": "publish_m51c_approved_proposals",
+    "body_sha256": "35cc8dfd1277cd96fde31c98a991426a0eab5667a54525f9b0a92302383b82e9"
+  },
+  {
+    "schema": "public",
+    "proname": "request_m51c_item_generation",
+    "body_sha256": "ac9946d1123e8c7f7e77a3178291e47fe3a831a6553812648ef2f6f7e231e854"
+  },
+  {
+    "schema": "public",
+    "proname": "review_m51c_item_proposal",
+    "body_sha256": "149bbf5b9c8c5357b0271deb98b392e7ea54b52394f7126cc3c947d9f6f75a89"
+  }
+]

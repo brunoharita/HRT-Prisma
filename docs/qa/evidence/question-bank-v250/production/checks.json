@@ -1,0 +1,144 @@
+{
+  "sha": "e16151ec657264ab403aa2eda9fe439ee2ad0ab3",
+  "checks": [
+    {
+      "name": "VPS checkout equals validated runtime SHA",
+      "pass": true
+    },
+    {
+      "name": "new web image running without restarts",
+      "pass": true
+    },
+    {
+      "name": "rollback image preserves previous web",
+      "pass": true
+    },
+    {
+      "name": "/prisma-parser-ia identity/image/status/start/health preserved",
+      "pass": true
+    },
+    {
+      "name": "/prisma-paddle-gateway identity/image/status/start/health preserved",
+      "pass": true
+    },
+    {
+      "name": "/hrt-mail-forwarder identity/image/status/start/health preserved",
+      "pass": true
+    },
+    {
+      "name": "/prisma-profile-synthesis identity/image/status/start/health preserved",
+      "pass": true
+    },
+    {
+      "name": "/paddle-vl-llama-test identity/image/status/start/health preserved",
+      "pass": true
+    },
+    {
+      "name": "/paddle-vl-prisma-test identity/image/status/start/health preserved",
+      "pass": true
+    },
+    {
+      "name": "/paddle-structure-1 identity/image/status/start/health preserved",
+      "pass": true
+    },
+    {
+      "name": "/paddle-vision-recovery-1 identity/image/status/start/health preserved",
+      "pass": true
+    },
+    {
+      "name": "/traefik-traefik-1 identity/image/status/start/health preserved",
+      "pass": true
+    },
+    {
+      "name": "all previous assets preserved byte for byte",
+      "pass": true
+    },
+    {
+      "name": "HTTPS root stable HTTP200",
+      "pass": true
+    },
+    {
+      "name": "/assets/index-DvwvWRwm.js HTTP200",
+      "pass": true
+    },
+    {
+      "name": "/assets/rolldown-runtime-C0FnF6B9.js HTTP200",
+      "pass": true
+    },
+    {
+      "name": "/assets/antd-vendor-CHFW8v3e.js HTTP200",
+      "pass": true
+    },
+    {
+      "name": "/assets/supabase-vendor-DoXvCMLf.js HTTP200",
+      "pass": true
+    },
+    {
+      "name": "/assets/react-vendor-BdxMnOeJ.js HTTP200",
+      "pass": true
+    },
+    {
+      "name": "/assets/antd-vendor-B5BXDqMa.css HTTP200",
+      "pass": true
+    },
+    {
+      "name": "/assets/index-DMRz36bQ.css HTTP200",
+      "pass": true
+    },
+    {
+      "name": "served JS embeds validated SHA and release 2.5.0",
+      "pass": true
+    },
+    {
+      "name": "served CSS contains scoped bank responsive layout and process layout",
+      "pass": true
+    },
+    {
+      "name": "/sign-in distribution HTTP200",
+      "pass": true
+    },
+    {
+      "name": "/login distribution HTTP200",
+      "pass": true
+    },
+    {
+      "name": "/item-bank distribution HTTP200",
+      "pass": true
+    },
+    {
+      "name": "/assessment/ distribution HTTP200",
+      "pass": true
+    },
+    {
+      "name": "/people distribution HTTP200",
+      "pass": true
+    },
+    {
+      "name": "/vacancies distribution HTTP200",
+      "pass": true
+    },
+    {
+      "name": "/tokens distribution HTTP200",
+      "pass": true
+    },
+    {
+      "name": "/settings distribution HTTP200",
+      "pass": true
+    },
+    {
+      "name": "1448: public login displays v2.5.0 without errors or overflow",
+      "pass": true
+    },
+    {
+      "name": "390: public login displays v2.5.0 without errors or overflow",
+      "pass": true
+    },
+    {
+      "name": "320: public login displays v2.5.0 without errors or overflow",
+      "pass": true
+    }
+  ],
+  "limits": [
+    "Public distribution and login only; internal authenticated real-user journey and empirical calibration not tested."
+  ]
+}

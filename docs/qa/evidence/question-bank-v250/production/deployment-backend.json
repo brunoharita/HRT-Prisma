@@ -1,0 +1,28 @@
+{
+  "sha": "e16151ec657264ab403aa2eda9fe439ee2ad0ab3",
+  "migrationsApplied": 2,
+  "edgeDeployment": {
+    "id": "bb93a946-a8c7-47f4-9484-d8aeb67549ba",
+    "slug": "assessment-item-generator",
+    "name": "assessment-item-generator",
+    "status": "ACTIVE",
+    "version": 8,
+    "created_at": 1788274497781,
+    "updated_at": 1791780284575,
+    "verify_jwt": true,
+    "import_map": false,
+    "entrypoint_path": "file:///tmp/user_fn_ioldpnqqvobprjiontre_bb93a946-a8c7-47f4-9484-d8aeb67549ba_8/source/supabase/functions/assessment-item-generator/index.ts",
+    "ezbr_sha256": "477785a39daf83641c83978afe4c55488c89080a9c3e51d64b4837c2d70327e9"
+  },
+  "checks": {
+    "privateHelpersInaccessible": true,
+    "anonymousDenied": true,
+    "serviceSettlementOnly": true,
+    "productionDataUnchanged": true,
+    "edgeCodeExactlyMatchesValidatedSha": true,
+    "tenFunctionBodiesMatchValidatedSources": true,
+    "unauthenticatedEdgeHttp401": true,
+    "policiesRemainDisabled": true
+  },
+  "limits": "Metadata and aggregate preservation, not real authenticated journey."
+}

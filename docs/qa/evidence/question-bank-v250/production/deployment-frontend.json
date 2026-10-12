@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-12",
+  "validatedFunctionalSha": "e16151ec657264ab403aa2eda9fe439ee2ad0ab3",
+  "publicationAttempt": {
+    "command": "release:publish --execute --wait-ci --promote-main --vps-host=prisma-vps",
+    "result": "exit22 at immediate HTTP HEAD after container recreation",
+    "rebuiltAgain": false
+  },
+  "observedRecovery": {
+    "independentSmokeChecks": 34,
+    "allPassed": true,
+    "previousAssetsPreserved": 218,
+    "currentAssets": 222,
+    "adjacentContainersPreserved": 9,
+    "rollbackImage": "prisma-web:rollback-before-e16151ec6572"
+  },
+  "checks": {
+    "twoMigrationStatementFingerprintsEqual": true,
+    "edge8ActiveJwtCodeEqual": true,
+    "featureAndMainCiPassed": true,
+    "productionAggregateDataUnchanged": true
+  },
+  "limits": [
+    "Public distribution/login smoke; authenticated real-user journey NOT TESTED.",
+    "No live paid AI, production proposal publication or invented human decision."
+  ]
+}

@@ -1,0 +1,197 @@
+[
+  {
+    "schema": "private",
+    "proname": "question_bank_complete_before_tokens",
+    "arguments": "p_request_id uuid, p_proposals jsonb, p_usage jsonb",
+    "security_definer": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "anon_execute": false,
+    "authenticated_execute": false,
+    "service_execute": false,
+    "definition_fingerprint": "0896ed5cdc9ee1e2376f96134293af30"
+  },
+  {
+    "schema": "private",
+    "proname": "question_bank_fail_before_tokens",
+    "arguments": "p_request_id uuid, p_error_class text",
+    "security_definer": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "anon_execute": false,
+    "authenticated_execute": false,
+    "service_execute": false,
+    "definition_fingerprint": "84bd7530414f96a357453e6cec8a940f"
+  },
+  {
+    "schema": "private",
+    "proname": "question_bank_publish_before_v250",
+    "arguments": "p_organization_id uuid, p_proposal_ids uuid[]",
+    "security_definer": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "anon_execute": false,
+    "authenticated_execute": false,
+    "service_execute": false,
+    "definition_fingerprint": "1ac155fb9a0a0b7ade5689814df4ec8b"
+  },
+  {
+    "schema": "private",
+    "proname": "question_bank_request_before_tokens",
+    "arguments": "p_organization_id uuid, p_generation_need_id uuid, p_quantity integer, p_target_scope text, p_estimated_cost_cents integer, p_idempotency_key text",
+    "security_definer": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "anon_execute": false,
+    "authenticated_execute": false,
+    "service_execute": false,
+    "definition_fingerprint": "5db4ffd5dd884badc8da4534571c4f25"
+  },
+  {
+    "schema": "private",
+    "proname": "question_bank_valid_content",
+    "arguments": "q jsonb",
+    "security_definer": false,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "anon_execute": false,
+    "authenticated_execute": false,
+    "service_execute": false,
+    "definition_fingerprint": "bf7fbd92ab19fd58777db19c402ab5a6"
+  },
+  {
+    "schema": "private",
+    "proname": "question_bank_workspace_before_v250",
+    "arguments": "p_organization_id uuid",
+    "security_definer": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "anon_execute": false,
+    "authenticated_execute": false,
+    "service_execute": false,
+    "definition_fingerprint": "ddf07450265bf4305843a3f15ae96df2"
+  },
+  {
+    "schema": "public",
+    "proname": "approve_and_publish_question_bank_proposal",
+    "arguments": "p_organization_id uuid, p_proposal_id uuid, p_rationale text",
+    "security_definer": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "anon_execute": false,
+    "authenticated_execute": true,
+    "service_execute": false,
+    "definition_fingerprint": "ce45c099ed62f620b85f6caef3d1c2e8"
+  },
+  {
+    "schema": "public",
+    "proname": "complete_m51c_external_generation",
+    "arguments": "p_request_id uuid, p_proposals jsonb, p_usage jsonb",
+    "security_definer": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "anon_execute": false,
+    "authenticated_execute": false,
+    "service_execute": true,
+    "definition_fingerprint": "7a6cf02831f9ec687f04a7d56e81e0cf"
+  },
+  {
+    "schema": "public",
+    "proname": "create_m51c_fake_generation_request",
+    "arguments": "p_organization_id uuid, p_blueprint_id uuid, p_dimension text, p_quantity integer, p_target_scope text, p_idempotency_key text",
+    "security_definer": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "anon_execute": false,
+    "authenticated_execute": true,
+    "service_execute": false,
+    "definition_fingerprint": "af45f6f2bd4f8c4be0708c385207a8e8"
+  },
+  {
+    "schema": "public",
+    "proname": "fail_m51c_external_generation",
+    "arguments": "p_request_id uuid, p_error_class text",
+    "security_definer": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "anon_execute": false,
+    "authenticated_execute": false,
+    "service_execute": true,
+    "definition_fingerprint": "b12278364628fe87e566a0ab15ecd0e7"
+  },
+  {
+    "schema": "public",
+    "proname": "load_m51c_item_bank_workspace",
+    "arguments": "p_organization_id uuid",
+    "security_definer": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "anon_execute": false,
+    "authenticated_execute": true,
+    "service_execute": false,
+    "definition_fingerprint": "7843bf8bd5ea451cc157d851ce5e4464"
+  },
+  {
+    "schema": "public",
+    "proname": "prepare_question_bank_generation",
+    "arguments": "p_organization_id uuid, p_blueprint_id uuid, p_dimension text",
+    "security_definer": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "anon_execute": false,
+    "authenticated_execute": true,
+    "service_execute": false,
+    "definition_fingerprint": "952bc8886d9b38f3adaf31a590171a03"
+  },
+  {
+    "schema": "public",
+    "proname": "publish_m51c_approved_proposals",
+    "arguments": "p_organization_id uuid, p_proposal_ids uuid[]",
+    "security_definer": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "anon_execute": false,
+    "authenticated_execute": true,
+    "service_execute": false,
+    "definition_fingerprint": "ff7f2a504a851f9f14792bdfe2a01b0f"
+  },
+  {
+    "schema": "public",
+    "proname": "request_m51c_item_generation",
+    "arguments": "p_organization_id uuid, p_generation_need_id uuid, p_quantity integer, p_target_scope text, p_estimated_cost_cents integer, p_idempotency_key text, p_token_quote_id uuid",
+    "security_definer": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "anon_execute": false,
+    "authenticated_execute": true,
+    "service_execute": false,
+    "definition_fingerprint": "1f26849187fea55ee4b6d98231665a80"
+  },
+  {
+    "schema": "public",
+    "proname": "review_m51c_item_proposal",
+    "arguments": "p_proposal_id uuid, p_decision text, p_rationale text",
+    "security_definer": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "anon_execute": false,
+    "authenticated_execute": true,
+    "service_execute": false,
+    "definition_fingerprint": "0758b2609a29baac355e8d07d9e626cc"
+  }
+]

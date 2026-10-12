@@ -1434,6 +1434,26 @@
       "localStatementSha256": "f8dbc0866e827ac4a2e43175cd70b55c0a3572395f3df4734c6989df956beab2",
       "remoteStatementSha256": "f8dbc0866e827ac4a2e43175cd70b55c0a3572395f3df4734c6989df956beab2",
       "verifiedAt": "2026-10-10"
+    },
+    {
+      "name": "question_bank_workspace_and_review",
+      "localVersion": "20261012010000",
+      "remoteVersion": "20261012044428",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localStatementSha256": "1bf3b8584065a4458adf17bdf765d2893f354dc08c77ad9cc9169fa20f5b7e5f",
+      "remoteStatementSha256": "1bf3b8584065a4458adf17bdf765d2893f354dc08c77ad9cc9169fa20f5b7e5f",
+      "verifiedAt": "2026-10-12"
+    },
+    {
+      "name": "question_bank_tokens",
+      "localVersion": "20261012011000",
+      "remoteVersion": "20261012044437",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localStatementSha256": "a86d98f7a9149debeb497e7254147b07a8b368ef5c255f368cdd30a514111967",
+      "remoteStatementSha256": "a86d98f7a9149debeb497e7254147b07a8b368ef5c255f368cdd30a514111967",
+      "verifiedAt": "2026-10-12"
     }
   ],
   "localOnly": [
@@ -1473,13 +1493,13 @@
     }
   ],
   "lastIncrementalVerification": {
-    "date": "2026-10-10",
-    "movement": "tokens-prisma-v240",
+    "date": "2026-10-12",
+    "movement": "question-bank-v250",
     "names": [
-      "prisma_tokens",
-      "prisma_tokens_consumers"
+      "question_bank_workspace_and_review",
+      "question_bank_tokens"
     ],
-    "evidence": "docs/qa/evidence/tokens-prisma-v240/production/statement-fingerprint.json",
+    "evidence": "docs/qa/evidence/question-bank-v250/production/statement-fingerprint.json",
     "historicalSnapshotVerifiedAtUnchanged": true
   }
 }

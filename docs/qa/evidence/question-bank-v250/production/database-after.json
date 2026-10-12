@@ -1,0 +1,42 @@
+[
+  {
+    "surface": "people",
+    "records": 11,
+    "fingerprint": "96a3e4530c3c2506fe7db3b84fb19f4e"
+  },
+  {
+    "surface": "professional_profiles",
+    "records": 15,
+    "fingerprint": "ee8716076fe8f1fa6462d4f676c53ecc"
+  },
+  {
+    "surface": "position_assessments",
+    "records": 2,
+    "fingerprint": "214e97617a651833ec09a1888fbd6376"
+  },
+  {
+    "surface": "assessment_items",
+    "records": 17,
+    "fingerprint": "b53d1c28bd3b02e29866a59cd380cc16"
+  },
+  {
+    "surface": "assessment_item_generation_proposals",
+    "records": 3,
+    "fingerprint": "114d8e855f6b57d699a77dc6acc91d85"
+  },
+  {
+    "surface": "assessment_item_generation_requests",
+    "records": 3,
+    "fingerprint": "1d37a045fc7201950ac5415c777f9887"
+  },
+  {
+    "surface": "assessment_item_generation_reviews",
+    "records": 3,
+    "fingerprint": "68c18940717305bf2636a445e2fcc23b"
+  },
+  {
+    "surface": "assessment_ai_policies",
+    "records": 2,
+    "fingerprint": "c8ac8cf5cf0d841a5c707744ab5eec93"
+  }
+]

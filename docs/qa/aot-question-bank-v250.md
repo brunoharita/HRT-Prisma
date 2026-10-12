@@ -14,11 +14,11 @@ Contrato congelado: `docs/qa/agreement-question-bank-v250.md` v1.0.0, integral; 
 | D-06 | Conteúdo completo antes de metadados; gabarito no RPC protegido | SQL/full content e negativas anon/member/tenant; browser/detail | PASS | Acesso não depende só da interface |
 | D-07 | Drawers responsivos; contexto/seleção/retorno separados | browser/close/Escape/pagination/drafts, states/scope | PASS | Rascunho preservado na sessão por organização |
 | D-08 | Fila pendente e filtros para histórico encerrado | browser/pending; states/closed proposal | PASS | Nível da competência distinto da dificuldade |
-| D-09 | Revisão integral, consulta encerrada, checkbox só aprovado | browser/review e batch; SQL/locked/valid content | PASS | Histórico2..6, processo exatamente5, sem conversão artificial |
+| D-09 | Revisão integral, consulta encerrada, checkbox só aprovado | browser/review e batch; SQL/locked/valid content | PASS | Histórico: 2..6, processo exatamente 5, sem conversão artificial |
 | D-10 | Validação estrutural e razões; comparação completa | browser/comparison desktop/mobile; SQL/invalid/duplicate | PASS | Similaridade lexical secundária, sem garantia |
 | D-11 | Nenhum prefill/decisão; motivos e rascunhos preservados | browser/empty rationale/disabled/draft; SQL/min10 | PASS | Sem conclusão humana fabricada |
 | D-12 | RPC transacional aprovar/publicar, auditorias separadas | SQL/audit/idempotence/global; concurrency2conexões; browser/review-only | PASS | Reutiliza governança existente |
-| D-13 | Aprovação comum vazia; exceções/rejeição/ajustes motivados | SQL/ordinary/exception/invalid atomic; browser/common | PASS | Revisão versionada2.0.0 |
+| D-13 | Aprovação comum vazia; exceções/rejeição/ajustes motivados | SQL/ordinary/exception/invalid atomic; browser/common | PASS | Revisão versionada 2.0.0 |
 | D-14 | Lote explícito com quantidade/destinos/origem | browser/batch; SQL/mixed tenant/status/rollback | PASS | Aprovados não selecionados preservados |
 | D-15 | Cobertura/modelo, composição e reserva separadas | SQL/coverage; browser/coverage; states/admin | PASS | Reserva não prova impossibilidade |
 | D-16 | Uma confirmação contextual, escolhas com efeito real | browser/generation; states/quantity/cancel | PASS | Cancelar não prepara/cobra/gera |
@@ -31,11 +31,11 @@ Contrato congelado: `docs/qa/agreement-question-bank-v250.md` v1.0.0, integral; 
 | D-23 | Família real, conteúdo/autor/data por versão | browser/history e detail; SQL/preserved rows | PASS | Sem heurística de código/limite de oito; autoria ausente não reconstruída |
 | D-24 | Configurações pela autoridade, consulta verdadeira | SQL/permissions; states/configuration/admin | PASS | Gerenciamento central pelo fluxo operacional existente |
 | D-25 | Sem teto comunica indisponibilidade; finanças distintas | states/configuration; browser/generation unavailable | PASS | Sem barra vazia/preço falso/certificação jurídica |
-| D-26 | Hierarquia conteúdo/decisão, ações azuis e rodapé | capturas catalog/detail/review/comparison/settings; inspeção | PASS | Mesmo conjunto de dados em1448/768/390/320 |
+| D-26 | Hierarquia conteúdo/decisão, ações azuis e rodapé | capturas catalog/detail/review/comparison/settings; inspeção | PASS | Mesmo conjunto de dados em 1448/768/390/320 |
 | D-27 | Loading real, preservação, estados/erros/recuperação | browser/hold/failure/empty; states; errors+loading coverage | PASS | Nenhum loading cria consulta/IA/recalculo |
 | D-28 | Responsividade, teclado, labels e abertura explícita | browser/Escape/Enter/overflow; long detail desktop/390/320 | PASS | Sem referência normativa final de pixels |
 | D-29 | Governança/tenant/histórico e consumidores preservados | regression-sql131; process64/portal38; navigation/loading/UX/Tokens | PASS | Evidência local sintética, sem Pessoas produtivas mutadas |
-| D-30 | Versão, fontes, Context Pack, rollout e sincronização | Plano/CI/banco/Edge/web/smoke ainda em fechamento | PARTIAL | Atualizar somente após prova operacional |
+| D-30 | Versão, fontes, Context Pack, rollout e sincronização | Plano/CI/banco/Edge/web; production/checks 34/34 e provas abaixo | PASS | Runtime e main/origin/VPS no SHA validado; documentação de fechamento sincronizada |
 
 ## Proibições verificadas
 
@@ -62,12 +62,12 @@ Contrato congelado: `docs/qa/agreement-question-bank-v250.md` v1.0.0, integral; 
 | Portal/correção/prova fixada | critical_transversal | Portal v1 compartilhado, autosave/revisão/envio/recibo e legado | regression-sql e regression-portal38, PASS |
 | Shell/navegação/loading/foco | plausible_indirect | Rótulo da rota e CSS isolado, retorno/escopo/teclado | Node/navigation/UX/loading e browser, PASS |
 | Pessoa/Perfil/Score/Posições | no_impact_identified | Sem escritor modificado; snapshots QA preservados | regression-sql/preservation e diff, PASS |
-| Parser/Synthesis/mail/Paddle/Traefik | no_impact_identified | Nenhum diff dessas superfícies; baseline operacional capturado | production/runtime-before; verificar preservação após rollout |
+| Parser/Synthesis/mail/Paddle/Traefik | no_impact_identified | Nenhum diff dessas superfícies; baseline operacional capturado | production/runtime-before e runtime-after, nove containers preservados, PASS |
 | Outras Configurações/Knowledge | no_impact_identified | Sem redesign/taxonomia/novo blueprint/modelo | diff e operational source guards, PASS |
 
 Nova entrega comprovada: topologia Questões/Para revisar, revisão contextual e consulta completa, geração cotada e administração secundária. Preservação é evidência separada do comportamento novo. Descoberta relevante: M5.1C tem contrato histórico diferente do processo; preservados ambos. Configuração externa produtiva ausente foi exposta, sem selecionar/ativar alternativa.
 
-Limitação de baseline: o PostgreSQL descartável original tem arquivo físico ausente de `profile_synthesis_jobs`, observado no cenário de exclusão durante regressão de processo. Não foi reparado/mutado. A regressão completa foi executada em clone próprio de schema, com apenas sementes técnicas locais;131verificações passaram. A concorrência usa duas conexões no mesmo clone, com fixture sintética e justificativa de exceção explícita; uma revisão e uma versão publicadas. Clone removido ao final. Testes somente banco52 também passaram com rollback no baseline original. Sete definições runtime produtivas e locais são canonicamente iguais (diferenças só de formatação), conforme production/compatibility.json.
+Limitação de baseline: o PostgreSQL descartável original tem arquivo físico ausente de `profile_synthesis_jobs`, observado no cenário de exclusão durante regressão de processo. Não foi reparado/mutado. A regressão completa foi executada em clone próprio de schema, com apenas sementes técnicas locais; 131 verificações passaram. A concorrência usa duas conexões no mesmo clone, com fixture sintética e justificativa de exceção explícita; uma revisão e uma versão publicadas. Clone removido ao final. Testes somente banco: 52 também passaram com rollback no baseline original. Sete definições runtime produtivas e locais são canonicamente iguais (diferenças só de formatação), conforme production/compatibility.json.
 
 ## Fora de escopo
 
@@ -75,7 +75,7 @@ F-01 a F-05 preservados: sem redesign de outros módulos, calibração real/limi
 
 ## Fidelidade e evidência visual
 
-Não há mockup normativo final, conforme A-03; screenshot anterior foi classificado como contraexemplo. Comparação estrutural utiliza mesmos dados/estados de fixtures em1448/768/390/320, catalog/detail/review/comparison/coverage/history/error/generation-unavailable e states/long/quality/settings. Catálogo prioriza conteúdo, detalhe usa largura apropriada, comparação vira sequência no celular, filtros/retorno/ações permanecem. Corrigidos overflow de aviso sintético e perda de largura das abas no mobile. Sem alegação de identidade de pixels ou validação real a partir de screenshot.
+Não há mockup normativo final, conforme A-03; screenshot anterior foi classificado como contraexemplo. Comparação estrutural utiliza mesmos dados/estados de fixtures em 1448/768/390/320, catalog/detail/review/comparison/coverage/history/error/generation-unavailable e states/long/quality/settings. Catálogo prioriza conteúdo, detalhe usa largura apropriada, comparação vira sequência no celular, filtros/retorno/ações permanecem. Corrigidos overflow de aviso sintético e perda de largura das abas no mobile. Sem alegação de identidade de pixels ou validação real a partir de screenshot.
 
 ## Desvios e decisões
 
@@ -83,10 +83,16 @@ Nenhum desvio de produto identificado após comparação D/P/F/A. Nenhuma nova d
 
 ## Validação final e limites
 
-UI principal: 191 verificações; estados: 32; processo: 64; portal: 38. SQL52 + integração131 e uma disputa concorrente. Deno5testes (inclui cinco estados replay, modelo divergente, cotação ausente, entrega válida e uso desconhecido). Node dirigido:39domínio/serviço/erros e23navegação/UX/registro/loading/operational. Types/build web/raiz e checks de contexto passaram na validação dirigida. Após o CI 38204215672 detectar duas falhas, o teste histórico de navegação foi atualizado para a topologia aprovada e três avisos internos receberam ações contextuais de recuperação. Revalidação: documentPresentation 7/7, actionableNotices 3/3 no snapshot indexado e estados 32/32, incluindo rascunho preservado após falha e recuperação sem repetir decisão. O teste de avisos na árvore local também encontrou dois arquivos de cópia alheios não indexados; esses arquivos foram preservados e excluídos da prova do checkout publicado. Nenhum LLM vivo, e-mail real ou decisão sobre Pessoas em produção. Não existe QA remoto separado; QA-first local isolado verificado. Jornada autenticada real e calibração empírica: NOT TESTED, fora da prova pretendida deste redesenho.
+UI principal: 191 verificações; estados: 32; processo: 64; portal: 38. SQL: 52 + integração: 131 e uma disputa concorrente. Deno: 5 testes (inclui cinco estados replay, modelo divergente, cotação ausente, entrega válida e uso desconhecido). Node dirigido:39 domínio/serviço/erros e23 navegação/UX/registro/loading/operational. Types/build web/raiz e checks de contexto passaram na validação dirigida. Após o CI 38204215672 detectar duas falhas, o teste histórico de navegação foi atualizado para a topologia aprovada e três avisos internos receberam ações contextuais de recuperação. Revalidação: documentPresentation 7/7, actionableNotices 3/3 no snapshot indexado e estados 32/32, incluindo rascunho preservado após falha e recuperação sem repetir decisão. O teste de avisos na árvore local também encontrou dois arquivos de cópia alheios não indexados; esses arquivos foram preservados e excluídos da prova do checkout publicado. Nenhum LLM vivo, e-mail real ou decisão sobre Pessoas em produção. Não existe QA remoto separado; QA-first local isolado verificado. Jornada autenticada real e calibração empírica: NOT TESTED, fora da prova pretendida deste redesenho.
 
 ## Git / QA / produção
 
-Rollout pendente de fechamento: publicar somente duas migrations novas, Edge `assessment-item-generator`, web e documentação/contexto, conforme plano por diff comprometido. Backend antes do web. Baseline: projeto Prisma `ioldpnqqvobprjiontre` ACTIVE_HEALTHY; Edge7 ACTIVE/JWT obrigatório; VPS `prisma-vps` `/opt/prisma` remoto autorizado, SHA a23d82e,10containers/218assets. Dados produtivos apenas por contagens/hashes agregados:11Pessoas,15Perfis,2avaliações,17questões,3propostas/solicitações/revisões e2políticas. Sem dados pessoais em evidências.
+Rollout concluído em 12/10/2026: duas migrations novas, Edge `assessment-item-generator`, web e documentação/contexto, conforme plano por diff comprometido. Backend publicado antes do web. Baseline: projeto Prisma `ioldpnqqvobprjiontre` ACTIVE_HEALTHY; Edge7 ACTIVE/JWT obrigatório; VPS `prisma-vps` `/opt/prisma` remoto autorizado, SHA a23d82e,10containers/218assets. Dados produtivos apenas por contagens/hashes agregados:11Pessoas,15Perfis,2avaliações,17questões,3propostas/solicitações/revisões e2políticas. Sem dados pessoais em evidências.
 
-Não declarar D-30 PASS nem conclusão operacional até conferir CI, migrations/grants/definições, Edge, SHA/runtime/assets/rollback, smoke público, dados agregados e sincronização.
+SHA funcional validado e publicado: `e16151ec657264ab403aa2eda9fe439ee2ad0ab3`. CI feature `38204906879` e main `38205165661`: PASS. Main local/origin e checkout VPS foram conferidos neste SHA após publicação; o commit final de documentação/evidências avança os checkouts sem reconstruir o runtime, mantendo explícita a distinção.
+
+Migrations remotas `20261012044428_question_bank_workspace_and_review` e `20261012044437_question_bank_tokens`: fingerprint SHA-256 exatamente igual aos arquivos locais (UTF-8/LF), dez corpos de funções iguais às fontes validadas. Quinze permissões conferidas: anon negado, helpers privados inacessíveis, settlement somente service_role. Ledger atualizado apenas para essas duas entradas; snapshot histórico e proibição de db push indiscriminado preservados. Edge8 ACTIVE/JWT, dois arquivos exatamente iguais às fontes do SHA; requisição sem JWT retorna HTTP401. Políticas: duas, nenhuma ativada/configurada.
+
+Deploy web terminou com exit22 no HEAD HTTP404 imediato à recriação. Não houve segunda reconstrução: após estabilização, verificação independente passou 34/34, com raiz/rotas/assets HTTP200, bundle com SHA e release2.5.0, CSS esperado, login público1448/390/320 sem erros/overflow. Web running/restart0, rollback `prisma-web:rollback-before-e16151ec6572` preserva imagem anterior, todos218assets anteriores mantidos (222 no runtime final). Nove containers adjacentes idênticos em ID/imagem/status/início/restarts/health; estados Paddle previamente unhealthy/exited não foram alterados nem declarados recuperados. Evidências production/checks, runtime-before/after e login.
+
+Oito contagens/hashes agregados de dados e políticas permaneceram iguais ao baseline. Não foram publicadas propostas nem inventadas decisões humanas em produção. Falha transitória do script de deploy está registrada com a recuperação observada, sem transformar o recibo original em sucesso fictício. Smoke público e contratos não comprovam jornada autenticada real ou calibração empírica.
