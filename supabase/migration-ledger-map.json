@@ -1464,6 +1464,16 @@
       "localStatementSha256": "8f84138e49c67ccc0bd66eb3f3d974b8adfe7a616755af364b78193cdeb941e0",
       "remoteStatementSha256": "8f84138e49c67ccc0bd66eb3f3d974b8adfe7a616755af364b78193cdeb941e0",
       "verifiedAt": "2026-10-12"
+    },
+    {
+      "name": "prisma_token_nonround_rates",
+      "localVersion": "20261012130000",
+      "remoteVersion": "20261012180750",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localStatementSha256": "3760a5ee53849ebd0c7747cc93fbd9c93f2840df5b1bd606daa1ed715b1e4964",
+      "remoteStatementSha256": "3760a5ee53849ebd0c7747cc93fbd9c93f2840df5b1bd606daa1ed715b1e4964",
+      "verifiedAt": "2026-10-12"
     }
   ],
   "localOnly": [
@@ -1504,11 +1514,11 @@
   ],
   "lastIncrementalVerification": {
     "date": "2026-10-12",
-    "movement": "company-question-reuse-v251",
+    "movement": "tokens-nonround-rates",
     "names": [
-      "company_question_reuse"
+      "prisma_token_nonround_rates"
     ],
-    "evidence": "docs/qa/evidence/company-question-reuse-v251/production/statement-fingerprint.json",
+    "evidence": "docs/qa/evidence/tokens-nonround-rates/production/after.json",
     "historicalSnapshotVerifiedAtUnchanged": true
   }
 }

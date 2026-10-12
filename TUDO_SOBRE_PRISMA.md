@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 462
-source_manifest_sha256: fddb61ee43846c23d24daa75ae383911a0f904fe9e320c8fa0a73dc969ae518c
+source_manifest_sha256: 4d48f3457688bb4f56bb7948368ed85c52394e2f92a96dcd87fa717986bf9400
 -->
 
 # Tudo sobre o Prisma
@@ -2638,7 +2638,7 @@ last_verified: 2026-10-12
 
 ## Tokens Prisma — tarifas não redondas
 
-Decisão de12/10/2026: novas cotações usam2.347 por questão,14.785 por Parser IA e6.193 por síntese;20questões=46.940. Créditos comerciais fixos configuráveis, sem simular tokens medidos do provedor. Migration aditiva preserva valores históricos/cotações/reservas e não muda pacotes/franquia/preços/papéis/IA. Mesmo app2.5.1 e contratos RPC existentes; publicação somente banco e docs, sem rebuild. Acordo/mapa/execução `docs/qa/tokens-nonround-rates.md`, evidência operacional no AoT correspondente. Ativação produtiva ainda em validação neste snapshot.
+Decisão de12/10/2026: novas cotações usam2.347 por questão,14.785 por Parser IA e6.193 por síntese;20questões=46.940. Créditos comerciais fixos configuráveis, sem simular tokens medidos do provedor. Migration aditiva preserva valores históricos/cotações/reservas e não muda pacotes/franquia/preços/papéis/IA. Mesmo app2.5.1 e contratos RPC existentes; publicação somente banco e docs, sem rebuild. Acordo/mapa/execução `docs/qa/tokens-nonround-rates.md`, evidência operacional no AoT correspondente. Publicado em main/origin/VPS no SHA funcional c298b1e0759164fbcb6e3f820af8c3bafcc6d6fb, CI feature38288421811/main38288671321 success. Migration remota20261012180750 com fingerprint igual. Local109SQL/22UI/1serviço/22tooling, tipos/lint/contextos/ledger PASS. Produção: três tarifas ativas, versões antigas intactas; dez hashes de dados,16 corpos/grants e9 tabelas/grants/RLS iguais; dez containers e quatro rotas HTTP200/hashHTML preservados, sem rebuild/restart. Ledger/contexto/fechamento sincronizam fontes. Jornada autenticada real NOT TESTED; não houve IA paga/pedido/pagamento fictício.
 
 ## Questões privadas reutilizáveis — v2.5.1
 
@@ -22968,11 +22968,11 @@ Contrato e execução `docs/qa/tokens-nonround-rates.md` 1.0.0, decisão explíc
 | D-01 | Três revisões 2.347/14.785/6.193 no catálogo existente | SQL valores exatos/unidades não redondas; UI tabela e cotações | PASS |
 | D-02 | INSERT aditivo; guard baseline/vigência futura e lock do catálogo | SQL snapshots de tarifas/cotações/reservas e saldos/pacotes/pedidos; reserva antiga10.000 e cotação antiga40.000 | PASS |
 | D-03 | Mesma UI/RPC dinâmica, pt-BR e texto secundário; sem aleatoriedade | Browser22checks em1448/390;20questões46.940; revisão visual mobile | PASS |
-| D-04 | Local rollback e negativas, publicação seletiva, preservação e documentação | Local PASS; produção e sincronização pendentes | PARTIAL |
+| D-04 | Local rollback e negativas, publicação seletiva, preservação e documentação | Local109SQL/22UI/1serviço; CI feature/main, produção e Git/VPS conferidos | PASS |
 
 ## Proibições verificadas
 
-P-01 PASS local: migration histórica/corpos/grants/RLS/escritores intactos no diff; snapshots e replay SQL preservam histórico. P-02 PASS: nenhuma mudança de runtime/IA/modelo/prompt/cache/reuso/Score/Perfil/Posição; dados protegidos intactos no SQL. Produção ainda NOT TESTED.
+P-01 PASS local: migration histórica/corpos/grants/RLS/escritores intactos no diff; snapshots e replay SQL preservam histórico. P-02 PASS: nenhuma mudança de runtime/IA/modelo/prompt/cache/reuso/Score/Perfil/Posição; dados protegidos intactos no SQL. Produção:16 corpos/grants,9 tabelas/grants/RLS/políticas e dez hashes agregados iguais.
 
 ## Mapa de Impacto e Preservação
 
@@ -22981,13 +22981,13 @@ Mapa final igual ao inicial, sem dependência nova. Novidade: três tarifas. Pre
 | Capacidade / relação | Baseline e regressão | Status |
 | --- | --- | --- |
 | Tarifas/cotação/reserva/débito — direct | Valores iniciais; snapshots, versões, total, liquidação antiga/nova/replay/falha/expiração | PASS local |
-| Avaliação/Banco de questões — direct | Mesmo código consulta `position_assessment_items`;79 asserts processo/portal legados e cotação/reserva20questões | PASS local; corpos produtivos pendentes |
-| Parser/Síntese — direct | Mesmas RPCs e funções; cotação/reserva/liquidação e permissão member | PASS local; corpos produtivos pendentes |
+| Avaliação/Banco de questões — direct | Mesmo código consulta `position_assessment_items`;79 asserts processo/portal legados e cotação/reserva20questões | PASS local/produtivo: corpos inalterados |
+| Parser/Síntese — direct | Mesmas RPCs e funções; cotação/reserva/liquidação e permissão member | PASS local/produtivo: corpos inalterados |
 | Informação UI — direct | Mesmos componentes reais com transporte sintético;22 checks desktop/mobile e capturas | PASS |
-| Autorização/tenant/RLS — critical_transversal | Anônimo, tenant errado, DML privado, edição operacional, member/Parser negados | PASS local; metadados produtivos pendentes |
-| Franquia/lotes/pacotes/pedidos/dados humanos — critical_transversal | Snapshot exato SQL; dez hashes produtivos baseline capturados | PASS local; produção pendente |
+| Autorização/tenant/RLS — critical_transversal | Anônimo, tenant errado, DML privado, edição operacional, member/Parser negados | PASS local/produtivo: metadados iguais |
+| Franquia/lotes/pacotes/pedidos/dados humanos — critical_transversal | Snapshot exato SQL; dez hashes produtivos baseline capturados | PASS local/produtivo: dez hashes iguais |
 | Cache/banco/reuso/Score/matching/Knowledge — plausible_indirect | Diff sem mudança runtime; SQL snapshots e regressão de reutilização/portal | PASS local |
-| Serviços/Edge/web/portal/mail — no_impact_identified | Somente catálogo SQL; sete containers baseline capturados, sem rebuild/restart previsto | NOT TESTED produção |
+| Serviços/Edge/web/portal/mail — no_impact_identified | Somente catálogo SQL; dez containers baseline capturados, sem rebuild/restart previsto | PASS: dez identidades/imagens/estados/restarts iguais |
 
 ## Fora de escopo preservado
 
@@ -23003,11 +23003,11 @@ PostgreSQL17 LOCAL descartável em127.0.0.1:55479/import_evidence_v202, baseline
 
 ## Git / QA / ambiente
 
-Publicação ainda pendente. Rollback por novas versões via Gestão de Tokens, preservando cotações/reservas. Supabase produtivo Prisma ioldpnqqvobprjiontre ACTIVE_HEALTHY verificado; sete serviços running/restarts0, Parser/Síntese/mail healthy, Paddle experimental unhealthy preexistente.
+Publicado em12/10/2026 no SHA funcional `c298b1e0759164fbcb6e3f820af8c3bafcc6d6fb`, main/origin/VPS. CI feature38288421811/main38288671321 success. Migration remota20261012180750, fingerprint SHA2563760a5ee53849ebd0c7747cc93fbd9c93f2840df5b1bd606daa1ed715b1e4964 igual ao arquivo. Três tarifas novas ativas e três históricas preservadas; dez hashes de dados iguais (Pessoas11/Perfis15/Avaliações2, contas/lotes/movimentos/pacotes/pedidos/cotações/reservas).16 corpos/grants e9 tabelas/grants/RLS/políticas iguais. Dez containers intactos, quatro rotas públicas HTTP200 e hash HTML preservado. Plano e publish explícitos: apenas database/docs, todos serviços/Edge/web skip. Ledger acrescenta somente nova equivalência, baseline histórica mantida. Fechamento documental sincroniza fontes sem novo deploy. Rollback por novas versões via Gestão de Tokens, preservando cotações/reservas. Supabase produtivo Prisma ioldpnqqvobprjiontre ACTIVE_HEALTHY verificado; dez containers preservados; sete running/restarts0, Parser/Síntese/mail healthy, Paddle experimental unhealthy e outros três Paddle exited preexistentes.
 
 ## Conclusão
 
-Implementação local validada, fechamento produtivo pendente.
+D-01 a D-04 e P-01/P-02 PASS. Nenhum desvio. Produção ativada; fechamento documental mantém configuração e runtime. Testes locais109 asserts (79 regressões processo/portal +30 comerciais/negativos),22UI,1serviço,22release/context-tooling, tipos web/lint/Context Pack/ledger PASS. O dispatcher sugere pnpm test pelo caminho genérico; foi substituído pelos testes dirigidos do mapa, sem suíte integral local. CI normal do repositório executou sua validação automática. Jornada produtiva autenticada continua NOT TESTED; não confundir smoke público e metadados com uso humano real.
 
 ---
 

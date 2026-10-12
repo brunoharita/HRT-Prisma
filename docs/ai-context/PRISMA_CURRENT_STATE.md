@@ -10,7 +10,7 @@ last_verified: 2026-10-12
 
 ## Tokens Prisma — tarifas não redondas
 
-Decisão de12/10/2026: novas cotações usam2.347 por questão,14.785 por Parser IA e6.193 por síntese;20questões=46.940. Créditos comerciais fixos configuráveis, sem simular tokens medidos do provedor. Migration aditiva preserva valores históricos/cotações/reservas e não muda pacotes/franquia/preços/papéis/IA. Mesmo app2.5.1 e contratos RPC existentes; publicação somente banco e docs, sem rebuild. Acordo/mapa/execução `docs/qa/tokens-nonround-rates.md`, evidência operacional no AoT correspondente. Ativação produtiva ainda em validação neste snapshot.
+Decisão de12/10/2026: novas cotações usam2.347 por questão,14.785 por Parser IA e6.193 por síntese;20questões=46.940. Créditos comerciais fixos configuráveis, sem simular tokens medidos do provedor. Migration aditiva preserva valores históricos/cotações/reservas e não muda pacotes/franquia/preços/papéis/IA. Mesmo app2.5.1 e contratos RPC existentes; publicação somente banco e docs, sem rebuild. Acordo/mapa/execução `docs/qa/tokens-nonround-rates.md`, evidência operacional no AoT correspondente. Publicado em main/origin/VPS no SHA funcional c298b1e0759164fbcb6e3f820af8c3bafcc6d6fb, CI feature38288421811/main38288671321 success. Migration remota20261012180750 com fingerprint igual. Local109SQL/22UI/1serviço/22tooling, tipos/lint/contextos/ledger PASS. Produção: três tarifas ativas, versões antigas intactas; dez hashes de dados,16 corpos/grants e9 tabelas/grants/RLS iguais; dez containers e quatro rotas HTTP200/hashHTML preservados, sem rebuild/restart. Ledger/contexto/fechamento sincronizam fontes. Jornada autenticada real NOT TESTED; não houve IA paga/pedido/pagamento fictício.
 
 ## Questões privadas reutilizáveis — v2.5.1
 
