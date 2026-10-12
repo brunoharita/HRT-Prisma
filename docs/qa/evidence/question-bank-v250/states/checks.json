@@ -117,6 +117,14 @@
       "pass": true
     },
     {
+      "name": "failed human decision preserves draft and contextual recovery",
+      "pass": true
+    },
+    {
+      "name": "review recovery is consultation, without new human mutation",
+      "pass": true
+    },
+    {
       "name": "no external requests/runtime errors",
       "pass": true
     }

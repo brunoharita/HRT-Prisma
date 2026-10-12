@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 456
-source_manifest_sha256: 8823f09c30f93370eaed3e82892c1b7120e15838d3f464df7a550b44454405bb
+source_manifest_sha256: e5352ca5b0126904c0a0681a929d5fe1b423449ce419a0b9bef0dda8257600e5
 -->
 
 # Tudo sobre o Prisma
@@ -22415,7 +22415,7 @@ Nenhum desvio de produto identificado após comparação D/P/F/A. Nenhuma nova d
 
 ## Validação final e limites
 
-UI principal191verificações; estados30; processo64; portal38. SQL52 + integração131 e uma disputa concorrente. Deno5testes (inclui cinco estados replay, modelo divergente, cotação ausente, entrega válida e uso desconhecido). Node dirigido:39domínio/serviço/erros e23navegação/UX/registro/loading/operational. Types/build web/raiz e checks de contexto serão registrados no fechamento. Nenhum LLM vivo, e-mail real ou decisão sobre Pessoas em produção. Não existe QA remoto separado; QA-first local isolado verificado. Jornada autenticada real e calibração empírica: NOT TESTED, fora da prova pretendida deste redesenho.
+UI principal: 191 verificações; estados: 32; processo: 64; portal: 38. SQL52 + integração131 e uma disputa concorrente. Deno5testes (inclui cinco estados replay, modelo divergente, cotação ausente, entrega válida e uso desconhecido). Node dirigido:39domínio/serviço/erros e23navegação/UX/registro/loading/operational. Types/build web/raiz e checks de contexto passaram na validação dirigida. Após o CI 38204215672 detectar duas falhas, o teste histórico de navegação foi atualizado para a topologia aprovada e três avisos internos receberam ações contextuais de recuperação. Revalidação: documentPresentation 7/7, actionableNotices 3/3 no snapshot indexado e estados 32/32, incluindo rascunho preservado após falha e recuperação sem repetir decisão. O teste de avisos na árvore local também encontrou dois arquivos de cópia alheios não indexados; esses arquivos foram preservados e excluídos da prova do checkout publicado. Nenhum LLM vivo, e-mail real ou decisão sobre Pessoas em produção. Não existe QA remoto separado; QA-first local isolado verificado. Jornada autenticada real e calibração empírica: NOT TESTED, fora da prova pretendida deste redesenho.
 
 ## Git / QA / produção
 

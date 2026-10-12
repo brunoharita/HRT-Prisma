@@ -149,9 +149,11 @@ test("M5.1 operational surfaces use explainable, responsive, and user-facing pre
   assert.match(verifications, /verificationStatus/);
   assert.match(verifications, /Encerradas/);
   assert.match(verifications, /className="prisma-responsive-table prisma-verification-table"/);
-  assert.match(itemBank, /label: "Operação"/);
-  assert.match(itemBank, /label: "Governança"/);
-  assert.match(itemBank, /label: "Lacunas"/);
+  assert.match(itemBank, /title="Banco de questões"/);
+  assert.match(itemBank, /key:"questions",label:"Questões"/);
+  assert.match(itemBank, /key:"review",label:`Para revisar/);
+  assert.match(itemBank, /Consultar cobertura/);
+  assert.match(itemBank, /Comparar questões/);
   assert.doesNotMatch(itemBank, /<Tabs activeKey=\{surface\}/);
   assert.match(home, /Como o Prisma trabalha/);
   assert.match(home, /<Drawer open=\{help\}/);
