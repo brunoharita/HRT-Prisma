@@ -1,0 +1,18 @@
+{
+  "checks": [
+    {
+      "name": "validated functional SHA in public bundle",
+      "pass": true
+    },
+    {
+      "name": "invitation date and non-performed labels in public bundle",
+      "pass": true
+    },
+    {
+      "name": "invitation layout styles in public CSS",
+      "pass": true
+    }
+  ],
+  "source": "public entry assets",
+  "limitations": "Static delivery proof; not an authenticated candidate journey"
+}

@@ -1,0 +1,14 @@
+{
+  "baseline": "a33e3db5347c677e6ee78156b9d6fa9f0f560f80",
+  "functionalSha": "602252c2b533df423fe6f59d9b0704bbf3e81077",
+  "node": {"tests": 15, "failed": 0, "suites": ["assessmentInvitations", "processAssessment", "positionFollowUp"]},
+  "sql": {"assertions": 87, "localDatabase": "import_evidence_v202", "host": "127.0.0.1", "port": 55479, "transactionRolledBack": true, "realData": false},
+  "browser": {"newChecks": 56, "regressionChecks": 84, "failed": 0, "widths": [1448, 768, 390, 320], "newChecksTimezone": "Asia/Tokyo", "syntheticServices": true},
+  "typesWeb": "PASS",
+  "buildTypeScript": "PASS",
+  "buildVite": "PASS",
+  "lint": "PASS",
+  "contextGenerateAndCheck": "PASS in staged clean snapshot",
+  "validationRouting": "Dispatcher commands deduplicated. Targeted Node and SQL/browser checks cover changed and demonstrably affected modules. No full local validate; repository-wide gate runs in existing CI.",
+  "limitations": ["Authenticated real-person journey not tested", "No real email sent", "No paid AI invoked", "No remote database write"]
+}

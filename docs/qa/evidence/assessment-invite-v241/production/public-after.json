@@ -1,0 +1,178 @@
+{
+  "phase": "after",
+  "base": "https://prisma.hrtsolutions.com.br",
+  "root": {
+    "path": "/",
+    "status": 200,
+    "bytes": 811,
+    "sha256": "fdab565bdd4d07b6a8b1997b6d5424ed97dce466087ca9af51dea734365ed4e1",
+    "contentType": "text/html"
+  },
+  "assets": [
+    {
+      "path": "/assets/index-DNIRepJ6.js",
+      "status": 200,
+      "bytes": 1153043,
+      "sha256": "dfee1ff3b55c091c51ac2bb7f5b0694b4adb57e027bda0bb711434689e7950f7",
+      "contentType": "application/javascript"
+    },
+    {
+      "path": "/assets/rolldown-runtime-C0FnF6B9.js",
+      "status": 200,
+      "bytes": 1291,
+      "sha256": "e0a79ad36c6ca1ffbc796c80aa5661803a9d1bc684e29d1587f48b4ba9a82714",
+      "contentType": "application/javascript"
+    },
+    {
+      "path": "/assets/antd-vendor-B8xYIvt7.js",
+      "status": 200,
+      "bytes": 1277650,
+      "sha256": "e55dfb90e7382ace47950b5aad50f69e60572ee7ffae7c942817dc5299fdde4a",
+      "contentType": "application/javascript"
+    },
+    {
+      "path": "/assets/supabase-vendor-DoXvCMLf.js",
+      "status": 200,
+      "bytes": 208137,
+      "sha256": "eb17416e1cf28455937e96c08d469cd658f3cf88ebb0d156ebb076e1bc183ba5",
+      "contentType": "application/javascript"
+    },
+    {
+      "path": "/assets/react-vendor-BdxMnOeJ.js",
+      "status": 200,
+      "bytes": 435,
+      "sha256": "58a473314db4571ac72867e4485c45c440a8bce86396a9433d650c3831b03067",
+      "contentType": "application/javascript"
+    },
+    {
+      "path": "/assets/antd-vendor-B5BXDqMa.css",
+      "status": 200,
+      "bytes": 2987,
+      "sha256": "6b734531b94fda9950119646124dccee1ee7e70e91b3e5be988c378ca9f9f98d",
+      "contentType": "text/css"
+    },
+    {
+      "path": "/assets/index-DcEUBlOc.css",
+      "status": 200,
+      "bytes": 472836,
+      "sha256": "57eb56565e320f2769e847a9476da461e5b6df2a5cc9f404b448faaf69449663",
+      "contentType": "text/css"
+    }
+  ],
+  "previousAssets": [
+    {
+      "path": "/assets/index-b8La5Fvb.js",
+      "status": 200,
+      "bytes": 1149711,
+      "sha256": "ca7eee038338826a3909ecb918c2f099bd536dc95ab75e3e4edec1199d12f2aa",
+      "contentType": "application/javascript",
+      "unchanged": true
+    },
+    {
+      "path": "/assets/rolldown-runtime-C0FnF6B9.js",
+      "status": 200,
+      "bytes": 1291,
+      "sha256": "e0a79ad36c6ca1ffbc796c80aa5661803a9d1bc684e29d1587f48b4ba9a82714",
+      "contentType": "application/javascript",
+      "unchanged": true
+    },
+    {
+      "path": "/assets/antd-vendor-B8xYIvt7.js",
+      "status": 200,
+      "bytes": 1277650,
+      "sha256": "e55dfb90e7382ace47950b5aad50f69e60572ee7ffae7c942817dc5299fdde4a",
+      "contentType": "application/javascript",
+      "unchanged": true
+    },
+    {
+      "path": "/assets/supabase-vendor-DoXvCMLf.js",
+      "status": 200,
+      "bytes": 208137,
+      "sha256": "eb17416e1cf28455937e96c08d469cd658f3cf88ebb0d156ebb076e1bc183ba5",
+      "contentType": "application/javascript",
+      "unchanged": true
+    },
+    {
+      "path": "/assets/react-vendor-BdxMnOeJ.js",
+      "status": 200,
+      "bytes": 435,
+      "sha256": "58a473314db4571ac72867e4485c45c440a8bce86396a9433d650c3831b03067",
+      "contentType": "application/javascript",
+      "unchanged": true
+    },
+    {
+      "path": "/assets/antd-vendor-B5BXDqMa.css",
+      "status": 200,
+      "bytes": 2987,
+      "sha256": "6b734531b94fda9950119646124dccee1ee7e70e91b3e5be988c378ca9f9f98d",
+      "contentType": "text/css",
+      "unchanged": true
+    },
+    {
+      "path": "/assets/index-RIGLq5_D.css",
+      "status": 200,
+      "bytes": 472012,
+      "sha256": "274687af66a2c9f49188610eb23109a6af1e8e24c0564c3e71457524cd56b2df",
+      "contentType": "text/css",
+      "unchanged": true
+    }
+  ],
+  "routes": [
+    {
+      "path": "/sign-in",
+      "status": 200,
+      "bytes": 811,
+      "sha256": "fdab565bdd4d07b6a8b1997b6d5424ed97dce466087ca9af51dea734365ed4e1",
+      "contentType": "text/html"
+    },
+    {
+      "path": "/profiles",
+      "status": 200,
+      "bytes": 811,
+      "sha256": "fdab565bdd4d07b6a8b1997b6d5424ed97dce466087ca9af51dea734365ed4e1",
+      "contentType": "text/html"
+    },
+    {
+      "path": "/vacancies",
+      "status": 200,
+      "bytes": 811,
+      "sha256": "fdab565bdd4d07b6a8b1997b6d5424ed97dce466087ca9af51dea734365ed4e1",
+      "contentType": "text/html"
+    },
+    {
+      "path": "/knowledge",
+      "status": 200,
+      "bytes": 811,
+      "sha256": "fdab565bdd4d07b6a8b1997b6d5424ed97dce466087ca9af51dea734365ed4e1",
+      "contentType": "text/html"
+    },
+    {
+      "path": "/settings",
+      "status": 200,
+      "bytes": 811,
+      "sha256": "fdab565bdd4d07b6a8b1997b6d5424ed97dce466087ca9af51dea734365ed4e1",
+      "contentType": "text/html"
+    },
+    {
+      "path": "/profiles/operations",
+      "status": 200,
+      "bytes": 811,
+      "sha256": "fdab565bdd4d07b6a8b1997b6d5424ed97dce466087ca9af51dea734365ed4e1",
+      "contentType": "text/html"
+    },
+    {
+      "path": "/verifications",
+      "status": 200,
+      "bytes": 811,
+      "sha256": "fdab565bdd4d07b6a8b1997b6d5424ed97dce466087ca9af51dea734365ed4e1",
+      "contentType": "text/html"
+    },
+    {
+      "path": "/item-bank",
+      "status": 200,
+      "bytes": 811,
+      "sha256": "fdab565bdd4d07b6a8b1997b6d5424ed97dce466087ca9af51dea734365ed4e1",
+      "contentType": "text/html"
+    }
+  ]
+}

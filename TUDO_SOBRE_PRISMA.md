@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 450
-source_manifest_sha256: 941433c35cc0a57bf2e81868f6d0ca88ee5679b84f1f5ad93fd8d4c093eee100
+source_manifest_sha256: 6497f785cd5bc920973f860757b8966de4ed7a3b7deb7b45053b58dc86ce4954
 -->
 
 # Tudo sobre o Prisma
@@ -2638,7 +2638,7 @@ last_verified: 2026-10-11
 
 ## Prazo e mensagem dos convites — correção 2.4.1
 
-Implementação autorizada em11/10/2026: prazo por1/3/7/14/30dias (padrão7) ou data, sempre até23:59 em Brasília incluindo segundos finais; mensagem padrão com a Posição; CTA em rodapé separado e responsivo. Aplicações não submetidas após o menor limite entre duração e acesso mostram Não realizada · prazo encerrado, sem mudar status persistido, respostas, histórico ou recibos concluídos. Reutiliza proteção PostgreSQL existente, sem migration/Edge/serviços/dependências novos. Local:15Node dirigidos,87SQL transacionais com rollback,56checks novos e84regressões browser em1448/768/390/320 e fuso Tokyo PASS; tipos/build PASS. Publicação e fechamento operacional pendentes. Contrato/mapa/AoT `docs/qa/assessment-invite-deadline-v241.md`.
+Implementação autorizada em11/10/2026: prazo por1/3/7/14/30dias (padrão7) ou data, sempre até23:59 em Brasília incluindo segundos finais; mensagem padrão com a Posição; CTA em rodapé separado e responsivo. Aplicações não submetidas após o menor limite entre duração e acesso mostram Não realizada · prazo encerrado, sem mudar status persistido, respostas, histórico ou recibos concluídos. Reutiliza proteção PostgreSQL existente, sem migration/Edge/serviços/dependências novos. Local:15Node dirigidos,87SQL transacionais com rollback,56checks novos e84regressões browser em1448/768/390/320 e fuso Tokyo PASS; tipos/build/lint/contextos PASS. Publicada em main/origin/VPS no SHA funcional602252c2b533df423fe6f59d9b0704bbf3e81077, CI branch38187211275/main38187308838 success (895testes).23HTTP200, três checks bundle/SHA/CSS e login2.4.1 em1448/390/320 PASS;16checks de preservação, rollback0efd266a e212assets anteriores íntegros (215após), outros nove containers intactos. HTTP404 imediato estabilizou sem novo deploy. Fechamento documental sincroniza Git sem reconstruir runtime; jornada autenticada real NOT TESTED. Contrato/mapa/AoT `docs/qa/assessment-invite-deadline-v241.md`.
 
 ## Registros legíveis — correção 2.4.1
 
@@ -23133,7 +23133,7 @@ Implementar D-01..05, impedir P-01/02, preservar F-01; A-01 somente execução. 
 | Preparação/IA/prova comum/cobrança/nav/loading | plausible_indirect | página compartilhada; regressão processAssessment dirigida, nenhum writer alterado/consulta gera envio |
 | Banco/Edge/Parser/Synthesis/mail/serviços | no_impact_identified | sem alteração runtime dessas camadas; plano webonly e identidade operacional preservada |
 
-PostgreSQL local verificado: import_evidence_v202,127.0.0.1:55479,prisma_v202_qa,people0 e position_assessments ausente. Fixture/rollback locais, sem dados reais. Baseline operacional de produção será revalidado antes de publicar.
+PostgreSQL local verificado: import_evidence_v202,127.0.0.1:55479,prisma_v202_qa,people0 e position_assessments ausente. Fixture/rollback locais, sem dados reais. Antes de publicar, baseline operacional revalidado: srv1038882,/opt/prisma,origin aprovado, checkout limpo a33e3db; web0efd266a,212assets e nove outros containers. Identidades/estados/restarts e assets conferidos após publicação.
 
 ## AoT
 
@@ -23143,10 +23143,12 @@ PostgreSQL local verificado: import_evidence_v202,127.0.0.1:55479,prisma_v202_qa
 | D-02 | startedAt já emitido pelo RPC tipado; apresentação derivada e relógio sem IO, servidor preservado | 87asserts SQL locais com rollback, incluindo rejeição PA_EXPIRED em load/start/save/submit sem mudança de respostas/status/resultado e recibo concluído; browser atualiza status sem reload | PASS |
 | D-03 | defaultAssessmentMessage(positionTitle), inicialização por contexto e preservação no refresh | mensagem padrão e personalizada/payload/retry nos quatro viewports; texto literal em teste Node | PASS |
 | D-UX-04 | deadline-summary e footer process-assessment-send | imagens invitation/expired em browser/, medição gap≥20px e CTA mobile; revisão visual1448/390, sem overflow em4larguras | PASS |
-| D-05 | publicação web derivada do diff | CI/produção/rollback/smoke/sincronização pendentes | PARTIAL |
-| P-01/02 | nenhum writer/migration/Edge alterado; date/message estáveis, relógio somente visual | 15Node dirigidos (novos+processAssessment+positionFollowUp), SQL87 e browser56+84; IA/cancelamento/revisão/prova fixada/histórico/loading/retry preservados | PASS local |
+| D-05 | publicação web derivada do diff, main/origin/VPS | SHA funcional602252c2b533df423fe6f59d9b0704bbf3e81077; CI branch38187211275/main38187308838 success,895testes;23HTTP200, bundle/SHA/CSS e login2.4.1 em1448/390/320;16checks de preservação/rollback | PASS |
+| P-01/02 | nenhum writer/migration/Edge alterado; date/message estáveis, relógio somente visual | 15Node dirigidos (novos+processAssessment+positionFollowUp), SQL87 e browser56+84; IA/cancelamento/revisão/prova fixada/histórico/loading/retry preservados; plano sem backend/serviços e nove outros containers intactos | PASS |
 
-Tipos frontend, build TypeScript e build Vite PASS. Evidências em `docs/qa/evidence/assessment-invite-v241/{browser,regression,sql}`. Screenshot fornecido é contraexemplo; comparação confirma ordem preservada e separação do CTA. Dados fictícios, sem envio real, chamada paga de IA ou escrita remota. Jornada autenticada de candidato real NOT TESTED. Sem desvio de contrato identificado; baseline/preservação operacionais aguardam publicação. Sem nova entrada de versão; correção2.4.1 conforme convenção do registro.
+Tipos frontend, build TypeScript/Vite, lint e contexto gerado/conferido em snapshot indexado limpo PASS. Evidências em `docs/qa/evidence/assessment-invite-v241/{browser,regression,sql,production}` e `local-validation.json`. Screenshot fornecido é contraexemplo; comparação confirma ordem preservada e separação do CTA. Dados fictícios, sem envio real, chamada paga de IA ou escrita remota. Jornada autenticada de candidato real NOT TESTED. Sem desvio de contrato identificado. Sem nova entrada de versão; correção2.4.1 conforme convenção do registro.
+
+Produção: web3baff4b5 running/zero reinícios, rollback-before-602252c2b533 igual à imagem anterior0efd266a; todos212assets anteriores íntegros,215após. Outros nove containers preservam identidade/imagem/estado/health/restarts/início, incluindo limitações Paddle unhealthy/exited preexistentes. O publisher encontrou HTTP404 no smoke imediato (SSH22/exit1); smoke após estabilização,23HTTP200, três checks bundle e login responsivo passaram sem rebuild adicional. Nenhuma mutation de negócio remota. Fechamento documental sincroniza Git com plano sem runtime; imagens/evidências identificam o SHA funcional, independentemente do SHA documental final.
 
 ---
 
