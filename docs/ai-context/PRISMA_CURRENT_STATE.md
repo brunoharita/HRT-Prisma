@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.71.3
+version: 2.71.4
 last_verified: 2026-10-11
 ---
 
 # Estado atual do Prisma
+
+## Tempo e orientações do participante — correção 2.4.1
+
+Implementação autorizada em11/10/2026: portal com contador em dias/horas/minutos sem segundos, data limite de acesso em Brasília e prazo efetivo de conclusão após início. Instruções agrupam tempo, como responder e atividade/privacidade; reforçam aba/janela ativas, conhecimento próprio, sincronização/revisão/envio e relógio contínuo, com limites da coleta real e análise humana. Disponíveis também durante a prova. Sem telemetria/IA/punição automática/gravação/contrato de dados/backend novos; não certifica conformidade jurídica ou substitui aviso final. Local18Node,70checks novos e38regressões browser PASS, incluindo quatro viewports/fuso Tokyo, menos de1minuto/expiração, confirmação/recibo e falha/buffer/retry; tipos/build PASS. Publicação pendente. Contrato/mapa/AoT `docs/qa/assessment-portal-guidance-v241.md`.
 
 ## Prazo e mensagem dos convites — correção 2.4.1
 

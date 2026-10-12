@@ -23,6 +23,8 @@ Histórico armazena somente códigos/IDs/hashes/versões/método/modelo/estado/d
 
 Telemetria limitada e advisory: nenhuma imagem/clipboard/tecla geral/coordenada/destino de janela, sem prova de fraude/punição. Coletor, backend e UI explicitam suporte/lacunas; eventos deduplicados e ligados à instância/versão. Falha de telemetria preserva respostas e a conclusão transacional autorizada. SQL local cobre roles/tenant/gabarito/prazo/revogação/segredos/replay/cascata; testes de consumidores, concorrência por conexões e browser complementam, sem teste em candidatos reais.
 
+Correção2.4.1 do portal: instruções operacionais detalham conhecimento próprio, aba/janela ativas, sincronização e conclusão, com finalidade e limites dos sinais existentes visíveis. Somente detalhes técnicos ficam sob demanda; informações continuam consultáveis durante a prova. Não amplia coleta nem afirma conformidade LGPD/base legal/consentimento/retention aprovados. Mantém o aviso jurídico final como pendência distinta das instruções; “Li as instruções” reconhece orientações operacionais. Acordo/AoT assessment-portal-guidance-v241.
+
 ## Ativos
 
 Ativos planejados: Verification Needs, políticas organizacionais, convites, itens globais, itens da organização, blueprints, attempts, respostas, rubricas, telemetria por questão, flags de integridade, evidência demonstrada, decisões humanas, contestação e logs.
