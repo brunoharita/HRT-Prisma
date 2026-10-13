@@ -45,4 +45,3 @@ begin
  updated:=replace(original,$old$('focus','mouse','capture','missing','navigation')$old$,$new$('focus','mouse','capture','missing','navigation','copy')$new$);
  if updated=original then raise exception 'Unexpected activity finish baseline';end if;execute updated;
 end $upgrade$;
-
