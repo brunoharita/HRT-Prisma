@@ -1,5 +1,5 @@
-export type TokenFunction = "position_assessment_items" | "parser_ia" | "profile_synthesis";
-export const tokenFunctionLabels: Record<TokenFunction,string> = {position_assessment_items:"Questões de avaliação",parser_ia:"Leitura de currículos",profile_synthesis:"Síntese de perfis"};
+export type TokenFunction = "position_assessment_items" | "parser_ia" | "profile_synthesis" | "assessment_activity_analysis";
+export const tokenFunctionLabels: Record<TokenFunction,string> = {position_assessment_items:"Questões de avaliação",parser_ia:"Leitura de currículos",profile_synthesis:"Síntese de perfis",assessment_activity_analysis:"Análise da atividade da avaliação"};
 export const formatTokens = (value:number) => new Intl.NumberFormat("pt-BR",{maximumFractionDigits:0}).format(value);
 export const formatTokenPrice = (cents:number) => new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL"}).format(cents/100);
 export interface TokenQuote {contract:"prisma-token-quote-1.0.0";organizationId:string;id:string;functionName:TokenFunction;quantity:number;tokensPerUnit:number;amount:number;available:number;expiresAt:string;}

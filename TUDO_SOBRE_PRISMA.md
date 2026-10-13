@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 463
-source_manifest_sha256: cae9f2a17b835206bf977219e095baf60ace97f246ce4d035f2fd572fc2006d3
+documentation_source_count: 466
+source_manifest_sha256: 0ab24e0ea28fde142b552d21804303c5c97b0fb98c8f640aaa7c959297ac2c9b
 -->
 
 # Tudo sobre o Prisma
@@ -2630,11 +2630,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.74.1
-last_verified: 2026-10-12
+version: 2.74.2
+last_verified: 2026-10-13
 ---
 
 # Estado atual do Prisma
+
+## Atividade legível e análise por IA —2.5.2 em preparação local
+
+Bruno autorizou em13/10/2026 apresentar eventos em português, resumo por questão com dados técnicos sob demanda e análise por IA explícita de padrões da tentativa completa. Implementação local em andamento; domínio calcula totais/tempos e IA seleciona/ordena somente padrões/contextos sustentados, sem nomes/contatos/enunciados/respostas/rawpayload ou julgamentos de fraude/Score/etapa. Resultado salvo gratuito, cotação antes da ação, tenant/role/snapshot/histórico/reserva/debito idempotentes e falha sem resultado libera; confirmação incerta não repete provider.68browser/185SQL/2disputas/4Node/10Deno locais PASS, tipos PASS; 82regressões portal e38preparação/resultado PASS; lint/contextos/22tooling PASS. Nova tarifa proposta6.193 Tokens por resultado é Q-01 sem resposta; não ativada, sem mudança de versão/publicação remota deste movimento. Produção segue2.5.1. Acordo/AoT assessment-activity-v252 e ADR-084. Fixtures, não qualidade de modelo vivo/candidato real.
 
 ## Ações da avaliação — correção sem mudança de versão
 
@@ -10142,6 +10146,34 @@ Rollback de aplicação deve conservar schema, ledger, pedidos e reservas. Clien
 
 ---
 
+## Source: `docs/decisions/ADR-084-assessment-activity-analysis.md`
+
+# ADR-084 — Análise fundamentada da atividade de uma avaliação
+
+Status: implementação local autorizada em13/10/2026; tarifa inicial pendente da decisão Q-01 no acordo assessment-activity-v252. Não comprova rollout.
+
+## Decisão
+
+Reutilizar a Edge Function position-assessment, OpenAI Responses/modelo já adotados, histórico genérico de IA e ledger Tokens Prisma. Um domínio puro calcula fatos e candidatos a padrões da tentativa inteira, a partir dos eventos oficiais associados à questão/versão. A IA seleciona e ordena padrões/contextos disponíveis em saída estruturada; textos e números vêm do domínio, sem narrativa livre que possa inventar destinos, fraude, intenção ou traços pessoais. Referências de questões/eventos acompanham os padrões, e limitações neutras são obrigatórias.
+
+Esta forma atende à análise geral com priorização da IA, preservando afirmações verificáveis. Apenas traduzir JSON com texto livre aumentaria o risco de conclusões não sustentadas. Gerar tudo deterministicamente e rotular como IA seria incorreto: há chamada explícita ao modelo para organização dos padrões, registrada separadamente.
+
+Provider recebe contagens, durações, números ordinais das questões e descrições neutras; não recebe nomes, contatos, enunciados, respostas, UUIDs pessoais, texto de payload ou horários individuais. Sem ferramentas/web e store:false. Custo técnico observado/estimado permanece separado do crédito comercial; teste não depende de modelo vivo.
+
+## Consistência e autoridade
+
+Snapshots privados são vinculados a organização/tentativa/fingerprint/método e autorizados pelo papel operacional existente. Dados originais não são alterados. Tabela privada com RLS e nenhum DML direto; consultas/início autenticados e conclusão exclusiva do service_role/JWT assinado. Composição não cria julgamento humano, Score ou etapa.
+
+Locks da tentativa e do ledger, índice parcial e operação idempotente impedem aquisição/débito duplicado. Reserva antes do provider; relatório, histórico e liquidação na mesma conclusão transacional. Resultado salvo é gratuito. Perda de confirmação não declara falha contraditória nem repete provider. Após2min em execução sem confirmação, informar necessidade de conciliação; reserva só permite nova ação depois de liberação administrativa explícita. Uma análise anterior permanece legível após falha/desatualização.
+
+Limites técnicos reaproveitam US$0,25/pedido e US$10/mês desta função, saída2000tokens e100solicitações/dia por empresa; custos desconhecidos usam teto conservador no orçamento, nunca zero fictício no histórico. A tarifa comercial da nova categoria é independente e ainda não foi ativada.
+
+## Evidência e limites
+
+Fontes: src/domain/assessmentActivityAnalysis.ts, supabase/functions/position-assessment/activity-analysis.ts, migration20261013120000, acordo/docs/qa/agreement-assessment-activity-v252.md. Testes puros, Deno, SQL descartável/rollback e concorrência local, browser sintético. Publicação, jornada autenticada real e qualidade do modelo vivo não são inferidas desses testes. A síntese apoia revisão humana, não certifica justiça, autenticidade ou conformidade jurídica.
+
+---
+
 ## Source: `docs/decisions/README.md`
 
 # Architectural Decision Records
@@ -10234,6 +10266,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 - Accepted does not mean implemented or active; each ADR states its evidence and environment.
 
 - [ADR-073: Interpretação derivada da trajetória](ADR-073-semantic-trajectory-score.md) — accepted no escopo M8.3; rollout e limites no AoT.
+
+- [ADR-084: Análise fundamentada da atividade de uma avaliação](ADR-084-assessment-activity-analysis.md) — implementação local autorizada; tarifa inicial e rollout pendentes no acordo assessment-activity-v252.
 
 ---
 
@@ -12058,6 +12092,10 @@ Reaproveitamento privado2.5.1: aprovação individual ou em conjunto projeta aut
 
 No portal, **Revisar avaliação** fica no cabeçalho junto ao progresso; o rodapé da questão contém somente **Anterior** e **Próxima**. Na revisão, **Voltar às questões** preserva a questão ativa e **Enviar avaliação** abre a confirmação **Confirmar envio e encerrar**. Revisar não conclui nem pausa o tempo; a conclusão exige respostas completas, sincronização e confirmação, com comprovante. Correção sem alterar2.5.1; acordo/AoT `docs/qa/assessment-review-placement.md`.
 
+## Atividade e análise por IA — implementação local para2.5.2
+
+A aba Atividade por questão apresenta perdas de foco, mouse antes da primeira escolha, zoom e atalhos com rótulos separados. Ver acontecimentos abre descrições com horários de Brasília e limites; detalhes técnicos preservam os campos originais sob demanda. Mobile usa cartões; histórico individual e processo comum compartilham a apresentação. Análise da atividade consulta resultado salvo gratuitamente e permite solicitação explícita com previsão de Tokens Prisma e confirmação. O sistema calcula fatos da tentativa inteira; IA seleciona/ordena padrões/contextos sustentados e links abrem as questões de evidência. Sem inferência de fraude, intenção, destino, contratação, Score ou etapa. Versão/fingerprint/data registram base e desatualização; falha conserva dados/relatório anterior e não debita sem entrega, confirmação incerta exige consulta/conciliação. Reutiliza provider/histórico/ledger, sem nova coleta. Implementação local autorizada, tarifa/publicação ainda pendentes: acordo/AoT assessment-activity-v252.
+
 ---
 
 ## Source: `docs/product/product-scope.md`
@@ -12784,6 +12822,52 @@ Risco C, com fronteira D existente reutilizada para classificação. Direct: com
 CA-01/02: tela sintética mesma topologia e viewport desktop/celular; pendência com 2 evidências leva ao editor correto; salvar move para grupo sem apagar vínculos; negativos de alcance/role; erro conserva seleção. CA-03: inventário de avisos, prova dirigida de foco/destino/retry e revisão do diff; controles já presentes no próprio aviso contam como ação, informações puramente explicativas não implicam ação. CA-04: registry10/contextos/CI/rotas/assets/SHA e rollback sincronizados.
 
 Prompt congelado: implementar D/P/F/A e critérios acima sem reinterpretar a exigência de problema claro e botão contextual. Usar UI existente, sem nova dependência e sem testes mutacionais de produção.
+
+---
+
+## Source: `docs/qa/agreement-assessment-activity-v252.md`
+
+# Acordo — Atividade legível e análise por IA, v2.5.2
+
+Contrato v1.0.0,13/10/2026. Bruno aprovou as duas propostas desta conversa, com main/produção2.5.2. Baseline925d4b3ca619b5f302f8fe4d737cb83a473e123e; tracked limpo e untracked alheios preservados. Risco D: dados de atividade por tentativa, IA explícita e consumo; sem nova coleta.
+
+## Comportamento aprovado
+
+- D-01: resumo legível por questão: aba/janela sem foco em ocorrências e duração; mouse sem movimento antes da primeira resposta com total e maior intervalo separados; alterações de zoom e atalhos registrados separados. Ausência de registro não é ausência de atividade; indisponível/não aplicável distintos de zero.
+- D-02: acontecimentos em português com horários Brasília, intervalos e duração aproximada, encerramento interpretado conforme fato registrado. Detalhe expandido ocupa toda a largura, não uma coluna estreita. Horário de recebimento, métodos, versões, IDs e payload original preservados em campos legíveis técnicos sob demanda; nenhuma serialização JSON primária.
+- D-03: card Análise da atividade antes da lista, com Analisar atividade com IA explícito, previsão Tokens Prisma e saldo antes de confirmação. Não executar IA por leitura, abertura ou atualização. Consultar resultado salvo é gratuito.
+- D-04: analisar tentativa completa disponível, não somente página da tabela. Declarar quantidade de questões e eventos considerados, limitações, versão/fingerprint/data e eventual desatualização. IA organiza padrões fundamentados; totais e durações calculados pelo sistema. Afirmações vinculadas a questões/eventos, com acesso às evidências.
+- D-05: reutilizar OpenAI Responses/modelo e histórico genérico/cobrança existentes. Enviar somente fatos agregados sem nome, e-mail, enunciados, respostas, contatos ou texto de payload. Saída estruturada limitada a padrões/contextos sustentados; não inventar números, destinos, causas, intensidade ou intenção.
+- D-06: sem fraude/suspeição/risco/contratação/Score/etapa automáticos; perda de foco não comprova consulta, atalhos não comprovam captura, mouse parado pode ser leitura/reflexão/acessibilidade; ausência não prova ausência. Sem cores acusatórias. Avaliação humana permanece.
+- D-07: persistir por organização/tentativa/snapshot, com autoria/método/modelo/versão e histórico imutável. Backend verifica ator, papel, tenant, tentativa e dados oficiais, rejeitando escopo desconhecido e entrada manipulada. Idempotência/cache/concorrência não repetem provider ou débito; falha sem resultado não cobra, resultado incerto exige reconciliação em vez de repetir IA.
+- D-08: frontend processual e histórico individual reutilizam apresentação equivalente; loading acessível até conclusão, erro com recuperação e dados anteriores preservados, teclado/mobile sem compressão. Resultado pode apoiar revisão, sem bloquear fluxo manual quando indisponível.
+- D-09: publicar versão2.5.2 por diff/SHA validado, migrations/backend/web somente quando necessários, QA-first sensível, negativos e regressão proporcional, rollback/smoke/sincronização e AoT/contexto.
+- P-01: nenhuma decisão humana pré-preenchida, conclusão de fraude ou discriminação; números/fatos ausentes não inventados nem zeros.
+- P-02: sem coleta/telemetria nova, alteração de respostas/correção/Score/etapa/perfil, logs com PII/prompts integrais, raw secrets ou dados pessoais ao provider.
+- P-03: sem retry pago automático, nova cobrança em cache/replay, tarifa presumida, mutação de dados reais apenas para teste ou novo provider/arquitetura independente.
+- F-01: proctoring, calibração, algoritmo de fraude, nova coleta, ranking, decisões sensíveis e redesign total do sistema.
+- A-01: componentes Prisma, domínio puro de fatos compartilhado frontend/Edge, validação estruturada, classes locais, migração aditiva e integração da função existente. Screenshot é contraexemplo técnico e exemplo de conteúdo; modelo textual aprovado é referência estrutural (análise antes da lista, detalhes na largura inteira), números são ilustrativos.
+- Q-01: nova tarifa da função Análise da atividade da avaliação; proposta6.193 Tokens/resultado com histórico separado aguardando resposta assíncrona. Bloqueia fechamento do contrato completo e ativação/publicação da tarifa dependente; apresentação e integração parametrizada que falha fechado sem tarifa são independentes.
+
+## Mapa de impacto inicial
+
+| Área / capacidade | Relação | Baseline / preservação / evidência mínima |
+| --- | --- | --- |
+| Resultado comum e histórico individual, apresentação de sinais | direct | componentes existentes/screenshot; fixtures em mesmos dados/viewport, tabela/expansão/mobile e limites |
+| Domínio factual e fronteira IA autenticada | direct | provider OpenAI/modelo já usado; testes puros e Edge mocks negativos, nenhum LLM pago em testes |
+| Tenant/ator/tentativa/resultados, RLS/grants e persistência | critical_transversal | schema PostgreSQL/contratos existentes; local descartável confirmado127.0.0.1:55479/import_evidence_v202, people0/sem avaliações; SQL negativo, QA rollback e hashes/grants remotos |
+| Tokens Prisma/cotação/reserva/débito e histórico genérico IA | direct | tarifas existentes2347/14785/6193 e versões preservadas; novo consumidor dependeQ-01, SQL concorre/replay/falha/isolamento e fixture frontend |
+| Portal, preparação/revisão/convites/correção | plausible_indirect | Edge/CSS/tipos compartilhados; regressão dirigida e corpos RPC críticos/telemetria preservados |
+| Matching/Parser/Síntese/Conhecimento/email | no_impact_identified | contratos/provedores dessas áreas não alterados; regressão do consumidor genérico Tokens aplicável e plano evita rebuild de serviços por proximidade |
+| Release/rotas/assets/rollback/navegação | critical_transversal | SHA/versão/containers antes/depois, CI e smoke proporcional |
+
+## Critérios de aceite
+
+CA-01(D-01/02/08): texto factual versus técnico, null/zero/false/não aplicável/inválido, datas/intervalos e detalhes completos; screenshot desktop/mobile, teclado e retorno. CA-02(D-03/04/05/06): ausência de IA implícita, cotação/consentimento da ação, tentativa inteira, padrões/evidências sustentados, ausência de PII/destinos/acusações e saída inválida rejeitada. CA-03(D-07): positivos/negativos de autorização/tenant/snapshot concorrente/idempotência/cache/reconciliação e cobrança/falha; registros originais intactos. CA-04(D-09): tipos/build/checks dirigidos/contextos/ledger, QA sensível, ambiente real identificado, main/origin/VPS/backend/SHA e smoke; evidências sem alegar qualidade real/fairness com fixtures.
+
+## Execução parcial autorizada
+
+EnquantoQ-01 permanece, implementar domínio factual/apresentação e integração parametrizada independente do valor, sem fixar ou ativar tarifa/cobrança presumida. A execução completa será congelada após resolverQ-01, incorporando todo o acordo. Não há pedido de reaprovacão das etapas já autorizadas.
 
 ---
 
@@ -17437,6 +17521,42 @@ Local/main/origin/VPS no mesmo SHA funcional na conferência de publicação. Fe
 ## Conclusão
 
 Todos os D e P aplicáveis PASS dentro das evidências declaradas. Versão2.0.10 publicada somente na web. Não se afirma teste de clique autenticado em Pessoa real nem runtime de todos os estados do inventário. Evidências e autoridade preservadas, sem decisões artificiais de classificação.
+
+---
+
+## Source: `docs/qa/aot-assessment-activity-v252.md`
+
+# AoT — Atividade legível e análise por IA
+
+Contrato: docs/qa/agreement-assessment-activity-v252.md v1.0.0. Baseline925d4b3ca619b5f302f8fe4d737cb83a473e123e. Estado local; Q-01 tarifa ainda pendente. Não publicado em main/produção.
+
+## Matriz de acordos
+
+| Regra | Implementação | Evidência local | Estado |
+| --- | --- | --- | --- |
+| D-01/02 | AssessmentActivity: textos, campos técnicos completos e expansão na largura inteira; mobile em cartões | 68browser em1448/768/390/320, timezoneTokyo/horárioBrasília, teclado, null/não aplicável/zero e dados originais | PASS |
+| D-03 | Cotação/confirmar/cancelar, cache gratuito e acesso explícito | fixture com tarifa arbitrária1234, nenhuma IA por leitura; tarifa real nova ainda não escolhida/ativada | PARTIAL |
+| D-04/05/06 | domínio puro, AI enum estrito, limites/evidências e dados minimizados | 4Node/5Deno novos+5Deno existentes, projeção sem PII/rawpayload, rejeição de acusações/IDs não sustentados | PASS |
+| D-07 | snapshot privado, RPCs/ledger/histórico, cache/replay, falha/liberação e resultado anterior | 185SQL rollback local incluindo consumidores anteriores,2disputas paralelas em banco descartável local removido | PASS |
+| D-08 | componente compartilhado de resultados históricos/atuais, feedback e contextos | 68browser dirigido,82portal e38preparação/resultado, tipos/build PASS | PASS |
+| D-09 | branch isolada, contrato/mapa/ADR; release2.5.2 autorizado | publicação depende Q-01 e gates finais | NOT TESTED |
+| P-01/02/03 | sem novas observações ou decisões/Score; chamada paga explícita; código rejeita saída fora dos fatos | testes de projeção/validação, simulações sem modelo vivo, replay/saldo/falha; nenhuma alteração de tarifa presumida | PASS |
+
+## Impacto e preservação
+
+Mapa inicial no acordo. Novidade: análise estruturada por tentativa com IA organizando fatos; apresentação de acontecimentos e consulta de análises salvas. Preservação: eventos originais, respostas, correção, Score, perfil, autoridade humana e consumidores existentes; snapshot/metadados e Tokens com escopos existentes. Coleta e funções de público/save/submit/eventos não alteradas; Edge compartilhada recebeu somente ação autenticada analyze_activity. Limite de baseline: único projeto remoto existente atende o app; não foi criado outro projeto/ambiente ou gasto de infraestrutura. QA sensível executada em PostgreSQL local descartável confirmado e fixtures isoladas. Dados reais e LLM vivo NOT TESTED.
+
+## Fidelidade visual
+
+Imagem do PO é contraexemplo técnico/conteúdo; referência normativa é o modelo textual aprovado: análise antes da lista, resumo em português e evidências expansíveis usando largura disponível. Capturas em docs/qa/evidence/assessment-activity-v252/browser. Revisão visual de analysis-1448/events-390 PASS, topologia/densidade/ações e campos técnicos sob demanda conferidos; render usa dados sintéticos; valores exemplificativos são fixtures e não decisões/inferências sobre Diego.
+
+## Pendência para fechamento
+
+Q-01: novo consumidor de IA não possui tarifa comercial aprovada. Proposta6.193 Tokens por análise concluída enviada por pergunta assíncrona; não presumir resposta nem ativar em produção. Versão2.5.2 e publicação serão fechadas depois da decisão e das validações necessárias. Sem autorização nova necessária para checkpoints administrativos já aprovados.
+
+A navegação por evidências usa o snapshot imutável da análise, inclusive eventos recebidos depois da consulta inicial da tela; limpeza da seleção volta aos dados atuais recebidos. O DTO inclui organização/tentativa e rejeita troca de escopo. A UI diferencia análise feita antes da conclusão da tentativa. Custos de testes são arbitrários1234/17, não tarifa aprovada. Coleta existente é parcial e eventos são interpretados como registros associados à questão, sem certificar atividade real/intenção; nova coleta ou correção de trackers não entrou no diff.
+
+Lint/check-contexto no snapshot limpo e22tooling PASS. SQL/log normalizado somente quanto ao padding terminal, sem alterar fatos/asserts. Conector remoto foi usado apenas para leitura de identidade/metadata/tarifas existentes; nenhuma migration, função ou cobrança nova foi aplicada. Produção permanece2.5.1; Q-01 impede fechamento/publish2.5.2.
 
 ---
 
@@ -29854,6 +29974,10 @@ Tecnologia assistiva não pode ser classificada automaticamente como comportamen
 ## Retenção
 
 Questões abertas antes de implementação: prazo de retenção de respostas, tentativas incompletas, telemetria, itens expostos, convites expirados, logs, flags de integridade, dados usados para calibração, backup e exclusão por titular.
+
+## Análise da atividade —2.5.2, local
+
+Nova leitura derivada autorizada: papéis operacionais existentes da organização; snapshot oficial de tentativa/questões/eventos e fingerprint, nunca dados do cliente para construir afirmações. Tabela privada/RLS sem DML/grants diretos; leitura/início autenticados e conclusão worker com JWT service_role. Provider recebe somente padrões agregados sem nomes/contatos/enunciados/respostas/rawpayload/identificadores, sem ferramentas e store:false. Saída limitada a referências/contextos permitidos, números/textos do domínio. Não decide fraude/contratação/Score/etapa. Original permanece imutável; vínculo da análise cascata com exclusão da tentativa, ledger/histórico genéricos preservam somente metadados comerciais. Ciência operacional continua distinta de consentimento/base legal. Acordo assessment-activity-v252; rollout/tarifa dependem da decisão pendente e evidência.
 
 ---
 

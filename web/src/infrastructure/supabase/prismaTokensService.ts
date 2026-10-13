@@ -7,6 +7,7 @@ function camelize(v:unknown):unknown {
 }
 export function tokenOperationError(message:string):string {
  const fixed:Record<string,string>={PT_INSUFFICIENT_BALANCE:"Saldo insuficiente de Tokens Prisma. Consulte o administrador da empresa.",PT_QUOTE_EXPIRED:"A previsão de consumo expirou. Atualize os valores antes de confirmar.",PT_QUOTE_REQUIRED:"Atualize a previsão de consumo antes de iniciar a IA.",PT_ACCESS_DENIED:"Você não tem permissão para esta operação.",PT_ACCOUNT_DISABLED:"O uso de Tokens Prisma desta empresa está suspenso. Consulte o administrador.",PT_OFFER_EXPIRED:"A oferta expirou. Solicite um pacote com as condições atuais.",PT_PAYMENT_CONFIRMATION_REQUIRED:"Confirme o pagamento verificado e informe sua referência.",PT_OPERATION_CONFLICT:"Este pedido já possui outras condições. Atualize para consultar o estado.",PT_SETTLEMENT_CONFLICT:"A operação já foi conciliada. Atualize o histórico.",PT_REASON_REQUIRED:"Informe uma justificativa válida para esta movimentação.",PT_RECONCILIATION_NOT_READY:"A reserva ainda não está disponível para conciliação."};
+ if(message==="PT_RATE_UNAVAILABLE")return "A tarifa desta função ainda não está configurada. Consulte o administrador da plataforma.";
  return fixed[message]??"Não foi possível confirmar a operação. Seus dados foram preservados. Atualize antes de tentar novamente.";
 }
 export async function tokenRpc<T>(action:string,organizationId:string|null=null,data:object={}):Promise<T> {

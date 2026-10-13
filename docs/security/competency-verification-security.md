@@ -120,3 +120,7 @@ Tecnologia assistiva não pode ser classificada automaticamente como comportamen
 ## Retenção
 
 Questões abertas antes de implementação: prazo de retenção de respostas, tentativas incompletas, telemetria, itens expostos, convites expirados, logs, flags de integridade, dados usados para calibração, backup e exclusão por titular.
+
+## Análise da atividade —2.5.2, local
+
+Nova leitura derivada autorizada: papéis operacionais existentes da organização; snapshot oficial de tentativa/questões/eventos e fingerprint, nunca dados do cliente para construir afirmações. Tabela privada/RLS sem DML/grants diretos; leitura/início autenticados e conclusão worker com JWT service_role. Provider recebe somente padrões agregados sem nomes/contatos/enunciados/respostas/rawpayload/identificadores, sem ferramentas e store:false. Saída limitada a referências/contextos permitidos, números/textos do domínio. Não decide fraude/contratação/Score/etapa. Original permanece imutável; vínculo da análise cascata com exclusão da tentativa, ledger/histórico genéricos preservam somente metadados comerciais. Ciência operacional continua distinta de consentimento/base legal. Acordo assessment-activity-v252; rollout/tarifa dependem da decisão pendente e evidência.

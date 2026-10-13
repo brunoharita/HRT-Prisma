@@ -16,6 +16,7 @@ export function AssessmentParticipantGuidance({durationMinutes,expiresAt}:{durat
   <section aria-labelledby="pa-guidance-privacy"><h2 id="pa-guidance-privacy">Atividade e privacidade</h2>
    <p>Suas respostas e sinais de atividade desta avaliação são registrados para apoiar a análise humana da regularidade do processo. Durante a prova, o sistema observa perda de foco da aba ou janela, intervalos sem movimento do mouse, mudanças de resposta, reabertura de questões, alterações de escala e alguns atalhos de captura recebidos pelo navegador.</p>
    <p><strong>Esses registros são limitados: não comprovam, por si só, consulta externa ou fraude e não geram eliminação automática.</strong> O uso de teclado, toque ou recursos de acessibilidade pode modificar os sinais e não representa um resultado negativo.</p>
+   <p>A empresa pode solicitar à IA uma organização dos padrões registrados para apoiar a revisão humana. São enviados apenas resumos de atividade, sem nome, contatos, enunciados ou respostas. A IA não determina fraude, aprovação ou contratação.</p>
    <details><summary>O que é registrado e quais são os limites</summary><ul>
     <li>Foco: episódios e duração em que a questão perde o foco ou a aba fica oculta, sem identificar qual outra janela foi acessada.</li>
     <li>Mouse: tempo total e maior intervalo sem movimento observado até a primeira alternativa marcada, somente enquanto a questão e a janela estão ativas. As coordenadas do ponteiro não são gravadas.</li>

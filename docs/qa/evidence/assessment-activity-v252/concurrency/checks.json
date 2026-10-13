@@ -1,0 +1,13 @@
+{
+  "environment": "Owned LOCAL PostgreSQL17 schema-only clone removed after run",
+  "checks": [
+    {
+      "name": "parallel distinct requests for same snapshot acquire provider once and reuse active operation",
+      "pass": true
+    },
+    {
+      "name": "parallel completion acknowledgement persists one report and exactly one debit",
+      "pass": true
+    }
+  ]
+}

@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.74.1
-last_verified: 2026-10-12
+version: 2.74.2
+last_verified: 2026-10-13
 ---
 
 # Estado atual do Prisma
+
+## Atividade legível e análise por IA —2.5.2 em preparação local
+
+Bruno autorizou em13/10/2026 apresentar eventos em português, resumo por questão com dados técnicos sob demanda e análise por IA explícita de padrões da tentativa completa. Implementação local em andamento; domínio calcula totais/tempos e IA seleciona/ordena somente padrões/contextos sustentados, sem nomes/contatos/enunciados/respostas/rawpayload ou julgamentos de fraude/Score/etapa. Resultado salvo gratuito, cotação antes da ação, tenant/role/snapshot/histórico/reserva/debito idempotentes e falha sem resultado libera; confirmação incerta não repete provider.68browser/185SQL/2disputas/4Node/10Deno locais PASS, tipos PASS; 82regressões portal e38preparação/resultado PASS; lint/contextos/22tooling PASS. Nova tarifa proposta6.193 Tokens por resultado é Q-01 sem resposta; não ativada, sem mudança de versão/publicação remota deste movimento. Produção segue2.5.1. Acordo/AoT assessment-activity-v252 e ADR-084. Fixtures, não qualidade de modelo vivo/candidato real.
 
 ## Ações da avaliação — correção sem mudança de versão
 

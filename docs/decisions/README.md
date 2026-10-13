@@ -88,3 +88,5 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 - Accepted does not mean implemented or active; each ADR states its evidence and environment.
 
 - [ADR-073: Interpretação derivada da trajetória](ADR-073-semantic-trajectory-score.md) — accepted no escopo M8.3; rollout e limites no AoT.
+
+- [ADR-084: Análise fundamentada da atividade de uma avaliação](ADR-084-assessment-activity-analysis.md) — implementação local autorizada; tarifa inicial e rollout pendentes no acordo assessment-activity-v252.

@@ -1,0 +1,24 @@
+import {spawnSync,spawn} from 'node:child_process';import {readFile,writeFile,mkdir} from 'node:fs/promises';
+const exe='C:/Program Files/PostgreSQL/17/bin/',args=['-X','-h','127.0.0.1','-p','55479','-U','prisma_v202_qa','-v','ON_ERROR_STOP=1'],db='prisma_activity_concurrency_v252',checks=[];
+function psql(database,query){const r=spawnSync(exe+'psql.exe',[...args,'-d',database,'-At','-c',query],{encoding:'utf8',windowsHide:true});if(r.status!==0)throw Error(r.stderr.slice(-1200));return r.stdout.trim();}
+function concurrent(query){return new Promise(resolve=>{const p=spawn(exe+'psql.exe',[...args,'-d',db,'-At','-c',query],{windowsHide:true});let out='',err='';p.stdout.on('data',x=>out+=x);p.stderr.on('data',x=>err+=x);p.on('exit',status=>resolve({status,out,err}));});}
+if(psql('import_evidence_v202','select count(*) from public.people')!=='0')throw Error('LOCAL empty baseline required');if(psql('postgres',`select count(*) from pg_database where datname='${db}'`)!=='0')throw Error('Dedicated LOCAL concurrency database exists; do not overwrite');
+psql('postgres',`create database ${db}`);
+try{
+ const dump=spawnSync(exe+'pg_dump.exe',['-h','127.0.0.1','-p','55479','-U','prisma_v202_qa','-d','import_evidence_v202','--schema-only','--no-owner','--no-privileges'],{encoding:'utf8',windowsHide:true,maxBuffer:16*1024*1024});if(dump.status!==0)throw Error('LOCAL_SCHEMA_DUMP_FAILED');await writeFile('tmp/assessment-activity-v252/concurrency-baseline.sql',dump.stdout);
+ let r=spawnSync(exe+'psql.exe',[...args,'-d',db,'-f','tmp/assessment-activity-v252/concurrency-baseline.sql'],{encoding:'utf8',windowsHide:true});if(r.status!==0)throw Error(r.stderr.slice(-1200));psql(db,'grant usage on schema extensions to anon,authenticated,service_role');
+ const fixture=(await readFile('tmp/tokens-prisma-local.sql','utf8')).replaceAll("'import_evidence_v202'",`'${db}'`).replace(/rollback;\s*$/,'commit;');await writeFile('tmp/assessment-activity-v252/concurrency-fixture.sql',fixture);r=spawnSync(exe+'psql.exe',[...args,'-d',db,'-f','tmp/assessment-activity-v252/concurrency-fixture.sql'],{encoding:'utf8',windowsHide:true});if(r.status!==0)throw Error(r.stderr.slice(-1600));
+ const a=psql(db,"select m83_id('a')"),actor=psql(db,"select m83_id('recruiter')"),attempt=psql(db,"select m83_id('aa-attempt')");
+ const auth=`select set_config('request.jwt.claim.sub','${actor}',true);`;
+ const q=psql(db,`begin;${auth}select public.prisma_tokens('quote','${a}','{"functionName":"assessment_activity_analysis","quantity":1}')->>'id';commit;`).split(/\r?\n/).find(x=>/^[a-f0-9-]{36}$/.test(x)&&x!==actor);
+ const op1=psql(db,'select gen_random_uuid()'),op2=psql(db,'select gen_random_uuid()');
+ const acquired=await Promise.all([op1,op2].map(op=>concurrent(`begin;set local role authenticated;${auth}select public.assessment_activity_analysis_start('${a}','${attempt}','${op}','${q}')->>'acquired';select pg_sleep(0.15);commit;`)));
+ checks.push({name:'parallel distinct requests for same snapshot acquire provider once and reuse active operation',pass:acquired.every(x=>x.status===0)&&acquired.filter(x=>/^true$/m.test(x.out)).length===1&&acquired.filter(x=>/^false$/m.test(x.out)).length===1});
+ const active=psql(db,`select id from private.assessment_activity_analyses where organization_id='${a}' and attempt_id='${attempt}' and status='running'`);
+ const facts=psql(db,`select facts::text from private.assessment_activity_analyses where organization_id='${a}' and status='succeeded' limit 1`);
+ const usage='{"durationMs":20,"inputTokens":100,"outputTokens":20,"estimatedCostUsd":0.0001}',selection='{"patternIds":["focus_occurrences"],"contextIds":["focus","missing"]}';
+ const finishes=await Promise.all([1,2].map(()=>concurrent(`begin;set local role service_role;select set_config('request.jwt.claims','{"role":"service_role"}',true);select public.assessment_activity_analysis_finish('${a}','${active}',true,'${facts.replaceAll("'","''")}','${selection}','${usage}')->>'status';select pg_sleep(0.15);commit;`)));
+ checks.push({name:'parallel completion acknowledgement persists one report and exactly one debit',pass:finishes.every(x=>x.status===0&&/^succeeded$/m.test(x.out))&&psql(db,`select count(*) from private.prisma_token_movements where function_name='assessment_activity_analysis' and reference_id=(select id from private.prisma_token_reservations where operation_id='${active}') and kind='debit'`)==='1'});
+ if(checks.some(c=>!c.pass))throw Error('TOKEN_CONCURRENCY_FAILED');
+}finally{psql('postgres',`drop database ${db}`);await mkdir('docs/qa/evidence/assessment-activity-v252/concurrency',{recursive:true});await writeFile('docs/qa/evidence/assessment-activity-v252/concurrency/checks.json',JSON.stringify({environment:'Owned LOCAL PostgreSQL17 schema-only clone removed after run',checks},null,2));}
+console.log(JSON.stringify({passed:checks.length,total:checks.length}));
