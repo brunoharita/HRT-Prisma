@@ -2,7 +2,7 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.74.7
+version: 2.74.8
 last_verified: 2026-10-13
 ---
 
@@ -10,7 +10,7 @@ last_verified: 2026-10-13
 
 ## Sinais de conteúdo da avaliação —2.5.3 publicada
 
-Coletor1.1 local também recorta a seleção de página inteira ao texto da questão, sem contar outras regiões; publicação complementar em curso. Seleção estável, comando de cópia e menu de contexto do enunciado/alternativas foram autorizados por Bruno como complemento aos sinais existentes. Coleta só metadados (região/contagem/horário/códigos), não texto/clipboard/imagens/teclado geral, não bloqueia ações e não prova fraude/captura ou destino. PrintScreen usa press/release recebidos sem duplicar par. Nova migration adiciona tipos/validação mantendo token/tenant/questão e grant worker; métodos antigos e respostas preservados. IA método1.1.0/envelope1.0.0 aditivo aceita padrões/limitações novos, relatório antigo legível e nova análise explícita com tarifa6193.213SQL LOCAL,12Deno,5fatos/5release Node,68atividade/82portal e35browser dedicado PASS, tipos/build PASS. Publicado em main/produção pelo runtime6af9e2da674ec7345346f9beb899ea505aace1ad. Migration20261013203510, Edge position-assessment v5 ACTIVE com fontes iguais;12conjuntos protegidos/grants24funções preservados,4corpos esperados alterados. CI38463541320 PASS; web HTTP200/versão2.5.3 em1448/390/320,230assets anteriores preservados, sem reconstrução repetida após404 transitório. Mantidos somente web/Edge/banco no plano e serviços adjacentes preservados. acordo/AoT assessment-content-signals.
+Coletor1.1 publicado também recorta a seleção de página inteira ao texto da questão, sem contar outras regiões. Seleção estável, comando de cópia e menu de contexto do enunciado/alternativas foram autorizados por Bruno como complemento aos sinais existentes. Coleta só metadados (região/contagem/horário/códigos), não texto/clipboard/imagens/teclado geral, não bloqueia ações e não prova fraude/captura ou destino. PrintScreen usa press/release recebidos sem duplicar par. Nova migration adiciona tipos/validação mantendo token/tenant/questão e grant worker; métodos antigos e respostas preservados. IA método1.1.0/envelope1.0.0 aditivo aceita padrões/limitações novos, relatório antigo legível e nova análise explícita com tarifa6193.213SQL LOCAL,12Deno,5fatos/5release Node,68atividade/82portal e35browser dedicado PASS, tipos/build PASS. Publicado em main/produção pelo runtimef780dcd487c288cbaf34ac07263f2a326dd9793e. Migrations20261013203510/20261013210859, Edge position-assessment v5 ACTIVE com fontes iguais;12conjuntos protegidos/grants24funções preservados,4corpos esperados alterados. CI38463541320/38467702146 PASS; web HTTP200/versão2.5.3 em1448/390/320,230assets anteriores preservados, sem reconstrução repetida após404 transitório. Mantidos somente web/Edge/banco no plano e serviços adjacentes preservados. acordo/AoT assessment-content-signals.
 
 ## Atividade legível e análise por IA —2.5.2 publicada
 

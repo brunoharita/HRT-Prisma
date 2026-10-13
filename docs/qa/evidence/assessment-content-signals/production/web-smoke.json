@@ -1,6 +1,6 @@
 {
-  "runtimeSourceSha": "6af9e2da674ec7345346f9beb899ea505aace1ad",
-  "baselineImage": "sha256:b47545ade6b6ee8a79097282cfa1574589c30e5b093c55a1f32fe86cb6c9cc73",
+  "runtimeSourceSha": "f780dcd487c288cbaf34ac07263f2a326dd9793e",
+  "baselineImage": "sha256:6aa97d36d8abeef217a64e5f9306e741ad1b3791e614593811f600b18d253eb2",
   "oldAssets": 230,
   "oldAssetsPreserved": true,
   "rollbackReadOnlyInventory": true,
@@ -24,9 +24,9 @@
   ],
   "assets": [
     {
-      "path": "/assets/index-3YpXv5z1.js",
+      "path": "/assets/index-BULt_Q8I.js",
       "http": 200,
-      "sha256": "b8c00c60066d9c9a1a98fc5daf6a7ca0b3183a0aa791e7702ececf8636b7ec15",
+      "sha256": "56e17c411a228e365fffb0305e44badfcfc813532538d47053e2bd651582d8c8",
       "sourceShaPresent": true,
       "signalsPresent": true
     },

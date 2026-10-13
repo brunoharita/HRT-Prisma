@@ -1,0 +1,21 @@
+{
+  "command": "publish",
+  "status": "GIT_PUBLISHED",
+  "sha": "f780dcd487c288cbaf34ac07263f2a326dd9793e",
+  "branch": "codex/assessment-content-signals",
+  "web": "PUBLISHED",
+  "parserIa": "SKIPPED",
+  "profileSynthesis": "SKIPPED",
+  "mailForwarder": "SKIPPED",
+  "remaining": {
+    "database": [
+      "supabase/migrations/20261013205000_assessment_content_selection_scope.sql"
+    ],
+    "edgeFunctions": [],
+    "web": false,
+    "paddleGateway": false,
+    "parserIa": false,
+    "profileSynthesis": false,
+    "mailForwarder": false
+  }
+}

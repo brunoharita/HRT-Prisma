@@ -1,0 +1,7 @@
+{
+  "version": "20261013210859",
+  "name": "assessment_content_selection_scope",
+  "statements": [
+    "-- Collector1.1 clips selection to question content, including whole-page copy.\n-- Preserve collector1.0 and all permissions/data.\ndo $upgrade$\ndeclare original text;updated text;\nbegin\n original:=pg_get_functiondef('public.position_assessment_public(text,text,jsonb)'::regprocedure);\n updated:=replace(original,$old$'position-assessment-browser-signals-1.0.0','position-assessment-content-signals-1.0.0'$old$,$new$'position-assessment-browser-signals-1.0.0','position-assessment-content-signals-1.0.0','position-assessment-content-signals-1.1.0'$new$);\n if updated=original then raise exception 'Unexpected content method baseline';end if;original:=updated;\n updated:=replace(original,$old$event->>'method' is distinct from 'position-assessment-content-signals-1.0.0'$old$,$new$coalesce(event->>'method','') not in ('position-assessment-content-signals-1.0.0','position-assessment-content-signals-1.1.0')$new$);\n if updated=original then raise exception 'Unexpected content validation baseline';end if;original:=updated;\n updated:=replace(original,$old$elsif event->>'method'='position-assessment-content-signals-1.0.0'$old$,$new$elsif event->>'method' in ('position-assessment-content-signals-1.0.0','position-assessment-content-signals-1.1.0')$new$);\n if updated=original then raise exception 'Unexpected non-content method baseline';end if;\n execute updated;\nend $upgrade$;\n"
+  ]
+}

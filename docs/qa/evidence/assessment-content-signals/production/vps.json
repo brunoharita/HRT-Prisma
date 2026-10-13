@@ -1,17 +1,17 @@
 {
   "host": "srv1038882",
   "root": "/opt/prisma",
-  "sha": "6af9e2da674ec7345346f9beb899ea505aace1ad",
+  "sha": "f780dcd487c288cbaf34ac07263f2a326dd9793e",
   "remote": "git@github.com:brunoharita/HRT-Prisma.git",
   "trackedStatus": "",
   "containers": {
     "prisma-web": {
-      "id": "b093f245996d1a19d84ec7af3d2d843941f5f8af511b0bed8b5549fc0cda4025",
-      "image": "sha256:6aa97d36d8abeef217a64e5f9306e741ad1b3791e614593811f600b18d253eb2",
+      "id": "09d62a5113f64bc559e973d28aaa4195f2e7dd3e55f45f314dbea4b5b4cf10f6",
+      "image": "sha256:ac5284827fcec2fac268c49e1cd6997bb5e4e945d0d974fe095d466770ec7379",
       "state": "running",
       "restarts": "0",
       "health": "",
-      "startedAt": "2026-10-13T20:37:26.919450139Z"
+      "startedAt": "2026-10-13T21:10:26.726618834Z"
     },
     "prisma-parser-ia": {
       "id": "e8bc778c8c00e1f25f54bc1df7e0a78fd0c31f324d847125ff87ded81f1a5fd5",

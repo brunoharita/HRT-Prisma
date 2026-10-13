@@ -1507,6 +1507,17 @@
       "remoteStatementSha256": "c79c6d9afbbb3f3c242003c220c4cc90da662152cb5896ed291dc14a54b0cb35",
       "fingerprintMethod": "normalized-newline-trim-v1",
       "verifiedAt": "2026-10-13"
+    },
+    {
+      "name": "assessment_content_selection_scope",
+      "localVersion": "20261013205000",
+      "remoteVersion": "20261013210859",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localStatementSha256": "41733583efa8cf84369325c0f9b2e51742bfd1773e57cb52424765c0eb07bbc5",
+      "remoteStatementSha256": "41733583efa8cf84369325c0f9b2e51742bfd1773e57cb52424765c0eb07bbc5",
+      "verifiedAt": "2026-10-13",
+      "fingerprintMethod": "normalized-newline-trim-v1"
     }
   ],
   "localOnly": [
@@ -1549,9 +1560,10 @@
     "date": "2026-10-13",
     "movement": "assessment-content-signals",
     "names": [
-      "assessment_content_signals"
+      "assessment_content_signals",
+      "assessment_content_selection_scope"
     ],
-    "evidence": "docs/qa/evidence/assessment-content-signals/production/after.json",
+    "evidence": "docs/qa/evidence/assessment-content-signals/production/scope-after.json",
     "historicalSnapshotVerifiedAtUnchanged": true
   }
 }
