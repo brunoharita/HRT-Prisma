@@ -1,0 +1,24 @@
+{
+  "checks": [
+    {
+      "name": "anonymous analysis denied",
+      "status": 401,
+      "expected": 401,
+      "pass": true
+    },
+    {
+      "name": "anonymous generation preserved",
+      "status": 401,
+      "expected": 401,
+      "pass": true
+    },
+    {
+      "name": "invalid public invitation preserved",
+      "status": 404,
+      "expected": 404,
+      "pass": true
+    }
+  ],
+  "noProviderCall": true,
+  "noRecordsWritten": true
+}

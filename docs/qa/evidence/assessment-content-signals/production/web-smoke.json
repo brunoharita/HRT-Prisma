@@ -1,0 +1,64 @@
+{
+  "runtimeSourceSha": "6af9e2da674ec7345346f9beb899ea505aace1ad",
+  "baselineImage": "sha256:b47545ade6b6ee8a79097282cfa1574589c30e5b093c55a1f32fe86cb6c9cc73",
+  "oldAssets": 230,
+  "oldAssetsPreserved": true,
+  "rollbackReadOnlyInventory": true,
+  "routes": [
+    {
+      "route": "/",
+      "http": 200
+    },
+    {
+      "route": "/sign-in",
+      "http": 200
+    },
+    {
+      "route": "/assessment/",
+      "http": 200
+    },
+    {
+      "route": "/item-bank",
+      "http": 200
+    }
+  ],
+  "assets": [
+    {
+      "path": "/assets/index-3YpXv5z1.js",
+      "http": 200,
+      "sha256": "b8c00c60066d9c9a1a98fc5daf6a7ca0b3183a0aa791e7702ececf8636b7ec15",
+      "sourceShaPresent": true,
+      "signalsPresent": true
+    },
+    {
+      "path": "/assets/rolldown-runtime-C0FnF6B9.js",
+      "http": 200,
+      "sha256": "e0a79ad36c6ca1ffbc796c80aa5661803a9d1bc684e29d1587f48b4ba9a82714"
+    },
+    {
+      "path": "/assets/antd-vendor-CHFW8v3e.js",
+      "http": 200,
+      "sha256": "e2efc693bd9da69fa2f10f9aea0033d5f2c90caa7902628e969d5117c49ee180"
+    },
+    {
+      "path": "/assets/supabase-vendor-DoXvCMLf.js",
+      "http": 200,
+      "sha256": "eb17416e1cf28455937e96c08d469cd658f3cf88ebb0d156ebb076e1bc183ba5"
+    },
+    {
+      "path": "/assets/react-vendor-BdxMnOeJ.js",
+      "http": 200,
+      "sha256": "58a473314db4571ac72867e4485c45c440a8bce86396a9433d650c3831b03067"
+    },
+    {
+      "path": "/assets/antd-vendor-B5BXDqMa.css",
+      "http": 200,
+      "sha256": "6b734531b94fda9950119646124dccee1ee7e70e91b3e5be988c378ca9f9f98d"
+    },
+    {
+      "path": "/assets/index-BJhlErwd.css",
+      "http": 200,
+      "sha256": "2c1eabb48b1c30fdbc81ba240aa11db125ef8743e546b8de41a90b136566bbf3"
+    }
+  ]
+}

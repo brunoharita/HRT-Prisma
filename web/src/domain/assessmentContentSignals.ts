@@ -1,17 +1,23 @@
 /** Observes page commands, never clipboard contents or the general keyboard. */
-export const CONTENT_SIGNAL_METHOD = "position-assessment-content-signals-1.0.0";
+export const CONTENT_SIGNAL_METHOD = "position-assessment-content-signals-1.1.0";
 type Region = "stem" | "options" | "mixed";
 type SelectionMetadata = {region:Region;characterCount:number;anchor:Node;focus:Node;anchorOffset:number;focusOffset:number};
 function editableTarget(target:EventTarget|null){return target instanceof Element&&!!target.closest("input:not([type=radio]):not([type=checkbox]),textarea,[contenteditable=true]");}
 export function selectedQuestionMetadata(root:HTMLElement):SelectionMetadata|null {
  if(editableTarget(root.ownerDocument.activeElement))return null;
  const s=root.ownerDocument.getSelection();
- if(!s||s.isCollapsed||!s.anchorNode||!s.focusNode||!root.contains(s.anchorNode)||!root.contains(s.focusNode))return null;
- const region=(node:Node)=>(node.nodeType===1?node as Element:node.parentElement)?.closest<HTMLElement>("[data-assessment-region]")?.dataset.assessmentRegion;
- const a=region(s.anchorNode),b=region(s.focusNode);
- if(!a||!b||!["stem","options"].includes(a)||!["stem","options"].includes(b))return null;
- const characterCount=Array.from(s.toString()).length;if(!characterCount||characterCount>100000)return null;
- return {region:a===b?a as Region:"mixed",characterCount,anchor:s.anchorNode,focus:s.focusNode,anchorOffset:s.anchorOffset,focusOffset:s.focusOffset};
+ if(!s||s.isCollapsed||s.rangeCount!==1||!s.anchorNode||!s.focusNode)return null;
+ const selected=s.getRangeAt(0),regions:Region[]=[];let characterCount=0;
+ // Read only clipped question regions, including when Ctrl+A spans the whole page.
+ for(const part of root.querySelectorAll<HTMLElement>("[data-assessment-region]")){
+  const region=part.dataset.assessmentRegion;if(!region||!["stem","options"].includes(region)||!selected.intersectsNode(part))continue;
+  const intersection=root.ownerDocument.createRange();intersection.selectNodeContents(part);
+  if(selected.compareBoundaryPoints(Range.START_TO_START,intersection)>0)intersection.setStart(selected.startContainer,selected.startOffset);
+  if(selected.compareBoundaryPoints(Range.END_TO_END,intersection)<0)intersection.setEnd(selected.endContainer,selected.endOffset);
+  const size=Array.from(intersection.toString()).length;if(!size)continue;characterCount+=size;regions.push(region as Region);
+ }
+ if(!characterCount||characterCount>100000)return null;
+ return {region:new Set(regions).size>1?"mixed":regions[0]!,characterCount,anchor:s.anchorNode,focus:s.focusNode,anchorOffset:s.anchorOffset,focusOffset:s.focusOffset};
 }
 export function captureShortcut(e:Pick<KeyboardEvent,"code"|"metaKey"|"shiftKey"|"ctrlKey">):string|null {
  if(e.code==="PrintScreen")return "PrintScreen";

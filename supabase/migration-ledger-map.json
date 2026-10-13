@@ -1496,6 +1496,17 @@
       "remoteStatementSha256": "0b91dc721e92a81834e19b53547368ec09c25d3416b49dc14a053a1278317f16",
       "verifiedAt": "2026-10-13",
       "fingerprintMethod": "normalized-newline-trim-v1"
+    },
+    {
+      "name": "assessment_content_signals",
+      "localVersion": "20261013193000",
+      "remoteVersion": "20261013203510",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localStatementSha256": "c79c6d9afbbb3f3c242003c220c4cc90da662152cb5896ed291dc14a54b0cb35",
+      "remoteStatementSha256": "c79c6d9afbbb3f3c242003c220c4cc90da662152cb5896ed291dc14a54b0cb35",
+      "fingerprintMethod": "normalized-newline-trim-v1",
+      "verifiedAt": "2026-10-13"
     }
   ],
   "localOnly": [
@@ -1536,12 +1547,11 @@
   ],
   "lastIncrementalVerification": {
     "date": "2026-10-13",
-    "movement": "assessment-activity-v252",
+    "movement": "assessment-content-signals",
     "names": [
-      "assessment_activity_analysis",
-      "assessment_activity_analysis_rate"
+      "assessment_content_signals"
     ],
-    "evidence": "docs/qa/evidence/assessment-activity-v252/production/after.json",
+    "evidence": "docs/qa/evidence/assessment-content-signals/production/after.json",
     "historicalSnapshotVerifiedAtUnchanged": true
   }
 }

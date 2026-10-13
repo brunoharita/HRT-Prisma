@@ -1,0 +1,34 @@
+{
+  "status": "PUBLISHED_VERIFIED",
+  "runtimeSourceSha": "6af9e2da674ec7345346f9beb899ea505aace1ad",
+  "version": "2.5.3",
+  "ci": 38463541320,
+  "database": {
+    "name": "assessment_content_signals",
+    "remoteVersion": "20261013203510",
+    "verified": true
+  },
+  "edge": {
+    "name": "position-assessment",
+    "version": 5,
+    "verified": true
+  },
+  "web": {
+    "image": "sha256:6aa97d36d8abeef217a64e5f9306e741ad1b3791e614593811f600b18d253eb2",
+    "http": 200,
+    "rollbackTag": "prisma-web:rollback-before-6af9e2da674e",
+    "rollbackImage": "sha256:b47545ade6b6ee8a79097282cfa1574589c30e5b093c55a1f32fe86cb6c9cc73",
+    "initialTransientHttp": 404,
+    "rebuiltAgain": false
+  },
+  "skipped": [
+    "parser",
+    "gateway",
+    "synthesis",
+    "mail"
+  ],
+  "limitations": [
+    "Synthetic new-signal browser tests and mocked provider; no real candidate or paid AI test",
+    "Public production smoke does not prove authenticated candidate behavior"
+  ]
+}

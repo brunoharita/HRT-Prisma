@@ -41,6 +41,14 @@
       "pass": true
     },
     {
+      "name": "Ctrl+A copy observes only question content with mixed region",
+      "pass": true
+    },
+    {
+      "name": "whole page names and instructions excluded from character count",
+      "pass": true
+    },
+    {
       "name": "copy and menu do not alter answers",
       "pass": true
     },

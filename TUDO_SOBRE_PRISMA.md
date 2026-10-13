@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 469
-source_manifest_sha256: 01c82ebfc7a5bd009de342501324177e8d739a41351c053fe05b486d77e337c5
+source_manifest_sha256: 3fcd66dcb842d72b17f5f4db4ec3c4d6a1137cf2fddb2123a090a79112789191
 -->
 
 # Tudo sobre o Prisma
@@ -2630,15 +2630,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.74.5
+version: 2.74.7
 last_verified: 2026-10-13
 ---
 
 # Estado atual do Prisma
 
-## Sinais de conteúdo da avaliação —2.5.3 local
+## Sinais de conteúdo da avaliação —2.5.3 publicada
 
-Seleção estável, comando de cópia e menu de contexto do enunciado/alternativas foram autorizados por Bruno como complemento aos sinais existentes. Coleta só metadados (região/contagem/horário/códigos), não texto/clipboard/imagens/teclado geral, não bloqueia ações e não prova fraude/captura ou destino. PrintScreen usa press/release recebidos sem duplicar par. Nova migration adiciona tipos/validação mantendo token/tenant/questão e grant worker; métodos antigos e respostas preservados. IA método1.1.0/envelope1.0.0 aditivo aceita padrões/limitações novos, relatório antigo legível e nova análise explícita com tarifa6193.211SQL LOCAL,12Deno,5fatos/5release Node,68atividade/82portal e33browser dedicado PASS, tipos/build PASS. Publicação em preparação, produção ainda2.5.2; acordo/AoT assessment-content-signals.
+Coletor1.1 local também recorta a seleção de página inteira ao texto da questão, sem contar outras regiões; publicação complementar em curso. Seleção estável, comando de cópia e menu de contexto do enunciado/alternativas foram autorizados por Bruno como complemento aos sinais existentes. Coleta só metadados (região/contagem/horário/códigos), não texto/clipboard/imagens/teclado geral, não bloqueia ações e não prova fraude/captura ou destino. PrintScreen usa press/release recebidos sem duplicar par. Nova migration adiciona tipos/validação mantendo token/tenant/questão e grant worker; métodos antigos e respostas preservados. IA método1.1.0/envelope1.0.0 aditivo aceita padrões/limitações novos, relatório antigo legível e nova análise explícita com tarifa6193.213SQL LOCAL,12Deno,5fatos/5release Node,68atividade/82portal e35browser dedicado PASS, tipos/build PASS. Publicado em main/produção pelo runtime6af9e2da674ec7345346f9beb899ea505aace1ad. Migration20261013203510, Edge position-assessment v5 ACTIVE com fontes iguais;12conjuntos protegidos/grants24funções preservados,4corpos esperados alterados. CI38463541320 PASS; web HTTP200/versão2.5.3 em1448/390/320,230assets anteriores preservados, sem reconstrução repetida após404 transitório. Mantidos somente web/Edge/banco no plano e serviços adjacentes preservados. acordo/AoT assessment-content-signals.
 
 ## Atividade legível e análise por IA —2.5.2 publicada
 
@@ -17624,17 +17624,17 @@ Desvios de contrato: nenhum. Limitações: tests/browser sintéticos e provider 
 
 # AoT — Sinais de conteúdo da avaliação2.5.3
 
-Fonte integral: agreement-assessment-content-signals.md1.0.0, baseline8ddfef923a41cf2e3f51f1ffa180fbcaca92dd61. Mapa de impacto no acordo; nenhum Q pendente. Risco D. Branch codex/assessment-content-signals. Publicação em preparação.
+Fonte integral: agreement-assessment-content-signals.md1.0.0, baseline8ddfef923a41cf2e3f51f1ffa180fbcaca92dd61. Mapa de impacto no acordo; nenhum Q pendente. Risco D. Branch codex/assessment-content-signals. Publicada2.5.3 em main/produção, runtime6af9e2da674ec7345346f9beb899ea505aace1ad.
 
 | Regra | Implementação | Teste/evidência | Estado |
 | --- | --- | --- | --- |
-| D-01/02 | assessmentContentSignals + portal, só regiões visíveis e metadados, eventos copy/contextmenu/selection e PrintScreen press/release deduplicado | 33browser dedicado, negativos/instruções/revisão/teclado/menu real + comando edit Copy do Chromium; sem confirmação do clipboard final/screenshot | PASS local |
-| D-03 | Migration20261013193000, enums/valores estritos e pipeline token existente |211SQL (22adicionais) em PostgreSQL LOCAL vazio/rollback; replay/tampering/PII/tenant/questão/método, respostas e histórico preservados | PASS local |
-| D-04/05 | fatos separados, campos legíveis/counters indisponíveis no legado, AI minimizada/contexto obrigatório; método1.1.0/envelope1.0.0 compatível |5fatos+5release Node,12Deno,68atividade e novas capturas1448/390/320, relatório legado sem campos novos | PASS local |
-| D-06 | instruções/owner docs/contexto2.5.3, publicação seletiva |82portal, tipos/build PASS; release/remote/CI/smoke/sync em preparação | PARTIAL |
-| P-01/02 | sem clipboard API/preventDefault/texto/imagem/chaves gerais, raw payload recusado e limites obrigatórios; legado não reescrito | negativos browser/SQL/Deno, mesma tarifa, fonte UI/provider | PASS local |
+| D-01/02 | assessmentContentSignals + portal, só regiões visíveis e metadados, eventos copy/contextmenu/selection e PrintScreen press/release deduplicado | 35browser dedicado, negativos/instruções/revisão/teclado/menu real + comando edit Copy do Chromium; sem confirmação do clipboard final/screenshot | PASS |
+| D-03 | Migration20261013193000, enums/valores estritos e pipeline token existente |213SQL (24adicionais) em PostgreSQL LOCAL vazio/rollback; replay/tampering/PII/tenant/questão/método, respostas e histórico preservados | PASS |
+| D-04/05 | fatos separados, campos legíveis/counters indisponíveis no legado, AI minimizada/contexto obrigatório; método1.1.0/envelope1.0.0 compatível |5fatos+5release Node,12Deno,68atividade e novas capturas1448/390/320, relatório legado sem campos novos | PASS |
+| D-06 | instruções/owner docs/contexto2.5.3, publicação seletiva |82portal, tipos/build PASS; CI38463541320, migration/Edge/web/smoke de produção verificados | PASS |
+| P-01/02 | sem clipboard API/preventDefault/texto/imagem/chaves gerais, raw payload recusado e limites obrigatórios; legado não reescrito | negativos browser/SQL/Deno, mesma tarifa, fonte UI/provider | PASS |
 
-Registros são observações declaradas pelo navegador e não evidência certificada de ação humana; isTrusted evita dispatchEvent acidental mas não torna o cliente autoridade. A seleção pode apoiar leitura; menu pode ter outros usos; Ctrl/Cmd+C observado pouco antes e menu recente são correlações indicativas, não prova do meio de cópia. Não observamos conteúdo final nem destino. Native menu item click não validado em headless; abertura real e evento copy nativo por comando de edição Chromium testados, além do teclado. Não há fixture real/IA paga/debito em produção nem certificação de modelo vivo. Ainda sem prova remota de rollout deste movimento.
+Registros são observações declaradas pelo navegador e não evidência certificada de ação humana; isTrusted evita dispatchEvent acidental mas não torna o cliente autoridade. A seleção pode apoiar leitura; menu pode ter outros usos; Ctrl/Cmd+C observado pouco antes e menu recente são correlações indicativas, não prova do meio de cópia. Não observamos conteúdo final nem destino. Native menu item click não validado em headless; abertura real e evento copy nativo por comando de edição Chromium testados, além do teclado. Não há fixture real/IA paga/debito em produção nem certificação de modelo vivo. Rollout remoto verificado na evidência production/. Jornada real autenticada/modelo vivo não são inferidos desses testes.
 
 Preservação: envelope/analyses1.0.0 continuam legíveis e imutáveis. Contadores novos opcionais ausentes permanecem indisponíveis; método anterior marcado desatualizado permite nova solicitação somente após cotação/confirmação, com tarifa6193 intacta. Tab/menu/seleção nativa não bloqueados; controles/respostas/submissão continuam no contrato existente. O teste inicial usava Sincronizar agora como flush de eventos, mas esse botão sincroniza respostas; o teste foi corrigido para aguardar o buffer do pipeline existente. Ajustou-se escopo do menu/cópia para aceitar foco temporariamente entregue ao menu nativo; sempre restrito à questão visível e tentativa ativa.
 
@@ -17643,6 +17643,16 @@ Revisão visual content-390 e legado: rótulos/limites/evidências legíveis, se
 Descoberta transversal na revisão: handshake explícito do método1.1.0 por x-prisma-activity-method no transporte já existente; assinatura4/grants permanecem intactos. Header é compatibilidade do consumidor, nunca fonte de autorização. Worker anterior não adquire nova análise enquanto o banco é atualizado; operações anteriores já iniciadas continuam podendo concluir. Negativos de worker antigo/versão errada preservam saldo. Rollback de Edge/web deve restaurar corpo/default da RPC start4 ao método1.0.0 antes de permitir novas análises pelo worker antigo, mantendo dados/eventos/relatórios/cobranças e evitando exclusões. Relatórios1.1.0 podem ficar indisponíveis ao leitor antigo durante um rollback; preservar dados para leitor compatível.
 
 Transporte de versão usa request.headers JSON com nomes em minúsculas, segundo [PostgREST](https://docs.postgrest.org/en/stable/references/transactions.html). Teste Deno com SDK real/mock de rede confirmou header e assinatura4. Grants/papéis seguem preservados; versão declarada não concede acesso ou altera verificação de tenant. Normalização final de EOF da migration não muda SQL.
+
+## Publicação e preservação
+
+Fonte/runtime6af9e2da674ec7345346f9beb899ea505aace1ad validado no CI38463541320 (foundation/ledger/deploy shell/audit). Migration assessment_content_signals remota20261013203510 com statement normalizado igual ao arquivo local; Edge position-assessment v5 ACTIVE, verify_jwt:false preservado para o portal com token e getUser/autoridade backend para ações operacionais. Fontes Edge iguais ao SHA. Header de método verificado e24ACL/configs idênticos;12conjuntos protegidos (incluindo relatórios, eventos e tarifas) com hashes iguais após migration e antes da interface. Somente4corpos previstos alterados (portal eventos/view/start/finish); sem grant novo, backfill ou chamada paga de teste. Nenhum novo método é retroativo.
+
+Web image6aa97d36d8abeef217a64e5f9306e741ad1b3791e614593811f600b18d253eb2 running/restart0 no host existente srv1038882,/opt/prisma. Rollback tag prisma-web:rollback-before-6af9e2da674e=b47545ade6b6ee8a79097282cfa1574589c30e5b093c55a1f32fe86cb6c9cc73. Smoke imediato404 transitório durante recriação; estabilização200 confirmada sem reconstrução repetida. Recibo de recuperação identifica isso. Public browser1448/390/320 mostra2.5.3 sem erro/overflow;4rotas/7assets200, SHA e três novos tipos presentes no bundle,230assets anteriores preservados por hashes (inventário read-only do rollback e baseline anterior). Parser/gateway/Synthesis/mail/Traefik mantêm instâncias/imagens da evidência anterior, sem recreação.
+
+Registrar fechamento documental/ledger/contextos sem reconstruir runtimes; sourceSHA permanece explícito. Desvios: nenhum. Limitações: native menu Copiar clicado pelo usuário não testado em headless (copy event nativo via comando Chromium e teclado testados); não certificamos sucesso de clipboard/captura nem toda combinação de navegador/SO, e não usamos candidato real/IA paga em produção como fixture. Todos D/P têm prova proporcional, rollout separado de qualidade real do modelo.
+
+Coletor1.1 recorta a seleção às regiões oficiais da questão, incluindo Ctrl+A/Cmd+A; caracteres de cabeçalho/instruções/nome não entram na contagem. Não há leitura do clipboard. Migração aditiva20261013205000 aceita1.0/1.1, preservando registros/permissões anteriores. Correção de cobertura dentro do mesmo movimento2.5.3, aguardando publicação complementar.
 
 ---
 
