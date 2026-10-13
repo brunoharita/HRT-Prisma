@@ -1,6 +1,6 @@
 # ADR-084 — Análise fundamentada da atividade de uma avaliação
 
-Status: implementação local autorizada em13/10/2026; tarifa inicial6.193 Tokens Prisma aprovada por Bruno em13/10/2026, D-10 do acordo assessment-activity-v252 v1.1.0. Não comprova rollout.
+Status: implementação local autorizada em13/10/2026; tarifa inicial6.193 Tokens Prisma aprovada por Bruno em13/10/2026, D-10 do acordo assessment-activity-v252 v1.1.0. Publicada em produção2.5.2, evidência no AoT assessment-activity-v252.
 
 ## Decisão
 

@@ -89,4 +89,4 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 
 - [ADR-073: Interpretação derivada da trajetória](ADR-073-semantic-trajectory-score.md) — accepted no escopo M8.3; rollout e limites no AoT.
 
-- [ADR-084: Análise fundamentada da atividade de uma avaliação](ADR-084-assessment-activity-analysis.md) — implementação local autorizada; tarifa inicial6193 aprovada; rollout em curso no acordo assessment-activity-v252 v1.1.0.
+- [ADR-084: Análise fundamentada da atividade de uma avaliação](ADR-084-assessment-activity-analysis.md) — implementação local autorizada; tarifa inicial6193 aprovada; publicada em2.5.2, acordo assessment-activity-v252 v1.1.0/AoT.

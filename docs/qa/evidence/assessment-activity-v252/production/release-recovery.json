@@ -1,0 +1,55 @@
+{
+  "status": "PUBLISHED_VERIFIED",
+  "date": "2026-10-13",
+  "runtimeSourceSha": "6ec031db505af61af77971bd12c1f53358d49fba",
+  "baselineSha": "925d4b3ca619b5f302f8fe4d737cb83a473e123e",
+  "main": "PUBLISHED",
+  "database": [
+    {
+      "version": "20261013191057",
+      "name": "assessment_activity_analysis",
+      "status": "VERIFIED"
+    },
+    {
+      "version": "20261013191104",
+      "name": "assessment_activity_analysis_rate",
+      "status": "VERIFIED"
+    }
+  ],
+  "edge": {
+    "function": "position-assessment",
+    "version": 4,
+    "status": "ACTIVE",
+    "sourceFilesMatch": true
+  },
+  "web": {
+    "status": "PUBLISHED",
+    "image": "sha256:b47545ade6b6ee8a79097282cfa1574589c30e5b093c55a1f32fe86cb6c9cc73",
+    "smoke": "HTTP200/version2.5.2"
+  },
+  "ci": {
+    "run": 38452521988,
+    "status": "PASS"
+  },
+  "recovery": {
+    "immediateHttpSmoke": 404,
+    "stabilizedHttpSmoke": 200,
+    "rebuiltAgain": false
+  },
+  "rollback": {
+    "webImage": "sha256:1fb4174052c388c9d9a17b7b0b20a62009cab54d5e398406fe819c832e46443d",
+    "webTag": "prisma-web:rollback-before-6ec031db505a",
+    "edgeBaseline": "925d4b3ca619b5f302f8fe4d737cb83a473e123e",
+    "database": "Additive; preserve all reports, rates, quotes and ledger history"
+  },
+  "skipped": [
+    "parserIa",
+    "paddleGateway",
+    "profileSynthesis",
+    "mailForwarder"
+  ],
+  "limitations": [
+    "Public smoke; authenticated real candidate journey not tested",
+    "Provider mocked in tests; live model quality not tested"
+  ]
+}

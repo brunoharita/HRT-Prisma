@@ -1,0 +1,77 @@
+{
+  "runtimeSourceSha": "6ec031db505af61af77971bd12c1f53358d49fba",
+  "baselineImage": "sha256:1fb4174052c388c9d9a17b7b0b20a62009cab54d5e398406fe819c832e46443d",
+  "baselineAssetEvidence": "tmp/assessment-review/assets-after.txt",
+  "oldAssets": 224,
+  "oldAssetsPreserved": true,
+  "currentAssets": 227,
+  "routes": [
+    {
+      "route": "/",
+      "http": 200,
+      "bytes": 811
+    },
+    {
+      "route": "/sign-in",
+      "http": 200,
+      "bytes": 811
+    },
+    {
+      "route": "/assessment/",
+      "http": 200,
+      "bytes": 811
+    },
+    {
+      "route": "/item-bank",
+      "http": 200,
+      "bytes": 811
+    }
+  ],
+  "assets": [
+    {
+      "path": "/assets/index-BB_GaV8_.js",
+      "http": 200,
+      "bytes": 1207948,
+      "sha256": "4963195cc8210f6c1a95cf1a88c6299e45984efb49b1167ad5e407dee310d4a3",
+      "sourceShaPresent": true,
+      "activityConsumerPresent": true,
+      "methodPresent": true
+    },
+    {
+      "path": "/assets/rolldown-runtime-C0FnF6B9.js",
+      "http": 200,
+      "bytes": 1291,
+      "sha256": "e0a79ad36c6ca1ffbc796c80aa5661803a9d1bc684e29d1587f48b4ba9a82714"
+    },
+    {
+      "path": "/assets/antd-vendor-CHFW8v3e.js",
+      "http": 200,
+      "bytes": 1273995,
+      "sha256": "e2efc693bd9da69fa2f10f9aea0033d5f2c90caa7902628e969d5117c49ee180"
+    },
+    {
+      "path": "/assets/supabase-vendor-DoXvCMLf.js",
+      "http": 200,
+      "bytes": 208137,
+      "sha256": "eb17416e1cf28455937e96c08d469cd658f3cf88ebb0d156ebb076e1bc183ba5"
+    },
+    {
+      "path": "/assets/react-vendor-BdxMnOeJ.js",
+      "http": 200,
+      "bytes": 435,
+      "sha256": "58a473314db4571ac72867e4485c45c440a8bce86396a9433d650c3831b03067"
+    },
+    {
+      "path": "/assets/antd-vendor-B5BXDqMa.css",
+      "http": 200,
+      "bytes": 2987,
+      "sha256": "6b734531b94fda9950119646124dccee1ee7e70e91b3e5be988c378ca9f9f98d"
+    },
+    {
+      "path": "/assets/index-BJhlErwd.css",
+      "http": 200,
+      "bytes": 480899,
+      "sha256": "2c1eabb48b1c30fdbc81ba240aa11db125ef8743e546b8de41a90b136566bbf3"
+    }
+  ]
+}

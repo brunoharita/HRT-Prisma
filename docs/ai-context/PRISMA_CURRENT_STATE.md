@@ -2,15 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.74.3
+version: 2.74.4
 last_verified: 2026-10-13
 ---
 
 # Estado atual do Prisma
 
-## Atividade legível e análise por IA —2.5.2 em preparação local
+## Atividade legível e análise por IA —2.5.2 publicada
 
-Bruno autorizou em13/10/2026 apresentar eventos em português, resumo por questão com dados técnicos sob demanda e análise por IA explícita de padrões da tentativa completa. Implementação local em andamento; domínio calcula totais/tempos e IA seleciona/ordena somente padrões/contextos sustentados, sem nomes/contatos/enunciados/respostas/rawpayload ou julgamentos de fraude/Score/etapa. Resultado salvo gratuito, cotação antes da ação, tenant/role/snapshot/histórico/reserva/debito idempotentes e falha sem resultado libera; confirmação incerta não repete provider.68browser/189SQL/2disputas/4Node/10Deno locais PASS, tipos PASS; 82regressões portal e38preparação/resultado PASS; lint/contextos/22tooling PASS. Tarifa6.193 Tokens por resultado aprovada por Bruno em13/10/2026; Q-01 resolvido como D-10 no acordo1.1.0, registro do app2.5.2 preparado. Ativação/publicação em curso; produção2.5.1 até smoke. Acordo/AoT assessment-activity-v252 e ADR-084. Fixtures, não qualidade de modelo vivo/candidato real.
+Bruno autorizou em13/10/2026 apresentar eventos em português, resumo por questão com dados técnicos sob demanda e análise por IA explícita de padrões da tentativa completa. Disponível em produção; domínio calcula totais/tempos e IA seleciona/ordena somente padrões/contextos sustentados, sem nomes/contatos/enunciados/respostas/rawpayload ou julgamentos de fraude/Score/etapa. Resultado salvo gratuito, cotação antes da ação, tenant/role/snapshot/histórico/reserva/debito idempotentes e falha sem resultado libera; confirmação incerta não repete provider.68browser/189SQL/2disputas/4Node/10Deno locais PASS, tipos PASS; 82regressões portal e38preparação/resultado PASS; lint/contextos/22tooling PASS. Tarifa6.193 Tokens por resultado aprovada por Bruno em13/10/2026; Q-01 resolvido como D-10 no acordo1.1.0, registro do app2.5.2 publicado. Migrations remotas20261013191057/20261013191104 e Edge position-assessment v4 ACTIVE, originais/tarifas antigas e19funções protegidas preservados. Runtime web6ec031db505af61af77971bd12c1f53358d49fba no host existente, HTTP200/versão2.5.2 em1448/390/320 sem erro/overflow,224assets anteriores preservados e rollback1fb41740. CI38452521988 PASS; autenticação anônima negada na nova ação. Acordo1.1.0/execução/AoT assessment-activity-v252 e ADR-084. Fixtures, não qualidade de modelo vivo/candidato real.
 
 ## Ações da avaliação — correção sem mudança de versão
 

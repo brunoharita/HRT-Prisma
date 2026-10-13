@@ -1,0 +1,89 @@
+{
+  "host": "srv1038882",
+  "root": "/opt/prisma",
+  "sha": "6ec031db505af61af77971bd12c1f53358d49fba",
+  "remote": "git@github.com:brunoharita/HRT-Prisma.git",
+  "trackedStatus": "",
+  "containers": {
+    "prisma-web": {
+      "id": "5a3c031948831d84346e10314162545e01325cf529acf3b10398268f7901c0ce",
+      "image": "sha256:b47545ade6b6ee8a79097282cfa1574589c30e5b093c55a1f32fe86cb6c9cc73",
+      "state": "running",
+      "restarts": "0",
+      "health": "",
+      "startedAt": "2026-10-13T19:13:55.267054368Z"
+    },
+    "prisma-parser-ia": {
+      "id": "e8bc778c8c00e1f25f54bc1df7e0a78fd0c31f324d847125ff87ded81f1a5fd5",
+      "image": "sha256:8542b81cebc337e052b89bcf9b1ba459ecf0824a0a4a993d8feb614401615039",
+      "state": "running",
+      "restarts": "0",
+      "health": "healthy",
+      "startedAt": "2026-10-11T01:26:11.607026385Z"
+    },
+    "prisma-paddle-gateway": {
+      "id": "8fb76416f61cd0baf27b14a4fe4e2692e6384487f740337ba5f424145f104653",
+      "image": "sha256:cf414afdb189d3906df09633566e75d56a56dc7779e21a73e80830b0b71c9b73",
+      "state": "running",
+      "restarts": "0",
+      "health": "",
+      "startedAt": "2026-10-11T01:25:24.006871887Z"
+    },
+    "hrt-mail-forwarder": {
+      "id": "b257a83cbb370299dc3666d120a22b47f7fb5acfc4a73516a78b821ae43fea6a",
+      "image": "sha256:ffc0f2a53e093cec01c4a91e652b29b0ede4808ecc2f461df9e6faa52940cc31",
+      "state": "running",
+      "restarts": "0",
+      "health": "healthy",
+      "startedAt": "2026-10-10T01:57:50.864521868Z"
+    },
+    "prisma-profile-synthesis": {
+      "id": "db6c5c0ef238534ba2967dce3bbf80e9e8c94089ca7bb48b84f4e523961b00d7",
+      "image": "sha256:2fdccaea0fb50449f9f5e800ada1925c690fab319e4d3708ade0f831c7e99167",
+      "state": "running",
+      "restarts": "0",
+      "health": "healthy",
+      "startedAt": "2026-10-09T22:59:12.540390376Z"
+    },
+    "paddle-vl-llama-test": {
+      "id": "d991a574e45eb002ce05e6c0fc9e448f4a4ed5f6128aaac049ea8cbdb24e4b8f",
+      "image": "sha256:b15cd87030b2eb8a284d398c095e03c6ba8baf386b68e1b83ab8b46e9555ffe8",
+      "state": "running",
+      "restarts": "0",
+      "health": "unhealthy",
+      "startedAt": "2026-09-15T20:01:24.349743935Z"
+    },
+    "paddle-vl-prisma-test": {
+      "id": "2e83e5ef4a5bcc882eb415c23f7099a814dd09798976ba4ea575806d2c883006",
+      "image": "sha256:4b19acbf5174fdd67410258a348a8485c23ceb6c22358530c51373141f43a4e2",
+      "state": "exited",
+      "restarts": "0",
+      "health": "",
+      "startedAt": "2026-09-15T15:33:04.369080568Z"
+    },
+    "paddle-structure-1": {
+      "id": "b0be4c3994881f54b19b00cbba85a432fe8b3e53bd1a2ae0cdedf771599be90d",
+      "image": "sha256:a2aed573f63f74047233f2af9ba9d2b2fb2aba66b891e41f3db488b230c3c29a",
+      "state": "exited",
+      "restarts": "0",
+      "health": "",
+      "startedAt": "2026-09-15T15:17:50.27488448Z"
+    },
+    "paddle-vision-recovery-1": {
+      "id": "24ed7d12632d4a1ba358ae82718914208e151284d14c791984e89a07e895f97f",
+      "image": "sha256:4b19acbf5174fdd67410258a348a8485c23ceb6c22358530c51373141f43a4e2",
+      "state": "exited",
+      "restarts": "17",
+      "health": "",
+      "startedAt": "2026-09-15T15:17:10.778029272Z"
+    },
+    "traefik-traefik-1": {
+      "id": "5e25fdc6d2e6fd3c622972310f67f640b80cac70538e17b42a529d1935488bc6",
+      "image": "sha256:f86a2cab1b5c649070c49f883c743dd32d8485a56e3368c5f93b9e91f1e91259",
+      "state": "running",
+      "restarts": "0",
+      "health": "",
+      "startedAt": "2026-09-15T10:50:34.167686935Z"
+    }
+  }
+}

@@ -1474,6 +1474,28 @@
       "localStatementSha256": "3760a5ee53849ebd0c7747cc93fbd9c93f2840df5b1bd606daa1ed715b1e4964",
       "remoteStatementSha256": "3760a5ee53849ebd0c7747cc93fbd9c93f2840df5b1bd606daa1ed715b1e4964",
       "verifiedAt": "2026-10-12"
+    },
+    {
+      "name": "assessment_activity_analysis",
+      "localVersion": "20261013120000",
+      "remoteVersion": "20261013191057",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localStatementSha256": "715f39e84ac20ffe88f460cad33c9042fb5ea2dc1b2b309b2d563df72f434614",
+      "remoteStatementSha256": "715f39e84ac20ffe88f460cad33c9042fb5ea2dc1b2b309b2d563df72f434614",
+      "verifiedAt": "2026-10-13",
+      "fingerprintMethod": "normalized-newline-trim-v1"
+    },
+    {
+      "name": "assessment_activity_analysis_rate",
+      "localVersion": "20261013130000",
+      "remoteVersion": "20261013191104",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localStatementSha256": "0b91dc721e92a81834e19b53547368ec09c25d3416b49dc14a053a1278317f16",
+      "remoteStatementSha256": "0b91dc721e92a81834e19b53547368ec09c25d3416b49dc14a053a1278317f16",
+      "verifiedAt": "2026-10-13",
+      "fingerprintMethod": "normalized-newline-trim-v1"
     }
   ],
   "localOnly": [
@@ -1513,12 +1535,13 @@
     }
   ],
   "lastIncrementalVerification": {
-    "date": "2026-10-12",
-    "movement": "tokens-nonround-rates",
+    "date": "2026-10-13",
+    "movement": "assessment-activity-v252",
     "names": [
-      "prisma_token_nonround_rates"
+      "assessment_activity_analysis",
+      "assessment_activity_analysis_rate"
     ],
-    "evidence": "docs/qa/evidence/tokens-nonround-rates/production/after.json",
+    "evidence": "docs/qa/evidence/assessment-activity-v252/production/after.json",
     "historicalSnapshotVerifiedAtUnchanged": true
   }
 }

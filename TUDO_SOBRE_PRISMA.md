@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 467
-source_manifest_sha256: 1862b9ce17e690f971d4799a6e1f423a2d28749e9a948f37dcacbe98e351ff8b
+source_manifest_sha256: 318d78204fc9cb1413321a436d6326944a037d3cfaaa553f8cecf2617ae9a927
 -->
 
 # Tudo sobre o Prisma
@@ -2630,15 +2630,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.74.3
+version: 2.74.4
 last_verified: 2026-10-13
 ---
 
 # Estado atual do Prisma
 
-## Atividade legível e análise por IA —2.5.2 em preparação local
+## Atividade legível e análise por IA —2.5.2 publicada
 
-Bruno autorizou em13/10/2026 apresentar eventos em português, resumo por questão com dados técnicos sob demanda e análise por IA explícita de padrões da tentativa completa. Implementação local em andamento; domínio calcula totais/tempos e IA seleciona/ordena somente padrões/contextos sustentados, sem nomes/contatos/enunciados/respostas/rawpayload ou julgamentos de fraude/Score/etapa. Resultado salvo gratuito, cotação antes da ação, tenant/role/snapshot/histórico/reserva/debito idempotentes e falha sem resultado libera; confirmação incerta não repete provider.68browser/189SQL/2disputas/4Node/10Deno locais PASS, tipos PASS; 82regressões portal e38preparação/resultado PASS; lint/contextos/22tooling PASS. Tarifa6.193 Tokens por resultado aprovada por Bruno em13/10/2026; Q-01 resolvido como D-10 no acordo1.1.0, registro do app2.5.2 preparado. Ativação/publicação em curso; produção2.5.1 até smoke. Acordo/AoT assessment-activity-v252 e ADR-084. Fixtures, não qualidade de modelo vivo/candidato real.
+Bruno autorizou em13/10/2026 apresentar eventos em português, resumo por questão com dados técnicos sob demanda e análise por IA explícita de padrões da tentativa completa. Disponível em produção; domínio calcula totais/tempos e IA seleciona/ordena somente padrões/contextos sustentados, sem nomes/contatos/enunciados/respostas/rawpayload ou julgamentos de fraude/Score/etapa. Resultado salvo gratuito, cotação antes da ação, tenant/role/snapshot/histórico/reserva/debito idempotentes e falha sem resultado libera; confirmação incerta não repete provider.68browser/189SQL/2disputas/4Node/10Deno locais PASS, tipos PASS; 82regressões portal e38preparação/resultado PASS; lint/contextos/22tooling PASS. Tarifa6.193 Tokens por resultado aprovada por Bruno em13/10/2026; Q-01 resolvido como D-10 no acordo1.1.0, registro do app2.5.2 publicado. Migrations remotas20261013191057/20261013191104 e Edge position-assessment v4 ACTIVE, originais/tarifas antigas e19funções protegidas preservados. Runtime web6ec031db505af61af77971bd12c1f53358d49fba no host existente, HTTP200/versão2.5.2 em1448/390/320 sem erro/overflow,224assets anteriores preservados e rollback1fb41740. CI38452521988 PASS; autenticação anônima negada na nova ação. Acordo1.1.0/execução/AoT assessment-activity-v252 e ADR-084. Fixtures, não qualidade de modelo vivo/candidato real.
 
 ## Ações da avaliação — correção sem mudança de versão
 
@@ -10150,7 +10150,7 @@ Rollback de aplicação deve conservar schema, ledger, pedidos e reservas. Clien
 
 # ADR-084 — Análise fundamentada da atividade de uma avaliação
 
-Status: implementação local autorizada em13/10/2026; tarifa inicial6.193 Tokens Prisma aprovada por Bruno em13/10/2026, D-10 do acordo assessment-activity-v252 v1.1.0. Não comprova rollout.
+Status: implementação local autorizada em13/10/2026; tarifa inicial6.193 Tokens Prisma aprovada por Bruno em13/10/2026, D-10 do acordo assessment-activity-v252 v1.1.0. Publicada em produção2.5.2, evidência no AoT assessment-activity-v252.
 
 ## Decisão
 
@@ -10267,7 +10267,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 
 - [ADR-073: Interpretação derivada da trajetória](ADR-073-semantic-trajectory-score.md) — accepted no escopo M8.3; rollout e limites no AoT.
 
-- [ADR-084: Análise fundamentada da atividade de uma avaliação](ADR-084-assessment-activity-analysis.md) — implementação local autorizada; tarifa inicial6193 aprovada; rollout em curso no acordo assessment-activity-v252 v1.1.0.
+- [ADR-084: Análise fundamentada da atividade de uma avaliação](ADR-084-assessment-activity-analysis.md) — implementação local autorizada; tarifa inicial6193 aprovada; publicada em2.5.2, acordo assessment-activity-v252 v1.1.0/AoT.
 
 ---
 
@@ -12096,9 +12096,9 @@ Reaproveitamento privado2.5.1: aprovação individual ou em conjunto projeta aut
 
 No portal, **Revisar avaliação** fica no cabeçalho junto ao progresso; o rodapé da questão contém somente **Anterior** e **Próxima**. Na revisão, **Voltar às questões** preserva a questão ativa e **Enviar avaliação** abre a confirmação **Confirmar envio e encerrar**. Revisar não conclui nem pausa o tempo; a conclusão exige respostas completas, sincronização e confirmação, com comprovante. Correção sem alterar2.5.1; acordo/AoT `docs/qa/assessment-review-placement.md`.
 
-## Atividade e análise por IA — implementação local para2.5.2
+## Atividade e análise por IA — disponível em2.5.2
 
-A aba Atividade por questão apresenta perdas de foco, mouse antes da primeira escolha, zoom e atalhos com rótulos separados. Ver acontecimentos abre descrições com horários de Brasília e limites; detalhes técnicos preservam os campos originais sob demanda. Mobile usa cartões; histórico individual e processo comum compartilham a apresentação. Análise da atividade consulta resultado salvo gratuitamente e permite solicitação explícita com previsão de Tokens Prisma e confirmação. O sistema calcula fatos da tentativa inteira; IA seleciona/ordena padrões/contextos sustentados e links abrem as questões de evidência. Sem inferência de fraude, intenção, destino, contratação, Score ou etapa. Versão/fingerprint/data registram base e desatualização; falha conserva dados/relatório anterior e não debita sem entrega, confirmação incerta exige consulta/conciliação. Reutiliza provider/histórico/ledger, sem nova coleta. Tarifa inicial6.193 Tokens Prisma por resultado concluído aprovada por Bruno em13/10/2026; implementação local validada, publicação em curso: acordo1.1.0/AoT assessment-activity-v252.
+A aba Atividade por questão apresenta perdas de foco, mouse antes da primeira escolha, zoom e atalhos com rótulos separados. Ver acontecimentos abre descrições com horários de Brasília e limites; detalhes técnicos preservam os campos originais sob demanda. Mobile usa cartões; histórico individual e processo comum compartilham a apresentação. Análise da atividade consulta resultado salvo gratuitamente e permite solicitação explícita com previsão de Tokens Prisma e confirmação. O sistema calcula fatos da tentativa inteira; IA seleciona/ordena padrões/contextos sustentados e links abrem as questões de evidência. Sem inferência de fraude, intenção, destino, contratação, Score ou etapa. Versão/fingerprint/data registram base e desatualização; falha conserva dados/relatório anterior e não debita sem entrega, confirmação incerta exige consulta/conciliação. Reutiliza provider/histórico/ledger, sem nova coleta. Tarifa inicial6.193 Tokens Prisma por resultado concluído aprovada por Bruno em13/10/2026; implementação publicada e verificada: acordo1.1.0/AoT assessment-activity-v252.
 
 ---
 
@@ -17532,19 +17532,19 @@ Todos os D e P aplicáveis PASS dentro das evidências declaradas. Versão2.0.10
 
 # AoT — Atividade legível e análise por IA
 
-Contrato: docs/qa/agreement-assessment-activity-v252.md v1.1.0. Baseline925d4b3ca619b5f302f8fe4d737cb83a473e123e. Estado local validado; Q-01 resolvido por Bruno em13/10/2026,6.193 Tokens por análise entregue. Publicação em preparação.
+Contrato: docs/qa/agreement-assessment-activity-v252.md v1.1.0. Baseline925d4b3ca619b5f302f8fe4d737cb83a473e123e. Estado local validado; Q-01 resolvido por Bruno em13/10/2026,6.193 Tokens por análise entregue. Publicado em main/produção2.5.2; runtime6ec031db505af61af77971bd12c1f53358d49fba.
 
 ## Matriz de acordos
 
 | Regra | Implementação | Evidência local | Estado |
 | --- | --- | --- | --- |
 | D-01/02 | AssessmentActivity: textos, campos técnicos completos e expansão na largura inteira; mobile em cartões | 68browser em1448/768/390/320, timezoneTokyo/horárioBrasília, teclado, null/não aplicável/zero e dados originais | PASS |
-| D-03 | Cotação/confirmar/cancelar, cache gratuito e acesso explícito | fixture com tarifa arbitrária1234, nenhuma IA por leitura; tarifa6193 testada em SQL com negativa de reaplicação; ativação remota pendente | PASS |
+| D-03 | Cotação/confirmar/cancelar, cache gratuito e acesso explícito | fixture com tarifa arbitrária1234, nenhuma IA por leitura; tarifa6193 testada em SQL com negativa de reaplicação; ativação remota6193 verificada | PASS |
 | D-04/05/06 | domínio puro, AI enum estrito, limites/evidências e dados minimizados | 4Node/5Deno novos+5Deno existentes, projeção sem PII/rawpayload, rejeição de acusações/IDs não sustentados | PASS |
 | D-07 | snapshot privado, RPCs/ledger/histórico, cache/replay, falha/liberação e resultado anterior | 189SQL rollback local incluindo consumidores anteriores,2disputas paralelas em banco descartável local removido | PASS |
 | D-08 | componente compartilhado de resultados históricos/atuais, feedback e contextos | 68browser dirigido,82portal e38preparação/resultado, tipos/build PASS | PASS |
-| D-10 | Migration20261013130000, tarifa6193 independente de custo técnico | 4asserts adicionais: valor aprovado, demais tarifas preservadas, replay negado e única versão | PASS local |
-| D-09 | branch isolada, contrato/mapa/ADR; release2.5.2 autorizado | gates/publicação remota em execução | NOT TESTED |
+| D-10 | Migration20261013130000, tarifa6193 independente de custo técnico | 4asserts adicionais: valor aprovado, demais tarifas preservadas, replay negado e única versão | PASS |
+| D-09 | branch isolada, contrato/mapa/ADR; release2.5.2 autorizado | CI38452521988 PASS; migrations/Edge/web/HTTP/assets/versão e rollback verificados | PASS |
 | P-01/02/03 | sem novas observações ou decisões/Score; chamada paga explícita; código rejeita saída fora dos fatos | testes de projeção/validação, simulações sem modelo vivo, replay/saldo/falha; nenhuma alteração de tarifa presumida | PASS |
 
 ## Impacto e preservação
@@ -17561,7 +17561,17 @@ Bruno respondeu aprovo à proposta de6.193 Tokens por análise concluída. D-10/
 
 A navegação por evidências usa o snapshot imutável da análise, inclusive eventos recebidos depois da consulta inicial da tela; limpeza da seleção volta aos dados atuais recebidos. O DTO inclui organização/tentativa e rejeita troca de escopo. A UI diferencia análise feita antes da conclusão da tentativa. Custos de testes são arbitrários1234/17, não tarifa aprovada. Coleta existente é parcial e eventos são interpretados como registros associados à questão, sem certificar atividade real/intenção; nova coleta ou correção de trackers não entrou no diff.
 
-Lint/check-contexto no snapshot limpo e22tooling PASS. SQL/log normalizado somente quanto ao padding terminal, sem alterar fatos/asserts. Conector remoto foi usado apenas para leitura de identidade/metadata/tarifas existentes; nenhuma migration, função ou cobrança nova foi aplicada. Produção permanece2.5.1 até publicação/smoke. CI inicial apontou aviso de erro sem ação na modal; corrigido com consulta de andamento explícita, sem retry pago. Teste actionableNotices PASS no checkout limpo (arquivos duplicados não rastreados do PO preservados).
+Lint/check-contexto no snapshot limpo e22tooling PASS. SQL/log normalizado somente quanto ao padding terminal, sem alterar fatos/asserts. Conector remoto confirmou identidade e aplicou somente migrations20261013191057/20261013191104 e Edge position-assessment v4, fontes iguais ao commit validado. Tarifa6193 ativa; nenhum teste real pago/débito executado. Produção2.5.2 publicada/verificada. CI inicial apontou aviso de erro sem ação na modal; corrigido com consulta de andamento explícita, sem retry pago. Teste actionableNotices PASS no checkout limpo (arquivos duplicados não rastreados do PO preservados).
+
+## Publicação e preservação verificada
+
+Runtime validado/publicado:6ec031db505af61af77971bd12c1f53358d49fba, origin/main/VPS no host srv1038882, raiz /opt/prisma e projeto Supabase ioldpnqqvobprjiontre. CI38452521988 PASS (foundation, ledger, deploy shell e audit). Banco/Edge publicados antes do web; negação anônima analysis/generation401 e token público inválido404. Table privada RLS ativa, sem DML para authenticated/service_role; load autenticado, finish somente worker. 11conjuntos protegidos e19funções/grants/config iguais antes/depois; somente tarifa nova6193 adicionada. Hashes normalizados de statements e fontes Edge iguais aos arquivos locais. Metadata financeira preservada, zero relatórios/débitos novos criados nos testes.
+
+Web image b47545ade6b6ee8a79097282cfa1574589c30e5b093c55a1f32fe86cb6c9cc73 running/restart0; rollback tag prisma-web:rollback-before-6ec031db505a aponta para1fb4174052c388c9d9a17b7b0b20a62009cab54d5e398406fe819c832e46443d. O smoke imediato do release recebeu404 transitório após recriação; confirmou-se estabilização HTTP200, sem reconstrução/reexecução. Recibo manual de recuperação acompanha a publicação.3viewports1448/390/320 com versão2.5.2, sem erro/overflow;4rotas e7assets HTTP200, SHA6ec031d/categoria/método presentes no bundle e224assets anteriores com hash preservado. Somente prisma-web recriado; serviços adjacentes mantêm instâncias/imagens anteriores, baseline bounded em metadados.
+
+Rollback compatível: retornar web à imagem anterior e Edge ao código925d4b3; não excluir tabela/relatórios/tarifas/cotações/reservas/histórico. Estrutura aditiva permanece compatível com consumidores anteriores. Uma desativação comercial futura deve preservar versões vigentes segundo gestão de Tokens.
+
+Desvios de contrato: nenhum. Limitações: tests/browser sintéticos e provider simulado; qualidade de modelo vivo e jornada autenticada com candidatos reais NOT TESTED, não inferidas do smoke público. Há implementação real minimizada do provider, mas nenhum prompt com dados reais foi enviado apenas para testar. Evidência em production/after.json, edge-smoke.json, web-smoke.json, public-browser.json, vps.json e recibo release-recovery.json. A revisão final documental/ledger/contexto não reconstrói runtimes; o SHA de runtime permanece explícito e a sincronização dos checkouts acompanha o fechamento.
 
 ---
 
@@ -29992,9 +30002,9 @@ Tecnologia assistiva não pode ser classificada automaticamente como comportamen
 
 Questões abertas antes de implementação: prazo de retenção de respostas, tentativas incompletas, telemetria, itens expostos, convites expirados, logs, flags de integridade, dados usados para calibração, backup e exclusão por titular.
 
-## Análise da atividade —2.5.2, local
+## Análise da atividade —2.5.2
 
-Nova leitura derivada autorizada: papéis operacionais existentes da organização; snapshot oficial de tentativa/questões/eventos e fingerprint, nunca dados do cliente para construir afirmações. Tabela privada/RLS sem DML/grants diretos; leitura/início autenticados e conclusão worker com JWT service_role. Provider recebe somente padrões agregados sem nomes/contatos/enunciados/respostas/rawpayload/identificadores, sem ferramentas e store:false. Saída limitada a referências/contextos permitidos, números/textos do domínio. Não decide fraude/contratação/Score/etapa. Original permanece imutável; vínculo da análise cascata com exclusão da tentativa, ledger/histórico genéricos preservam somente metadados comerciais. Ciência operacional continua distinta de consentimento/base legal. Acordo assessment-activity-v252; tarifa6193 aprovada em13/10/2026; rollout depende das verificações registradas no AoT.
+Nova leitura derivada autorizada: papéis operacionais existentes da organização; snapshot oficial de tentativa/questões/eventos e fingerprint, nunca dados do cliente para construir afirmações. Tabela privada/RLS sem DML/grants diretos; leitura/início autenticados e conclusão worker com JWT service_role. Provider recebe somente padrões agregados sem nomes/contatos/enunciados/respostas/rawpayload/identificadores, sem ferramentas e store:false. Saída limitada a referências/contextos permitidos, números/textos do domínio. Não decide fraude/contratação/Score/etapa. Original permanece imutável; vínculo da análise cascata com exclusão da tentativa, ledger/histórico genéricos preservam somente metadados comerciais. Ciência operacional continua distinta de consentimento/base legal. Acordo assessment-activity-v252; tarifa6193 aprovada em13/10/2026; publicação2.5.2 verificada no AoT.
 
 ---
 
