@@ -1,0 +1,7 @@
+# Execução — Atividade legível e análise por IA2.5.2
+
+Fonte normativa integral: [acordo v1.1.0](agreement-assessment-activity-v252.md), aprovado por Bruno nesta conversa em13/10/2026, incluindo a resolução de Q-01 como D-10. Todos D-01 a D-10, P-01 a P-03, F-01, A-01 e CA-01 a CA-05 são incorporados sem mudança de significado.
+
+Concluir a implementação existente, ativando a nova categoria assessment_activity_analysis em6.193 Tokens Prisma por resultado entregue. Cotação e confirmação antes da IA; consulta salva sem consumo, falha sem resultado libera. Manter D-01/02 apresentação factual em português, D-03 card antes da lista, D-04 tentativa inteira e evidências, D-05 provider minimizado/histórico existente, D-06 autoridade humana, D-07 tenant/snapshot/idempotência/concorrência, D-08 histórico/processo/mobile/feedback e D-09 main/produção2.5.2 por SHA validado com smoke/rollback/contexto/AoT.
+
+Nenhuma acusação, decisão, zero inventado, PII ao provider, coleta nova, retry pago automático ou tarifa presumida pode ocorrer (P-01/02/03). Proctoring, ranking, calibração, redesign total e alterações da coleta são F-01. Reuso de componentes/domínio/integração existente é A-01. Validar somente delta de tarifa, correção de recuperação indicada pelo CI e release; conservar evidência funcional e de regressão já obtida. Banco/Edge antes de web; não publicar serviços adjacentes. Fechar cada D/P no AoT com evidência e limitações de modelo vivo/jornada real explícitas.

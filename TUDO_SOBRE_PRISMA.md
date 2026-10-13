@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 466
-source_manifest_sha256: 0ab24e0ea28fde142b552d21804303c5c97b0fb98c8f640aaa7c959297ac2c9b
+documentation_source_count: 467
+source_manifest_sha256: 1862b9ce17e690f971d4799a6e1f423a2d28749e9a948f37dcacbe98e351ff8b
 -->
 
 # Tudo sobre o Prisma
@@ -2630,7 +2630,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.74.2
+version: 2.74.3
 last_verified: 2026-10-13
 ---
 
@@ -2638,7 +2638,7 @@ last_verified: 2026-10-13
 
 ## Atividade legível e análise por IA —2.5.2 em preparação local
 
-Bruno autorizou em13/10/2026 apresentar eventos em português, resumo por questão com dados técnicos sob demanda e análise por IA explícita de padrões da tentativa completa. Implementação local em andamento; domínio calcula totais/tempos e IA seleciona/ordena somente padrões/contextos sustentados, sem nomes/contatos/enunciados/respostas/rawpayload ou julgamentos de fraude/Score/etapa. Resultado salvo gratuito, cotação antes da ação, tenant/role/snapshot/histórico/reserva/debito idempotentes e falha sem resultado libera; confirmação incerta não repete provider.68browser/185SQL/2disputas/4Node/10Deno locais PASS, tipos PASS; 82regressões portal e38preparação/resultado PASS; lint/contextos/22tooling PASS. Nova tarifa proposta6.193 Tokens por resultado é Q-01 sem resposta; não ativada, sem mudança de versão/publicação remota deste movimento. Produção segue2.5.1. Acordo/AoT assessment-activity-v252 e ADR-084. Fixtures, não qualidade de modelo vivo/candidato real.
+Bruno autorizou em13/10/2026 apresentar eventos em português, resumo por questão com dados técnicos sob demanda e análise por IA explícita de padrões da tentativa completa. Implementação local em andamento; domínio calcula totais/tempos e IA seleciona/ordena somente padrões/contextos sustentados, sem nomes/contatos/enunciados/respostas/rawpayload ou julgamentos de fraude/Score/etapa. Resultado salvo gratuito, cotação antes da ação, tenant/role/snapshot/histórico/reserva/debito idempotentes e falha sem resultado libera; confirmação incerta não repete provider.68browser/189SQL/2disputas/4Node/10Deno locais PASS, tipos PASS; 82regressões portal e38preparação/resultado PASS; lint/contextos/22tooling PASS. Tarifa6.193 Tokens por resultado aprovada por Bruno em13/10/2026; Q-01 resolvido como D-10 no acordo1.1.0, registro do app2.5.2 preparado. Ativação/publicação em curso; produção2.5.1 até smoke. Acordo/AoT assessment-activity-v252 e ADR-084. Fixtures, não qualidade de modelo vivo/candidato real.
 
 ## Ações da avaliação — correção sem mudança de versão
 
@@ -10150,7 +10150,7 @@ Rollback de aplicação deve conservar schema, ledger, pedidos e reservas. Clien
 
 # ADR-084 — Análise fundamentada da atividade de uma avaliação
 
-Status: implementação local autorizada em13/10/2026; tarifa inicial pendente da decisão Q-01 no acordo assessment-activity-v252. Não comprova rollout.
+Status: implementação local autorizada em13/10/2026; tarifa inicial6.193 Tokens Prisma aprovada por Bruno em13/10/2026, D-10 do acordo assessment-activity-v252 v1.1.0. Não comprova rollout.
 
 ## Decisão
 
@@ -10166,7 +10166,7 @@ Snapshots privados são vinculados a organização/tentativa/fingerprint/método
 
 Locks da tentativa e do ledger, índice parcial e operação idempotente impedem aquisição/débito duplicado. Reserva antes do provider; relatório, histórico e liquidação na mesma conclusão transacional. Resultado salvo é gratuito. Perda de confirmação não declara falha contraditória nem repete provider. Após2min em execução sem confirmação, informar necessidade de conciliação; reserva só permite nova ação depois de liberação administrativa explícita. Uma análise anterior permanece legível após falha/desatualização.
 
-Limites técnicos reaproveitam US$0,25/pedido e US$10/mês desta função, saída2000tokens e100solicitações/dia por empresa; custos desconhecidos usam teto conservador no orçamento, nunca zero fictício no histórico. A tarifa comercial da nova categoria é independente e ainda não foi ativada.
+Limites técnicos reaproveitam US$0,25/pedido e US$10/mês desta função, saída2000tokens e100solicitações/dia por empresa; custos desconhecidos usam teto conservador no orçamento, nunca zero fictício no histórico. A tarifa comercial aprovada da nova categoria é6.193 Tokens por resultado entregue, independente desses limites técnicos. Consulta salva gratuita e falha sem resultado sem débito.
 
 ## Evidência e limites
 
@@ -10267,7 +10267,7 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 
 - [ADR-073: Interpretação derivada da trajetória](ADR-073-semantic-trajectory-score.md) — accepted no escopo M8.3; rollout e limites no AoT.
 
-- [ADR-084: Análise fundamentada da atividade de uma avaliação](ADR-084-assessment-activity-analysis.md) — implementação local autorizada; tarifa inicial e rollout pendentes no acordo assessment-activity-v252.
+- [ADR-084: Análise fundamentada da atividade de uma avaliação](ADR-084-assessment-activity-analysis.md) — implementação local autorizada; tarifa inicial6193 aprovada; rollout em curso no acordo assessment-activity-v252 v1.1.0.
 
 ---
 
@@ -11077,6 +11077,10 @@ A primeira versão retorna histórico completo com paginação visual. Carga em 
 ## Revisão de tarifas de 12/10/2026
 
 Migration `20261012130000_prisma_token_nonround_rates.sql`: insere três revisões, sem atualizar histórico/schema/permissões. Bloqueia aplicação se a baseline vigente diferir de 2.000/10.000/5.000 ou houver vigência futura cadastrada, evitando substituir decisão comercial concorrente. Publicação somente banco e documentação; consumidores e UI já leem tarifas versionadas, sem rebuild/restart. Configuração `prisma-token-tariffs-2026-10-12`; app 2.5.1 e envelopes RPC existentes mantidos. Rollback operacional por novas versões 2.000/10.000/5.000 na Gestão de Tokens, preservando histórico, cotações e reservas. QA local: `node scripts/test-prisma-tokens-sql.mjs --nonround-rates` em baseline vazia descartável, transação com rollback; UI com tarifas sintéticas iguais em dois viewports. Verificar hashes agregados de dados protegidos, corpos/grants/RLS, fingerprint da migration e identidade dos serviços antes/depois.
+
+## Análise da atividade da avaliação2.5.2
+
+Bruno aprovou em13/10/2026 a nova categoria assessment_activity_analysis, tarifa inicial6.193 Tokens Prisma por análise concluída da tentativa. Migration20261013130000 é aditiva, bloqueia categoria já configurada e preserva as outras tarifas/cotações/reservas. Resultado salvo é consulta gratuita; nova base exige ação/cotação explícitas, falha sem resultado libera reserva, confirmação incerta não repete chamada paga. Usos aparecem no histórico comercial separado; custo do provider permanece técnico/global segundo contratos existentes. Acordo1.1.0/AoT assessment-activity-v252 registram ativação e publicação.
 
 ---
 
@@ -12094,7 +12098,7 @@ No portal, **Revisar avaliação** fica no cabeçalho junto ao progresso; o roda
 
 ## Atividade e análise por IA — implementação local para2.5.2
 
-A aba Atividade por questão apresenta perdas de foco, mouse antes da primeira escolha, zoom e atalhos com rótulos separados. Ver acontecimentos abre descrições com horários de Brasília e limites; detalhes técnicos preservam os campos originais sob demanda. Mobile usa cartões; histórico individual e processo comum compartilham a apresentação. Análise da atividade consulta resultado salvo gratuitamente e permite solicitação explícita com previsão de Tokens Prisma e confirmação. O sistema calcula fatos da tentativa inteira; IA seleciona/ordena padrões/contextos sustentados e links abrem as questões de evidência. Sem inferência de fraude, intenção, destino, contratação, Score ou etapa. Versão/fingerprint/data registram base e desatualização; falha conserva dados/relatório anterior e não debita sem entrega, confirmação incerta exige consulta/conciliação. Reutiliza provider/histórico/ledger, sem nova coleta. Implementação local autorizada, tarifa/publicação ainda pendentes: acordo/AoT assessment-activity-v252.
+A aba Atividade por questão apresenta perdas de foco, mouse antes da primeira escolha, zoom e atalhos com rótulos separados. Ver acontecimentos abre descrições com horários de Brasília e limites; detalhes técnicos preservam os campos originais sob demanda. Mobile usa cartões; histórico individual e processo comum compartilham a apresentação. Análise da atividade consulta resultado salvo gratuitamente e permite solicitação explícita com previsão de Tokens Prisma e confirmação. O sistema calcula fatos da tentativa inteira; IA seleciona/ordena padrões/contextos sustentados e links abrem as questões de evidência. Sem inferência de fraude, intenção, destino, contratação, Score ou etapa. Versão/fingerprint/data registram base e desatualização; falha conserva dados/relatório anterior e não debita sem entrega, confirmação incerta exige consulta/conciliação. Reutiliza provider/histórico/ledger, sem nova coleta. Tarifa inicial6.193 Tokens Prisma por resultado concluído aprovada por Bruno em13/10/2026; implementação local validada, publicação em curso: acordo1.1.0/AoT assessment-activity-v252.
 
 ---
 
@@ -12829,7 +12833,7 @@ Prompt congelado: implementar D/P/F/A e critérios acima sem reinterpretar a exi
 
 # Acordo — Atividade legível e análise por IA, v2.5.2
 
-Contrato v1.0.0,13/10/2026. Bruno aprovou as duas propostas desta conversa, com main/produção2.5.2. Baseline925d4b3ca619b5f302f8fe4d737cb83a473e123e; tracked limpo e untracked alheios preservados. Risco D: dados de atividade por tentativa, IA explícita e consumo; sem nova coleta.
+Contrato v1.1.0,13/10/2026. Bruno aprovou as duas propostas desta conversa, com main/produção2.5.2. Baseline925d4b3ca619b5f302f8fe4d737cb83a473e123e; tracked limpo e untracked alheios preservados. Risco D: dados de atividade por tentativa, IA explícita e consumo; sem nova coleta.
 
 ## Comportamento aprovado
 
@@ -12847,7 +12851,7 @@ Contrato v1.0.0,13/10/2026. Bruno aprovou as duas propostas desta conversa, com 
 - P-03: sem retry pago automático, nova cobrança em cache/replay, tarifa presumida, mutação de dados reais apenas para teste ou novo provider/arquitetura independente.
 - F-01: proctoring, calibração, algoritmo de fraude, nova coleta, ranking, decisões sensíveis e redesign total do sistema.
 - A-01: componentes Prisma, domínio puro de fatos compartilhado frontend/Edge, validação estruturada, classes locais, migração aditiva e integração da função existente. Screenshot é contraexemplo técnico e exemplo de conteúdo; modelo textual aprovado é referência estrutural (análise antes da lista, detalhes na largura inteira), números são ilustrativos.
-- Q-01: nova tarifa da função Análise da atividade da avaliação; proposta6.193 Tokens/resultado com histórico separado aguardando resposta assíncrona. Bloqueia fechamento do contrato completo e ativação/publicação da tarifa dependente; apresentação e integração parametrizada que falha fechado sem tarifa são independentes.
+- D-10 (Q-01 resolvido): Bruno aprovou em13/10/2026 a tarifa inicial de6.193 Tokens Prisma por análise concluída da tentativa, com histórico separado como Análise da atividade da avaliação. Consultar resultado salvo é gratuito; falha sem resultado não cobra. Nova revisão de tarifa não altera cotações/reservas já emitidas.
 
 ## Mapa de impacto inicial
 
@@ -12856,7 +12860,7 @@ Contrato v1.0.0,13/10/2026. Bruno aprovou as duas propostas desta conversa, com 
 | Resultado comum e histórico individual, apresentação de sinais | direct | componentes existentes/screenshot; fixtures em mesmos dados/viewport, tabela/expansão/mobile e limites |
 | Domínio factual e fronteira IA autenticada | direct | provider OpenAI/modelo já usado; testes puros e Edge mocks negativos, nenhum LLM pago em testes |
 | Tenant/ator/tentativa/resultados, RLS/grants e persistência | critical_transversal | schema PostgreSQL/contratos existentes; local descartável confirmado127.0.0.1:55479/import_evidence_v202, people0/sem avaliações; SQL negativo, QA rollback e hashes/grants remotos |
-| Tokens Prisma/cotação/reserva/débito e histórico genérico IA | direct | tarifas existentes2347/14785/6193 e versões preservadas; novo consumidor dependeQ-01, SQL concorre/replay/falha/isolamento e fixture frontend |
+| Tokens Prisma/cotação/reserva/débito e histórico genérico IA | direct | tarifas existentes2347/14785/6193 e versões preservadas; nova categoria aprovada6.193 Tokens, SQL concorre/replay/falha/isolamento e fixture frontend |
 | Portal, preparação/revisão/convites/correção | plausible_indirect | Edge/CSS/tipos compartilhados; regressão dirigida e corpos RPC críticos/telemetria preservados |
 | Matching/Parser/Síntese/Conhecimento/email | no_impact_identified | contratos/provedores dessas áreas não alterados; regressão do consumidor genérico Tokens aplicável e plano evita rebuild de serviços por proximidade |
 | Release/rotas/assets/rollback/navegação | critical_transversal | SHA/versão/containers antes/depois, CI e smoke proporcional |
@@ -12865,9 +12869,9 @@ Contrato v1.0.0,13/10/2026. Bruno aprovou as duas propostas desta conversa, com 
 
 CA-01(D-01/02/08): texto factual versus técnico, null/zero/false/não aplicável/inválido, datas/intervalos e detalhes completos; screenshot desktop/mobile, teclado e retorno. CA-02(D-03/04/05/06): ausência de IA implícita, cotação/consentimento da ação, tentativa inteira, padrões/evidências sustentados, ausência de PII/destinos/acusações e saída inválida rejeitada. CA-03(D-07): positivos/negativos de autorização/tenant/snapshot concorrente/idempotência/cache/reconciliação e cobrança/falha; registros originais intactos. CA-04(D-09): tipos/build/checks dirigidos/contextos/ledger, QA sensível, ambiente real identificado, main/origin/VPS/backend/SHA e smoke; evidências sem alegar qualidade real/fairness com fixtures.
 
-## Execução parcial autorizada
+## Execução completa congelada
 
-EnquantoQ-01 permanece, implementar domínio factual/apresentação e integração parametrizada independente do valor, sem fixar ou ativar tarifa/cobrança presumida. A execução completa será congelada após resolverQ-01, incorporando todo o acordo. Não há pedido de reaprovacão das etapas já autorizadas.
+Não há Q material pendente. O pedido implementar/publicar2.5.2 e a resposta aprovo à tarifa autorizam concluir D-01 a D-10, preservando P-01 a P-03 e F-01. A-01 permanece delegado. CA-05(D-10): tarifa6193 ativa e única na nova categoria; negativa de reaplicação, demais tarifas/histórico preservados, cotação/reserva/liquidação oficiais e consulta grátis. Execução: docs/qa/execution-assessment-activity-v252.md, referência exata a este contrato v1.1.0.
 
 ---
 
@@ -17528,18 +17532,19 @@ Todos os D e P aplicáveis PASS dentro das evidências declaradas. Versão2.0.10
 
 # AoT — Atividade legível e análise por IA
 
-Contrato: docs/qa/agreement-assessment-activity-v252.md v1.0.0. Baseline925d4b3ca619b5f302f8fe4d737cb83a473e123e. Estado local; Q-01 tarifa ainda pendente. Não publicado em main/produção.
+Contrato: docs/qa/agreement-assessment-activity-v252.md v1.1.0. Baseline925d4b3ca619b5f302f8fe4d737cb83a473e123e. Estado local validado; Q-01 resolvido por Bruno em13/10/2026,6.193 Tokens por análise entregue. Publicação em preparação.
 
 ## Matriz de acordos
 
 | Regra | Implementação | Evidência local | Estado |
 | --- | --- | --- | --- |
 | D-01/02 | AssessmentActivity: textos, campos técnicos completos e expansão na largura inteira; mobile em cartões | 68browser em1448/768/390/320, timezoneTokyo/horárioBrasília, teclado, null/não aplicável/zero e dados originais | PASS |
-| D-03 | Cotação/confirmar/cancelar, cache gratuito e acesso explícito | fixture com tarifa arbitrária1234, nenhuma IA por leitura; tarifa real nova ainda não escolhida/ativada | PARTIAL |
+| D-03 | Cotação/confirmar/cancelar, cache gratuito e acesso explícito | fixture com tarifa arbitrária1234, nenhuma IA por leitura; tarifa6193 testada em SQL com negativa de reaplicação; ativação remota pendente | PASS |
 | D-04/05/06 | domínio puro, AI enum estrito, limites/evidências e dados minimizados | 4Node/5Deno novos+5Deno existentes, projeção sem PII/rawpayload, rejeição de acusações/IDs não sustentados | PASS |
-| D-07 | snapshot privado, RPCs/ledger/histórico, cache/replay, falha/liberação e resultado anterior | 185SQL rollback local incluindo consumidores anteriores,2disputas paralelas em banco descartável local removido | PASS |
+| D-07 | snapshot privado, RPCs/ledger/histórico, cache/replay, falha/liberação e resultado anterior | 189SQL rollback local incluindo consumidores anteriores,2disputas paralelas em banco descartável local removido | PASS |
 | D-08 | componente compartilhado de resultados históricos/atuais, feedback e contextos | 68browser dirigido,82portal e38preparação/resultado, tipos/build PASS | PASS |
-| D-09 | branch isolada, contrato/mapa/ADR; release2.5.2 autorizado | publicação depende Q-01 e gates finais | NOT TESTED |
+| D-10 | Migration20261013130000, tarifa6193 independente de custo técnico | 4asserts adicionais: valor aprovado, demais tarifas preservadas, replay negado e única versão | PASS local |
+| D-09 | branch isolada, contrato/mapa/ADR; release2.5.2 autorizado | gates/publicação remota em execução | NOT TESTED |
 | P-01/02/03 | sem novas observações ou decisões/Score; chamada paga explícita; código rejeita saída fora dos fatos | testes de projeção/validação, simulações sem modelo vivo, replay/saldo/falha; nenhuma alteração de tarifa presumida | PASS |
 
 ## Impacto e preservação
@@ -17550,13 +17555,13 @@ Mapa inicial no acordo. Novidade: análise estruturada por tentativa com IA orga
 
 Imagem do PO é contraexemplo técnico/conteúdo; referência normativa é o modelo textual aprovado: análise antes da lista, resumo em português e evidências expansíveis usando largura disponível. Capturas em docs/qa/evidence/assessment-activity-v252/browser. Revisão visual de analysis-1448/events-390 PASS, topologia/densidade/ações e campos técnicos sob demanda conferidos; render usa dados sintéticos; valores exemplificativos são fixtures e não decisões/inferências sobre Diego.
 
-## Pendência para fechamento
+## Fechamento da decisão comercial
 
-Q-01: novo consumidor de IA não possui tarifa comercial aprovada. Proposta6.193 Tokens por análise concluída enviada por pergunta assíncrona; não presumir resposta nem ativar em produção. Versão2.5.2 e publicação serão fechadas depois da decisão e das validações necessárias. Sem autorização nova necessária para checkpoints administrativos já aprovados.
+Bruno respondeu aprovo à proposta de6.193 Tokens por análise concluída. D-10/CA-05 incorporados ao acordo v1.1.0 e execução congelada. Ativação aditiva, sem alterar tarifas/reservas existentes; consultar salva grátis/falha sem resultado libera.
 
 A navegação por evidências usa o snapshot imutável da análise, inclusive eventos recebidos depois da consulta inicial da tela; limpeza da seleção volta aos dados atuais recebidos. O DTO inclui organização/tentativa e rejeita troca de escopo. A UI diferencia análise feita antes da conclusão da tentativa. Custos de testes são arbitrários1234/17, não tarifa aprovada. Coleta existente é parcial e eventos são interpretados como registros associados à questão, sem certificar atividade real/intenção; nova coleta ou correção de trackers não entrou no diff.
 
-Lint/check-contexto no snapshot limpo e22tooling PASS. SQL/log normalizado somente quanto ao padding terminal, sem alterar fatos/asserts. Conector remoto foi usado apenas para leitura de identidade/metadata/tarifas existentes; nenhuma migration, função ou cobrança nova foi aplicada. Produção permanece2.5.1; Q-01 impede fechamento/publish2.5.2.
+Lint/check-contexto no snapshot limpo e22tooling PASS. SQL/log normalizado somente quanto ao padding terminal, sem alterar fatos/asserts. Conector remoto foi usado apenas para leitura de identidade/metadata/tarifas existentes; nenhuma migration, função ou cobrança nova foi aplicada. Produção permanece2.5.1 até publicação/smoke. CI inicial apontou aviso de erro sem ação na modal; corrigido com consulta de andamento explícita, sem retry pago. Teste actionableNotices PASS no checkout limpo (arquivos duplicados não rastreados do PO preservados).
 
 ---
 
@@ -24112,6 +24117,18 @@ VacancyAssistPage é síncrona, sem espera artificial. ResumeImport, ProfileSear
 
 ---
 
+## Source: `docs/qa/execution-assessment-activity-v252.md`
+
+# Execução — Atividade legível e análise por IA2.5.2
+
+Fonte normativa integral: [acordo v1.1.0](agreement-assessment-activity-v252.md), aprovado por Bruno nesta conversa em13/10/2026, incluindo a resolução de Q-01 como D-10. Todos D-01 a D-10, P-01 a P-03, F-01, A-01 e CA-01 a CA-05 são incorporados sem mudança de significado.
+
+Concluir a implementação existente, ativando a nova categoria assessment_activity_analysis em6.193 Tokens Prisma por resultado entregue. Cotação e confirmação antes da IA; consulta salva sem consumo, falha sem resultado libera. Manter D-01/02 apresentação factual em português, D-03 card antes da lista, D-04 tentativa inteira e evidências, D-05 provider minimizado/histórico existente, D-06 autoridade humana, D-07 tenant/snapshot/idempotência/concorrência, D-08 histórico/processo/mobile/feedback e D-09 main/produção2.5.2 por SHA validado com smoke/rollback/contexto/AoT.
+
+Nenhuma acusação, decisão, zero inventado, PII ao provider, coleta nova, retry pago automático ou tarifa presumida pode ocorrer (P-01/02/03). Proctoring, ranking, calibração, redesign total e alterações da coleta são F-01. Reuso de componentes/domínio/integração existente é A-01. Validar somente delta de tarifa, correção de recuperação indicada pelo CI e release; conservar evidência funcional e de regressão já obtida. Banco/Edge antes de web; não publicar serviços adjacentes. Fechar cada D/P no AoT com evidência e limitações de modelo vivo/jornada real explícitas.
+
+---
+
 ## Source: `docs/qa/execution-candidate-card-visual.md`
 
 # Execução — cartão de Pessoas por Posição
@@ -29977,7 +29994,7 @@ Questões abertas antes de implementação: prazo de retenção de respostas, te
 
 ## Análise da atividade —2.5.2, local
 
-Nova leitura derivada autorizada: papéis operacionais existentes da organização; snapshot oficial de tentativa/questões/eventos e fingerprint, nunca dados do cliente para construir afirmações. Tabela privada/RLS sem DML/grants diretos; leitura/início autenticados e conclusão worker com JWT service_role. Provider recebe somente padrões agregados sem nomes/contatos/enunciados/respostas/rawpayload/identificadores, sem ferramentas e store:false. Saída limitada a referências/contextos permitidos, números/textos do domínio. Não decide fraude/contratação/Score/etapa. Original permanece imutável; vínculo da análise cascata com exclusão da tentativa, ledger/histórico genéricos preservam somente metadados comerciais. Ciência operacional continua distinta de consentimento/base legal. Acordo assessment-activity-v252; rollout/tarifa dependem da decisão pendente e evidência.
+Nova leitura derivada autorizada: papéis operacionais existentes da organização; snapshot oficial de tentativa/questões/eventos e fingerprint, nunca dados do cliente para construir afirmações. Tabela privada/RLS sem DML/grants diretos; leitura/início autenticados e conclusão worker com JWT service_role. Provider recebe somente padrões agregados sem nomes/contatos/enunciados/respostas/rawpayload/identificadores, sem ferramentas e store:false. Saída limitada a referências/contextos permitidos, números/textos do domínio. Não decide fraude/contratação/Score/etapa. Original permanece imutável; vínculo da análise cascata com exclusão da tentativa, ledger/histórico genéricos preservam somente metadados comerciais. Ciência operacional continua distinta de consentimento/base legal. Acordo assessment-activity-v252; tarifa6193 aprovada em13/10/2026; rollout depende das verificações registradas no AoT.
 
 ---
 

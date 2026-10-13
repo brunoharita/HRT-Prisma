@@ -1,6 +1,6 @@
 # ADR-084 — Análise fundamentada da atividade de uma avaliação
 
-Status: implementação local autorizada em13/10/2026; tarifa inicial pendente da decisão Q-01 no acordo assessment-activity-v252. Não comprova rollout.
+Status: implementação local autorizada em13/10/2026; tarifa inicial6.193 Tokens Prisma aprovada por Bruno em13/10/2026, D-10 do acordo assessment-activity-v252 v1.1.0. Não comprova rollout.
 
 ## Decisão
 
@@ -16,7 +16,7 @@ Snapshots privados são vinculados a organização/tentativa/fingerprint/método
 
 Locks da tentativa e do ledger, índice parcial e operação idempotente impedem aquisição/débito duplicado. Reserva antes do provider; relatório, histórico e liquidação na mesma conclusão transacional. Resultado salvo é gratuito. Perda de confirmação não declara falha contraditória nem repete provider. Após2min em execução sem confirmação, informar necessidade de conciliação; reserva só permite nova ação depois de liberação administrativa explícita. Uma análise anterior permanece legível após falha/desatualização.
 
-Limites técnicos reaproveitam US$0,25/pedido e US$10/mês desta função, saída2000tokens e100solicitações/dia por empresa; custos desconhecidos usam teto conservador no orçamento, nunca zero fictício no histórico. A tarifa comercial da nova categoria é independente e ainda não foi ativada.
+Limites técnicos reaproveitam US$0,25/pedido e US$10/mês desta função, saída2000tokens e100solicitações/dia por empresa; custos desconhecidos usam teto conservador no orçamento, nunca zero fictício no histórico. A tarifa comercial aprovada da nova categoria é6.193 Tokens por resultado entregue, independente desses limites técnicos. Consulta salva gratuita e falha sem resultado sem débito.
 
 ## Evidência e limites
 

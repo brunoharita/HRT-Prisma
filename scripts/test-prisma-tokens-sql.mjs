@@ -24,7 +24,20 @@ if(nonround){
  sql+=`select m83_reject($nr_migration$${migration}$nr_migration$,'P0001');\nselect m83_assert((select count(*)=6 from private.prisma_token_rates),'replay rejected without extra revisions');\n`;
 }else sql+=await readFile('supabase/qa/prisma_tokens_verification.sql','utf8');
 const activity=process.argv.includes('--activity-analysis');
-if(activity){sql+=await readFile('supabase/migrations/20261013120000_assessment_activity_analysis.sql','utf8');sql+=await readFile('supabase/qa/assessment_activity_analysis_verification.sql','utf8');}
+if(activity){
+ sql+=await readFile('supabase/migrations/20261013120000_assessment_activity_analysis.sql','utf8');
+ const rate=await readFile('supabase/migrations/20261013130000_assessment_activity_analysis_rate.sql','utf8');
+ sql+=`reset role; savepoint approved_activity_rate; create temp table aa_rates_before as select to_jsonb(r) data from private.prisma_token_rates r;
+`;
+ sql+=rate;
+ sql+=`select m83_assert((select count(*)=1 and min(tokens_per_unit)=6193 from private.prisma_token_rates where function_name='assessment_activity_analysis'),'approved commercial activity tariff is 6193');
+select m83_assert(not exists(select data from aa_rates_before except select to_jsonb(r) from private.prisma_token_rates r),'other tariffs preserved');
+select m83_reject($aa_rate$${rate}$aa_rate$,'P0001');
+select m83_assert((select count(*)=1 from private.prisma_token_rates where function_name='assessment_activity_analysis'),'tariff replay adds no revision');
+rollback to approved_activity_rate;
+`;
+ sql+=await readFile('supabase/qa/assessment_activity_analysis_verification.sql','utf8');
+}
 sql+='\nrollback;';
 const dir=activity?'docs/qa/evidence/assessment-activity-v252/sql':nonround?'docs/qa/evidence/tokens-nonround-rates/sql':'docs/qa/evidence/tokens-prisma-v240/sql';await mkdir(dir,{recursive:true});await mkdir('tmp',{recursive:true});await writeFile('tmp/tokens-prisma-local.sql',sql);
 const r=spawnSync('C:/Program Files/PostgreSQL/17/bin/psql.exe',['-X','-h','127.0.0.1','-p','55479','-U','prisma_v202_qa','-d','import_evidence_v202','-v','ON_ERROR_STOP=1','-f','tmp/tokens-prisma-local.sql'],{encoding:'utf8',windowsHide:true});
