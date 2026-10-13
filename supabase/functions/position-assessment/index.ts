@@ -1,4 +1,4 @@
-import {analyzeAssessmentActivity} from "./activity-analysis.ts";
+import {analyzeAssessmentActivity,activityMethodHeaders} from "./activity-analysis.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.112.3";
 import { createResendAssessmentTransport } from "../../../src/infrastructure/positionAssessmentEmailTransport.ts";
 const origins=new Set(["https://prisma.hrtsolutions.com.br","http://127.0.0.1:5555","http://localhost:5555"]);
@@ -83,7 +83,7 @@ Deno.serve(async(request:Request)=>{
    return reply(200,await rpc(server,"position_assessment_public",{p_action:action,p_token_hash:tokenHash,p_payload:object(body.payload)}));
   }
   const authorization=request.headers.get("authorization")??"";if(!authorization.startsWith("Bearer "))return reply(401,{error:"Sessão necessária."});
-  const user=createClient(Deno.env.get("SUPABASE_URL")!,Deno.env.get("SUPABASE_ANON_KEY")!,{global:{headers:{Authorization:authorization}},auth:{persistSession:false,autoRefreshToken:false}});
+  const user=createClient(Deno.env.get("SUPABASE_URL")!,Deno.env.get("SUPABASE_ANON_KEY")!,{global:{headers:{Authorization:authorization,...(action==="analyze_activity"?activityMethodHeaders:{})}},auth:{persistSession:false,autoRefreshToken:false}});
   const {data:identity,error}=await user.auth.getUser();if(error||!identity.user)return reply(401,{error:"Sessão inválida."});
   if(action==="generate")return reply(200,await generate(user,body));
   if(action==="analyze_activity")return reply(200,await analyzeAssessmentActivity(user,server,body,{fetch,apiKey:Deno.env.get("OPENAI_API_KEY")}));

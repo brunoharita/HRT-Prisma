@@ -35,9 +35,12 @@ select m83_assert((select min(tokens_per_unit)=17 from private.prisma_token_rate
 set local role authenticated;select set_config('request.jwt.claims',jsonb_build_object('role','authenticated','sub',m83_id('recruiter'))::text,true);
 select m83_assert(public.assessment_activity_analysis_load(m83_id('a'),m83_id('aa-attempt'))#>>'{previousAnalysis,stale}'='true','older method remains readable and explicitly requires consent before refresh');
 insert into aa_state values('quote-content',public.prisma_tokens('quote',m83_id('a'),'{"functionName":"assessment_activity_analysis","quantity":1}'));
-select m83_reject('select public.assessment_activity_analysis_start(m83_id(''a''),m83_id(''aa-attempt''),m83_id(''old-worker''),null)','42501');
-select m83_reject('select public.assessment_activity_analysis_start(m83_id(''a''),m83_id(''aa-attempt''),m83_id(''old-worker''),null,''assessment-activity-analysis-1.0.0'')','22023');
-insert into aa_state values('start-content',public.assessment_activity_analysis_start(m83_id('a'),m83_id('aa-attempt'),m83_id('cs-request'),(select (value->>'id')::uuid from aa_state where key='quote-content'),'assessment-activity-analysis-1.1.0'));
+select set_config('request.headers','{}',true);
+select m83_reject('select public.assessment_activity_analysis_start(m83_id(''a''),m83_id(''aa-attempt''),m83_id(''old-worker''),null)','22023');
+select set_config('request.headers','{"x-prisma-activity-method":"assessment-activity-analysis-1.0.0"}',true);
+select m83_reject('select public.assessment_activity_analysis_start(m83_id(''a''),m83_id(''aa-attempt''),m83_id(''old-worker''),null)','22023');
+select set_config('request.headers','{"x-prisma-activity-method":"assessment-activity-analysis-1.1.0"}',true);
+insert into aa_state values('start-content',public.assessment_activity_analysis_start(m83_id('a'),m83_id('aa-attempt'),m83_id('cs-request'),(select (value->>'id')::uuid from aa_state where key='quote-content')));
 select m83_assert((select value#>>'{analysis,methodVersion}'='assessment-activity-analysis-1.1.0' and value->>'acquired'='true' from aa_state where key='start-content'),'new analysis gets explicit new method and frozen official snapshot');
 reset role;
 insert into aa_state values('facts-content',jsonb_build_object('contract','assessment-activity-analysis-1.0.0','questionCount',(select jsonb_array_length(value#>'{snapshot,questions}') from aa_state where key='start-content'),'patterns',jsonb_build_array(jsonb_build_object('id','copy_operations','title','Comandos de cópia registrados'))));

@@ -10,7 +10,7 @@ last_verified: 2026-10-13
 
 ## Sinais de conteúdo da avaliação —2.5.3 local
 
-Seleção estável, comando de cópia e menu de contexto do enunciado/alternativas foram autorizados por Bruno como complemento aos sinais existentes. Coleta só metadados (região/contagem/horário/códigos), não texto/clipboard/imagens/teclado geral, não bloqueia ações e não prova fraude/captura ou destino. PrintScreen usa press/release recebidos sem duplicar par. Nova migration adiciona tipos/validação mantendo token/tenant/questão e grant worker; métodos antigos e respostas preservados. IA método1.1.0/envelope1.0.0 aditivo aceita padrões/limitações novos, relatório antigo legível e nova análise explícita com tarifa6193.211SQL LOCAL,11Deno,5fatos/5release Node,68atividade/82portal e33browser dedicado PASS, tipos/build PASS. Publicação em preparação, produção ainda2.5.2; acordo/AoT assessment-content-signals.
+Seleção estável, comando de cópia e menu de contexto do enunciado/alternativas foram autorizados por Bruno como complemento aos sinais existentes. Coleta só metadados (região/contagem/horário/códigos), não texto/clipboard/imagens/teclado geral, não bloqueia ações e não prova fraude/captura ou destino. PrintScreen usa press/release recebidos sem duplicar par. Nova migration adiciona tipos/validação mantendo token/tenant/questão e grant worker; métodos antigos e respostas preservados. IA método1.1.0/envelope1.0.0 aditivo aceita padrões/limitações novos, relatório antigo legível e nova análise explícita com tarifa6193.211SQL LOCAL,12Deno,5fatos/5release Node,68atividade/82portal e33browser dedicado PASS, tipos/build PASS. Publicação em preparação, produção ainda2.5.2; acordo/AoT assessment-content-signals.
 
 ## Atividade legível e análise por IA —2.5.2 publicada
 

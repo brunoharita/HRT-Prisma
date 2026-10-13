@@ -37,6 +37,8 @@ begin
  if updated=original then raise exception 'Unexpected activity view baseline';end if;execute updated;
  original:=pg_get_functiondef('public.assessment_activity_analysis_start(uuid,uuid,uuid,uuid)'::regprocedure);
  updated:=replace(original,$old$'assessment-activity-analysis-1.0.0'$old$,$new$'assessment-activity-analysis-1.1.0'$new$);
+ updated:=replace(updated,$old$ actor:=private.authorize_position_follow_up(p_organization_id);$old$,$new$ if coalesce(nullif(current_setting('request.headers',true),'')::jsonb->>'x-prisma-activity-method','')<>'assessment-activity-analysis-1.1.0' then raise exception 'PA_ACTIVITY_METHOD_INVALID' using errcode='22023';end if;
+ actor:=private.authorize_position_follow_up(p_organization_id);$new$);
  updated:=replace(updated,$old$fingerprint=fp and status in ('running','succeeded')$old$,$new$fingerprint=fp and method_version='assessment-activity-analysis-1.1.0' and status in ('running','succeeded')$new$);
  if updated=original then raise exception 'Unexpected activity start baseline';end if;execute updated;
  original:=pg_get_functiondef('public.assessment_activity_analysis_finish(uuid,uuid,boolean,jsonb,jsonb,jsonb)'::regprocedure);
@@ -44,14 +46,3 @@ begin
  if updated=original then raise exception 'Unexpected activity finish baseline';end if;execute updated;
 end $upgrade$;
 
--- Explicit consumer-method handshake. Old in-flight completions remain valid,
--- but old workers cannot acquire a report labeled as the new method.
-revoke execute on function public.assessment_activity_analysis_start(uuid,uuid,uuid,uuid) from public,anon,authenticated,service_role;
-create function public.assessment_activity_analysis_start(p_organization_id uuid,p_attempt_id uuid,p_request_id uuid,p_token_quote_id uuid,p_method_version text) returns jsonb
-language plpgsql security definer set search_path='' as $$
-begin
- if p_method_version is distinct from 'assessment-activity-analysis-1.1.0' then raise exception 'PA_ACTIVITY_METHOD_INVALID' using errcode='22023';end if;
- return public.assessment_activity_analysis_start(p_organization_id,p_attempt_id,p_request_id,p_token_quote_id);
-end $$;
-revoke all on function public.assessment_activity_analysis_start(uuid,uuid,uuid,uuid,text) from public,anon,authenticated,service_role;
-grant execute on function public.assessment_activity_analysis_start(uuid,uuid,uuid,uuid,text) to authenticated;

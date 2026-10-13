@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 469
-source_manifest_sha256: 24cdf9c06398f7ca592fa75f8f01256387f4c6461382129d1b4df61c313ece66
+source_manifest_sha256: 247348f7aeb548161c4a54f6ffd151fd26d05fa64dfbf3901815b56c7d0fdc2f
 -->
 
 # Tudo sobre o Prisma
@@ -2638,7 +2638,7 @@ last_verified: 2026-10-13
 
 ## Sinais de conteúdo da avaliação —2.5.3 local
 
-Seleção estável, comando de cópia e menu de contexto do enunciado/alternativas foram autorizados por Bruno como complemento aos sinais existentes. Coleta só metadados (região/contagem/horário/códigos), não texto/clipboard/imagens/teclado geral, não bloqueia ações e não prova fraude/captura ou destino. PrintScreen usa press/release recebidos sem duplicar par. Nova migration adiciona tipos/validação mantendo token/tenant/questão e grant worker; métodos antigos e respostas preservados. IA método1.1.0/envelope1.0.0 aditivo aceita padrões/limitações novos, relatório antigo legível e nova análise explícita com tarifa6193.211SQL LOCAL,11Deno,5fatos/5release Node,68atividade/82portal e33browser dedicado PASS, tipos/build PASS. Publicação em preparação, produção ainda2.5.2; acordo/AoT assessment-content-signals.
+Seleção estável, comando de cópia e menu de contexto do enunciado/alternativas foram autorizados por Bruno como complemento aos sinais existentes. Coleta só metadados (região/contagem/horário/códigos), não texto/clipboard/imagens/teclado geral, não bloqueia ações e não prova fraude/captura ou destino. PrintScreen usa press/release recebidos sem duplicar par. Nova migration adiciona tipos/validação mantendo token/tenant/questão e grant worker; métodos antigos e respostas preservados. IA método1.1.0/envelope1.0.0 aditivo aceita padrões/limitações novos, relatório antigo legível e nova análise explícita com tarifa6193.211SQL LOCAL,12Deno,5fatos/5release Node,68atividade/82portal e33browser dedicado PASS, tipos/build PASS. Publicação em preparação, produção ainda2.5.2; acordo/AoT assessment-content-signals.
 
 ## Atividade legível e análise por IA —2.5.2 publicada
 
@@ -17630,7 +17630,7 @@ Fonte integral: agreement-assessment-content-signals.md1.0.0, baseline8ddfef923a
 | --- | --- | --- | --- |
 | D-01/02 | assessmentContentSignals + portal, só regiões visíveis e metadados, eventos copy/contextmenu/selection e PrintScreen press/release deduplicado | 33browser dedicado, negativos/instruções/revisão/teclado/menu real + comando edit Copy do Chromium; sem confirmação do clipboard final/screenshot | PASS local |
 | D-03 | Migration20261013193000, enums/valores estritos e pipeline token existente |211SQL (22adicionais) em PostgreSQL LOCAL vazio/rollback; replay/tampering/PII/tenant/questão/método, respostas e histórico preservados | PASS local |
-| D-04/05 | fatos separados, campos legíveis/counters indisponíveis no legado, AI minimizada/contexto obrigatório; método1.1.0/envelope1.0.0 compatível |5fatos+5release Node,11Deno,68atividade e novas capturas1448/390/320, relatório legado sem campos novos | PASS local |
+| D-04/05 | fatos separados, campos legíveis/counters indisponíveis no legado, AI minimizada/contexto obrigatório; método1.1.0/envelope1.0.0 compatível |5fatos+5release Node,12Deno,68atividade e novas capturas1448/390/320, relatório legado sem campos novos | PASS local |
 | D-06 | instruções/owner docs/contexto2.5.3, publicação seletiva |82portal, tipos/build PASS; release/remote/CI/smoke/sync em preparação | PARTIAL |
 | P-01/02 | sem clipboard API/preventDefault/texto/imagem/chaves gerais, raw payload recusado e limites obrigatórios; legado não reescrito | negativos browser/SQL/Deno, mesma tarifa, fonte UI/provider | PASS local |
 
@@ -17640,7 +17640,7 @@ Preservação: envelope/analyses1.0.0 continuam legíveis e imutáveis. Contador
 
 Revisão visual content-390 e legado: rótulos/limites/evidências legíveis, sem dado técnico primário.25tooling/lint/contexto no checkout limpo PASS; arquivos não rastreados alheios preservados.
 
-Descoberta transversal na revisão: handshake explícito do método1.1.0 na RPC start5 argumentos; start4 não permanece exposto a clientes. Worker anterior não adquire nova análise enquanto o banco é atualizado; operações anteriores já iniciadas continuam podendo concluir. Negativos de worker antigo/versão errada preservam saldo. Rollback de Edge/web deve restaurar corpo/default/grant da RPC start4 ao método1.0.0 antes de permitir novas análises pelo worker antigo, mantendo dados/eventos/relatórios/cobranças e evitando exclusões. Relatórios1.1.0 podem ficar indisponíveis ao leitor antigo durante um rollback; preservar dados para leitor compatível.
+Descoberta transversal na revisão: handshake explícito do método1.1.0 por x-prisma-activity-method no transporte já existente; assinatura4/grants permanecem intactos. Header é compatibilidade do consumidor, nunca fonte de autorização. Worker anterior não adquire nova análise enquanto o banco é atualizado; operações anteriores já iniciadas continuam podendo concluir. Negativos de worker antigo/versão errada preservam saldo. Rollback de Edge/web deve restaurar corpo/default da RPC start4 ao método1.0.0 antes de permitir novas análises pelo worker antigo, mantendo dados/eventos/relatórios/cobranças e evitando exclusões. Relatórios1.1.0 podem ficar indisponíveis ao leitor antigo durante um rollback; preservar dados para leitor compatível.
 
 ---
 

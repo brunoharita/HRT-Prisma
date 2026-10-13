@@ -40,3 +40,11 @@ Deno.test('commercial balance rejection stops before provider and never leaks ba
  const response=await handler(new Request('https://fixture.invalid/assessment',{method:'POST',headers:{Origin:'http://127.0.0.1:5555',Authorization:'Bearer fixture','Content-Type':'application/json'},body:JSON.stringify({contract:'position-assessment-1.0.0',action:'generate',organizationId:org,assessmentId:id,requestId,tokenQuoteId:req,distribution:[{requirementId:req,difficulty:'easy',quantity:1}]})}));assert(response.status>=400&&!provider,'denial precedes paid call');assert(!JSON.stringify(await response.json()).includes('PT_INSUFFICIENT_BALANCE'),'safe error contract');
  }finally{globalThis.fetch=originalFetch;}
 });
+Deno.test('activity transport sends the method handshake through existing headers and keeps the RPC signature',async()=>{
+ let acquired=false;
+ try{globalThis.fetch=async(input,init)=>{const url=String(input);if(url.includes('/auth/v1/user'))return Response.json({id,role:'authenticated'});
+ if(url.endsWith('/assessment_activity_analysis_start')){const headers=new Headers(init?.headers);assert(headers.get('x-prisma-activity-method')==='assessment-activity-analysis-1.1.0','method header propagated by SDK');const payload=JSON.parse(String(init?.body));assert(Object.keys(payload).length===4&&!('p_method_version' in payload),'four argument contract preserved');acquired=true;return Response.json({acquired:false,analysis:{status:'succeeded'}});}
+ throw Error('Unexpected request '+url);};
+ const res=await handler(new Request('https://fixture.invalid/assessment',{method:'POST',headers:{Origin:'http://127.0.0.1:5555',Authorization:'Bearer actor-fixture','Content-Type':'application/json'},body:JSON.stringify({contract:'position-assessment-1.0.0',action:'analyze_activity',organizationId:org,attemptId:id,requestId,tokenQuoteId:req})}));assert(res.status===200&&acquired,'authorized cache path with method handshake and no provider call');
+ }finally{globalThis.fetch=originalFetch;}
+});

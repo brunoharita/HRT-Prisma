@@ -1,4 +1,5 @@
 import {buildActivityFacts,validateActivitySelection,ACTIVITY_ANALYSIS_VERSION,ACTIVITY_ANALYSIS_METHOD_VERSION,ACTIVITY_CONTEXTS,type ActivityEvent,type ActivityQuestion} from "../../../src/domain/assessmentActivityAnalysis.ts";
+export const activityMethodHeaders={"x-prisma-activity-method":ACTIVITY_ANALYSIS_METHOD_VERSION};
 const uuid=/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i;
 async function rpc(client:any,name:string,args:object){const {data,error}=await client.rpc(name,args);if(error)throw Object.assign(Error("PA_ACTIVITY_RPC_FAILED"),{code:error.code});return data;}
 async function boundedJson(response:Response){const reader=response.body?.getReader();if(!reader)throw Error("PA_ACTIVITY_PROVIDER_INVALID");let length=0;const parts:Uint8Array[]=[];try{while(true){const item=await reader.read();if(item.done)break;length+=item.value.length;if(length>65536){void reader.cancel();throw Error("PA_ACTIVITY_PROVIDER_INVALID");}parts.push(item.value);}}finally{reader.releaseLock();}const bytes=new Uint8Array(length);let at=0;for(const part of parts){bytes.set(part,at);at+=part.length;}return JSON.parse(new TextDecoder().decode(bytes));}
@@ -6,7 +7,7 @@ async function boundedJson(response:Response){const reader=response.body?.getRea
 export async function analyzeAssessmentActivity(user:any,server:any,body:Record<string,any>,dependencies:{fetch:typeof fetch;apiKey:string|undefined}) {
  const org=body.organizationId,attemptId=body.attemptId,requestId=body.requestId;
  if(![org,attemptId,requestId,body.tokenQuoteId].every(v=>typeof v==="string"&&uuid.test(v)))throw Error("PA_ACTIVITY_REQUEST_INVALID");
- const acquired=await rpc(user,"assessment_activity_analysis_start",{p_organization_id:org,p_attempt_id:attemptId,p_request_id:requestId,p_token_quote_id:body.tokenQuoteId,p_method_version:ACTIVITY_ANALYSIS_METHOD_VERSION});
+ const acquired=await rpc(user,"assessment_activity_analysis_start",{p_organization_id:org,p_attempt_id:attemptId,p_request_id:requestId,p_token_quote_id:body.tokenQuoteId});
  if(!acquired.acquired)return {contract:ACTIVITY_ANALYSIS_VERSION,organizationId:org,attemptId,analysis:acquired.analysis,reused:true};
  const start=Date.now();let inputTokens:number|null=null,outputTokens:number|null=null,cost:number|null=null;
  let result:any;
