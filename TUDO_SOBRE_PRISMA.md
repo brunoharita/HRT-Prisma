@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 469
-source_manifest_sha256: 247348f7aeb548161c4a54f6ffd151fd26d05fa64dfbf3901815b56c7d0fdc2f
+source_manifest_sha256: 01c82ebfc7a5bd009de342501324177e8d739a41351c053fe05b486d77e337c5
 -->
 
 # Tudo sobre o Prisma
@@ -17641,6 +17641,8 @@ Preservação: envelope/analyses1.0.0 continuam legíveis e imutáveis. Contador
 Revisão visual content-390 e legado: rótulos/limites/evidências legíveis, sem dado técnico primário.25tooling/lint/contexto no checkout limpo PASS; arquivos não rastreados alheios preservados.
 
 Descoberta transversal na revisão: handshake explícito do método1.1.0 por x-prisma-activity-method no transporte já existente; assinatura4/grants permanecem intactos. Header é compatibilidade do consumidor, nunca fonte de autorização. Worker anterior não adquire nova análise enquanto o banco é atualizado; operações anteriores já iniciadas continuam podendo concluir. Negativos de worker antigo/versão errada preservam saldo. Rollback de Edge/web deve restaurar corpo/default da RPC start4 ao método1.0.0 antes de permitir novas análises pelo worker antigo, mantendo dados/eventos/relatórios/cobranças e evitando exclusões. Relatórios1.1.0 podem ficar indisponíveis ao leitor antigo durante um rollback; preservar dados para leitor compatível.
+
+Transporte de versão usa request.headers JSON com nomes em minúsculas, segundo [PostgREST](https://docs.postgrest.org/en/stable/references/transactions.html). Teste Deno com SDK real/mock de rede confirmou header e assinatura4. Grants/papéis seguem preservados; versão declarada não concede acesso ou altera verificação de tenant. Normalização final de EOF da migration não muda SQL.
 
 ---
 
