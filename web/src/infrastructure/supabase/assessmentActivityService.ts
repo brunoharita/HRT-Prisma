@@ -1,12 +1,12 @@
 import {supabase} from "./client";
-import {ACTIVITY_ANALYSIS_VERSION,validateActivitySelection,type ActivityFacts,type ActivitySelection} from "../../../../src/domain/assessmentActivityAnalysis";
+import {ACTIVITY_ANALYSIS_VERSION,ACTIVITY_ANALYSIS_METHOD_VERSION,validateActivitySelection,type ActivityFacts,type ActivitySelection} from "../../../../src/domain/assessmentActivityAnalysis";
 export interface SavedActivityAnalysis {id:string;organizationId:string;attemptId:string;attemptStatus:"started"|"submitted";status:"running"|"succeeded"|"failed"|"reconciliation_required";inputFingerprint:string;stale:boolean;methodVersion:string;model:string;createdAt:string;completedAt:string|null;facts:ActivityFacts|null;selection:ActivitySelection|null;errorCategory:string|null;}
 export interface ActivityAnalysisWorkspace {contract:typeof ACTIVITY_ANALYSIS_VERSION;organizationId:string;attemptId:string;inputFingerprint?:string;analysis:SavedActivityAnalysis|null;previousAnalysis?:SavedActivityAnalysis|null;}
 function checked(value:unknown,org:string,attempt:string):ActivityAnalysisWorkspace {
  const v=value as ActivityAnalysisWorkspace;
  if(!v||v.contract!==ACTIVITY_ANALYSIS_VERSION||v.organizationId!==org||v.attemptId!==attempt)throw Error("Não foi possível confirmar o contexto da análise. Atualize a consulta.");
  for(const a of [v.analysis,v.previousAnalysis])if(a){
-  if(a.organizationId!==org||a.attemptId!==attempt||!["started","submitted"].includes(a.attemptStatus)||!["running","succeeded","failed","reconciliation_required"].includes(a.status)||a.methodVersion!==ACTIVITY_ANALYSIS_VERSION||typeof a.inputFingerprint!=="string"||typeof a.stale!=="boolean")throw Error("Análise incompatível. Os registros de atividade foram preservados.");
+  if(a.organizationId!==org||a.attemptId!==attempt||!["started","submitted"].includes(a.attemptStatus)||!["running","succeeded","failed","reconciliation_required"].includes(a.status)||![ACTIVITY_ANALYSIS_VERSION,ACTIVITY_ANALYSIS_METHOD_VERSION].includes(a.methodVersion)||typeof a.inputFingerprint!=="string"||typeof a.stale!=="boolean")throw Error("Análise incompatível. Os registros de atividade foram preservados.");
   if(a.status==="succeeded"){if(!a.facts||a.facts.contract!==ACTIVITY_ANALYSIS_VERSION||!Array.isArray(a.facts.patterns)||!Array.isArray(a.facts.rows)||!a.selection)throw Error("Análise incompleta. Consulte os acontecimentos.");try{validateActivitySelection(a.selection,a.facts);}catch{throw Error("A análise salva contém informações incompatíveis. Consulte os acontecimentos e atualize a consulta.");}}
  }
  return v;

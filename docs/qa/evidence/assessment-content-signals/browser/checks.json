@@ -1,0 +1,140 @@
+{
+  "checks": [
+    {
+      "name": "instruction selection and copy never recorded",
+      "pass": true
+    },
+    {
+      "name": "real keyboard copy and selection recorded separately with question scope",
+      "pass": true
+    },
+    {
+      "name": "untrusted synthetic copy is ignored",
+      "pass": true
+    },
+    {
+      "name": "opening context menu is distinct and never creates a copy",
+      "pass": true
+    },
+    {
+      "name": "native copy command after menu has only indicative menu correlation",
+      "pass": true
+    },
+    {
+      "name": "PrintScreen press and release count once",
+      "pass": true
+    },
+    {
+      "name": "PrintScreen release alone also observable",
+      "pass": true
+    },
+    {
+      "name": "existing capture shortcut preserved",
+      "pass": true
+    },
+    {
+      "name": "copy selection in alternatives works while radio has focus",
+      "pass": true
+    },
+    {
+      "name": "editable input copy is excluded",
+      "pass": true
+    },
+    {
+      "name": "copy and menu do not alter answers",
+      "pass": true
+    },
+    {
+      "name": "new question copies bind its own id",
+      "pass": true
+    },
+    {
+      "name": "general review is not attributed to last question",
+      "pass": true
+    },
+    {
+      "name": "metadata carries no selected content clipboard image or coordinates",
+      "pass": true
+    },
+    {
+      "name": "no runtime errors or global overflow",
+      "pass": true
+    },
+    {
+      "name": "1448: AI pattern includes copy and mandatory limits",
+      "pass": true
+    },
+    {
+      "name": "1448: human-readable evidence retains three distinct actions",
+      "pass": true
+    },
+    {
+      "name": "1448: no page overflow content",
+      "pass": true
+    },
+    {
+      "name": "1448: legacy update labels changed method rather than inventing new data",
+      "pass": true
+    },
+    {
+      "name": "1448: old saved report readable with unavailable new counters",
+      "pass": true
+    },
+    {
+      "name": "1448: no page overflow legacy",
+      "pass": true
+    },
+    {
+      "name": "390: AI pattern includes copy and mandatory limits",
+      "pass": true
+    },
+    {
+      "name": "390: human-readable evidence retains three distinct actions",
+      "pass": true
+    },
+    {
+      "name": "390: no page overflow content",
+      "pass": true
+    },
+    {
+      "name": "390: legacy update labels changed method rather than inventing new data",
+      "pass": true
+    },
+    {
+      "name": "390: old saved report readable with unavailable new counters",
+      "pass": true
+    },
+    {
+      "name": "390: no page overflow legacy",
+      "pass": true
+    },
+    {
+      "name": "320: AI pattern includes copy and mandatory limits",
+      "pass": true
+    },
+    {
+      "name": "320: human-readable evidence retains three distinct actions",
+      "pass": true
+    },
+    {
+      "name": "320: no page overflow content",
+      "pass": true
+    },
+    {
+      "name": "320: legacy update labels changed method rather than inventing new data",
+      "pass": true
+    },
+    {
+      "name": "320: old saved report readable with unavailable new counters",
+      "pass": true
+    },
+    {
+      "name": "320: no page overflow legacy",
+      "pass": true
+    }
+  ],
+  "limitations": [
+    "Synthetic data/browser copy commands; no confirmation of final system clipboard or screenshots",
+    "Native menu click itself not tested in headless browser"
+  ]
+}

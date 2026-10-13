@@ -23,7 +23,8 @@ if(nonround){
  sql+=await readFile('supabase/qa/prisma_token_nonround_after.sql','utf8');
  sql+=`select m83_reject($nr_migration$${migration}$nr_migration$,'P0001');\nselect m83_assert((select count(*)=6 from private.prisma_token_rates),'replay rejected without extra revisions');\n`;
 }else sql+=await readFile('supabase/qa/prisma_tokens_verification.sql','utf8');
-const activity=process.argv.includes('--activity-analysis');
+const content=process.argv.includes('--content-signals');
+const activity=process.argv.includes('--activity-analysis')||content;
 if(activity){
  sql+=await readFile('supabase/migrations/20261013120000_assessment_activity_analysis.sql','utf8');
  const rate=await readFile('supabase/migrations/20261013130000_assessment_activity_analysis_rate.sql','utf8');
@@ -38,7 +39,8 @@ rollback to approved_activity_rate;
 `;
  sql+=await readFile('supabase/qa/assessment_activity_analysis_verification.sql','utf8');
 }
+if(content){sql+=await readFile('supabase/migrations/20261013193000_assessment_content_signals.sql','utf8');sql+=await readFile('supabase/qa/assessment_content_signals_verification.sql','utf8');}
 sql+='\nrollback;';
-const dir=activity?'docs/qa/evidence/assessment-activity-v252/sql':nonround?'docs/qa/evidence/tokens-nonround-rates/sql':'docs/qa/evidence/tokens-prisma-v240/sql';await mkdir(dir,{recursive:true});await mkdir('tmp',{recursive:true});await writeFile('tmp/tokens-prisma-local.sql',sql);
+const dir=content?'docs/qa/evidence/assessment-content-signals/sql':activity?'docs/qa/evidence/assessment-activity-v252/sql':nonround?'docs/qa/evidence/tokens-nonround-rates/sql':'docs/qa/evidence/tokens-prisma-v240/sql';await mkdir(dir,{recursive:true});await mkdir('tmp',{recursive:true});await writeFile('tmp/tokens-prisma-local.sql',sql);
 const r=spawnSync('C:/Program Files/PostgreSQL/17/bin/psql.exe',['-X','-h','127.0.0.1','-p','55479','-U','prisma_v202_qa','-d','import_evidence_v202','-v','ON_ERROR_STOP=1','-f','tmp/tokens-prisma-local.sql'],{encoding:'utf8',windowsHide:true});
 const rawOutput=(r.stdout+'\n'+r.stderr).replaceAll('\r\n','\n');const output=activity?rawOutput.split('\n').map(line=>line.trimEnd()).join('\n'):rawOutput;await writeFile(`${dir}/sql.txt`,output);console.log(output.slice(-6500));process.exitCode=r.status??1;

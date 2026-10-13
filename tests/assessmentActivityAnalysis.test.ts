@@ -30,3 +30,13 @@ test("AI can organize only supported patterns and approved neutral contexts, nev
  const repeated=buildActivityFacts(questions,[event(1,1,"focus_episode",{durationMs:1000}),event(2,1,"focus_episode",{durationMs:1000})]);
  assert.throws(()=>validateActivitySelection({patternIds:["focus_occurrences"],contextIds:["focus"]},repeated));
 });
+
+test("content signals stay distinct, references exact and repeated copies require a neutral limitation",()=>{
+ const facts=buildActivityFacts(questions,[event(1,1,"text_selection_observed",{region:"stem",characterCount:10}),event(2,1,"context_menu_observed",{region:"stem",characterCount:10}),event(3,2,"copy_action_observed",{region:"options",characterCount:5}),event(4,2,"copy_action_observed",{region:"options",characterCount:5})]);
+ assert.equal(facts.selectionCount,1);assert.equal(facts.copyCount,2);assert.equal(facts.contextMenuCount,1);
+ assert.deepEqual(facts.patterns.find(p=>p.id==="copy_operations")?.eventIds,[3,4]);
+ assert.throws(()=>validateActivitySelection({patternIds:["text_selections"],contextIds:["copy"]},facts));
+ assert.deepEqual(validateActivitySelection({patternIds:["copy_operations","text_selections","context_menus"],contextIds:["copy","missing"]},facts).contextIds,["copy","missing"]);
+ const legacy=structuredClone(buildActivityFacts(questions,[]));delete legacy.copyCount;delete legacy.selectionCount;delete legacy.contextMenuCount;
+ assert.equal(legacy.copyCount,undefined);assert.equal(activityDuration(null),"Informação indisponível");
+});

@@ -1,0 +1,345 @@
+{
+  "data": [
+    {
+      "count": 11,
+      "object": "public.people",
+      "fingerprint": "27edb7b765eb685b474d3a6a9b1cfa34"
+    },
+    {
+      "count": 15,
+      "object": "public.professional_profiles",
+      "fingerprint": "aa4261a3bfa1c53c54eaf00e08be7e19"
+    },
+    {
+      "count": 2,
+      "object": "public.position_assessments",
+      "fingerprint": "df1258297648be70273d26b885288359"
+    },
+    {
+      "count": 2,
+      "object": "public.position_assessment_attempts",
+      "fingerprint": "4e024363c72a785b776a8a08e462872f"
+    },
+    {
+      "count": 72,
+      "object": "public.position_assessment_events",
+      "fingerprint": "da0b58b71135298a2439ec1b0e5219f2"
+    },
+    {
+      "count": 2,
+      "object": "public.position_evaluation_entries",
+      "fingerprint": "140391d415e995379d5548bf6103abd5"
+    },
+    {
+      "count": 2,
+      "object": "private.prisma_token_accounts",
+      "fingerprint": "760b0d19bedc85c783cb2665df2f736f"
+    },
+    {
+      "count": 5,
+      "object": "private.prisma_token_movements",
+      "fingerprint": "1368891c60e73a8d579d39f365cf6c9c"
+    },
+    {
+      "count": 7,
+      "object": "private.prisma_token_rates",
+      "fingerprint": "a1b6635ad65f645265e4e29c20207153"
+    },
+    {
+      "count": 2,
+      "object": "private.assessment_activity_analyses",
+      "fingerprint": "d71371f88cff15dbe410807f1049da1b"
+    },
+    {
+      "count": 5,
+      "object": "public.ai_requests",
+      "fingerprint": "644bdaa9bfae7ad6003df85a01221074"
+    },
+    {
+      "count": 5,
+      "object": "public.ai_usage_events",
+      "fingerprint": "d836734dbd6ed3b299a5813b85081e24"
+    }
+  ],
+  "functions": [
+    {
+      "body": "8477e0b0b370638943e120dedeb58d5a",
+      "proacl": [
+        "postgres=X/postgres"
+      ],
+      "nspname": "private",
+      "proname": "assessment_activity_snapshot",
+      "proconfig": [
+        "search_path=\"\""
+      ]
+    },
+    {
+      "body": "554de2416260b9b65e162d981472dfc2",
+      "proacl": [
+        "postgres=X/postgres"
+      ],
+      "nspname": "private",
+      "proname": "assessment_activity_view",
+      "proconfig": [
+        "search_path=\"\""
+      ]
+    },
+    {
+      "body": "982bcddafd4506c09a978a1e30e82cb1",
+      "proacl": [
+        "postgres=X/postgres"
+      ],
+      "nspname": "private",
+      "proname": "authorize_position_follow_up",
+      "proconfig": [
+        "search_path=\"\""
+      ]
+    },
+    {
+      "body": "a77d59f0e6ca252084882b7981bf6063",
+      "proacl": [
+        "postgres=X/postgres"
+      ],
+      "nspname": "private",
+      "proname": "prisma_token_balance",
+      "proconfig": [
+        "search_path=\"\""
+      ]
+    },
+    {
+      "body": "b21af5721cb18c7413aa663492490450",
+      "proacl": [
+        "postgres=X/postgres"
+      ],
+      "nspname": "private",
+      "proname": "prisma_token_bind_synthesis",
+      "proconfig": [
+        "search_path=\"\""
+      ]
+    },
+    {
+      "body": "0510391551fad582bc428c997ebf128f",
+      "proacl": [
+        "postgres=X/postgres"
+      ],
+      "nspname": "private",
+      "proname": "prisma_token_ensure",
+      "proconfig": [
+        "search_path=\"\""
+      ]
+    },
+    {
+      "body": "19ad5ab62735185604badd2330daa659",
+      "proacl": [
+        "postgres=X/postgres"
+      ],
+      "nspname": "private",
+      "proname": "prisma_token_reserve",
+      "proconfig": [
+        "search_path=\"\""
+      ]
+    },
+    {
+      "body": "dfad31d7df96836e4851f2f513c057c9",
+      "proacl": [
+        "postgres=X/postgres"
+      ],
+      "nspname": "private",
+      "proname": "prisma_token_settle",
+      "proconfig": [
+        "search_path=\"\""
+      ]
+    },
+    {
+      "body": "a08c247def1960f1b316687abca7f9a2",
+      "proacl": [
+        "postgres=X/postgres"
+      ],
+      "nspname": "private",
+      "proname": "record_ai_history_v1",
+      "proconfig": [
+        "search_path=\"\""
+      ]
+    },
+    {
+      "body": "6d036d65dd92ad506bbefe063a4190c1",
+      "proacl": [
+        "postgres=X/postgres",
+        "service_role=X/postgres"
+      ],
+      "nspname": "public",
+      "proname": "assessment_activity_analysis_finish",
+      "proconfig": [
+        "search_path=\"\""
+      ]
+    },
+    {
+      "body": "cdb94ad87b9add107032abd3fbb12f5b",
+      "proacl": [
+        "postgres=X/postgres",
+        "authenticated=X/postgres"
+      ],
+      "nspname": "public",
+      "proname": "assessment_activity_analysis_load",
+      "proconfig": [
+        "search_path=\"\""
+      ]
+    },
+    {
+      "body": "fc140feb61cbf227c6e6e74f1f9bac35",
+      "proacl": [
+        "postgres=X/postgres",
+        "authenticated=X/postgres"
+      ],
+      "nspname": "public",
+      "proname": "assessment_activity_analysis_start",
+      "proconfig": [
+        "search_path=\"\""
+      ]
+    },
+    {
+      "body": "f7bb2b7389b0f39a9524fb203917e7cc",
+      "proacl": [
+        "postgres=X/postgres",
+        "authenticated=X/postgres"
+      ],
+      "nspname": "public",
+      "proname": "position_assessment_bank",
+      "proconfig": [
+        "search_path=\"\""
+      ]
+    },
+    {
+      "body": "dc2205c8fd62721d1480f0653fcc54fa",
+      "proacl": [
+        "postgres=X/postgres",
+        "service_role=X/postgres"
+      ],
+      "nspname": "public",
+      "proname": "position_assessment_delivery",
+      "proconfig": [
+        "search_path=\"\""
+      ]
+    },
+    {
+      "body": "b496a63843ef5496c6d824aafb58bcac",
+      "proacl": [
+        "postgres=X/postgres",
+        "service_role=X/postgres"
+      ],
+      "nspname": "public",
+      "proname": "position_assessment_email_configuration",
+      "proconfig": [
+        "search_path=\"\""
+      ]
+    },
+    {
+      "body": "aff0c021e1cb2cc1b2b674af1c874be5",
+      "proacl": [
+        "postgres=X/postgres",
+        "service_role=X/postgres"
+      ],
+      "nspname": "public",
+      "proname": "position_assessment_generation_finish",
+      "proconfig": [
+        "search_path=\"\""
+      ]
+    },
+    {
+      "body": "5b5e70377d49765b4aa1f948262ec456",
+      "proacl": [
+        "postgres=X/postgres",
+        "authenticated=X/postgres"
+      ],
+      "nspname": "public",
+      "proname": "position_assessment_generation_request",
+      "proconfig": [
+        "search_path=\"\""
+      ]
+    },
+    {
+      "body": "311b75cc368e94ac62bd7eac5afe543f",
+      "proacl": [
+        "postgres=X/postgres",
+        "authenticated=X/postgres"
+      ],
+      "nspname": "public",
+      "proname": "position_assessment_invite",
+      "proconfig": [
+        "search_path=\"\""
+      ]
+    },
+    {
+      "body": "e7b8302a0122c18bc8c834e77927b859",
+      "proacl": [
+        "postgres=X/postgres",
+        "authenticated=X/postgres"
+      ],
+      "nspname": "public",
+      "proname": "position_assessment_mutate",
+      "proconfig": [
+        "search_path=\"\""
+      ]
+    },
+    {
+      "body": "5e8db75aeb53aedce1294001904641c7",
+      "proacl": [
+        "postgres=X/postgres",
+        "service_role=X/postgres"
+      ],
+      "nspname": "public",
+      "proname": "position_assessment_pending_deliveries",
+      "proconfig": [
+        "search_path=\"\""
+      ]
+    },
+    {
+      "body": "26ae4b44c269aa2b866994d5f19dafad",
+      "proacl": [
+        "postgres=X/postgres",
+        "service_role=X/postgres"
+      ],
+      "nspname": "public",
+      "proname": "position_assessment_public",
+      "proconfig": [
+        "search_path=\"\""
+      ]
+    },
+    {
+      "body": "2b0612be1424bdea0ef7f278fd6cde35",
+      "proacl": [
+        "postgres=X/postgres",
+        "authenticated=X/postgres"
+      ],
+      "nspname": "public",
+      "proname": "position_assessment_workspace",
+      "proconfig": [
+        "search_path=\"\""
+      ]
+    },
+    {
+      "body": "6ef99fa55bd12bb2604c75629b02b1eb",
+      "proacl": [
+        "postgres=X/postgres",
+        "authenticated=X/postgres"
+      ],
+      "nspname": "public",
+      "proname": "prisma_tokens",
+      "proconfig": [
+        "search_path=\"\""
+      ]
+    },
+    {
+      "body": "f68101d87d6a83949adf930c821f53b3",
+      "proacl": [
+        "postgres=X/postgres",
+        "service_role=X/postgres"
+      ],
+      "nspname": "public",
+      "proname": "record_ai_history_v1",
+      "proconfig": [
+        "search_path=\"\""
+      ]
+    }
+  ]
+}

@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 467
-source_manifest_sha256: 318d78204fc9cb1413321a436d6326944a037d3cfaaa553f8cecf2617ae9a927
+documentation_source_count: 469
+source_manifest_sha256: 24cdf9c06398f7ca592fa75f8f01256387f4c6461382129d1b4df61c313ece66
 -->
 
 # Tudo sobre o Prisma
@@ -2630,11 +2630,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.74.4
+version: 2.74.5
 last_verified: 2026-10-13
 ---
 
 # Estado atual do Prisma
+
+## Sinais de conteúdo da avaliação —2.5.3 local
+
+Seleção estável, comando de cópia e menu de contexto do enunciado/alternativas foram autorizados por Bruno como complemento aos sinais existentes. Coleta só metadados (região/contagem/horário/códigos), não texto/clipboard/imagens/teclado geral, não bloqueia ações e não prova fraude/captura ou destino. PrintScreen usa press/release recebidos sem duplicar par. Nova migration adiciona tipos/validação mantendo token/tenant/questão e grant worker; métodos antigos e respostas preservados. IA método1.1.0/envelope1.0.0 aditivo aceita padrões/limitações novos, relatório antigo legível e nova análise explícita com tarifa6193.211SQL LOCAL,11Deno,5fatos/5release Node,68atividade/82portal e33browser dedicado PASS, tipos/build PASS. Publicação em preparação, produção ainda2.5.2; acordo/AoT assessment-content-signals.
 
 ## Atividade legível e análise por IA —2.5.2 publicada
 
@@ -10172,6 +10176,10 @@ Limites técnicos reaproveitam US$0,25/pedido e US$10/mês desta função, saíd
 
 Fontes: src/domain/assessmentActivityAnalysis.ts, supabase/functions/position-assessment/activity-analysis.ts, migration20261013120000, acordo/docs/qa/agreement-assessment-activity-v252.md. Testes puros, Deno, SQL descartável/rollback e concorrência local, browser sintético. Publicação, jornada autenticada real e qualidade do modelo vivo não são inferidas desses testes. A síntese apoia revisão humana, não certifica justiça, autenticidade ou conformidade jurídica.
 
+## Complemento2.5.3 — metadados de seleção/cópia/menu
+
+Pedido de Bruno autoriza observação adicional das regiões de enunciado/alternativas durante tentativa ativa e questão visível. Eventos text_selection_observed, copy_action_observed e context_menu_observed guardam região/quantidade de caracteres/horário, com códigos de suporte/limitação e eventual correlação indicativa. Não guardam texto, imagens, clipboard, coordenadas ou teclas gerais e não bloqueiam cópia/menu. PrintScreen considera keydown/keyup recebidos sem duplicar um par. Não confirma captura/cópia concluída, destino ou fraude; programas externos/fotos continuam não observáveis. Instruções informam os novos sinais. Pipeline existente impõe token/tenant/questão/versão e payload mínimo estrito; sem grant novo ou histórico reescrito. Análise método1.1.0 integra padrões calculados e limite copy obrigatório, com envelope1.0.0 preservado e relatórios antigos legíveis; atualização paga somente explícita, tarifa6193 mantida. Acordo/AoT assessment-content-signals registra validação e publicação; estado de rollout deve ser conferido no AoT.
+
 ---
 
 ## Source: `docs/decisions/README.md`
@@ -12100,6 +12108,10 @@ No portal, **Revisar avaliação** fica no cabeçalho junto ao progresso; o roda
 
 A aba Atividade por questão apresenta perdas de foco, mouse antes da primeira escolha, zoom e atalhos com rótulos separados. Ver acontecimentos abre descrições com horários de Brasília e limites; detalhes técnicos preservam os campos originais sob demanda. Mobile usa cartões; histórico individual e processo comum compartilham a apresentação. Análise da atividade consulta resultado salvo gratuitamente e permite solicitação explícita com previsão de Tokens Prisma e confirmação. O sistema calcula fatos da tentativa inteira; IA seleciona/ordena padrões/contextos sustentados e links abrem as questões de evidência. Sem inferência de fraude, intenção, destino, contratação, Score ou etapa. Versão/fingerprint/data registram base e desatualização; falha conserva dados/relatório anterior e não debita sem entrega, confirmação incerta exige consulta/conciliação. Reutiliza provider/histórico/ledger, sem nova coleta. Tarifa inicial6.193 Tokens Prisma por resultado concluído aprovada por Bruno em13/10/2026; implementação publicada e verificada: acordo1.1.0/AoT assessment-activity-v252.
 
+## Complemento2.5.3 — metadados de seleção/cópia/menu
+
+Pedido de Bruno autoriza observação adicional das regiões de enunciado/alternativas durante tentativa ativa e questão visível. Eventos text_selection_observed, copy_action_observed e context_menu_observed guardam região/quantidade de caracteres/horário, com códigos de suporte/limitação e eventual correlação indicativa. Não guardam texto, imagens, clipboard, coordenadas ou teclas gerais e não bloqueiam cópia/menu. PrintScreen considera keydown/keyup recebidos sem duplicar um par. Não confirma captura/cópia concluída, destino ou fraude; programas externos/fotos continuam não observáveis. Instruções informam os novos sinais. Pipeline existente impõe token/tenant/questão/versão e payload mínimo estrito; sem grant novo ou histórico reescrito. Análise método1.1.0 integra padrões calculados e limite copy obrigatório, com envelope1.0.0 preservado e relatórios antigos legíveis; atualização paga somente explícita, tarifa6193 mantida. Acordo/AoT assessment-content-signals registra validação e publicação; estado de rollout deve ser conferido no AoT.
+
 ---
 
 ## Source: `docs/product/product-scope.md`
@@ -12872,6 +12884,39 @@ CA-01(D-01/02/08): texto factual versus técnico, null/zero/false/não aplicáve
 ## Execução completa congelada
 
 Não há Q material pendente. O pedido implementar/publicar2.5.2 e a resposta aprovo à tarifa autorizam concluir D-01 a D-10, preservando P-01 a P-03 e F-01. A-01 permanece delegado. CA-05(D-10): tarifa6193 ativa e única na nova categoria; negativa de reaplicação, demais tarifas/histórico preservados, cotação/reserva/liquidação oficiais e consulta grátis. Execução: docs/qa/execution-assessment-activity-v252.md, referência exata a este contrato v1.1.0.
+
+---
+
+## Source: `docs/qa/agreement-assessment-content-signals.md`
+
+# Acordo e execução — Sinais de conteúdo da avaliação2.5.3
+
+Contrato1.0.0, aprovado pelo pedido de Bruno nesta conversa. Baseline8ddfef923a41cf2e3f51f1ffa180fbcaca92dd61. Risco D, implementação em branch codex/assessment-content-signals. Pedido autoriza adicionar os métodos observáveis propostos aos sinais existentes. Supersede somente a exclusão de nova coleta do movimento assessment-activity-v252 para os metadados definidos abaixo; não muda dados históricos nem autoriza acesso ao clipboard/imagens.
+
+- D-01: registrar seleção estável de texto da questão, comando de cópia com seleção no enunciado/alternativas e abertura de menu de contexto nessas regiões. Somente durante tentativa ativa e questão efetivamente visível; ignorar inputs, instruções, revisão geral, recibo, outras páginas e eventos sintéticos. Seleção não significa cópia; menu aberto não significa copiar. Identificar região e quantidade de caracteres, sem armazenar texto/posição/clipboard. Correlação com Ctrl/Cmd+C ou menu é somente indicativa, não método certificado.
+- D-02: manter atalhos existentes, adicionar soltura de PrintScreen quando recebida e evitar duplicidade por pressionar/soltar. Sem registrar teclado geral. Não assegurar captura ou detectar foto/programa externo.
+- D-03: persistir no pipeline público já autorizado por token/tenant/questão/versão, com validação estrita de métodos/enum/contagens, replay idempotente e rejeição de payload livre, texto/imagem/chaves manipuladas. Preservar respostas/correção/Score/etapas/grants e sinais anteriores.
+- D-04: apresentar os três sinais separados com rótulos/limites em português, detalhes completos sob demanda, desktop/mobile e histórico individual/processual. Nenhum registro não prova ausência; contagem ausente em relatório histórico permanece indisponível.
+- D-05: integrar padrões factuais à análise explícita de IA, mesma tarifa6193/cache/ledger/provider minimizado, sem envio de texto selecionado. Método1.1.0 com envelope1.0.0 aditivo; relatórios1.0.0 continuam legíveis e imutáveis, nova análise exige cotação/confirmação, nunca cobrança ou atualização automática. Limitações de cópia/contexto obrigatórias, sem acusação, destino, intenção ou decisão humana.
+- D-06: atualizar instruções visíveis ao candidato e owner docs/contexto/AoT; publicar2.5.3 em main/produção com regressão afetada, migração/Edge/web somente, rollback/smoke/sincronização.
+- P-01: ler/modificar clipboard, salvar texto selecionado/imagens, bloquear cópia/menu, capturar teclado geral, vigiar outros programas/aparelhos ou declarar fraude/captura confirmada.
+- P-02: inferir cópia apenas de seleção/menu/atalho, retroagir observação em provas antigas, alterar histórico/decisões/tarifas ou iniciar IA automaticamente.
+- F-01: gravação de tela, extensão/agente do SO, proctoring, controle de aplicativos, ranking/penalidade e redesign geral.
+- A-01: eventos nativos copy/selectionchange/contextmenu/keyboard, componentes e pipeline existentes; debounce/dedupe, arquivos/reuso, detalhes de teste/deploy. Sem nova biblioteca/provider/categoria comercial. Versão2.5.3 registra esta entrega material.
+- Q: nenhum material pendente. CA-01(D01/02): browser real com teclado/copiar, menu, seleção, escopo/navegação e negativos; metadados sem texto e sem bloquear ação. CA-02(D03): SQL local rollback com novos eventos, negativos/manipulação/idempotência/preservação. CA-03(D04/05): fatos/limites/detalhes/evidências, legado e seleção IA válida/invalidada, fixtures nos viewports atuais; provider mock/minimizado. CA-04(D06): instruções, tipos/build/CI/contexto, ambiente remoto identificado, fontes/grants/dados preservados, publicação/smoke/rollback/sync.
+
+## Mapa de impacto prévio
+
+| Área | Relação | Baseline e preservação mínima |
+| --- | --- | --- |
+| Portal/coleta/privacidade | direct | 2.5.2, coletores existentes, 82checks portal; navegador com cópia/contexto/seleção, escopo ativo e navegação/respostas mantidos |
+| Eventos/RPC/token/tenant | critical_transversal | PG17 local127.0.0.1:55479/import_evidence_v202 vazio; SQL novos/legados, negativos e hashes/grants remotos, nenhuma fixture em produção |
+| Exibição/IA/histórico | direct | v25268checks/fatos/Edge/SQL; novos padrões, legado1.0.0, não exposição do texto e tarifa6193/idempotência mantidas |
+| Preparação/convites/correção | plausible_indirect | Edge/portal compartilhados; regressão dirigida sem envio real ou IA paga |
+| Parser/Matching/Knowledge/mail/Síntese | no_impact_identified | nenhuma lógica alterada; compartilhar domínio factual não os torna consumidores; plano não publica serviços adjacentes |
+| Release/rotas/assets | critical_transversal | SHA/image/rollback existentes; CI e smoke versões/assets com publicação seletiva |
+
+Execução congelada: implementar integralmente D-01 a D-06, P-01/02, F-01, A-01 e CA01-04 acima; fechar AoT com prova e limites, sem reaprovacão administrativa. Reuso nativo e capacidades Prisma atendem à necessidade; não há solução externa nova a selecionar.
 
 ---
 
@@ -17572,6 +17617,30 @@ Web image b47545ade6b6ee8a79097282cfa1574589c30e5b093c55a1f32fe86cb6c9cc73 runni
 Rollback compatível: retornar web à imagem anterior e Edge ao código925d4b3; não excluir tabela/relatórios/tarifas/cotações/reservas/histórico. Estrutura aditiva permanece compatível com consumidores anteriores. Uma desativação comercial futura deve preservar versões vigentes segundo gestão de Tokens.
 
 Desvios de contrato: nenhum. Limitações: tests/browser sintéticos e provider simulado; qualidade de modelo vivo e jornada autenticada com candidatos reais NOT TESTED, não inferidas do smoke público. Há implementação real minimizada do provider, mas nenhum prompt com dados reais foi enviado apenas para testar. Evidência em production/after.json, edge-smoke.json, web-smoke.json, public-browser.json, vps.json e recibo release-recovery.json. A revisão final documental/ledger/contexto não reconstrói runtimes; o SHA de runtime permanece explícito e a sincronização dos checkouts acompanha o fechamento.
+
+---
+
+## Source: `docs/qa/aot-assessment-content-signals.md`
+
+# AoT — Sinais de conteúdo da avaliação2.5.3
+
+Fonte integral: agreement-assessment-content-signals.md1.0.0, baseline8ddfef923a41cf2e3f51f1ffa180fbcaca92dd61. Mapa de impacto no acordo; nenhum Q pendente. Risco D. Branch codex/assessment-content-signals. Publicação em preparação.
+
+| Regra | Implementação | Teste/evidência | Estado |
+| --- | --- | --- | --- |
+| D-01/02 | assessmentContentSignals + portal, só regiões visíveis e metadados, eventos copy/contextmenu/selection e PrintScreen press/release deduplicado | 33browser dedicado, negativos/instruções/revisão/teclado/menu real + comando edit Copy do Chromium; sem confirmação do clipboard final/screenshot | PASS local |
+| D-03 | Migration20261013193000, enums/valores estritos e pipeline token existente |211SQL (22adicionais) em PostgreSQL LOCAL vazio/rollback; replay/tampering/PII/tenant/questão/método, respostas e histórico preservados | PASS local |
+| D-04/05 | fatos separados, campos legíveis/counters indisponíveis no legado, AI minimizada/contexto obrigatório; método1.1.0/envelope1.0.0 compatível |5fatos+5release Node,11Deno,68atividade e novas capturas1448/390/320, relatório legado sem campos novos | PASS local |
+| D-06 | instruções/owner docs/contexto2.5.3, publicação seletiva |82portal, tipos/build PASS; release/remote/CI/smoke/sync em preparação | PARTIAL |
+| P-01/02 | sem clipboard API/preventDefault/texto/imagem/chaves gerais, raw payload recusado e limites obrigatórios; legado não reescrito | negativos browser/SQL/Deno, mesma tarifa, fonte UI/provider | PASS local |
+
+Registros são observações declaradas pelo navegador e não evidência certificada de ação humana; isTrusted evita dispatchEvent acidental mas não torna o cliente autoridade. A seleção pode apoiar leitura; menu pode ter outros usos; Ctrl/Cmd+C observado pouco antes e menu recente são correlações indicativas, não prova do meio de cópia. Não observamos conteúdo final nem destino. Native menu item click não validado em headless; abertura real e evento copy nativo por comando de edição Chromium testados, além do teclado. Não há fixture real/IA paga/debito em produção nem certificação de modelo vivo. Ainda sem prova remota de rollout deste movimento.
+
+Preservação: envelope/analyses1.0.0 continuam legíveis e imutáveis. Contadores novos opcionais ausentes permanecem indisponíveis; método anterior marcado desatualizado permite nova solicitação somente após cotação/confirmação, com tarifa6193 intacta. Tab/menu/seleção nativa não bloqueados; controles/respostas/submissão continuam no contrato existente. O teste inicial usava Sincronizar agora como flush de eventos, mas esse botão sincroniza respostas; o teste foi corrigido para aguardar o buffer do pipeline existente. Ajustou-se escopo do menu/cópia para aceitar foco temporariamente entregue ao menu nativo; sempre restrito à questão visível e tentativa ativa.
+
+Revisão visual content-390 e legado: rótulos/limites/evidências legíveis, sem dado técnico primário.25tooling/lint/contexto no checkout limpo PASS; arquivos não rastreados alheios preservados.
+
+Descoberta transversal na revisão: handshake explícito do método1.1.0 na RPC start5 argumentos; start4 não permanece exposto a clientes. Worker anterior não adquire nova análise enquanto o banco é atualizado; operações anteriores já iniciadas continuam podendo concluir. Negativos de worker antigo/versão errada preservam saldo. Rollback de Edge/web deve restaurar corpo/default/grant da RPC start4 ao método1.0.0 antes de permitir novas análises pelo worker antigo, mantendo dados/eventos/relatórios/cobranças e evitando exclusões. Relatórios1.1.0 podem ficar indisponíveis ao leitor antigo durante um rollback; preservar dados para leitor compatível.
 
 ---
 
@@ -30005,6 +30074,10 @@ Questões abertas antes de implementação: prazo de retenção de respostas, te
 ## Análise da atividade —2.5.2
 
 Nova leitura derivada autorizada: papéis operacionais existentes da organização; snapshot oficial de tentativa/questões/eventos e fingerprint, nunca dados do cliente para construir afirmações. Tabela privada/RLS sem DML/grants diretos; leitura/início autenticados e conclusão worker com JWT service_role. Provider recebe somente padrões agregados sem nomes/contatos/enunciados/respostas/rawpayload/identificadores, sem ferramentas e store:false. Saída limitada a referências/contextos permitidos, números/textos do domínio. Não decide fraude/contratação/Score/etapa. Original permanece imutável; vínculo da análise cascata com exclusão da tentativa, ledger/histórico genéricos preservam somente metadados comerciais. Ciência operacional continua distinta de consentimento/base legal. Acordo assessment-activity-v252; tarifa6193 aprovada em13/10/2026; publicação2.5.2 verificada no AoT.
+
+## Complemento2.5.3 — metadados de seleção/cópia/menu
+
+Pedido de Bruno autoriza observação adicional das regiões de enunciado/alternativas durante tentativa ativa e questão visível. Eventos text_selection_observed, copy_action_observed e context_menu_observed guardam região/quantidade de caracteres/horário, com códigos de suporte/limitação e eventual correlação indicativa. Não guardam texto, imagens, clipboard, coordenadas ou teclas gerais e não bloqueiam cópia/menu. PrintScreen considera keydown/keyup recebidos sem duplicar um par. Não confirma captura/cópia concluída, destino ou fraude; programas externos/fotos continuam não observáveis. Instruções informam os novos sinais. Pipeline existente impõe token/tenant/questão/versão e payload mínimo estrito; sem grant novo ou histórico reescrito. Análise método1.1.0 integra padrões calculados e limite copy obrigatório, com envelope1.0.0 preservado e relatórios antigos legíveis; atualização paga somente explícita, tarifa6193 mantida. Acordo/AoT assessment-content-signals registra validação e publicação; estado de rollout deve ser conferido no AoT.
 
 ---
 

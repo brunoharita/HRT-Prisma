@@ -1,0 +1,19 @@
+# AoT — Sinais de conteúdo da avaliação2.5.3
+
+Fonte integral: agreement-assessment-content-signals.md1.0.0, baseline8ddfef923a41cf2e3f51f1ffa180fbcaca92dd61. Mapa de impacto no acordo; nenhum Q pendente. Risco D. Branch codex/assessment-content-signals. Publicação em preparação.
+
+| Regra | Implementação | Teste/evidência | Estado |
+| --- | --- | --- | --- |
+| D-01/02 | assessmentContentSignals + portal, só regiões visíveis e metadados, eventos copy/contextmenu/selection e PrintScreen press/release deduplicado | 33browser dedicado, negativos/instruções/revisão/teclado/menu real + comando edit Copy do Chromium; sem confirmação do clipboard final/screenshot | PASS local |
+| D-03 | Migration20261013193000, enums/valores estritos e pipeline token existente |211SQL (22adicionais) em PostgreSQL LOCAL vazio/rollback; replay/tampering/PII/tenant/questão/método, respostas e histórico preservados | PASS local |
+| D-04/05 | fatos separados, campos legíveis/counters indisponíveis no legado, AI minimizada/contexto obrigatório; método1.1.0/envelope1.0.0 compatível |5fatos+5release Node,11Deno,68atividade e novas capturas1448/390/320, relatório legado sem campos novos | PASS local |
+| D-06 | instruções/owner docs/contexto2.5.3, publicação seletiva |82portal, tipos/build PASS; release/remote/CI/smoke/sync em preparação | PARTIAL |
+| P-01/02 | sem clipboard API/preventDefault/texto/imagem/chaves gerais, raw payload recusado e limites obrigatórios; legado não reescrito | negativos browser/SQL/Deno, mesma tarifa, fonte UI/provider | PASS local |
+
+Registros são observações declaradas pelo navegador e não evidência certificada de ação humana; isTrusted evita dispatchEvent acidental mas não torna o cliente autoridade. A seleção pode apoiar leitura; menu pode ter outros usos; Ctrl/Cmd+C observado pouco antes e menu recente são correlações indicativas, não prova do meio de cópia. Não observamos conteúdo final nem destino. Native menu item click não validado em headless; abertura real e evento copy nativo por comando de edição Chromium testados, além do teclado. Não há fixture real/IA paga/debito em produção nem certificação de modelo vivo. Ainda sem prova remota de rollout deste movimento.
+
+Preservação: envelope/analyses1.0.0 continuam legíveis e imutáveis. Contadores novos opcionais ausentes permanecem indisponíveis; método anterior marcado desatualizado permite nova solicitação somente após cotação/confirmação, com tarifa6193 intacta. Tab/menu/seleção nativa não bloqueados; controles/respostas/submissão continuam no contrato existente. O teste inicial usava Sincronizar agora como flush de eventos, mas esse botão sincroniza respostas; o teste foi corrigido para aguardar o buffer do pipeline existente. Ajustou-se escopo do menu/cópia para aceitar foco temporariamente entregue ao menu nativo; sempre restrito à questão visível e tentativa ativa.
+
+Revisão visual content-390 e legado: rótulos/limites/evidências legíveis, sem dado técnico primário.25tooling/lint/contexto no checkout limpo PASS; arquivos não rastreados alheios preservados.
+
+Descoberta transversal na revisão: handshake explícito do método1.1.0 na RPC start5 argumentos; start4 não permanece exposto a clientes. Worker anterior não adquire nova análise enquanto o banco é atualizado; operações anteriores já iniciadas continuam podendo concluir. Negativos de worker antigo/versão errada preservam saldo. Rollback de Edge/web deve restaurar corpo/default/grant da RPC start4 ao método1.0.0 antes de permitir novas análises pelo worker antigo, mantendo dados/eventos/relatórios/cobranças e evitando exclusões. Relatórios1.1.0 podem ficar indisponíveis ao leitor antigo durante um rollback; preservar dados para leitor compatível.

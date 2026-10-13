@@ -1,0 +1,279 @@
+{
+  "checks": [
+    {
+      "name": "1448: load is free and never invokes paid analysis or quote",
+      "pass": true
+    },
+    {
+      "name": "1448: readable event with Brasília interval and separate mouse durations",
+      "pass": true
+    },
+    {
+      "name": "1448: no raw event or timestamp in primary detail",
+      "pass": true
+    },
+    {
+      "name": "1448: keyboard opens complete technical fields preserving method timestamp and id",
+      "pass": true
+    },
+    {
+      "name": "1448: configured commercial consumption shown before action",
+      "pass": true
+    },
+    {
+      "name": "1448: cancel never invokes analysis",
+      "pass": true
+    },
+    {
+      "name": "1448: complete attempt scope not table page",
+      "pass": true
+    },
+    {
+      "name": "1448: neutral analysis requires one quoted explicit action",
+      "pass": true
+    },
+    {
+      "name": "1448: interpretation limits visible",
+      "pass": true
+    },
+    {
+      "name": "1448: analysis links open supporting questions and events",
+      "pass": true
+    },
+    {
+      "name": "1448: no overflow runtime errors or external traffic",
+      "pass": true
+    },
+    {
+      "name": "1448: evidence comes from immutable analysis snapshot including newer events",
+      "pass": true
+    },
+    {
+      "name": "1448: cached report free on reopening",
+      "pass": true
+    },
+    {
+      "name": "1448: absent signals never become zero or paid analysis",
+      "pass": true
+    },
+    {
+      "name": "1448: insufficient balance blocks provider",
+      "pass": true
+    },
+    {
+      "name": "1448: ambiguous result has no automatic paid retry",
+      "pass": true
+    },
+    {
+      "name": "1448: checking status is free and preserves the event table",
+      "pass": true
+    },
+    {
+      "name": "768: load is free and never invokes paid analysis or quote",
+      "pass": true
+    },
+    {
+      "name": "768: readable event with Brasília interval and separate mouse durations",
+      "pass": true
+    },
+    {
+      "name": "768: no raw event or timestamp in primary detail",
+      "pass": true
+    },
+    {
+      "name": "768: keyboard opens complete technical fields preserving method timestamp and id",
+      "pass": true
+    },
+    {
+      "name": "768: configured commercial consumption shown before action",
+      "pass": true
+    },
+    {
+      "name": "768: cancel never invokes analysis",
+      "pass": true
+    },
+    {
+      "name": "768: complete attempt scope not table page",
+      "pass": true
+    },
+    {
+      "name": "768: neutral analysis requires one quoted explicit action",
+      "pass": true
+    },
+    {
+      "name": "768: interpretation limits visible",
+      "pass": true
+    },
+    {
+      "name": "768: analysis links open supporting questions and events",
+      "pass": true
+    },
+    {
+      "name": "768: no overflow runtime errors or external traffic",
+      "pass": true
+    },
+    {
+      "name": "768: evidence comes from immutable analysis snapshot including newer events",
+      "pass": true
+    },
+    {
+      "name": "768: cached report free on reopening",
+      "pass": true
+    },
+    {
+      "name": "768: absent signals never become zero or paid analysis",
+      "pass": true
+    },
+    {
+      "name": "768: insufficient balance blocks provider",
+      "pass": true
+    },
+    {
+      "name": "768: ambiguous result has no automatic paid retry",
+      "pass": true
+    },
+    {
+      "name": "768: checking status is free and preserves the event table",
+      "pass": true
+    },
+    {
+      "name": "390: load is free and never invokes paid analysis or quote",
+      "pass": true
+    },
+    {
+      "name": "390: readable event with Brasília interval and separate mouse durations",
+      "pass": true
+    },
+    {
+      "name": "390: no raw event or timestamp in primary detail",
+      "pass": true
+    },
+    {
+      "name": "390: keyboard opens complete technical fields preserving method timestamp and id",
+      "pass": true
+    },
+    {
+      "name": "390: configured commercial consumption shown before action",
+      "pass": true
+    },
+    {
+      "name": "390: cancel never invokes analysis",
+      "pass": true
+    },
+    {
+      "name": "390: complete attempt scope not table page",
+      "pass": true
+    },
+    {
+      "name": "390: neutral analysis requires one quoted explicit action",
+      "pass": true
+    },
+    {
+      "name": "390: interpretation limits visible",
+      "pass": true
+    },
+    {
+      "name": "390: analysis links open supporting questions and events",
+      "pass": true
+    },
+    {
+      "name": "390: no overflow runtime errors or external traffic",
+      "pass": true
+    },
+    {
+      "name": "390: evidence comes from immutable analysis snapshot including newer events",
+      "pass": true
+    },
+    {
+      "name": "390: cached report free on reopening",
+      "pass": true
+    },
+    {
+      "name": "390: absent signals never become zero or paid analysis",
+      "pass": true
+    },
+    {
+      "name": "390: insufficient balance blocks provider",
+      "pass": true
+    },
+    {
+      "name": "390: ambiguous result has no automatic paid retry",
+      "pass": true
+    },
+    {
+      "name": "390: checking status is free and preserves the event table",
+      "pass": true
+    },
+    {
+      "name": "320: load is free and never invokes paid analysis or quote",
+      "pass": true
+    },
+    {
+      "name": "320: readable event with Brasília interval and separate mouse durations",
+      "pass": true
+    },
+    {
+      "name": "320: no raw event or timestamp in primary detail",
+      "pass": true
+    },
+    {
+      "name": "320: keyboard opens complete technical fields preserving method timestamp and id",
+      "pass": true
+    },
+    {
+      "name": "320: configured commercial consumption shown before action",
+      "pass": true
+    },
+    {
+      "name": "320: cancel never invokes analysis",
+      "pass": true
+    },
+    {
+      "name": "320: complete attempt scope not table page",
+      "pass": true
+    },
+    {
+      "name": "320: neutral analysis requires one quoted explicit action",
+      "pass": true
+    },
+    {
+      "name": "320: interpretation limits visible",
+      "pass": true
+    },
+    {
+      "name": "320: analysis links open supporting questions and events",
+      "pass": true
+    },
+    {
+      "name": "320: no overflow runtime errors or external traffic",
+      "pass": true
+    },
+    {
+      "name": "320: evidence comes from immutable analysis snapshot including newer events",
+      "pass": true
+    },
+    {
+      "name": "320: cached report free on reopening",
+      "pass": true
+    },
+    {
+      "name": "320: absent signals never become zero or paid analysis",
+      "pass": true
+    },
+    {
+      "name": "320: insufficient balance blocks provider",
+      "pass": true
+    },
+    {
+      "name": "320: ambiguous result has no automatic paid retry",
+      "pass": true
+    },
+    {
+      "name": "320: checking status is free and preserves the event table",
+      "pass": true
+    }
+  ],
+  "limitations": [
+    "Synthetic attempt/client, arbitrary tariff1234 for validation; no paid model or personal-data business writes"
+  ]
+}

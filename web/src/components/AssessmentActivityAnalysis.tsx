@@ -1,6 +1,6 @@
 import {Alert,Button,Modal} from "antd";
 import {useEffect,useRef,useState} from "react";
-import {ACTIVITY_CONTEXTS,type ActivityFacts} from "../../../src/domain/assessmentActivityAnalysis";
+import {ACTIVITY_CONTEXTS,ACTIVITY_ANALYSIS_METHOD_VERSION,type ActivityFacts} from "../../../src/domain/assessmentActivityAnalysis";
 import {assessmentActivityService,type ActivityAnalysisWorkspace} from "../infrastructure/supabase/assessmentActivityService";
 import {takeTokenQuote} from "../infrastructure/supabase/prismaTokensService";
 import {formatTokens,quoteUsable} from "../domain/prismaTokens";
@@ -28,7 +28,7 @@ export function AssessmentActivityAnalysis({organizationId,attemptId,facts,statu
  <p className="assessment-analysis-meta">Organizada por IA em {date(saved.completedAt??saved.createdAt)} (Brasília) · consulta da análise salva sem consumo adicional</p>
  <p>{saved.attemptStatus==="submitted"?"Dados de uma tentativa concluída.":"Dados recebidos enquanto a tentativa ainda não tinha conclusão registrada. A análise é parcial."}</p>
  <p><strong>Escopo desta análise:</strong> {saved.facts.questionCount} questões, {saved.facts.questionsWithEvents} com registros e {saved.facts.eventCount} acontecimentos considerados.</p>
- {saved.stale?<Alert type="warning" title="Há dados mais recentes na tentativa" description="Este resultado permanece disponível como análise anterior. Atualizar com IA considera os dados atuais e informa novo consumo antes da confirmação."/>:null}
+ {saved.stale?<Alert type="warning" title={saved.methodVersion!==ACTIVITY_ANALYSIS_METHOD_VERSION?"Há uma versão mais recente do método de análise":"Há dados mais recentes na tentativa"} description="Este resultado permanece disponível como análise anterior. Atualizar com IA considera os dados atuais e informa novo consumo antes da confirmação."/>:null}
  <h4>Resumo</h4><p>{saved.selection.patternIds.slice(0,2).map(id=>(()=>{const pattern=saved.facts!.patterns.find(pattern=>pattern.id===id);return pattern?pattern.title+": "+pattern.description:null;})()).filter(Boolean).join(" ")}</p>
  <h4>Padrões identificados</h4>
  {saved.selection.patternIds.map(id=>saved.facts!.patterns.find(pattern=>pattern.id===id)).filter(Boolean).map(pattern=>pattern?<article className="assessment-analysis-pattern" key={pattern.id}><strong>{pattern.title}</strong><p>{pattern.description}</p><Button type="link" onClick={()=>onEvidence(pattern.questionNumbers,saved.facts!)}>Ver acontecimentos · questões {pattern.questionNumbers.join(", ")}</Button></article>:null)}
