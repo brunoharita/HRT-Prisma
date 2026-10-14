@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 479
-source_manifest_sha256: e3cf77adaf63813c784d02b20bb18b8b8b53eec62d56e2036588a097f95b048e
+source_manifest_sha256: aac55b7dd763ad38e519e486ceb733070761deee79ddd060e0f0c23f3fe07e53
 -->
 
 # Tudo sobre o Prisma
@@ -2643,7 +2643,7 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.74.15
+version: 2.74.16
 last_verified: 2026-10-14
 ---
 
@@ -2651,7 +2651,7 @@ last_verified: 2026-10-14
 
 ## Tag de acompanhamento ativo — correção 2.6.0
 
-Bruno autorizou em 14/10/2026 corrigir a tag verde na descoberta de Pessoas: somente vínculo com processo `active` exibe **Já está no acompanhamento**. Processo encerrado conserva vínculo, identificação e acesso histórico; sem dados/backend/estilos/Score/IA alterados. Publicação seletiva web/documentação, app permanece 2.6.0. Acordo, mapa, execução e evidências em `docs/qa/follow-up-active-tag.md`. QA sintético: 32 verificações de browser desktop/celular, tipos/build/lint/contexto PASS; CI e publicação pendentes nesta revisão. Jornada produtiva autenticada NOT TESTED.
+Bruno autorizou em 14/10/2026 corrigir a tag verde na descoberta de Pessoas: somente vínculo com processo `active` exibe **Já está no acompanhamento**. Processo encerrado conserva vínculo, identificação e acesso histórico; sem dados/backend/estilos/Score/IA alterados. Publicação seletiva web/documentação, app permanece 2.6.0. Acordo, mapa, execução e evidências em `docs/qa/follow-up-active-tag.md`. QA sintético: 32 verificações de browser desktop/celular, tipos/build/lint/contexto PASS. Publicada runtime9b9ed51433e9f46fd55efff596ca5e964f177dd0 em main/origin/VPS; CI branch38617482458/main38617705924 SUCCESS. Quatro rotas/bundle/SHA/versão/slogan HTTP200, web running/restart0, rollback anterior e nove containers adjacentes preservados.404imediato estabilizou sem rebuild; fechamento documental sincroniza fontes sem reconstruir runtime. Jornada produtiva autenticada NOT TESTED.
 
 ## Processos seletivos separados de Posições — 2.6.0 publicada
 
@@ -28043,7 +28043,7 @@ Execução: aplicar integralmente D-01..03, P-01/P-UX-01, F-01/A-01 e CA-01 acim
 | --- | --- | --- | --- | --- | --- |
 | D-01 | Verde somente ativa/vinculada | Condição JSX de status | Browser ativo/encerrado/sem vínculo, browser-results.json | PASS | UI real, fixture sintética |
 | D-02 | Vínculo/histórico preservados | Condição externa e botão intactos | IDs exatos, render e retorno, browser-results.json | PASS | Sem mutação produtiva |
-| D-03 | Publicação seletiva 2.6.0 | Dispatcher/main/VPS | CI e smoke/SHA/rollback | NOT TESTED | Público não prova uso autenticado |
+| D-03 | Publicação seletiva 2.6.0 | Dispatcher/main/VPS, runtime 9b9ed51433e9f46fd55efff596ca5e964f177dd0 | CI branch38617482458/main38617705924 SUCCESS, production-verification.json | PASS | Público não prova uso autenticado |
 
 ## Proibições verificadas
 
@@ -28054,14 +28054,14 @@ Execução: aplicar integralmente D-01..03, P-01/P-UX-01, F-01/A-01 e CA-01 acim
 
 ## Mapa de Impacto e Preservação
 
-Mapa inicial, classe B. Baseline funcional 9806e1e, fixture existente ativa/encerrada em 1448/390px. Reúso da capacidade atual suficiente; sem decisão arquitetural nova.
+Mapa final igual ao inicial, classe B. Baseline funcional 9806e1e, fixture existente ativa/encerrada em 1448/390px. Reúso da capacidade atual suficiente; sem decisão arquitetural nova ou dependência/reclassificação descoberta.
 
 | Capacidade/área | Relação | Impacto e regressão mínima | Status |
 | --- | --- | --- | --- |
 | Tag/vínculo/identificação/acesso | direct | Verde ativa, azul encerrada, botão com mesmos IDs; browser-results.json | PASS |
 | Layout, Score, requisitos e controles de Pessoas | plausible_indirect | Texto idêntico exceto verde; geometria horizontal e cards seguintes iguais, screenshots desktop/mobile sem overflow | PASS |
 | Tenant/papéis/consulta e retorno | critical_transversal | Nenhum gate/serviço alterado; IDs mantidos e consulta por retorno sem mutações | PASS |
-| Persistência/IA/billing/ocupação e demais runtimes | no_impact_identified | Nenhum writer/contrato alterado; plano web/docs e identidade de containers adjacentes | NOT TESTED |
+| Persistência/IA/billing/ocupação e demais runtimes | no_impact_identified | Nenhum writer/contrato alterado; plano web/docs, nove containers adjacentes com IDs/imagens/status/restarts idênticos | PASS |
 
 ### Novidade e preservação
 
@@ -28069,7 +28069,7 @@ Correção exclusiva da condição verde. Sem dependência/reclassificação pre
 
 ## Fora de escopo preservado
 
-F-01: diff funcional somente condicional JSX; nenhuma alteração em writer, banco, Edge ou outro serviço. Plano/publicação pendentes.
+F-01 PASS: diff funcional somente condicional JSX; nenhuma alteração em writer, banco, Edge ou outro serviço. Plano/publicação somente web/documentação.
 
 ## Evidência de fidelidade visual
 
@@ -28081,11 +28081,15 @@ Nenhum desvio funcional. Única decisão nova é a condição ativa autorizada n
 
 ## Validação final / Git / QA / ambiente
 
-Local: 32 verificações de browser PASS (ativo/encerrado, vínculo ausente, IDs históricos, retorno, zero escrita/IA/externas/erros, preservação visual). Tipos web, build, lint e contexto PASS; avisos de bundle/import dinâmico preexistentes. Dependências já instaladas reutilizadas por junction no checkout limpo; pnpm não reinstalou nem alterou lockfile. CI/publicação pendentes. Jornada produtiva autenticada NOT TESTED.
+Local: 32 verificações de browser PASS (ativo/encerrado, vínculo ausente, IDs históricos, retorno, zero escrita/IA/externas/erros, preservação visual). Tipos web, build, lint e contexto PASS; avisos de bundle/import dinâmico preexistentes. Dependências já instaladas reutilizadas por junction no checkout limpo; pnpm não reinstalou nem alterou lockfile. CI branch38617482458 e main38617705924 SUCCESS. Jornada produtiva autenticada NOT TESTED.
+
+Runtime publicado em main/origin/VPS: `9b9ed51433e9f46fd55efff596ca5e964f177dd0`, app 2.6.0. Produção: quatro rotas públicas HTTP200, bundle/SHA/versão/slogan anterior conferidos, web running/restart0, rollback igual à imagem anterior, nove outros containers com identidade/imagem/status/restarts preservados. Evidências `production-baseline.json`, `production-verification.json` e `ci-results.json`. Nenhum acesso ao banco, dado real mutado ou IA remota.
+
+Dispatcher promoveu main e publicou web; smoke imediato retornou404 durante recreate, causando saída22 antes do recibo automático. Probe independente confirmou estabilização e todos os critérios, sem rebuild adicional. Fechamento documental/contexto sincroniza fontes em main/origin/VPS sem reconstruir runtime; CI obrigatório mantido. Avisos Git de prune de worktrees antigos não bloquearam FF/commit/push; nenhum checkout/lock alheio removido.
 
 ## Conclusão
 
-QA dirigido PASS; D-03 depende de CI/publicação/sincronização.
+D-01..03, P-01/P-UX-01 e F-01 PASS nos limites declarados. Nenhum desvio ou ampliação de escopo; histórico e dados preservados pelo diff exclusivamente de apresentação. Jornada produtiva autenticada NOT TESTED.
 
 ---
 

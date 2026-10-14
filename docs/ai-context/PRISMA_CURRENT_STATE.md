@@ -2,7 +2,7 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.74.15
+version: 2.74.16
 last_verified: 2026-10-14
 ---
 
@@ -10,7 +10,7 @@ last_verified: 2026-10-14
 
 ## Tag de acompanhamento ativo — correção 2.6.0
 
-Bruno autorizou em 14/10/2026 corrigir a tag verde na descoberta de Pessoas: somente vínculo com processo `active` exibe **Já está no acompanhamento**. Processo encerrado conserva vínculo, identificação e acesso histórico; sem dados/backend/estilos/Score/IA alterados. Publicação seletiva web/documentação, app permanece 2.6.0. Acordo, mapa, execução e evidências em `docs/qa/follow-up-active-tag.md`. QA sintético: 32 verificações de browser desktop/celular, tipos/build/lint/contexto PASS; CI e publicação pendentes nesta revisão. Jornada produtiva autenticada NOT TESTED.
+Bruno autorizou em 14/10/2026 corrigir a tag verde na descoberta de Pessoas: somente vínculo com processo `active` exibe **Já está no acompanhamento**. Processo encerrado conserva vínculo, identificação e acesso histórico; sem dados/backend/estilos/Score/IA alterados. Publicação seletiva web/documentação, app permanece 2.6.0. Acordo, mapa, execução e evidências em `docs/qa/follow-up-active-tag.md`. QA sintético: 32 verificações de browser desktop/celular, tipos/build/lint/contexto PASS. Publicada runtime9b9ed51433e9f46fd55efff596ca5e964f177dd0 em main/origin/VPS; CI branch38617482458/main38617705924 SUCCESS. Quatro rotas/bundle/SHA/versão/slogan HTTP200, web running/restart0, rollback anterior e nove containers adjacentes preservados.404imediato estabilizou sem rebuild; fechamento documental sincroniza fontes sem reconstruir runtime. Jornada produtiva autenticada NOT TESTED.
 
 ## Processos seletivos separados de Posições — 2.6.0 publicada
 
