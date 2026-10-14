@@ -572,7 +572,7 @@ function SignInPage({
         <div className="prisma-auth-message">
           <h1>Onde a evidência<br />encontra a <span>Inteligência.</span></h1>
           <div aria-hidden="true" className="prisma-auth-message-line" />
-          <p>Inteligência que conecta.<br />Evidência que transforma.</p>
+          <p>As pessoas certas hoje.<br />A liderança de amanhã.</p>
         </div>
       </section>
       <section className="prisma-auth-form-panel">
