@@ -15,9 +15,9 @@ const emptyFilters:ResultFilters={topic:'',difficulty:'',outcome:''};
 const measureLabels:Record<ResultMeasure,string>={correct:'Acertos',focus:'Perdas de foco',focusTime:'Tempo sem foco registrado',changes:'Alterações de resposta',responseTime:'Tempo de resposta'};
 const smallDuration=(ms:number|null)=>ms===null?'Indisponível':activityDuration(ms).replace(' minutos',' min').replace(' minuto',' min').replace(' segundos',' s').replace(' segundo',' s').replace(' e ',' ');
 
-export function AssessmentAttemptResults({assessment,attempt,personName,positionTitle}:{assessment:PositionAssessment;attempt:AssessmentAttempt|null;personName?:string;positionTitle?:string}) {
+export function AssessmentAttemptResults({assessment,attempt,personName,positionTitle,onRefresh}:{assessment:PositionAssessment;attempt:AssessmentAttempt|null;personName?:string;positionTitle?:string;onRefresh?:()=>void}) {
  if(!attempt)return <Empty description="Nenhuma aplicação emitida."/>;
- if(!assessment.organization_id||attempt.assessmentId!==assessment.id||assessment.questions.some(q=>q.organizationId!==assessment.organization_id))return <Alert type="error" title="Não foi possível confirmar o contexto do resultado. Atualize a consulta."/>;
+ if(!assessment.organization_id||attempt.assessmentId!==assessment.id||assessment.questions.some(q=>q.organizationId!==assessment.organization_id))return <Alert type="error" title="Não foi possível confirmar o contexto do resultado. Atualize a consulta." action={<Button onClick={onRefresh??(()=>window.location.reload())}>Atualizar consulta</Button>}/>;
  return <ResultView key={assessment.organization_id+':'+assessment.id+':'+attempt.id} assessment={assessment} attempt={attempt} personName={personName} positionTitle={positionTitle}/>;
 }
 function ResultView({assessment,attempt,personName,positionTitle}:{assessment:PositionAssessment;attempt:AssessmentAttempt;personName:string|undefined;positionTitle:string|undefined}) {

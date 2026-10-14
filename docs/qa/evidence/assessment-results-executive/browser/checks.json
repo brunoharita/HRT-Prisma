@@ -77,6 +77,10 @@
       "pass": true
     },
     {
+      "name": "1448: explicit recovery preserves fail-closed context and never invokes IA",
+      "pass": true
+    },
+    {
       "name": "768: approved whole-result values and five topic groups",
       "pass": true
     },
@@ -150,6 +154,10 @@
     },
     {
       "name": "768: mismatched tenant does not expose results or query analysis",
+      "pass": true
+    },
+    {
+      "name": "768: explicit recovery preserves fail-closed context and never invokes IA",
       "pass": true
     },
     {
@@ -229,6 +237,10 @@
       "pass": true
     },
     {
+      "name": "390: explicit recovery preserves fail-closed context and never invokes IA",
+      "pass": true
+    },
+    {
       "name": "320: approved whole-result values and five topic groups",
       "pass": true
     },
@@ -302,6 +314,10 @@
     },
     {
       "name": "320: mismatched tenant does not expose results or query analysis",
+      "pass": true
+    },
+    {
+      "name": "320: explicit recovery preserves fail-closed context and never invokes IA",
       "pass": true
     }
   ],

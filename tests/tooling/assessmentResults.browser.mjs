@@ -50,6 +50,7 @@ try{
   check(width+': incomplete attempt cannot become corrected performance',(await stats.innerText()).includes('Disponível após conclusão')&&!(await stats.innerText()).includes('15 / 20'));
   await page.goto(base+'/assessment-activity.html?mode=foreign');await page.getByText('Não foi possível confirmar o contexto do resultado.',{exact:false}).waitFor();
   check(width+': mismatched tenant does not expose results or query analysis',await page.locator('.assessment-results').count()===0&&(await calls(page)).length===0);
+  await page.getByRole('button',{name:'Atualizar consulta',exact:true}).click();await page.getByText('Não foi possível confirmar o contexto do resultado.',{exact:false}).waitFor();check(width+': explicit recovery preserves fail-closed context and never invokes IA',await page.locator('.assessment-results').count()===0&&(await calls(page)).length===0);
   await page.close();
   const reference=await browser.newPage({viewport:{width,height:1080}});
   await reference.setContent('<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"></head><body style="margin:0;background:#fff"><main style="max-width:1000px;margin:24px auto">'+await readFile('docs/product/assessment-results-executive-reference.html','utf8')+'</main></body></html>');
