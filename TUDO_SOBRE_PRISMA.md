@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 478
-source_manifest_sha256: bc0463e6ebe8725faf1450ca284450283b5ea74e19d6555adbb086697eac6d6c
+source_manifest_sha256: a21ac7c4244ad3d86db40a084b253b41feba048839049526f3df27f98e45e3ce
 -->
 
 # Tudo sobre o Prisma
@@ -23361,6 +23361,7 @@ Jornada autenticada real NOT TESTED; não inferir uso humano ou entrega de convi
 ## Git / publicação
 
 Pendente. Destinos: migration nova e web, SHA explícito/CI/rollback. Banco aditivo não remove dados. Rollback UI conserva guards; cliente antigo sem início explícito recebe erro seguro e deve atualizar para2.6.0. Não retirar guard para rollback.
+`nCI branch38583025197 bloqueou mapeamento inline no throw e aviso de acesso sem ação. Corrigidos sem retirar gates; testes reviewOperationErrors/actionableNotices/contrato21 + criação/reabertura e browser de recuperação aprovados. Novo SHA será validado pelo CI antes de integrar/publicar.
 
 ---
 

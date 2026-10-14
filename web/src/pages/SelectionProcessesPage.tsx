@@ -45,7 +45,7 @@ export function SelectionProcessesPage({activeMembership,onNavigate,selectedId,v
   catch(e){setError(e instanceof Error?e.message:"Não foi possível salvar.");throw e;}finally{lock.current=false;setPending(false);}
  }
  function confirmStatus(p:SelectionProcess){Modal.confirm({title:p.status==="active"?"Encerrar este processo?":"Reabrir este processo?",content:"Candidatos, avaliações e decisões serão preservados. A ocupação da Posição permanece a mesma.",okText:p.status==="active"?"Encerrar processo":"Reabrir processo",cancelText:"Cancelar",onOk:()=>changeStatus(p)});}
- if(!allowed)return <PrismaPage><Alert type="error" showIcon title="Você não tem acesso aos processos seletivos."/></PrismaPage>;
+ if(!allowed)return <PrismaPage><Alert type="error" showIcon title="Você não tem acesso aos processos seletivos." action={<Button onClick={()=>onNavigate("/")}>Ir para Início</Button>}/></PrismaPage>;
  const back=()=>onNavigate(vacancyId?`/selection-processes/position/${vacancyId}`:"/selection-processes");
  const canWrite=selected?.isCurrent&&selected.status==="active";
  return <PrismaPage className={`sp-page ${selectedId?"sp-selected":""}`}>

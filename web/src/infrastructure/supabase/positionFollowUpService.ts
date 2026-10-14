@@ -10,6 +10,8 @@ function decode(value: Json): FollowUpData {
   return data;
 }
 function failure(error: { code?: string; message: string }): Error {
+  if(error.message.includes("SELECTION_POSITION_OCCUPIED"))return new Error("A Posição precisa estar desocupada para iniciar ou reabrir um processo.");
+  if(error.message.includes("SELECTION_ACTIVE_PROCESS_EXISTS"))return new Error("Esta Posição já tem um processo em andamento. Abra o processo existente.");
   return new Error(error.code === "40001" ? "Outra pessoa alterou este acompanhamento. Atualize os dados antes de tentar novamente; seu rascunho foi preservado."
     : error.code === "42501" ? "Você não tem acesso a este acompanhamento."
       : "Não foi possível salvar ou consultar o acompanhamento. Confira os campos e tente novamente. O último estado confirmado foi preservado.");
@@ -21,7 +23,7 @@ export const positionFollowUpService = {
   },
   async start(organizationId:string,vacancyId:string,processId:string|null,revision:number|null,requestId:string):Promise<FollowUpData>{
     const {data,error}=await supabase.rpc('start_position_selection_process' as never,{p_organization_id:organizationId,p_vacancy_id:vacancyId,p_process_id:processId,p_revision:revision,p_request_id:requestId} as never);
-    if(error)throw new Error(error.message.includes("SELECTION_POSITION_OCCUPIED")?"A Posição precisa estar desocupada para iniciar um processo.":error.message.includes("SELECTION_ACTIVE_PROCESS_EXISTS")?"Esta Posição já tem um processo em andamento.":failure(error).message);return decode(data);
+    if(error)throw failure(error);return decode(data);
   },
   async mutate(organizationId: string, vacancyId: string, action: string, personId: string | null, revision: number | null, payload: object = {},processId?:string): Promise<FollowUpData> {
     const args={p_organization_id: organizationId, p_vacancy_id: vacancyId, p_action: action,p_person_id:personId,p_expected_revision:revision,p_payload:payload as Json};

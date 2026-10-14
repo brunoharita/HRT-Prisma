@@ -46,3 +46,4 @@ Jornada autenticada real NOT TESTED; não inferir uso humano ou entrega de convi
 ## Git / publicação
 
 Pendente. Destinos: migration nova e web, SHA explícito/CI/rollback. Banco aditivo não remove dados. Rollback UI conserva guards; cliente antigo sem início explícito recebe erro seguro e deve atualizar para2.6.0. Não retirar guard para rollback.
+`nCI branch38583025197 bloqueou mapeamento inline no throw e aviso de acesso sem ação. Corrigidos sem retirar gates; testes reviewOperationErrors/actionableNotices/contrato21 + criação/reabertura e browser de recuperação aprovados. Novo SHA será validado pelo CI antes de integrar/publicar.

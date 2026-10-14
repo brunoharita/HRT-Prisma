@@ -8,3 +8,11 @@ test("operator decoder rejects unknown contracts rather than inventing an empty 
 test("workspace and selected records must match requested tenant",async()=>{await assert.rejects(service({...envelope,organizationId:"b"}).load("a"),/incompatível/);await assert.rejects(service({...envelope,selected:{...process,organizationId:"b"}}).load("a"),/incompatível/);await assert.rejects(service({...envelope,processes:[{...process,organizationId:"b"}]}).load("a"),/incompatível/);});
 test("unknown lifecycle and unscoped eligible positions fail closed",async()=>{await assert.rejects(service({...envelope,selected:{...process,status:"paused"}}).load("a"),/incompatível/);await assert.rejects(service({...envelope,positions:[{organizationId:"b",id:"v",title:"Position"}]}).positions("a"),/incompatível/);});
 test("valid empty process remains empty and readable",async()=>{const d=await service(envelope).load("a");assert.equal(d.selected.id,"p");assert.equal(d.selected.candidates,0);assert.deepEqual(d.selected.stages,{});});
+test("creation and reopen guards expose a safe actionable message",async()=>{
+ const raw=readFileSync("web/src/infrastructure/supabase/positionFollowUpService.ts","utf8").split("\n").filter(l=>!l.startsWith("import ")).join("\n").replace("export const positionFollowUpService","const positionFollowUpService");
+ const js=ts.transpileModule(raw,{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText;
+ for(const message of ["SELECTION_POSITION_OCCUPIED","SELECTION_ACTIVE_PROCESS_EXISTS"]){
+  const s=new Function("supabase",js+";return positionFollowUpService;")({rpc:async()=>({data:null,error:{code:"22023",message}})});
+  await assert.rejects(s.start("a","v",null,null,"request"),e=>!e.message.includes("SELECTION_")&&(e.message.includes("desocupada")||e.message.includes("processo em andamento")));
+ }
+});
