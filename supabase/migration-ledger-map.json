@@ -1538,6 +1538,19 @@
       "statementFingerprintStatus": "equal",
       "localCanonicalLength": 11382,
       "remoteCanonicalLength": 11382
+    },
+    {
+      "name": "selection_process_outcome",
+      "localVersion": "20261014190000",
+      "remoteVersion": "20261014215422",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localStatementSha256": "32677f5b32086df9a323d1e90a2ea373f3aecfbce2094c18abd23369d380f7d5",
+      "remoteStatementSha256": "32677f5b32086df9a323d1e90a2ea373f3aecfbce2094c18abd23369d380f7d5",
+      "localCanonicalLength": 22329,
+      "remoteCanonicalLength": 22329,
+      "verifiedAt": "2026-10-14",
+      "fingerprintMethod": "strip-line-comments-collapse-whitespace-v1"
     }
   ],
   "localOnly": [
@@ -1578,11 +1591,11 @@
   ],
   "lastIncrementalVerification": {
     "date": "2026-10-14",
-    "movement": "selection-processes-v260",
+    "movement": "selection-outcome-v261",
     "names": [
-      "selection_process_management"
+      "selection_process_outcome"
     ],
-    "evidence": "docs/qa/evidence/selection-processes-v260/production/scope-after.json",
+    "evidence": "docs/qa/evidence/selection-outcome-v261/production/publication.json",
     "historicalSnapshotVerifiedAtUnchanged": true
   }
 }

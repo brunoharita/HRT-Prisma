@@ -2,15 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.74.17
+version: 2.74.18
 last_verified: 2026-10-14
 ---
 
 # Estado atual do Prisma
 
-## Escolha no encerramento e histórico da participação — 2.6.1 em QA
+## Escolha no encerramento e histórico da participação — 2.6.1 publicada
 
-Bruno autorizou em14/10/2026: escolher uma Pessoa participante ou ninguém somente ao encerrar; vínculo encerrado não aparece na descoberta; histórico completo no Perfil. Resultado humano adicional selection-process-outcome-1.0.0 gravado com encerramento/revisão/auditoria; reabertura conserva eventos e limpa escolha vigente. Legado sem backfill: Resultado não informado. person-selection-history-1.0.0 pagina participações50por empresa/Pessoa e referencia provas originais; expansão usa acompanhamento e resultado existentes, com notas/entrevista/fuso/decisões/questões/respostas/registros. Nenhuma ocupação, contratação, Score, fatos/versões do Perfil ou IA automáticos. Auditoria obrigatória de consulta da prova permanece; não há coleta nova. Acordo/execução1.0.0 e AoT selection-outcome-v261. Local159SQL/3disputas reais,38Node e117browser+13guards+32preservação PASS; tipos/build PASS. Publicação/CI ainda pendentes nesta revisão; jornada produtiva autenticada NOT TESTED.
+Bruno autorizou em14/10/2026: escolher uma Pessoa participante ou ninguém somente ao encerrar; vínculo encerrado não aparece na descoberta; histórico completo no Perfil. Resultado humano adicional selection-process-outcome-1.0.0 gravado com encerramento/revisão/auditoria; reabertura conserva eventos e limpa escolha vigente. Legado sem backfill: Resultado não informado. person-selection-history-1.0.0 pagina participações50por empresa/Pessoa e referencia provas originais; expansão usa acompanhamento e resultado existentes, com notas/entrevista/fuso/decisões/questões/respostas/registros. Nenhuma ocupação, contratação, Score, fatos/versões do Perfil ou IA automáticos. Auditoria obrigatória de consulta da prova permanece; não há coleta nova. Acordo/execução1.0.0 e AoT selection-outcome-v261. Local159SQL/3disputas reais,38Node e117browser+13guards+32preservação PASS; tipos/build/lint/contexto/ledger/release-tooling22 PASS. Publicado runtime e2da3f36b4b72de9a551df304e583caddc693ac2 em main/origin/VPS, CIbranch38643059929/main38643939021 SUCCESS. Migrationremota20261014215422/fingerprint igual, seis corpos/grants conferidos, nove conjuntos produtivos/hash e ACL/RLS preservados, legado sem backfill. Somente web recriada, running/restart0; quatro rotas/bundle/SHA/versão/slogan200, rollback e246assets anteriores íntegros, nove contêineres adjacentes inalterados.404imediato estabilizou sem rebuild/redeploy. Fechamento documental/ledger sincroniza fontes sem reconstruir runtime; jornada produtiva autenticada NOT TESTED.
 
 ## Tag de acompanhamento ativo — correção 2.6.0
 

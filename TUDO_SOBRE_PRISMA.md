@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 482
-source_manifest_sha256: ba7668a8b866e955dbe4e91711c224b1e236ab42594fc1c7e82325ef54fbe113
+source_manifest_sha256: eff540a934151932b6046148a90d879bc8a9b677a1d99b7b6e62e24f591e4610
 -->
 
 # Tudo sobre o Prisma
@@ -2643,15 +2643,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.74.17
+version: 2.74.18
 last_verified: 2026-10-14
 ---
 
 # Estado atual do Prisma
 
-## Escolha no encerramento e histórico da participação — 2.6.1 em QA
+## Escolha no encerramento e histórico da participação — 2.6.1 publicada
 
-Bruno autorizou em14/10/2026: escolher uma Pessoa participante ou ninguém somente ao encerrar; vínculo encerrado não aparece na descoberta; histórico completo no Perfil. Resultado humano adicional selection-process-outcome-1.0.0 gravado com encerramento/revisão/auditoria; reabertura conserva eventos e limpa escolha vigente. Legado sem backfill: Resultado não informado. person-selection-history-1.0.0 pagina participações50por empresa/Pessoa e referencia provas originais; expansão usa acompanhamento e resultado existentes, com notas/entrevista/fuso/decisões/questões/respostas/registros. Nenhuma ocupação, contratação, Score, fatos/versões do Perfil ou IA automáticos. Auditoria obrigatória de consulta da prova permanece; não há coleta nova. Acordo/execução1.0.0 e AoT selection-outcome-v261. Local159SQL/3disputas reais,38Node e117browser+13guards+32preservação PASS; tipos/build PASS. Publicação/CI ainda pendentes nesta revisão; jornada produtiva autenticada NOT TESTED.
+Bruno autorizou em14/10/2026: escolher uma Pessoa participante ou ninguém somente ao encerrar; vínculo encerrado não aparece na descoberta; histórico completo no Perfil. Resultado humano adicional selection-process-outcome-1.0.0 gravado com encerramento/revisão/auditoria; reabertura conserva eventos e limpa escolha vigente. Legado sem backfill: Resultado não informado. person-selection-history-1.0.0 pagina participações50por empresa/Pessoa e referencia provas originais; expansão usa acompanhamento e resultado existentes, com notas/entrevista/fuso/decisões/questões/respostas/registros. Nenhuma ocupação, contratação, Score, fatos/versões do Perfil ou IA automáticos. Auditoria obrigatória de consulta da prova permanece; não há coleta nova. Acordo/execução1.0.0 e AoT selection-outcome-v261. Local159SQL/3disputas reais,38Node e117browser+13guards+32preservação PASS; tipos/build/lint/contexto/ledger/release-tooling22 PASS. Publicado runtime e2da3f36b4b72de9a551df304e583caddc693ac2 em main/origin/VPS, CIbranch38643059929/main38643939021 SUCCESS. Migrationremota20261014215422/fingerprint igual, seis corpos/grants conferidos, nove conjuntos produtivos/hash e ACL/RLS preservados, legado sem backfill. Somente web recriada, running/restart0; quatro rotas/bundle/SHA/versão/slogan200, rollback e246assets anteriores íntegros, nove contêineres adjacentes inalterados.404imediato estabilizou sem rebuild/redeploy. Fechamento documental/ledger sincroniza fontes sem reconstruir runtime; jornada produtiva autenticada NOT TESTED.
 
 ## Tag de acompanhamento ativo — correção 2.6.0
 
@@ -23408,7 +23408,7 @@ Contrato: `agreement-selection-outcome-v261.md` versão1.0.0; execução corresp
 | D-04 | Projeção history por empresa/Pessoa, paginação e expansão no Histórico do Perfil | Browser histórico/teste/questões/registros/legado/erro/paginação; SQL/RPC; contratos de escopo | PASS | Provas individuais sem ciclo permanecem separadas |
 | D-05 | Vínculo/ação/identificação só com ativo confirmado; gestor genérico sem vínculo encerrado | Browser ativo/chosen/none/legado1448/390/320, erro com cache, discovery32 | PASS | Perfil/Score/comparação conservados |
 | D-06 | Campos aditivos/FK composta, entradas e provas intactas; erasure remove referência pessoal | SQL snapshots e erasure, tipos/build e Node | PASS | Dados sintéticos; nenhum DML de negócio produtivo |
-| D-07 | Pendente | CA-03 | NOT TESTED | CI/produção/sync |
+| D-07 | Migration e frontend publicados, main/origin/VPS funcionais e fechamento documental | CA-03: production/publication.json; CI branch38643059929/main38643939021 SUCCESS; quatro rotas/bundle/SHA/versão200 | PASS | Produção; jornada autenticada real NOT TESTED |
 
 ## Proibições e mapa de preservação
 
@@ -23425,9 +23425,9 @@ Mapa final igual ao inicial em agreement-selection-outcome-v261.md, sem novas de
 | Provas/convites/respostas/resultados | plausible_indirect | Writers intactos e snapshots completos; resultado original abre questões/respostas/registros | PASS |
 | Auth/tenant/erasure | critical_transversal | Private authorize reutilizado, negativos de papel/tenant/anon/worker, FK composta e identidade apagada | PASS |
 | Score/Perfil/ocupação/comercial/IA | no_impact_identified | Sem escritores alterados, snapshots, nenhuma chamada externa no browser | PASS |
-| Parser/Synthesis/gateway/mail | no_impact_identified | Sem arquivo/contrato desses serviços alterado; plano e preservação produtiva pendentes | NOT TESTED |
+| Parser/Synthesis/gateway/mail | no_impact_identified | Plano seletivo banco/web e nove contêineres adjacentes idênticos antes/depois | PASS |
 
-F-01/F-02 preservados no diff: sem novos estados de processo, coleta, prova, contratação, IA, preço, expurgo ou backfill. PASS local; publicação pendente.
+F-01/F-02 preservados no diff: sem novos estados de processo, coleta, prova, contratação, IA, preço, expurgo ou backfill. PASS local e verificação produtiva proporcional.
 
 ## Fidelidade visual
 
@@ -23441,7 +23441,15 @@ Falhas de QA resolvidas: fixture adicionava Perfil após baseline de comparaçã
 
 ## Validação final / Git / QA / produção
 
-QA local:159SQL e3disputas reais com limpeza do banco descartável;38Node dirigidos,117browser/13guards e32preservação. Tipos/build web e build dos testes PASS; lint/contexto e CI finais pendentes. Sem suíte integral local, LLM externo ou banco produtivo como fixture. Evidências em evidence/selection-outcome-v261. Leitura de resultado reutiliza auditoria existente de consulta; não é decisão/gravação de negócio por leitura. Jornada produtiva autenticada NOT TESTED.
+QA local:159SQL e3disputas reais com limpeza do banco descartável;38Node dirigidos,117browser/13guards e32preservação. Tipos/build web, build dos testes, lint/contexto,22release-tooling e ledger PASS. CI branch38643059929/main38643939021 SUCCESS. Sem suíte integral local, LLM externo ou banco produtivo como fixture. Evidências em evidence/selection-outcome-v261. Leitura de resultado reutiliza auditoria existente de consulta; não é decisão/gravação de negócio por leitura. Jornada produtiva autenticada NOT TESTED.
+
+Publicado SHA funcional e2da3f36b4b72de9a551df304e583caddc693ac2 em main/origin/VPS. Migration local20261014190000/remota20261014215422, fingerprint SHA256 igual32677f5b32086df9a323d1e90a2ea373f3aecfbce2094c18abd23369d380f7d5; seis corpos e grants conferidos, sem grants anon/service_role para novo leitor. Dados das nove tabelas e ACL/RLS intactos, sete funções protegidas não alteradas; processo legado sem resultado inventado. Alias registrado sem replay/reparo do ledger histórico, cliDbPushAllowed=false.
+
+Somente web recriada; running/restart0, rollback igual à imagem anterior e nove contêineres adjacentes idênticos.246assets anteriores preservados (248depois). Probe imediato do script retornou404/exit22 após recriação; estabilização independente confirmou quatro rotas, bundle, SHA completo, versão2.6.1 e slogan200; nenhum rebuild/redeploy repetido. Registro sanitizado: production/publication.json.
+
+Advisor mantém achados prévios e acrescenta aviso esperado para RPC autenticada SECURITY DEFINER. O novo leitor usa autorização existente por tenant/papel, search_path vazio, sem EXECUTE para anon/worker/PUBLIC; negativos locais PASS e grants produtivos conferidos. [Referência do aviso](https://supabase.com/docs/guides/database/database-linter?lint=0029_authenticated_security_definer_function_executable). Sem alteração de permissões adjacentes. Limpeza de dados/containers produtivos e correção de avisos históricos permanecem fora do escopo.
+
+Fechamento documental/ledger sincroniza fontes e evidências sem reconstruir runtime funcional. Worktree e junction existentes preservados; artefatos de falha locais não rastreados e trabalho alheio fora do release.
 
 ---
 
