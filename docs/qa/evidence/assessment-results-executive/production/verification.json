@@ -1,0 +1,102 @@
+{
+  "runtimeSourceSha": "8a6a181c400c2f76519a62220fd04f9022c8b9f0",
+  "rollbackImage": "sha256:ac5284827fcec2fac268c49e1cd6997bb5e4e945d0d974fe095d466770ec7379",
+  "web": {
+    "id": "d3d8660f397137e3c2fc926ec55a42fcc59037ba4c81042d2b14ed7547f99c24",
+    "image": "sha256:83ac4e53e83e8df3504a75478437fc4805ed74aa96a1757bd656aaa0e23977bd",
+    "state": "running",
+    "restarts": "0"
+  },
+  "adjacentContainersPreserved": 9,
+  "oldAssets": 231,
+  "newAssets": 235,
+  "oldAssetHashesPreserved": true,
+  "routes": [
+    {
+      "route": "/",
+      "http": 200
+    },
+    {
+      "route": "/sign-in",
+      "http": 200
+    },
+    {
+      "route": "/assessment/",
+      "http": 200
+    },
+    {
+      "route": "/item-bank",
+      "http": 200
+    }
+  ],
+  "assets": [
+    {
+      "path": "/assets/index-BMKzDWj6.js",
+      "http": 200,
+      "sha256": "ada4f58a08369086bb9cac39a1b79be86132ce2dc83ea6479ed034dfdece69f7",
+      "sourceSha": true,
+      "version": true,
+      "executive": true
+    },
+    {
+      "path": "/assets/rolldown-runtime-C0FnF6B9.js",
+      "http": 200,
+      "sha256": "e0a79ad36c6ca1ffbc796c80aa5661803a9d1bc684e29d1587f48b4ba9a82714"
+    },
+    {
+      "path": "/assets/antd-vendor-g5prliAM.js",
+      "http": 200,
+      "sha256": "ec866881cc4aa6752e727663706c308b0e300a1ed923b8e5a4abc423be399a7e"
+    },
+    {
+      "path": "/assets/supabase-vendor-DoXvCMLf.js",
+      "http": 200,
+      "sha256": "eb17416e1cf28455937e96c08d469cd658f3cf88ebb0d156ebb076e1bc183ba5"
+    },
+    {
+      "path": "/assets/react-vendor-BdxMnOeJ.js",
+      "http": 200,
+      "sha256": "58a473314db4571ac72867e4485c45c440a8bce86396a9433d650c3831b03067"
+    },
+    {
+      "path": "/assets/antd-vendor-B5BXDqMa.css",
+      "http": 200,
+      "sha256": "6b734531b94fda9950119646124dccee1ee7e70e91b3e5be988c378ca9f9f98d"
+    },
+    {
+      "path": "/assets/index-OR2VzZHo.css",
+      "http": 200,
+      "sha256": "643a103692f2ebef89eb03a8c28d973bc8a15a578079d663619b2a550c6eeb85",
+      "executiveStyles": true
+    }
+  ],
+  "publicBrowser": [
+    {
+      "width": 1448,
+      "version": "v2.5.4",
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "version": "v2.5.4",
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "version": "v2.5.4",
+      "overflow": false,
+      "errors": []
+    }
+  ],
+  "initialSmoke": {
+    "http": 404,
+    "phase": "immediately after recreation",
+    "recoveredWithoutRebuild": true
+  },
+  "limits": [
+    "Public smoke; authenticated real candidate journey not tested",
+    "No production fixtures or paid AI actions; database and Edge unchanged"
+  ]
+}

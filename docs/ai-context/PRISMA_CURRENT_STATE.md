@@ -2,15 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.74.9
+version: 2.74.10
 last_verified: 2026-10-13
 ---
 
 # Estado atual do Prisma
 
-## Resultado executivo da avaliação — 2.5.4 validada localmente, publicação pendente
+## Resultado executivo da avaliação — 2.5.4 publicada
 
-Bruno aprovou a visão executiva clara e autorizou implementação/main/publicação em13/10/2026. Interface individual/histórica com indicadores gerais, abas Visão geral/Questões/Registros, métricas por assunto/dificuldade e filtros combináveis com denominador/recorte explícitos. Consulta determinística sem IA/cotação automática; síntese inteira salva e sua evidência imutável permanecem separadas do recorte atual, com confirmação comercial existente preservada. Tempo de resposta indisponível, sem nova coleta/calibração/penalidade/influência em Score/Perfil/etapas. Contratos1.0.0/método1.1.0/backend/tarifas inalterados. Acordo/mapa/execução1.0.0 em docs/qa/agreement-assessment-results-executive.md, referência normativa em docs/product/assessment-results-executive-reference.html. Local:24Node-tooling/297browser dirigidos, tipos/build e fidelidade 1448/768/390/320 PASS. AoT registra limites e rollout pendente; esta nota não comprova publicação.
+Bruno aprovou a visão executiva clara e autorizou implementação/main/publicação em13/10/2026. Interface individual/histórica com indicadores gerais, abas Visão geral/Questões/Registros, métricas por assunto/dificuldade e filtros combináveis com denominador/recorte explícitos. Consulta determinística sem IA/cotação automática; síntese inteira salva e sua evidência imutável permanecem separadas do recorte atual, com confirmação comercial existente preservada. Tempo de resposta indisponível, sem nova coleta/calibração/penalidade/influência em Score/Perfil/etapas. Contratos1.0.0/método1.1.0/backend/tarifas inalterados. Acordo/mapa/execução1.0.0 em docs/qa/agreement-assessment-results-executive.md, referência normativa em docs/product/assessment-results-executive-reference.html. Local:24Node-tooling/297browser dirigidos, tipos/build e fidelidade 1448/768/390/320 PASS. Publicada em main/origin/VPS no runtime8a6a181c400c2f76519a62220fd04f9022c8b9f0, CI branch38492885528/main38493344570 PASS (913testes). Web83ac4e53 running/restart0,4rotas/7assets HTTP200 e login v2.5.4 em1448/390/320 sem overflow/erro;231assets anteriores preservados,9contêineres adjacentes intactos e rollbackac528482 conferido.404 imediato após recriação estabilizou sem rebuild repetido. Banco/Edge/coletores/métodos/tarifas não foram publicados. AoT registra evidência, limitações e fechamento documental sem rebuild; jornada autenticada real NOT TESTED.
 
 ## Sinais de conteúdo da avaliação —2.5.3 publicada
 

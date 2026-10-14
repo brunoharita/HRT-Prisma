@@ -1,0 +1,13 @@
+{
+  "initialPublishExit": 22,
+  "webOnly": true,
+  "databaseChanged": false,
+  "edgeChanged": false,
+  "site": "https://prisma.hrtsolutions.com.br",
+  "initialHttp": 404,
+  "outcome": "PUBLISHED_VERIFIED_AFTER_TRANSIENT_SMOKE",
+  "mainCi": 38493344570,
+  "branchCi": 38492885528,
+  "runtimeSourceSha": "8a6a181c400c2f76519a62220fd04f9022c8b9f0",
+  "rebuildRepeated": false
+}
