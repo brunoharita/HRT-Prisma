@@ -568,7 +568,7 @@ export function VacancyPeoplePage({ activeMembership, onNavigate, vacancyId }: C
   }
   function followUpStatus(match: VacancyCandidateMatch) {
     return followUp.data?.process && followUp.data.entries.some(entry => entry.personId === match.candidate.personId)
-      ? <Space wrap className="prisma-candidate-follow-up-status"><Tag color="green" icon={<CheckCircleOutlined aria-hidden="true" />}>Já está no acompanhamento</Tag><Tag color="blue">Processo atual{followUp.data.process.status === "closed" ? " · encerrado" : ""}</Tag>{!followUp.confirmed ? <small>Último estado confirmado</small> : null}</Space> : null;
+      ? <Space wrap className="prisma-candidate-follow-up-status">{followUp.data.process.status === "active" ? <Tag color="green" icon={<CheckCircleOutlined aria-hidden="true" />}>Já está no acompanhamento</Tag> : null}<Tag color="blue">Processo atual{followUp.data.process.status === "closed" ? " · encerrado" : ""}</Tag>{!followUp.confirmed ? <small>Último estado confirmado</small> : null}</Space> : null;
   }
   const evaluationActivity = useLoadingTask("Preparando detalhes da avaliação…");
   const scoreActivity = useLoadingTask("Atualizando avaliação da Pessoa…");

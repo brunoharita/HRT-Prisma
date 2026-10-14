@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.74.14
+version: 2.74.15
 last_verified: 2026-10-14
 ---
 
 # Estado atual do Prisma
+
+## Tag de acompanhamento ativo — correção 2.6.0
+
+Bruno autorizou em 14/10/2026 corrigir a tag verde na descoberta de Pessoas: somente vínculo com processo `active` exibe **Já está no acompanhamento**. Processo encerrado conserva vínculo, identificação e acesso histórico; sem dados/backend/estilos/Score/IA alterados. Publicação seletiva web/documentação, app permanece 2.6.0. Acordo, mapa, execução e evidências em `docs/qa/follow-up-active-tag.md`. QA sintético: 32 verificações de browser desktop/celular, tipos/build/lint/contexto PASS; CI e publicação pendentes nesta revisão. Jornada produtiva autenticada NOT TESTED.
 
 ## Processos seletivos separados de Posições — 2.6.0 publicada
 

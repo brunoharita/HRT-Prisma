@@ -1,0 +1,130 @@
+[
+  {
+    "name": "normal-1448: other card content and layout preserved",
+    "pass": true
+  },
+  {
+    "name": "normal-1448: green tag only for active process",
+    "pass": true
+  },
+  {
+    "name": "normal-1448: process identification retained",
+    "pass": true
+  },
+  {
+    "name": "normal-1448: unlinked person has no membership tag",
+    "pass": true
+  },
+  {
+    "name": "normal-1448: historical/current access retains exact process and person",
+    "pass": true
+  },
+  {
+    "name": "normal-1448: focus reload retains state without writes or AI",
+    "pass": true
+  },
+  {
+    "name": "normal-1448: responsive without overflow or runtime/external errors",
+    "pass": true
+  },
+  {
+    "name": "closed-1448: removing tag only contracts linked card vertically",
+    "pass": true
+  },
+  {
+    "name": "closed-1448: natural vertical reflow",
+    "heightDelta": 0
+  },
+  {
+    "name": "closed-1448: other card content and layout preserved",
+    "pass": true
+  },
+  {
+    "name": "closed-1448: green tag only for active process",
+    "pass": true
+  },
+  {
+    "name": "closed-1448: process identification retained",
+    "pass": true
+  },
+  {
+    "name": "closed-1448: unlinked person has no membership tag",
+    "pass": true
+  },
+  {
+    "name": "closed-1448: historical/current access retains exact process and person",
+    "pass": true
+  },
+  {
+    "name": "closed-1448: focus reload retains state without writes or AI",
+    "pass": true
+  },
+  {
+    "name": "closed-1448: responsive without overflow or runtime/external errors",
+    "pass": true
+  },
+  {
+    "name": "normal-390: other card content and layout preserved",
+    "pass": true
+  },
+  {
+    "name": "normal-390: green tag only for active process",
+    "pass": true
+  },
+  {
+    "name": "normal-390: process identification retained",
+    "pass": true
+  },
+  {
+    "name": "normal-390: unlinked person has no membership tag",
+    "pass": true
+  },
+  {
+    "name": "normal-390: historical/current access retains exact process and person",
+    "pass": true
+  },
+  {
+    "name": "normal-390: focus reload retains state without writes or AI",
+    "pass": true
+  },
+  {
+    "name": "normal-390: responsive without overflow or runtime/external errors",
+    "pass": true
+  },
+  {
+    "name": "closed-390: removing tag only contracts linked card vertically",
+    "pass": true
+  },
+  {
+    "name": "closed-390: natural vertical reflow",
+    "heightDelta": -34.390625
+  },
+  {
+    "name": "closed-390: other card content and layout preserved",
+    "pass": true
+  },
+  {
+    "name": "closed-390: green tag only for active process",
+    "pass": true
+  },
+  {
+    "name": "closed-390: process identification retained",
+    "pass": true
+  },
+  {
+    "name": "closed-390: unlinked person has no membership tag",
+    "pass": true
+  },
+  {
+    "name": "closed-390: historical/current access retains exact process and person",
+    "pass": true
+  },
+  {
+    "name": "closed-390: focus reload retains state without writes or AI",
+    "pass": true
+  },
+  {
+    "name": "closed-390: responsive without overflow or runtime/external errors",
+    "pass": true
+  }
+]

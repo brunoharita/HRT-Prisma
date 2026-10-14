@@ -14,6 +14,8 @@ Inclusão de Pessoa não cria mais processo implicitamente, substituindo a cria�
 
 Pode haver vários ciclos históricos e somente um ativo por Posição. Encerramento mantém candidatos, etapas, entrevistas, decisões, prova, aplicações e resultados; não ocupa automaticamente a Posição. Reabertura do ciclo atual exige Posição desocupada. Ciclos anteriores permanecem somente consulta. Um novo ciclo conserva o anterior e começa sem candidatos; reuso explícito de prova compatível segue process-assessment.md.
 
+Na descoberta de Pessoas para a Posição, a tag verde **Já está no acompanhamento** exige vínculo com processo em andamento. Processo encerrado mantém o vínculo, a indicação **Processo atual · encerrado** e **Abrir acompanhamento** para consulta do histórico, sem tag verde. Correção autorizada em 14/10/2026, acordo/execução/AoT em docs/qa/follow-up-active-tag.md; app permanece 2.6.0.
+
 O estado de ocupação é independente do estado do processo. Posição desocupada pode estar sem processo ativo; encerramento não pressupõe contratação. A fonte da ocupação é public.positions.status, com organization_id e vínculo pela Posição; ausência fica indisponível, nunca elegível por inferência.
 
 ## Contrato e operação
