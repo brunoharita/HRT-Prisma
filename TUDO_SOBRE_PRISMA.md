@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 479
-source_manifest_sha256: aac55b7dd763ad38e519e486ceb733070761deee79ddd060e0f0c23f3fe07e53
+documentation_source_count: 482
+source_manifest_sha256: ba7668a8b866e955dbe4e91711c224b1e236ab42594fc1c7e82325ef54fbe113
 -->
 
 # Tudo sobre o Prisma
@@ -2643,11 +2643,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.74.16
+version: 2.74.17
 last_verified: 2026-10-14
 ---
 
 # Estado atual do Prisma
+
+## Escolha no encerramento e histórico da participação — 2.6.1 em QA
+
+Bruno autorizou em14/10/2026: escolher uma Pessoa participante ou ninguém somente ao encerrar; vínculo encerrado não aparece na descoberta; histórico completo no Perfil. Resultado humano adicional selection-process-outcome-1.0.0 gravado com encerramento/revisão/auditoria; reabertura conserva eventos e limpa escolha vigente. Legado sem backfill: Resultado não informado. person-selection-history-1.0.0 pagina participações50por empresa/Pessoa e referencia provas originais; expansão usa acompanhamento e resultado existentes, com notas/entrevista/fuso/decisões/questões/respostas/registros. Nenhuma ocupação, contratação, Score, fatos/versões do Perfil ou IA automáticos. Auditoria obrigatória de consulta da prova permanece; não há coleta nova. Acordo/execução1.0.0 e AoT selection-outcome-v261. Local159SQL/3disputas reais,38Node e117browser+13guards+32preservação PASS; tipos/build PASS. Publicação/CI ainda pendentes nesta revisão; jornada produtiva autenticada NOT TESTED.
 
 ## Tag de acompanhamento ativo — correção 2.6.0
 
@@ -5127,6 +5131,12 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `assessment-ai-budget` | operations/AI/security | 1.0.0 | geração externa | implementado e desativado | reservation, usage, release, caps e cooldown | local/QA | bloquear geração |
 
 ## Evidência não é rollout
+
+### Resultado do processo e histórico da Pessoa1.0.0 — produto2.6.1
+
+`selection-process-outcome-1.0.0` é o contrato adicional do encerramento humano. Payload de close_process exige contract e outcome selected/none; selected exige selectedPersonId participante do mesmo ciclo/empresa, none proíbe esse campo. Reutiliza wrappers/revisão/locks/auditoria existentes. Campos aditivos no processo closure_outcome/selected_entry_id/closed_at/closure_actor_id são gravados atomicamente; FK composta de empresa/entrada e SET NULL somente na referência pessoal preservam erasure e tenant. Nenhum grant de tabela ou worker/anon. Reabertura limpa o resultado vigente e conserva eventos anteriores; corpo da auditoria não duplica o nome escolhido, resolvido pela entrada vinculada. Exclusão explícita apaga referências/histórico pessoal via FKs existentes, preserva a ocorrência anônima de escolha, nunca transforma em ninguém. Legados permanecem null, sem backfill. Leitores mantêm follow-up1.0.0 e management1.0.0 com outcome adicional versionado; cliente antigo pode ler, mas encerramento sem contrato/resultado é recusado com segurança e requer atualizar o frontend.
+
+`person-selection-history-1.0.0` usa get_person_selection_history(org,person,offset), autorização viva de acompanhamento e escopo obrigatório de empresa/Pessoa; pagina50. Participações carregam IDs, resultado, datas e resumos de provas com organizationId/personId; expansão reutiliza consulta do ciclo e a avaliação original para respostas/resultados/registros. Provas individuais sem processo continuam separadas. Nenhuma nova inferência, decisão, IA, cobrança, mutação de negócio por consulta ou duplicação de resultado; auditoria obrigatória existente de consulta da prova permanece. Acordo/AoT selection-outcome-v261 e owner selection-processes.md.
 
 ### Gestão de processos seletivos1.0.0 — produto2.6.0
 
@@ -10165,6 +10175,10 @@ Uma prova por ciclo, congelada na primeira emissão; nenhuma promoção ou conve
 
 ## Alternativas e consequências
 
+### Delta aprovado em14/10/2026 — encerramento/histórico2.6.1
+
+Escolha final pertence ao encerramento do ciclo, não a uma etapa ou à nota. Reutilizar processo/entradas/auditoria e provas existentes, acrescentando resultado humano transacional e projeção paginada da participação, evita duplicar resultados ou atribuir decisões ao Perfil profissional. Snapshot/decisões intermediárias e histórico permanecem. FK por empresa/entrada com remoção somente da referência pessoal conserva isolamento e erasure; padrão suportado pelo [PostgreSQL17](https://www.postgresql.org/docs/17/ddl-constraints.html#DDL-CONSTRAINTS-FK). Reabertura conserva a decisão anterior em auditoria, sem escolha vigente no ativo. Não há backfill ou fornecedor/biblioteca novos. Contratos adicionais versionam o resultado e a projeção histórica sem alterar os contratos de prova/portal. Escrita antiga de encerramento sem escolha explícita é recusada; rollback de web conserva schema/dados/guard e exige atualizar o frontend para novos encerramentos. Acordo/execução1.0.0 e AoT selection-outcome-v261.
+
 ### Delta aprovado em14/10/2026 — Processos seletivos2.6.0
 
 Bruno escolheu proposta3 e autorizou criação explícita somente para Posição desocupada, um processo ativo por Posição e gestão própria no menu. Reutilizar ciclos existentes, RPC de criação e guardas backend é suficiente; não criar tabela, plataforma externa ou biblioteca. O primeiro ciclo também começa vazio; a inclusão não cria processo. Reabertura requer Posição desocupada. Novo envelope selection-process-management-1.0.0 consulta projeções mínimas/paginadas e preserva contratos/artefatos históricos da avaliação. Índice ativo, lock e trigger impedem bypass/concorrência, sem backfill. Acordo1.0.0/AoT selection-processes-v260.
@@ -12140,6 +12154,8 @@ O prazo oferece **1, 3, 7, 14 ou 30 dias** (padrão 7) e **Escolher uma data**, 
 
 A prova fica fixada no primeiro envio: questões, versões, ordem, duração e correção permanecem comuns para candidatos adicionados depois. **Consultar avaliação do processo** abre a prova e **Ver resultado e atividade** consulta cada aplicação. Correção objetiva, respostas e sinais observados não modificam Score, Perfil, etapas, ocupação ou decisão humana. Sinais parciais não comprovam pesquisa, captura ou fraude.
 
+Na2.6.1, o Histórico do Perfil também consulta as avaliações da participação, com os mesmos IDs, questões, respostas, resultados e registros. Provas individuais anteriores continuam acessíveis sem inventar associação com ciclo. Resultado de teste permanece separado da escolha humana de alguém/ninguém no encerramento; nenhuma cópia, recálculo ou nova IA por abrir o histórico. Auditoria de consulta existente preservada. Owner selection-processes.md e AoT selection-outcome-v261.
+
 **Reabrir processo** mantém a prova existente. Na2.6.0, a gestão fica no menu **Processos seletivos**: criação explícita somente para Posição desocupada e sem processo ativo; reabertura do ciclo atual também exige Posição desocupada. **Novo processo seletivo** cria um ciclo vazio, conservando o anterior. O novo ciclo pode montar outra prova ou **Reutilizar prova** compatível anterior, sem copiar aplicações/respostas/decisões. Ciclos anteriores são somente consulta. **Avaliações individuais anteriores** preserva o histórico anterior à2.3.2; não declara equivalência retroativa. Contrato de gestão: `selection-processes.md`.
 
 Nenhum aviso final ou expurgo temporal foi introduzido. Exclusão explícita de uma Pessoa conserva a prova comum e remove suas aplicações, eventos, convites e referências pessoais dos recibos de lote. Uma prova comum facilita comparação do instrumento, mas não certifica justiça ou calibração empírica de dificuldade.
@@ -12537,7 +12553,17 @@ Inclusão de Pessoa não cria mais processo implicitamente, substituindo a cria�
 
 Pode haver vários ciclos históricos e somente um ativo por Posição. Encerramento mantém candidatos, etapas, entrevistas, decisões, prova, aplicações e resultados; não ocupa automaticamente a Posição. Reabertura do ciclo atual exige Posição desocupada. Ciclos anteriores permanecem somente consulta. Um novo ciclo conserva o anterior e começa sem candidatos; reuso explícito de prova compatível segue process-assessment.md.
 
-Na descoberta de Pessoas para a Posição, a tag verde **Já está no acompanhamento** exige vínculo com processo em andamento. Processo encerrado mantém o vínculo, a indicação **Processo atual · encerrado** e **Abrir acompanhamento** para consulta do histórico, sem tag verde. Correção autorizada em 14/10/2026, acordo/execução/AoT em docs/qa/follow-up-active-tag.md; app permanece 2.6.0.
+Na descoberta de Pessoas para a Posição, somente vínculo confirmado com processo em andamento produz **Já está no acompanhamento**, **Processo atual** e **Abrir acompanhamento**. Processo encerrado não produz tag, rótulo ou ação de acompanhamento individual. Histórico permanece no processo específico e no Perfil. Consulta pendente/falha não afirma acompanhamento ativo com base em cache; Perfil, Score e comparação permanecem acessíveis. Esta regra2.6.1 supersede a indicação encerrada de follow-up-active-tag.
+
+## Encerramento e histórico — 2.6.1
+
+**Encerrar processo** abre o mesmo fluxo pela gestão e pelo acompanhamento: escolher exatamente uma Pessoa participante ou **Encerrar sem escolher ninguém**. Nada é pré-selecionado. Confirmar grava resultado, encerramento, responsável, data e auditoria juntos; cancelar não grava decisão. Não há escolha final enquanto o processo está ativo. Processo vazio admite somente ninguém. Falha preserva o rascunho; atualização após resposta incerta reconcilia o resultado já salvo, sem nova decisão.
+
+Processo encerrado mostra a Pessoa escolhida ou **Encerrado sem escolha**; participantes mostram **Escolhida** ou **Não escolhida** segundo esse resultado humano. Legado sem conclusão explícita mostra **Resultado não informado**. Prosseguir/Não prosseguir são decisões intermediárias e permanecem separadas da escolha final. Reabertura mantém o encerramento anterior no histórico e volta a andamento sem escolha final vigente; nova escolha só no próximo encerramento. Nenhuma contratação/ocupação, Score, Perfil ou prova é alterada.
+
+No **Histórico** do Perfil, **Processos seletivos** reúne participações da empresa consultada, em páginas de50com Carregar mais. Resumo por ciclo e resultado; expansão consulta etapas, anotações, entrevista com fuso, decisão intermediária e auditoria completa da participação. Provas/aplicações aparecem com situação e acertos originais; consulta abre as questões, respostas, resultados e registros existentes pelos IDs exatos, sem copiar ou recalcular. Avaliações individuais anteriores sem vínculo comprovado ficam em seção própria, sem atribuição retroativa a um ciclo. Histórico operacional é restrito aos papéis de acompanhamento e não reescreve fatos/versões publicados do Perfil. Não inventa entrevista realizada a partir de agendamento.
+
+Contratos adicionais **selection-process-outcome-1.0.0** e **person-selection-history-1.0.0**, acordo/execução1.0.0 e AoT selection-outcome-v261. Sem backfill de decisão humana ou coleta nova de atividades.
 
 O estado de ocupação é independente do estado do processo. Posição desocupada pode estar sem processo ativo; encerramento não pressupõe contratação. A fonte da ocupação é public.positions.status, com organization_id e vínculo pela Posição; ausência fica indisponível, nunca elegível por inferência.
 
@@ -17249,6 +17275,55 @@ Versão 1.0.0, agreed, 2026-10-03. Continuidade da correção/publicação autor
 ## Execução congelada
 
 Implementar D-S01 a D-S04 sob P-S01, excluindo F-S01, com autonomia A-S01. Este acordo incorpora o prompt do complemento; AoT registra implementação, testes, produção e limites, sem afirmar que a revisão real já foi publicada.
+
+---
+
+## Source: `docs/qa/agreement-selection-outcome-v261.md`
+
+# Acordo — encerramento e histórico de processos, v2.6.1
+
+Versão 1.0.0, aprovado por Bruno nesta conversa em 14/10/2026. Baseline `453747131f82d537ae1f2591b6d3e450cfb6fefb`. Transcrição do acordo, sem nova decisão de produto. Supersede a exibição de vínculos encerrados de D-03 em people-compact-v234 e D-02 em follow-up-active-tag; complementa D-04/D-05 de selection-processes-v260, preservando as demais regras.
+
+## DEVE
+
+- D-01: somente ao encerrar um processo ativo, escolher exatamente uma Pessoa participante ou explicitamente ninguém. Uma única confirmação grava resultado, encerramento, responsável, data e auditoria na mesma transação. Cancelar a tela não grava nada. Nenhuma escolha final durante o processo ativo.
+- D-02: usar o mesmo fluxo pelos dois acessos existentes de Encerrar processo (gestão e acompanhamento); não criar terceira possibilidade de resultado ou ação antecipada de escolha. Sem escolha pré-preenchida; participante exigido na opção com escolha. Reabertura existente conserva as decisões anteriores no histórico, retorna a andamento sem escolha final vigente e novo encerramento registra uma nova decisão, sem reescrever a anterior.
+- D-03: processo específico encerrado mostra a Pessoa escolhida ou Encerrado sem escolha. Participantes mostram Escolhida/Não escolhida conforme o resultado explícito desse encerramento. Andamento não afirma escolha final. Legado encerrado sem resultado permanece Resultado não informado; não converter Prosseguir, etapa ou nota em escolha.
+- D-04: no Histórico do Perfil, mostrar participações da empresa consultada, resultado final e dados/atividades completos já registrados: etapas, anotações, entrevistas, decisões, provas/aplicações, respostas/resultados e demais acontecimentos. Resumo compacto por participação e detalhes sob demanda, com links de processo/resultado pelos IDs exatos. Falha de consulta não inventa ausência; sem dados de outro tenant/papel.
+- D-05: descoberta geral da Posição só exibe indicação/vínculo operacional quando o processo está ativo. Encerrado não produz tags, rótulo Processo atual, ação Abrir acompanhamento ou indicação individual de participação encerrada. Consulta histórica continua no processo específico e no Perfil. Pessoas e capacidades de descoberta permanecem.
+- D-06: preservar registros, avaliações/resultados, decisões intermediárias, ocupação, Score e fatos/versões publicados do Perfil. Reabertura/criação e controles humanos existentes preservados. Exclusão explícita da Pessoa segue a proteção/remoção de referências pessoais existente; nunca inventar identidade removida.
+- D-07: publicar 2.6.1 em main/origin/produção, QA proporcional, CI, rollback, smoke e sincronização. Sem LLM remoto nem fixtures produtivas.
+
+## PROIBIDO
+
+- P-01: contratação/ocupação/reprovação/Score/alteração de Perfil automáticos; nota ou fechamento legado como prova de escolha; participante externo ao processo escolhido; leitura/mutação entre empresas, papel/contrato desconhecido ou auditoria parcial.
+- P-02: escolher antes do encerramento, gravar decisões ou alterar dados de negócio por abrir/cancelar/consultar, perder histórico por reabrir, remover funcionalidades corretas ou dados para simplificar. A auditoria obrigatória de consulta já existente é preservada.
+- P-UX-01: redesenhar a arquitetura aprovada de gestão/acompanhamento/descoberta; despejar todos os detalhes no resumo do Perfil ou exigir formulários por candidato para encerrar.
+
+## FORA DE ESCOPO / AUTONOMIA / PENDENTES
+
+- F-01: contratação/ocupação, novos estados de processo, IA/cobrança, novas etapas, novo instrumento de teste, expurgo/backfill de decisões antigas, divulgação pública do histórico ou outros serviços.
+- F-02: criação de nova coleta ou novos formulários de atividades. Este movimento integra o histórico registrado; atividades futuras permanecem nos controles existentes, sem fabricar entrevista realizada por agendamento.
+- A-01: estender registros/RPCs/componentes existentes, campos de resultado/auditoria, tokens, consulta progressiva e testes sintéticos, sem biblioteca/fornecedor novo. Sem duplicar resultados de provas ou escrever histórico dentro dos fatos do Perfil publicado.
+- Q: nenhuma pendência material. A regra aprovada restringe os resultados do encerramento a alguém/ninguém; rótulos intermediários e ausência legada permanecem fatos distintos.
+
+## Aceite e Mapa de Impacto
+
+CA-01 (D-01..03/P-01..02): SQL escolhido/ninguém, vazio, participante errado/tenant/papel, payload/contrato/versionamento, revisão concorrente e replay sem duplicar auditoria, atomicidade, legado, reabertura e snapshots protegidos. Browser cancelar, escolha obrigatória, falha/retry sem perder escolha, dupla confirmação e ambos os acessos em 1448/390/320px.
+CA-02 (D-04..06): histórico da Pessoa com processo ativo/encerrado/legado e múltiplos ciclos, notas/entrevista/decisões/auditoria e aplicação de prova; ID explícito no resultado/processo, vazio/erro/permissão e isolamento. Descoberta encerrada sem vínculo visual, ativa preservada, sem mutação passiva; renders antes/depois com a mesma fixture/viewport.
+CA-03 (D-07): tipos/build/checks dirigidos, contexto/CI, plano comprometido apenas banco/web/docs, fingerprint/ACLs/RLS/rollout, SHA/versão/assets/rollback/saúde e containers adjacentes. Jornada produtiva autenticada não inferida do QA.
+
+| Área/capacidade | Relação | Baseline e mínima preservação/validação |
+| --- | --- | --- |
+| Encerramento/resultado/reabertura | direct | main4537471, core RPC/ciclos/auditoria; SQL transacional/negativos e concorrência, dois acessos browser |
+| Descoberta e acesso ativo | direct | mesmos cards/fixture; ativo com tag/ação, encerrado sem vínculo visual, perfil/comparação/Score preservados |
+| Histórico do Perfil e processo | direct | PersonFollowUps/PersonWorkspace/FollowUpHistory e provas existentes; múltiplos ciclos, detalhes e links explícitos |
+| Provas/convites/respostas/resultados | plausible_indirect | writers de avaliação intactos; snapshots SQL, leitura por processo/Pessoa e resultado original navegável |
+| Auth/tenant/erasure | critical_transversal | authorize_position_follow_up, grants/RLS e FKs; negativos de papel/tenant/anon/worker e referência removida |
+| Score/Perfil/ocupação/comercial/IA | no_impact_identified | nenhum writer desses domínios; snapshots/hashes e diff/plano, sem chamada externa no browser |
+| Parser/Synthesis/gateway/mail | no_impact_identified | destinos não necessários; identidade/imagem/estado/restarts antes/depois |
+
+Classe D, trabalho isolado. Reúso das capacidades existentes suficiente; extensão do contrato de resultado humano e projeção histórica, sem nova arquitetura de fornecedor. Fechamento: D/P aplicáveis PASS, evidência e docs/contexto, CI, publicação seletiva e sincronização. Não executar suíte integral local por padrão.
 
 ---
 
@@ -23317,6 +23392,59 @@ Rollback: alteração restrita ao corpo do trigger, sem DDL destrutivo ou saneam
 
 ---
 
+## Source: `docs/qa/aot-selection-outcome-v261.md`
+
+# AoT — encerramento e histórico v2.6.1
+
+Contrato: `agreement-selection-outcome-v261.md` versão1.0.0; execução correspondente integral. Baseline453747131f82d537ae1f2591b6d3e450cfb6fefb. Conclusões somente após prova.
+
+## Matriz de Acordos
+
+| ID | Implementação | Teste/evidência | Status | Ambiente/limite |
+| --- | --- | --- | --- | --- |
+| D-01 | Core RPC, resultado separado no processo, modal único | SQL escolhido/ninguém/vazio/contrato/participante/revisão/auditoria, disputa3, guards dupla ativação | PASS | Local SQL/QA sintético |
+| D-02 | CloseSelectionProcessModal nos dois acessos, reabertura conserva auditoria; resposta incerta reconciliada por leitura | browser/results.json e guards.json, SQL reabertura/ciclos/eventos | PASS | Ambos acessos; nenhum escritor novo de atividade |
+| D-03 | selectionResultLabel, resumo/cartões/Lista/detalhe, ausência legada explícita | Node/SQL legado/proceed e renders chosen/unknown | PASS | Nenhuma equivalência escolha/nota/contratação |
+| D-04 | Projeção history por empresa/Pessoa, paginação e expansão no Histórico do Perfil | Browser histórico/teste/questões/registros/legado/erro/paginação; SQL/RPC; contratos de escopo | PASS | Provas individuais sem ciclo permanecem separadas |
+| D-05 | Vínculo/ação/identificação só com ativo confirmado; gestor genérico sem vínculo encerrado | Browser ativo/chosen/none/legado1448/390/320, erro com cache, discovery32 | PASS | Perfil/Score/comparação conservados |
+| D-06 | Campos aditivos/FK composta, entradas e provas intactas; erasure remove referência pessoal | SQL snapshots e erasure, tipos/build e Node | PASS | Dados sintéticos; nenhum DML de negócio produtivo |
+| D-07 | Pendente | CA-03 | NOT TESTED | CI/produção/sync |
+
+## Proibições e mapa de preservação
+
+Mapa final igual ao inicial em agreement-selection-outcome-v261.md, sem novas dependências ou reclassificações.
+
+| Capacidade / proibição | Relação | Prova proporcional | Status |
+| --- | --- | --- | --- |
+| P-01: resultado humano, tenant/papel/versão/sem decisão automática | critical_transversal | SQL negativos, contrato e revisão; sem writer de Score/Perfil/ocupação, snapshots iguais | PASS |
+| P-02: sem gravação de negócio por consulta/cancelar e histórico preservado | direct | Browser chamadas e SQL auditoria/ciclos; consulta da prova mantém auditoria obrigatória existente | PASS |
+| P-UX-01: arquitetura e controles conservados | direct | before/after e comparação descoberta32; modal único, cards/Lista/Kanban e detalhes originais | PASS |
+| Encerramento/resultado/reabertura | direct |159SQLtotal (120baseline +39novos), disputa real3 e dois acessos browser | PASS |
+| Descoberta/acesso ativo | direct |117browser inclui matriz ativo/encerrado/legado, guards de erro/cache e32preservação | PASS |
+| Histórico do Perfil/processo | direct | Browser progressivo/paginação/falha/legado, Node e SQL com IDs exatos | PASS |
+| Provas/convites/respostas/resultados | plausible_indirect | Writers intactos e snapshots completos; resultado original abre questões/respostas/registros | PASS |
+| Auth/tenant/erasure | critical_transversal | Private authorize reutilizado, negativos de papel/tenant/anon/worker, FK composta e identidade apagada | PASS |
+| Score/Perfil/ocupação/comercial/IA | no_impact_identified | Sem escritores alterados, snapshots, nenhuma chamada externa no browser | PASS |
+| Parser/Synthesis/gateway/mail | no_impact_identified | Sem arquivo/contrato desses serviços alterado; plano e preservação produtiva pendentes | NOT TESTED |
+
+F-01/F-02 preservados no diff: sem novos estados de processo, coleta, prova, contratação, IA, preço, expurgo ou backfill. PASS local; publicação pendente.
+
+## Fidelidade visual
+
+Screenshot do relato anterior é referência de preservação da descoberta, dados pessoais ilustrativos. Baseline4537471 com mesmas fixtures/viewports1448/390 em before-management/follow-up/discovery/profile. Depois: chosen-management/follow-up, close-final, after-profile e after-discovery em evidence/selection-outcome-v261/browser;320px sem overflow. Gestão e acompanhamento conservam arquitetura v260. Perfil acrescenta seção Processos seletivos no Histórico, com ciclos fechados inicialmente e dados progressivos. Título curto evita truncamento no celular. Descoberta32 comprova texto/geometria ativos idênticos e preservação do restante exceto remoções aprovadas/contração vertical natural. Modal tem duas opções, sem escolha antecipada e controles acessíveis. PASS nos estados/dados equivalentes; sem redesenho material.
+
+## Desvios / alterações autorizadas
+
+Nenhum desvio do acordo humano. Redação de P-02 explicita decisões/dados de negócio e preserva a auditoria obrigatória de consulta já existente, conforme AGENTS e contrato da prova; não muda regra aprovada. Renders usam dados sintéticos. Campo de entrevista agendada não é apresentado como entrevista realizada.
+
+Falhas de QA resolvidas: fixture adicionava Perfil após baseline de comparação (corrigida a preparação, sem writer do produto alterado); runner de rotas precisava de build; fixture de serviços antiga omitia decoder e questões usavam tenant diferente (preservados decoder/guard reais); seletores precisaram expandir questão/usar fechamento contextual; caso empty compartilhado zerava fixture antes da montagem (caso isolado). Source foi estabilizado; repetições focaram os cenários afetados. Capturas intermediárias não são evidência normativa do render final.
+
+## Validação final / Git / QA / produção
+
+QA local:159SQL e3disputas reais com limpeza do banco descartável;38Node dirigidos,117browser/13guards e32preservação. Tipos/build web e build dos testes PASS; lint/contexto e CI finais pendentes. Sem suíte integral local, LLM externo ou banco produtivo como fixture. Evidências em evidence/selection-outcome-v261. Leitura de resultado reutiliza auditoria existente de consulta; não é decisão/gravação de negócio por leitura. Jornada produtiva autenticada NOT TESTED.
+
+---
+
 ## Source: `docs/qa/aot-selection-processes-v260.md`
 
 # AoT — Processos seletivos v2.6.0
@@ -27932,6 +28060,16 @@ Contrato: `docs/qa/agreement-release-efficiency.md` 1.0.0.
 ## Limite operacional do Supabase
 
 O conector confirmou um único projeto remoto de produção. A auditoria encontrou aliases de timestamp, migrations remotas desdobradas, arquivos locais sem registro e fingerprints divergentes. Esta execução não usa `migration repair`, não reaplica SQL e não altera `supabase_migrations.schema_migrations`. Migrations futuras são publicadas individualmente pelo mecanismo autorizado e verificadas antes de atualizar o mapa.
+
+---
+
+## Source: `docs/qa/execution-selection-outcome-v261.md`
+
+# Execução — encerramento e histórico v2.6.1
+
+Aplicar integralmente `docs/qa/agreement-selection-outcome-v261.md` versão1.0.0, aprovado por Bruno em14/10/2026 e lido integralmente. D-01..07, P-01/02/P-UX-01, F-01/02, A-01 e todos os CA vinculam esta execução. Sem Q material.
+
+Preservar topologia e controles existentes; acrescentar modal único de encerramento com duas opções, resultado humano em consulta específica, participações progressivas no Histórico do Perfil. Descoberta só opera com vínculo ativo. Migração aditiva/contrato explícito, autorização viva backend e auditoria transacional; nenhum backfill de decisão humana nem teste produtivo. Validar mapa proporcional e publicar somente os destinos derivados do diff. Registrar AoT/evidências/limites antes de concluir.
 
 ---
 

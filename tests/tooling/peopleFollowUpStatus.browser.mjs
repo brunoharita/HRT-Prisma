@@ -4,7 +4,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 const { chromium } = createRequire(import.meta.url)(process.env.PRISMA_PLAYWRIGHT_PATH ?? "playwright");
 const browser = await chromium.launch({ headless: true, executablePath: process.env.PRISMA_BROWSER_PATH });
 const base = process.env.PRISMA_PEOPLE_BASE_URL ?? "http://127.0.0.1:5711";
-const dir = process.env.PRISMA_PEOPLE_EVIDENCE ?? "docs/qa/evidence/follow-up-active-tag";
+const dir = process.env.PRISMA_PEOPLE_EVIDENCE ?? "docs/qa/evidence/selection-outcome-v261/discovery";
 const baseline = process.argv.includes("--baseline"), results = [];
 await mkdir(dir, { recursive: true });
 function check(name, value) { results.push({ name, pass: Boolean(value) }); assert.ok(value, name); }
@@ -16,7 +16,8 @@ try {
     await page.route("**/*", route => route.request().url().startsWith(base + "/") ? route.continue() : (errors.push("external request"), route.abort()));
     await page.goto(`${base}/people-compact.html?state=${state}`);
     const card = page.locator(".prisma-vacancy-match-card").first();
-    await card.getByRole("button", { name: "Abrir acompanhamento", exact: true }).waitFor();
+    await card.getByRole("button", { name: "Ver perfil", exact: true }).waitFor();
+    await page.waitForTimeout(180);
     await page.evaluate(() => document.fonts.ready);
     const snapshot = await page.locator(".prisma-vacancy-match-card").evaluateAll(cards => cards.map(card => {
       const copy = card.cloneNode(true);
@@ -28,20 +29,23 @@ try {
     await page.screenshot({ path: `${dir}/${baseline ? "before" : "after"}-${label}.png`, fullPage: true });
     if (baseline) await writeFile(`${dir}/baseline-${label}.json`, JSON.stringify(snapshot, null, 2));
     else {
-      const before = JSON.parse(await readFile(`${dir}/baseline-${label}.json`, "utf8"));
+      const before = JSON.parse(await readFile(`docs/qa/evidence/follow-up-active-tag/baseline-${label}.json`, "utf8"));
       if (state === "normal") assert.deepEqual(snapshot, before, `${label}: active cards unchanged`);
       else {
-        assert.deepEqual(snapshot.map(({ text, x, width }) => ({ text, x, width })), before.map(({ text, x, width }) => ({ text, x, width })), `${label}: other content and horizontal geometry unchanged`);
+        const normalized = text => text.replaceAll("Processo atual · encerrado", "").replaceAll("Abrir acompanhamento", "").replaceAll("Adicionar ao acompanhamento", "").replaceAll("Processo atual encerrado", "");
+        assert.deepEqual(snapshot.map(({ text, x, width }) => ({ text:normalized(text), x, width })), before.map(({ text, x, width }) => ({ text:normalized(text), x, width })), `${label}: other content and horizontal geometry unchanged`);
         const delta = snapshot[0].height - before[0].height;
         check(`${label}: removing tag only contracts linked card vertically`, delta <= 0 && snapshot[0].y === before[0].y && snapshot.slice(1).every((c, i) => c.height === before[i + 1].height && Math.abs(c.y - before[i + 1].y - delta) < 0.01));
         results.push({ name: `${label}: natural vertical reflow`, heightDelta: delta });
       }
       check(`${label}: other card content and layout preserved`, true);
       check(`${label}: green tag only for active process`, await card.getByText("Já está no acompanhamento", { exact: true }).count() === (state === "normal" ? 1 : 0));
-      check(`${label}: process identification retained`, await card.getByText(state === "closed" ? "Processo atual · encerrado" : "Processo atual", { exact: true }).isVisible());
+      check(`${label}: process identification only for active membership`, state === "normal" ? await card.getByText("Processo atual", { exact: true }).isVisible() : await page.getByText(/Processo atual/).count() === 0);
       check(`${label}: unlinked person has no membership tag`, await page.locator(".prisma-vacancy-match-card").nth(1).getByText("Já está no acompanhamento", { exact: true }).count() === 0);
-      await card.getByRole("button", { name: "Abrir acompanhamento", exact: true }).click();
-      check(`${label}: historical/current access retains exact process and person`, (await page.evaluate(() => window.__peopleFixture.navigations)).at(-1) === "/vacancies/22000000-0000-0000-0000-000000000001/follow-up/processes/22000000-0000-0000-0000-000000000005/22000000-0000-0000-0000-000000000010");
+      if(state === "normal") {
+        await card.getByRole("button", { name: "Abrir acompanhamento", exact: true }).click();
+        check(`${label}: active access retains exact process and person`, (await page.evaluate(() => window.__peopleFixture.navigations)).at(-1) === "/vacancies/22000000-0000-0000-0000-000000000001/follow-up/processes/22000000-0000-0000-0000-000000000005/22000000-0000-0000-0000-000000000010");
+      } else check(`${label}: no operational action based on closed linkage`, await page.getByRole("button", {name:"Abrir acompanhamento",exact:true}).count()===0 && await page.getByRole("button", {name:"Adicionar ao acompanhamento",exact:true}).count()===0);
       await page.evaluate(() => window.dispatchEvent(new Event("focus")));
       await page.waitForFunction(() => window.__peopleFixture.calls.filter(c => c.name === "load-follow-up").length === 2);
       await page.waitForTimeout(120);

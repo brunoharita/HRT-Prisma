@@ -8,6 +8,8 @@ import {positionFollowUpService} from "../infrastructure/supabase/positionFollow
 import type {FollowUpData} from "../domain/positionFollowUp";
 import {FollowUpHistory} from "../components/FollowUpHistory";
 import {CreateSelectionProcessModal} from "../components/CreateSelectionProcessModal";
+import {CloseSelectionProcessModal} from "../components/CloseSelectionProcessModal";
+import {selectionResultLabel} from "../domain/selectionOutcome";
 import {PrismaPage,PrismaPageHeader} from "../ui/PrismaPage";
 import {useViewState} from "../ui/PrismaNavigation";
 import {useLoadingFeedback} from "../ui/PrismaLoadingFeedback";
@@ -15,6 +17,8 @@ import "./selectionProcesses.css";
 const roles=["super_admin","owner","admin","recruiter"];
 export function SelectionProcessesPage({activeMembership,onNavigate,selectedId,vacancyId}:{activeMembership:OrganizationMembership;onNavigate:(path:string)=>void;selectedId?:string;vacancyId?:string}){
  const org=activeMembership.organizationId;
+ const [closing,setClosing]=useState<SelectionProcess|null>(null);
+ useEffect(()=>setClosing(null),[org,selectedId]);
  const [filter,setFilter]=useViewState("processFilters",{search:"",status:"all",page:1},"/selection-processes");
  const [data,setData]=useState<SelectionWorkspace|null>(null),[loading,setLoading]=useState(true),[error,setError]=useState<string|null>(null),[retry,setRetry]=useState(0),[creating,setCreating]=useState(false);
  const [pending,setPending]=useState(false),[tab,setTab]=useState("summary"),[history,setHistory]=useState<FollowUpData|null>(null),[historyError,setHistoryError]=useState<string|null>(null),[historyLoading,setHistoryLoading]=useState(false);
@@ -41,10 +45,10 @@ export function SelectionProcessesPage({activeMembership,onNavigate,selectedId,v
  },[tab,selected?.id,retry,org]);
  async function changeStatus(p:SelectionProcess){
   if(lock.current)return;lock.current=true;setPending(true);setError(null);
-  try{await positionFollowUpService.mutate(org,p.vacancyId,p.status==="active"?"close_process":"reopen_process",null,p.revision,{},p.id);setRetry(n=>n+1);}
+  try{await positionFollowUpService.mutate(org,p.vacancyId,"reopen_process",null,p.revision,{},p.id);setRetry(n=>n+1);}
   catch(e){setError(e instanceof Error?e.message:"Não foi possível salvar.");throw e;}finally{lock.current=false;setPending(false);}
  }
- function confirmStatus(p:SelectionProcess){Modal.confirm({title:p.status==="active"?"Encerrar este processo?":"Reabrir este processo?",content:"Candidatos, avaliações e decisões serão preservados. A ocupação da Posição permanece a mesma.",okText:p.status==="active"?"Encerrar processo":"Reabrir processo",cancelText:"Cancelar",onOk:()=>changeStatus(p)});}
+ function confirmStatus(p:SelectionProcess){if(p.status==="active"){setClosing(p);return;}Modal.confirm({title:"Reabrir este processo?",content:"O encerramento anterior ficará no histórico. O processo voltará a andamento, sem escolha final vigente. A ocupação da Posição permanece a mesma.",okText:"Reabrir processo",cancelText:"Cancelar",onOk:()=>changeStatus(p)});}
  if(!allowed)return <PrismaPage><Alert type="error" showIcon title="Você não tem acesso aos processos seletivos." action={<Button onClick={()=>onNavigate("/")}>Ir para Início</Button>}/></PrismaPage>;
  const back=()=>onNavigate(vacancyId?`/selection-processes/position/${vacancyId}`:"/selection-processes");
  const canWrite=selected?.isCurrent&&selected.status==="active";
@@ -70,11 +74,12 @@ export function SelectionProcessesPage({activeMembership,onNavigate,selectedId,v
  </div></header>
  {selected.status==="closed"?<Alert type="info" showIcon title="Processo encerrado" description={selected.isCurrent?"Candidatos, avaliações e decisões permanecem disponíveis. Reabrir exige Posição desocupada.":"Este ciclo histórico está disponível somente para consulta."}/>:null}
  <Tabs activeKey={tab} onChange={setTab} items={[
- {key:"summary",label:"Resumo",children:<div className="sp-stage-summary"><h3>Candidatos por etapa</h3>{processStageRows(selected).map((r,i)=><div className="sp-stage-row" key={r.key}><span className={`sp-stage-dot sp-stage-${i}`} aria-hidden/><span>{r.title}</span><strong>{r.count}</strong></div>)}</div>},
+ {key:"summary",label:"Resumo",children:<div className="sp-stage-summary">{selected.status==="closed"?<div className="sp-tab-content"><h3>Resultado final</h3><p>{selectionResultLabel(selected.status,selected.outcome)}</p>{selected.outcome?<small>{new Date(selected.outcome.closedAt).toLocaleString("pt-BR")} · {selected.outcome.actor??"Responsável indisponível"}</small>:null}</div>:null}<h3>Candidatos por etapa</h3>{processStageRows(selected).map((r,i)=><div className="sp-stage-row" key={r.key}><span className={`sp-stage-dot sp-stage-${i}`} aria-hidden/><span>{r.title}</span><strong>{r.count}</strong></div>)}</div>},
  {key:"assessment",label:"Avaliação",children:<div className="sp-tab-content"><p>A prova pertence a este processo. Aplicações, resultados e registros permanecem individuais.</p><Button onClick={()=>onNavigate(`${processFollowUpPath(selected)}/assessment`)}>Consultar avaliação do processo</Button></div>},
  {key:"history",label:"Histórico",children:<div className="sp-tab-content">{historyError?<Alert showIcon type="error" title={historyError} action={<Button onClick={()=>setRetry(n=>n+1)}>Tentar novamente</Button>}/>:historyLoading?<Skeleton active/>:history?<FollowUpHistory history={history.history} operators={history.operators}/>:null}</div>}
  ]}/></>:loading?<Skeleton active paragraph={{rows:6}}/>:<Empty description="Selecione um processo para consultar o resumo."/>}
  </section></div>
  {creating?<CreateSelectionProcessModal organizationId={org} {...(vacancyId?{vacancyId}:{})} onClose={()=>setCreating(false)} onCreated={id=>{setCreating(false);setFilter({search:"",status:"all",page:1});onNavigate(`/selection-processes/${id}`);setRetry(n=>n+1);}}/>:null}
+ {closing?<CloseSelectionProcessModal key={`${org}:${closing.id}`} organizationId={org} vacancyId={closing.vacancyId} processId={closing.id} onCancel={()=>setClosing(null)} onClosed={()=>{setClosing(null);setRetry(n=>n+1);}}/>:null}
  </PrismaPage>;
 }

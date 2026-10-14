@@ -1,0 +1,470 @@
+[
+  {
+    "name": "management/1448: no final selection action during active process",
+    "pass": true
+  },
+  {
+    "name": "management/1448: confirmation needs explicit outcome",
+    "pass": true
+  },
+  {
+    "name": "management/1448: opening and cancellation never writes",
+    "pass": true
+  },
+  {
+    "name": "management/1448: selecting someone requires a participant",
+    "pass": true
+  },
+  {
+    "name": "management/1448: one explicit participant enables closure",
+    "pass": true
+  },
+  {
+    "name": "management/1448: closure modal fits viewport",
+    "pass": true
+  },
+  {
+    "name": "management/1448: exactly one explicit closure includes participant and contract",
+    "pass": true
+  },
+  {
+    "name": "management/1448: fixture occupancy remains vacant",
+    "pass": true
+  },
+  {
+    "name": "follow-up/1448: no final selection action during active process",
+    "pass": true
+  },
+  {
+    "name": "follow-up/1448: confirmation needs explicit outcome",
+    "pass": true
+  },
+  {
+    "name": "follow-up/1448: opening and cancellation never writes",
+    "pass": true
+  },
+  {
+    "name": "follow-up/1448: selecting someone requires a participant",
+    "pass": true
+  },
+  {
+    "name": "follow-up/1448: one explicit participant enables closure",
+    "pass": true
+  },
+  {
+    "name": "follow-up/1448: closure modal fits viewport",
+    "pass": true
+  },
+  {
+    "name": "follow-up/1448: exactly one explicit closure includes participant and contract",
+    "pass": true
+  },
+  {
+    "name": "follow-up/1448: fixture occupancy remains vacant",
+    "pass": true
+  },
+  {
+    "name": "management/390: no final selection action during active process",
+    "pass": true
+  },
+  {
+    "name": "management/390: confirmation needs explicit outcome",
+    "pass": true
+  },
+  {
+    "name": "management/390: opening and cancellation never writes",
+    "pass": true
+  },
+  {
+    "name": "management/390: selecting someone requires a participant",
+    "pass": true
+  },
+  {
+    "name": "management/390: one explicit participant enables closure",
+    "pass": true
+  },
+  {
+    "name": "management/390: closure modal fits viewport",
+    "pass": true
+  },
+  {
+    "name": "management/390: exactly one explicit closure includes participant and contract",
+    "pass": true
+  },
+  {
+    "name": "management/390: fixture occupancy remains vacant",
+    "pass": true
+  },
+  {
+    "name": "follow-up/390: no final selection action during active process",
+    "pass": true
+  },
+  {
+    "name": "follow-up/390: confirmation needs explicit outcome",
+    "pass": true
+  },
+  {
+    "name": "follow-up/390: opening and cancellation never writes",
+    "pass": true
+  },
+  {
+    "name": "follow-up/390: selecting someone requires a participant",
+    "pass": true
+  },
+  {
+    "name": "follow-up/390: one explicit participant enables closure",
+    "pass": true
+  },
+  {
+    "name": "follow-up/390: closure modal fits viewport",
+    "pass": true
+  },
+  {
+    "name": "follow-up/390: exactly one explicit closure includes participant and contract",
+    "pass": true
+  },
+  {
+    "name": "follow-up/390: fixture occupancy remains vacant",
+    "pass": true
+  },
+  {
+    "name": "management: nobody closes without a person identifier",
+    "pass": true
+  },
+  {
+    "name": "follow-up: nobody closes without a person identifier",
+    "pass": true
+  },
+  {
+    "name": "save failure preserves chosen person and keeps process active",
+    "pass": true
+  },
+  {
+    "name": "explicit retry succeeds with same participant",
+    "pass": true
+  },
+  {
+    "name": "discovery/active/1448: membership only for active process",
+    "pass": true
+  },
+  {
+    "name": "discovery/active/1448: candidate consultation remains available",
+    "pass": true
+  },
+  {
+    "name": "discovery/active/1448: no overflow",
+    "pass": true
+  },
+  {
+    "name": "discovery/active/1448: read only",
+    "pass": true
+  },
+  {
+    "name": "discovery/chosen/1448: membership only for active process",
+    "pass": true
+  },
+  {
+    "name": "discovery/chosen/1448: no closed linkage or historical open action",
+    "pass": true
+  },
+  {
+    "name": "discovery/chosen/1448: candidate consultation remains available",
+    "pass": true
+  },
+  {
+    "name": "discovery/chosen/1448: no overflow",
+    "pass": true
+  },
+  {
+    "name": "discovery/chosen/1448: read only",
+    "pass": true
+  },
+  {
+    "name": "discovery/none/1448: membership only for active process",
+    "pass": true
+  },
+  {
+    "name": "discovery/none/1448: no closed linkage or historical open action",
+    "pass": true
+  },
+  {
+    "name": "discovery/none/1448: candidate consultation remains available",
+    "pass": true
+  },
+  {
+    "name": "discovery/none/1448: no overflow",
+    "pass": true
+  },
+  {
+    "name": "discovery/none/1448: read only",
+    "pass": true
+  },
+  {
+    "name": "discovery/legacy/1448: membership only for active process",
+    "pass": true
+  },
+  {
+    "name": "discovery/legacy/1448: no closed linkage or historical open action",
+    "pass": true
+  },
+  {
+    "name": "discovery/legacy/1448: candidate consultation remains available",
+    "pass": true
+  },
+  {
+    "name": "discovery/legacy/1448: no overflow",
+    "pass": true
+  },
+  {
+    "name": "discovery/legacy/1448: read only",
+    "pass": true
+  },
+  {
+    "name": "discovery/active/390: membership only for active process",
+    "pass": true
+  },
+  {
+    "name": "discovery/active/390: candidate consultation remains available",
+    "pass": true
+  },
+  {
+    "name": "discovery/active/390: no overflow",
+    "pass": true
+  },
+  {
+    "name": "discovery/active/390: read only",
+    "pass": true
+  },
+  {
+    "name": "discovery/chosen/390: membership only for active process",
+    "pass": true
+  },
+  {
+    "name": "discovery/chosen/390: no closed linkage or historical open action",
+    "pass": true
+  },
+  {
+    "name": "discovery/chosen/390: candidate consultation remains available",
+    "pass": true
+  },
+  {
+    "name": "discovery/chosen/390: no overflow",
+    "pass": true
+  },
+  {
+    "name": "discovery/chosen/390: read only",
+    "pass": true
+  },
+  {
+    "name": "discovery/none/390: membership only for active process",
+    "pass": true
+  },
+  {
+    "name": "discovery/none/390: no closed linkage or historical open action",
+    "pass": true
+  },
+  {
+    "name": "discovery/none/390: candidate consultation remains available",
+    "pass": true
+  },
+  {
+    "name": "discovery/none/390: no overflow",
+    "pass": true
+  },
+  {
+    "name": "discovery/none/390: read only",
+    "pass": true
+  },
+  {
+    "name": "discovery/legacy/390: membership only for active process",
+    "pass": true
+  },
+  {
+    "name": "discovery/legacy/390: no closed linkage or historical open action",
+    "pass": true
+  },
+  {
+    "name": "discovery/legacy/390: candidate consultation remains available",
+    "pass": true
+  },
+  {
+    "name": "discovery/legacy/390: no overflow",
+    "pass": true
+  },
+  {
+    "name": "discovery/legacy/390: read only",
+    "pass": true
+  },
+  {
+    "name": "discovery/active/320: membership only for active process",
+    "pass": true
+  },
+  {
+    "name": "discovery/active/320: candidate consultation remains available",
+    "pass": true
+  },
+  {
+    "name": "discovery/active/320: no overflow",
+    "pass": true
+  },
+  {
+    "name": "discovery/active/320: read only",
+    "pass": true
+  },
+  {
+    "name": "discovery/chosen/320: membership only for active process",
+    "pass": true
+  },
+  {
+    "name": "discovery/chosen/320: no closed linkage or historical open action",
+    "pass": true
+  },
+  {
+    "name": "discovery/chosen/320: candidate consultation remains available",
+    "pass": true
+  },
+  {
+    "name": "discovery/chosen/320: no overflow",
+    "pass": true
+  },
+  {
+    "name": "discovery/chosen/320: read only",
+    "pass": true
+  },
+  {
+    "name": "discovery/none/320: membership only for active process",
+    "pass": true
+  },
+  {
+    "name": "discovery/none/320: no closed linkage or historical open action",
+    "pass": true
+  },
+  {
+    "name": "discovery/none/320: candidate consultation remains available",
+    "pass": true
+  },
+  {
+    "name": "discovery/none/320: no overflow",
+    "pass": true
+  },
+  {
+    "name": "discovery/none/320: read only",
+    "pass": true
+  },
+  {
+    "name": "discovery/legacy/320: membership only for active process",
+    "pass": true
+  },
+  {
+    "name": "discovery/legacy/320: no closed linkage or historical open action",
+    "pass": true
+  },
+  {
+    "name": "discovery/legacy/320: candidate consultation remains available",
+    "pass": true
+  },
+  {
+    "name": "discovery/legacy/320: no overflow",
+    "pass": true
+  },
+  {
+    "name": "discovery/legacy/320: read only",
+    "pass": true
+  },
+  {
+    "name": "profile/1448: active chosen nobody and unknown legacy coexist",
+    "pass": true
+  },
+  {
+    "name": "profile/1448: original notes interview and intermediate decision remain consultable",
+    "pass": true
+  },
+  {
+    "name": "profile/1448: test summary is distinct from final choice",
+    "pass": true
+  },
+  {
+    "name": "profile/1448: no overflow",
+    "pass": true
+  },
+  {
+    "name": "profile/1448: exact historical process and person navigation",
+    "pass": true
+  },
+  {
+    "name": "profile/1448: original result questions and records are accessible",
+    "pass": true
+  },
+  {
+    "name": "profile/1448: consultations do not write human decisions",
+    "pass": true
+  },
+  {
+    "name": "profile/390: active chosen nobody and unknown legacy coexist",
+    "pass": true
+  },
+  {
+    "name": "profile/390: original notes interview and intermediate decision remain consultable",
+    "pass": true
+  },
+  {
+    "name": "profile/390: test summary is distinct from final choice",
+    "pass": true
+  },
+  {
+    "name": "profile/390: no overflow",
+    "pass": true
+  },
+  {
+    "name": "profile/390: exact historical process and person navigation",
+    "pass": true
+  },
+  {
+    "name": "profile/390: original result questions and records are accessible",
+    "pass": true
+  },
+  {
+    "name": "profile/390: consultations do not write human decisions",
+    "pass": true
+  },
+  {
+    "name": "profile/320: active chosen nobody and unknown legacy coexist",
+    "pass": true
+  },
+  {
+    "name": "profile/320: original notes interview and intermediate decision remain consultable",
+    "pass": true
+  },
+  {
+    "name": "profile/320: test summary is distinct from final choice",
+    "pass": true
+  },
+  {
+    "name": "profile/320: no overflow",
+    "pass": true
+  },
+  {
+    "name": "profile/320: exact historical process and person navigation",
+    "pass": true
+  },
+  {
+    "name": "profile/320: original result questions and records are accessible",
+    "pass": true
+  },
+  {
+    "name": "profile/320: consultations do not write human decisions",
+    "pass": true
+  },
+  {
+    "name": "failed history is not invented absence",
+    "pass": true
+  },
+  {
+    "name": "all history pages remain reachable",
+    "pass": true
+  },
+  {
+    "name": "no runtime or external failures",
+    "pass": true
+  }
+]

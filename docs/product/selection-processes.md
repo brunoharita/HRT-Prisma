@@ -14,7 +14,17 @@ Inclusão de Pessoa não cria mais processo implicitamente, substituindo a cria�
 
 Pode haver vários ciclos históricos e somente um ativo por Posição. Encerramento mantém candidatos, etapas, entrevistas, decisões, prova, aplicações e resultados; não ocupa automaticamente a Posição. Reabertura do ciclo atual exige Posição desocupada. Ciclos anteriores permanecem somente consulta. Um novo ciclo conserva o anterior e começa sem candidatos; reuso explícito de prova compatível segue process-assessment.md.
 
-Na descoberta de Pessoas para a Posição, a tag verde **Já está no acompanhamento** exige vínculo com processo em andamento. Processo encerrado mantém o vínculo, a indicação **Processo atual · encerrado** e **Abrir acompanhamento** para consulta do histórico, sem tag verde. Correção autorizada em 14/10/2026, acordo/execução/AoT em docs/qa/follow-up-active-tag.md; app permanece 2.6.0.
+Na descoberta de Pessoas para a Posição, somente vínculo confirmado com processo em andamento produz **Já está no acompanhamento**, **Processo atual** e **Abrir acompanhamento**. Processo encerrado não produz tag, rótulo ou ação de acompanhamento individual. Histórico permanece no processo específico e no Perfil. Consulta pendente/falha não afirma acompanhamento ativo com base em cache; Perfil, Score e comparação permanecem acessíveis. Esta regra2.6.1 supersede a indicação encerrada de follow-up-active-tag.
+
+## Encerramento e histórico — 2.6.1
+
+**Encerrar processo** abre o mesmo fluxo pela gestão e pelo acompanhamento: escolher exatamente uma Pessoa participante ou **Encerrar sem escolher ninguém**. Nada é pré-selecionado. Confirmar grava resultado, encerramento, responsável, data e auditoria juntos; cancelar não grava decisão. Não há escolha final enquanto o processo está ativo. Processo vazio admite somente ninguém. Falha preserva o rascunho; atualização após resposta incerta reconcilia o resultado já salvo, sem nova decisão.
+
+Processo encerrado mostra a Pessoa escolhida ou **Encerrado sem escolha**; participantes mostram **Escolhida** ou **Não escolhida** segundo esse resultado humano. Legado sem conclusão explícita mostra **Resultado não informado**. Prosseguir/Não prosseguir são decisões intermediárias e permanecem separadas da escolha final. Reabertura mantém o encerramento anterior no histórico e volta a andamento sem escolha final vigente; nova escolha só no próximo encerramento. Nenhuma contratação/ocupação, Score, Perfil ou prova é alterada.
+
+No **Histórico** do Perfil, **Processos seletivos** reúne participações da empresa consultada, em páginas de50com Carregar mais. Resumo por ciclo e resultado; expansão consulta etapas, anotações, entrevista com fuso, decisão intermediária e auditoria completa da participação. Provas/aplicações aparecem com situação e acertos originais; consulta abre as questões, respostas, resultados e registros existentes pelos IDs exatos, sem copiar ou recalcular. Avaliações individuais anteriores sem vínculo comprovado ficam em seção própria, sem atribuição retroativa a um ciclo. Histórico operacional é restrito aos papéis de acompanhamento e não reescreve fatos/versões publicados do Perfil. Não inventa entrevista realizada a partir de agendamento.
+
+Contratos adicionais **selection-process-outcome-1.0.0** e **person-selection-history-1.0.0**, acordo/execução1.0.0 e AoT selection-outcome-v261. Sem backfill de decisão humana ou coleta nova de atividades.
 
 O estado de ocupação é independente do estado do processo. Posição desocupada pode estar sem processo ativo; encerramento não pressupõe contratação. A fonte da ocupação é public.positions.status, com organization_id e vínculo pela Posição; ausência fica indisponível, nunca elegível por inferência.
 

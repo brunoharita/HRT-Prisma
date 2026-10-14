@@ -1,0 +1,14 @@
+[
+  {
+    "name": "two concurrent closure decisions yield one success and one revision conflict",
+    "pass": true
+  },
+  {
+    "name": "one closure audit and one committed result",
+    "pass": true
+  },
+  {
+    "name": "person data and occupancy survive closure race",
+    "pass": true
+  }
+]

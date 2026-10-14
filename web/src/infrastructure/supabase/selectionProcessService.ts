@@ -1,5 +1,6 @@
 import { supabase } from "./client";
 import { SELECTION_PROCESS_CONTRACT, type SelectionProcess, type SelectionPosition, type SelectionWorkspace } from "../../domain/selectionProcess";
+import { isSelectionOutcome } from "../../domain/selectionOutcome";
 const errorMessage = (error:{message:string;code?:string}) => error.message.includes("SELECTION_POSITION_OCCUPIED")?"A Posição precisa estar desocupada para iniciar um processo."
  :error.message.includes("SELECTION_ACTIVE_PROCESS_EXISTS")?"Esta Posição já tem um processo em andamento. Abra o processo existente."
  :error.code==="40001"?"A Posição ou o processo mudou. Atualize os dados antes de tentar novamente."
@@ -12,6 +13,7 @@ function envelope(value:unknown,organizationId:string):Record<string,unknown>{
 function process(value:unknown,organizationId:string):SelectionProcess{
  const p=value as SelectionProcess;
  if(p?.organizationId!==organizationId||!p.id||!p.vacancyId||!["active","closed"].includes(p.status)||!Number.isSafeInteger(p.candidates)||!p.stages)throw Error("Processo seletivo incompatível.");
+ if(p.outcome&&(!isSelectionOutcome(p.outcome)||p.status!=="closed"))throw Error("Resultado do processo incompatível.");
  return p;
 }
 export const selectionProcessService={

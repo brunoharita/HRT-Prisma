@@ -1,0 +1,54 @@
+[
+  {
+    "name": "empty process cannot select a nonexistent participant",
+    "pass": true
+  },
+  {
+    "name": "failed participant read never enables closure",
+    "pass": true
+  },
+  {
+    "name": "explicit participant reload recovers available closure",
+    "pass": true
+  },
+  {
+    "name": "lost response reconciles observed result without a second decision",
+    "pass": true
+  },
+  {
+    "name": "1448: double activation writes once",
+    "pass": true
+  },
+  {
+    "name": "390: double activation writes once",
+    "pass": true
+  },
+  {
+    "name": "member never reads operational processes",
+    "pass": true
+  },
+  {
+    "name": "known empty history remains explicit",
+    "pass": true
+  },
+  {
+    "name": "mismatched test scope never exposes questions or result",
+    "pass": true
+  },
+  {
+    "name": "legacy test without attempt preserves questions without fabricated result",
+    "pass": true
+  },
+  {
+    "name": "unconfirmed stale membership does not appear active",
+    "pass": true
+  },
+  {
+    "name": "failed membership consultation preserves manual profile access",
+    "pass": true
+  },
+  {
+    "name": "no runtime or external failures",
+    "pass": true
+  }
+]

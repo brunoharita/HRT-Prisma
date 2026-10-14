@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.74.16
+version: 2.74.17
 last_verified: 2026-10-14
 ---
 
 # Estado atual do Prisma
+
+## Escolha no encerramento e histórico da participação — 2.6.1 em QA
+
+Bruno autorizou em14/10/2026: escolher uma Pessoa participante ou ninguém somente ao encerrar; vínculo encerrado não aparece na descoberta; histórico completo no Perfil. Resultado humano adicional selection-process-outcome-1.0.0 gravado com encerramento/revisão/auditoria; reabertura conserva eventos e limpa escolha vigente. Legado sem backfill: Resultado não informado. person-selection-history-1.0.0 pagina participações50por empresa/Pessoa e referencia provas originais; expansão usa acompanhamento e resultado existentes, com notas/entrevista/fuso/decisões/questões/respostas/registros. Nenhuma ocupação, contratação, Score, fatos/versões do Perfil ou IA automáticos. Auditoria obrigatória de consulta da prova permanece; não há coleta nova. Acordo/execução1.0.0 e AoT selection-outcome-v261. Local159SQL/3disputas reais,38Node e117browser+13guards+32preservação PASS; tipos/build PASS. Publicação/CI ainda pendentes nesta revisão; jornada produtiva autenticada NOT TESTED.
 
 ## Tag de acompanhamento ativo — correção 2.6.0
 

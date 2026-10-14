@@ -1,9 +1,10 @@
 import { followUpColumns } from "./positionFollowUp.js";
+import type { SelectionOutcome } from "./selectionOutcome.js";
 export const SELECTION_PROCESS_CONTRACT = "selection-process-management-1.0.0";
 export interface SelectionProcess {
  organizationId:string; id:string; vacancyId:string; title:string; name:string; sequence:number;
  status:"active"|"closed"; revision:number; isCurrent:boolean; occupancy:"vacant"|"occupied"|null;
- createdAt:string; candidates:number; stages:Record<string,number>;
+ createdAt:string; candidates:number; stages:Record<string,number>; outcome?:SelectionOutcome|null;
 }
 export interface SelectionWorkspace {
  contract:typeof SELECTION_PROCESS_CONTRACT; organizationId:string; processes:SelectionProcess[];

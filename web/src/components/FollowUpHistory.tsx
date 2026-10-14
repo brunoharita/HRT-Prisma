@@ -5,6 +5,7 @@ import {followUpHistoryLabels, followUpStages, type FollowUpData} from "../domai
 const labels: Record<string,string> = {
   stage: "Etapa", status: "Situação do processo", nextAction: "Próxima ação", assignee: "Responsável",
   dueDate: "Prazo", notes: "Anotações e perguntas internas", interview: "Entrevista", decision: "Decisão",
+  closureOutcome: "Resultado do encerramento",
 };
 function record(value: unknown): Record<string,unknown> {
   return value !== null && typeof value === "object" && !Array.isArray(value) ? value as Record<string,unknown> : {};
@@ -18,6 +19,7 @@ function display(key: string, value: unknown, operators: FollowUpData["operators
   if(key==="assignee")return operators.find(o=>o.id===value)?.name??"Responsável indisponível";
   if(key==="stage")return followUpStages[value as keyof typeof followUpStages]??String(value);
   if(key==="status")return value==="active"?"Em andamento":value==="closed"?"Encerrado":String(value);
+  if(key==="closureOutcome")return value==="selected"?"Uma Pessoa escolhida":value==="none"?"Encerrado sem escolha":"Resultado não informado";
   if(key==="dueDate"&&typeof value==="string")return value.split("-").reverse().join("/");
   if(key==="interview"){
     const interview=record(value),at=typeof interview.at==="string"?new Date(interview.at):null;
@@ -40,6 +42,7 @@ export function FollowUpHistory({history,operators}:{history:FollowUpData["histo
     const before=fields(event.before),after=fields(event.after);
     const changed=Object.keys(labels).filter(key=>JSON.stringify(before[key])!==JSON.stringify(after[key]));
     return <article key={event.id}><h3>{followUpHistoryLabels[event.action]??"Alteração registrada"}</h3><p>{event.actor} · {new Date(event.at).toLocaleString("pt-BR")}</p>
+      {event.subjectName?<p>{event.action==="reopen_process"?"Escolha do encerramento anterior":"Pessoa escolhida neste encerramento"}: {event.subjectName}</p>:null}
       {changed.length?<dl>{changed.map(key=><div key={key}><dt>{labels[key]}</dt><dd><span>Anterior: {display(key,before[key],operators)}</span><span>Registrado: {display(key,after[key],operators)}</span></dd></div>)}</dl>:<p>{event.action==="add"?"Pessoa adicionada ao acompanhamento.":"Registro preservado neste processo."}</p>}
       <details className="prisma-disclosure"><summary>Consultar registro completo da alteração</summary><div><ReadableRecord value={{anterior:event.before,registrado:event.after}}/></div></details>
     </article>;

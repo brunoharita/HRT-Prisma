@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {isSelectionOutcome,selectionResultLabel,type SelectionOutcome} from '../web/src/domain/selectionOutcome.js';
+const outcome:SelectionOutcome={contract:'selection-process-outcome-1.0.0',outcome:'selected',selectedPersonId:'winner',selectedPersonName:'Pessoa sintética',closedAt:'2026-10-14T12:00:00Z',actor:'Operador'};
+test('active participation never presents a final choice',()=>{assert.equal(selectionResultLabel('active',outcome,'winner'),'Em andamento');});
+test('closed legacy data and intermediate proceed cannot invent a winner',()=>{assert.equal(selectionResultLabel('closed',null,'person'),'Resultado não informado');assert.equal(isSelectionOutcome({outcome:'proceed'}),false);});
+test('explicit winner and other participants have distinct final results',()=>{assert.equal(selectionResultLabel('closed',outcome,'winner'),'Escolhida');assert.equal(selectionResultLabel('closed',outcome,'other'),'Não escolhida');assert.equal(selectionResultLabel('closed',outcome),'Pessoa escolhida: Pessoa sintética');});
+test('nobody is an explicit final result, never an empty winner',()=>{const none={...outcome,outcome:'none' as const,selectedPersonId:null,selectedPersonName:null};assert.equal(selectionResultLabel('closed',none),'Encerrado sem escolha');assert.equal(selectionResultLabel('closed',none,'person'),'Não escolhida');assert.equal(isSelectionOutcome({...outcome,outcome:'none'}),false);});
+test('erased identity preserves documented selection without inventing a name',()=>{const erased={...outcome,selectedPersonId:null,selectedPersonName:null};assert.equal(isSelectionOutcome(erased),true);assert.equal(selectionResultLabel('closed',erased),'Pessoa escolhida: identidade indisponível');});
+test('unknown contract and invalid decision date fail closed',()=>{assert.equal(isSelectionOutcome({...outcome,contract:'unknown'}),false);assert.equal(isSelectionOutcome({...outcome,closedAt:'yesterday'}),false);assert.equal(isSelectionOutcome({...outcome,outcome:'cancelled'}),false);});

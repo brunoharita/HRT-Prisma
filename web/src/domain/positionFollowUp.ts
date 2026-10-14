@@ -1,3 +1,4 @@
+import type { SelectionOutcome } from "./selectionOutcome.js";
 export const followUpStages = {
   awaiting_evaluation: "Selecionadas para acompanhamento", evaluating: "Selecionadas para acompanhamento",
   awaiting_interview: "Aguardando entrevista", interview_scheduled: "Entrevista agendada",
@@ -38,11 +39,11 @@ export interface FollowUpEntry {
 }
 export interface FollowUpData {
   contract: "position-follow-up-1.0.0";
-  process: { id: string; name: string; status: "active" | "closed"; revision: number; isCurrent?:boolean; sequence?:number } | null;
+  process: { id: string; name: string; status: "active" | "closed"; revision: number; isCurrent?:boolean; sequence?:number; outcome?:SelectionOutcome|null } | null;
   processes?: Array<{ id:string;name:string;status:"active"|"closed";revision:number;isCurrent:boolean;sequence:number }>;
   entries: FollowUpEntry[];
   operators: { id: string; name: string }[];
-  history: { id: string; entryId: string | null; action: string; actor: string; at: string; before: unknown; after: unknown }[];
+  history: { id: string; entryId: string | null; action: string; actor: string; at: string; before: unknown; after: unknown; subjectName?:string|null }[];
 }
 export interface FollowUpFilters { search: string; stage: string; assignee: string; due: string; order: string; closed: boolean; }
 const brazilStates: Record<string,string> = {
