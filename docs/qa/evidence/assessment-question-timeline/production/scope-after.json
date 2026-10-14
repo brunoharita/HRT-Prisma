@@ -1,0 +1,59 @@
+{
+  "rls": [
+    {
+      "acl": "{postgres=arwdDxtm/postgres}",
+      "table": "position_assessment_attempts",
+      "enabled": true
+    },
+    {
+      "acl": "{postgres=arwdDxtm/postgres}",
+      "table": "position_assessment_events",
+      "enabled": true
+    },
+    {
+      "acl": "{postgres=arwdDxtm/postgres}",
+      "table": "position_assessments",
+      "enabled": true
+    }
+  ],
+  "policies": "d41d8cd98f00b204e9800998ecf8427e",
+  "functions": [
+    {
+      "acl": "{postgres=X/postgres,service_role=X/postgres}",
+      "name": "assessment_activity_analysis_finish(uuid,uuid,boolean,jsonb,jsonb,jsonb)",
+      "bodyHash": "c78b0dcaa4c53246fb23e45e722b8ff7"
+    },
+    {
+      "acl": "{postgres=X/postgres,authenticated=X/postgres}",
+      "name": "assessment_activity_analysis_load(uuid,uuid)",
+      "bodyHash": "4d7437e8814cd0f8c09cb8b64f7dfa16"
+    },
+    {
+      "acl": "{postgres=X/postgres,authenticated=X/postgres}",
+      "name": "assessment_activity_analysis_start(uuid,uuid,uuid,uuid)",
+      "bodyHash": "fa0b60bae3f4edaa15f1f5969e93d8d1"
+    },
+    {
+      "acl": "{postgres=X/postgres,service_role=X/postgres}",
+      "name": "position_assessment_public(text,text,jsonb)",
+      "bodyHash": "79e967bd6cdcbd78dc209e31dcda3f6d"
+    },
+    {
+      "acl": "{postgres=X/postgres,authenticated=X/postgres}",
+      "name": "position_assessment_workspace(uuid,uuid,uuid)",
+      "bodyHash": "92e37b4b39dc42cf92e4cfccf265b1ff"
+    },
+    {
+      "acl": "{postgres=X/postgres}",
+      "name": "private.assessment_activity_view(private.assessment_activity_analyses,text)",
+      "bodyHash": "6eda9262cd30e6f7595a53ea9be7513e"
+    }
+  ],
+  "migration": {
+    "name": "assessment_response_timeline",
+    "version": "20261014130326",
+    "statements": [
+      "-- Additive metadata timeline. Preserve previous collectors, data, authorization and grants.\nalter table public.position_assessment_events drop constraint position_assessment_events_kind_check;\nalter table public.position_assessment_events add constraint position_assessment_events_kind_check\n check(kind in ('focus_episode','mouse_idle_before_first_choice','zoom_observed','capture_shortcut_observed','observation_gap','question_reopened','answer_changed','text_selection_observed','copy_action_observed','context_menu_observed','question_displayed','answer_selected'));\n\ndo $upgrade$\ndeclare original text;updated text;\nbegin\n original:=pg_get_functiondef('public.position_assessment_public(text,text,jsonb)'::regprocedure);\n updated:=replace(original,$old$'text_selection_observed','copy_action_observed','context_menu_observed')$old$,$new$'text_selection_observed','copy_action_observed','context_menu_observed','question_displayed','answer_selected')$new$);\n -- Only extend the kind allowlist, not the content-signal branch.\n updated:=replace(updated,$old$if kind in ('text_selection_observed','copy_action_observed','context_menu_observed','question_displayed','answer_selected')$old$,$new$if kind in ('text_selection_observed','copy_action_observed','context_menu_observed')$new$);\n if updated=original then raise exception 'Unexpected event kind baseline';end if;original:=updated;\n updated:=replace(original,$old$'position-assessment-content-signals-1.1.0')$old$,$new$'position-assessment-content-signals-1.1.0','position-assessment-response-timeline-1.0.0')$new$);\n -- Preserve the content method guard; the new method is exclusively for response timeline.\n updated:=replace(updated,$old$('position-assessment-content-signals-1.0.0','position-assessment-content-signals-1.1.0','position-assessment-response-timeline-1.0.0')$old$,$new$('position-assessment-content-signals-1.0.0','position-assessment-content-signals-1.1.0')$new$);\n if updated=original then raise exception 'Unexpected event method baseline';end if;original:=updated;\n updated:=replace(original,$old$allowed:=case kind when 'focus_episode'$old$,$new$allowed:=case when event->>'method'='position-assessment-response-timeline-1.0.0' and kind in ('answer_selected','answer_changed') then array['optionId','previousOptionId','support','limitation'] else case kind when 'focus_episode'$new$);\n if updated=original then raise exception 'Unexpected payload baseline';end if;\n original:=updated;updated:=replace(original,$old$else array['support','limitation'] end;$old$,$new$else array['support','limitation'] end end;$new$);\n if updated=original then raise exception 'Unexpected payload ending';end if;original:=updated;\n updated:=replace(original,$old$   select * into ev from public.position_assessment_events where attempt_id=t.id and event_id=eid;$old$,$new$   if event->>'method'='position-assessment-response-timeline-1.0.0' then\n    if kind not in ('question_displayed','answer_selected','answer_changed') then raise exception 'PA_TIMELINE_INVALID' using errcode='22023';end if;\n    if kind='question_displayed' then\n     if event#>>'{values,support}' is distinct from 'observed_display' or event#>>'{values,limitation}' is distinct from 'display_does_not_confirm_reading' then raise exception 'PA_TIMELINE_INVALID' using errcode='22023';end if;\n    else\n     if event#>>'{values,support}' is distinct from 'observed_choice' or event#>>'{values,limitation}' is distinct from 'choice_does_not_identify_intent'\n      or jsonb_typeof(event#>'{values,optionId}') is distinct from 'string'\n      or not exists(select 1 from jsonb_array_elements(a.questions) q cross join lateral jsonb_array_elements(q->'options') o where q->>'id'=event->>'questionInstanceId' and o->>'id'=event#>>'{values,optionId}')\n      or (kind='answer_selected' and jsonb_typeof(event#>'{values,previousOptionId}') is distinct from 'null')\n      or (kind='answer_changed' and (jsonb_typeof(event#>'{values,previousOptionId}') is distinct from 'string' or event#>>'{values,previousOptionId}'=event#>>'{values,optionId}'\n       or not exists(select 1 from jsonb_array_elements(a.questions) q cross join lateral jsonb_array_elements(q->'options') o where q->>'id'=event->>'questionInstanceId' and o->>'id'=event#>>'{values,previousOptionId}')))\n     then raise exception 'PA_TIMELINE_INVALID' using errcode='22023';end if;\n    end if;\n   elsif kind in ('question_displayed','answer_selected') then raise exception 'PA_TIMELINE_INVALID' using errcode='22023';end if;\n   select * into ev from public.position_assessment_events where attempt_id=t.id and event_id=eid;$new$);\n if updated=original then raise exception 'Unexpected event insertion baseline';end if;\n execute updated;\nend $upgrade$;\n"
+    ]
+  }
+}

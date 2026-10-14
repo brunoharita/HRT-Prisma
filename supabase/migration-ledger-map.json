@@ -1518,6 +1518,17 @@
       "remoteStatementSha256": "41733583efa8cf84369325c0f9b2e51742bfd1773e57cb52424765c0eb07bbc5",
       "verifiedAt": "2026-10-13",
       "fingerprintMethod": "normalized-newline-trim-v1"
+    },
+    {
+      "name": "assessment_response_timeline",
+      "localVersion": "20261014100000",
+      "remoteVersion": "20261014130326",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localStatementSha256": "4eebe8e1bd244998835f8c32fd125b04a987efa119e06d64921d08a34f000008",
+      "remoteStatementSha256": "4eebe8e1bd244998835f8c32fd125b04a987efa119e06d64921d08a34f000008",
+      "verifiedAt": "2026-10-14",
+      "fingerprintMethod": "normalized-newline-trim-v1"
     }
   ],
   "localOnly": [
@@ -1557,13 +1568,12 @@
     }
   ],
   "lastIncrementalVerification": {
-    "date": "2026-10-13",
-    "movement": "assessment-content-signals",
+    "date": "2026-10-14",
+    "movement": "assessment-question-timeline",
     "names": [
-      "assessment_content_signals",
-      "assessment_content_selection_scope"
+      "assessment_response_timeline"
     ],
-    "evidence": "docs/qa/evidence/assessment-content-signals/production/scope-after.json",
+    "evidence": "docs/qa/evidence/assessment-question-timeline/production/scope-after.json",
     "historicalSnapshotVerifiedAtUnchanged": true
   }
 }

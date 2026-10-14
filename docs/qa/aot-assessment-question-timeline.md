@@ -4,11 +4,11 @@ Acordo/execução congelados: agreement-assessment-question-timeline.md 1.0.0, a
 
 | Requisito | Implementação | Teste/evidência | Estado |
 | --- | --- | --- | --- |
-| D-01 | assessmentTimeline.ts/AssessmentActivity: intervalos válidos por início, eventos pontuais, desempate e resumos explícitos | 3 unit novos, 20 checks novos browser e 68 regressões de atividade; snapshots/fatos não reordenados | PASS local |
-| D-02 | Portal: exibição, primeira escolha/troca com IDs, revisão sem questão ativa | Novo browser desktop1448/mobile390; portal82 preserva revisão/envio/buffer; SQL novo método/legado/replay | PASS local |
-| D-03 | Contexto resposta final/salva, situação, marcos ausentes e divergência explícita | timeline/legacy PNGs1448/390, 20 browser; sem IA paga ou história criada | PASS local |
-| D-04/P-01 | Migration aditiva sem grants/DML, token/tenant/versão e opções validados | SQL completo do pipeline em sql/sql.txt, negativos e preservação; 20 Node/fatos/mouse/release | PASS local |
-| D-05 | Registro2.5.5, docs de produto/arquitetura/contexto | Tipos/build PASS; contexto/CI/produção exigidos antes do encerramento | PARTIAL — rollout pendente |
+| D-01 | assessmentTimeline.ts/AssessmentActivity: intervalos válidos por início, eventos pontuais, desempate e resumos explícitos | 3 unit novos, 20 checks novos browser e 68 regressões de atividade; snapshots/fatos não reordenados | PASS |
+| D-02 | Portal: exibição, primeira escolha/troca com IDs, revisão sem questão ativa | Novo browser desktop1448/mobile390; portal82 preserva revisão/envio/buffer; SQL novo método/legado/replay | PASS |
+| D-03 | Contexto resposta final/salva, situação, marcos ausentes e divergência explícita | timeline/legacy PNGs1448/390, 20 browser; sem IA paga ou história criada | PASS |
+| D-04/P-01 | Migration aditiva sem grants/DML, token/tenant/versão e opções validados | SQL completo do pipeline em sql/sql.txt, negativos e preservação; 20 Node/fatos/mouse/release | PASS |
+| D-05 | Registro2.5.5, docs de produto/arquitetura/contexto | Tipos/build/contexto PASS; CI38568382541/38568730165 e production/verification.json/ledger/preservation.json | PASS |
 
 ## Preservação e limites
 
@@ -20,4 +20,8 @@ Jornada autenticada real e IA paga NOT TESTED; não são inferidas dos testes si
 
 ## Encerramento operacional
 
-Publicação, ledger incremental, SHA/CI, hashes/grants pós-migration, containers/assets e smoke serão anexados na mesma entrega. Concluir somente após D-05 PASS; nenhum rebuild extra é necessário para o fechamento documental.
+Publicado runtime8c2b38ff1bdeb05a6c193825d9b17aeb4f7f73a9 em main/origin/VPS. CI38568382541 (branch) e38568730165 (main) SUCCESS. SQL233checks PASS,20Node e22tooling PASS; novos20browser+68atividade+82portal=170 PASS. Tipos/build/contexto/lint PASS no snapshot rastreado, sem drafts alheios.
+
+Migração assessment_response_timeline aplicada isoladamente no projeto verificado: local20261014100000/remote20261014130326, SHA256normalizado4eebe8e1bd244998835f8c32fd125b04a987efa119e06d64921d08a34f000008 igual. Scope-after/preservation comprovam apenas position_assessment_public alterado;5outros corpos,6ACLs,3tabelas/RLS/ACL e políticas preservados. Sem DML/backfill ou Edge publicado. A publicação do dispatcher mantém database em remaining porque é destino manual; a evidência Supabase comprova a aplicação realizada, sem reaplicar pelo CLI.
+
+Web60916ee5/image96eda2f1 running/restart0;9contêineres adjacentes iguais,238assets anteriores byte-idênticos,241após. Rollback83ac4e53 igual à imagem anterior.4rotas/bundle HTTP200, SHA2.5.5/timeline verificados; login público1448/390 sem erro/overflow. verification.json e scope-after.json registram o estado. D-01..D-05/P-01 PASS nos limites declarados; sem desvio material. Fechamento documental sincroniza Git/VPS sem rebuild. Jornada autenticada real/IA paga permanecem NOT TESTED.

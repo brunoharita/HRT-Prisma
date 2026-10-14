@@ -2,15 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.74.12
+version: 2.74.13
 last_verified: 2026-10-14
 ---
 
 # Estado atual do Prisma
 
-## Linha do tempo factual da questão — entrega 2.5.5
+## Linha do tempo factual da questão — 2.5.5 publicada
 
-Implementação autorizada por Bruno em14/10/2026, incremental à2.5.4. Questão reúne resposta final/salva, situação e linha do tempo por início de intervalos válidos, com eventos pontuais e resumos acumulados separados. Portal registra exibição, primeira escolha e troca de alternativa pelo método position-assessment-response-timeline-1.0.0, IDs oficiais sem texto livre; revisão geral suspende o contexto. SQL aditivo valida método/shape/opções e mantém token/tenant/grants/replay. Dados antigos/snapshots continuam parciais, sem backfill ou IA automática. Nenhuma alteração de Score/Perfil/etapa/tarifa. Acordo/mapa/CA em docs/qa/agreement-assessment-question-timeline.md; implementação e validação local concluídas, rollout depende da evidência operacional no AoT docs/qa/aot-assessment-question-timeline.md.
+Implementação autorizada por Bruno em14/10/2026, incremental à2.5.4. Questão reúne resposta final/salva, situação e linha do tempo por início de intervalos válidos, com eventos pontuais e resumos acumulados separados. Portal registra exibição, primeira escolha e troca de alternativa pelo método position-assessment-response-timeline-1.0.0, IDs oficiais sem texto livre; revisão geral suspende o contexto. SQL aditivo valida método/shape/opções e mantém token/tenant/grants/replay. Dados antigos/snapshots continuam parciais, sem backfill ou IA automática. Nenhuma alteração de Score/Perfil/etapa/tarifa. Acordo/mapa/CA em docs/qa/agreement-assessment-question-timeline.md; Publicada no runtime8c2b38ff1bdeb05a6c193825d9b17aeb4f7f73a9, CI branch38568382541/main38568730165 PASS. Migrationremote20261014130326 com fingerprint igual à fonte;5outros corpos/6grants e3tabelas/RLS preservados. Web96eda2f1 running/restart0,4rotas/bundle HTTP200;238assets e9contêineres adjacentes preservados. SQL233/Node20/tooling22/browser170 PASS; visual e smoke público1448/390. AoT docs/qa/aot-assessment-question-timeline.md registra limites: jornada autenticada real e IA paga NOT TESTED.
 
 ## Disciplina de execução e encerramento — contrato de instruções 1.3.3
 

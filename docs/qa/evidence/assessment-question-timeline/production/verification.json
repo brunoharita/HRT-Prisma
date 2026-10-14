@@ -1,0 +1,51 @@
+{
+  "runtimeSourceSha": "8c2b38ff1bdeb05a6c193825d9b17aeb4f7f73a9",
+  "version": "2.5.5",
+  "web": "/prisma-web 60916ee562a7ba08875a2399ec93f29cf6bb5adcf8dbdc8c5dda3f8ffdac9b2d sha256:96eda2f1af9752c2653808280ef06ad968038fa22ef9ed6b3314fc6f7a22bbcb running 0",
+  "adjacentContainersPreserved": 9,
+  "oldAssetsPreserved": 238,
+  "totalAssets": 241,
+  "rollbackImage": "sha256:83ac4e53e83e8df3504a75478437fc4805ed74aa96a1757bd656aaa0e23977bd",
+  "routes": [
+    {
+      "route": "/",
+      "status": 200
+    },
+    {
+      "route": "/sign-in",
+      "status": 200
+    },
+    {
+      "route": "/assessment/",
+      "status": 200
+    },
+    {
+      "route": "/item-bank",
+      "status": 200
+    }
+  ],
+  "bundle": {
+    "path": "/assets/index-DRjBm9Jx.js",
+    "sha": true,
+    "version": true,
+    "timeline": true
+  },
+  "publicViewports": [
+    {
+      "width": 1448,
+      "version": "2.5.5",
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "version": "2.5.5",
+      "overflow": false,
+      "errors": []
+    }
+  ],
+  "limits": [
+    "Public smoke and local synthetic timeline; authenticated real candidate NOT TESTED",
+    "No paid IA or production fixture; only reviewed migration and web published"
+  ]
+}

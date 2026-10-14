@@ -1,0 +1,14 @@
+{
+  "project": "ioldpnqqvobprjiontre",
+  "changedFunctionBodies": [
+    "position_assessment_public(text,text,jsonb)"
+  ],
+  "otherFunctionBodiesPreserved": 5,
+  "functionGrantsPreserved": 6,
+  "rlsAndTableGrantsPreserved": 3,
+  "policiesPreserved": true,
+  "migrationFingerprintEqual": true,
+  "localVersion": "20261014100000",
+  "remoteVersion": "20261014130326",
+  "dataMutationByMigration": false
+}
