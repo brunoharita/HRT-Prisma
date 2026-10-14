@@ -19,9 +19,9 @@ export const positionFollowUpService = {
     const { data, error } = processId?await supabase.rpc("get_position_follow_up_process" as never,{p_organization_id:organizationId,p_vacancy_id:vacancyId,p_process_id:processId} as never):await supabase.rpc("get_position_follow_up", { p_organization_id: organizationId, p_vacancy_id: vacancyId });
     if (error) throw failure(error); return decode(data);
   },
-  async start(organizationId:string,vacancyId:string,processId:string,revision:number,requestId:string):Promise<FollowUpData>{
+  async start(organizationId:string,vacancyId:string,processId:string|null,revision:number|null,requestId:string):Promise<FollowUpData>{
     const {data,error}=await supabase.rpc('start_position_selection_process' as never,{p_organization_id:organizationId,p_vacancy_id:vacancyId,p_process_id:processId,p_revision:revision,p_request_id:requestId} as never);
-    if(error)throw failure(error);return decode(data);
+    if(error)throw new Error(error.message.includes("SELECTION_POSITION_OCCUPIED")?"A Posição precisa estar desocupada para iniciar um processo.":error.message.includes("SELECTION_ACTIVE_PROCESS_EXISTS")?"Esta Posição já tem um processo em andamento.":failure(error).message);return decode(data);
   },
   async mutate(organizationId: string, vacancyId: string, action: string, personId: string | null, revision: number | null, payload: object = {},processId?:string): Promise<FollowUpData> {
     const args={p_organization_id: organizationId, p_vacancy_id: vacancyId, p_action: action,p_person_id:personId,p_expected_revision:revision,p_payload:payload as Json};

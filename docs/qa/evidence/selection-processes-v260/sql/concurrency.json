@@ -1,0 +1,14 @@
+[
+  {
+    "name": "concurrent same request returns same cycle with one audit",
+    "pass": true
+  },
+  {
+    "name": "distinct concurrent starts leave exactly one new active process",
+    "pass": true
+  },
+  {
+    "name": "previous cycle and position occupancy preserved",
+    "pass": true
+  }
+]

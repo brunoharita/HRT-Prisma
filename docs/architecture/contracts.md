@@ -113,6 +113,10 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 
 ## Evidência não é rollout
 
+### Gestão de processos seletivos1.0.0 — produto2.6.0
+
+`selection-process-management-1.0.0` projeta processos por organização, Posição, ciclo, revisão, situação, ocupação factual e contagens por etapa. get_selection_process_workspace pagina50e devolve resumo selecionado com ID explícito; get_selection_process_positions pagina Posições desocupadas/sem processo ativo. Autoridade reutiliza private.authorize_position_follow_up; nenhuma tabela exposta ou novo grant a worker/anon. start_position_selection_process conserva assinatura/ACL, aceita primeiro ciclo explícito com anterior/revisão null, request obrigatório e replay do ciclo exato. Guard de INSERT/reabertura e índice ativo por tenant/Posição impedem bypass/concorrência; versões desconhecidas e ocupação ausente não permitem criar. Auditoria permanece transacional, sem DML/backfill. Acompanhamento1.0.0, prova2.0.0/portal1.0.0 preservados. Acordo/AoT selection-processes-v260; produto selection-processes.md.
+
 Tipos TypeScript provam contrato de código local. Migration prova intenção executável de schema. Somente evidência de ambiente comprova ativação. O catálogo deve ser atualizado junto com qualquer mudança material.
 
 ## Eventos e APIs

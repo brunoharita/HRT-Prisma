@@ -7,6 +7,7 @@ import { POSITION_TAXONOMY_CONTRACT } from "../domain/positionTaxonomy";
 import type { OrganizationMembership } from "../shared/access";
 import { PrismaCard } from "../ui/PrismaCard";
 import { PositionTaxonomyPanel, TaxonomyOriginDetails } from "./PositionTaxonomyPanel";
+import { PositionProcessAccess } from "./PositionProcessAccess";
 import "../pages/positionOverview.css";
 
 interface Props {
@@ -14,9 +15,10 @@ interface Props {
   membership: OrganizationMembership;
   onEdit: () => void;
   onFollowUp: () => void;
+  onNavigate?: (path:string) => void;
 }
 
-export function PositionOverview({ detail, membership, onEdit, onFollowUp }: Props) {
+export function PositionOverview({ detail, membership, onEdit, onFollowUp, onNavigate }: Props) {
   const [referencesOpen, setReferencesOpen] = useState(false);
   // The compact status follows the same title/tenant scope as the complete reference panel.
   const taxonomy = detail.taxonomy?.contractVersion === POSITION_TAXONOMY_CONTRACT
@@ -66,7 +68,7 @@ export function PositionOverview({ detail, membership, onEdit, onFollowUp }: Pro
         {referencePending ? <Button block className="prisma-position-reference-review" onClick={onEdit}>Revisar associação</Button> : null}
         <p className="prisma-position-note">Referências não se tornam requisitos automaticamente.</p>
       </PrismaCard>
-      <PrismaCard title="Acompanhamento"><p>Conduza a avaliação das Pessoas incluídas nesta Posição.</p><Button block onClick={onFollowUp}>Abrir acompanhamento</Button></PrismaCard>
+      <PrismaCard title="Processos seletivos"><PositionProcessAccess organizationId={membership.organizationId} vacancyId={detail.id!} occupancy={detail.occupancy} onNavigate={onNavigate??(()=>onFollowUp())}/></PrismaCard>
     </aside>
     <Drawer title="Referência e fontes da Posição" open={referencesOpen} onClose={() => setReferencesOpen(false)} size={760} className="prisma-position-reference-drawer">
       {referencesOpen ? <PositionTaxonomyPanel draft={{ ...detail, taxonomy }} membership={membership} onEdit={() => { setReferencesOpen(false); onEdit(); }} /> : null}

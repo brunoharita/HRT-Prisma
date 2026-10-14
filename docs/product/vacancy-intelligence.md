@@ -74,7 +74,7 @@ A ordenação vigente é determinística: grupo de trajetória, Prisma Score dec
 
 ## Acompanhamento Pessoa–Posição v2.2.0
 
-A descoberta mantém a comparação de exatamente duas Pessoas. `Adicionar ao acompanhamento` é uma ação humana independente: inicia `Acompanhamento 01` na primeira inclusão e reutiliza a Pessoa publicada. Posição, ocupação, processo e etapa individual permanecem separados. O mesmo cadastro pode participar de acompanhamentos independentes em várias Posições.
+A descoberta mantém a comparação de exatamente duas Pessoas. `Adicionar ao acompanhamento` é uma ação humana independente e reutiliza a Pessoa publicada. A partir da2.6.0, exige processo seletivo criado explicitamente; a criação na primeira inclusão da2.2.0 foi substituída. Posição, ocupação, processo e etapa individual permanecem separados. O mesmo cadastro pode participar de acompanhamentos independentes em várias Posições. Gestão, criação e ciclo atual seguem `selection-processes.md`.
 
 A aba Acompanhamento alterna Lista/Kanban do mesmo conjunto. Lista oferece etapa, próxima ação, responsável e prazo; busca nome/ação, filtros etapa/responsável/prazo inclusive ausentes e ordenação nome/prazo. Indicadores consideram o processo inteiro, com contagem filtrada separada. Kanban mostra Selecionadas para acompanhamento, Aguardando entrevista, Entrevista agendada, Aguardando decisão e Decisão registrada. Os dois identificadores iniciais legados são projetados na primeira coluna; filtros e coluna mobile antigos continuam válidos, sem reescrever registros ou histórico. Concluídos permanece consultável.
 

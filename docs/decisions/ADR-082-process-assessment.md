@@ -10,4 +10,8 @@ Uma prova por ciclo, congelada na primeira emissão; nenhuma promoção ou conve
 
 ## Alternativas e consequências
 
+### Delta aprovado em14/10/2026 — Processos seletivos2.6.0
+
+Bruno escolheu proposta3 e autorizou criação explícita somente para Posição desocupada, um processo ativo por Posição e gestão própria no menu. Reutilizar ciclos existentes, RPC de criação e guardas backend é suficiente; não criar tabela, plataforma externa ou biblioteca. O primeiro ciclo também começa vazio; a inclusão não cria processo. Reabertura requer Posição desocupada. Novo envelope selection-process-management-1.0.0 consulta projeções mínimas/paginadas e preserva contratos/artefatos históricos da avaliação. Índice ativo, lock e trigger impedem bypass/concorrência, sem backfill. Acordo1.0.0/AoT selection-processes-v260.
+
 Prova distinta por Pessoa impediria equivalência do instrumento e repetiria custo/revisão. Tabela/plataforma externa separada duplicaria catálogo, tokens, outbox e ledger sem benefício funcional verificado. Ampliar estruturas próprias é a menor integração compatível; nenhuma nova biblioteca/fornecedor. Implica migration aditiva, atualização seletiva das RPCs e Edge, leitura de ciclos e cuidado com exclusão de uma Pessoa: apagar sua aplicação não apaga a prova comum. Histórico e schema ficam preservados em rollback; consumidores antigos continuam lendo aplicações existentes, mas novas provas individuais são recusadas pelo backend.

@@ -1,0 +1,2 @@
+import{defineConfig}from"vite";import react from"@vitejs/plugin-react";
+export default defineConfig({root:"tests/ui",cacheDir:"../../tmp/vite-selection-processes",publicDir:"../../web/public",plugins:[{name:"synthetic-selection-transport",enforce:"pre",transform(_code,id){if(id.replaceAll("\\","/").endsWith("/infrastructure/supabase/client.ts"))return 'export {transport as supabase} from "../../../../tests/ui/selection-processes/fixture";';}},react()],server:{host:"127.0.0.1",port:5706,strictPort:true,fs:{allow:["../.."]}}});

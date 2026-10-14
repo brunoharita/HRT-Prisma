@@ -1,0 +1,118 @@
+[
+  {
+    "name": "menu has separate Positions and Selection processes",
+    "pass": true
+  },
+  {
+    "name": "three processes and five real stage counts",
+    "pass": true
+  },
+  {
+    "name": "desktop master-detail preserves approximately 38/62 split",
+    "pass": true
+  },
+  {
+    "name": "status filters server-backed closed process",
+    "pass": true
+  },
+  {
+    "name": "search matches Position without AI",
+    "pass": true
+  },
+  {
+    "name": "closed process exposes occupancy independently and disables preparation",
+    "pass": true
+  },
+  {
+    "name": "occupied Position prevents reopen control",
+    "pass": true
+  },
+  {
+    "name": "history uses explicit current process identity",
+    "pass": true
+  },
+  {
+    "name": "assessment links explicit cycle",
+    "pass": true
+  },
+  {
+    "name": "empty process cannot be created without choosing eligible Position",
+    "pass": true
+  },
+  {
+    "name": "explicit creation starts empty and sends stable request ID",
+    "pass": true
+  },
+  {
+    "name": "close mutation is explicit and preserves Position occupancy",
+    "pass": true
+  },
+  {
+    "name": "read failure preserves last confirmed rows",
+    "pass": true
+  },
+  {
+    "name": "reads and filters invoke no provider or commercial RPC",
+    "pass": true
+  },
+  {
+    "name": "no page overflow at 768px",
+    "pass": true
+  },
+  {
+    "name": "no page overflow at 390px",
+    "pass": true
+  },
+  {
+    "name": "mobile 390 opens list without compressed detail",
+    "pass": true
+  },
+  {
+    "name": "mobile 390 sequential detail hides list",
+    "pass": true
+  },
+  {
+    "name": "mobile detail no overflow 390",
+    "pass": true
+  },
+  {
+    "name": "mobile 390 return restores list",
+    "pass": true
+  },
+  {
+    "name": "no page overflow at 320px",
+    "pass": true
+  },
+  {
+    "name": "mobile 320 opens list without compressed detail",
+    "pass": true
+  },
+  {
+    "name": "mobile 320 sequential detail hides list",
+    "pass": true
+  },
+  {
+    "name": "mobile detail no overflow 320",
+    "pass": true
+  },
+  {
+    "name": "mobile 320 return restores list",
+    "pass": true
+  },
+  {
+    "name": "creation from Position preselects its eligible identity",
+    "pass": true
+  },
+  {
+    "name": "unknown process identity fails closed without another process detail",
+    "pass": true
+  },
+  {
+    "name": "member has no operational queries",
+    "pass": true
+  },
+  {
+    "name": "no external calls or runtime errors",
+    "pass": true
+  }
+]

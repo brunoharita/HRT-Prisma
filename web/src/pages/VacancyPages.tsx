@@ -551,10 +551,10 @@ export function VacancyDetailPage({ activeMembership, onNavigate, vacancyId, ini
     </header>
     <Modal title="Excluir esta Posição?" open={confirmDeleteOpen} confirmLoading={deleting} onCancel={() => { if (!deleting) setConfirmDeleteOpen(false); }} cancelText="Cancelar" okText="Excluir posição" okButtonProps={{ danger: true }} cancelButtonProps={{ disabled: deleting }} onOk={async () => { if (await removeVacancy()) setConfirmDeleteOpen(false); }}><p>Esta necessidade sairá da lista. O histórico de definições e avaliações será preservado.</p>{error ? <Alert showIcon title={error} type="error" action={<Button onClick={() => setConfirmDeleteOpen(false)}>Voltar à posição</Button>} /> : null}</Modal>
     {error && !confirmDeleteOpen ? <Alert showIcon title={error} type="error" action={<Button onClick={() => onNavigate(`/vacancies/${vacancyId}/edit`)}>Abrir posição</Button>} /> : null}
-    <Tabs className="prisma-position-tabs" defaultActiveKey={initialTab} onChange={key => { if (key === "follow-up") onNavigate(`/vacancies/${vacancyId}/follow-up`); if (key === "people") onNavigate(`/vacancies/${vacancyId}/people`); }} items={[
-      { key: "overview", label: "Visão geral", children: <PositionOverview detail={detail} membership={activeMembership} onEdit={() => onNavigate(`/vacancies/${detail.id}/edit`)} onFollowUp={() => onNavigate(`/vacancies/${detail.id}/follow-up`)} /> },
+    <Tabs className="prisma-position-tabs" defaultActiveKey={initialTab} onChange={key => { if (key === "follow-up") onNavigate(`/selection-processes/position/${vacancyId}`); if (key === "people") onNavigate(`/vacancies/${vacancyId}/people`); }} items={[
+      { key: "overview", label: "Visão geral", children: <PositionOverview detail={detail} membership={activeMembership} onEdit={() => onNavigate(`/vacancies/${detail.id}/edit`)} onFollowUp={() => onNavigate(`/selection-processes/position/${detail.id}`)} onNavigate={onNavigate} /> },
       { key: "people", label: "Pessoas encontradas", children: null },
-      { key: "follow-up", label: "Acompanhamento", children: null },
+      { key: "follow-up", label: "Processos seletivos", children: null },
       { key: "history", label: "Histórico", children: <PrismaCard><List dataSource={history} locale={{ emptyText: "Nenhuma alteração registrada." }} renderItem={(item) => <List.Item><List.Item.Meta avatar={<HistoryOutlined />} title={historyLabel(item.type)} description={`${item.version ? `Definição v${item.version} · ` : ""}${formatDate(item.createdAt)}`} /></List.Item>} /></PrismaCard> },
     ]} />
   </PrismaPage>;

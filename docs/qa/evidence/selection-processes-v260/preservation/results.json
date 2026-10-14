@@ -1,0 +1,38 @@
+[
+  {
+    "name": "five full-width candidate stages preserved",
+    "pass": true
+  },
+  {
+    "name": "process history stays distinct from Position history",
+    "pass": true
+  },
+  {
+    "name": "List and Kanban modes preserved",
+    "pass": true
+  },
+  {
+    "name": "candidate details preserve human decision and interview controls",
+    "pass": true
+  },
+  {
+    "name": "mobile 390 preserves selected single Kanban column",
+    "pass": true
+  },
+  {
+    "name": "mobile 390 full page without overflow",
+    "pass": true
+  },
+  {
+    "name": "mobile 320 preserves selected single Kanban column",
+    "pass": true
+  },
+  {
+    "name": "mobile 320 full page without overflow",
+    "pass": true
+  },
+  {
+    "name": "member cannot inspect candidates",
+    "pass": true
+  }
+]

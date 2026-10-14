@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.74.13
+version: 2.74.14
 last_verified: 2026-10-14
 ---
 
 # Estado atual do Prisma
+
+## Processos seletivos separados de Posições — 2.6.0 implementada, publicação pendente
+
+Bruno aprovou em14/10/2026 a proposta3: menu próprio, lista38%/resumo62%, acompanhamento amplo e celular com lista/detalhe sucessivos. Cada processo pertence a uma Posição permanente. Criação explícita vazia somente em Posição desocupada/sem processo ativo, inclusive acesso pela Posição; backend revalida, lock/índice/trigger e replay/auditoria protegem disputas e bloqueiam criação implícita. Seleção mantém Lista/Kanban, cinco etapas, entrevistas/decisões humanas, prova/aplicações/resultados e histórico por ciclo. Consulta paginada50por empresa, sem PII de candidatos no resumo e sem IA/débito/Score/Perfil/matching. Envelope selection-process-management-1.0.0; demais contratos e URLs legíveis. Acordo/execução1.0.0, owner selection-processes.md, AoT selection-processes-v260. SQL120 e disputas3, browser29novo/9preservação, Node19/rotas6/contrato4PASS; tipos/build/fidelidade comprovados em QA sintético. Rollout não presumido; jornada autenticada real NOT TESTED. Destinos previstos banco/web.
 
 ## Linha do tempo factual da questão — 2.5.5 publicada
 

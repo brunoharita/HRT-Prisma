@@ -1,0 +1,13 @@
+[
+  "tests/fixtures/selection-processes/bootstrap-0.sql",
+  "supabase/migrations/20261009140000_generic_ai_request_history.sql",
+  "supabase/migrations/20261008120000_position_follow_up.sql",
+  "supabase/migrations/20261009150000_position_assessment.sql",
+  "supabase/migrations/20261009160000_ai_history_worker_boundary.sql",
+  "supabase/migrations/20261009170000_position_assessment_operational_boundary.sql",
+  "tests/fixtures/selection-processes/bootstrap-6.sql",
+  "supabase/qa/position_assessment_verification.sql",
+  "tests/fixtures/selection-processes/bootstrap-8.sql",
+  "supabase/migrations/20261010120000_process_assessment.sql",
+  "supabase/qa/process_assessment_verification.sql"
+]

@@ -1,4 +1,5 @@
 import { PositionFollowUpPage } from "../pages/PositionFollowUpPage";
+import { SelectionProcessesPage } from "../pages/SelectionProcessesPage";
 import { ProcessAssessmentPage } from "../pages/ProcessAssessmentPage";
 import { TokensPrismaPage } from "../pages/TokensPrismaPage";
 import { PositionAssessmentPortal } from "../pages/PositionAssessmentPortal";
@@ -103,6 +104,7 @@ interface AppRoute {
   positionAssessmentPersonId?: string;
   processAssessment?:boolean;
   selectionProcessId?:string;
+  selectionWorkspace?:boolean;
   selfDataToken?: string;
   vacancyId?: string;
   vacancyView?: "list" | "create" | "assist" | "detail" | "edit" | "people" | "compare" | "follow-up";
@@ -129,6 +131,7 @@ const routes: AppRoute[] = [
     icon: <ApartmentOutlined />,
     rule: { requiresAuth: true, requiresMembership: true, allowedRoles: ["super_admin", "owner", "admin", "recruiter"] },
   },
+  { path: "/selection-processes", label: "Processos seletivos", icon: <BranchesOutlined />, rule: { requiresAuth: true, requiresMembership: true, allowedRoles: ["super_admin", "owner", "admin", "recruiter"] } },
   {
     path: "/matching",
     label: "Matching",
@@ -367,7 +370,7 @@ export function PrismaApplication() {
       onSignOut={() => void handleSignOut()}
       profileName={profileName}
       profileSubtitle={profileSubtitle}
-      selectedPath={route.path === "/settings" ? "/knowledge" : route.profileId ? "/profiles" : route.vacancyId || route.vacancyView ? "/vacancies" : route.userId ? "/users" : route.path.startsWith("/matching") ? "/verifications" : route.path.startsWith("/verifications") ? "/verifications" : route.path}
+      selectedPath={route.path === "/selection-processes" || route.vacancyView === "follow-up" ? "/selection-processes" : route.path === "/settings" ? "/knowledge" : route.profileId ? "/profiles" : route.vacancyId || route.vacancyView ? "/vacancies" : route.userId ? "/users" : route.path.startsWith("/matching") ? "/verifications" : route.path.startsWith("/verifications") ? "/verifications" : route.path}
     >
       {state.errorMessage || state.infoMessage ? (
         <Alert
@@ -486,6 +489,7 @@ function renderRouteContent(
     if (route.vacancyId) return <VacancyDetailPage activeMembership={activeMembership} onNavigate={onNavigate} vacancyId={route.vacancyId} initialTab={route.vacancyHistory ? "history" : "overview"} />;
     return <VacanciesPage activeMembership={activeMembership} onNavigate={onNavigate} />;
   }
+  if(route.path==="/selection-processes"&&activeMembership)return <SelectionProcessesPage activeMembership={activeMembership} onNavigate={onNavigate} {...(route.selectionProcessId?{selectedId:route.selectionProcessId}:{})} {...(route.vacancyId?{vacancyId:route.vacancyId}:{})}/>;
   if (route.path === "/organizations") {
     return <PlaceholderPage title="Organizações" description="Gestão estrutural de grupos e empresas permanece fora deste movimento." />;
   }
@@ -630,6 +634,11 @@ function findRoute(pathname: string): AppRoute {
   const exact = routes.find((route) => route.path === normalized);
   if (exact) return exact;
   const reviewerRule = { requiresAuth: true, requiresMembership: true, allowedRoles: ["super_admin", "owner", "admin", "recruiter"] as const };
+  if(normalized==="/selection-processes")return {path:"/selection-processes",selectionWorkspace:true,rule:reviewerRule};
+  const positionProcesses=/^\/selection-processes\/position\/([^/]+)$/.exec(normalized);
+  if(positionProcesses?.[1])return {path:"/selection-processes",selectionWorkspace:true,vacancyId:positionProcesses[1],rule:reviewerRule};
+  const selectionSummary=/^\/selection-processes\/([^/]+)$/.exec(normalized);
+  if(selectionSummary?.[1])return {path:"/selection-processes",selectionWorkspace:true,selectionProcessId:selectionSummary[1],rule:reviewerRule};
   if (normalized === "/vacancies/new") return { path: "/vacancies", vacancyView: "create", rule: reviewerRule };
   if (normalized === "/vacancies/assist") return { path: "/vacancies", vacancyView: "assist", rule: reviewerRule };
   const assessmentToken = /^\/assessment\/([a-f0-9]{64})$/.exec(normalized);

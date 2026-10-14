@@ -1,0 +1,1075 @@
+BEGIN
+DO
+TRUNCATE TABLE
+CREATE TABLE
+ALTER TABLE
+REVOKE
+        set_config
+---------------------------
+ trajectory-evidence-1.2.0
+(1 row)
+
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+INSERT 0 1
+INSERT 0 2
+INSERT 0 4
+INSERT 0 4
+INSERT 0 4
+INSERT 0 1
+INSERT 0 2
+INSERT 0 1
+INSERT 0 1
+INSERT 0 2
+UPDATE 1
+CREATE TABLE
+CREATE INDEX
+ALTER TABLE
+CREATE INDEX
+ALTER TABLE
+DROP POLICY
+CREATE POLICY
+CREATE POLICY
+REVOKE
+GRANT
+REVOKE
+CREATE FUNCTION
+REVOKE
+CREATE FUNCTION
+REVOKE
+GRANT
+COMMENT
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE INDEX
+CREATE INDEX
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+REVOKE
+CREATE FUNCTION
+REVOKE
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE TABLE
+INSERT 0 1
+REVOKE
+CREATE TABLE
+CREATE INDEX
+CREATE TABLE
+CREATE INDEX
+CREATE TABLE
+CREATE INDEX
+CREATE TABLE
+CREATE INDEX
+CREATE TABLE
+CREATE INDEX
+CREATE TABLE
+CREATE INDEX
+DO
+REVOKE
+REVOKE
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+REVOKE
+REVOKE
+GRANT
+REVOKE
+GRANT
+CREATE TABLE
+REVOKE
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE TABLE
+REVOKE
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE FUNCTION
+REVOKE
+GRANT
+ALTER TABLE
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE FUNCTION
+REVOKE
+CREATE TRIGGER
+INSERT 0 1
+INSERT 0 1
+CREATE TABLE
+GRANT
+INSERT 0 1
+SELECT 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+SET
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+RESET
+SET
+              set_config
+--------------------------------------
+ fb5558da-3d02-d4f3-b8e3-459bd9f53ecf
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 72c08182-63ae-46f7-2888-124d9cf74e60
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           mutate_position_follow_up
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"entries": [{"id": "5d8dcec8-5756-46e6-9e3b-053f34c1f77c", "age": null, "match": null, "score": null, "stage": "awaiting_evaluation", "title": null, "details": {}, "fullName": "Pessoa sintética", "personId": "08b8e17c-c0c1-08fe-9002-600edf81ebe2", "revision": 1, "profileId": "fd2e7ad9-9c9c-b324-7a80-84b145cf6ef2", "scoreState": "unavailable", "evaluationId": null, "profileVersion": 2, "scoreProfileId": null, "scorePositionId": null, "sourceProfileId": "fd2e7ad9-9c9c-b324-7a80-84b145cf6ef2", "sourcePositionId": "c00907a4-c580-c875-a1d9-901c6ade3f69"}], "history": [{"at": "2026-10-14T11:29:06.798055-03:00", "id": "d20a84c3-69ff-4c27-a390-42bb5e684050", "actor": "Synthetic recruiter", "after": {"stage": "awaiting_evaluation", "details": {}, "revision": 1}, "action": "add", "before": null, "entryId": "5d8dcec8-5756-46e6-9e3b-053f34c1f77c"}], "process": {"id": "1e4c554f-ab0d-4737-ae7b-d7df51e9b692", "name": "Avaliação 01", "status": "active", "revision": 2}, "contract": "position-follow-up-1.0.0", "operators": [{"id": "72c08182-63ae-46f7-2888-124d9cf74e60", "name": "Synthetic recruiter"}]}
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+INSERT 0 1
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+RESET
+INSERT 0 1
+SET
+ position_assessment_generation_finish
+---------------------------------------
+ {"status": "succeeded"}
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+RESET
+SET
+              set_config
+--------------------------------------
+ 72c08182-63ae-46f7-2888-124d9cf74e60
+(1 row)
+
+UPDATE 1
+ m83_reject
+------------
+
+(1 row)
+
+DO
+UPDATE 1
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 7f695961-ba40-8230-f39d-8a15e2c1a712
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+RESET
+SET
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+INSERT 0 1
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+UPDATE 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+INSERT 0 1
+UPDATE 1
+ m83_assert
+------------
+
+(1 row)
+
+UPDATE 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+RESET
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+RESET
+SELECT 1
+ALTER TABLE
+ALTER TABLE
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+ALTER TABLE
+CREATE INDEX
+ALTER TABLE
+CREATE INDEX
+CREATE TABLE
+ALTER TABLE
+REVOKE
+CREATE FUNCTION
+REVOKE
+CREATE TRIGGER
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+REVOKE
+REVOKE
+CREATE FUNCTION
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+REVOKE
+GRANT
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+SET
+ m83_reject
+------------
+
+(1 row)
+
+RESET
+SET
+              set_config
+--------------------------------------
+ 7f695961-ba40-8230-f39d-8a15e2c1a712
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 72c08182-63ae-46f7-2888-124d9cf74e60
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+INSERT 0 1
+RESET
+SET
+ position_assessment_generation_finish
+---------------------------------------
+ {"status": "succeeded"}
+(1 row)
+
+RESET
+SET
+              set_config
+--------------------------------------
+ 72c08182-63ae-46f7-2888-124d9cf74e60
+(1 row)
+
+UPDATE 1
+ m83_reject
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+INSERT 0 1
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+RESET
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+SELECT 1
+SET
+              set_config
+--------------------------------------
+ 72c08182-63ae-46f7-2888-124d9cf74e60
+(1 row)
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        mutate_position_follow_up
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"entries": [{"id": "7eaca132-de69-4bea-b25f-5802e575d19f", "age": null, "city": null, "match": null, "score": null, "stage": "awaiting_evaluation", "state": null, "title": null, "details": {}, "fullName": "Candidato sintético tardio", "personId": "ba81abe0-e8cc-015b-ad87-b306485247cc", "revision": 1, "profileId": "7d29b755-8068-c230-cdf9-1b852808c739", "scoreState": "unavailable", "evaluationId": null, "profileVersion": 1, "scoreProfileId": null, "scorePositionId": null, "sourceProfileId": "7d29b755-8068-c230-cdf9-1b852808c739", "sourcePositionId": "c00907a4-c580-c875-a1d9-901c6ade3f69"}, {"id": "5d8dcec8-5756-46e6-9e3b-053f34c1f77c", "age": null, "city": null, "match": null, "score": null, "stage": "awaiting_evaluation", "state": null, "title": null, "details": {}, "fullName": "Pessoa sintética", "personId": "08b8e17c-c0c1-08fe-9002-600edf81ebe2", "revision": 1, "profileId": "fd2e7ad9-9c9c-b324-7a80-84b145cf6ef2", "scoreState": "unavailable", "evaluationId": null, "profileVersion": 2, "scoreProfileId": null, "scorePositionId": null, "sourceProfileId": "fd2e7ad9-9c9c-b324-7a80-84b145cf6ef2", "sourcePositionId": "c00907a4-c580-c875-a1d9-901c6ade3f69"}], "history": [{"at": "2026-10-14T11:29:06.798055-03:00", "id": "09b0469a-a053-4e2d-aa12-345e8a6714f3", "actor": "Synthetic recruiter", "after": {"stage": "awaiting_evaluation", "details": {}, "revision": 1}, "action": "add", "before": null, "entryId": "7eaca132-de69-4bea-b25f-5802e575d19f"}, {"at": "2026-10-14T11:29:06.798055-03:00", "id": "d20a84c3-69ff-4c27-a390-42bb5e684050", "actor": "Synthetic recruiter", "after": {"stage": "awaiting_evaluation", "details": {}, "revision": 1}, "action": "add", "before": null, "entryId": "5d8dcec8-5756-46e6-9e3b-053f34c1f77c"}], "process": {"id": "1e4c554f-ab0d-4737-ae7b-d7df51e9b692", "name": "Avaliação 01", "status": "active", "revision": 3, "sequence": 1, "isCurrent": true}, "contract": "position-follow-up-1.0.0", "operators": [{"id": "72c08182-63ae-46f7-2888-124d9cf74e60", "name": "Synthetic recruiter"}], "processes": [{"id": "1e4c554f-ab0d-4737-ae7b-d7df51e9b692", "name": "Avaliação 01", "status": "active", "revision": 3, "sequence": 1, "isCurrent": true}]}
+(1 row)
+
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+RESET
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+SET
+INSERT 0 1
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+RESET
+SET
+              set_config
+--------------------------------------
+ 72c08182-63ae-46f7-2888-124d9cf74e60
+(1 row)
+
+INSERT 0 1
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       mutate_position_follow_up_process
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"entries": [{"id": "7eaca132-de69-4bea-b25f-5802e575d19f", "age": null, "city": null, "match": null, "score": null, "stage": "awaiting_evaluation", "state": null, "title": null, "details": {}, "fullName": "Candidato sintético tardio", "personId": "ba81abe0-e8cc-015b-ad87-b306485247cc", "revision": 1, "profileId": "7d29b755-8068-c230-cdf9-1b852808c739", "scoreState": "unavailable", "evaluationId": null, "profileVersion": 1, "scoreProfileId": null, "scorePositionId": null, "sourceProfileId": "7d29b755-8068-c230-cdf9-1b852808c739", "sourcePositionId": "c00907a4-c580-c875-a1d9-901c6ade3f69"}, {"id": "5d8dcec8-5756-46e6-9e3b-053f34c1f77c", "age": null, "city": null, "match": null, "score": null, "stage": "awaiting_evaluation", "state": null, "title": null, "details": {}, "fullName": "Pessoa sintética", "personId": "08b8e17c-c0c1-08fe-9002-600edf81ebe2", "revision": 1, "profileId": "fd2e7ad9-9c9c-b324-7a80-84b145cf6ef2", "scoreState": "unavailable", "evaluationId": null, "profileVersion": 2, "scoreProfileId": null, "scorePositionId": null, "sourceProfileId": "fd2e7ad9-9c9c-b324-7a80-84b145cf6ef2", "sourcePositionId": "c00907a4-c580-c875-a1d9-901c6ade3f69"}], "history": [{"at": "2026-10-14T11:29:06.798055-03:00", "id": "04e09a84-4f0f-429f-b32f-f5b93a7b7f91", "actor": "Synthetic recruiter", "after": {"status": "closed"}, "action": "close_process", "before": {"status": "active"}, "entryId": null}, {"at": "2026-10-14T11:29:06.798055-03:00", "id": "09b0469a-a053-4e2d-aa12-345e8a6714f3", "actor": "Synthetic recruiter", "after": {"stage": "awaiting_evaluation", "details": {}, "revision": 1}, "action": "add", "before": null, "entryId": "7eaca132-de69-4bea-b25f-5802e575d19f"}, {"at": "2026-10-14T11:29:06.798055-03:00", "id": "d20a84c3-69ff-4c27-a390-42bb5e684050", "actor": "Synthetic recruiter", "after": {"stage": "awaiting_evaluation", "details": {}, "revision": 1}, "action": "add", "before": null, "entryId": "5d8dcec8-5756-46e6-9e3b-053f34c1f77c"}], "process": {"id": "1e4c554f-ab0d-4737-ae7b-d7df51e9b692", "name": "Avaliação 01", "status": "closed", "revision": 4, "sequence": 1, "isCurrent": true}, "contract": "position-follow-up-1.0.0", "operators": [{"id": "72c08182-63ae-46f7-2888-124d9cf74e60", "name": "Synthetic recruiter"}], "processes": [{"id": "1e4c554f-ab0d-4737-ae7b-d7df51e9b692", "name": "Avaliação 01", "status": "closed", "revision": 4, "sequence": 1, "isCurrent": true}]}
+(1 row)
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          mutate_position_follow_up_process
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"entries": [{"id": "7eaca132-de69-4bea-b25f-5802e575d19f", "age": null, "city": null, "match": null, "score": null, "stage": "awaiting_evaluation", "state": null, "title": null, "details": {}, "fullName": "Candidato sintético tardio", "personId": "ba81abe0-e8cc-015b-ad87-b306485247cc", "revision": 1, "profileId": "7d29b755-8068-c230-cdf9-1b852808c739", "scoreState": "unavailable", "evaluationId": null, "profileVersion": 1, "scoreProfileId": null, "scorePositionId": null, "sourceProfileId": "7d29b755-8068-c230-cdf9-1b852808c739", "sourcePositionId": "c00907a4-c580-c875-a1d9-901c6ade3f69"}, {"id": "5d8dcec8-5756-46e6-9e3b-053f34c1f77c", "age": null, "city": null, "match": null, "score": null, "stage": "awaiting_evaluation", "state": null, "title": null, "details": {}, "fullName": "Pessoa sintética", "personId": "08b8e17c-c0c1-08fe-9002-600edf81ebe2", "revision": 1, "profileId": "fd2e7ad9-9c9c-b324-7a80-84b145cf6ef2", "scoreState": "unavailable", "evaluationId": null, "profileVersion": 2, "scoreProfileId": null, "scorePositionId": null, "sourceProfileId": "fd2e7ad9-9c9c-b324-7a80-84b145cf6ef2", "sourcePositionId": "c00907a4-c580-c875-a1d9-901c6ade3f69"}], "history": [{"at": "2026-10-14T11:29:06.798055-03:00", "id": "04e09a84-4f0f-429f-b32f-f5b93a7b7f91", "actor": "Synthetic recruiter", "after": {"status": "closed"}, "action": "close_process", "before": {"status": "active"}, "entryId": null}, {"at": "2026-10-14T11:29:06.798055-03:00", "id": "09b0469a-a053-4e2d-aa12-345e8a6714f3", "actor": "Synthetic recruiter", "after": {"stage": "awaiting_evaluation", "details": {}, "revision": 1}, "action": "add", "before": null, "entryId": "7eaca132-de69-4bea-b25f-5802e575d19f"}, {"at": "2026-10-14T11:29:06.798055-03:00", "id": "a5432d6c-500f-4a5d-96a2-f6b5557a0ef3", "actor": "Synthetic recruiter", "after": {"status": "active"}, "action": "reopen_process", "before": {"status": "closed"}, "entryId": null}, {"at": "2026-10-14T11:29:06.798055-03:00", "id": "d20a84c3-69ff-4c27-a390-42bb5e684050", "actor": "Synthetic recruiter", "after": {"stage": "awaiting_evaluation", "details": {}, "revision": 1}, "action": "add", "before": null, "entryId": "5d8dcec8-5756-46e6-9e3b-053f34c1f77c"}], "process": {"id": "1e4c554f-ab0d-4737-ae7b-d7df51e9b692", "name": "Avaliação 01", "status": "active", "revision": 5, "sequence": 1, "isCurrent": true}, "contract": "position-follow-up-1.0.0", "operators": [{"id": "72c08182-63ae-46f7-2888-124d9cf74e60", "name": "Synthetic recruiter"}], "processes": [{"id": "1e4c554f-ab0d-4737-ae7b-d7df51e9b692", "name": "Avaliação 01", "status": "active", "revision": 5, "sequence": 1, "isCurrent": true}]}
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+UPDATE 1
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            mutate_position_follow_up_process
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"entries": [{"id": "7eaca132-de69-4bea-b25f-5802e575d19f", "age": null, "city": null, "match": null, "score": null, "stage": "awaiting_evaluation", "state": null, "title": null, "details": {}, "fullName": "Candidato sintético tardio", "personId": "ba81abe0-e8cc-015b-ad87-b306485247cc", "revision": 1, "profileId": "7d29b755-8068-c230-cdf9-1b852808c739", "scoreState": "unavailable", "evaluationId": null, "profileVersion": 1, "scoreProfileId": null, "scorePositionId": null, "sourceProfileId": "7d29b755-8068-c230-cdf9-1b852808c739", "sourcePositionId": "c00907a4-c580-c875-a1d9-901c6ade3f69"}, {"id": "5d8dcec8-5756-46e6-9e3b-053f34c1f77c", "age": null, "city": null, "match": null, "score": null, "stage": "awaiting_evaluation", "state": null, "title": null, "details": {}, "fullName": "Pessoa sintética", "personId": "08b8e17c-c0c1-08fe-9002-600edf81ebe2", "revision": 1, "profileId": "fd2e7ad9-9c9c-b324-7a80-84b145cf6ef2", "scoreState": "unavailable", "evaluationId": null, "profileVersion": 2, "scoreProfileId": null, "scorePositionId": null, "sourceProfileId": "fd2e7ad9-9c9c-b324-7a80-84b145cf6ef2", "sourcePositionId": "c00907a4-c580-c875-a1d9-901c6ade3f69"}], "history": [{"at": "2026-10-14T11:29:06.798055-03:00", "id": "04e09a84-4f0f-429f-b32f-f5b93a7b7f91", "actor": "Synthetic recruiter", "after": {"status": "closed"}, "action": "close_process", "before": {"status": "active"}, "entryId": null}, {"at": "2026-10-14T11:29:06.798055-03:00", "id": "09b0469a-a053-4e2d-aa12-345e8a6714f3", "actor": "Synthetic recruiter", "after": {"stage": "awaiting_evaluation", "details": {}, "revision": 1}, "action": "add", "before": null, "entryId": "7eaca132-de69-4bea-b25f-5802e575d19f"}, {"at": "2026-10-14T11:29:06.798055-03:00", "id": "4f393754-463b-494d-875f-93dd04be98c0", "actor": "Synthetic recruiter", "after": {"status": "closed"}, "action": "close_process", "before": {"status": "active"}, "entryId": null}, {"at": "2026-10-14T11:29:06.798055-03:00", "id": "a5432d6c-500f-4a5d-96a2-f6b5557a0ef3", "actor": "Synthetic recruiter", "after": {"status": "active"}, "action": "reopen_process", "before": {"status": "closed"}, "entryId": null}, {"at": "2026-10-14T11:29:06.798055-03:00", "id": "d20a84c3-69ff-4c27-a390-42bb5e684050", "actor": "Synthetic recruiter", "after": {"stage": "awaiting_evaluation", "details": {}, "revision": 1}, "action": "add", "before": null, "entryId": "5d8dcec8-5756-46e6-9e3b-053f34c1f77c"}], "process": {"id": "1e4c554f-ab0d-4737-ae7b-d7df51e9b692", "name": "Avaliação 01", "status": "closed", "revision": 6, "sequence": 1, "isCurrent": true}, "contract": "position-follow-up-1.0.0", "operators": [{"id": "72c08182-63ae-46f7-2888-124d9cf74e60", "name": "Synthetic recruiter"}], "processes": [{"id": "1e4c554f-ab0d-4737-ae7b-d7df51e9b692", "name": "Avaliação 01", "status": "closed", "revision": 6, "sequence": 1, "isCurrent": true}]}
+(1 row)
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                       start_position_selection_process
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"entries": [], "history": [{"at": "2026-10-14T11:29:06.798055-03:00", "id": "93dc1c7e-95fb-413b-bc69-0fc106aacfc1", "actor": "Synthetic recruiter", "after": {"previousProcessId": "1e4c554f-ab0d-4737-ae7b-d7df51e9b692"}, "action": "start_process", "before": null, "entryId": null}], "process": {"id": "455084bc-ff80-4116-aea4-936178d6b848", "name": "Acompanhamento 02", "status": "active", "revision": 1, "sequence": 2, "isCurrent": true}, "contract": "position-follow-up-1.0.0", "operators": [{"id": "72c08182-63ae-46f7-2888-124d9cf74e60", "name": "Synthetic recruiter"}], "processes": [{"id": "455084bc-ff80-4116-aea4-936178d6b848", "name": "Acompanhamento 02", "status": "active", "revision": 1, "sequence": 2, "isCurrent": true}, {"id": "1e4c554f-ab0d-4737-ae7b-d7df51e9b692", "name": "Avaliação 01", "status": "closed", "revision": 7, "sequence": 1, "isCurrent": false}]}
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    process_assessment_reuse
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"id": "68080745-87a9-4b24-bccf-c1aa34f3b539", "config": {"mode": "ai", "level": 1, "quantity": 10, "distribution": {"level": 1, "counts": {"easy": 6, "hard": 1, "medium": 3}, "version": "position-assessment-distribution-1.0.0", "quantity": 10, "percentages": {"easy": 60, "hard": 10, "medium": 30}}, "durationMinutes": 60}, "status": "draft", "revision": 1, "person_id": null, "questions": [{"id": "741dc5aa-5ab7-4fe7-104a-f2bb41ca413f", "stem": "Synthetic question 1", "review": "approved", "source": "ai", "options": [{"id": "A", "label": "Alpha"}, {"id": "B", "label": "Beta"}, {"id": "C", "label": "Gamma"}, {"id": "D", "label": "Delta"}, {"id": "E", "label": "Epsilon"}], "version": "pa-item-1.0.0", "language": "pt-BR", "approvedAt": "2026-10-14T11:29:06.798055-03:00", "approvedBy": "72c08182-63ae-46f7-2888-124d9cf74e60", "difficulty": "easy", "provenance": {"method": "synthetic-qa", "version": "pa-method-1.0.0", "authorId": null}, "explanation": "Synthetic evidence", "competencyKey": "JavaScript", "requirementId": "7219b369-250d-7f3e-1ba2-85cd4fc08224", "organizationId": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe", "correctOptionId": "A"}, {"id": "c123f9db-3aca-0798-971f-4b41c8b8f9fa", "stem": "Synthetic question 2", "review": "approved", "source": "ai", "options": [{"id": "A", "label": "Alpha"}, {"id": "B", "label": "Beta"}, {"id": "C", "label": "Gamma"}, {"id": "D", "label": "Delta"}, {"id": "E", "label": "Epsilon"}], "version": "pa-item-1.0.0", "language": "pt-BR", "approvedAt": "2026-10-14T11:29:06.798055-03:00", "approvedBy": "72c08182-63ae-46f7-2888-124d9cf74e60", "difficulty": "easy", "provenance": {"method": "synthetic-qa", "version": "pa-method-1.0.0", "authorId": null}, "explanation": "Synthetic evidence", "competencyKey": "JavaScript", "requirementId": "7219b369-250d-7f3e-1ba2-85cd4fc08224", "organizationId": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe", "correctOptionId": "A"}, {"id": "47e35fb2-4d3a-a495-fa61-28df56d2fa7f", "stem": "Synthetic question 3", "review": "approved", "source": "ai", "options": [{"id": "A", "label": "Alpha"}, {"id": "B", "label": "Beta"}, {"id": "C", "label": "Gamma"}, {"id": "D", "label": "Delta"}, {"id": "E", "label": "Epsilon"}], "version": "pa-item-1.0.0", "language": "pt-BR", "approvedAt": "2026-10-14T11:29:06.798055-03:00", "approvedBy": "72c08182-63ae-46f7-2888-124d9cf74e60", "difficulty": "easy", "provenance": {"method": "synthetic-qa", "version": "pa-method-1.0.0", "authorId": null}, "explanation": "Synthetic evidence", "competencyKey": "JavaScript", "requirementId": "7219b369-250d-7f3e-1ba2-85cd4fc08224", "organizationId": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe", "correctOptionId": "A"}, {"id": "bb922112-743b-6724-cbaa-1f8d5d3e388d", "stem": "Synthetic question 4", "review": "approved", "source": "ai", "options": [{"id": "A", "label": "Alpha"}, {"id": "B", "label": "Beta"}, {"id": "C", "label": "Gamma"}, {"id": "D", "label": "Delta"}, {"id": "E", "label": "Epsilon"}], "version": "pa-item-1.0.0", "language": "pt-BR", "approvedAt": "2026-10-14T11:29:06.798055-03:00", "approvedBy": "72c08182-63ae-46f7-2888-124d9cf74e60", "difficulty": "easy", "provenance": {"method": "synthetic-qa", "version": "pa-method-1.0.0", "authorId": null}, "explanation": "Synthetic evidence", "competencyKey": "JavaScript", "requirementId": "7219b369-250d-7f3e-1ba2-85cd4fc08224", "organizationId": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe", "correctOptionId": "A"}, {"id": "baaffad5-68d3-0616-0d36-715885998fa5", "stem": "Synthetic question 5", "review": "approved", "source": "ai", "options": [{"id": "A", "label": "Alpha"}, {"id": "B", "label": "Beta"}, {"id": "C", "label": "Gamma"}, {"id": "D", "label": "Delta"}, {"id": "E", "label": "Epsilon"}], "version": "pa-item-1.0.0", "language": "pt-BR", "approvedAt": "2026-10-14T11:29:06.798055-03:00", "approvedBy": "72c08182-63ae-46f7-2888-124d9cf74e60", "difficulty": "easy", "provenance": {"method": "synthetic-qa", "version": "pa-method-1.0.0", "authorId": null}, "explanation": "Synthetic evidence", "competencyKey": "JavaScript", "requirementId": "7219b369-250d-7f3e-1ba2-85cd4fc08224", "organizationId": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe", "correctOptionId": "A"}, {"id": "e40a5e51-1665-d07e-78a6-edd382784d06", "stem": "Synthetic question 6", "review": "approved", "source": "ai", "options": [{"id": "A", "label": "Alpha"}, {"id": "B", "label": "Beta"}, {"id": "C", "label": "Gamma"}, {"id": "D", "label": "Delta"}, {"id": "E", "label": "Epsilon"}], "version": "pa-item-1.0.0", "language": "pt-BR", "approvedAt": "2026-10-14T11:29:06.798055-03:00", "approvedBy": "72c08182-63ae-46f7-2888-124d9cf74e60", "difficulty": "easy", "provenance": {"method": "synthetic-qa", "version": "pa-method-1.0.0", "authorId": null}, "explanation": "Synthetic evidence", "competencyKey": "JavaScript", "requirementId": "7219b369-250d-7f3e-1ba2-85cd4fc08224", "organizationId": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe", "correctOptionId": "A"}, {"id": "4877c11b-0b98-6867-af53-fea12e226af1", "stem": "Synthetic question 7", "review": "approved", "source": "ai", "options": [{"id": "A", "label": "Alpha"}, {"id": "B", "label": "Beta"}, {"id": "C", "label": "Gamma"}, {"id": "D", "label": "Delta"}, {"id": "E", "label": "Epsilon"}], "version": "pa-item-1.0.0", "language": "pt-BR", "approvedAt": "2026-10-14T11:29:06.798055-03:00", "approvedBy": "72c08182-63ae-46f7-2888-124d9cf74e60", "difficulty": "medium", "provenance": {"method": "synthetic-qa", "version": "pa-method-1.0.0", "authorId": null}, "explanation": "Synthetic evidence", "competencyKey": "JavaScript", "requirementId": "7219b369-250d-7f3e-1ba2-85cd4fc08224", "organizationId": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe", "correctOptionId": "A"}, {"id": "4adfe1db-2715-0c0e-6f44-73a714badb30", "stem": "Synthetic question 8", "review": "approved", "source": "ai", "options": [{"id": "A", "label": "Alpha"}, {"id": "B", "label": "Beta"}, {"id": "C", "label": "Gamma"}, {"id": "D", "label": "Delta"}, {"id": "E", "label": "Epsilon"}], "version": "pa-item-1.0.0", "language": "pt-BR", "approvedAt": "2026-10-14T11:29:06.798055-03:00", "approvedBy": "72c08182-63ae-46f7-2888-124d9cf74e60", "difficulty": "medium", "provenance": {"method": "synthetic-qa", "version": "pa-method-1.0.0", "authorId": null}, "explanation": "Synthetic evidence", "competencyKey": "JavaScript", "requirementId": "7219b369-250d-7f3e-1ba2-85cd4fc08224", "organizationId": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe", "correctOptionId": "A"}, {"id": "4037cd37-ff1f-c330-ab28-ef993cf03460", "stem": "Synthetic question 9", "review": "approved", "source": "ai", "options": [{"id": "A", "label": "Alpha"}, {"id": "B", "label": "Beta"}, {"id": "C", "label": "Gamma"}, {"id": "D", "label": "Delta"}, {"id": "E", "label": "Epsilon"}], "version": "pa-item-1.0.0", "language": "pt-BR", "approvedAt": "2026-10-14T11:29:06.798055-03:00", "approvedBy": "72c08182-63ae-46f7-2888-124d9cf74e60", "difficulty": "medium", "provenance": {"method": "synthetic-qa", "version": "pa-method-1.0.0", "authorId": null}, "explanation": "Synthetic evidence", "competencyKey": "JavaScript", "requirementId": "7219b369-250d-7f3e-1ba2-85cd4fc08224", "organizationId": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe", "correctOptionId": "A"}, {"id": "1c6a2e97-ad60-88e5-613a-044954d4b2ed", "stem": "Synthetic question 10", "review": "approved", "source": "ai", "options": [{"id": "A", "label": "Alpha"}, {"id": "B", "label": "Beta"}, {"id": "C", "label": "Gamma"}, {"id": "D", "label": "Delta"}, {"id": "E", "label": "Epsilon"}], "version": "pa-item-1.0.0", "language": "pt-BR", "approvedAt": "2026-10-14T11:29:06.798055-03:00", "approvedBy": "72c08182-63ae-46f7-2888-124d9cf74e60", "difficulty": "hard", "provenance": {"method": "synthetic-qa", "version": "pa-method-1.0.0", "authorId": null}, "explanation": "Synthetic evidence", "competencyKey": "JavaScript", "requirementId": "7219b369-250d-7f3e-1ba2-85cd4fc08224", "organizationId": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe", "correctOptionId": "A"}], "created_at": "2026-10-14T11:29:06.798055-03:00", "created_by": "72c08182-63ae-46f7-2888-124d9cf74e60", "process_id": "455084bc-ff80-4116-aea4-936178d6b848", "updated_at": "2026-10-14T11:29:06.798055-03:00", "vacancy_id": "aadb77a3-9949-d53f-5764-dc3cb785d385", "requirements": [{"id": "7219b369-250d-7f3e-1ba2-85cd4fc08224", "label": "JavaScript", "competencyKey": "JavaScript"}], "organization_id": "8e9f520a-8b0b-e1b3-e85a-a8648e7bacfe", "contract_version": "position-assessment-2.0.0", "position_version_id": "c00907a4-c580-c875-a1d9-901c6ade3f69"}
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+INSERT 0 1
+UPDATE 1
+UPDATE 1
+INSERT 0 1
+UPDATE 1
+ m83_assert
+------------
+
+(1 row)
+
+UPDATE 1
+ m83_assert
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ fb5558da-3d02-d4f3-b8e3-459bd9f53ecf
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 72c08182-63ae-46f7-2888-124d9cf74e60
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+RESET
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+DO
+DO
+CREATE INDEX
+CREATE FUNCTION
+REVOKE
+CREATE TRIGGER
+CREATE FUNCTION
+CREATE FUNCTION
+REVOKE
+CREATE FUNCTION
+CREATE FUNCTION
+REVOKE
+GRANT
+RESET
+SELECT 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+UPDATE 1
+CREATE TABLE
+GRANT
+SET
+              set_config
+--------------------------------------
+ fb5558da-3d02-d4f3-b8e3-459bd9f53ecf
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 7f695961-ba40-8230-f39d-8a15e2c1a712
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 1c84eaeb-a2c3-d1ec-df63-34dd2093d9a2
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ set_config
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 72c08182-63ae-46f7-2888-124d9cf74e60
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+DELETE 1
+INSERT 0 1
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   mutate_position_follow_up_process
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"entries": [{"id": "4a2bff6e-46dd-45ba-9e5c-342a9a2684aa", "age": null, "city": null, "match": null, "score": null, "stage": "awaiting_evaluation", "state": null, "title": null, "details": {}, "fullName": "Pessoa sintética", "personId": "08b8e17c-c0c1-08fe-9002-600edf81ebe2", "revision": 1, "profileId": "fd2e7ad9-9c9c-b324-7a80-84b145cf6ef2", "scoreState": "unavailable", "evaluationId": null, "profileVersion": 2, "scoreProfileId": null, "scorePositionId": null, "sourceProfileId": "fd2e7ad9-9c9c-b324-7a80-84b145cf6ef2", "sourcePositionId": "58a2a596-b8fe-78d8-f246-7ab77d49e15c"}], "history": [{"at": "2026-10-14T11:29:06.798055-03:00", "id": "8131ce41-04f4-4ddd-b8ef-b967420acfad", "actor": "Synthetic recruiter", "after": {"positionVersionId": "58a2a596-b8fe-78d8-f246-7ab77d49e15c", "previousProcessId": null}, "action": "start_process", "before": null, "entryId": null}, {"at": "2026-10-14T11:29:06.798055-03:00", "id": "84a426c8-b618-4bc6-a378-03ab97b3622b", "actor": "Synthetic recruiter", "after": {"status": "closed"}, "action": "close_process", "before": {"status": "active"}, "entryId": null}, {"at": "2026-10-14T11:29:06.798055-03:00", "id": "8f6c5366-afc4-4a78-9089-c0a93b7c1f29", "actor": "Synthetic recruiter", "after": {"stage": "awaiting_evaluation", "details": {}, "revision": 1}, "action": "add", "before": null, "entryId": "4a2bff6e-46dd-45ba-9e5c-342a9a2684aa"}], "process": {"id": "af38775d-856f-4c32-bb56-306976256a74", "name": "Processo 01", "status": "closed", "revision": 3, "sequence": 1, "isCurrent": true}, "contract": "position-follow-up-1.0.0", "operators": [{"id": "72c08182-63ae-46f7-2888-124d9cf74e60", "name": "Synthetic recruiter"}], "processes": [{"id": "af38775d-856f-4c32-bb56-306976256a74", "name": "Processo 01", "status": "closed", "revision": 3, "sequence": 1, "isCurrent": true}]}
+(1 row)
+
+RESET
+ m83_assert
+------------
+
+(1 row)
+
+UPDATE 1
+SET
+              set_config
+--------------------------------------
+ 72c08182-63ae-46f7-2888-124d9cf74e60
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+RESET
+UPDATE 1
+SET
+              set_config
+--------------------------------------
+ 72c08182-63ae-46f7-2888-124d9cf74e60
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+RESET
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ROLLBACK
+
+psql:tmp/selection-processes/local.sql:2: NOTICE:  truncate cascades to table "profile_synthesis_attempts"
+psql:tmp/selection-processes/local.sql:964: NOTICE:  PASS: distribution exact 20 level3
+psql:tmp/selection-processes/local.sql:965: NOTICE:  PASS: denied (22023)
+psql:tmp/selection-processes/local.sql:966: NOTICE:  PASS: denied (22023)
+psql:tmp/selection-processes/local.sql:968: NOTICE:  PASS: denied (42501)
+psql:tmp/selection-processes/local.sql:969: NOTICE:  PASS: denied (42501)
+psql:tmp/selection-processes/local.sql:973: NOTICE:  PASS: denied (42501)
+psql:tmp/selection-processes/local.sql:975: NOTICE:  PASS: denied (42501)
+psql:tmp/selection-processes/local.sql:977: NOTICE:  PASS: denied (42501)
+psql:tmp/selection-processes/local.sql:978: NOTICE:  PASS: denied (42501)
+psql:tmp/selection-processes/local.sql:980: NOTICE:  PASS: read does not create assessments
+psql:tmp/selection-processes/local.sql:982: NOTICE:  PASS: denied (22023)
+psql:tmp/selection-processes/local.sql:983: NOTICE:  PASS: denied (40001)
+psql:tmp/selection-processes/local.sql:985: NOTICE:  PASS: same generation request replays without new reservation
+psql:tmp/selection-processes/local.sql:986: NOTICE:  PASS: denied (40001)
+psql:tmp/selection-processes/local.sql:991: NOTICE:  PASS: denied (42501)
+psql:tmp/selection-processes/local.sql:996: NOTICE:  PASS: denied (22023)
+psql:tmp/selection-processes/local.sql:1000: NOTICE:  PASS: invite is queued, never invented sent
+psql:tmp/selection-processes/local.sql:1001: NOTICE:  PASS: operator does not receive raw personal token
+psql:tmp/selection-processes/local.sql:1003: NOTICE:  PASS: denied (42501)
+psql:tmp/selection-processes/local.sql:1007: NOTICE:  PASS: backend acquires persisted first attempt and lease
+psql:tmp/selection-processes/local.sql:1008: NOTICE:  PASS: duplicate dispatch does not acquire lease
+psql:tmp/selection-processes/local.sql:1011: NOTICE:  PASS: questions absent before explicit start
+psql:tmp/selection-processes/local.sql:1013: NOTICE:  PASS: start exposes exactly five alternatives per question
+psql:tmp/selection-processes/local.sql:1014: NOTICE:  PASS: portal exposes no answer key or explanation
+psql:tmp/selection-processes/local.sql:1015: NOTICE:  PASS: denied (22023)
+psql:tmp/selection-processes/local.sql:1018: NOTICE:  PASS: autosave replay idempotent after lost response
+psql:tmp/selection-processes/local.sql:1020: NOTICE:  PASS: candidate receives completion receipt only
+psql:tmp/selection-processes/local.sql:1021: NOTICE:  PASS: submission replay preserves receipt
+psql:tmp/selection-processes/local.sql:1023: NOTICE:  PASS: backend deterministic correction
+psql:tmp/selection-processes/local.sql:1024: NOTICE:  PASS: profiles preserved
+psql:tmp/selection-processes/local.sql:1025: NOTICE:  PASS: matching and score preserved
+psql:tmp/selection-processes/local.sql:1026: NOTICE:  PASS: position status and definition preserved
+psql:tmp/selection-processes/local.sql:1027: NOTICE:  PASS: all assessment tables have RLS
+psql:tmp/selection-processes/local.sql:1632: NOTICE:  PASS: legacy assessment unchanged
+psql:tmp/selection-processes/local.sql:1633: NOTICE:  PASS: legacy attempts unchanged
+psql:tmp/selection-processes/local.sql:1635: NOTICE:  PASS: denied (42501)
+psql:tmp/selection-processes/local.sql:1639: NOTICE:  PASS: denied (42501)
+psql:tmp/selection-processes/local.sql:1641: NOTICE:  PASS: denied (42501)
+psql:tmp/selection-processes/local.sql:1642: NOTICE:  PASS: denied (22023)
+psql:tmp/selection-processes/local.sql:1643: NOTICE:  PASS: denied (40001)
+psql:tmp/selection-processes/local.sql:1644: NOTICE:  PASS: denied (40001)
+psql:tmp/selection-processes/local.sql:1646: NOTICE:  PASS: new proof belongs to process, never individual
+psql:tmp/selection-processes/local.sql:1656: NOTICE:  PASS: denied (22023)
+psql:tmp/selection-processes/local.sql:1657: NOTICE:  PASS: invalid batch does not approve/freeze
+psql:tmp/selection-processes/local.sql:1660: NOTICE:  PASS: batch queues personal invitations without exposing token
+psql:tmp/selection-processes/local.sql:1661: NOTICE:  PASS: lost batch response replays without duplicate invitation
+psql:tmp/selection-processes/local.sql:1662: NOTICE:  PASS: denied (22023)
+psql:tmp/selection-processes/local.sql:1663: NOTICE:  PASS: legacy individual workspace remains available
+psql:tmp/selection-processes/local.sql:1665: NOTICE:  PASS: batch replay creates exactly one application
+psql:tmp/selection-processes/local.sql:1666: NOTICE:  PASS: one human action approves complete common proof
+psql:tmp/selection-processes/local.sql:1672: NOTICE:  PASS: individual workspace includes legacy and own shared application only
+psql:tmp/selection-processes/local.sql:1673: NOTICE:  PASS: individual workspace cannot leak another candidate application
+psql:tmp/selection-processes/local.sql:1675: NOTICE:  PASS: late candidate receives exactly frozen common proof
+psql:tmp/selection-processes/local.sql:1676: NOTICE:  PASS: legacy history survives shared send
+psql:tmp/selection-processes/local.sql:1680: NOTICE:  PASS: shared proof preserves public portal v1
+psql:tmp/selection-processes/local.sql:1681: NOTICE:  PASS: shared public portal uses individual application identity
+psql:tmp/selection-processes/local.sql:1688: NOTICE:  PASS: reopening existing process preserves its exact proof
+psql:tmp/selection-processes/local.sql:1692: NOTICE:  PASS: new process preserves historical cycle
+psql:tmp/selection-processes/local.sql:1693: NOTICE:  PASS: new process does not copy candidates or human decisions
+psql:tmp/selection-processes/local.sql:1694: NOTICE:  PASS: denied (40001)
+psql:tmp/selection-processes/local.sql:1695: NOTICE:  PASS: historical process remains readable
+psql:tmp/selection-processes/local.sql:1697: NOTICE:  PASS: reuse copies proof only, never answers/invitations
+psql:tmp/selection-processes/local.sql:1703: NOTICE:  PASS: canonical bank version preserves its actual human approval
+psql:tmp/selection-processes/local.sql:1705: NOTICE:  PASS: edited bank creates new contextual copy requiring human review
+psql:tmp/selection-processes/local.sql:1707: NOTICE:  PASS: denied (42501)
+psql:tmp/selection-processes/local.sql:1709: NOTICE:  PASS: denied (42501)
+psql:tmp/selection-processes/local.sql:1710: NOTICE:  PASS: denied (42501)
+psql:tmp/selection-processes/local.sql:1711: NOTICE:  PASS: denied (42501)
+psql:tmp/selection-processes/local.sql:1712: NOTICE:  PASS: denied (22023)
+psql:tmp/selection-processes/local.sql:1714: NOTICE:  PASS: profiles preserved
+psql:tmp/selection-processes/local.sql:1715: NOTICE:  PASS: matching preserved
+psql:tmp/selection-processes/local.sql:1716: NOTICE:  PASS: positions preserved
+psql:tmp/selection-processes/local.sql:1722: NOTICE:  PASS: explicit person erasure removes own applications
+psql:tmp/selection-processes/local.sql:1722: NOTICE:  PASS: explicit erasure removes personal batch receipts
+psql:tmp/selection-processes/local.sql:1722: NOTICE:  PASS: erasure of participant preserves common test
+psql:tmp/selection-processes/local.sql:1741: NOTICE:  PASS: denied (40001)
+psql:tmp/selection-processes/local.sql:1741: NOTICE:  PASS: denied (42501)
+psql:tmp/selection-processes/local.sql:1741: NOTICE:  PASS: closed context rejects late generation without overwriting draft
+psql:tmp/selection-processes/local.sql:1741: NOTICE:  PASS: denied (22023)
+psql:tmp/selection-processes/local.sql:1878: NOTICE:  PASS: denied (42501)
+psql:tmp/selection-processes/local.sql:1879: NOTICE:  PASS: denied (42501)
+psql:tmp/selection-processes/local.sql:1880: NOTICE:  PASS: denied (42501)
+psql:tmp/selection-processes/local.sql:1882: NOTICE:  PASS: denied (42501)
+psql:tmp/selection-processes/local.sql:1884: NOTICE:  PASS: denied (42501)
+psql:tmp/selection-processes/local.sql:1886: NOTICE:  PASS: denied (42501)
+psql:tmp/selection-processes/local.sql:1888: NOTICE:  PASS: denied (42501)
+psql:tmp/selection-processes/local.sql:1889: NOTICE:  PASS: versioned operator envelope
+psql:tmp/selection-processes/local.sql:1890: NOTICE:  PASS: denied (22023)
+psql:tmp/selection-processes/local.sql:1891: NOTICE:  PASS: denied (22023)
+psql:tmp/selection-processes/local.sql:1892: NOTICE:  PASS: denied (42501)
+psql:tmp/selection-processes/local.sql:1893: NOTICE:  PASS: denied (22023)
+psql:tmp/selection-processes/local.sql:1894: NOTICE:  PASS: eligible vacant position is selectable
+psql:tmp/selection-processes/local.sql:1895: NOTICE:  PASS: denied (22023)
+psql:tmp/selection-processes/local.sql:1896: NOTICE:  PASS: implicit inclusion never creates a cycle
+psql:tmp/selection-processes/local.sql:1898: NOTICE:  PASS: explicit first process is empty and active
+psql:tmp/selection-processes/local.sql:1899: NOTICE:  PASS: same request reuses exact cycle
+psql:tmp/selection-processes/local.sql:1900: NOTICE:  PASS: denied (40001)
+psql:tmp/selection-processes/local.sql:1901: NOTICE:  PASS: denied (22023)
+psql:tmp/selection-processes/local.sql:1902: NOTICE:  PASS: active position excluded from new selection
+psql:tmp/selection-processes/local.sql:1903: NOTICE:  PASS: server search and status scope
+psql:tmp/selection-processes/local.sql:1904: NOTICE:  PASS: pagination is bounded and explicit
+psql:tmp/selection-processes/local.sql:1905: NOTICE:  PASS: denied (42501)
+psql:tmp/selection-processes/local.sql:1906: NOTICE:  PASS: existing add writer works only after explicit creation
+psql:tmp/selection-processes/local.sql:1907: NOTICE:  PASS: summary counts actual membership
+psql:tmp/selection-processes/local.sql:1908: NOTICE:  PASS: legacy initial stages grouped
+psql:tmp/selection-processes/local.sql:1913: NOTICE:  PASS: closing does not occupy position
+psql:tmp/selection-processes/local.sql:1917: NOTICE:  PASS: denied (22023)
+psql:tmp/selection-processes/local.sql:1918: NOTICE:  PASS: denied (22023)
+psql:tmp/selection-processes/local.sql:1919: NOTICE:  PASS: occupied position excluded
+psql:tmp/selection-processes/local.sql:1924: NOTICE:  PASS: new empty cycle after closure
+psql:tmp/selection-processes/local.sql:1925: NOTICE:  PASS: history retains prior candidate
+psql:tmp/selection-processes/local.sql:1926: NOTICE:  PASS: replay of old request returns exact historic cycle
+psql:tmp/selection-processes/local.sql:1927: NOTICE:  PASS: denied (40001)
+psql:tmp/selection-processes/local.sql:1929: NOTICE:  PASS: only one active cycle
+psql:tmp/selection-processes/local.sql:1930: NOTICE:  PASS: one audit per creation, replay adds none
+psql:tmp/selection-processes/local.sql:1935: NOTICE:  PASS: assessments attempts scores profiles preserved
+psql:tmp/selection-processes/local.sql:1936: NOTICE:  PASS: anon cannot list
+psql:tmp/selection-processes/local.sql:1937: NOTICE:  PASS: worker gains no operator permission
+psql:tmp/selection-processes/local.sql:1938: NOTICE:  PASS: no direct client writes
+psql:tmp/selection-processes/local.sql:1939: NOTICE:  PASS: RLS retained

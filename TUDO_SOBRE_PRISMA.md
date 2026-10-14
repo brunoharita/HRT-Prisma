@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 474
-source_manifest_sha256: cac5ada87b7ed105544ce69fb482d4843e675efbfd449807b5b72f11014e2baf
+documentation_source_count: 478
+source_manifest_sha256: bc0463e6ebe8725faf1450ca284450283b5ea74e19d6555adbb086697eac6d6c
 -->
 
 # Tudo sobre o Prisma
@@ -2643,11 +2643,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.74.13
+version: 2.74.14
 last_verified: 2026-10-14
 ---
 
 # Estado atual do Prisma
+
+## Processos seletivos separados de Posições — 2.6.0 implementada, publicação pendente
+
+Bruno aprovou em14/10/2026 a proposta3: menu próprio, lista38%/resumo62%, acompanhamento amplo e celular com lista/detalhe sucessivos. Cada processo pertence a uma Posição permanente. Criação explícita vazia somente em Posição desocupada/sem processo ativo, inclusive acesso pela Posição; backend revalida, lock/índice/trigger e replay/auditoria protegem disputas e bloqueiam criação implícita. Seleção mantém Lista/Kanban, cinco etapas, entrevistas/decisões humanas, prova/aplicações/resultados e histórico por ciclo. Consulta paginada50por empresa, sem PII de candidatos no resumo e sem IA/débito/Score/Perfil/matching. Envelope selection-process-management-1.0.0; demais contratos e URLs legíveis. Acordo/execução1.0.0, owner selection-processes.md, AoT selection-processes-v260. SQL120 e disputas3, browser29novo/9preservação, Node19/rotas6/contrato4PASS; tipos/build/fidelidade comprovados em QA sintético. Rollout não presumido; jornada autenticada real NOT TESTED. Destinos previstos banco/web.
 
 ## Linha do tempo factual da questão — 2.5.5 publicada
 
@@ -5120,6 +5124,10 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 
 ## Evidência não é rollout
 
+### Gestão de processos seletivos1.0.0 — produto2.6.0
+
+`selection-process-management-1.0.0` projeta processos por organização, Posição, ciclo, revisão, situação, ocupação factual e contagens por etapa. get_selection_process_workspace pagina50e devolve resumo selecionado com ID explícito; get_selection_process_positions pagina Posições desocupadas/sem processo ativo. Autoridade reutiliza private.authorize_position_follow_up; nenhuma tabela exposta ou novo grant a worker/anon. start_position_selection_process conserva assinatura/ACL, aceita primeiro ciclo explícito com anterior/revisão null, request obrigatório e replay do ciclo exato. Guard de INSERT/reabertura e índice ativo por tenant/Posição impedem bypass/concorrência; versões desconhecidas e ocupação ausente não permitem criar. Auditoria permanece transacional, sem DML/backfill. Acompanhamento1.0.0, prova2.0.0/portal1.0.0 preservados. Acordo/AoT selection-processes-v260; produto selection-processes.md.
+
 Tipos TypeScript provam contrato de código local. Migration prova intenção executável de schema. Somente evidência de ambiente comprova ativação. O catálogo deve ser atualizado junto com qualquer mudança material.
 
 ## Eventos e APIs
@@ -5701,6 +5709,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+Decisão de Bruno em14/10/2026: publicar **Prisma v2.6.0**, primeira entrega do movimento6. Registry mantém toda a história e inicia0. `selection-process-management-1.0.0` versiona a consulta tenant-scoped, gestão separada e criação explícita por Posição desocupada/sem processo ativo. start_position_selection_process mantém assinatura/ACL e permite primeiro ciclo vazio; índice/trigger garantem concorrência e elegibilidade. Acompanhamento1.0.0, prova2.0.0/portal1.0.0, Score/Perfil/matching/IA/tarifas preservados. Destinos somente migration nova e web; acordo/execução/AoT selection-processes-v260 e delta ADR-082. Rollout depende dos recibos finais.
 
 Decisão de Bruno em10/10/2026: publicar **Prisma v2.3.4**, primeira proposta de cards compactos na descoberta de Pessoas e indicação persistida de acompanhamento no processo atual. Registry acrescenta a entrega4 ao movimento3 e marca3como pulada por solicitação explícita, sem entrega fictícia. Sem mudança de contrato persistido, matching, IA, banco ou backend. Rollout somente web; acordo/execução/AoT `people-compact-v234` registram validação e publicação.
 
@@ -10151,6 +10161,10 @@ Uma prova por ciclo, congelada na primeira emissão; nenhuma promoção ou conve
 
 ## Alternativas e consequências
 
+### Delta aprovado em14/10/2026 — Processos seletivos2.6.0
+
+Bruno escolheu proposta3 e autorizou criação explícita somente para Posição desocupada, um processo ativo por Posição e gestão própria no menu. Reutilizar ciclos existentes, RPC de criação e guardas backend é suficiente; não criar tabela, plataforma externa ou biblioteca. O primeiro ciclo também começa vazio; a inclusão não cria processo. Reabertura requer Posição desocupada. Novo envelope selection-process-management-1.0.0 consulta projeções mínimas/paginadas e preserva contratos/artefatos históricos da avaliação. Índice ativo, lock e trigger impedem bypass/concorrência, sem backfill. Acordo1.0.0/AoT selection-processes-v260.
+
 Prova distinta por Pessoa impediria equivalência do instrumento e repetiria custo/revisão. Tabela/plataforma externa separada duplicaria catálogo, tokens, outbox e ledger sem benefício funcional verificado. Ampliar estruturas próprias é a menor integração compatível; nenhuma nova biblioteca/fornecedor. Implica migration aditiva, atualização seletiva das RPCs e Edge, leitura de ciclos e cuidado com exclusão de uma Pessoa: apagar sua aplicação não apaga a prova comum. Histórico e schema ficam preservados em rollback; consumidores antigos continuam lendo aplicações existentes, mas novas provas individuais são recusadas pelo backend.
 
 ---
@@ -12122,7 +12136,7 @@ O prazo oferece **1, 3, 7, 14 ou 30 dias** (padrão 7) e **Escolher uma data**, 
 
 A prova fica fixada no primeiro envio: questões, versões, ordem, duração e correção permanecem comuns para candidatos adicionados depois. **Consultar avaliação do processo** abre a prova e **Ver resultado e atividade** consulta cada aplicação. Correção objetiva, respostas e sinais observados não modificam Score, Perfil, etapas, ocupação ou decisão humana. Sinais parciais não comprovam pesquisa, captura ou fraude.
 
-**Reabrir processo** mantém a prova existente. Depois de **Encerrar processo**, **Novo processo seletivo** cria um ciclo vazio, conservando o anterior em **Processo seletivo**. O novo ciclo pode montar outra prova ou **Reutilizar prova** compatível anterior, sem copiar aplicações/respostas/decisões. Ciclos anteriores são somente consulta. **Avaliações individuais anteriores** preserva o histórico anterior à2.3.2; não declara equivalência retroativa.
+**Reabrir processo** mantém a prova existente. Na2.6.0, a gestão fica no menu **Processos seletivos**: criação explícita somente para Posição desocupada e sem processo ativo; reabertura do ciclo atual também exige Posição desocupada. **Novo processo seletivo** cria um ciclo vazio, conservando o anterior. O novo ciclo pode montar outra prova ou **Reutilizar prova** compatível anterior, sem copiar aplicações/respostas/decisões. Ciclos anteriores são somente consulta. **Avaliações individuais anteriores** preserva o histórico anterior à2.3.2; não declara equivalência retroativa. Contrato de gestão: `selection-processes.md`.
 
 Nenhum aviso final ou expurgo temporal foi introduzido. Exclusão explícita de uma Pessoa conserva a prova comum e remove suas aplicações, eventos, convites e referências pessoais dos recibos de lote. Uma prova comum facilita comparação do instrumento, mas não certifica justiça ou calibração empírica de dificuldade.
 
@@ -12501,6 +12515,36 @@ Boundary externo `m51c-assessment-item-generator-2.0.0`, requisição `m51c-asse
 
 ---
 
+## Source: `docs/product/selection-processes.md`
+
+# Processos seletivos — v2.6.0
+
+Decisão de Bruno em14/10/2026, acordo selection-processes-v2601.0.0. A Posição representa um lugar permanente na organização; cada processo é um ciclo de seleção para exatamente uma Posição.
+
+## Gestão e criação
+
+O menu **Processos seletivos** abre lista à esquerda e resumo do selecionado à direita. Busca por processo/Posição e filtros Todos/Em andamento/Encerrados são consultas por empresa, paginadas em50registros. **Abrir acompanhamento** abre a página ampla existente, com Lista/Kanban, candidatos, avaliação e histórico. No celular, lista e resumo são telas sucessivas, com retorno à lista; o resumo por etapas precede as ações.
+
+**Novo processo** exige escolher uma Posição desocupada sem processo ativo. A seleção consulta somente Posições elegíveis, em páginas de50com busca; o backend revalida elegibilidade na gravação. O ciclo começa vazio. Na Posição, **Criar processo seletivo** oferece a mesma ação; se já existe processo ativo, **Abrir processo seletivo** acessa seu resumo. **Ver processos e histórico** conserva o vínculo com os ciclos anteriores.
+
+Inclusão de Pessoa não cria mais processo implicitamente, substituindo a criação na primeira inclusão da2.2.0. Primeiro crie o ciclo; depois inclua Pessoas pelos controles existentes de descoberta. Comparação/aderência permanece distinta da inclusão e da decisão humana.
+
+## Ciclos e preservação
+
+Pode haver vários ciclos históricos e somente um ativo por Posição. Encerramento mantém candidatos, etapas, entrevistas, decisões, prova, aplicações e resultados; não ocupa automaticamente a Posição. Reabertura do ciclo atual exige Posição desocupada. Ciclos anteriores permanecem somente consulta. Um novo ciclo conserva o anterior e começa sem candidatos; reuso explícito de prova compatível segue process-assessment.md.
+
+O estado de ocupação é independente do estado do processo. Posição desocupada pode estar sem processo ativo; encerramento não pressupõe contratação. A fonte da ocupação é public.positions.status, com organization_id e vínculo pela Posição; ausência fica indisponível, nunca elegível por inferência.
+
+## Contrato e operação
+
+Envelope de consulta **selection-process-management-1.0.0**, duas RPCs minimizadas: get_selection_process_workspace e get_selection_process_positions. Reutiliza position_evaluation_processes e o RPC start_position_selection_process, agora capaz de iniciar o primeiro ciclo explicitamente. Auditoria é transacional e start_request_id sustenta replay. Locks de Posição e índice único protegem disputas; o trigger de criação/reabertura impede bypass e a criação implícita legada. Mesmos papéis de acompanhamento: super_admin/owner/admin/recruiter, autorização viva backend, sem grants de tabelas.
+
+Contratos anteriores de acompanhamento, prova e portal continuam legíveis; URLs anteriores de acompanhamento/avaliação preservadas e menu selecionado passa à área de processos. Visitas, filtros e resumo não acionam IA, cobrança, matching ou atualização de Perfil/Score. Cartões reais de candidatos e seus controles foram conservados; simplificações dos mockups não autorizam retirar capacidades.
+
+Referência normativa: proposta-processos-seletivos-v2m6-2026-10-14/03-lista-painel.png, estrutura aprovada; dados/contagens/marca ilustrativos. Render/QA/rollout e limites: docs/qa/aot-selection-processes-v260.md.
+
+---
+
 ## Source: `docs/product/ux-foundation.md`
 
 # Base transversal de experiência do Prisma
@@ -12743,7 +12787,7 @@ A ordenação vigente é determinística: grupo de trajetória, Prisma Score dec
 
 ## Acompanhamento Pessoa–Posição v2.2.0
 
-A descoberta mantém a comparação de exatamente duas Pessoas. `Adicionar ao acompanhamento` é uma ação humana independente: inicia `Acompanhamento 01` na primeira inclusão e reutiliza a Pessoa publicada. Posição, ocupação, processo e etapa individual permanecem separados. O mesmo cadastro pode participar de acompanhamentos independentes em várias Posições.
+A descoberta mantém a comparação de exatamente duas Pessoas. `Adicionar ao acompanhamento` é uma ação humana independente e reutiliza a Pessoa publicada. A partir da2.6.0, exige processo seletivo criado explicitamente; a criação na primeira inclusão da2.2.0 foi substituída. Posição, ocupação, processo e etapa individual permanecem separados. O mesmo cadastro pode participar de acompanhamentos independentes em várias Posições. Gestão, criação e ciclo atual seguem `selection-processes.md`.
 
 A aba Acompanhamento alterna Lista/Kanban do mesmo conjunto. Lista oferece etapa, próxima ação, responsável e prazo; busca nome/ação, filtros etapa/responsável/prazo inclusive ausentes e ordenação nome/prazo. Indicadores consideram o processo inteiro, com contagem filtrada separada. Kanban mostra Selecionadas para acompanhamento, Aguardando entrevista, Entrevista agendada, Aguardando decisão e Decisão registrada. Os dois identificadores iniciais legados são projetados na primeira coluna; filtros e coluna mobile antigos continuam válidos, sem reescrever registros ou histórico. Concluídos permanece consultável.
 
@@ -17199,6 +17243,67 @@ Versão 1.0.0, agreed, 2026-10-03. Continuidade da correção/publicação autor
 ## Execução congelada
 
 Implementar D-S01 a D-S04 sob P-S01, excluindo F-S01, com autonomia A-S01. Este acordo incorpora o prompt do complemento; AoT registra implementação, testes, produção e limites, sem afirmar que a revisão real já foi publicada.
+
+---
+
+## Source: `docs/qa/agreement-selection-processes-v260.md`
+
+# Acordo — Processos seletivos separados de Posições, v2.6.0
+
+Versão 1.0.0, agreed. Bruno aprovou as regras e a proposta visual 3 nesta conversa em 14/10/2026 e autorizou implementação em main/publicação v2.6.0. Baseline 3766fce913a835ec32a2db73214d9239f4bd6803. Este documento transcreve o escopo aprovado, sem nova decisão.
+
+## DEVE
+
+- D-01: cada processo pertence a uma Posição permanente; ciclos anteriores permanecem consultáveis.
+- D-02: um único processo ativo por Posição. Criar explicitamente um processo vazio somente para Posição desocupada, com ação pela Posição ou pela área de processos. Inclusão de Pessoa não cria processo implicitamente.
+- D-03: menu próprio Processos seletivos, consulta por empresa, busca e filtros Todos/Em andamento/Encerrados. Estado do processo independente da ocupação.
+- D-04: abrir acompanhamento existente, encontrar Pessoas, preparar/consultar avaliação, histórico, encerramento e reabertura autorizados; Lista/Kanban, seleção, entrevistas, decisões e fontes preservados.
+- D-05: vínculo e acesso pela Posição; se já há processo ativo, abrir esse processo. Histórico permanece disponível.
+- D-06: backend impõe tenant, papel, versão, concorrência/idempotência e auditoria transacional. Nenhuma fixture produtiva.
+- D-07: entrega v2.6.0 em main/origin/produção, CI, rollback, smoke e contexto sincronizados.
+- D-UX-01: proposta 3 é alvo normativo de estrutura: sidebar Prisma; título/ação Novo processo; lista compacta à esquerda (aproximadamente 38%) e painel do selecionado à direita (62%); busca/filtros sobre lista; seleção azul; identidade, situação, ocupação, Ver Posição, candidatos e resumo por cinco etapas; abas Resumo/Avaliação/Histórico; Abrir acompanhamento em destaque, ações Encontrar pessoas/Preparar avaliação/Encerrar processo agrupadas no alto.
+- D-UX-02: acompanhamento em página ampla, sem Kanban comprimido no painel; abas Candidatos/Avaliação/Histórico. Celular com lista e resumo sucessivos, retorno e ações acessíveis.
+
+## PROIBIDO
+
+- P-01: processos sem Posição, mais de um ativo por Posição, criação implícita ou em Posição ocupada.
+- P-02: leitura/mutação entre empresas ou por papel não autorizado, histórico reescrito, remoção de candidatos/provas/convites/resultados.
+- P-03: encerramento/consulta mudarem ocupação, Score, Perfil, matching, decisão humana ou acionarem IA/débito.
+- P-UX-01: substituir split por catálogo/tabela isolada, exibir lista e detalhe comprimidos lado a lado no celular, retirar capacidades atuais de acompanhamento.
+
+## FORA DE ESCOPO
+
+- F-01: múltiplas Posições num processo, anúncio público, contratação automática, novo ATS, coleta/IA/tarifas, expurgo e alterações do instrumento de avaliação.
+- F-02: redesenho dos cartões reais de candidatos, marca/slogans, novas etapas, rascunho/pausa ou estados não aprovados.
+
+## AUTONOMIA
+
+- A-01: reutilizar tabelas/RPCs/componentes atuais, URLs compatíveis, filtros/paginação e controles acessíveis, sem nova dependência.
+- A-UX-01: tokens, ícones, conteúdo real, contagens dinâmicas e detalhes decorativos. Ícone de encerramento não significa exclusão.
+
+## PENDÊNCIAS
+
+Nenhuma material. Alteração de contrato por Bruno prevalece; não ampliar escopo.
+
+## Aceite
+
+CA-D01..D06: testes SQL transacionais e negativos (tenant/papel, ocupada, concorrência, replay, primeira criação e ciclos/histórico); testes de contrato/navegação e browser sintético dos pontos afetados, sem LLM remoto.
+CA-D07: CI e recibos de SHA/migration/web/rollback/smoke; limitações de jornada autenticada real explicitadas.
+CA-UX01/02: render desktop 1448px e celular 390px, mesmos três processos fictícios 12/8/10 e seleção backend; comparação com referência; 768/320px para overflow e navegação. Mockup possui cartões simplificados; preservar cartões reais é exigência aprovada.
+
+## Mapa de impacto / preservação
+
+| Área | Relação | Baseline / mecanismo | Validação mínima |
+| --- | --- | --- | --- |
+| Menu, lista/resumo e entrada pela Posição | direct | main3766fce, proposta3; shells/store existentes | browser desktop/mobile, busca/filtros, criação, links e render |
+| Criação/consulta de processos e reabertura | direct | position_evaluation_processes; versão atual da Posição e gate de reviewer | SQL positivo/negativo, replay e disputa |
+| Inclusão e acompanhamento Lista/Kanban | direct | criação implícita atual substituída; demais writers preservados | SQL inclusão/etapas/entrevista/decisão e browser dirigido |
+| Avaliações/convites/resultado/histórico | plausible_indirect | ID explícito do processo, writers não alterados | contrato, SQL processo/avaliação e smoke de navegação |
+| Auth/tenant/retorno | critical_transversal | authorize_position_follow_up, store por empresa e history | negativos/RLS/grants, navegação/back e isolamento |
+| Score/Perfil/matching/ocupação | no_impact_identified | consulta somente de contagens, sem writers destes domínios | hashes/dados antes/depois e revisão de destinos |
+| Parser/Synthesis/gateway/mail/Knowledge | no_impact_identified | sem contratos/transportes alterados | release plan e preservação dos runtimes |
+
+Fechamento: todos D/P aplicáveis comprovados, documentação/contexto/CI, publicação seletiva banco e web e sincronização. Não executar suíte integral local por padrão.
 
 ---
 
@@ -23206,6 +23311,59 @@ Rollback: alteração restrita ao corpo do trigger, sem DDL destrutivo ou saneam
 
 ---
 
+## Source: `docs/qa/aot-selection-processes-v260.md`
+
+# AoT — Processos seletivos v2.6.0
+
+Acordo/execução1.0.0 aprovados por Bruno em14/10/2026. Baseline main/VPS3766fce913a835ec32a2db73214d9239f4bd6803; runtime8c2b38ff/web96eda2f1. Supabase ioldpnqqvobprjiontre ACTIVE_HEALTHY verificado, um processo encerrado/nenhum ativo. QA remoto separado inexistente na configuração; PostgreSQL17 local import_evidence_v202:55479/prisma_v202_qa confirmado people0. Fixtures transacionais/rollback; DB próprio de disputa criado/removido pelo script.
+
+## Matriz de acordos
+
+| ID | Implementação | Teste / evidência | Status |
+| --- | --- | --- | --- |
+| D-01 | Tabelas existentes, ciclos e links Posição/processo | SQL histórico/candidato anterior e browser vínculo | PASS |
+| D-02 | start RPC, trigger/índice/locks, modal vazio e inclusão sem criação | SQL criação/ocupada/replay, disputa3, browser vazio/entrada | PASS |
+| D-03 | Menu, workspace paginado50, busca/status e summary | SQL escopo/filtros/offset, rotas6, browser29 | PASS |
+| D-04 | Acompanhamento Lista/Kanban, prova e histórico | browser preservação9, Node19, SQL avaliação/ciclo/snapshots | PASS |
+| D-05 | PositionProcessAccess e aba da Posição | browser preseleção, SQL elegíveis e links | PASS |
+| D-06 | Gate vivo, ACLs existentes, guards e auditoria | SQL120total (baseline79 + novo41) e contrato4, disputa3 e negativos | PASS |
+| D-07 | Registry2.6.0, owner docs e contexto | Publicação/CI pendentes | NOT TESTED |
+| D-UX-01 | Lista38%/painel62%, seleção e ações | browser/desktop-1448.png, dados12/8/10 e geometria38/62 | PASS |
+| D-UX-02 | Acompanhamento amplo, mobile sucessivo/resumo antes de ações | browser/detail-390.png/list-390.png/detail-320.png; preservation/kanban-1448.png/390/320 | PASS |
+
+## Proibições e mapa de preservação
+
+| ID / capacidade | Relação | Prova | Status |
+| --- | --- | --- | --- |
+| P-01 | direct | Negativos ocupada/implícita/ativo, índice/concurrency.json | PASS |
+| P-02 | critical_transversal | Tenant/papel/anon/worker/tabelas e snapshots protegidos | PASS |
+| P-03 | no_impact_identified | SQL prova/aplicações/Score/Perfil; close não ocupa; browser sem IA/comercial | PASS |
+| P-UX-01 | direct | Split/mobile único/acompanhamento real preservado | PASS |
+| Candidatos/etapas/entrevista/decisão | direct | Writer core/grants preservados, SQL baseline/browser | PASS |
+| Avaliações/convites/resultados | plausible_indirect | Writer preservado, ID explícito/legado e snapshots/rotas | PASS |
+| Auth/tenant/retorno | critical_transversal | Gate backend/reviewer e origins-scoped rotas6/Node4 | PASS |
+| Parser/Synthesis/gateway/mail/Knowledge | no_impact_identified | Sem writer/dependência; release/runtimes a confirmar | NOT TESTED |
+
+Mapa inicial mantido. Bootstrap QA usa recipe rastreado/fixtures existentes, sem dependência em rascunhos não rastreados. Nenhuma nova biblioteca/fornecedor; reúso aprovado registrado no delta ADR-082.
+
+## Fidelidade visual
+
+Referência normativa: docs/product/proposta-processos-seletivos-v2m6-2026-10-14/03-lista-painel.png. Prancha raster com desktop/mobile, sem viewport executável declarado. Comparação estrutural normalizada com render1448/390e mesmos estados/dados: split38/62, hierarquia, seleção, abas, resumo/ações e mobile sucessivo reconhecíveis. Viewports768/320sem overflow. Ajustes autônomos: sidebar real288, tokens/marca/tipografia atuais, ícone Encerrar sem lixeira, ações mobile após resumo. Cartões reais/Score/controles conservados; simplificações da prancha são ilustrativas. Nenhum desvio material identificado.
+
+## Validação / limites
+
+SQL120PASS com rollback/disputas3PASS; Node19e rotas6PASS; browser29novo+9preservaçãoPASS sem chamadas externas/erros. Tipos/build web PASS, com avisos de bundle/dynamic import preexistentes. Evidências docs/qa/evidence/selection-processes-v260. Suíte integral local não executada; CI obrigatório permanece.
+
+Falhas resolvidas antes do teste final: papel local identificado no runner existente após pressuposto incorreto; fixture de Posição ganhou título obrigatório; negativo histórico usa40001preservado; registry/JSX corrigidos; ícones decorativos aria-hidden e espera do browser ajustados; marcador documental incorreto reaplicado no arquivo correto. Nenhuma ampliação de escopo ou alteração produtiva durante QA.
+
+Jornada autenticada real NOT TESTED; não inferir uso humano ou entrega de convite do QA sintético. F-01/F-02 preservados, sem IA/preço/Score/instrumento alterados.
+
+## Git / publicação
+
+Pendente. Destinos: migration nova e web, SHA explícito/CI/rollback. Banco aditivo não remove dados. Rollback UI conserva guards; cliente antigo sem início explícito recebe erro seguro e deve atualizar para2.6.0. Não retirar guard para rollback.
+
+---
+
 ## Source: `docs/qa/aot-sidebar-branding-v171.md`
 
 # AoT — Sidebar institucional e Prisma v1.7.1
@@ -27760,6 +27918,16 @@ Contrato: `docs/qa/agreement-release-efficiency.md` 1.0.0.
 ## Limite operacional do Supabase
 
 O conector confirmou um único projeto remoto de produção. A auditoria encontrou aliases de timestamp, migrations remotas desdobradas, arquivos locais sem registro e fingerprints divergentes. Esta execução não usa `migration repair`, não reaplica SQL e não altera `supabase_migrations.schema_migrations`. Migrations futuras são publicadas individualmente pelo mecanismo autorizado e verificadas antes de atualizar o mapa.
+
+---
+
+## Source: `docs/qa/execution-selection-processes-v260.md`
+
+# Execução — Processos seletivos v2.6.0
+
+Aplicar integralmente docs/qa/agreement-selection-processes-v260.md versão1.0.0, aprovado nesta conversa por Bruno em14/10/2026. D-01..D-07, D-UX-01/02, P-01..03/P-UX-01, F-01/02, A-01/A-UX-01 e todos os CA vinculam esta execução sem substituição.
+
+Referência normativa: docs/product/proposta-processos-seletivos-v2m6-2026-10-14/03-lista-painel.png. Lista esquerda/resumo direita; acompanhamento amplo separado; mobile sucessivo. Dados e marca ilustrativos. Preservar capacidades atuais e usar autorização real backend. Reutilizar infraestrutura e tabelas; migration aditiva/versionada, QA local descartável e publicação seletiva autorizada. Registrar testes/evidências no AoT antes de declarar completo.
 
 ---
 

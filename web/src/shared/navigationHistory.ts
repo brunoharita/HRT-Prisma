@@ -11,7 +11,7 @@ export interface NavigationHistoryEntry {
 export function operatorHistoryPath(path: string): string | null {
   const safe = safeNavigationPath(path);
   if (!safe || /[?#]/.test(safe)) return null;
-  return safe === "/" || /^\/(profiles|vacancies|matching|verifications|item-bank|knowledge|users|settings|organizations)(\/|$)/.test(safe) ? safe : null;
+  return safe === "/" || /^\/(profiles|vacancies|selection-processes|matching|verifications|item-bank|knowledge|users|settings|organizations)(\/|$)/.test(safe) ? safe : null;
 }
 
 export function readNavigationHistory(value: unknown, scope: string, pathname: string): NavigationHistoryEntry | null {
