@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.74.11
-last_verified: 2026-10-13
+version: 2.74.12
+last_verified: 2026-10-14
 ---
 
 # Estado atual do Prisma
+
+## Linha do tempo factual da questão — entrega 2.5.5
+
+Implementação autorizada por Bruno em14/10/2026, incremental à2.5.4. Questão reúne resposta final/salva, situação e linha do tempo por início de intervalos válidos, com eventos pontuais e resumos acumulados separados. Portal registra exibição, primeira escolha e troca de alternativa pelo método position-assessment-response-timeline-1.0.0, IDs oficiais sem texto livre; revisão geral suspende o contexto. SQL aditivo valida método/shape/opções e mantém token/tenant/grants/replay. Dados antigos/snapshots continuam parciais, sem backfill ou IA automática. Nenhuma alteração de Score/Perfil/etapa/tarifa. Acordo/mapa/CA em docs/qa/agreement-assessment-question-timeline.md; implementação e validação local concluídas, rollout depende da evidência operacional no AoT docs/qa/aot-assessment-question-timeline.md.
 
 ## Disciplina de execução e encerramento — contrato de instruções 1.3.3
 

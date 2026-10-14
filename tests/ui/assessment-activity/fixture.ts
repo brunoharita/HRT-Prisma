@@ -6,6 +6,16 @@ export const questions=Array.from({length:20},(_,i)=>({id:id(100+i),version:"fix
 const event=(id:number,q:number,kind:string,payload:Record<string,unknown>):ActivityEvent=>({id,question_id:questions[q-1]!.id,question_version:"fixture",kind,client_at_ms:1791894360000+id*1000,received_at:"2026-10-13T12:26:06Z",sequence:id,method:"fixture-1.0.0",payload});
 export const events=[event(1,1,"focus_episode",{durationMs:10000,closedBy:"focus_returned"}),event(2,2,"focus_episode",{durationMs:10000,closedBy:"focus_returned"}),event(3,2,"focus_episode",{durationMs:9000,closedBy:"question_changed"}),event(4,3,"focus_episode",{durationMs:9000,closedBy:"focus_returned"}),event(5,4,"focus_episode",{durationMs:6969.5,closedBy:"focus_returned",startedAtClientMs:1791894359699.2998,endedAtClientMs:1791894366668.7998}),event(6,5,"focus_episode",{durationMs:12000,closedBy:"focus_returned"}),event(7,5,"focus_episode",{durationMs:12000,closedBy:"focus_returned"}),...[11000,9000,3000,3184,5000].map((total,n)=>event(8+n,n+1,"mouse_idle_before_first_choice",{totalIdleMs:total,longestIdleMs:n===3?1201:n===0?3000:2000,support:"observed_mouse",closedBy:"first_choice",resolutionMs:100})),event(13,6,"mouse_idle_before_first_choice",{totalIdleMs:null,longestIdleMs:null,support:"not_applicable",closedBy:"collector_stopped"})];
 const mode=new URLSearchParams(location.search).get("mode");
+if(mode==='timeline'){
+ const base=1791894360000;
+ events.splice(0);
+ const add=(id:number,kind:string,time:number,payload:Record<string,unknown>)=>events.push({...event(id,1,kind,payload),client_at_ms:base+time});
+ add(30,'question_displayed',0,{support:'observed_display',limitation:'display_does_not_confirm_reading'});
+ add(31,'focus_episode',4000,{startedAtClientMs:base+1000,endedAtClientMs:base+4000,durationMs:3000,closedBy:'focus_returned'});
+ add(32,'copy_action_observed',2000,{region:'stem',characterCount:12,trigger:'not_identified',support:'received_copy_event',limitation:'clipboard_result_and_destination_not_observable'});
+ add(33,'answer_selected',6000,{optionId:'B',previousOptionId:null,support:'observed_choice',limitation:'choice_does_not_identify_intent'});
+ add(34,'answer_changed',8000,{optionId:'A',previousOptionId:'B',support:'observed_choice',limitation:'choice_does_not_identify_intent'});
+}
 if(mode==='visual'){
  const topics=['APIs','Docker','Azure','Segurança','Banco de dados'],difficulties:AssessmentDifficulty[]=['easy','easy','hard','medium','easy','medium','hard','medium','easy','medium','hard','medium','easy','medium','hard','easy','easy','medium','medium','easy'];
  questions.forEach((q,i)=>{q.requirementId=id(50+Math.floor(i/4));q.competencyKey=topics[Math.floor(i/4)]!;q.difficulty=difficulties[i]!;});

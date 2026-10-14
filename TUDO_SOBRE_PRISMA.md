@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 472
-source_manifest_sha256: 7535ddebe86aeb8ca9e9f8cf29ef4623291a6477ea4811584892d79e91ac048c
+documentation_source_count: 474
+source_manifest_sha256: bd332a472cf97dbdae453f5a4dfe65b89593f7abda94c688863a19647f6cf8df
 -->
 
 # Tudo sobre o Prisma
@@ -2643,11 +2643,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.74.11
-last_verified: 2026-10-13
+version: 2.74.12
+last_verified: 2026-10-14
 ---
 
 # Estado atual do Prisma
+
+## Linha do tempo factual da questão — entrega 2.5.5
+
+Implementação autorizada por Bruno em14/10/2026, incremental à2.5.4. Questão reúne resposta final/salva, situação e linha do tempo por início de intervalos válidos, com eventos pontuais e resumos acumulados separados. Portal registra exibição, primeira escolha e troca de alternativa pelo método position-assessment-response-timeline-1.0.0, IDs oficiais sem texto livre; revisão geral suspende o contexto. SQL aditivo valida método/shape/opções e mantém token/tenant/grants/replay. Dados antigos/snapshots continuam parciais, sem backfill ou IA automática. Nenhuma alteração de Score/Perfil/etapa/tarifa. Acordo/mapa/CA em docs/qa/agreement-assessment-question-timeline.md; implementação e validação local concluídas, rollout depende da evidência operacional no AoT docs/qa/aot-assessment-question-timeline.md.
 
 ## Disciplina de execução e encerramento — contrato de instruções 1.3.3
 
@@ -5420,6 +5424,10 @@ Workspace/envelope de operador `process-assessment-1.0.0`; portal `position-asse
 Reuso explícito exige mesma organização/Posição/versão de definição e prova anterior emitida/composição aprovada. Cria novo rascunho sem respostas/convites. Histórico do ciclo é consultável. Cancelamento individual revoga só aquele link; não cancela a prova comum nem permite recriar aplicação duplicada por replay. Uma futura segunda tentativa da mesma Pessoa no mesmo ciclo exigiria decisão específica de produto.
 
 IA e histórico/custos reutilizam geração/reserva/ledger/modelo atuais. Escrita durante reserva pendente é bloqueada; conclusão tardia verifica revisão, estado, processo atual e ativo. Orçamento e consumo desconhecido permanecem explícitos. Exclusão explícita de participante remove cascatas e recibos pessoais do lote, preservando prova do processo; nenhuma exclusão automática foi ativada.
+
+## Eventos de resposta — método 1.0.0 (2.5.5)
+
+O método position-assessment-response-timeline-1.0.0 estende o pipeline de metadados com question_displayed, answer_selected e answer_changed (este último também aceita o método legado). Novo payload de escolha exige optionId oficial, previousOptionId nulo na primeira escolha ou oficial/diferente na troca, support/limitation estritos. Exibição exige somente support/limitation. Validação fora do frontend mantém token/tentativa/tenant/questão/versão, idempotência, conflito de replay e proibição de campos livres. Envelope do portal, grants/RLS e writers de resultado/IA permanecem. Eventos são observações do navegador; não garantem uma trilha transacional completa das respostas. A apresentação ordena intervalos de foco por início válido e desempata por sequência/id; não altera facts nem snapshots de IA. Nenhum dado histórico é reescrito. Migração incremental: 20261014100000_assessment_response_timeline.sql.
 
 ---
 
@@ -12139,6 +12147,12 @@ Resultado individual atual e histórico apresentam fundo claro, identificação/
 
 Grupo abre Questões mantendo números originais, alternativas, resposta/gabarito, explicação e origem; padrão abre Registros de evidência. Todos os sinais, incluindo seleção/cópia/menu, zoom, atalhos, lacunas, eventos não associados e detalhes técnicos continuam consultáveis. Retorno conserva filtros. Síntese por IA permanece recolhida e identifica avaliação inteira/base histórica; suas evidências usam o snapshot original. Consulta, abas e filtros não geram IA/cotação/débito. Atualização exige o fluxo comercial existente, conserva relatório anterior em erro e evita retry pago automático. Tempo de resposta por questão/assunto é explicitamente indisponível; não é inferido do tempo global ou do mouse/foco. Não há nova coleta, mudança de contratos/métodos/tarifas/backend ou influência em Score/Perfil/etapas. Acordo1.0.0, referência e AoT assessment-results-executive registram escopo, fidelidade, testes e rollout; publicação só é confirmada pela evidência operacional do AoT.
 
+## Linha do tempo factual 2.5.5
+
+Os acontecimentos da questão reúnem resposta final (ou salva em aplicação não concluída), situação e linha do tempo observada. Eventos pontuais usam seu horário; intervalos de foco com marcos válidos usam o início sem esconder o fim. Intervalos podem se sobrepor. Mouse permanece um resumo acumulado, sem inventar uma lista de pausas. Exibição na tela não confirma leitura; escolha não identifica intenção.
+
+Novos eventos registram exibição da questão, primeira escolha observada e troca com IDs oficiais. Revisão geral suspende o contexto da questão; retorno efetivo gera nova exibição. A lista aponta exibição/primeira escolha ausentes e diferenças entre última escolha disponível e resposta salva. Avaliações antigas e snapshots de IA não recebem backfill. Não há narrativa de IA, classificação de fraude, penalidade ou alteração de Score/Perfil/etapa. Acordo/CA/mapa: docs/qa/agreement-assessment-question-timeline.md.
+
 ---
 
 ## Source: `docs/product/product-scope.md`
@@ -12944,6 +12958,34 @@ Contrato1.0.0, aprovado pelo pedido de Bruno nesta conversa. Baseline8ddfef923a4
 | Release/rotas/assets | critical_transversal | SHA/image/rollback existentes; CI e smoke versões/assets com publicação seletiva |
 
 Execução congelada: implementar integralmente D-01 a D-06, P-01/02, F-01, A-01 e CA01-04 acima; fechar AoT com prova e limites, sem reaprovacão administrativa. Reuso nativo e capacidades Prisma atendem à necessidade; não há solução externa nova a selecionar.
+
+---
+
+## Source: `docs/qa/agreement-assessment-question-timeline.md`
+
+# Acordo e execução — linha do tempo da questão 1.0.0
+
+Bruno aprovou em 14/10/2026 a recomendação de cronologia factual, marcos de resposta e contexto conjunto, com integração/main/publicação. Registro vigente 2.5.4; incremento autorizado para 2.5.5. Baseline main5316236f8964f57abc247e2d1f1cda51c13b31f9; runtime8a6a181/web83ac4e53. Classe D pela validação de eventos no banco.
+
+- D-01: exibir linha do tempo por questão, ordenar intervalos pelo início válido e eventos pontuais pelo horário observado; desempatar por sequência/id sem alterar registros originais. Resumos acumulados permanecem identificados como resumos, sem inventar pausas.
+- D-02: registrar cada exibição efetiva da questão, primeira escolha e troca de alternativa. Novo método position-assessment-response-timeline-1.0.0; somente metadados e IDs de opções oficiais. Revisão geral não representa exibição de uma questão. Retornos, autosave e envio explícito são preservados.
+- D-03: reunir resposta final/salva, situação e registros na questão; indicar marcos ausentes e limitações. Registros antigos e snapshots de IA permanecem parciais, sem reconstrução retroativa ou cobertura contínua presumida.
+- D-04: validar no servidor token, tenant, questão/versão, método, campos e alternativas oficiais; preservar idempotência, conflito de replay, grants/RLS, resultados e dados reais.
+- D-05: publicação 2.5.5 com migrations/web estritamente derivados do diff, evidência e sincronização.
+- P-01: não inferir leitura, intenção, consulta externa ou fraude; não penalizar, decidir contratação, alterar Score/Perfil/etapa/IA/tarifa, coletar texto livre ou inventar história.
+- F-01: análise narrativa por IA, comparação de candidatos, precisão cognitiva, telemetria contínua, novo serviço/dependência, backfill de marcos.
+- A-01: estender cards de acontecimentos existentes com contexto compacto e lista cronológica acessível; desktop/celular com quebra de texto. Reusar pipeline, validação e componentes; sem nova arquitetura visual de modal.
+- CA-01: teste de início de intervalo versus encerramento, empate e entradas antigas; mesmas contagens/evidências originais.
+- CA-02: navegador verifica exibição, primeira escolha, troca com IDs, não emissão em revisão, buffer/retorno e ausência de envio/IA implícitos.
+- CA-03: navegador desktop/celular com resposta e lacunas, sem overflow; registros antigos legíveis.
+- CA-04: SQL sintético local com aceitação/replay, rejeição de IDs/versões/métodos/campos e tenant, dados/grants preservados. Sem fixture em produção.
+- CA-05: tipos/build, release registry, contexto, CI e smoke de publicação; sem alegar teste autenticado real.
+
+## Mapa de impacto e preservação
+
+Resultados/atividade/portal/events RPC direct: baseline código e fixtures atuais; regressão dos marcos, foco/mouse, resposta/envio e histórico. Preparação/convites plausible_indirect: nenhuma chamada ou mudança nesses consumidores; checagem de diff e teste dirigido do portal. Tenant/grants/idempotência critical_transversal: SQL negativos e inventário remoto antes/depois. IA/Score/Perfil/etapas/tarifas no_impact_identified: novos marcos não entram nos padrões/contratos existentes, diff sem seus escritores e dados protegidos no SQL. Runtime adjacente no_impact_identified: inventário de containers e release seletivo sem rebuild desses serviços.
+
+Conclusão objetiva: D-01..D-05 e P-01 comprovados, documentação/contexto atualizados, CI e superfícies autorizadas sincronizados. Repetir apenas checks afetados por correção concreta. AoT/evidência neste mesmo movimento; não reabrir escopo no fechamento.
 
 ---
 
@@ -17720,6 +17762,34 @@ Web image6aa97d36d8abeef217a64e5f9306e741ad1b3791e614593811f600b18d253eb2 runnin
 Fechamento documental/ledger/contextos sincronizado pelo dispatcher e fast-forward da VPS, sem reconstruir runtimes; sourceSHA permanece explícito. Desvios: nenhum. Limitações: native menu Copiar clicado pelo usuário não testado em headless (copy event nativo via comando Chromium e teclado testados); não certificamos sucesso de clipboard/captura nem toda combinação de navegador/SO, e não usamos candidato real/IA paga em produção como fixture. Todos D/P têm prova proporcional, rollout separado de qualidade real do modelo.
 
 Coletor1.1 recorta a seleção às regiões oficiais da questão, incluindo Ctrl+A/Cmd+A; caracteres de cabeçalho/instruções/nome não entram na contagem. Não há leitura do clipboard. Migração aditiva20261013205000 aceita1.0/1.1, preservando registros/permissões anteriores. Correção de cobertura dentro do mesmo movimento2.5.3, publicada no runtimef780dcd487c288cbaf34ac07263f2a326dd9793e, CI38467702146 SUCCESS. Migration remota20261013210859 com fingerprint idêntico;12conjuntos protegidos e24ACL/configs iguais, somente corpo do portal alterado como previsto. Webac5284827fcec2fac268c49e1cd6997bb5e4e945d0d974fe095d466770ec7379 running/restart0; rollback-before-f780dcd487c2=6aa97d36d8abeef217a64e5f9306e741ad1b3791e614593811f600b18d253eb2. Smoke público1448/390/320 sem erro/overflow,4rotas/7assets200,230assets históricos preservados. Edgev5 preservada, serviços adjacentes intactos. Evidências finais production/scope-after.json,scope-schema.json,scope-release.json,vps.json,web-smoke.json e capturas públicas.
+
+---
+
+## Source: `docs/qa/aot-assessment-question-timeline.md`
+
+# AoT — linha do tempo da questão 2.5.5
+
+Acordo/execução congelados: agreement-assessment-question-timeline.md 1.0.0, aprovados por Bruno em14/10/2026. Baseline main5316236, runtime8a6a181/web83ac4e53, Supabase ioldpnqqvobprjiontre ACTIVE_HEALTHY. QA remoto separado inexistente; PostgreSQL17 local127.0.0.1:55479/import_evidence_v202 confirmado vazio (people0, sem avaliações) e fixtures em transação com rollback. Fonte testada estabilizada antes dos navegadores.
+
+| Requisito | Implementação | Teste/evidência | Estado |
+| --- | --- | --- | --- |
+| D-01 | assessmentTimeline.ts/AssessmentActivity: intervalos válidos por início, eventos pontuais, desempate e resumos explícitos | 3 unit novos, 20 checks novos browser e 68 regressões de atividade; snapshots/fatos não reordenados | PASS local |
+| D-02 | Portal: exibição, primeira escolha/troca com IDs, revisão sem questão ativa | Novo browser desktop1448/mobile390; portal82 preserva revisão/envio/buffer; SQL novo método/legado/replay | PASS local |
+| D-03 | Contexto resposta final/salva, situação, marcos ausentes e divergência explícita | timeline/legacy PNGs1448/390, 20 browser; sem IA paga ou história criada | PASS local |
+| D-04/P-01 | Migration aditiva sem grants/DML, token/tenant/versão e opções validados | SQL completo do pipeline em sql/sql.txt, negativos e preservação; 20 Node/fatos/mouse/release | PASS local |
+| D-05 | Registro2.5.5, docs de produto/arquitetura/contexto | Tipos/build PASS; contexto/CI/produção exigidos antes do encerramento | PARTIAL — rollout pendente |
+
+## Preservação e limites
+
+Mapa do acordo mantido. Novo fluxo é apresentação e metadados: nada modifica respostas/resultados/avaliações/snapshots de IA. Consulta e filtros não geram IA/cotação. Processo de preparação/convite não é chamado; portal82 preserva autoridade do envio. Scope/RLS/grants/hash de6funções foram conferidos no backend antes do rollout. Somente position_assessment_public deve mudar, demais corpos/ACL devem ficar iguais. Perfil/Score/etapa/tarifas não possuem writer alterado.
+
+Falhas resolvidas: tipo opcional explicitamente undefined no renderer; helper de fixture SQL ganhou acesso apenas session-local porque service_role não possui leitura direta das tabelas (proteção preservada). Cluster local estava parado; iniciado no diretório/porta corretos, sem alterar serviço PostgreSQL principal. Primeira tentativa usou porta padrão e falhou sem modificar dados. Um patch documental foi rejeitado por marcador incorreto e reaplicado no arquivo certo. Comparação visual/new/legacy não possui referência nova normativa: conserva modal claro e cards existentes, agrega resposta e lista vertical, sem overflow1448/390. IA/análise contratual1.1.0 inalterada; classificação humana permanece humana.
+
+Jornada autenticada real e IA paga NOT TESTED; não são inferidas dos testes sintéticos. Nenhuma fixture em produção. Rollback: web anterior preservado por release-web; banco aditivo mantém leitores/coletores antigos e não requer apagar eventos novos. Não remover registros para rollback.
+
+## Encerramento operacional
+
+Publicação, ledger incremental, SHA/CI, hashes/grants pós-migration, containers/assets e smoke serão anexados na mesma entrega. Concluir somente após D-05 PASS; nenhum rebuild extra é necessário para o fechamento documental.
 
 ---
 

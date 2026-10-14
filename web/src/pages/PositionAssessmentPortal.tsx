@@ -9,6 +9,7 @@ import {assessmentRemainingSeconds,assessmentRemainingLabel,assessmentDeadlineLa
 import {AssessmentParticipantGuidance} from "../components/AssessmentParticipantGuidance";
 import "./positionAssessment.css";
 import {observeQuestionContent} from "../domain/assessmentContentSignals";
+import {RESPONSE_TIMELINE_METHOD,responseChoice} from '../../../src/domain/assessmentTimeline';
 type Event={eventId:string;questionInstanceId:string;questionVersion:string;kind:string;clientAtMs:number;sequence:number;method:string;values:Record<string,unknown>};
 export function PositionAssessmentPortal({token}:{token:string}){
  const [data,setData]=useState<ParticipantAssessment|null>(null),[loading,setLoading]=useState(true),[busy,setBusy]=useState(false),[error,setError]=useState<string|null>(null),[index,setIndex]=useState(0),[answers,setAnswers]=useState<Record<string,string>>({}),[marked,setMarked]=useState<string[]>([]),[sync,setSync]=useState("Carregando…"),[remaining,setRemaining]=useState<number|null>(null),[review,setReview]=useState(false);
@@ -32,11 +33,12 @@ export function PositionAssessmentPortal({token}:{token:string}){
  useEffect(()=>{void load();const timer=setInterval(()=>{void save();void flushEvents();const deadline=current.current?.deadline;setRemaining(assessmentRemainingSeconds(deadline));},1000);return()=>clearInterval(timer);},[token]);
  useEffect(()=>{setRemaining(assessmentRemainingSeconds(data?.deadline));},[data?.deadline]);
  const q=data?.questions?.[index];
- useEffect(()=>{if(!data?.attemptId||!data.organizationId||data.status!=="started"||!q)return;const s={organizationId:data.organizationId,attemptId:data.attemptId,questionInstanceId:q.id,questionVersion:q.version};const time=at();scope.current=s;
+ useEffect(()=>{if(!data?.attemptId||!data.organizationId||data.status!=="started"||!q||review)return;const s={organizationId:data.organizationId,attemptId:data.attemptId,questionInstanceId:q.id,questionVersion:q.version};const time=at();scope.current=s;
+  queue('question_displayed',RESPONSE_TIMELINE_METHOD,{support:'observed_display',limitation:'display_does_not_confirm_reading'},s);
   observations(focus.current.activate(s,time));observations(focus.current.observe({hidden:document.hidden,focused:document.hasFocus()},time));observations(mouse.current.activate(s,time,{active:!document.hidden&&document.hasFocus(),previouslyAnswered:!!draft.current.answers[q.id]}));
   if(visited.current.has(q.id))queue("question_reopened","position-assessment-browser-signals-1.0.0",{support:"observed",limitation:"no_intent_inference"},s);visited.current.add(q.id);
   return()=>{const time=at();observations(focus.current.activate(null,time));observations(mouse.current.activate(null,time,{active:false,previouslyAnswered:true}));scope.current=null;};
- },[data?.attemptId,data?.status,q?.id]);
+ },[data?.attemptId,data?.status,q?.id,review]);
  useEffect(()=>{const active=()=>{const time=at();observations(focus.current.observe({hidden:document.hidden,focused:document.hasFocus()},time));mouse.current.setActive(!document.hidden&&document.hasFocus(),time);};
   const move=(e:PointerEvent)=>{if(e.pointerType==="mouse")mouse.current.movement(at());};
   let scale=window.visualViewport?.scale??null;
@@ -47,7 +49,7 @@ export function PositionAssessmentPortal({token}:{token:string}){
   return()=>{clearInterval(timer);window.removeEventListener("blur",active);window.removeEventListener("focus",active);document.removeEventListener("visibilitychange",active);window.removeEventListener("pointermove",move);window.visualViewport?.removeEventListener("resize",zoom);window.removeEventListener("pagehide",leave);};
  },[token]);
  useEffect(()=>observeQuestionContent(()=>current.current?.status==="started"&&remainingRef.current!==0&&scope.current&&contentRoot.current?.dataset.assessmentQuestion===scope.current.questionInstanceId?contentRoot.current:null,(kind,method,values)=>queue(kind,method,values)),[token]);
- function choose(option:string){if(!q||submitLock.current)return;if(draft.current.answers[q.id]&&draft.current.answers[q.id]!==option)queue("answer_changed","position-assessment-browser-signals-1.0.0",{support:"observed",limitation:"no_intent_inference"});observations(mouse.current.firstChoice(at()));draft.current={...draft.current,answers:{...draft.current.answers,[q.id]:option}};dirty.current=true;setAnswers(draft.current.answers);setSync("Resposta preservada · salvando…");persist();void save();}
+ function choose(option:string){if(!q||submitLock.current||review||!q.options.some(o=>o.id===option))return;const choice=responseChoice(draft.current.answers[q.id],option);if(choice)queue(choice.kind,RESPONSE_TIMELINE_METHOD,choice.values);observations(mouse.current.firstChoice(at()));draft.current={...draft.current,answers:{...draft.current.answers,[q.id]:option}};dirty.current=true;setAnswers(draft.current.answers);setSync("Resposta preservada · salvando…");persist();void save();}
  async function submit(){if(submitLock.current)return;submitLock.current=true;setBusy(true);try{await save();if(dirty.current)throw Error("Confirme a sincronização das respostas antes de enviar.");observations(focus.current.activate(null,at()));observations(mouse.current.activate(null,at(),{active:false,previouslyAnswered:true}));await flushEvents();const result=await service.participant(token,"submit",{revision:current.current?.revision,...draft.current});current.current=result;setData(result);dirty.current=false;persist();if(!events.current.length){try{localStorage.removeItem(storageKey.current);}catch{/* receipt remains on server */}}else void flushEvents();setError(null);}catch(e){setError(e instanceof Error?e.message:"Envio não confirmado. Consulte o estado antes de tentar novamente.");}finally{submitLock.current=false;setBusy(false);}}
  if(loading&&!data)return <main className="pa-portal"><Skeleton active paragraph={{rows:10}} />{error?<Alert type="error" title={error} action={<Button loading={loading} onClick={()=>void load()}>Tentar novamente</Button>} />:null}</main>;
  if(!data)return <main className="pa-portal"><Alert type="error" title={error??"Convite indisponível."} action={<Button loading={loading} onClick={()=>void load()}>Tentar novamente</Button>} /></main>;

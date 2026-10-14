@@ -1,0 +1,88 @@
+{
+  "checks": [
+    {
+      "name": "1448: focus interval ordered by start before later point event",
+      "pass": true
+    },
+    {
+      "name": "1448: final answer outcome and choice transition together",
+      "pass": true
+    },
+    {
+      "name": "1448: intervals and partial observation limits explicit",
+      "pass": true
+    },
+    {
+      "name": "1448: legacy timeline remains explicitly incomplete",
+      "pass": true
+    },
+    {
+      "name": "1448: review is read-only and has no paid calls",
+      "pass": true
+    },
+    {
+      "name": "1448: collector records first display and correct version",
+      "pass": true
+    },
+    {
+      "name": "1448: first and changed choices carry official IDs only",
+      "pass": true
+    },
+    {
+      "name": "1448: review has no active question content",
+      "pass": true
+    },
+    {
+      "name": "1448: review does not emit another display",
+      "pass": true
+    },
+    {
+      "name": "1448: responsive and no external traffic or runtime errors",
+      "pass": true
+    },
+    {
+      "name": "390: focus interval ordered by start before later point event",
+      "pass": true
+    },
+    {
+      "name": "390: final answer outcome and choice transition together",
+      "pass": true
+    },
+    {
+      "name": "390: intervals and partial observation limits explicit",
+      "pass": true
+    },
+    {
+      "name": "390: legacy timeline remains explicitly incomplete",
+      "pass": true
+    },
+    {
+      "name": "390: review is read-only and has no paid calls",
+      "pass": true
+    },
+    {
+      "name": "390: collector records first display and correct version",
+      "pass": true
+    },
+    {
+      "name": "390: first and changed choices carry official IDs only",
+      "pass": true
+    },
+    {
+      "name": "390: review has no active question content",
+      "pass": true
+    },
+    {
+      "name": "390: review does not emit another display",
+      "pass": true
+    },
+    {
+      "name": "390: responsive and no external traffic or runtime errors",
+      "pass": true
+    }
+  ],
+  "limits": [
+    "Synthetic local QA only; no production participant or paid IA",
+    "Legacy data stays partial; deterministic reconstruction of observed events only"
+  ]
+}

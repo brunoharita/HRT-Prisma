@@ -1,0 +1,14 @@
+{
+  "project": "ioldpnqqvobprjiontre",
+  "rls": true,
+  "tableAcl": "{postgres=arwdDxtm/postgres}",
+  "policiesHash": "d41d8cd98f00b204e9800998ecf8427e",
+  "functions": {
+    "assessment_activity_analysis_finish(uuid,uuid,boolean,jsonb,jsonb,jsonb)": "c78b0dcaa4c53246fb23e45e722b8ff7",
+    "assessment_activity_analysis_load(uuid,uuid)": "4d7437e8814cd0f8c09cb8b64f7dfa16",
+    "assessment_activity_analysis_start(uuid,uuid,uuid,uuid)": "fa0b60bae3f4edaa15f1f5969e93d8d1",
+    "position_assessment_public(text,text,jsonb)": "42d503ec412ba37c658577e649ef3399",
+    "position_assessment_workspace(uuid,uuid,uuid)": "92e37b4b39dc42cf92e4cfccf265b1ff",
+    "private.assessment_activity_view(private.assessment_activity_analyses,text)": "6eda9262cd30e6f7595a53ea9be7513e"
+  }
+}
