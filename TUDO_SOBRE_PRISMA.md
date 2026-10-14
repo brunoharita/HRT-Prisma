@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 471
-source_manifest_sha256: 8885f47b3043d54ec6ea8591cda4dd688fc4cec2bc6a8895e6e5fc4da84f4d51
+documentation_source_count: 472
+source_manifest_sha256: 7535ddebe86aeb8ca9e9f8cf29ef4623291a6477ea4811584892d79e91ac048c
 -->
 
 # Tudo sobre o Prisma
@@ -17,7 +17,7 @@ Para interpretar esta exportação, comece pelo índice e pelo estado atual. Dep
 
 # Prisma agent contract
 
-Instruction contract version: 1.3.2. Approved revisions: instruction audit 2026-09-11; standing push authorization 2026-09-12; visual fidelity, standing main/production authorization and impact-scoped release operation 2026-09-18; necessary personal-data transfer to the existing Prisma VPS authorization 2026-10-03. This versions agent guidance, not persisted product contracts.
+Instruction contract version: 1.3.3. Approved revisions: instruction audit 2026-09-11; standing push authorization 2026-09-12; visual fidelity, standing main/production authorization and impact-scoped release operation 2026-09-18; necessary personal-data transfer to the existing Prisma VPS authorization 2026-10-03; execution economy and timely closeout authorization 2026-10-13. This versions agent guidance, not persisted product contracts.
 
 ## 1. Authority and scope
 
@@ -195,6 +195,19 @@ Never create micro-movements only for diagnosis, documentation, testing, commit,
 - Rerun only validations affected by a new edit; do not run unrelated suites merely because they exist.
 - Full repository validation is exceptional. It requires explicit Product Owner authorization after the agent explains why the change creates cross-cutting regression risk that targeted validation cannot cover.
 - Do not remove critical security, contract, migration, or AI regression validation in the areas affected by the change to save time or tokens.
+
+### Execution discipline and timely closeout
+
+Apply the lessons explicitly approved by Bruno on 2026-10-13:
+
+- Before implementation, define the smallest sufficient validation and the completion conditions for the approved scope. Reuse the existing impact map/AoT; do not create a separate planning artifact just for time control. Completion requires the applicable acceptance criteria, necessary documentation, checks, authorized publication and synchronization, with limitations reported.
+- Every additional read, investigation, test run or review cycle must answer a concrete unresolved question, verify a relevant change or address a failure. Stop revisiting a settled point without new evidence. Check count alone is neither proof of quality nor proof of excess: assess coverage, repetition and actual duration.
+- Stabilize the tested source before browser validation. If an edit is necessary, interrupt or restart only the affected scenarios. Distinguish a product defect from a selector, fixture, environment or reload failure before changing product code; check directly affected version, notice/recovery and other contracts before pushing.
+- Resolve local interference with the smallest safe approach that preserves unrelated work. Do not repeat a failed command unchanged without evidence that the cause was transient. Existing untracked drafts must not enter a release or generated context; use an exact tracked snapshot when necessary. Never remove an active Git lock or bypass a required gate.
+- Prepare required evidence and documentation during implementation and consolidate the closeout. Post-publication facts may need a follow-up commit; it must not reopen the functional scope or cause an unnecessary runtime rebuild, new deployment or repetition of already valid tests. Keep mandatory CI intact.
+- At progress checkpoints, compare elapsed time with the remaining concrete work. If time increases without new evidence or a deliverable, stop speculative review, identify the next necessary action and execute it. Progress messages do not substitute for progress; check background-job completion promptly instead of leaving long unobserved intervals.
+- Once completion conditions are satisfied, report the result and end the task. Do not prolong closeout with optional polish, hypothetical risks or repetitive verification. A real unresolved issue must be resolved or explicitly reported; never invent success to shorten delivery.
+- When explaining delays, use timestamps and distinguish elapsed time, tool call/return intervals and overlapping background jobs. Do not equate time between calls with idle time, sum parallel durations as total elapsed time, blame required process without evidence, or promise an unsupported fixed deadline.
 
 ## 9. Git and environments
 
@@ -2630,11 +2643,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.74.10
+version: 2.74.11
 last_verified: 2026-10-13
 ---
 
 # Estado atual do Prisma
+
+## Disciplina de execução e encerramento — contrato de instruções 1.3.3
+
+Em 13/10/2026, Bruno autorizou persistir os aprendizados da entrega executiva em memória e AGENTS.md, seção 8: validação proporcional, finalidade concreta para cada ciclo adicional, fonte estável nos testes, diagnóstico de falhas da automação, fechamento preparado durante a execução, acompanhamento do tempo e encerramento assim que os critérios forem satisfeitos. Gates obrigatórios, autoridade, proteção de dados e preservação de trabalho alheio permanecem vigentes. Atualização de governança/documentação, sem alteração de runtime ou da versão comercial 2.5.4. Acordo e AoT: docs/qa/aot-execution-economy-v133.md.
 
 ## Resultado executivo da avaliação — 2.5.4 publicada
 
@@ -18124,6 +18141,35 @@ Web `08ce658e93da605dcb6b03f3393d4856ca0807379cdfdac59c6c483d1c879511`, running0
 Contextos gerados em snapshot dos arquivos autorizados (875files no gate inicial), checker/lint/foundation PASS. Suite completa local não executada; CI obrigatório do repositório executou seus gates automaticamente. Dez fluxos finais de tela e15checks SQL PASS; ajustes de seletores da fixture para navegação nativa e Select Ant Design atual foram corrigidos, sem alterar o produto para acomodar teste. Nenhum diagnóstico temporário no produto. Servidor/navegador QA próprios encerrados; PostgreSQL previamente ativo preservado.
 
 D-01..04/P-01 PASS, sem desvio material. Jornada autenticada hospedada real NOT TESTED; fixture UI + PostgreSQL local não a substituem. Sem chamada real de IA. Complemento documental/ledger pertence ao mesmo movimento, sincronizado em main/VPS sem reconstruir a aplicação.
+
+---
+
+## Source: `docs/qa/aot-execution-economy-v133.md`
+
+# Acordo e AoT — economia de execução 1.3.3
+
+Autoridade: pedido explícito de Bruno em 13/10/2026 para inserir os aprendizados na memória persistente e em AGENTS.md. Baseline: main 1aea6294e994b215bf27ddb2e15dfe8bc0dce553; sem alterações rastreadas pendentes. Classe A documental; sem novo contrato de produto ou ADR.
+
+## Acordo, impacto e preservação
+
+- D-01: registrar regras operacionais em AGENTS.md seção 8 e versionar instruções em 1.3.3.
+- D-02: registrar uma nota pequena na extensão autorizada de memória; não editar MEMORY.md nem o resumo gerado.
+- D-03: manter o contexto documental sincronizado e validar apenas as superfícies documentais afetadas.
+- P-01: não retirar gates, proteção de dados, critérios de aceite ou autoridade; não publicar drafts alheios.
+- F-01: código, banco, runtime, nova funcionalidade, alteração de CI e prazo fixo de entrega.
+- A-01: redação e organização dos registros, reutilizando o processo existente. Sem pendência material.
+- Mapa: AGENTS e nota de memória direct; contexto/exportações plausible_indirect; autoridade e validação critical_transversal preservadas por leitura do diff; runtime no_impact_identified por plano documental sem fonte executável alterada. Regressão: diff, contexto e teste dirigido do gerador; sem testes de produto ou rebuild.
+
+## Implementação, teste e evidência
+
+| Requisito | Implementação | Teste/evidência | Status |
+| --- | --- | --- | --- |
+| D-01 | AGENTS.md seção 8; instruções 1.3.3 | Leitura do diff e conferência de versão/arquivo/whitespace | PASS |
+| D-02 | C:/Users/Bruno/.codex/memories/extensions/ad_hoc/notes/2026-10-13T23-05-44-prisma-economia-execucao.md | Arquivo relido e validado; nenhuma edição da memória gerada | PASS |
+| D-03 | PRISMA_CURRENT_STATE.md 2.74.11 e exports gerados | Snapshot rastreado: gerador/checker aprovados e 3 testes de prismaContext PASS | PASS |
+| P-01/F-01 | Gates mantidos; nenhum código ou draft alheio incluído | Diff e plano: somente documentation/context-pack/generated-context | PASS |
+
+SHA e CI são confirmados no encerramento operacional. Sem desvio do acordo, mudança de produto, rebuild ou destino de produção adicional. Evidência documental exige somente checks documentais; CI automático existente não é retirado.
 
 ---
 

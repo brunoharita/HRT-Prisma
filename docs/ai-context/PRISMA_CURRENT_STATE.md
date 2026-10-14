@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.74.10
+version: 2.74.11
 last_verified: 2026-10-13
 ---
 
 # Estado atual do Prisma
+
+## Disciplina de execução e encerramento — contrato de instruções 1.3.3
+
+Em 13/10/2026, Bruno autorizou persistir os aprendizados da entrega executiva em memória e AGENTS.md, seção 8: validação proporcional, finalidade concreta para cada ciclo adicional, fonte estável nos testes, diagnóstico de falhas da automação, fechamento preparado durante a execução, acompanhamento do tempo e encerramento assim que os critérios forem satisfeitos. Gates obrigatórios, autoridade, proteção de dados e preservação de trabalho alheio permanecem vigentes. Atualização de governança/documentação, sem alteração de runtime ou da versão comercial 2.5.4. Acordo e AoT: docs/qa/aot-execution-economy-v133.md.
 
 ## Resultado executivo da avaliação — 2.5.4 publicada
 
