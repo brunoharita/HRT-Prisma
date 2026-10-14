@@ -1,0 +1,37 @@
+[
+  {
+    "object": "processes",
+    "rows": 1,
+    "hash": "e631a4f729f20e0fdae5e67ae38d64e4"
+  },
+  {
+    "object": "entries",
+    "rows": 2,
+    "hash": "bf81621b7a9cb3e617d04786c5ccdadb"
+  },
+  {
+    "object": "assessments",
+    "rows": 2,
+    "hash": "5aea959212163acb103aa8f1c5cd4dab"
+  },
+  {
+    "object": "attempts",
+    "rows": 2,
+    "hash": "93dbee71357bd90e91f18b7a7ed5d9e9"
+  },
+  {
+    "object": "scores",
+    "rows": 40,
+    "hash": "f4fa570602588e4f1da33e7cc23626b3"
+  },
+  {
+    "object": "profiles",
+    "rows": 15,
+    "hash": "ef99a2cf69f29833526e35fae4e041d4"
+  },
+  {
+    "object": "positions",
+    "rows": 5,
+    "hash": "393bd7238167f2383b1f045ef136f8e0"
+  }
+]

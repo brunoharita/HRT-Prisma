@@ -1529,6 +1529,15 @@
       "remoteStatementSha256": "4eebe8e1bd244998835f8c32fd125b04a987efa119e06d64921d08a34f000008",
       "verifiedAt": "2026-10-14",
       "fingerprintMethod": "normalized-newline-trim-v1"
+    },
+    {
+      "name": "selection_process_management",
+      "localVersion": "20261014150000",
+      "remoteVersion": "20261014145038",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localCanonicalLength": 11382,
+      "remoteCanonicalLength": 11382
     }
   ],
   "localOnly": [
@@ -1569,11 +1578,11 @@
   ],
   "lastIncrementalVerification": {
     "date": "2026-10-14",
-    "movement": "assessment-question-timeline",
+    "movement": "selection-processes-v260",
     "names": [
-      "assessment_response_timeline"
+      "selection_process_management"
     ],
-    "evidence": "docs/qa/evidence/assessment-question-timeline/production/scope-after.json",
+    "evidence": "docs/qa/evidence/selection-processes-v260/production/scope-after.json",
     "historicalSnapshotVerifiedAtUnchanged": true
   }
 }

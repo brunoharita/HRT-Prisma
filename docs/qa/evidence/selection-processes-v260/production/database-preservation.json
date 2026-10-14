@@ -1,0 +1,28 @@
+{
+  "dataPreserved": true,
+  "protectedFunctionsPreserved": {
+    "authorize_position_follow_up": "25877dd73c67c8883309e54e2c78e694",
+    "get_position_follow_up_cycle": "d0dbc6afdf64886f9ece584abcffc97d",
+    "mutate_position_follow_up_cycle_core": "5363543a93379548b7b288b6d8d9f59f",
+    "position_assessment_public": "79e967bd6cdcbd78dc209e31dcda3f6d"
+  },
+  "newMigrationFingerprint": "3a5eea3a0b5f66989ed545b0c14715d6a497d0b4236568cae007312b8b518a3d",
+  "rls": [
+    {
+      "acl": "{postgres=arwdDxtm/postgres}",
+      "rls": true,
+      "table": "position_evaluation_entries"
+    },
+    {
+      "acl": "{postgres=arwdDxtm/postgres}",
+      "rls": true,
+      "table": "position_evaluation_history"
+    },
+    {
+      "acl": "{postgres=arwdDxtm/postgres}",
+      "rls": true,
+      "table": "position_evaluation_processes"
+    }
+  ],
+  "pass": true
+}

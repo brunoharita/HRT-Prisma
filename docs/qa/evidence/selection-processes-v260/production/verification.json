@@ -1,0 +1,44 @@
+{
+  "sha": "141a7c81d0781516eeee098757bc243161e8b12f",
+  "version": "2.6.0",
+  "runtime": "/prisma-web fb9fb2ae1150730539751cdd63e9432b7109be5618ec82023c0bf0f93f1e9624 sha256:068105c01d98a4e8201ccb411fe33dd47aadf5712bc40f5cc1c4d2ffe3987017 running 0",
+  "preservedServices": 9,
+  "rollback": "sha256:96eda2f1af9752c2653808280ef06ad968038fa22ef9ed6b3314fc6f7a22bbcb",
+  "previousAssetsPreserved": 238,
+  "assetsAfter": 242,
+  "probes": [
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/sign-in",
+      "status": 200
+    },
+    {
+      "path": "/selection-processes",
+      "status": 200
+    },
+    {
+      "path": "/vacancies",
+      "status": 200
+    }
+  ],
+  "bundle": "/assets/index-DPQG9PZL.js",
+  "screens": [
+    {
+      "width": 1448,
+      "version": "v2.6.0",
+      "runtimeErrors": 0,
+      "pass": true
+    },
+    {
+      "width": 390,
+      "version": "v2.6.0",
+      "runtimeErrors": 0,
+      "pass": true
+    }
+  ],
+  "authenticatedRealJourney": "NOT TESTED",
+  "pass": true
+}

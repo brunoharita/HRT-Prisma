@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 478
-source_manifest_sha256: a21ac7c4244ad3d86db40a084b253b41feba048839049526f3df27f98e45e3ce
+source_manifest_sha256: aa036ec9e1adcdb7402bf15f1ba797b0ffc77eab7bafa9cf6318cd08890b5549
 -->
 
 # Tudo sobre o Prisma
@@ -2649,9 +2649,9 @@ last_verified: 2026-10-14
 
 # Estado atual do Prisma
 
-## Processos seletivos separados de Posições — 2.6.0 implementada, publicação pendente
+## Processos seletivos separados de Posições — 2.6.0 publicada
 
-Bruno aprovou em14/10/2026 a proposta3: menu próprio, lista38%/resumo62%, acompanhamento amplo e celular com lista/detalhe sucessivos. Cada processo pertence a uma Posição permanente. Criação explícita vazia somente em Posição desocupada/sem processo ativo, inclusive acesso pela Posição; backend revalida, lock/índice/trigger e replay/auditoria protegem disputas e bloqueiam criação implícita. Seleção mantém Lista/Kanban, cinco etapas, entrevistas/decisões humanas, prova/aplicações/resultados e histórico por ciclo. Consulta paginada50por empresa, sem PII de candidatos no resumo e sem IA/débito/Score/Perfil/matching. Envelope selection-process-management-1.0.0; demais contratos e URLs legíveis. Acordo/execução1.0.0, owner selection-processes.md, AoT selection-processes-v260. SQL120 e disputas3, browser29novo/9preservação, Node19/rotas6/contrato4PASS; tipos/build/fidelidade comprovados em QA sintético. Rollout não presumido; jornada autenticada real NOT TESTED. Destinos previstos banco/web.
+Bruno aprovou em14/10/2026 a proposta3: menu próprio, lista38%/resumo62%, acompanhamento amplo e celular com lista/detalhe sucessivos. Cada processo pertence a uma Posição permanente. Criação explícita vazia somente em Posição desocupada/sem processo ativo, inclusive acesso pela Posição; backend revalida, lock/índice/trigger e replay/auditoria protegem disputas e bloqueiam criação implícita. Seleção mantém Lista/Kanban, cinco etapas, entrevistas/decisões humanas, prova/aplicações/resultados e histórico por ciclo. Consulta paginada50por empresa, sem PII de candidatos no resumo e sem IA/débito/Score/Perfil/matching. Envelope selection-process-management-1.0.0; demais contratos e URLs legíveis. Acordo/execução1.0.0, owner selection-processes.md, AoT selection-processes-v260. SQL120 e disputas3, browser29novo/9preservação, Node19/rotas6/contrato5PASS; tipos/build/fidelidade comprovados em QA sintético. Publicada runtime141a7c81d0781516eeee098757bc243161e8b12f; CIbranch38583647158/main38584067622SUCCESS. Migrationremote20261014145038/fingerprint igual à fonte, quatro writers protegidos/ACLs e sete conjuntos produtivos/hash preservados. Webrunning/restart0,4rotas/bundle/versão200, rollback e9contêineres adjacentes preservados;238assets antigos íntegros.404imediato estabilizou sem rebuild. Jornada autenticada real NOT TESTED; destinos somente banco/web. Fechamento documental sincroniza fontes sem reconstrução de runtime.
 
 ## Linha do tempo factual da questão — 2.5.5 publicada
 
@@ -23326,8 +23326,8 @@ Acordo/execução1.0.0 aprovados por Bruno em14/10/2026. Baseline main/VPS3766fc
 | D-03 | Menu, workspace paginado50, busca/status e summary | SQL escopo/filtros/offset, rotas6, browser29 | PASS |
 | D-04 | Acompanhamento Lista/Kanban, prova e histórico | browser preservação9, Node19, SQL avaliação/ciclo/snapshots | PASS |
 | D-05 | PositionProcessAccess e aba da Posição | browser preseleção, SQL elegíveis e links | PASS |
-| D-06 | Gate vivo, ACLs existentes, guards e auditoria | SQL120total (baseline79 + novo41) e contrato4, disputa3 e negativos | PASS |
-| D-07 | Registry2.6.0, owner docs e contexto | Publicação/CI pendentes | NOT TESTED |
+| D-06 | Gate vivo, ACLs existentes, guards e auditoria | SQL120total (baseline79 + novo41) e contrato5, disputa3 e negativos | PASS |
+| D-07 | Registry2.6.0, owner docs e contexto | CI branch38583647158/main38584067622, verification.json/ledger | PASS |
 | D-UX-01 | Lista38%/painel62%, seleção e ações | browser/desktop-1448.png, dados12/8/10 e geometria38/62 | PASS |
 | D-UX-02 | Acompanhamento amplo, mobile sucessivo/resumo antes de ações | browser/detail-390.png/list-390.png/detail-320.png; preservation/kanban-1448.png/390/320 | PASS |
 
@@ -23342,7 +23342,7 @@ Acordo/execução1.0.0 aprovados por Bruno em14/10/2026. Baseline main/VPS3766fc
 | Candidatos/etapas/entrevista/decisão | direct | Writer core/grants preservados, SQL baseline/browser | PASS |
 | Avaliações/convites/resultados | plausible_indirect | Writer preservado, ID explícito/legado e snapshots/rotas | PASS |
 | Auth/tenant/retorno | critical_transversal | Gate backend/reviewer e origins-scoped rotas6/Node4 | PASS |
-| Parser/Synthesis/gateway/mail/Knowledge | no_impact_identified | Sem writer/dependência; release/runtimes a confirmar | NOT TESTED |
+| Parser/Synthesis/gateway/mail/Knowledge | no_impact_identified | Plano somente banco/web; nove runtimes IDs/imagens/estados/restarts preservados | PASS |
 
 Mapa inicial mantido. Bootstrap QA usa recipe rastreado/fixtures existentes, sem dependência em rascunhos não rastreados. Nenhuma nova biblioteca/fornecedor; reúso aprovado registrado no delta ADR-082.
 
@@ -23360,8 +23360,15 @@ Jornada autenticada real NOT TESTED; não inferir uso humano ou entrega de convi
 
 ## Git / publicação
 
-Pendente. Destinos: migration nova e web, SHA explícito/CI/rollback. Banco aditivo não remove dados. Rollback UI conserva guards; cliente antigo sem início explícito recebe erro seguro e deve atualizar para2.6.0. Não retirar guard para rollback.
-`nCI branch38583025197 bloqueou mapeamento inline no throw e aviso de acesso sem ação. Corrigidos sem retirar gates; testes reviewOperationErrors/actionableNotices/contrato21 + criação/reabertura e browser de recuperação aprovados. Novo SHA será validado pelo CI antes de integrar/publicar.
+Publicado runtime 141a7c81d0781516eeee098757bc243161e8b12f, v2.6.0, em main/origin/VPS. CI branch38583647158 e main38584067622 SUCCESS. Plano somente migration e web; serviços/modelos/tarifas adjacentes não publicados. Verificação production/verification.json comprova container running/restart0, bundle/SHA/versão,4rotas HTTP200 e login público1448/390sem erro/overflow. Nove contêineres adjacentes preservaram IDs/imagens/estado/restarts,238assets anteriores byte-idênticos preservados,242assets após. Rollback96eda2f1 corresponde à imagem anterior.
+
+Migration local20261014150000/remote20261014145038, fingerprint normalizado3a5eea3a0b5f66989ed545b0c14715d6a497d0b4236568cae007312b8b518a3d, comprimento11382, iguais. scope-after.json confirma somente start RPC anterior alterado, quatro funções protegidas/ACLs mantidas e três tabelas RLS/ACLs sem novo grant. Índice/guard/consultas instalados. database-preservation.json/data-before/data-after comprovam hashes/contagens idênticos dos sete conjuntos produtivos: processos,entries,provas,aplicações,Scores,Perfis e ocupação.
+
+CI inicial38583025197 bloqueou mapeamento inline no throw e aviso de acesso sem ação; corrigidos preservando os testes, com21checks dirigidos e teste adicional de mensagem de criação/reabertura/recuperação. CI final passou. Smoke imediato do deploy retornou404durante recriação; confirmação independente posterior comprovou estabilização sem rebuild. Probe de rollback inicialmente usou prefixo8em vez do12do script; corrigida somente a verificação, rollback existente confirmado.
+
+Integração main por fast-forward. A referência PNG não rastreada na pasta canônica tinha hash idêntico; foi preservada como03-lista-painel-origem.png antes da integração. Outros rascunhos alheios preservados. Avisos de Git sobre prune de worktrees antigos não bloqueiam commits/FF; nenhum lock/checkout alheio foi removido.
+
+D-01..D-07/D-UX-01/02 e P-01..03/P-UX-01 PASS nos limites declarados, F-01/F-02 preservados; nenhum desvio material. Jornada autenticada real permanece NOT TESTED. Fechamento documental e ledger sincronizados sem reconstruir o runtime funcional. Banco aditivo mantém dados/guards; UI antiga sem início explícito recebe erro seguro e precisa atualizar. Não retirar guard para rollback.
 
 ---
 

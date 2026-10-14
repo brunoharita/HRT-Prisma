@@ -1,0 +1,77 @@
+{
+  "ledger": [
+    {
+      "name": "selection_process_management",
+      "version": "20261014145038",
+      "fingerprint": "3a5eea3a0b5f66989ed545b0c14715d6a497d0b4236568cae007312b8b518a3d",
+      "canonicalLength": 11382
+    }
+  ],
+  "functions": [
+    {
+      "acl": "{postgres=X/postgres}",
+      "name": "authorize_position_follow_up",
+      "schema": "private",
+      "bodyHash": "25877dd73c67c8883309e54e2c78e694"
+    },
+    {
+      "acl": "{postgres=X/postgres}",
+      "name": "get_position_follow_up_cycle",
+      "schema": "private",
+      "bodyHash": "d0dbc6afdf64886f9ece584abcffc97d"
+    },
+    {
+      "acl": "{postgres=X/postgres,authenticated=X/postgres}",
+      "name": "get_selection_process_positions",
+      "schema": "public",
+      "bodyHash": "b007947e2ff995c7b15f699f01d2508e"
+    },
+    {
+      "acl": "{postgres=X/postgres,authenticated=X/postgres}",
+      "name": "get_selection_process_workspace",
+      "schema": "public",
+      "bodyHash": "0f3029c551883e578be195bb45edc7a3"
+    },
+    {
+      "acl": "{postgres=X/postgres}",
+      "name": "guard_selection_process_start",
+      "schema": "private",
+      "bodyHash": "ed8b4a53a32efb6e1c155b650d5b4eb9"
+    },
+    {
+      "acl": "{postgres=X/postgres}",
+      "name": "mutate_position_follow_up_cycle_core",
+      "schema": "private",
+      "bodyHash": "5363543a93379548b7b288b6d8d9f59f"
+    },
+    {
+      "acl": "{postgres=X/postgres,service_role=X/postgres}",
+      "name": "position_assessment_public",
+      "schema": "public",
+      "bodyHash": "79e967bd6cdcbd78dc209e31dcda3f6d"
+    },
+    {
+      "acl": "{postgres=X/postgres,authenticated=X/postgres}",
+      "name": "start_position_selection_process",
+      "schema": "public",
+      "bodyHash": "5b9621a65a0d6dbf0a9bc75397830f35"
+    }
+  ],
+  "tables": [
+    {
+      "acl": "{postgres=arwdDxtm/postgres}",
+      "rls": true,
+      "table": "position_evaluation_entries"
+    },
+    {
+      "acl": "{postgres=arwdDxtm/postgres}",
+      "rls": true,
+      "table": "position_evaluation_history"
+    },
+    {
+      "acl": "{postgres=arwdDxtm/postgres}",
+      "rls": true,
+      "table": "position_evaluation_processes"
+    }
+  ]
+}
