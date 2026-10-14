@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 469
-source_manifest_sha256: 1c3104fd2d394da20eb7dc5bcc426f096544fa2ba1b01e50d2d8c740527c46f2
+documentation_source_count: 471
+source_manifest_sha256: 062c2895703cf4209b361610f980de9b4cc3c1a2119c9ee0dca9d4cccdea8167
 -->
 
 # Tudo sobre o Prisma
@@ -2630,11 +2630,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.74.8
+version: 2.74.9
 last_verified: 2026-10-13
 ---
 
 # Estado atual do Prisma
+
+## Resultado executivo da avaliação — 2.5.4 validada localmente, publicação pendente
+
+Bruno aprovou a visão executiva clara e autorizou implementação/main/publicação em13/10/2026. Interface individual/histórica com indicadores gerais, abas Visão geral/Questões/Registros, métricas por assunto/dificuldade e filtros combináveis com denominador/recorte explícitos. Consulta determinística sem IA/cotação automática; síntese inteira salva e sua evidência imutável permanecem separadas do recorte atual, com confirmação comercial existente preservada. Tempo de resposta indisponível, sem nova coleta/calibração/penalidade/influência em Score/Perfil/etapas. Contratos1.0.0/método1.1.0/backend/tarifas inalterados. Acordo/mapa/execução1.0.0 em docs/qa/agreement-assessment-results-executive.md, referência normativa em docs/product/assessment-results-executive-reference.html. Local:16Node/293browser dirigidos, tipos/build e fidelidade 1448/768/390/320 PASS. AoT registra limites e rollout pendente; esta nota não comprova publicação.
 
 ## Sinais de conteúdo da avaliação —2.5.3 publicada
 
@@ -12106,11 +12110,17 @@ No portal, **Revisar avaliação** fica no cabeçalho junto ao progresso; o roda
 
 ## Atividade e análise por IA — disponível em2.5.2
 
-A aba Atividade por questão apresenta perdas de foco, mouse antes da primeira escolha, zoom e atalhos com rótulos separados. Ver acontecimentos abre descrições com horários de Brasília e limites; detalhes técnicos preservam os campos originais sob demanda. Mobile usa cartões; histórico individual e processo comum compartilham a apresentação. Análise da atividade consulta resultado salvo gratuitamente e permite solicitação explícita com previsão de Tokens Prisma e confirmação. O sistema calcula fatos da tentativa inteira; IA seleciona/ordena padrões/contextos sustentados e links abrem as questões de evidência. Sem inferência de fraude, intenção, destino, contratação, Score ou etapa. Versão/fingerprint/data registram base e desatualização; falha conserva dados/relatório anterior e não debita sem entrega, confirmação incerta exige consulta/conciliação. Reutiliza provider/histórico/ledger, sem nova coleta. Tarifa inicial6.193 Tokens Prisma por resultado concluído aprovada por Bruno em13/10/2026; implementação publicada e verificada: acordo1.1.0/AoT assessment-activity-v252.
+A aba Registros (antes Atividade por questão) apresenta perdas de foco, mouse antes da primeira escolha, zoom e atalhos com rótulos separados. Ver acontecimentos abre descrições com horários de Brasília e limites; detalhes técnicos preservam os campos originais sob demanda. Mobile usa cartões; histórico individual e processo comum compartilham a apresentação. Análise da atividade consulta resultado salvo gratuitamente e permite solicitação explícita com previsão de Tokens Prisma e confirmação. O sistema calcula fatos da tentativa inteira; IA seleciona/ordena padrões/contextos sustentados e links abrem as questões de evidência. Sem inferência de fraude, intenção, destino, contratação, Score ou etapa. Versão/fingerprint/data registram base e desatualização; falha conserva dados/relatório anterior e não debita sem entrega, confirmação incerta exige consulta/conciliação. Reutiliza provider/histórico/ledger, sem nova coleta. Tarifa inicial6.193 Tokens Prisma por resultado concluído aprovada por Bruno em13/10/2026; implementação publicada e verificada: acordo1.1.0/AoT assessment-activity-v252.
 
 ## Complemento2.5.3 — metadados de seleção/cópia/menu
 
 Pedido de Bruno autoriza observação adicional das regiões de enunciado/alternativas durante tentativa ativa e questão visível. Eventos text_selection_observed, copy_action_observed e context_menu_observed guardam região/quantidade de caracteres/horário, com códigos de suporte/limitação e eventual correlação indicativa. Não guardam texto, imagens, clipboard, coordenadas ou teclas gerais e não bloqueiam cópia/menu. PrintScreen considera keydown/keyup recebidos sem duplicar um par. Não confirma captura/cópia concluída, destino ou fraude; programas externos/fotos continuam não observáveis. Instruções informam os novos sinais. Pipeline existente impõe token/tenant/questão/versão e payload mínimo estrito; sem grant novo ou histórico reescrito. Análise método1.1.0 integra padrões calculados e limite copy obrigatório, com envelope1.0.0 preservado e relatórios antigos legíveis; atualização paga somente explícita, tarifa6193 mantida. Acordo/AoT assessment-content-signals registra validação e publicação; estado de rollout deve ser conferido no AoT.
+
+## Resultado executivo 2.5.4
+
+Resultado individual atual e histórico apresentam fundo claro, identificação/versão, acertos persistidos em destaque, tempo decorrido válido entre início/envio e quantidade de questões com registros. Indicadores representam a avaliação inteira; registros são parciais. Visão geral inicia em acertos por assunto. Mostrar alterna acertos, perdas de foco, duração sem foco e alterações de resposta; Agrupar por alterna assunto/dificuldade; filtros por assunto, dificuldade e resposta alteram o recorte com quantidade e limpar. IDs dos requisitos e versões aplicadas sustentam os joins; rótulos iguais não unem assuntos distintos. Dificuldade é classificação atribuída, sem calibração empírica. Ausência de duração ou correção permanece indisponível, sem barra de zero inventada.
+
+Grupo abre Questões mantendo números originais, alternativas, resposta/gabarito, explicação e origem; padrão abre Registros de evidência. Todos os sinais, incluindo seleção/cópia/menu, zoom, atalhos, lacunas, eventos não associados e detalhes técnicos continuam consultáveis. Retorno conserva filtros. Síntese por IA permanece recolhida e identifica avaliação inteira/base histórica; suas evidências usam o snapshot original. Consulta, abas e filtros não geram IA/cotação/débito. Atualização exige o fluxo comercial existente, conserva relatório anterior em erro e evita retry pago automático. Tempo de resposta por questão/assunto é explicitamente indisponível; não é inferido do tempo global ou do mouse/foco. Não há nova coleta, mudança de contratos/métodos/tarifas/backend ou influência em Score/Perfil/etapas. Acordo1.0.0, referência e AoT assessment-results-executive registram escopo, fidelidade, testes e rollout; publicação só é confirmada pela evidência operacional do AoT.
 
 ---
 
@@ -12917,6 +12927,46 @@ Contrato1.0.0, aprovado pelo pedido de Bruno nesta conversa. Baseline8ddfef923a4
 | Release/rotas/assets | critical_transversal | SHA/image/rollback existentes; CI e smoke versões/assets com publicação seletiva |
 
 Execução congelada: implementar integralmente D-01 a D-06, P-01/02, F-01, A-01 e CA01-04 acima; fechar AoT com prova e limites, sem reaprovacão administrativa. Reuso nativo e capacidades Prisma atendem à necessidade; não há solução externa nova a selecionar.
+
+---
+
+## Source: `docs/qa/agreement-assessment-results-executive.md`
+
+# Acordo e execução — Resultado executivo da avaliação 2.5.4
+
+Contrato 1.0.0. Bruno aprovou a opção 1, seus agrupamentos configuráveis e o refinamento claro, e autorizou implementar, integrar em main e publicar nesta conversa em 13/10/2026. Baseline main/origin 5d6f8066a75f7c710a150f92116771e07a56a987. Risco C: apresentação integrada, sem mudança de persistência, autorização ou método IA.
+
+Referência normativa: `docs/product/assessment-results-executive-reference.html`, cópia integral do último protótipo aprovado. Seus dados são ilustrativos. Topologia: cabeçalho com pessoa/contexto/estado; três indicadores, acertos com maior destaque; abas Visão geral/Questões/Registros; faixa clara com Mostrar/Agrupar por/Filtros; escopo visível; duas colunas de agrupamentos e padrões; origem IA recolhida e limites. Fundo branco, azul discreto, bordas suaves, espaçamento regular, ações junto à informação. Desktop modal amplo; celular uma coluna, controles reorganizados e fechamento disponível. Não substituir por relatório longo, wizard ou dashboard distinto.
+
+- D-01 / D-UX-01: aplicar essa composição no resultado individual atual e histórico, preservando identificação e versão. Indicadores sempre representam a avaliação inteira: acertos persistidos, tempo decorrido válido início/envio, questões com registros aceitos; ausência permanece indisponível, nunca zero inventado. Estados não concluídos não exibem correção como resultado concluído.
+- D-02 / D-UX-02: leitura padrão acertos por assunto; Mostrar permite acertos, ocorrências de perda de foco, tempo sem foco registrado, alterações de resposta; Agrupar por assunto/dificuldade; Filtros por assunto/dificuldade/resposta correta ou incorreta, com limpar e quantidade explícita. Agrupar não muda escopo; filtros mudam os dois painéis e a lista. Não confundir tempo sem foco com tempo de resposta; este aparece indisponível. Dificuldade é classificação da versão aplicada, não calibração empírica. Sempre mostrar denominador.
+- D-03 / D-UX-03: navegar de grupo/padrão para questões/registros associados mantendo recorte; retornar preserva escolhas. Manter enunciado, cinco alternativas, resposta/gabarito, explicação, origem/método/versão e todos sinais/detalhes técnicos. Eventos sem correspondência permanecem consultáveis. Nenhum recorte mistura empresas, tentativas ou versões.
+- D-04: preservar IA explícita, cotação/confirmação, saldo, cache, retry/conciliacão/erros, análises antigas e evidência do snapshot imutável. Consulta/filtros/abas não geram IA nem cotação automaticamente. Síntese salva tem escopo original identificado e não é reescrita por filtros; link abre os registros daquele snapshot e permite retornar aos dados atuais.
+- D-05 / D-UX-04: uso por teclado, feedback de carregamento, limites visíveis, ausência/zero/não aplicável separados, responsividade em 1448/768/390/320. Modal com fechamento nativo, títulos/contexto, rolagem vertical; sem rolagem horizontal no resumo/mobile.
+- D-06: publicação seletiva 2.5.4 em main/produção, tipos/build/testes dirigidos, Context Pack/AoT, fidelidade com mesmos dados/viewport, rollback/smoke/sincronização. Não usar candidatos reais como fixture nem executar IA paga de teste.
+- P-01: inventar tempo de resposta, calibração, risco/fraude/aptidão, ranking ou decisão automática; alterar resultado, Score, Perfil, matching, etapa, banco de questões ou histórico.
+- P-02: coletar dados novos, mudar contratos/tarifas/IA/backend/RLS, cobrar automaticamente, ocultar sinais ou reatribuir eventos de versões/empresas divergentes.
+- F-01: novo coletor de tempo, matriz assunto×dificuldade avançada, comparação entre candidatos, exportação, novo provider/componente externo, redesign da preparação/portal.
+- A-01 / A-UX-01: reutilizar Ant Design, ícones e tokens existentes; arquivos, funções puras, joins pelos IDs oficiais, densidade e decoração menor, layout responsivo e estratégia proporcional de regressão delegados à engenharia. Sem biblioteca nova. Produto 2.5.4; contratos persistidos/métodos IA permanecem intactos.
+- Q: nenhum material pendente.
+- CA-01 (D01/02): fixtures com grupos desiguais/sem resposta/dados ausentes, difícil e recorte, mudança de métrica sem mutação; indicadores gerais estáveis e denominadores exatos.
+- CA-02 (D03/04/P02): browser com respostas/registros/conteúdo/legado/stale/snapshot diferente/cache/confirmar/cancelar/saldo/resultado incerto; filtros não invocam IA/cotação; evidência por versão e tentativa preservada.
+- CA-03 (D05/UX): capturas mesmas pessoas/dados/viewport da referência, teclado, sem overflow/erros e estado incompleto; demais sinais legíveis no detalhe, origem IA e limites acessíveis.
+- CA-04 (D06/P01/F01): diff dirigido sem backend/novos coletores, CI aplicável, smoke público SHA/versão/assets/rollback/container adjacente, AoT distingue fixture de jornada autenticada real.
+
+## Mapa de impacto prévio
+
+| Capacidade | Relação | Baseline e validação mínima |
+| --- | --- | --- |
+| Resultado individual/histórico/modal/abas | direct | código baseline, fixtures de resultados; grupos/filtros/join/respostas/navegação e capturas novas |
+| Registros/síntese/cache/limites | direct | fatos método1.1.0/envelope1.0.0, 68 checks v252; regressão dirigida com snapshots/legado/negativos |
+| Preparação/processo/posição | plausible_indirect | consumidor compartilhado AssessmentAttemptResults; regressão configuração/revisão/convites e histórico sem efeitos de consulta |
+| Custos/tenant/dados | critical_transversal | serviço validado atual e pipeline de cotação; mocks de chamadas/escopo sem mudanças de autoridade ou mutação real |
+| Portal/coleta/correção | no_impact_identified | somente consumidor de leitura; fonte/método não alterados, smoke do portal/revisão/envio já existente |
+| Score/Perfil/matching/banco/Parser/mail/Síntese worker | no_impact_identified | não são consumidores do resumo; diff/plano sem mudanças nessas regras/destinos, preservar containers na publicação |
+| Web/release/assets | critical_transversal | runtime2.5.3/f780dcd, VPS existente/opt/prisma; plano web-only, rollback/rotas/SHA/contexto/sync |
+
+Execução congelada: implementar todos D/P/F/A/CA acima, sem reabrir decisões já aprovadas. Reuso Ant Design e capacidades Prisma atende à necessidade; não há alternativa externa material nova. Fechar AoT segundo o template; fidelidade visual estrutural não exige pixel idêntico, adapta dados reais e componentes acessíveis sem mudar hierarquia/ordem/ações.
 
 ---
 
@@ -17653,6 +17703,47 @@ Web image6aa97d36d8abeef217a64e5f9306e741ad1b3791e614593811f600b18d253eb2 runnin
 Fechamento documental/ledger/contextos sincronizado pelo dispatcher e fast-forward da VPS, sem reconstruir runtimes; sourceSHA permanece explícito. Desvios: nenhum. Limitações: native menu Copiar clicado pelo usuário não testado em headless (copy event nativo via comando Chromium e teclado testados); não certificamos sucesso de clipboard/captura nem toda combinação de navegador/SO, e não usamos candidato real/IA paga em produção como fixture. Todos D/P têm prova proporcional, rollout separado de qualidade real do modelo.
 
 Coletor1.1 recorta a seleção às regiões oficiais da questão, incluindo Ctrl+A/Cmd+A; caracteres de cabeçalho/instruções/nome não entram na contagem. Não há leitura do clipboard. Migração aditiva20261013205000 aceita1.0/1.1, preservando registros/permissões anteriores. Correção de cobertura dentro do mesmo movimento2.5.3, publicada no runtimef780dcd487c288cbaf34ac07263f2a326dd9793e, CI38467702146 SUCCESS. Migration remota20261013210859 com fingerprint idêntico;12conjuntos protegidos e24ACL/configs iguais, somente corpo do portal alterado como previsto. Webac5284827fcec2fac268c49e1cd6997bb5e4e945d0d974fe095d466770ec7379 running/restart0; rollback-before-f780dcd487c2=6aa97d36d8abeef217a64e5f9306e741ad1b3791e614593811f600b18d253eb2. Smoke público1448/390/320 sem erro/overflow,4rotas/7assets200,230assets históricos preservados. Edgev5 preservada, serviços adjacentes intactos. Evidências finais production/scope-after.json,scope-schema.json,scope-release.json,vps.json,web-smoke.json e capturas públicas.
+
+---
+
+## Source: `docs/qa/aot-assessment-results-executive.md`
+
+# AoT — Resultado executivo da avaliação 2.5.4
+
+Contrato: `docs/qa/agreement-assessment-results-executive.md`, versão1.0.0, aprovado pelo pedido de implementação/publicação desta conversa. Baseline5d6f8066a75f7c710a150f92116771e07a56a987. Classes C/UX integrada; backend e método IA não mudam.
+
+## Matriz de acordos
+
+| ID | Implementação | Teste/evidência | Status / limite |
+| --- | --- | --- | --- |
+| D-01/UX01 | AssessmentResultView, modal/contexto, acertos persistidos/elapsed/registros | 4 unit novos e 76 checks browser, 32 integração | PASS (fixtures) |
+| D-02/UX02 | shared/assessmentResultAnalysis, seletor/grupos/filtros | 16 Node dirigidos (4 novos), grupos desiguais/ausência/zero/join, 76 browser | PASS |
+| D-03/UX03 | abas, questões, AssessmentActivity com seleção e snapshot | 76 novos/68 atividade/35 conteúdo, filtros/números/snapshot e reset | PASS |
+| D-04 | AssessmentActivityAnalysis compacta, mesma infraestrutura/quotes/reservas | 68 atividade/35 conteúdo, cache/cancelar/saldo/uncerto/legado, sem geração/cotação implícita | PASS |
+| D-05/UX04 | CSS claro responsivo/nativo Ant Design/feedback existente | referência/overview 1448/768/390/320, teclado, fusos, 76+32 browser sem overflow | PASS |
+| D-06 | versão2.5.4, owner docs/contexto, release web-only | tipos/build locais PASS; CI/publicação/rollback/smoke/sync pendentes | PARTIAL |
+
+## Proibições e fora de escopo
+
+P-01/P-02/F-01 PASS local: diff não altera migration/Edge/coleta/tarifa/persistência/Score/Perfil/matching/etapas; 4 unit e browser verificam ausência/zero/tempo indisponível, empresa divergente sem consulta, IDs e versão dos eventos, sem escrita ou análise/cotação por filtros. Portal82 mantém revisão/envio explícitos. Contratos/métodos persistidos permanecem intactos.
+
+## Mapa de impacto e preservação
+
+Mapa prévio permanece o do acordo: resultados/atividade direct; preparação/processo plausible_indirect; tenant/custo/release critical_transversal; portal/coleta e outros domínios no_impact_identified. Regressão obrigatória dirigida, sem suíte completa local automática. Dependências descobertas: reaproveitamento do consumidor legado da atividade e reset de evidência deve sincronizar o escopo externo, evitando rótulo de snapshot sobre dados atuais. Sem destino extra de release.
+
+## Fidelidade visual
+
+Referência HTML normativa e fixture visual: Pessoa exemplo, backend,12/20,18min40s,20/20registros; cinco assuntos4questões,9episódios/6questões/92s,mouse70s e2alterações. Comparação visual em1448/768/390/320 realizada, capturas browser/reference-* e overview-* preservadas. Composição/ordem/hierarquia/cores/agrupamentos reconhecíveis; três indicadores, faixa e dois painéis, coluna no celular. Ícones locais Ant Design substituem Lucide da referência pela autonomia permitida. Conteúdo de análise real deve conservar limites/data/escopo/cache, não copiar textos simulados. Diferenças menores delegadas por A-UX-01: ícone em vez de iniciais ilustrativas, rótulo Concluído do sistema, controles nativos Ant Design, faixa IA mais alta para estado/escopo e acesso extra aos sinais/metadados existentes. A largura menor da fixture móvel decorre do padding do contêiner de teste; o modal real em integration/modal-* usa o padding18 aprovado, conserva fechar por Escape e ausência de overflow. Sem substituição estrutural.
+
+## Validação final e ambiente
+
+Local: 16 Node (4 novos), 76 browser executivo, 68 regressões atividade, 35 conteúdo, 32 integração processo/modal e 82 portal: 293 checks browser PASS. Typecheck web/build PASS (warnings já existentes de chunk/dynamic-import). Fixtures sintéticas locais, sem candidato real, IA paga ou mutação de produção. Baseline VPS confirmado srv1038882,/opt/prisma main5d6f806, runtimewebac528482 running/restart0; demais nove instâncias inventariadas para comparar após rollout. QA frontend local com cliente sintético sem saída externa. Jornada autenticada real NOT TESTED; não é inferida de fixtures/public smoke.
+
+## Desvios / conclusão
+
+Validação de contexto/lint/foundation será feita no snapshot rastreado exato: o gerador do checkout original também inclui Markdown de propostas não rastreadas em docs, enquanto o checker recusa as cópias TUDO_SOBRE_PRISMA (1)/(2). Regenerar os dois exports no snapshot evita publicar rascunhos alheios; nenhum arquivo alheio é movido/removido. Dispatcher é roteador: seu pnpm test amplo é substituído pelos testes afetados já comprovados, conforme AGENTS; o workflow CI existente permanece obrigatório. Travas index.lock vazias abandonadas, sem processo Git e sem handle aberto, são removidas somente depois de verificação; nunca se altera índice/dados para contornar uma trava ativa.
+
+Escopo funcional local concluído, rollout ainda pendente. Um teste inicial selecionava detalhe técnico oculto na tabela; foi restringido ao detalhe aberto e acionado por teclado. Falhas durante edição/HMR foram rerodadas com fonte estável. Correções materiais locais: quebra de links longos/snapshot em320/390, abas compactas320 e título acessível nativo da modal; nunca usar click forçado como prova. Análises/campos técnicos/legado seguem disponíveis. Checker de contexto no checkout original encontrou duas cópias não rastreadas preexistentes TUDO_SOBRE_PRISMA (1)/(2). Elas não foram removidas ou movidas; validação deve executar no snapshot exato rastreado do release. Todos os arquivos alheios preservados. Evidências históricas de conteúdo foram restauradas ao baseline depois de copiar a regressão atual para seu diretório; o runner passou a aceitar PRISMA_EVIDENCE_DIR. Nenhuma outra mudança de autoridade/escopo foi requerida.
 
 ---
 

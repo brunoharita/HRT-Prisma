@@ -1,0 +1,135 @@
+{
+  "checks": [
+    {
+      "name": "1448: configuration default controls preserved",
+      "pass": true
+    },
+    {
+      "name": "1448: montage still reuses bank without paid generation or sending",
+      "pass": true
+    },
+    {
+      "name": "1448: actual modal retains person context result and unavailable legacy duration",
+      "pass": true
+    },
+    {
+      "name": "1448: actual process result retains immutable five options",
+      "pass": true
+    },
+    {
+      "name": "1448: actual modal keeps activity and partial-evidence limits",
+      "pass": true
+    },
+    {
+      "name": "1448: no modal overflow with keyboard close available",
+      "pass": true
+    },
+    {
+      "name": "1448: closing preserves application status with no sends or cancellation",
+      "pass": true
+    },
+    {
+      "name": "1448: no runtime errors or external requests",
+      "pass": true
+    },
+    {
+      "name": "768: configuration default controls preserved",
+      "pass": true
+    },
+    {
+      "name": "768: montage still reuses bank without paid generation or sending",
+      "pass": true
+    },
+    {
+      "name": "768: actual modal retains person context result and unavailable legacy duration",
+      "pass": true
+    },
+    {
+      "name": "768: actual process result retains immutable five options",
+      "pass": true
+    },
+    {
+      "name": "768: actual modal keeps activity and partial-evidence limits",
+      "pass": true
+    },
+    {
+      "name": "768: no modal overflow with keyboard close available",
+      "pass": true
+    },
+    {
+      "name": "768: closing preserves application status with no sends or cancellation",
+      "pass": true
+    },
+    {
+      "name": "768: no runtime errors or external requests",
+      "pass": true
+    },
+    {
+      "name": "390: configuration default controls preserved",
+      "pass": true
+    },
+    {
+      "name": "390: montage still reuses bank without paid generation or sending",
+      "pass": true
+    },
+    {
+      "name": "390: actual modal retains person context result and unavailable legacy duration",
+      "pass": true
+    },
+    {
+      "name": "390: actual process result retains immutable five options",
+      "pass": true
+    },
+    {
+      "name": "390: actual modal keeps activity and partial-evidence limits",
+      "pass": true
+    },
+    {
+      "name": "390: no modal overflow with keyboard close available",
+      "pass": true
+    },
+    {
+      "name": "390: closing preserves application status with no sends or cancellation",
+      "pass": true
+    },
+    {
+      "name": "390: no runtime errors or external requests",
+      "pass": true
+    },
+    {
+      "name": "320: configuration default controls preserved",
+      "pass": true
+    },
+    {
+      "name": "320: montage still reuses bank without paid generation or sending",
+      "pass": true
+    },
+    {
+      "name": "320: actual modal retains person context result and unavailable legacy duration",
+      "pass": true
+    },
+    {
+      "name": "320: actual process result retains immutable five options",
+      "pass": true
+    },
+    {
+      "name": "320: actual modal keeps activity and partial-evidence limits",
+      "pass": true
+    },
+    {
+      "name": "320: no modal overflow with keyboard close available",
+      "pass": true
+    },
+    {
+      "name": "320: closing preserves application status with no sends or cancellation",
+      "pass": true
+    },
+    {
+      "name": "320: no runtime errors or external requests",
+      "pass": true
+    }
+  ],
+  "limitations": [
+    "Synthetic process/client and local browser; no authenticated real candidate or paid action"
+  ]
+}

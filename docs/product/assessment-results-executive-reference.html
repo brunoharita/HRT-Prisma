@@ -1,0 +1,210 @@
+<div id="prisma-result-v2" aria-label="Visão executiva parametrizável">
+  <style>
+    #prisma-result-v2{--pr-bg:#ffffff;--pr-text:#192b48;--pr-sub:#53657e;--pr-line:#e3eaf3;--pr-soft:#f5f8fc;--pr-blue:#245ac9;--pr-blue-soft:#eef4ff;--pr-track:#e8eef7;--pr-ok:#edf8f1;--pr-ok-text:#256044;color:var(--pr-text);font:14px/1.5 system-ui,sans-serif;width:100%;color-scheme:light}
+    #prisma-result-v2 *{box-sizing:border-box}
+    #prisma-result-v2 .pr-window{background:var(--pr-bg);border:1px solid var(--pr-line);border-radius:20px;padding:28px;box-shadow:0 12px 35px #15345b0d}
+    #prisma-result-v2 h2{font-size:24px;line-height:1.25;letter-spacing:-.6px;margin:0 0 15px;font-weight:650}
+    #prisma-result-v2 h3{font-size:16px;letter-spacing:-.25px;margin:0 0 4px;font-weight:650}
+    #prisma-result-v2 p{margin:0}
+    #prisma-result-v2 .pr-muted{color:var(--pr-sub)}
+    #prisma-result-v2 .pr-small{font-size:12px}
+    #prisma-result-v2 .pr-head{display:flex;gap:14px;justify-content:space-between;align-items:flex-start}
+    #prisma-result-v2 .pr-eyebrow{font-size:11px;font-weight:600;letter-spacing:1.2px;color:var(--pr-sub);margin-bottom:7px}
+    #prisma-result-v2 .pr-person{display:flex;align-items:center;gap:10px}
+    #prisma-result-v2 .pr-avatar{display:grid;place-items:center;flex:0 0 38px;height:38px;border-radius:12px;background:var(--pr-blue-soft);color:var(--pr-blue);font-size:13px;font-weight:650}
+    #prisma-result-v2 .pr-person-name{font-weight:600}
+    #prisma-result-v2 .pr-status{display:flex;align-items:center;gap:5px;color:var(--pr-ok-text);background:var(--pr-ok);border-radius:20px;padding:6px 10px;font-size:12px;font-weight:550;white-space:nowrap}
+    #prisma-result-v2 .pr-status i{width:14px;height:14px}
+    #prisma-result-v2 .pr-stats{display:grid;grid-template-columns:1.15fr 1fr 1fr;gap:12px;margin:22px 0 20px}
+    #prisma-result-v2 .pr-stat{background:var(--pr-bg);border:1px solid var(--pr-line);border-radius:12px;padding:15px 16px}
+    #prisma-result-v2 .pr-stat-label{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--pr-sub)}
+    #prisma-result-v2 .pr-stat-label i{width:14px;height:14px}
+    #prisma-result-v2 .pr-stat strong{display:block;font-size:25px;line-height:1.2;letter-spacing:-.6px;font-weight:650;font-variant-numeric:tabular-nums;margin:9px 0 6px}
+    #prisma-result-v2 .pr-stat:first-child{background:var(--pr-blue-soft);border-color:#dbe7fe}
+    #prisma-result-v2 .pr-stat:first-child strong{color:var(--pr-blue);font-size:31px;margin-top:5px}
+    #prisma-result-v2 .pr-tabs{display:flex;gap:23px;border-bottom:1px solid var(--pr-line);margin-bottom:20px;flex-wrap:wrap}
+    #prisma-result-v2 button,#prisma-result-v2 select{font:inherit;cursor:pointer}
+    #prisma-result-v2 button:focus-visible,#prisma-result-v2 select:focus-visible,#prisma-result-v2 summary:focus-visible{outline:3px solid var(--pr-blue);outline-offset:3px}
+    #prisma-result-v2 .pr-tab{display:flex;align-items:center;gap:6px;padding:10px 0;border:0;border-bottom:2px solid transparent;background:transparent;color:var(--pr-sub);font-size:13px}
+    #prisma-result-v2 .pr-tab i{width:15px;height:15px}
+    #prisma-result-v2 .pr-tab[aria-selected=true]{border-bottom-color:var(--pr-blue);color:var(--pr-blue);font-weight:600}
+    #prisma-result-v2 .pr-controls{display:flex;flex-wrap:wrap;gap:12px 14px;align-items:flex-end;background:var(--pr-soft);border-radius:12px;padding:12px}
+    #prisma-result-v2 .pr-field{display:flex;flex-direction:column;gap:5px;flex:1;min-width:170px}
+    #prisma-result-v2 label,#prisma-result-v2 legend{font-size:11px;font-weight:550;color:var(--pr-sub)}
+    #prisma-result-v2 select{min-width:0;width:100%;height:38px;padding:6px 10px;border:1px solid #d7e0ed;background:var(--pr-bg);color:var(--pr-text);border-radius:8px;font-size:13px}
+    #prisma-result-v2 fieldset{margin:0;padding:0;border:0;min-width:0;flex:1}
+    #prisma-result-v2 legend{margin:0 0 5px;padding:0}
+    #prisma-result-v2 .pr-segments{display:flex;gap:2px;background:#e6edf7;padding:3px;border-radius:8px;min-height:38px}
+    #prisma-result-v2 .pr-segment{flex:1;border:0;border-radius:6px;padding:5px 10px;color:var(--pr-sub);background:transparent;font-size:13px}
+    #prisma-result-v2 .pr-segment[aria-pressed=true]{background:var(--pr-bg);color:var(--pr-blue);font-weight:600;box-shadow:0 1px 4px #15345b14}
+    #prisma-result-v2 .pr-button{display:flex;gap:6px;align-items:center;justify-content:center;border:1px solid #d7e0ed;border-radius:8px;padding:7px 11px;min-height:38px;background:var(--pr-bg);color:var(--pr-text);white-space:nowrap;font-size:13px}
+    #prisma-result-v2 .pr-button i{width:14px;height:14px}
+    #prisma-result-v2 .pr-link{border:0;padding:4px 0;background:transparent;color:var(--pr-blue);text-align:left;font-size:13px}
+    #prisma-result-v2 .pr-link:hover{text-decoration:underline;text-underline-offset:3px}
+    #prisma-result-v2 .pr-filter-panel{margin-top:8px;padding:14px;background:var(--pr-soft);border-radius:10px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+    #prisma-result-v2 [hidden]{display:none!important}
+    #prisma-result-v2 .pr-scope{display:flex;align-items:center;flex-wrap:wrap;gap:6px 9px;margin:12px 2px 16px;color:var(--pr-sub);font-size:12px}
+    #prisma-result-v2 .pr-dot{height:6px;width:6px;border-radius:50%;background:var(--pr-blue)}
+    #prisma-result-v2 .pr-main{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:14px}
+    #prisma-result-v2 .pr-panel{min-width:0;border:1px solid var(--pr-line);border-radius:13px;padding:18px;background:var(--pr-bg)}
+    #prisma-result-v2 .pr-panel-heading{display:flex;gap:9px;align-items:flex-start;margin-bottom:4px}
+    #prisma-result-v2 .pr-panel-heading>i{width:17px;height:17px;color:var(--pr-blue);flex-shrink:0;margin-top:3px}
+    #prisma-result-v2 .pr-row{padding:13px 0;margin:0;border-bottom:1px solid #f0f3f8}
+    #prisma-result-v2 .pr-row:last-child{border:0}
+    #prisma-result-v2 .pr-row-head{display:flex;justify-content:space-between;gap:8px;align-items:baseline;margin-bottom:7px}
+    #prisma-result-v2 .pr-row-head button{min-width:0;overflow-wrap:anywhere;color:var(--pr-text);font-weight:550;padding:0}
+    #prisma-result-v2 .pr-value{font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:600}
+    #prisma-result-v2 .pr-track{height:7px;background:var(--pr-track);border-radius:5px;overflow:hidden}
+    #prisma-result-v2 .pr-fill{height:100%;background:var(--pr-blue);border-radius:5px}
+    #prisma-result-v2 .pr-row>p{margin-top:5px;text-align:right;font-size:11px}
+    #prisma-result-v2 #pr-view-questions{margin-top:11px;font-weight:550}
+    #prisma-result-v2 .pr-pattern{display:flex;gap:10px;padding:15px 0;border-bottom:1px solid var(--pr-line)}
+    #prisma-result-v2 .pr-pattern:last-child{border-bottom:0;padding-bottom:0}
+    #prisma-result-v2 .pr-pattern-icon{display:grid;place-items:center;width:28px;height:28px;flex:0 0 28px;border-radius:9px;background:var(--pr-blue-soft);color:var(--pr-blue);margin-top:2px}
+    #prisma-result-v2 .pr-pattern-icon i{width:14px;height:14px}
+    #prisma-result-v2 .pr-pattern-body{min-width:0}
+    #prisma-result-v2 .pr-pattern strong{display:block;font-size:13px;font-weight:600;margin-bottom:5px}
+    #prisma-result-v2 .pr-pattern-body>p:first-of-type{font-size:13px;font-weight:550}
+    #prisma-result-v2 .pr-pattern-body .pr-small{font-size:11px;line-height:1.6;margin-top:2px}
+    #prisma-result-v2 .pr-pattern .pr-link{margin-top:8px;font-size:12px}
+    #prisma-result-v2 .pr-origin{margin-top:16px;background:var(--pr-soft);border-radius:9px;padding:11px 13px;color:var(--pr-sub);font-size:12px}
+    #prisma-result-v2 summary{cursor:pointer;color:var(--pr-blue)}
+    #prisma-result-v2 details p{margin-top:7px}
+    #prisma-result-v2 .pr-foot{margin-top:14px;font-size:11px;color:var(--pr-sub)}
+    #prisma-result-v2 .pr-questions{display:grid;gap:10px}
+    #prisma-result-v2 .pr-question{border-bottom:1px solid var(--pr-line);padding:12px 0}
+    #prisma-result-v2 .pr-question-line{display:flex;gap:8px;justify-content:space-between;flex-wrap:wrap}
+    #prisma-result-v2 .pr-empty{padding:24px 0;color:var(--pr-sub)}
+    #prisma-result-v2 .pr-note{background:var(--pr-soft);border-radius:8px;padding:14px;margin:12px 0}
+    #prisma-result-v2 .pr-demo{margin-top:8px;color:var(--pr-sub);font-size:11px}
+    #prisma-result-v2.pr-compact .pr-row{padding:9px 0}
+    #prisma-result-v2.pr-compact .pr-pattern{padding:10px 0}
+    @media(max-width:610px){#prisma-result-v2 .pr-window{padding:18px;border-radius:16px}#prisma-result-v2 .pr-main{grid-template-columns:1fr;gap:12px}#prisma-result-v2 .pr-filter-panel{grid-template-columns:1fr}#prisma-result-v2 .pr-head{flex-wrap:wrap}#prisma-result-v2 .pr-stats{gap:8px}#prisma-result-v2 .pr-stat{padding:12px 10px}#prisma-result-v2 .pr-stat strong{font-size:21px}#prisma-result-v2 .pr-stat:first-child strong{font-size:25px}#prisma-result-v2 .pr-field{min-width:140px}#prisma-result-v2 select{font-size:16px}#prisma-result-v2 .pr-tabs{gap:19px}#prisma-result-v2 .pr-panel{padding:16px}}
+    @media(max-width:440px){#prisma-result-v2 .pr-stats{grid-template-columns:1fr 1fr}#prisma-result-v2 .pr-stat:first-child{grid-column:1/-1}#prisma-result-v2 .pr-stat:first-child strong{font-size:32px}#prisma-result-v2 .pr-controls>.pr-field{flex-basis:100%}#prisma-result-v2 .pr-tab{font-size:12px}#prisma-result-v2 .pr-tabs{gap:16px}#prisma-result-v2 .pr-tabs i{display:none}}
+    @media(pointer:coarse){#prisma-result-v2 button,#prisma-result-v2 select{min-height:44px}}
+  </style>
+  <div class="pr-window">
+    <div class="pr-head">
+      <div><p class="pr-eyebrow">AVALIAÇÃO PARA POSIÇÃO</p><h2>Resultado e atividade</h2><div class="pr-person"><span class="pr-avatar" aria-hidden="true">PE</span><div><p class="pr-person-name">Pessoa exemplo</p><p class="pr-muted pr-small">Desenvolvedor backend · versão aplicada 1</p></div></div></div>
+      <span class="pr-status"><i data-lucide="circle-check" aria-hidden="true"></i>Concluída</span>
+    </div>
+    <div class="pr-stats" aria-label="Indicadores da avaliação inteira">
+      <div class="pr-stat"><span class="pr-stat-label"><i data-lucide="check-check" aria-hidden="true"></i>Acertos na avaliação</span><strong>12 / 20</strong><span class="pr-muted pr-small">60% · avaliação inteira</span></div>
+      <div class="pr-stat"><span class="pr-stat-label"><i data-lucide="clock-3" aria-hidden="true"></i>Tempo decorrido</span><strong>18 min 40 s</strong><span class="pr-muted pr-small">Do início ao envio</span></div>
+      <div class="pr-stat"><span class="pr-stat-label"><i data-lucide="list-checks" aria-hidden="true"></i>Questões com registros</span><strong>20 / 20</strong><span class="pr-muted pr-small">Observação parcial</span></div>
+    </div>
+    <div class="pr-tabs" role="tablist" aria-label="Seções do resultado">
+      <button class="pr-tab" id="pr-tab-overview" role="tab" aria-selected="true" aria-controls="pr-overview" data-tab="overview" type="button"><i data-lucide="layout-dashboard" aria-hidden="true"></i>Visão geral</button>
+      <button class="pr-tab" id="pr-tab-questions" role="tab" aria-selected="false" aria-controls="pr-questions" data-tab="questions" type="button"><i data-lucide="list" aria-hidden="true"></i>Questões</button>
+      <button class="pr-tab" id="pr-tab-records" role="tab" aria-selected="false" aria-controls="pr-records" data-tab="records" type="button"><i data-lucide="activity" aria-hidden="true"></i>Registros</button>
+    </div>
+    <div class="pr-controls">
+      <div class="pr-field"><label for="pr-measure">Mostrar</label><select id="pr-measure"><option value="correct">Acertos</option><option value="focus">Perdas de foco</option><option value="focusTime">Tempo sem foco registrado</option><option value="changes">Alterações de resposta</option><option value="responseTime">Tempo de resposta · indisponível</option></select></div>
+      <fieldset><legend>Agrupar por</legend><div class="pr-segments"><button class="pr-segment" aria-pressed="true" data-group="topic" type="button">Assunto</button><button class="pr-segment" aria-pressed="false" data-group="difficulty" type="button">Dificuldade</button></div></fieldset>
+      <button class="pr-button" id="pr-filters-button" aria-expanded="false" aria-controls="pr-filters" type="button"><i data-lucide="sliders-horizontal" aria-hidden="true"></i><span id="pr-filters-label">Filtros</span></button>
+    </div>
+    <div class="pr-filter-panel" id="pr-filters" hidden>
+      <div class="pr-field"><label for="pr-topic">Assunto</label><select id="pr-topic"><option value="">Todos os assuntos</option><option>APIs</option><option>Docker</option><option>Azure</option><option>Segurança</option><option>Banco de dados</option></select></div>
+      <div class="pr-field"><label for="pr-difficulty">Dificuldade</label><select id="pr-difficulty"><option value="">Todas as dificuldades</option><option>Fácil</option><option>Média</option><option>Difícil</option></select></div>
+      <div class="pr-field"><label for="pr-outcome">Resposta</label><select id="pr-outcome"><option value="">Todas as respostas</option><option value="correct">Correta</option><option value="incorrect">Incorreta</option></select></div>
+    </div>
+    <div class="pr-scope" aria-live="polite"><span class="pr-dot" aria-hidden="true"></span><span id="pr-scope-text">Avaliação inteira · 20 questões</span><button class="pr-link" id="pr-clear" type="button" hidden>Limpar filtros</button></div>
+    <div id="pr-overview" role="tabpanel" aria-labelledby="pr-tab-overview">
+      <div class="pr-main">
+        <section class="pr-panel" aria-label="Análise por agrupamento"><div class="pr-panel-heading"><i data-lucide="chart-no-axes-column-increasing" aria-hidden="true"></i><div><h3 id="pr-chart-title">Acertos por assunto</h3><p class="pr-muted pr-small" id="pr-chart-description">Respostas corretas / questões do grupo</p></div></div><div id="pr-bars"></div><button class="pr-link" id="pr-view-questions" type="button">Explorar questões →</button></section>
+        <section class="pr-panel" aria-label="Registros do mesmo recorte"><div class="pr-panel-heading"><i data-lucide="activity" aria-hidden="true"></i><div><h3>Padrões observados</h3><p class="pr-muted pr-small">Registros do mesmo recorte</p></div></div><div id="pr-patterns"></div></section>
+      </div>
+    </div>
+    <div id="pr-questions" role="tabpanel" aria-labelledby="pr-tab-questions" hidden><h3>Questões do recorte</h3><div id="pr-question-list" class="pr-questions"></div></div>
+    <div id="pr-records" role="tabpanel" aria-labelledby="pr-tab-records" hidden><h3 id="pr-records-title">Acontecimentos do recorte</h3><div id="pr-record-list" class="pr-questions"></div><button class="pr-link" id="pr-all-records" type="button" hidden>Ver todas as famílias de registros</button></div>
+    <details class="pr-origin"><summary>Síntese por IA salva · avaliação inteira · origem e limites</summary><p>Resumo ilustrativo: 9 perdas de foco em 6 questões, 1 min 32 s acumulados; repetição em 3 questões. Os filtros mudam os agrupamentos de dados, sem reescrever esta síntese.</p><p>Registros de navegador não identificam destino, intenção ou atividade fora da prova. Ausência de movimento pode acompanhar leitura ou reflexão. Consulta e filtros sem nova geração por IA.</p></details>
+    <p class="pr-foot">Resultado da prova separado do Prisma Score. Registros parciais apoiam a análise humana.</p>
+    <p class="pr-demo">Proposta interativa · dados fictícios · sem conexão com o Prisma</p>
+  </div>
+  <script>
+  (()=>{
+    const root=document.getElementById('prisma-result-v2');
+    const find=id=>root.querySelector('#'+id);
+    const topics=['APIs','Docker','Azure','Segurança','Banco de dados'];
+    const diff=['Fácil','Fácil','Difícil','Média','Fácil','Média','Difícil','Média','Fácil','Média','Difícil','Média','Fácil','Média','Difícil','Fácil','Fácil','Média','Média','Fácil'];
+    const good=new Set([1,2,3,5,6,9,10,11,13,14,17,18]);
+    const episodes={2:[8],3:[10,10],7:[20,14],9:[6],14:[10,8],16:[6]};
+    const idle={1:12,6:20,10:8,14:16,19:14};
+    const changes=new Set([7,14]);
+    const rows=Array.from({length:20},(_,i)=>({id:i+1,topic:topics[Math.floor(i/4)],difficulty:diff[i],correct:good.has(i+1),episodes:episodes[i+1]||[],idle:idle[i+1]||0,changes:changes.has(i+1)?1:0}));
+    const state={group:'topic',measure:'correct',topic:'',difficulty:'',outcome:'',tab:'overview',family:''};
+    const design={compact:false};
+    const sum=(r,fn)=>r.reduce((s,q)=>s+fn(q),0);
+    const duration=s=>s>=60?`${Math.floor(s/60)} min ${s%60} s`:`${s} s`;
+    const scoped=()=>rows.filter(q=>(!state.topic||q.topic===state.topic)&&(!state.difficulty||q.difficulty===state.difficulty)&&(!state.outcome||(state.outcome==='correct')===q.correct));
+    function switchTab(tab){state.tab=tab;render()}
+    function records(family){state.family=family;switchTab('records')}
+    function render(){
+      root.classList.toggle('pr-compact',design.compact);
+      const selected=scoped(),filtered=!!(state.topic||state.difficulty||state.outcome);
+      const labels=[state.topic,state.difficulty,state.outcome==='correct'?'Respostas corretas':state.outcome==='incorrect'?'Respostas incorretas':''].filter(Boolean);
+      find('pr-scope-text').textContent=filtered?`Recorte: ${labels.join(' · ')} · ${selected.length} de 20 questões`:'Avaliação inteira · 20 questões';
+      find('pr-clear').hidden=!filtered;
+      find('pr-filters-label').textContent=filtered?`Filtros (${labels.length})`:'Filtros';
+      find('pr-topic').value=state.topic;find('pr-difficulty').value=state.difficulty;find('pr-outcome').value=state.outcome;find('pr-measure').value=state.measure;
+      root.querySelectorAll('[data-group]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.group===state.group)));
+      root.querySelectorAll('[data-tab]').forEach(b=>{b.setAttribute('aria-selected',String(b.dataset.tab===state.tab));find('pr-'+b.dataset.tab).hidden=b.dataset.tab!==state.tab});
+      const names={correct:'Acertos',focus:'Perdas de foco',focusTime:'Tempo sem foco registrado',changes:'Alterações de resposta',responseTime:'Tempo de resposta'};
+      const scopeNames=state.group==='topic'?topics:['Fácil','Média','Difícil'];
+      const groups=scopeNames.map(name=>({name,questions:selected.filter(q=>q[state.group]===name)})).filter(g=>g.questions.length);
+      find('pr-chart-title').textContent=`${names[state.measure]} por ${state.group==='topic'?'assunto':'dificuldade'}`;
+      const descriptions={correct:'Respostas corretas / questões do grupo',focus:'Ocorrências registradas · contagem absoluta',focusTime:'Duração acumulada registrada · segundos',changes:'Alterações de alternativa · contagem absoluta',responseTime:'Medição completa por questão indisponível'};
+      find('pr-chart-description').textContent=descriptions[state.measure]+(state.group==='difficulty'?' · classificação da questão':'');
+      const value=r=>state.measure==='correct'?sum(r,q=>+q.correct):state.measure==='focus'?sum(r,q=>q.episodes.length):state.measure==='focusTime'?sum(r,q=>sum(q.episodes,s=>s)):sum(r,q=>q.changes);
+      const max=Math.max(1,...groups.map(g=>value(g.questions)));
+      const bars=find('pr-bars');bars.replaceChildren();
+      if(state.measure==='responseTime'){
+        const box=document.createElement('div');box.className='pr-note';box.textContent='Sem dados completos para este recorte. Tempo decorrido, tempo sem foco e ausência de movimento do mouse medem coisas diferentes.';bars.append(box);
+      }else if(!groups.length){const empty=document.createElement('p');empty.className='pr-empty';empty.textContent='Nenhuma questão neste recorte.';bars.append(empty)}
+      else for(const g of groups){
+        const v=value(g.questions),percent=state.measure==='correct'?100*v/g.questions.length:100*v/max;
+        const text=state.measure==='correct'?`${v} / ${g.questions.length}`:state.measure==='focusTime'?duration(v):`${v} ${state.measure==='focus'?'ocorr.':'alter.'}`;
+        const row=document.createElement('div');row.className='pr-row';
+        row.innerHTML='<div class="pr-row-head"><button class="pr-link" type="button"></button><span class="pr-value"></span></div><div class="pr-track"><div class="pr-fill"></div></div><p class="pr-muted pr-small"></p>';
+        row.querySelector('button').textContent=g.name;row.querySelector('button').setAttribute('aria-label',`Ver questões: ${g.name}`);
+        row.querySelector('button').onclick=()=>{state[state.group]=g.name;switchTab('questions')};
+        row.querySelector('.pr-value').textContent=text;row.querySelector('.pr-fill').style.width=percent+'%';
+        row.querySelector('.pr-track').setAttribute('role','img');row.querySelector('.pr-track').setAttribute('aria-label',`${g.name}: ${text}`);
+        const affected=g.questions.filter(q=>state.measure==='changes'?q.changes:q.episodes.length).length;
+        row.querySelector('p').textContent=state.measure==='correct'?`${Math.round(percent)}% de acertos`:`${affected} de ${g.questions.length} questões com este registro`;
+        bars.append(row);
+      }
+      const totalFocus=sum(selected,q=>q.episodes.length),totalSeconds=sum(selected,q=>sum(q.episodes,s=>s));
+      const patterns=[
+        {title:'Perdas de foco',value:`${totalFocus} ocorrências · ${selected.filter(q=>q.episodes.length).length} questões`,context:`${duration(totalSeconds)} acumulados · repetição em ${selected.filter(q=>q.episodes.length>1).length} questões`,family:'focus'},
+        {title:'Intervalos sem movimento do mouse',value:`${duration(sum(selected,q=>q.idle))} registrados`,context:'Antes da primeira escolha · observação parcial',family:'mouse'},
+        {title:'Alterações de resposta',value:`${sum(selected,q=>q.changes)} registros · ${selected.filter(q=>q.changes).length} questões`,context:'Revisar respostas é permitido',family:'changes'}
+      ];
+      const patternBox=find('pr-patterns');patternBox.replaceChildren();
+      if(!selected.length){const empty=document.createElement('p');empty.className='pr-empty';empty.textContent='Nenhuma questão neste recorte.';patternBox.append(empty)}
+      else patterns.forEach(p=>{const item=document.createElement('div');item.className='pr-pattern';const icon=p.family==='focus'?'focus':p.family==='mouse'?'mouse':'repeat-2';item.innerHTML=`<span class="pr-pattern-icon"><i data-lucide="${icon}" aria-hidden="true"></i></span><div class="pr-pattern-body"><strong></strong><p></p><p class="pr-muted pr-small"></p><button class="pr-link" type="button">Ver acontecimentos →</button></div>`;item.querySelector('strong').textContent=p.title;item.querySelector('p').textContent=p.value;item.querySelectorAll('p')[1].textContent=p.context;item.querySelector('button').onclick=()=>records(p.family);patternBox.append(item)});
+      const questionList=find('pr-question-list');questionList.replaceChildren();
+      if(!selected.length)questionList.textContent='Nenhuma questão neste recorte.';
+      selected.forEach(q=>{const item=document.createElement('div');item.className='pr-question';item.innerHTML='<div class="pr-question-line"><strong></strong><span></span></div><p class="pr-muted pr-small"></p>';item.querySelector('strong').textContent=`Questão ${q.id} · ${q.topic}`;item.querySelector('span').textContent=q.correct?'Correta':'Incorreta';item.querySelector('p').textContent=`${q.difficulty} · ${q.episodes.length} perdas de foco · ${q.changes} alterações de resposta`;questionList.append(item)});
+      const recordList=find('pr-record-list');recordList.replaceChildren();
+      find('pr-records-title').textContent=state.family==='focus'?'Perdas de foco do recorte':state.family==='mouse'?'Intervalos de mouse do recorte':state.family==='changes'?'Alterações de resposta do recorte':'Acontecimentos do recorte';
+      let count=0;
+      function addRecord(q,label){count++;const item=document.createElement('div');item.className='pr-question';item.textContent=`Questão ${q.id} · ${q.topic} · ${label}`;recordList.append(item)}
+      selected.forEach(q=>{if(!state.family||state.family==='focus')q.episodes.forEach((s,i)=>addRecord(q,`perda de foco ${i+1}: ${duration(s)}`));if(!state.family||state.family==='mouse')addRecord(q,`sem movimento antes da primeira escolha: ${duration(q.idle)} acumulados`);if((!state.family||state.family==='changes')&&q.changes)addRecord(q,'1 alteração de resposta')});
+      if(!count)recordList.textContent='Nenhum registro desta família no recorte ilustrativo.';
+      find('pr-all-records').hidden=!state.family;
+      if(globalThis.lucide)lucide.createIcons({attrs:{width:16,height:16}});
+    }
+    find('pr-measure').onchange=e=>{state.measure=e.target.value;switchTab('overview')};
+    root.querySelectorAll('[data-group]').forEach(b=>b.onclick=()=>{state.group=b.dataset.group;switchTab('overview')});
+    root.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
+    ['topic','difficulty','outcome'].forEach(key=>find('pr-'+key).onchange=e=>{state[key]=e.target.value;render()});
+    find('pr-filters-button').onclick=()=>{const open=find('pr-filters').hidden;find('pr-filters').hidden=!open;find('pr-filters-button').setAttribute('aria-expanded',String(open))};
+    find('pr-clear').onclick=()=>{state.topic=state.difficulty=state.outcome='';render()};
+    find('pr-view-questions').onclick=()=>switchTab('questions');
+    find('pr-all-records').onclick=()=>{state.family='';render()};
+    render();
+    if(globalThis.Tweak){const tweak=new Tweak({container:root,onChange:render});tweak.addToggle(design,'compact',{label:'Densidade compacta'})}
+  })();
+  </script>
+</div>

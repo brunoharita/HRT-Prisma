@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.74.8
+version: 2.74.9
 last_verified: 2026-10-13
 ---
 
 # Estado atual do Prisma
+
+## Resultado executivo da avaliação — 2.5.4 validada localmente, publicação pendente
+
+Bruno aprovou a visão executiva clara e autorizou implementação/main/publicação em13/10/2026. Interface individual/histórica com indicadores gerais, abas Visão geral/Questões/Registros, métricas por assunto/dificuldade e filtros combináveis com denominador/recorte explícitos. Consulta determinística sem IA/cotação automática; síntese inteira salva e sua evidência imutável permanecem separadas do recorte atual, com confirmação comercial existente preservada. Tempo de resposta indisponível, sem nova coleta/calibração/penalidade/influência em Score/Perfil/etapas. Contratos1.0.0/método1.1.0/backend/tarifas inalterados. Acordo/mapa/execução1.0.0 em docs/qa/agreement-assessment-results-executive.md, referência normativa em docs/product/assessment-results-executive-reference.html. Local:16Node/293browser dirigidos, tipos/build e fidelidade 1448/768/390/320 PASS. AoT registra limites e rollout pendente; esta nota não comprova publicação.
 
 ## Sinais de conteúdo da avaliação —2.5.3 publicada
 

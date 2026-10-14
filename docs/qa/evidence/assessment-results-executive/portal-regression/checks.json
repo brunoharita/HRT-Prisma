@@ -1,0 +1,335 @@
+{
+  "checks": [
+    {
+      "name": "1448: access countdown uses days hours minutes",
+      "pass": true
+    },
+    {
+      "name": "1448: real access date Brasília independent of browser timezone",
+      "pass": true
+    },
+    {
+      "name": "1448: essential operating instructions visible",
+      "pass": true
+    },
+    {
+      "name": "1448: purpose human review accessibility visible",
+      "pass": true
+    },
+    {
+      "name": "1448: no blanket monitoring or legal certification",
+      "pass": true
+    },
+    {
+      "name": "1448: reading does not start collect or write",
+      "pass": true
+    },
+    {
+      "name": "1448: keyboard disclosure gives real limits",
+      "pass": true
+    },
+    {
+      "name": "1448: instructions no overflow",
+      "pass": true
+    },
+    {
+      "name": "1448: start remains explicit and countdown uses effective deadline",
+      "pass": true
+    },
+    {
+      "name": "1448: five alternatives no answer key or admin shell",
+      "pass": true
+    },
+    {
+      "name": "1448: guidance available during test",
+      "pass": true
+    },
+    {
+      "name": "1448: autosave navigation keep choice",
+      "pass": true
+    },
+    {
+      "name": "1448: review action belongs to header and question footer only navigates",
+      "pass": true
+    },
+    {
+      "name": "1448: incomplete final submission blocked",
+      "pass": true
+    },
+    {
+      "name": "1448: opening review does not submit and time keeps running",
+      "pass": true
+    },
+    {
+      "name": "1448: return keeps active question and chosen answer",
+      "pass": true
+    },
+    {
+      "name": "1448: last minute no seconds or early expiry",
+      "pass": true
+    },
+    {
+      "name": "1448: expired deadline retained without automatic submit",
+      "pass": true
+    },
+    {
+      "name": "1448: no external IO runtime exceptions or overflow",
+      "pass": true
+    },
+    {
+      "name": "1448: complete answers still require explicit confirmation",
+      "pass": true
+    },
+    {
+      "name": "1448: cancellation retains twenty answers",
+      "pass": true
+    },
+    {
+      "name": "1448: submission gives server receipt and no timer",
+      "pass": true
+    },
+    {
+      "name": "768: access countdown uses days hours minutes",
+      "pass": true
+    },
+    {
+      "name": "768: real access date Brasília independent of browser timezone",
+      "pass": true
+    },
+    {
+      "name": "768: essential operating instructions visible",
+      "pass": true
+    },
+    {
+      "name": "768: purpose human review accessibility visible",
+      "pass": true
+    },
+    {
+      "name": "768: no blanket monitoring or legal certification",
+      "pass": true
+    },
+    {
+      "name": "768: reading does not start collect or write",
+      "pass": true
+    },
+    {
+      "name": "768: keyboard disclosure gives real limits",
+      "pass": true
+    },
+    {
+      "name": "768: instructions no overflow",
+      "pass": true
+    },
+    {
+      "name": "768: start remains explicit and countdown uses effective deadline",
+      "pass": true
+    },
+    {
+      "name": "768: five alternatives no answer key or admin shell",
+      "pass": true
+    },
+    {
+      "name": "768: guidance available during test",
+      "pass": true
+    },
+    {
+      "name": "768: autosave navigation keep choice",
+      "pass": true
+    },
+    {
+      "name": "768: review action belongs to header and question footer only navigates",
+      "pass": true
+    },
+    {
+      "name": "768: incomplete final submission blocked",
+      "pass": true
+    },
+    {
+      "name": "768: opening review does not submit and time keeps running",
+      "pass": true
+    },
+    {
+      "name": "768: return keeps active question and chosen answer",
+      "pass": true
+    },
+    {
+      "name": "768: last minute no seconds or early expiry",
+      "pass": true
+    },
+    {
+      "name": "768: expired deadline retained without automatic submit",
+      "pass": true
+    },
+    {
+      "name": "768: no external IO runtime exceptions or overflow",
+      "pass": true
+    },
+    {
+      "name": "390: access countdown uses days hours minutes",
+      "pass": true
+    },
+    {
+      "name": "390: real access date Brasília independent of browser timezone",
+      "pass": true
+    },
+    {
+      "name": "390: essential operating instructions visible",
+      "pass": true
+    },
+    {
+      "name": "390: purpose human review accessibility visible",
+      "pass": true
+    },
+    {
+      "name": "390: no blanket monitoring or legal certification",
+      "pass": true
+    },
+    {
+      "name": "390: reading does not start collect or write",
+      "pass": true
+    },
+    {
+      "name": "390: keyboard disclosure gives real limits",
+      "pass": true
+    },
+    {
+      "name": "390: instructions no overflow",
+      "pass": true
+    },
+    {
+      "name": "390: start remains explicit and countdown uses effective deadline",
+      "pass": true
+    },
+    {
+      "name": "390: five alternatives no answer key or admin shell",
+      "pass": true
+    },
+    {
+      "name": "390: guidance available during test",
+      "pass": true
+    },
+    {
+      "name": "390: autosave navigation keep choice",
+      "pass": true
+    },
+    {
+      "name": "390: review action belongs to header and question footer only navigates",
+      "pass": true
+    },
+    {
+      "name": "390: incomplete final submission blocked",
+      "pass": true
+    },
+    {
+      "name": "390: opening review does not submit and time keeps running",
+      "pass": true
+    },
+    {
+      "name": "390: return keeps active question and chosen answer",
+      "pass": true
+    },
+    {
+      "name": "390: last minute no seconds or early expiry",
+      "pass": true
+    },
+    {
+      "name": "390: expired deadline retained without automatic submit",
+      "pass": true
+    },
+    {
+      "name": "390: no external IO runtime exceptions or overflow",
+      "pass": true
+    },
+    {
+      "name": "390: complete answers still require explicit confirmation",
+      "pass": true
+    },
+    {
+      "name": "390: cancellation retains twenty answers",
+      "pass": true
+    },
+    {
+      "name": "390: submission gives server receipt and no timer",
+      "pass": true
+    },
+    {
+      "name": "320: access countdown uses days hours minutes",
+      "pass": true
+    },
+    {
+      "name": "320: real access date Brasília independent of browser timezone",
+      "pass": true
+    },
+    {
+      "name": "320: essential operating instructions visible",
+      "pass": true
+    },
+    {
+      "name": "320: purpose human review accessibility visible",
+      "pass": true
+    },
+    {
+      "name": "320: no blanket monitoring or legal certification",
+      "pass": true
+    },
+    {
+      "name": "320: reading does not start collect or write",
+      "pass": true
+    },
+    {
+      "name": "320: keyboard disclosure gives real limits",
+      "pass": true
+    },
+    {
+      "name": "320: instructions no overflow",
+      "pass": true
+    },
+    {
+      "name": "320: start remains explicit and countdown uses effective deadline",
+      "pass": true
+    },
+    {
+      "name": "320: five alternatives no answer key or admin shell",
+      "pass": true
+    },
+    {
+      "name": "320: guidance available during test",
+      "pass": true
+    },
+    {
+      "name": "320: autosave navigation keep choice",
+      "pass": true
+    },
+    {
+      "name": "320: review action belongs to header and question footer only navigates",
+      "pass": true
+    },
+    {
+      "name": "320: incomplete final submission blocked",
+      "pass": true
+    },
+    {
+      "name": "320: opening review does not submit and time keeps running",
+      "pass": true
+    },
+    {
+      "name": "320: return keeps active question and chosen answer",
+      "pass": true
+    },
+    {
+      "name": "320: last minute no seconds or early expiry",
+      "pass": true
+    },
+    {
+      "name": "320: expired deadline retained without automatic submit",
+      "pass": true
+    },
+    {
+      "name": "320: no external IO runtime exceptions or overflow",
+      "pass": true
+    }
+  ],
+  "limitations": [
+    "Synthetic participants/services; Tokyo timezone; no real email, paid AI or business writes"
+  ]
+}

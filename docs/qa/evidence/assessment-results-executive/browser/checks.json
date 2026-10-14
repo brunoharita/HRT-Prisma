@@ -1,0 +1,312 @@
+{
+  "checks": [
+    {
+      "name": "1448: approved whole-result values and five topic groups",
+      "pass": true
+    },
+    {
+      "name": "1448: light surface and primary blue result",
+      "pass": true
+    },
+    {
+      "name": "1448: difficulty has exact assigned counts",
+      "pass": true
+    },
+    {
+      "name": "1448: scope explicit while overall result stays fixed",
+      "pass": true
+    },
+    {
+      "name": "1448: focus aggregation follows selected difficulty",
+      "pass": true
+    },
+    {
+      "name": "1448: observed durations summed without response-time inference",
+      "pass": true
+    },
+    {
+      "name": "1448: unavailable response time has no invented chart",
+      "pass": true
+    },
+    {
+      "name": "1448: group drilldown preserves original question numbers",
+      "pass": true
+    },
+    {
+      "name": "1448: keyboard detail keeps all five options answer key explanation and provenance",
+      "pass": true
+    },
+    {
+      "name": "1448: pattern drilldown retains question7 and its two exact episodes",
+      "pass": true
+    },
+    {
+      "name": "1448: return preserves Docker filter",
+      "pass": true
+    },
+    {
+      "name": "1448: other signals and technical disclosure retained",
+      "pass": true
+    },
+    {
+      "name": "1448: saved full-scope synthesis independent of filtering",
+      "pass": true
+    },
+    {
+      "name": "1448: all presentation actions have only one free load and no quote or paid call",
+      "pass": true
+    },
+    {
+      "name": "1448: Brasília conclusion retained",
+      "pass": true
+    },
+    {
+      "name": "1448: no overflow external calls or runtime errors",
+      "pass": true
+    },
+    {
+      "name": "1448: absent durations remain unavailable and no paid action",
+      "pass": true
+    },
+    {
+      "name": "1448: incomplete attempt cannot become corrected performance",
+      "pass": true
+    },
+    {
+      "name": "1448: mismatched tenant does not expose results or query analysis",
+      "pass": true
+    },
+    {
+      "name": "768: approved whole-result values and five topic groups",
+      "pass": true
+    },
+    {
+      "name": "768: light surface and primary blue result",
+      "pass": true
+    },
+    {
+      "name": "768: difficulty has exact assigned counts",
+      "pass": true
+    },
+    {
+      "name": "768: scope explicit while overall result stays fixed",
+      "pass": true
+    },
+    {
+      "name": "768: focus aggregation follows selected difficulty",
+      "pass": true
+    },
+    {
+      "name": "768: observed durations summed without response-time inference",
+      "pass": true
+    },
+    {
+      "name": "768: unavailable response time has no invented chart",
+      "pass": true
+    },
+    {
+      "name": "768: group drilldown preserves original question numbers",
+      "pass": true
+    },
+    {
+      "name": "768: keyboard detail keeps all five options answer key explanation and provenance",
+      "pass": true
+    },
+    {
+      "name": "768: pattern drilldown retains question7 and its two exact episodes",
+      "pass": true
+    },
+    {
+      "name": "768: return preserves Docker filter",
+      "pass": true
+    },
+    {
+      "name": "768: other signals and technical disclosure retained",
+      "pass": true
+    },
+    {
+      "name": "768: saved full-scope synthesis independent of filtering",
+      "pass": true
+    },
+    {
+      "name": "768: all presentation actions have only one free load and no quote or paid call",
+      "pass": true
+    },
+    {
+      "name": "768: Brasília conclusion retained",
+      "pass": true
+    },
+    {
+      "name": "768: no overflow external calls or runtime errors",
+      "pass": true
+    },
+    {
+      "name": "768: absent durations remain unavailable and no paid action",
+      "pass": true
+    },
+    {
+      "name": "768: incomplete attempt cannot become corrected performance",
+      "pass": true
+    },
+    {
+      "name": "768: mismatched tenant does not expose results or query analysis",
+      "pass": true
+    },
+    {
+      "name": "390: approved whole-result values and five topic groups",
+      "pass": true
+    },
+    {
+      "name": "390: light surface and primary blue result",
+      "pass": true
+    },
+    {
+      "name": "390: difficulty has exact assigned counts",
+      "pass": true
+    },
+    {
+      "name": "390: scope explicit while overall result stays fixed",
+      "pass": true
+    },
+    {
+      "name": "390: focus aggregation follows selected difficulty",
+      "pass": true
+    },
+    {
+      "name": "390: observed durations summed without response-time inference",
+      "pass": true
+    },
+    {
+      "name": "390: unavailable response time has no invented chart",
+      "pass": true
+    },
+    {
+      "name": "390: group drilldown preserves original question numbers",
+      "pass": true
+    },
+    {
+      "name": "390: keyboard detail keeps all five options answer key explanation and provenance",
+      "pass": true
+    },
+    {
+      "name": "390: pattern drilldown retains question7 and its two exact episodes",
+      "pass": true
+    },
+    {
+      "name": "390: return preserves Docker filter",
+      "pass": true
+    },
+    {
+      "name": "390: other signals and technical disclosure retained",
+      "pass": true
+    },
+    {
+      "name": "390: saved full-scope synthesis independent of filtering",
+      "pass": true
+    },
+    {
+      "name": "390: all presentation actions have only one free load and no quote or paid call",
+      "pass": true
+    },
+    {
+      "name": "390: Brasília conclusion retained",
+      "pass": true
+    },
+    {
+      "name": "390: no overflow external calls or runtime errors",
+      "pass": true
+    },
+    {
+      "name": "390: absent durations remain unavailable and no paid action",
+      "pass": true
+    },
+    {
+      "name": "390: incomplete attempt cannot become corrected performance",
+      "pass": true
+    },
+    {
+      "name": "390: mismatched tenant does not expose results or query analysis",
+      "pass": true
+    },
+    {
+      "name": "320: approved whole-result values and five topic groups",
+      "pass": true
+    },
+    {
+      "name": "320: light surface and primary blue result",
+      "pass": true
+    },
+    {
+      "name": "320: difficulty has exact assigned counts",
+      "pass": true
+    },
+    {
+      "name": "320: scope explicit while overall result stays fixed",
+      "pass": true
+    },
+    {
+      "name": "320: focus aggregation follows selected difficulty",
+      "pass": true
+    },
+    {
+      "name": "320: observed durations summed without response-time inference",
+      "pass": true
+    },
+    {
+      "name": "320: unavailable response time has no invented chart",
+      "pass": true
+    },
+    {
+      "name": "320: group drilldown preserves original question numbers",
+      "pass": true
+    },
+    {
+      "name": "320: keyboard detail keeps all five options answer key explanation and provenance",
+      "pass": true
+    },
+    {
+      "name": "320: pattern drilldown retains question7 and its two exact episodes",
+      "pass": true
+    },
+    {
+      "name": "320: return preserves Docker filter",
+      "pass": true
+    },
+    {
+      "name": "320: other signals and technical disclosure retained",
+      "pass": true
+    },
+    {
+      "name": "320: saved full-scope synthesis independent of filtering",
+      "pass": true
+    },
+    {
+      "name": "320: all presentation actions have only one free load and no quote or paid call",
+      "pass": true
+    },
+    {
+      "name": "320: Brasília conclusion retained",
+      "pass": true
+    },
+    {
+      "name": "320: no overflow external calls or runtime errors",
+      "pass": true
+    },
+    {
+      "name": "320: absent durations remain unavailable and no paid action",
+      "pass": true
+    },
+    {
+      "name": "320: incomplete attempt cannot become corrected performance",
+      "pass": true
+    },
+    {
+      "name": "320: mismatched tenant does not expose results or query analysis",
+      "pass": true
+    }
+  ],
+  "limitations": [
+    "Synthetic same-data reference; no authenticated production candidate or paid model",
+    "Reference icons use host Lucide in conversation; local comparison preserves layout and labels"
+  ]
+}
