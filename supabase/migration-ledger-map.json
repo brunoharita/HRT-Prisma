@@ -1594,6 +1594,16 @@
       "localCanonicalLength": 21125,
       "remoteCanonicalLength": 21125,
       "verifiedAt": "2026-10-15"
+    },
+    {
+      "name": "professional_area_type",
+      "localVersion": "20261015203000",
+      "remoteVersion": "20261015204943"
+    },
+    {
+      "name": "professional_areas",
+      "localVersion": "20261015203100",
+      "remoteVersion": "20261015204950"
     }
   ],
   "localOnly": [
@@ -1634,11 +1644,12 @@
   ],
   "lastIncrementalVerification": {
     "date": "2026-10-15",
-    "movement": "people-taxonomy-v272",
+    "movement": "professional-areas-v274",
     "names": [
-      "people_directory_taxonomy"
+      "professional_area_type",
+      "professional_areas"
     ],
-    "evidence": "docs/qa/evidence/people-taxonomy-v272/publication.json",
+    "evidence": "docs/qa/evidence/professional-areas-v274/publication.json",
     "historicalSnapshotVerifiedAtUnchanged": true
   }
 }

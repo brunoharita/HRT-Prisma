@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 494
-source_manifest_sha256: 4cbae2a97ea48ba9ff1e3cc5a9f75e8f02ce8be40804e0ead2a4b4c2f4df7e60
+source_manifest_sha256: 42c47a8c1f717308eb2f3ccb9149b03e990b215e15d27c5925dfc0bf0d8a7fa5
 -->
 
 # Tudo sobre o Prisma
@@ -2651,7 +2651,7 @@ last_verified: 2026-10-15
 
 ## Áreas profissionais2.7.4: cadastro global/local e curadoria
 
-Implementação autorizada em15/10/2026 reutiliza Knowledge/ADR-069 com tipo professional_area,16 macroáreas editoriais iniciais, cadastro e edição versionada, contribuição global separada e curadoria exclusiva do Super Admin. Seleção humana opcional no Perfil, inclusive vazia, prevalece; texto original preservado. IA fechada usa somente macroáreas global/local no orçamento compartilhado existente, sem publicação ou nova tarifa. Pessoas usa área do Perfil, independente de cronologia; funções continuam por experiência. Contrato e limites em `docs/architecture/professional-areas.md`; acordo/mapa/execução/AoT em `docs/qa/professional-areas-v274.md`. Validação e publicação em andamento; não declarar rollout concluído por documentação.
+Implementação autorizada em15/10/2026 reutiliza Knowledge/ADR-069 com tipo professional_area,16 macroáreas editoriais iniciais, cadastro e edição versionada, contribuição global separada e curadoria exclusiva do Super Admin. Seleção humana opcional no Perfil, inclusive vazia, prevalece; texto original preservado. IA fechada usa somente macroáreas global/local no orçamento compartilhado existente, sem publicação ou nova tarifa. Pessoas usa área do Perfil, independente de cronologia; funções continuam por experiência. Contrato e limites em `docs/architecture/professional-areas.md`; acordo/mapa/execução/AoT em `docs/qa/professional-areas-v274.md`. Publicada no runtime cbb3f9c03d0fa415b110dd40820c873757160812, CI branch38804832934/main38805046744 SUCCESS; migrations20261015204943/20261015204950 iguais à fonte, knowledge-agent22 e matching-trajectory19 com JWT preservado (somente decoder gerado adicional no matching). Web running/restart0/HTTP200, rollback/assets anteriores e6containers adjacentes preservados. Smoke autenticado confirma catálogo, HRBP→RH e seletor no mesmo rascunho sem escrita; Pessoas/16Perfis com hashes preservados.49SQL/27Node/3matching/5Deno/22tooling e19cenários browser PASS. Classificação inicial está gradual: limite diário compartilhado já consumido,3BUDGET_LIMITED/11queued na observação, sem aumento de orçamento; seleção manual imediata. Fechamento detalha limitações e evidências sem alegar acurácia empírica.
 
 ## Editor manual 2.7.3: rolagem integral
 
@@ -30300,6 +30300,25 @@ GOV-01 final: resolvers genéricos/normalização de competências reclassificad
 Limites: QA sintético local não prova acurácia empírica da classificação nem comportamento autenticado de todos os tenants. Catálogo IA limitado a60candidatos; todos os registros continuam selecionáveis manualmente. IA gradual dentro dos caps existentes, sem orçamento novo. Publicação/CI/smoke/sincronização ainda em andamento; status operacional PARTIAL até receipt.
 
 Dependência descoberta no CI38804302185: decodificador gerado do matching exige sincronização exata com personIngestionService. Gerado novamente (somente retenção dos dois campos opcionais), matching-trajectory passa a destino direto de compatibilidade. Regressão mínima:3testes matchingRuntime (paridade de datas/score/decoder), sem alteração de regras/prompt/modelo. Primeiro CI falhou por snapshot desatualizado, nenhum destino produtivo foi alterado antes de corrigir.
+
+
+## Publicação e AoT operacional
+
+PASS:2.7.4 integrada em main/origin/VPS no SHA runtime cbb3f9c03d0fa415b110dd40820c873757160812. CI branch38804832934 e main38805046744 SUCCESS. Segundo CI38804657586 exigiu regenerar Context Pack após o snapshot; corrigido antes de produção. Não houve bypass de CI. Fonte final estável publicada uma vez por destino.
+
+49assertivas SQL descartáveis,27Node dirigidos,3matchingRuntime,5Deno,22tooling,6cenários browser de cadastro/curadoria/seletor/Delta,4de Pessoas e9de preservação editor/PDF PASS. Tipos/build/lint/contexto PASS. CI completo obrigatório também passou. QA remoto separado indisponível; não houve gravação sintética ou decisão humana fictícia em produção.
+
+Migrations remotas20261015204943 professional_area_type e20261015204950 professional_areas comparadas integralmente à fonte Git, incluindo aliases no ledger; somente essas novas migrations aplicadas, sem replay histórico.16áreas globais ativas. knowledge-agent22/JWTtrue; matching-trajectory19/JWTtrue conserva todos os arquivos anteriores exceto o decodificador gerado, conferido contra baseline remoto. Outros módulos do knowledge-agent integralmente iguais. Não houve mudança de prompt/modelo/regra do matching.
+
+Web243cf9db470b running/restart0/HTTP200, imagem a96ee1a0198c928e15559be7764dd07c5d630355ad1aa839dd0d47fb2b67ab0f.404imediato da recriação estabilizou sem rebuild. Rollback prisma-web:rollback-before-cbb3f9c03d0f retém2.7.3 e todos os assets anteriores conferidos por SHA256. Seis containers adjacentes mantêm os IDs; teste previamente unhealthy continua assim. Resíduo administrativo local: mensagens de manutenção Git sobre metadados antigos de worktrees, sem impedir fast-forward/push; não foi removido trabalho alheio para silenciá-las.
+
+Smoke autenticado confirma versão2.7.4, catálogo/curadoria global, buscaHRBP → Recursos Humanos e opção equivalente no MESMO rascunho existente da Pessoa indicada, em aba separada. Nenhum save/publicação/criação de rascunho/seleção real executado. Busca do dropdown não criou alterações não salvas. A primeira espera por RH ignorou paginação10; busca por alias confirmou o registro, sem alteração de produto. Aba original preservada. Hashes completos de Pessoas048b6ca3fcbff5e98df8c12e39a83bbf e dos16Perfis768f9c33e755cd05c0c517cc6d4cb872 permaneceram iguais antes/depois. Autoridade/anon/worker grants conferidos no banco produtivo.
+
+Limite operacional explícito:14contextos iniciais de macroárea. Na observação,3BUDGET_LIMITED e11queued; cap compartilhado diário existente já consumido. Sem aumento de custo ou bypass; retry/cadência existentes continuam. Classificação real paga deste lançamento não foi demonstrada por essa fila, mas fluxo fechado foi validado com provider mock, incluindo falhas, autoridade e IDs. Cadastro/seleção manual estão disponíveis imediatamente. Não há alegação de cobertura de todos os Perfis ou acurácia empírica.
+
+Advisor Supabase sinaliza cache com RLS sem políticas e RPCs SECURITY DEFINER autenticadas. Revisão: cache é intencionalmente service-only e revoga clientes; RPCs exigem identidade/papel/empresa internamente, search_path fixo e negativos SQL aprovados. Não ampliar grants para eliminar avisos. Referências do advisor: [RLS sem políticas](https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy) e [RPCs privilegiadas autenticadas](https://supabase.com/docs/guides/database/database-linter?lint=0029_authenticated_security_definer_function_executable). Demais avisos gerais do projeto fora do movimento não foram alterados.
+
+D-01..05 e P-01..03 PASS dentro dos critérios e limites registrados. Sem desvio funcional do acordo; nova dependência do decodificador registrada no GOV-01. Fechamento documental/ledger/contexto sincroniza fontes sem nova publicação de runtime. Receipt: evidence/professional-areas-v274/publication.json.
 
 ---
 

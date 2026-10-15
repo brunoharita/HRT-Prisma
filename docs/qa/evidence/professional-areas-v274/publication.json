@@ -1,0 +1,101 @@
+{
+  "version": "2.7.4",
+  "runtimeSha": "cbb3f9c03d0fa415b110dd40820c873757160812",
+  "baselineSha": "2a55428375f9b33eeca1149caf75e606ca3ff32f",
+  "ci": {
+    "branch": 38804832934,
+    "main": 38805046744,
+    "status": "success",
+    "priorFailures": [
+      {
+        "id": 38804302185,
+        "reason": "generated matching decoder stale"
+      },
+      {
+        "id": 38804657586,
+        "reason": "context export stale after decoder sync; fixed before production"
+      }
+    ]
+  },
+  "validation": {
+    "sqlAssertions": 49,
+    "nodeTests": 27,
+    "matchingParityTests": 3,
+    "denoTests": 5,
+    "toolingTests": 22,
+    "editorRegressionCases": 9,
+    "peopleBrowserCases": 4,
+    "catalogProfileBrowserCases": 6,
+    "types": true,
+    "webBuild": true,
+    "context": true
+  },
+  "database": {
+    "project": "ioldpnqqvobprjiontre",
+    "migrations": [
+      {
+        "name": "professional_area_type",
+        "local": "20261015203000",
+        "remote": "20261015204943",
+        "fullSourceEqual": true
+      },
+      {
+        "name": "professional_areas",
+        "local": "20261015203100",
+        "remote": "20261015204950",
+        "fullSourceEqual": true
+      }
+    ],
+    "seedAreas": 16,
+    "beforeAfter": {
+      "profilesHash": "768f9c33e755cd05c0c517cc6d4cb872",
+      "peopleHash": "048b6ca3fcbff5e98df8c12e39a83bbf",
+      "equal": true
+    }
+  },
+  "functions": {
+    "knowledge-agent": {
+      "version": 22,
+      "verifyJwt": true,
+      "unrelatedModulesEqual": true
+    },
+    "matching-trajectory": {
+      "version": 19,
+      "verifyJwt": true,
+      "onlyGeneratedDecoderChanged": true
+    }
+  },
+  "web": {
+    "container": "243cf9db470b1a7b7d793c335386fe194a8aea526e31c23be3585bdad28a727c",
+    "image": "sha256:a96ee1a0198c928e15559be7764dd07c5d630355ad1aa839dd0d47fb2b67ab0f",
+    "state": "running",
+    "restarts": 0,
+    "http": 200,
+    "rollback": "prisma-web:rollback-before-cbb3f9c03d0f",
+    "previousAssetsSha256Verified": true,
+    "adjacentContainersUnchanged": 6,
+    "initial404": "stabilized without rebuild"
+  },
+  "authenticatedSmoke": {
+    "catalog": true,
+    "version": true,
+    "HRBPsearchShowsRH": true,
+    "globalCurationVisible": true,
+    "profileSelector": true,
+    "realDataSaved": false,
+    "HRBPsearchInExistingDraft": true,
+    "unsavedChangesCreated": false,
+    "originalDraftTabPreserved": true
+  },
+  "limits": {
+    "remoteQa": "not available; isolated local verification",
+    "paidLlmQa": false,
+    "empiricalAccuracy": false,
+    "productionBackfill": "14 contexts; 3 BUDGET_LIMITED and 11 queued at observation; original shared caps retained",
+    "globalOrLocalHumanCurationInProduction": "not executed for test"
+  },
+  "securityReview": {
+    "cacheWithoutClientPolicies": "intentional service-only with grants denied to clients",
+    "publicSecurityDefinerRpcs": "intentional authenticated RPCs with backend organization/role checks; negative SQL tests passed"
+  }
+}
