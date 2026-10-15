@@ -1561,6 +1561,17 @@
       "localStatementSha256": "fc0065bdeb92f6ac52ea5b9bb847ab4177874d4e898051b4db86b1e7da1ffa20",
       "remoteStatementSha256": "fc0065bdeb92f6ac52ea5b9bb847ab4177874d4e898051b4db86b1e7da1ffa20",
       "verifiedAt": "2026-10-14"
+    },
+    {
+      "name": "manual_profile_and_employee",
+      "localVersion": "20261015070000",
+      "remoteVersion": "20261015045024",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localStatementSha256": "0bfe9fc806b9566253670b2c510c3645a3ad6e85f5f3360c4ab72aa1cc83b8c3",
+      "remoteStatementSha256": "0bfe9fc806b9566253670b2c510c3645a3ad6e85f5f3360c4ab72aa1cc83b8c3",
+      "fingerprintMethod": "strip-CR-trim-exterior-whitespace-v1",
+      "verifiedAt": "2026-10-15"
     }
   ],
   "localOnly": [
@@ -1600,12 +1611,12 @@
     }
   ],
   "lastIncrementalVerification": {
-    "date": "2026-10-14",
-    "movement": "tokens-v262",
+    "date": "2026-10-15",
+    "movement": "manual-profile-v270",
     "names": [
-      "tokens_calendar_wallet"
+      "manual_profile_and_employee"
     ],
-    "evidence": "docs/qa/evidence/tokens-v262/production/publication.json",
+    "evidence": "docs/qa/evidence/manual-profile-v270/publication.json",
     "historicalSnapshotVerifiedAtUnchanged": true
   }
 }

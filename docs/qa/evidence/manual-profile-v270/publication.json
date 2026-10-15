@@ -1,0 +1,321 @@
+{
+  "verifiedAt": "2026-10-15T04:59:00Z",
+  "version": "2.7.0",
+  "baseline": "519423b648416f5765995b59282a7d1b1d1e733b",
+  "functionalSHA": "164c57e060460afa98ea92c08f322a4f9e8c111e",
+  "projectRef": "ioldpnqqvobprjiontre",
+  "migration": {
+    "name": "manual_profile_and_employee",
+    "localVersion": "20261015070000",
+    "remoteVersion": "20261015045024",
+    "statementFingerprintStatus": "equal",
+    "canonicalSha256": "0bfe9fc806b9566253670b2c510c3645a3ad6e85f5f3360c4ab72aa1cc83b8c3",
+    "method": "strip-CR-trim-exterior-whitespace-v1",
+    "fullStatementsEqual": true
+  },
+  "ci": {
+    "feature": {
+      "run": 38683426320,
+      "status": "success"
+    },
+    "main": {
+      "run": 38683676492,
+      "status": "success"
+    }
+  },
+  "dataPreservation": {
+    "after": [
+      {
+        "object": "people",
+        "records": 11,
+        "fingerprint": "5f8addefabc7ebea075ca085bd5dd4a2"
+      },
+      {
+        "object": "profiles",
+        "records": 15,
+        "fingerprint": "c1116a5ca5b939c78d04f4994cd725cc"
+      },
+      {
+        "object": "private_data",
+        "records": 11,
+        "fingerprint": "3f7476aee9e11ebdcb799d1b2787d9ee"
+      },
+      {
+        "object": "documents",
+        "records": 12,
+        "fingerprint": "4da3a2b795c5c35c3b2b44dd6b685d8d"
+      },
+      {
+        "object": "assessments",
+        "records": 2,
+        "fingerprint": "1857da46c7c56536be48440082e6bc0d"
+      },
+      {
+        "object": "follow_up",
+        "records": 1,
+        "fingerprint": "8c5144359d894473c0dbf0f3eff70422"
+      },
+      {
+        "object": "token_accounts",
+        "records": 2,
+        "fingerprint": "f9572c52cdc39a8ac178ff7a78e8d1c3"
+      },
+      {
+        "object": "token_rates",
+        "records": 7,
+        "fingerprint": "00744d49fcb2e440c996b08ca10756cb"
+      },
+      {
+        "object": "token_reservations",
+        "records": 4,
+        "fingerprint": "5b00d313392d0c5479ce307400551042"
+      }
+    ],
+    "checks": [
+      {
+        "object": "people",
+        "records": 11,
+        "preserved": true
+      },
+      {
+        "object": "profiles",
+        "records": 15,
+        "preserved": true
+      },
+      {
+        "object": "private_data",
+        "records": 11,
+        "preserved": true
+      },
+      {
+        "object": "documents",
+        "records": 12,
+        "preserved": true
+      },
+      {
+        "object": "assessments",
+        "records": 2,
+        "preserved": true
+      },
+      {
+        "object": "follow_up",
+        "records": 1,
+        "preserved": true
+      },
+      {
+        "object": "token_accounts",
+        "records": 2,
+        "preserved": true
+      },
+      {
+        "object": "token_rates",
+        "records": 7,
+        "preserved": true
+      },
+      {
+        "object": "token_reservations",
+        "records": 4,
+        "preserved": true
+      }
+    ]
+  },
+  "security": {
+    "employeeNotNullDefaultFalse": true,
+    "existingPeopleFalse": 11,
+    "manualReviews": 0,
+    "anonStartAllowed": false,
+    "authenticatedStartAllowed": true,
+    "directReviewInsertAllowed": false,
+    "innerApproveAllowed": false,
+    "advisors": [
+      {
+        "name": "rls_enabled_no_policy",
+        "level": "INFO",
+        "count": 35,
+        "newObjects": []
+      },
+      {
+        "name": "anon_security_definer_function_executable",
+        "level": "WARN",
+        "count": 4,
+        "newObjects": []
+      },
+      {
+        "name": "authenticated_security_definer_function_executable",
+        "level": "WARN",
+        "count": 126,
+        "newObjects": [
+          "find_manual_profile_duplicates",
+          "start_manual_profile_review"
+        ]
+      },
+      {
+        "name": "auth_leaked_password_protection",
+        "level": "WARN",
+        "count": 1,
+        "newObjects": []
+      }
+    ],
+    "assessment": "Novos avisos security-definer correspondem aos dois RPCs intencionais com autorização reviewer/tenant; negativos locais e ACL remota verificados. Outros avisos preexistentes."
+  },
+  "releaseSurfaces": [
+    "database",
+    "web"
+  ],
+  "runtime": {
+    "container": "edfc0d95b865",
+    "status": "running",
+    "restarts": 0,
+    "image": "sha256:53e26dbcd3bee8fef505dc15cf27cd3e4c17e40f80fa1686dc01ad5c777a6fe7",
+    "rollbackTag": "prisma-web:rollback-before-164c57e06046",
+    "rollbackImage": "sha256:7dc9d02e6c28117cf7dd756cfab518f0221cf592900c09b29fd9ed2b619fb9e9"
+  },
+  "assets": {
+    "before": 256,
+    "after": 259,
+    "preserved": true,
+    "missing": []
+  },
+  "containers": {
+    "before": {
+      "prisma-web": {
+        "id": "025ab4354600",
+        "image": "prisma-web:1.6.4",
+        "status": "Up 3 hours"
+      },
+      "prisma-parser-ia": {
+        "id": "e8bc778c8c00",
+        "image": "prisma-parser-ia:1.0.0",
+        "status": "Up 4 days (healthy)"
+      },
+      "prisma-paddle-gateway": {
+        "id": "8fb76416f61c",
+        "image": "prisma-paddle-gateway:1.1.0",
+        "status": "Up 4 days"
+      },
+      "hrt-mail-forwarder": {
+        "id": "b257a83cbb37",
+        "image": "hrt-mail-forwarder:ffc5a8ce626b6d87c219e1f511cc0f467682714f",
+        "status": "Up 5 days (healthy)"
+      },
+      "prisma-profile-synthesis": {
+        "id": "db6c5c0ef238",
+        "image": "prisma-profile-synthesis:3e271e32d6e9c7b7bd3b77571507ccd71d037956",
+        "status": "Up 5 days (healthy)"
+      },
+      "paddle-vl-llama-test": {
+        "id": "d991a574e45e",
+        "image": "ghcr.io/ggml-org/llama.cpp:server",
+        "status": "Up 4 weeks (unhealthy)"
+      },
+      "paddle-vl-prisma-test": {
+        "id": "2e83e5ef4a5b",
+        "image": "paddle-vision-recovery",
+        "status": "Exited (137) 4 weeks ago"
+      },
+      "paddle-structure-1": {
+        "id": "b0be4c399488",
+        "image": "paddle-structure",
+        "status": "Exited (137) 4 weeks ago"
+      },
+      "paddle-vision-recovery-1": {
+        "id": "24ed7d12632d",
+        "image": "paddle-vision-recovery",
+        "status": "Exited (143) 4 weeks ago"
+      },
+      "traefik-traefik-1": {
+        "id": "5e25fdc6d2e6",
+        "image": "traefik:latest",
+        "status": "Up 4 weeks"
+      }
+    },
+    "after": {
+      "prisma-web": {
+        "id": "edfc0d95b865",
+        "image": "prisma-web:1.6.4",
+        "status": "Up 15 seconds"
+      },
+      "prisma-parser-ia": {
+        "id": "e8bc778c8c00",
+        "image": "prisma-parser-ia:1.0.0",
+        "status": "Up 4 days (healthy)"
+      },
+      "prisma-paddle-gateway": {
+        "id": "8fb76416f61c",
+        "image": "prisma-paddle-gateway:1.1.0",
+        "status": "Up 4 days"
+      },
+      "hrt-mail-forwarder": {
+        "id": "b257a83cbb37",
+        "image": "hrt-mail-forwarder:ffc5a8ce626b6d87c219e1f511cc0f467682714f",
+        "status": "Up 5 days (healthy)"
+      },
+      "prisma-profile-synthesis": {
+        "id": "db6c5c0ef238",
+        "image": "prisma-profile-synthesis:3e271e32d6e9c7b7bd3b77571507ccd71d037956",
+        "status": "Up 5 days (healthy)"
+      },
+      "paddle-vl-llama-test": {
+        "id": "d991a574e45e",
+        "image": "ghcr.io/ggml-org/llama.cpp:server",
+        "status": "Up 4 weeks (unhealthy)"
+      },
+      "paddle-vl-prisma-test": {
+        "id": "2e83e5ef4a5b",
+        "image": "paddle-vision-recovery",
+        "status": "Exited (137) 4 weeks ago"
+      },
+      "paddle-structure-1": {
+        "id": "b0be4c399488",
+        "image": "paddle-structure",
+        "status": "Exited (137) 4 weeks ago"
+      },
+      "paddle-vision-recovery-1": {
+        "id": "24ed7d12632d",
+        "image": "paddle-vision-recovery",
+        "status": "Exited (143) 4 weeks ago"
+      },
+      "traefik-traefik-1": {
+        "id": "5e25fdc6d2e6",
+        "image": "traefik:latest",
+        "status": "Up 4 weeks"
+      }
+    },
+    "adjacentPreserved": true
+  },
+  "publicSmoke": {
+    "status": "PASS",
+    "routes": [
+      "/",
+      "/profiles/manual",
+      "/profiles",
+      "/platform-tokens"
+    ],
+    "assets": [
+      "/assets/index-DPCSWXAx.js",
+      "/assets/antd-vendor-B5BXDqMa.css",
+      "/assets/index-C9yZfE-R.css"
+    ],
+    "allStatus": 200,
+    "bundleSHAAndVersion": true,
+    "transient404": "Primeiro probe durante recriação; estabilização confirmada sem redeploy."
+  },
+  "authenticatedSmoke": {
+    "status": "PASS",
+    "method": "Navegador integrado, sessão existente, somente leitura",
+    "version": "2.7.0",
+    "checks": [
+      "Pessoas oferece preenchimento manual e importação PDF",
+      "Filtro Funcionário ativo: todos/Sim/Não",
+      "Entrada manual com Nome/E-mail/Telefone, explicação rascunho parcial/sem Tokens e alternativa PDF",
+      "Gestão Pacotes e tarifas: Tarifas atuais aberta inicialmente",
+      "Quatro tarifas atuais e três antigas no histórico expansível"
+    ],
+    "limitations": [
+      "Criação/salvamento/publicação de Pessoa real não executados em produção; cobertos por SQL isolado e interface sintética",
+      "Nenhuma tarifa futura existente em produção; Programada coberta por fixture temporal",
+      "Sem projeto QA remoto separado"
+    ],
+    "productionSyntheticWrites": false
+  }
+}
