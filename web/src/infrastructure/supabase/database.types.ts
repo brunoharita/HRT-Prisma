@@ -1720,7 +1720,7 @@ export interface Database {
       knowledge_classification: "explicit" | "inferred";
       knowledge_scope: "global" | "organization";
       knowledge_status: "draft" | "approved" | "deprecated" | "rejected";
-      knowledge_concept_type: "occupation" | "skill" | "competency" | "knowledge" | "technology" | "methodology" | "certification";
+      knowledge_concept_type: "occupation" | "skill" | "competency" | "knowledge" | "technology" | "methodology" | "certification" | "professional_area";
       knowledge_relation_type: "is_a" | "part_of" | "related_to" | "requires" | "uses" | "applies_to" | "supports" | "equivalent_to" | "broader_than" | "narrower_than";
       knowledge_mapping_type: "exact" | "close" | "broader" | "narrower" | "related";
       knowledge_source_class: "official_occupational_taxonomy" | "official_vendor_documentation" | "official_certification_issuer" | "official_standard_body" | "official_government_or_public_body" | "recognized_nonprofit_foundation" | "secondary_recognized_source";

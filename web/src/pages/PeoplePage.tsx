@@ -79,13 +79,13 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
       || (profileFilter === "approved" && Boolean(person.currentProfile))
       || (profileFilter === "without_profile" && !person.currentProfile);
     const matchesImport = importFilter === "all" || presentDocument(person.latestDocument).state === importFilter;
-    const matchesProfessional = !areaFilter && !functionFilter || directoryEntries(person.professionalDirectory,directoryScope).entries.some(e => matchesDirectory(e,areaFilter,functionFilter));
+    const matchesProfessional = (!areaFilter || person.professionalAreas?.some(a => a.id === areaFilter)) && (!functionFilter || directoryEntries(person.professionalDirectory,directoryScope).entries.some(e => matchesDirectory(e,"",functionFilter)));
     return matchesProfessional && matchesOperational && matchesProfile && matchesImport && (employeeFilter === "all" || (person.isActiveEmployee === true) === (employeeFilter === "yes"));
   }), [areaFilter,functionFilter,directoryScope,employeeFilter, importFilter, operationalFilter, people, profileFilter]);
   const hasFilters = Boolean(areaFilter || functionFilter || employeeFilter !== "all" || search || profileFilter !== "all" || importFilter !== "all" || operationalFilter !== "active");
   const scopedEntries = people.flatMap(p => directoryEntries(p.professionalDirectory,directoryScope).entries);
-  const conceptOptions = (kind: "area" | "function") => Array.from(new Map(scopedEntries.flatMap(e => kind === "area" ? e.areas : e.function ? [e.function] : []).map(c => [c.id,{value:c.id,label:c.label}])).values()).sort((a,b) => a.label.localeCompare(b.label,"pt-BR"));
-  const shownEntries = (person: PersonWorkspaceSummary) => directoryEntries(person.professionalDirectory,directoryScope).entries.filter(e => matchesDirectory(e,areaFilter,functionFilter));
+  const conceptOptions = (kind: "area" | "function") => Array.from(new Map((kind === "area" ? people.flatMap(p => p.professionalAreas ?? []) : scopedEntries.flatMap(e => e.function ? [e.function] : [])).map(c => [c.id,{value:c.id,label:c.label}])).values()).sort((a,b) => a.label.localeCompare(b.label,"pt-BR"));
+  const shownEntries = (person: PersonWorkspaceSummary) => directoryEntries(person.professionalDirectory,directoryScope).entries.filter(e => matchesDirectory(e,"",functionFilter));
   const resetPage = () => setPagination((current) => ({ ...current, current: 1 }));
   const clearFilters = () => { setAreaFilter(""); setFunctionFilter(""); setDirectoryScope("recent"); setEmployeeFilter("all"); setSearch(""); setProfileFilter("all"); setImportFilter("all"); setOperationalFilter("active"); resetPage(); };
   const activePeople = people.filter((person) => person.operationalStatus === "active");
@@ -112,7 +112,7 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
     },
     {
       title: "Área(s) profissional(is)", key: "professionalAreas", width: 210,
-      render: (_,person) => <DirectoryConcepts concepts={shownEntries(person).flatMap(e => e.areas)} entries={shownEntries(person)} fallback={directoryFallback(person,directoryScope)} />,
+      render: (_,person) => <DirectoryConcepts concepts={person.professionalAreas ?? []} entries={[]} fallback={person.professionalAreas === null ? "Áreas indisponíveis" : "Sem área selecionada ou agrupada"} />,
     },
     {
       title: "Função / cargo", key: "professionalFunction", width: 240,
@@ -277,8 +277,8 @@ function DirectoryConcepts({concepts,entries,fallback}: {concepts:DirectoryConce
   const unique = Array.from(new Map(concepts.map(c => [c.id,c])).values());
   return <div className="prisma-directory-cell">{unique.length ? unique.map(c => {
     const sources = entries.filter(e => e.areas.some(a => a.id === c.id) || e.function?.id === c.id);
-    const ai = sources.some(e => [...e.areas,...(e.function ? [e.function] : [])].some(a => a.id === c.id && a.method === "ai_grouping"));
-    return <Tooltip key={c.id} title={`${ai ? "Agrupamento sugerido por IA" : "Alias aprovado do Knowledge"}. ${sources.map(e => `${e.originalRole || "Experiência"} · ${e.organization || "Empresa não informada"} · ${e.period || "Sem período"} · Perfil v${e.profileVersion}`).join("; ")}. Knowledge v${c.version}.`}>
+    const ai = c.method === "ai_grouping" || sources.some(e => [...e.areas,...(e.function ? [e.function] : [])].some(a => a.id === c.id && a.method === "ai_grouping"));
+    return <Tooltip key={c.id} title={`${c.method === "human_confirmed" ? "Área selecionada pelo gestor" : ai ? "Agrupamento sugerido por IA" : "Termo aprovado do Knowledge"}. ${sources.map(e => `${e.originalRole || "Experiência"} · ${e.organization || "Empresa não informada"} · ${e.period || "Sem período"} · Perfil v${e.profileVersion}`).join("; ")}. Knowledge v${c.version}.`}>
       <span tabIndex={0} className="prisma-directory-concept">{c.label}{ai ? <small className="prisma-directory-ai">IA</small> : null}</span>
     </Tooltip>;
   }) : <small>{fallback}</small>}</div>;

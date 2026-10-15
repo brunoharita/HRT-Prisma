@@ -1,0 +1,38 @@
+{
+  "results": [
+    {
+      "width": 1448,
+      "localCreateEdit": true
+    },
+    {
+      "width": 1448,
+      "globalCuration": true
+    },
+    {
+      "width": 1448,
+      "selectByAlias": true,
+      "draftSave": true,
+      "comparison": true,
+      "originalPreserved": [],
+      "publicationCount": 0
+    },
+    {
+      "width": 390,
+      "localCreateEdit": true
+    },
+    {
+      "width": 390,
+      "globalCuration": true
+    },
+    {
+      "width": 390,
+      "selectByAlias": true,
+      "draftSave": true,
+      "comparison": true,
+      "originalPreserved": [],
+      "publicationCount": 0
+    }
+  ],
+  "errors": [],
+  "outbound": []
+}

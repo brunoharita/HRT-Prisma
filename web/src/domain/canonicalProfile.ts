@@ -9,7 +9,7 @@ export interface CanonicalKnowledgeTerm {
   canonicalLabel: string | null;
   state: "resolved" | "ambiguous" | "unresolved";
   conceptId?: string | null;
-  conceptType?: "occupation" | "skill" | "competency" | "knowledge" | "technology" | "methodology" | "certification" | null;
+  conceptType?: "occupation" | "skill" | "competency" | "knowledge" | "technology" | "methodology" | "certification" | "professional_area" | null;
   sourceFieldPath?: string | null;
   sourceVersion?: string | null;
 }
@@ -26,6 +26,7 @@ export interface PrismaProfileView {
     summary: string | null;
     professionalObjective: string | null;
     areasOfExpertise: string[];
+    professionalAreas?: string[];
     keyResults: string[];
   } | null;
   experiences: StructuredExperience[];
@@ -71,11 +72,12 @@ const KNOWLEDGE_PATTERNS = [
 
 export function buildPrismaProfileView(source: PrismaProfileSource): PrismaProfileView {
   const profile = source.profile;
-  const about = profile.summary || profile.professionalObjective || profile.areasOfExpertise.length || profile.keyResults.length
+  const about = profile.summary || profile.professionalObjective || profile.areasOfExpertise.length || profile.professionalAreaIds?.length || profile.keyResults.length
     ? {
         summary: cleanText(profile.summary),
         professionalObjective: cleanText(profile.professionalObjective),
         areasOfExpertise: uniqueText(profile.areasOfExpertise),
+        ...(profile.professionalAreaLabels?.length ? { professionalAreas: uniqueText(profile.professionalAreaLabels) } : {}),
         keyResults: uniqueText(profile.keyResults.map((item) => item.value)),
       }
     : null;

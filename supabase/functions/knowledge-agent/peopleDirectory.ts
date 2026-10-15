@@ -14,7 +14,7 @@ export async function processPeopleDirectory(client: SupabaseClient) {
     if (missing) {
       const key = Deno.env.get("OPENAI_API_KEY");
       if (!job.externalEnabled || Deno.env.get("KNOWLEDGE_AGENT_ENABLED") !== "true" || !key || Deno.env.get("KNOWLEDGE_RESEARCH_MODEL") !== job.model) errorCode = "AI_DISABLED";
-      else if (!safeDirectoryInput(job.input)) errorCode = "INPUT_LIMIT";
+      else if (!safeDirectoryInput(job.input) || job.candidates.some((c: {label:string;description?:string;aliases?:string[]}) => !safeDirectoryInput({role:c.label,context:c.description ?? "",areas:c.aliases ?? []}))) errorCode = "INPUT_LIMIT";
       else {
         const { data: allowed, error: budgetError } = await client.rpc("reserve_people_directory_call", {
           p_run_id: job.id, p_lease: job.lease,

@@ -37,6 +37,7 @@ export function CanonicalProfileView({ profile, compact = false, showHeader = tr
       {showHeader ? <CanonicalProfileHeader profile={profile} /> : null}
       <div className="prisma-canonical-profile__content">
         {profile.about ? <CanonicalSection action={evidenceAction(onShowEvidence, "about")} className="prisma-canonical-about" icon={<FileTextOutlined />} title="Sobre">
+          {profile.about.professionalAreas?.length ? <LabeledTags label="Áreas profissionais padronizadas" values={profile.about.professionalAreas} /> : null}
           {profile.about.areasOfExpertise.length ? <LabeledTags label="Áreas de atuação" values={profile.about.areasOfExpertise} /> : null}
           {profile.about.summary ? <Typography.Paragraph>{profile.about.summary}</Typography.Paragraph> : null}
           {profile.about.professionalObjective ? <div className="prisma-canonical-subsection"><Typography.Text strong>Objetivo profissional</Typography.Text><Typography.Paragraph>{profile.about.professionalObjective}</Typography.Paragraph></div> : null}

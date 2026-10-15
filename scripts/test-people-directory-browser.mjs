@@ -19,8 +19,8 @@ try {
   await page.getByRole("combobox",{name:"Período da atuação"}).click();await page.getByText("Trajetória completa",{exact:true}).click();
   await page.getByRole("combobox",{name:"Filtrar área profissional"}).click();await page.getByText("Recursos Humanos",{exact:true}).last().click();
   await page.getByRole("combobox",{name:"Filtrar função profissional"}).click();await page.getByText("Gerente de TI",{exact:true}).last().click();
-  await page.getByText("Ajuste os filtros para ampliar a busca.",{exact:true}).waitFor();
-  results.push({width,sameExperience:true});
+  await page.getByText("Ana Exemplo",{exact:true}).waitFor();assert.equal(await page.getByText("Carlos Exemplo",{exact:true}).count(),0);
+  results.push({width,profileAreaAndScopedFunction:true});
   await page.getByRole("button",{name:"Limpar filtros",exact:true}).first().click();await page.getByText("Ana Exemplo",{exact:true}).waitFor();
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1);assert.equal(overflow,false,"page overflow; table may scroll internally");
   await page.goto("http://127.0.0.1:5717/people-directory-qa.html?state=unavailable");await page.getByText("Carlos Exemplo",{exact:true}).waitFor();assert.ok(await page.getByText("Agrupamento indisponível",{exact:true}).count());

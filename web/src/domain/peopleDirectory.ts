@@ -1,5 +1,5 @@
 import { parseResumePeriod } from "../../../src/domain/resumeDates.js";
-export interface DirectoryConcept { id: string; label: string; version: number; method: "approved_exact_alias" | "ai_grouping" }
+export interface DirectoryConcept { id: string; label: string; version: number; method: "approved_exact_alias" | "ai_grouping" | "human_confirmed"; active?: boolean }
 export interface DirectoryEntry {
   personId: string; profileId: string; profileVersion: number; experienceIndex: number;
   originalRole: string | null; organization: string | null; period: string | null;

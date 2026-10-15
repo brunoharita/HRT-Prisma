@@ -222,7 +222,7 @@ export const personIngestionService = {
     const rows = people ?? [];
     if (rows.length === 0) return [];
     const personIds = rows.map((person) => person.id);
-    const [privateResult, documentResult, profileResult, directoryResult] = await Promise.all([
+    const [privateResult, documentResult, profileResult, directoryResult, areasResult] = await Promise.all([
       includePrivateData
         ? supabase.from("person_private_data")
           .select("person_id, email, phone_e164, phone_country_iso2, phone_country_label, phone_country_code, phone_national_number, birth_date, city, country_code, notes")
@@ -235,6 +235,7 @@ export const personIngestionService = {
         .select("id, person_id, source_document_id, profile_version, approved_at, created_at, superseded_at")
         .eq("organization_id", organizationId).in("person_id", personIds),
       supabase.rpc("get_people_directory", { p_organization_id: organizationId }),
+      supabase.rpc("get_people_professional_areas" as never, { p_organization_id: organizationId } as never),
     ]);
     const { data: privateRows, error: privateError } = privateResult;
     throwIfError(privateError, "Não foi possível carregar os dados privados permitidos.");
@@ -277,6 +278,8 @@ export const personIngestionService = {
       summary.professionalDirectory = directoryResult.error || !Array.isArray(directoryResult.data) ? null
         : (directoryResult.data as unknown as import("../../domain/peopleDirectory").DirectoryEntry[])
           .filter(entry => entry.personId === person.id && entry.profileId === summary.currentProfile?.id);
+      summary.professionalAreas = areasResult.error || !Array.isArray(areasResult.data) ? null
+        : (areasResult.data as unknown as Array<{personId:string;profileId:string;areas:import("../../domain/peopleDirectory").DirectoryConcept[]}>).find(a => a.personId === person.id && a.profileId === summary.currentProfile?.id)?.areas ?? [];
       return summary;
     })
       .filter((person) => !normalizedSearch || knowledgePersonIds.has(person.id) || normalizeSearch([
@@ -285,6 +288,7 @@ export const personIngestionService = {
         person.privateData.phoneE164,
         person.privateData.phoneNationalNumber,
         directorySearch(person.professionalDirectory),
+        ...(person.professionalAreas ?? []).map(a => a.label),
       ].join(" ")).includes(normalizedSearch));
   },
 
@@ -1733,6 +1737,7 @@ function decodeDraft(identifiedFields: Json, uncertainties: Json, notIdentified:
       linkedin: typeof contact.linkedin === "string" ? contact.linkedin : null,
     },
     professionalTitle: typeof value.professionalTitle === "string" ? value.professionalTitle : null,
+    ...(Array.isArray(value.professionalAreaIds) ? { professionalAreaIds: value.professionalAreaIds.filter((id): id is string => typeof id === "string"), professionalAreaLabels: value.professionalAreaLabels?.filter((label): label is string => typeof label === "string") ?? [] } : {}),
     areasOfExpertise: Array.isArray(value.areasOfExpertise) ? value.areasOfExpertise.filter((item): item is string => typeof item === "string") : [],
     professionalObjective: typeof value.professionalObjective === "string" ? value.professionalObjective : null,
     summary: typeof value.summary === "string" ? value.summary : null,

@@ -43,9 +43,12 @@ import {
   type ReviewDraftIssue,
 } from "../../domain/reviewFieldLifecycle";
 
+import { ProfessionalAreaField } from "./ProfessionalAreaField";
+
 const ManualReviewContext = createContext(false);
 
 interface StructuredReviewPanelProps {
+  organizationId?: string | undefined;
   workspace: ProfileReviewWorkspace;
   draft: StructuredDraft;
   editable: boolean;
@@ -76,6 +79,7 @@ type RemovedDraftEntry =
   | { key: string; kind: "custom-item"; sectionId: string; index: number; item: StructuredDraft["customSections"][number]["items"][number]; label: string };
 
 export function StructuredReviewPanel({
+  organizationId,
   workspace,
   draft,
   editable,
@@ -303,7 +307,7 @@ export function StructuredReviewPanel({
         activeKey={activeTab}
         className="prisma-review-tabs"
         items={[
-          { key: "summary", label: tabLabel("summary", "Resumo"), children: <SummaryEditor {...commonProps()} onAddResult={addResult} onRemoveResult={removeResult} removedResults={removedEntries.filter((entry) => entry.kind === "result")} validationIssues={validationIssues} onUndoRemoval={undoRemoval} /> },
+          { key: "summary", label: tabLabel("summary", "Resumo"), children: <SummaryEditor organizationId={organizationId} {...commonProps()} onAddResult={addResult} onRemoveResult={removeResult} removedResults={removedEntries.filter((entry) => entry.kind === "result")} validationIssues={validationIssues} onUndoRemoval={undoRemoval} /> },
           { key: "experience", label: tabLabel("experience", `Experiência (${draft.experiences.length})`), children: ExperienceEditor() },
           { key: "education", label: tabLabel("education", `Formação (${draft.education.length})`), children: EducationEditor() },
           { key: "skills", label: tabLabel("skills", "Competências"), children: TagField({ fieldPath: "competencies", label: "Competências explícitas" }) },
@@ -633,6 +637,7 @@ interface CommonEditorProps {
 }
 
 interface SummaryEditorProps extends CommonEditorProps {
+  organizationId?: string | undefined;
   validationIssues: ReviewDraftIssue[];
   removedResults: Extract<RemovedDraftEntry, { kind: "result" }>[];
   onAddResult: () => void;
@@ -640,7 +645,7 @@ interface SummaryEditorProps extends CommonEditorProps {
   onUndoRemoval: (entry: RemovedDraftEntry) => void;
 }
 
-function SummaryEditor({ workspace, draft, editable, selectedFieldPath, onDraftChange, onFieldSelect, validationIssues, removedResults, onAddResult, onRemoveResult, onUndoRemoval }: SummaryEditorProps) {
+function SummaryEditor({ organizationId, workspace, draft, editable, selectedFieldPath, onDraftChange, onFieldSelect, validationIssues, removedResults, onAddResult, onRemoveResult, onUndoRemoval }: SummaryEditorProps) {
   const validationMessage = (fieldPath: string) => validationIssues.find((issue) => fieldPathMatches(issue.fieldPath, fieldPath))?.message ?? null;
   const manual = workspace.sourceKind === "manual";
   const fields = [
@@ -671,6 +676,7 @@ function SummaryEditor({ workspace, draft, editable, selectedFieldPath, onDraftC
         <Typography.Text type="secondary">{manual ? "Título e áreas declarados pela Pessoa, sem inferir informações ausentes." : "Título e áreas declaradas no currículo, sem inferir objetivo ou senioridade ausentes."}</Typography.Text>
       </div>
       <ReviewField editable={editable} extracted={workspace.extractedData.professionalTitle ?? "Não identificado"} fieldPath="professionalTitle" label="Cargo ou título profissional" onChange={(value) => onDraftChange({ ...draft, professionalTitle: value || null })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, "professionalTitle")} validationMessage={validationMessage("professionalTitle")} value={draft.professionalTitle ?? ""} />
+      {organizationId ? <ProfessionalAreaField organizationId={organizationId} reviewId={workspace.id} draft={draft} editable={editable} onChange={onDraftChange} /> : null}
       <SummaryTagField editable={editable} extracted={workspace.extractedData.areasOfExpertise} fieldPath="areasOfExpertise" label="Áreas de atuação" onChange={(values) => onDraftChange({ ...draft, areasOfExpertise: values })} onSelect={onFieldSelect} selectedFieldPath={selectedFieldPath} validationMessage={validationMessage("areasOfExpertise")} value={draft.areasOfExpertise} />
 
       <Divider />

@@ -804,7 +804,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
           /> : <div className="prisma-profile-review-source"><Alert showIcon title="Você está editando uma cópia. Esta versão histórica não será alterada." type="info" /><StructuredProfileView profile={workspace.extractedData} /></div>}
         </div>
         <div className="prisma-review-structured-pane">
-          <StructuredReviewPanel
+          <StructuredReviewPanel organizationId={activeMembership.organizationId}
             activeLinkId={activeLinkId} busy={busy} deferredActionLabel={deferredReviewActionLabel} draft={draft} editable={Boolean(editable)} hasTransientChanges={transientOnly} hasUnsavedChanges={dirty} onDiscardAndContinue={discardUnsavedChangesAndContinue} onDraftChange={(nextDraft) => { setDraft(nextDraft); setValidationIssues([]); setError(null); }} onEvidenceDelete={(input) => void handleEvidenceDelete(input)} onEvidenceNavigate={handleEvidenceNavigate}
             onCreateCustomSection={() => {
               if (workspace.sourceKind === "manual") { setCustomSectionName(""); setManualSectionValue(""); setManualSectionOpen(true); return; }

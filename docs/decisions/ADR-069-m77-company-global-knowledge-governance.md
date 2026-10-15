@@ -11,3 +11,7 @@ Somente Super Admin lê e decide a fila de propostas. Pode usar o `knowledge-age
 ## Consequências
 
 Não há nova Knowledge, provider, embedding ou pesquisa automática. A extensão acrescenta a origem estruturada da contribuição à proposta e restringe a fila global por RLS. Histórico e decisões continuam auditáveis; reinterpretação permanece manual e baseada em impacto.
+
+## Extensão aprovada em15/10/2026 — Macroáreas
+
+O Product Owner aprovou aplicar a mesma governança às macroáreas profissionais: tipo próprio nas entidades existentes de Knowledge, cadastro global/local com versões, contribuição separada a cada revisão e decisão exclusiva do Super Admin. A classificação automática é projeção de navegação, com seleção humana prioritária no Perfil; não reinterpreta competência ou Score. Especificação `docs/architecture/professional-areas.md`, acordo `docs/qa/professional-areas-v274.md`1.0.0. Substitui o uso de H1 como macroárea do diretório2.7.2, preservando a taxonomia de competências.

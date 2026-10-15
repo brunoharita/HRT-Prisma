@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 492
-source_manifest_sha256: a4246a3e78c4dc6b1448de5ae6b5977d2d7e19a31008ec687616b5b27ba911ff
+documentation_source_count: 494
+source_manifest_sha256: d95ee3662e0d606b7e3fbe03999a660b1d68e381cc6067af4669d250e89fef03
 -->
 
 # Tudo sobre o Prisma
@@ -2643,11 +2643,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.76.3
+version: 2.76.4
 last_verified: 2026-10-15
 ---
 
 # Estado atual do Prisma
+
+## Áreas profissionais2.7.4: cadastro global/local e curadoria
+
+Implementação autorizada em15/10/2026 reutiliza Knowledge/ADR-069 com tipo professional_area,16 macroáreas editoriais iniciais, cadastro e edição versionada, contribuição global separada e curadoria exclusiva do Super Admin. Seleção humana opcional no Perfil, inclusive vazia, prevalece; texto original preservado. IA fechada usa somente macroáreas global/local no orçamento compartilhado existente, sem publicação ou nova tarifa. Pessoas usa área do Perfil, independente de cronologia; funções continuam por experiência. Contrato e limites em `docs/architecture/professional-areas.md`; acordo/mapa/execução/AoT em `docs/qa/professional-areas-v274.md`. Validação e publicação em andamento; não declarar rollout concluído por documentação.
 
 ## Editor manual 2.7.3: rolagem integral
 
@@ -5470,6 +5474,12 @@ Flags não substituem autorização, RLS, migration, contrato ou aprovação de 
 
 # Agrupamento profissional do diretório de Pessoas
 
+## Regra vigente a partir de2.7.4
+
+`professional-area-1.0.0` substitui exclusivamente áreas H1 e a conjunção área/função na mesma experiência. Macroárea é cadastro global/local do Knowledge (`professional_area`), selecionado no Perfil ou classificado em contexto próprio pela IA. Pessoas lê `get_people_professional_areas`; escolha humana publicada, inclusive vazia, prevalece. Área independe da cronologia; função e período continuam por experiência. A combinação filtra área do Perfil E função no recorte temporal, sem atribuir aquela área a todo emprego. Não há promoção hierárquica nem evidência de competência. Contrato atual em `professional-areas.md`, acordo/AoT `docs/qa/professional-areas-v274.md`.
+
+## Histórico2.7.2 (áreas substituídas; funções/cache preservados)
+
 Contrato `people-directory-1.0.0`, entrega 2.7.2. Derivação de navegação do Perfil aprovado vigente, sem alteração de fatos, seleção, Score, matching ou evidência de competência.
 
 Cada experiência preserva índice no snapshot, Perfil/versão, cargo original, organização e período. Áreas referenciam conceitos aprovados classificados no subgrupo existente H1 do Knowledge; funções referenciam ocupações aprovadas. Não há novo catálogo. Alias exato usa `resolve_knowledge_term_v2`, incluindo precedência da empresa. Alias que muda classe hierárquica não equivale ao cargo para esta apresentação. Áreas gerais só alimentam a resolução exata quando mencionadas na mesma experiência, com proteção conservadora para negação.
@@ -5511,6 +5521,36 @@ IA e histórico/custos reutilizam geração/reserva/ledger/modelo atuais. Escrit
 ## Eventos de resposta — método 1.0.0 (2.5.5)
 
 O método position-assessment-response-timeline-1.0.0 estende o pipeline de metadados com question_displayed, answer_selected e answer_changed (este último também aceita o método legado). Novo payload de escolha exige optionId oficial, previousOptionId nulo na primeira escolha ou oficial/diferente na troca, support/limitation estritos. Exibição exige somente support/limitation. Validação fora do frontend mantém token/tentativa/tenant/questão/versão, idempotência, conflito de replay e proibição de campos livres. Envelope do portal, grants/RLS e writers de resultado/IA permanecem. Eventos são observações do navegador; não garantem uma trilha transacional completa das respostas. A apresentação ordena intervalos de foco por início válido e desempata por sequência/id; não altera facts nem snapshots de IA. Nenhum dado histórico é reescrito. Migração incremental: 20261014100000_assessment_response_timeline.sql.
+
+---
+
+## Source: `docs/architecture/professional-areas.md`
+
+# Macroáreas profissionais
+
+Contrato `professional-area-1.0.0`, entrega2.7.4. Extensão do Knowledge/ADR-069, não biblioteca paralela de competências. Tipo `professional_area` nas tabelas existentes de conceitos/termos/propostas/approvals/changesets. Acordo e evidência: `docs/qa/professional-areas-v274.md`.
+
+## Cadastro e governança
+
+Conhecimento > Áreas profissionais lista nome, descrição, termos associados, camada, status e versão; busca textual, cadastro, edição e desativação sem exclusão. Super Admin mantém Global; owner/admin mantêm apenas a própria empresa. Outros papéis consultam. RPCs validam sessão e autoridade backend, inputs sanitizados, concorrência por versão e lock do changeset. IDs estáveis; versões e snapshot anterior ficam auditados. A referência inicial contém16 macroáreas editoriais Prisma, autorizadas no lançamento, sem atribuir Pessoas nem alegar autoridade externa.
+
+Criação/edição local ativa é imediatamente utilizável e gera contribuição global separada. Cada revisão conserva proposta e decisão anteriores; a primeira usa origin_concept_id e todas registram conceito/versão/empresa em original_proposal.origin. A fila é exclusiva do Super Admin. Curadoria pode editar e criar uma área global, associar a uma global existente, rejeitar ou manter somente local. Associação não mescla IDs nem modifica automaticamente aliases. Todas as decisões preservam o conceito local. Editar/desativar Global exige autoridade Global e não altera dados locais.
+
+## Perfil e Pessoas
+
+`areasOfExpertise` permanece texto declarado/extraído. `professionalAreaIds?: string[]` e labels canônicas de snapshot são seleção humana opcional, distinta de fatos extraídos e de evidências. Presença, inclusive `[]`, impede inferência de substituir a escolha; ausência preserva escolha vigente nas próximas revisões. Labels são preenchidas novamente pelo backend, não confiadas ao cliente. Até10 áreas selecionadas; cadastro ativo para novas escolhas, áreas inativas já selecionadas continuam históricas e identificadas. Editor oferece busca por nome/termo, base global/local, origem da classificação e link para o cadastro, mantendo rascunho/comparação/publicação explícita. A comparação exibe essa escolha; alteração ocorre no editor, não como decisão de bloco extraído.
+
+Pessoas consulta `get_people_professional_areas`, juntando por Pessoa E Perfil vigente. Coluna e filtro usam área humana publicada ou projeção derivada. Área pertence ao Perfil, independentemente de experiências/datas. Função e período mantêm seu recorte por experiência. Combinação área/função significa área do Perfil e função no período selecionado; nunca prova que todos os empregos pertencem àquela macroárea. Desativar área não elimina escolhas humanas históricas; inferência só referencia áreas ativas.
+
+## Classificação e preservação
+
+Reutiliza fila privada/cron/worker `people_directory`, opt-in, modelo `gpt-5.6-luna`, histórico, `store:false`, ausência de web/ferramentas e o MESMO orçamento da normalização20/dia e200/mês. Contexto macroarea tem kind/método próprios e prioridade sobre backlog de funções. Importação/revisão documental pode enfileirar. Digitar, salvar e publicar Perfil manual não enfileiram esta IA. Consulta da lista/editor não escreve nem chama provedor; editor atualiza sugestão por leitura a cada30s quando visível. Sem opt-in/limite/disponibilidade, a seleção manual permanece livre.
+
+Payload limitado: título240, áreas declaradas até20x160, cargo/responsabilidades agregados até1400, sem nome/ID/contato/empregador/datas/currículo integral. Candidatos são no máximo60 macroáreas disponíveis, priorizando locais, com descrições600 e até10 termos; homônima local precede global. Catálogo maior continua integralmente selecionável manualmente; classificação automática é conservadora dentro desse limite. Proteção contra contato/CPF/telefone/URL também nos candidatos. IA retorna até3 IDs candidatos, sem criar Knowledge nem publicar Perfil. Alias exato é restrito ao tipo macroárea; ambiguidades não viram equivalência. Completion revalida fonte, lease, fingerprint, versões e tipos; escolha humana não pode ser sobrescrita.
+
+Resolvers genéricos e normalização de competência excluem macroáreas. Triggers proíbem classificar/vincular macroárea como evidência de competência. Score, matching, decisões de seleção e tarifas não passam a usar esse campo. Histórico e texto original permanecem intactos.
+
+Rollback: voltar web/Edge para2.7.3 e desativar somente cron people-directory caso necessário; manter migrações aditivas e registros/histórico, sem excluir enum/dados. Funções legadas do worker ficam privadas, sem grant cliente. Não executar downgrade destrutivo. Seleção opcional no JSON continua preservada mesmo com web anterior.
 
 ---
 
@@ -9844,6 +9884,10 @@ Somente Super Admin lê e decide a fila de propostas. Pode usar o `knowledge-age
 ## Consequências
 
 Não há nova Knowledge, provider, embedding ou pesquisa automática. A extensão acrescenta a origem estruturada da contribuição à proposta e restringe a fila global por RLS. Histórico e decisões continuam auditáveis; reinterpretação permanece manual e baseada em impacto.
+
+## Extensão aprovada em15/10/2026 — Macroáreas
+
+O Product Owner aprovou aplicar a mesma governança às macroáreas profissionais: tipo próprio nas entidades existentes de Knowledge, cadastro global/local com versões, contribuição separada a cada revisão e decisão exclusiva do Super Admin. A classificação automática é projeção de navegação, com seleção humana prioritária no Perfil; não reinterpreta competência ou Score. Especificação `docs/architecture/professional-areas.md`, acordo `docs/qa/professional-areas-v274.md`1.0.0. Substitui o uso de H1 como macroárea do diretório2.7.2, preservando a taxonomia de competências.
 
 ---
 
@@ -30193,6 +30237,67 @@ O contrato congelado está em `agreement-m72-person-professional-evidence.md`; o
 ## M7.2 v2 — Taxonomia de Competências e Perfil de Evidências
 
 O prompt mestre revisado é congelado em `agreement-m72-competency-taxonomy-evidence-v2.md` e substitui integralmente a semântica futura do prompt anterior, sem reescrever o contrato, snapshot ou AoT histórico. `execution-m72-competency-taxonomy-evidence-v2.md` referencia a versão 2.0.0 integral; o AoT próprio mapeia cada `D-*` e `P-*`. A prova combina PostgreSQL descartável com rollback, testes negativos de tenant/autoridade/domínio, domínio e adapters tipados, build/lint/foundation e comparação visual das três superfícies em desktop e 390x844. O rollout e seus limites são registrados separadamente no mesmo AoT.
+
+---
+
+## Source: `docs/qa/professional-areas-v274.md`
+
+# Acordo, execução e AoT — Áreas profissionais 2.7.4
+
+Contrato 1.0.0, aprovado por Bruno em15/10/2026 na conversa: cadastro de macroáreas global/local, curadoria global, seleção no Perfil e classificação pela IA. Baseline2a55428375f9b33eeca1149caf75e606ca3ff32f (2.7.3). Reutiliza ADR-069; substitui o agrupamento de áreas H1 e a conjunção área/função por experiência do contrato people-directory-1.0.0. Funções continuam por experiência; macroárea pertence ao Perfil e não comprova atuação em cada emprego.
+
+## Acordo congelado e execução
+
+- D-01 cadastro em Conhecimento > Áreas profissionais: globais disponíveis às empresas; owner/admin cadastram/editam locais; Super Admin mantém globais. Nome, descrição, termos associados, ativação e versões auditáveis; carga inicial de macroáreas gerais, sem atribuir pessoas.
+- D-02 cadastro local imediatamente utilizável; contribuição global separada, sanitizada e rastreável. Somente Super Admin aprova (editando ou associando a área global existente), rejeita ou mantém local; nenhuma decisão global modifica a origem local.
+- D-03 seleção opcional de áreas globais/locais no editor estruturado, persistida com rascunho/comparação/publicação; escolha humana, inclusive seleção vazia, prevalece sobre inferência. Texto extraído permanece separado e preservado. Campos aceitam múltiplas áreas, preservando a cardinalidade já existente.
+- D-04 IA usa somente referências de macroárea disponíveis na empresa, título, áreas importadas e contexto profissional limitado. Sem nova biblioteca/provedor/modelo/orçamento; sugestão identificada, sem equivalência forçada nem criação de registros. Indisponibilidade preserva seleção manual. Importação pode enfileirar; digitar/salvar Perfil manual não invoca IA.
+- D-05 coluna/filtro de área em Pessoas usa a seleção publicada ou agrupamento derivado, independentemente de datas de experiências; função/período mantêm significado anterior. Cadastro global/local e escolha humana observam isolamento/autoridade backend.
+- P-01 IA não publica Perfil/Knowledge, não substitui escolha humana e não promove contribuição.
+- P-02 não vazar dados/áreas locais entre empresas, nem permitir escrita global por admin local ou alteração local pela curadoria global. Não enviar identidade/contatos/empregador/currículo integral ao provedor.
+- P-03 preservar originais, histórico, publicação explícita, PDF, comparação, competências/Score/matching/seleção e tarifas. Não transformar macroárea inferida em evidência de competência.
+- F-01 hierarquia/subáreas formal, fusão automática, reclassificação humana em massa, mudança de funções/senioridade ou redesenho amplo do editor.
+- A-01 ampliar os conceitos/propostas/termos/changesets existentes com tipo professional_area; componentes Ant Design/Prisma existentes, IDs estáveis e desativação sem exclusão. Usar worker/fila/budget existentes com método versionado e classificação de Perfil separada da experiência.
+- Q: nenhuma. Seleção múltipla reutiliza o campo prévio; referências visuais anteriores são contraprovas, não mockup normativo novo.
+- CA-01 CRUD global/local e contribuição/decisões com testes SQL positivos, negativos e histórico.
+- CA-02 rascunho e publicação mantêm seleção/limpeza humana, original e prioridade sobre IA; browser desktop/celular e Delta.
+- CA-03 IA fechada valida IDs/escopo/versão e ausência de fonte; mock de provedor e orçamento compartilhado; falha não bloqueia usuário.
+- CA-04 Pessoas mostra/filtra macroárea sem depender de experiência, preservando função/datas; tipos/build/testes dirigidos, CI, rollout seletivo, smoke e sincronização.
+
+Execução: implementar integralmente D-01..05, provar P-01..03, respeitar F-01 e A-01. Classe D. Nova versão2.7.4. Autorização inclui main/produção conforme AGENTS§7.
+
+## GOV-01 inicial
+
+| Capacidade | Relação | Baseline / preservação / validação mínima |
+| --- | --- | --- |
+| Knowledge/contribuições/permissões | direct | ADR-069, escopo e auditoria existentes; SQL CRUD, curadoria e negativas tenant/role/anon |
+| Rascunho/Perfil/Delta/área | direct | 2.7.3, texto original e publicação humana; SQL validação e browser seleção/salvar/retomar/comparar |
+| Worker/cache/opt-in/budget | direct | 2.7.2; provider mock, IDs fechados, contexto minimizado, reserva compartilhada e fonte vigente |
+| Pessoas/área/função/período | direct | 2.7.2; filtro macroárea do Perfil e função temporal independente, fallback |
+| PDF/rolagem manual/educação | plausible_indirect | editor compartilhado2.7.3; regressão dirigida de editor e contrato de dados |
+| Auth/RLS/histórico | critical_transversal | backend existente; negar cross-tenant, member/anon, versão obsoleta; smoke autenticado sem escrita humana real |
+| Score/matching/seleção/tarifas | no_impact_identified | campo aditivo de classificação separado de fatos, writers/contratos dessas capacidades inalterados; revisão do diff e checks dirigidos |
+
+Fechamento mínimo: critérios acima, documentação/contexto, CI obrigatório, ledger/migrations conferidos, rollout somente destinos derivados, rollback, main/origin/VPS sincronizados. Estado inicial de todos os critérios: NOT TESTED. Não há QA remoto separado conhecido; usar PostgreSQL descartável e browser sintético, sem afirmar equivalência a produção.
+
+## AoT
+
+| Acordo | Implementação | Teste/evidência local | Status |
+| --- | --- | --- | --- |
+| D-01 | Conceitos/termos existentes, RPC save_professional_area, cadastro global/local | SQL CRUD/versionamento/desativação e browser1448/390 | PASS |
+| D-02 | Propostas/approvals existentes, nova revisão por edição; RPC de curadoria | SQL aprovar/associar/adiar, negativas global/local, snapshots/IDs preservados; browser curadoria | PASS |
+| D-03 | IDs opcionais + labels canônicas backend; selector separado, decode, Delta e publicação | SQL rascunho/publicação/prefill/limpeza explícita/inativas/original; browser salvar e comparar, zero publicação automática | PASS |
+| D-04 | kind profile_area na fila existente, aliases tipados, IA fechada, opt-in/budget/lease/fonte | SQL candidatos/sem fonte/zero cap, Deno mock e rejeição de IDs/contato; sem provedor pago em QA | PASS |
+| D-05 | RPC própria, join Pessoa/Perfil, área do Perfil e função temporal independente | Browser1448/390 combina RH do Perfil com função TI, fallback/navegação; SQL Perfil sem experiência | PASS |
+| P-01 | Sem writers de Perfil/Knowledge no worker; seleção vazia e presença humana prevalecem | SQL concorrência/completion e publicação humana, Deno IDs fechados | PASS |
+| P-02 | require_knowledge_admin/has_org_role, grants mínimos, RLS herdada, candidato minimizado | Negativas SQL empresa alheia/admin local/member/anon/PII; mock sem currículo/contatos | PASS |
+| P-03 | Original separado; resolvers/normalizer excluem macroárea, guard de competência | SQL macroárea não vira evidência; 27Node relacionados,9browser de editor/PDF,5Deno | PASS |
+
+Evidência local em `evidence/professional-areas-v274`: SQL descartável, browser cadastro/curadoria/editor/comparação, regressão de Pessoas e editor. Tipos root/web, build web, lint e Context Pack aprovados. Selectors de teste foram corrigidos para o nome acessível com ícone e múltiplas ocorrências legítimas; a primeira execução de browser faltava configuração sintética do Vite. Erros de compilação SQL foram corrigidos antes da publicação. Nenhuma fixture foi aplicada em produção.
+
+GOV-01 final: resolvers genéricos/normalização de competências reclassificados como `direct` para excluir o novo tipo e impedir que aliases de macroáreas contaminem competências. Prova SQL de RH unresolved na normalização genérica e rejeição do vínculo/classificação como competência; funções/Score/matching/seleção/tarifas preservados, sem novos consumidores dessas informações. Relacionamentos restantes iguais ao mapa inicial. F-01 preservado no diff: sem hierarquia formal ou merge de identidades. Referência visual é contraprova anterior; mantém editor/tabela/componentes existentes, não há mockup normativo novo.
+
+Limites: QA sintético local não prova acurácia empírica da classificação nem comportamento autenticado de todos os tenants. Catálogo IA limitado a60candidatos; todos os registros continuam selecionáveis manualmente. IA gradual dentro dos caps existentes, sem orçamento novo. Publicação/CI/smoke/sincronização ainda em andamento; status operacional PARTIAL até receipt.
 
 ---
 

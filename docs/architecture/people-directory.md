@@ -1,5 +1,11 @@
 # Agrupamento profissional do diretório de Pessoas
 
+## Regra vigente a partir de2.7.4
+
+`professional-area-1.0.0` substitui exclusivamente áreas H1 e a conjunção área/função na mesma experiência. Macroárea é cadastro global/local do Knowledge (`professional_area`), selecionado no Perfil ou classificado em contexto próprio pela IA. Pessoas lê `get_people_professional_areas`; escolha humana publicada, inclusive vazia, prevalece. Área independe da cronologia; função e período continuam por experiência. A combinação filtra área do Perfil E função no recorte temporal, sem atribuir aquela área a todo emprego. Não há promoção hierárquica nem evidência de competência. Contrato atual em `professional-areas.md`, acordo/AoT `docs/qa/professional-areas-v274.md`.
+
+## Histórico2.7.2 (áreas substituídas; funções/cache preservados)
+
 Contrato `people-directory-1.0.0`, entrega 2.7.2. Derivação de navegação do Perfil aprovado vigente, sem alteração de fatos, seleção, Score, matching ou evidência de competência.
 
 Cada experiência preserva índice no snapshot, Perfil/versão, cargo original, organização e período. Áreas referenciam conceitos aprovados classificados no subgrupo existente H1 do Knowledge; funções referenciam ocupações aprovadas. Não há novo catálogo. Alias exato usa `resolve_knowledge_term_v2`, incluindo precedência da empresa. Alias que muda classe hierárquica não equivale ao cargo para esta apresentação. Áreas gerais só alimentam a resolução exata quando mencionadas na mesma experiência, com proteção conservadora para negação.

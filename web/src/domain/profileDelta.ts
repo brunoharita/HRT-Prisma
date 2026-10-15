@@ -32,7 +32,7 @@ export interface ProfileDeltaContext {
 }
 
 export function isProfileBlockDecisionItem(item: ProfileDeltaItem): boolean {
-  return item.section !== "private_contact";
+  return item.section !== "private_contact" && item.key !== "professionalAreaIds";
 }
 
 export function deriveProfileDelta(current: StructuredDraft | null, proposal: StructuredDraft, context: ProfileDeltaContext = {}): ProfileDelta {
@@ -42,6 +42,9 @@ export function deriveProfileDelta(current: StructuredDraft | null, proposal: St
   scalar(items, "summary", "professionalObjective", "Objetivo profissional", current?.professionalObjective ?? null, proposal.professionalObjective, removals);
   scalar(items, "summary", "summary", "Resumo profissional", current?.summary ?? null, proposal.summary, removals);
   list(items, "summary", "areasOfExpertise", "Área de atuação", current?.areasOfExpertise ?? [], proposal.areasOfExpertise, removals);
+  if (proposal.professionalAreaIds !== undefined || current?.professionalAreaIds !== undefined) {
+    items.push({ key: "professionalAreaIds", section: "summary", kind: proposal.professionalAreaIds === undefined || JSON.stringify(current?.professionalAreaIds ?? []) === JSON.stringify(proposal.professionalAreaIds) ? "maintained" : current?.professionalAreaIds === undefined ? "added" : "updated", label: "Áreas profissionais padronizadas", before: current?.professionalAreaIds === undefined ? "Agrupamento automático" : (current.professionalAreaLabels ?? current.professionalAreaIds).join(", ") || "Sem área selecionada", after: proposal.professionalAreaIds === undefined ? "Manter escolha vigente" : (proposal.professionalAreaLabels ?? proposal.professionalAreaIds).join(", ") || "Sem área selecionada", removable: false, provenance: "human", resolver: "same_block", sourceBlockId: null, targetBlockId: null });
+  }
   entities(items, "experiences", "experiences", current?.experiences ?? [], proposal.experiences, experienceIdentity, experienceLabel, removals);
   entities(items, "education", "education", current?.education ?? [], proposal.education, educationIdentity, educationLabel, removals);
   list(items, "competencies", "competencies", "Competência explícita", current?.competencies ?? [], proposal.competencies, removals);

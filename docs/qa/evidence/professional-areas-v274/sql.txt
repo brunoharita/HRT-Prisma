@@ -1,0 +1,502 @@
+BEGIN
+DO
+CREATE FUNCTION
+REVOKE
+CREATE TRIGGER
+DO
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+ALTER FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE TRIGGER
+CREATE FUNCTION
+CREATE TRIGGER
+CREATE FUNCTION
+ALTER FUNCTION
+REVOKE
+CREATE FUNCTION
+REVOKE
+GRANT
+ALTER FUNCTION
+REVOKE
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE FUNCTION
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE FUNCTION
+CREATE TRIGGER
+CREATE TRIGGER
+REVOKE
+DO
+ enqueue_people_directory
+--------------------------
+(0 rows)
+
+ enqueue_professional_area
+---------------------------
+(0 rows)
+
+COMMIT
+BEGIN
+        set_config
+---------------------------
+ trajectory-evidence-1.2.0
+(1 row)
+
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+INSERT 0 1
+INSERT 0 2
+INSERT 0 4
+INSERT 0 4
+INSERT 0 4
+INSERT 0 1
+INSERT 0 2
+INSERT 0 2
+INSERT 0 2
+INSERT 0 1
+CREATE TABLE
+GRANT
+ m83_assert
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 2ba60756-5899-31cf-469b-75337c591d1e
+(1 row)
+
+SET
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+RESET
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 2ba60756-5899-31cf-469b-75337c591d1e
+(1 row)
+
+SET
+ m83_reject
+------------
+
+(1 row)
+
+RESET
+              set_config
+--------------------------------------
+ 66e77899-6cb3-ef95-70ed-82713bdca594
+(1 row)
+
+SET
+INSERT 0 1
+ review_professional_area_contribution
+---------------------------------------
+ 5f0805d2-3dfd-4a5f-978e-dbe957002fc5
+(1 row)
+
+RESET
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 2ba60756-5899-31cf-469b-75337c591d1e
+(1 row)
+
+SET
+        save_professional_area
+--------------------------------------
+ d0801e36-5286-474b-a323-f856ffb3294e
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+RESET
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 66e77899-6cb3-ef95-70ed-82713bdca594
+(1 row)
+
+SET
+ review_professional_area_contribution
+---------------------------------------
+
+(1 row)
+
+RESET
+ m83_assert
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 72c08182-63ae-46f7-2888-124d9cf74e60
+(1 row)
+
+SET
+INSERT 0 1
+INSERT 0 1
+            save_profile_review
+--------------------------------------------
+ (26b2a3d9-524a-4b3f-9204-0b84981619d3,2,f)
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+              review_id               |              profile_id              | profile_version | reused
+--------------------------------------+--------------------------------------+-----------------+--------
+ 26b2a3d9-524a-4b3f-9204-0b84981619d3 | c782e293-3338-437b-8f34-64903ceeb4b7 |               1 | f
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+RESET
+UPDATE 1
+ enqueue_people_directory
+--------------------------
+
+(1 row)
+
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ complete_people_directory
+---------------------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ fb5558da-3d02-d4f3-b8e3-459bd9f53ecf
+(1 row)
+
+SET
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+RESET
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 2ba60756-5899-31cf-469b-75337c591d1e
+(1 row)
+
+SET
+        save_professional_area
+--------------------------------------
+ d0801e36-5286-474b-a323-f856ffb3294e
+(1 row)
+
+RESET
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 72c08182-63ae-46f7-2888-124d9cf74e60
+(1 row)
+
+SET
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+            save_profile_review
+--------------------------------------------
+ (6380f4c5-3802-459a-b51a-a7c835800c25,2,f)
+(1 row)
+
+              review_id               |              profile_id              | profile_version | reused
+--------------------------------------+--------------------------------------+-----------------+--------
+ 6380f4c5-3802-459a-b51a-a7c835800c25 | ac574ad3-ea47-47d6-b371-2edd61410087 |               2 | f
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+RESET
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+INSERT 0 1
+INSERT 0 1
+ m83_reject
+------------
+
+(1 row)
+
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+UPDATE 1
+ complete_people_directory
+---------------------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+DELETE 1
+ m83_assert
+------------
+
+(1 row)
+
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+ROLLBACK
+
+psql:tmp/area-verification.sql:373: NOTICE:  PASS: 16 initial macroareas; no H1 retyping
+psql:tmp/area-verification.sql:377: NOTICE:  PASS: local available immediately
+psql:tmp/area-verification.sql:378: NOTICE:  PASS: denied (42501)
+psql:tmp/area-verification.sql:379: NOTICE:  PASS: denied (42501)
+psql:tmp/area-verification.sql:380: NOTICE:  PASS: denied (42501)
+psql:tmp/area-verification.sql:381: NOTICE:  PASS: denied (23505)
+psql:tmp/area-verification.sql:382: NOTICE:  PASS: denied (22023)
+psql:tmp/area-verification.sql:383: NOTICE:  PASS: company cannot read global contribution queue
+psql:tmp/area-verification.sql:386: NOTICE:  PASS: one separate global contribution
+psql:tmp/area-verification.sql:388: NOTICE:  PASS: denied (42501)
+psql:tmp/area-verification.sql:394: NOTICE:  PASS: global association preserves local ID/version/status
+psql:tmp/area-verification.sql:395: NOTICE:  PASS: global decision is audited
+psql:tmp/area-verification.sql:398: NOTICE:  PASS: denied (40001)
+psql:tmp/area-verification.sql:400: NOTICE:  PASS: edit preserves ID and increments version
+psql:tmp/area-verification.sql:401: NOTICE:  PASS: edit produces new contribution; old decision immutable
+psql:tmp/area-verification.sql:402: NOTICE:  PASS: local history keeps previous snapshot
+psql:tmp/area-verification.sql:406: NOTICE:  PASS: defer keeps local usable
+psql:tmp/area-verification.sql:412: NOTICE:  PASS: labels canonicalized server-side
+psql:tmp/area-verification.sql:413: NOTICE:  PASS: original areas preserved independently
+psql:tmp/area-verification.sql:414: NOTICE:  PASS: denied (42501)
+psql:tmp/area-verification.sql:416: NOTICE:  PASS: human selection published without any experience
+psql:tmp/area-verification.sql:422: NOTICE:  PASS: macroarea jobs prioritized over function backlog
+psql:tmp/area-verification.sql:423: NOTICE:  PASS: RH exact alias resolves only macroarea
+psql:tmp/area-verification.sql:424: NOTICE:  PASS: IA candidates contain only macroareas
+psql:tmp/area-verification.sql:426: NOTICE:  PASS: classification exposed as derived grouping
+psql:tmp/area-verification.sql:427: NOTICE:  PASS: explicit empty human selection wins over inference
+psql:tmp/area-verification.sql:428: NOTICE:  PASS: AI never changes published Profile
+psql:tmp/area-verification.sql:429: NOTICE:  PASS: local area cannot be a different tenant candidate
+psql:tmp/area-verification.sql:430: NOTICE:  PASS: employer not in provider input
+psql:tmp/area-verification.sql:431: NOTICE:  PASS: manual draft does not enqueue AI
+psql:tmp/area-verification.sql:433: NOTICE:  PASS: denied (42501)
+psql:tmp/area-verification.sql:434: NOTICE:  PASS: denied (42501)
+psql:tmp/area-verification.sql:436: NOTICE:  PASS: anonymous cannot read catalog
+psql:tmp/area-verification.sql:437: NOTICE:  PASS: worker remains service-only
+psql:tmp/area-verification.sql:439: NOTICE:  PASS: macroarea is not a generic competency alias
+psql:tmp/area-verification.sql:440: NOTICE:  PASS: generic competency suggestions exclude macroareas
+psql:tmp/area-verification.sql:444: NOTICE:  PASS: deactivation preserves historical human selection
+psql:tmp/area-verification.sql:445: NOTICE:  PASS: inactive area excluded from AI candidates
+psql:tmp/area-verification.sql:448: NOTICE:  PASS: prefill retains selected inactive historical area
+psql:tmp/area-verification.sql:452: NOTICE:  PASS: explicit empty human selection survives publication and merge
+psql:tmp/area-verification.sql:454: NOTICE:  PASS: manual save and publication never enqueue macroarea AI
+psql:tmp/area-verification.sql:456: NOTICE:  PASS: macroarea never becomes normalized competency evidence
+psql:tmp/area-verification.sql:459: NOTICE:  PASS: denied (22023)
+psql:tmp/area-verification.sql:462: NOTICE:  PASS: reclassification job uses macroarea context
+psql:tmp/area-verification.sql:463: NOTICE:  PASS: denied (P0001)
+psql:tmp/area-verification.sql:464: NOTICE:  PASS: macroarea respects same zero daily cap
+psql:tmp/area-verification.sql:467: NOTICE:  PASS: human change during AI invalidates completion
+psql:tmp/area-verification.sql:469: NOTICE:  PASS: deleting final source purges private derived cache
+psql:tmp/area-verification.sql:473: NOTICE:  PASS: extraction cannot create a human-confirmed area selection

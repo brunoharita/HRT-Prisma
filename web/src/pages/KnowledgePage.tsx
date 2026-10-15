@@ -15,6 +15,7 @@ import type { CompetencySubgroupOption } from "../domain/profileCompetencyCurati
 import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
 import {KnowledgeStructure} from "../components/KnowledgeStructure";
 import {KnowledgeSourceMonitor} from "../components/KnowledgeSourceMonitor";
+import { ProfessionalAreas } from "../components/ProfessionalAreas";
 import { PrismaCard } from "../ui/PrismaCard";
 
 interface Props { profile: PlatformAccessProfile; activeMembership: OrganizationMembership | null; initialTab?:string; }
@@ -74,7 +75,9 @@ export function KnowledgePage({ profile, activeMembership, initialTab="overview"
   ], []);
 
   if (error && !dashboard) return <PrismaPage><Alert message={error} type="error" showIcon action={<Button onClick={() => void load()}>Tentar novamente</Button>} /></PrismaPage>;
+  const areaTab = { key: "professional-areas", label: "Áreas profissionais", children: <ProfessionalAreas organizationId={organizationId} global={isGlobal} canEdit={isGlobal || activeMembership?.role === "owner" || activeMembership?.role === "admin"} /> };
   const tabs = isGlobal ? [
+    areaTab,
     { key: "overview", label: "Visão Geral", children: overviewPanel() },
     { key: "structure", label: "Estrutura de competências", children: <KnowledgeStructure organizationId={organizationId}/> },
     { key: "global", label: "Base global de conhecimento", children: conceptsPanel() },
@@ -83,6 +86,7 @@ export function KnowledgePage({ profile, activeMembership, initialTab="overview"
     { key: "proposals", label: "Propostas", children: proposalsPanel() },
     { key: "impacts", label: "Impactos", children: impactsPanel() },
   ] : [
+    areaTab,
     { key: "overview", label: "Visão Geral", children: overviewPanel() },
     { key: "structure", label: "Estrutura de competências", children: <KnowledgeStructure organizationId={organizationId}/> },
     { key: "organization", label: "Conhecimento da empresa", children: conceptsPanel("organization") },
@@ -211,7 +215,7 @@ export function KnowledgePage({ profile, activeMembership, initialTab="overview"
     ]} />;
   }
   function proposalsPanel() {
-    return <div className="prisma-knowledge-proposals">{dashboard?.proposals.length ? dashboard.proposals.map((proposal) => <PrismaCard key={proposal.id} title={proposal.proposedConcept.canonical_label ?? proposal.observedTerm}>
+    return <div className="prisma-knowledge-proposals">{dashboard?.proposals.length ? dashboard.proposals.filter(p => p.proposedConcept.concept_type !== "professional_area").map((proposal) => <PrismaCard key={proposal.id} title={proposal.proposedConcept.canonical_label ?? proposal.observedTerm}>
       <Space direction="vertical" size="middle" style={{ width: "100%" }}><Space wrap><Tag>{proposal.proposedConcept.concept_type === "occupation" ? "Ocupação" : proposal.proposedConcept.concept_type === "certification" ? "Certificação legada" : "Competência"}</Tag><Tag color={proposal.scope === "global" ? "blue" : "purple"}>{proposal.scope === "organization" ? "Proposta legada · Empresa ativa" : proposal.originOrganizationId ? "Contribuição de empresa" : "Global Prisma"}</Tag>{statusTag(proposal.status)}</Space>
       <Typography.Paragraph>{proposal.proposedConcept.description ?? "Sem descrição."}</Typography.Paragraph>
       {proposal.proposedConcept.concept_type !== "occupation" ? <><Select aria-label={`Subagrupador de ${proposal.proposedConcept.canonical_label ?? "proposta"}`} placeholder="Classifique antes de aprovar" value={approvalSubgroups[proposal.id] ?? proposal.proposedConcept.subgroup_id ?? null} onChange={(value) => setApprovalSubgroups((current) => ({ ...current, [proposal.id]: value }))} options={subgroupSelectOptions(subgroups, proposal.scope)} /><SubgroupGuide subgroups={subgroups} id={approvalSubgroups[proposal.id] ?? proposal.proposedConcept.subgroup_id ?? null} /></> : null}
@@ -271,7 +275,7 @@ function SubgroupGuide({ subgroups, id }: { subgroups: CompetencySubgroupOption[
   return <Alert type="info" title={`${item.macroGroupCode === "hard" ? "Hard Skills" : "Soft Skills"} > ${item.label}`}
     description={<><p>{item.definition}</p><p>{item.classificationQuestion}</p>{item.examples?.length ? <small>Exemplos: {item.examples.join(", ")}</small> : null}</>} />;
 }
-function describeType(value: string) { return ({ occupation: "Ocupação", skill: "Habilidade", competency: "Competência", knowledge: "Conhecimento", technology: "Tecnologia", methodology: "Metodologia", certification: "Certificação" } as Record<string, string>)[value] ?? value; }
+function describeType(value: string) { return ({ professional_area: "Área profissional", occupation: "Ocupação", skill: "Habilidade", competency: "Competência", knowledge: "Conhecimento", technology: "Tecnologia", methodology: "Metodologia", certification: "Certificação" } as Record<string, string>)[value] ?? value; }
 function describeRelation(attributes: unknown, fallback: string) { const value = isRecord(attributes) ? attributes.relevance : null; return value === "essential" ? "Essencial" : value === "optional" ? "Opcional" : fallback.replaceAll("_", " "); }
 function describeMeasures(attributes: unknown) { if (!isRecord(attributes) || !Array.isArray(attributes.measurements)) return "—"; const values = attributes.measurements.flatMap((measure) => isRecord(measure) && typeof measure.scaleId === "string" && typeof measure.rawValue === "string" ? [`${describeScale(measure.scaleId)} ${measure.rawValue}`] : []); return values.length ? values.join(" · ") : "—"; }
 function describeScale(scale: string) { return ({ IM: "Importância", LV: "Nível" } as Record<string, string>)[scale] ?? scale; }

@@ -91,6 +91,7 @@ export interface PersonEditorValue {
 
 export interface PersonWorkspaceSummary {
   professionalDirectory?: import("./peopleDirectory.js").DirectoryEntry[] | null;
+  professionalAreas?: import("./peopleDirectory.js").DirectoryConcept[] | null;
   isCandidate?: boolean | undefined;
   isActiveEmployee?: boolean;
   id: string;
@@ -261,6 +262,9 @@ export interface StructuredDraft {
   contact: StructuredResumeContact;
   professionalTitle: string | null;
   areasOfExpertise: string[];
+  /** Presence, including [], means a human choice; independent of extracted text. */
+  professionalAreaIds?: string[];
+  professionalAreaLabels?: string[];
   professionalObjective: string | null;
   summary: string | null;
   keyResults: StructuredKeyResult[];

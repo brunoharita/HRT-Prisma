@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.76.3
+version: 2.76.4
 last_verified: 2026-10-15
 ---
 
 # Estado atual do Prisma
+
+## Áreas profissionais2.7.4: cadastro global/local e curadoria
+
+Implementação autorizada em15/10/2026 reutiliza Knowledge/ADR-069 com tipo professional_area,16 macroáreas editoriais iniciais, cadastro e edição versionada, contribuição global separada e curadoria exclusiva do Super Admin. Seleção humana opcional no Perfil, inclusive vazia, prevalece; texto original preservado. IA fechada usa somente macroáreas global/local no orçamento compartilhado existente, sem publicação ou nova tarifa. Pessoas usa área do Perfil, independente de cronologia; funções continuam por experiência. Contrato e limites em `docs/architecture/professional-areas.md`; acordo/mapa/execução/AoT em `docs/qa/professional-areas-v274.md`. Validação e publicação em andamento; não declarar rollout concluído por documentação.
 
 ## Editor manual 2.7.3: rolagem integral
 
