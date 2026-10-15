@@ -16,6 +16,7 @@ function decodeDraft(identifiedFields, uncertainties, notIdentified) {
             linkedin: typeof contact.linkedin === "string" ? contact.linkedin : null,
         },
         professionalTitle: typeof value.professionalTitle === "string" ? value.professionalTitle : null,
+        ...(Array.isArray(value.professionalAreaIds) ? { professionalAreaIds: value.professionalAreaIds.filter((id) => typeof id === "string"), professionalAreaLabels: value.professionalAreaLabels?.filter((label) => typeof label === "string") ?? [] } : {}),
         areasOfExpertise: Array.isArray(value.areasOfExpertise) ? value.areasOfExpertise.filter((item) => typeof item === "string") : [],
         professionalObjective: typeof value.professionalObjective === "string" ? value.professionalObjective : null,
         summary: typeof value.summary === "string" ? value.summary : null,
