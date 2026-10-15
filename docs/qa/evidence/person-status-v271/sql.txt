@@ -25,8 +25,16 @@ UPDATE 1
 
 UPDATE 1
 
+INSERT 0 1
+INSERT 0 1
 UPDATE 1
+
+UPDATE 1
+
+UPDATE 1
+
+UPDATE 2
 
 DO
 ROLLBACK
-PASS: 12 SQL checks, isolated model; existing authorization helper replaced only by test stub
+PASS: 15 SQL checks, isolated model; existing authorization helper replaced only by test stub

@@ -16,7 +16,7 @@ Implementação: RPC minimizado get_person_relationship_tags reutiliza authorize
 | D-02 | boolean confirmado e Pessoa ativa; testes nenhuma/individual/duas tags/arquivada; busca e comparação usam a mesma fonte | PASS |
 | D-03 | classificações e ações antigas retiradas; dropdown produtivo sem vínculo editável, original sem tag inventada | PASS |
 | P-01 | nova consulta somente leitura; hashes de Pessoas11/participações2/processos1 iguais antes/depois; sem writers de Perfil/Score/Tokens/seleção alterados | PASS |
-| CA-01 |15 testes Node dirigidos,12 checks SQL modelo, tipos/build/web/lint/contexto PASS; CI branch38740352525/main38740657994 SUCCESS; smoke autenticado somente leitura | PASS |
+| CA-01 |15 testes Node dirigidos,15 checks SQL modelo, tipos/build/web/lint/contexto PASS; CI branch38740352525/main38740657994 SUCCESS; smoke autenticado somente leitura | PASS |
 
 Publicada no SHA funcional65987d608d32d2d751ef3b3ebfaed0f03b834695. Migration local20261015130000/alias remoto20261015131141 integralmente igual ao Git após normalização CR/whitespace exterior; anon sem execute, authenticated com execução e autorização backend existente intacta. Apenas banco e web publicados. Web7375f10bb3e6 running/zero reinícios, rollback retém imagem53e26dbc,259assets anteriores com hashes exatos e nove containers adjacentes intactos. Probe404na recriação estabilizou sem redeploy. Fonte/evidência em `evidence/person-status-v271/publication.json`. Fechamento documental/contexto/ledger sincroniza main/GitHub/VPS sem rebuild.
 

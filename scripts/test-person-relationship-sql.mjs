@@ -30,6 +30,11 @@ update public.position_evaluation_entries set details='{"decision":{"outcome":"p
 update public.position_evaluation_entries set stage='closed';select pg_temp.check_tag(false);
 update public.position_evaluation_entries set stage='awaiting_decision';update public.position_evaluation_processes set status='closed';select pg_temp.check_tag(false);
 update public.position_evaluation_processes set status='active';select pg_temp.check_tag(true);
+insert into public.position_evaluation_processes values('00000000-0000-0000-0000-000000000005','00000000-0000-0000-0000-000000000001','active');
+insert into public.position_evaluation_entries values('00000000-0000-0000-0000-000000000003','00000000-0000-0000-0000-000000000001','00000000-0000-0000-0000-000000000005','awaiting_interview','{}');
+update public.position_evaluation_entries set details='{"decision":{"outcome":"do_not_proceed"}}' where process_id='00000000-0000-0000-0000-000000000004';select pg_temp.check_tag(true);
+update public.position_evaluation_processes set status='closed' where id='00000000-0000-0000-0000-000000000004';select pg_temp.check_tag(true);
+update public.position_evaluation_entries set stage='closed' where process_id='00000000-0000-0000-0000-000000000005';select pg_temp.check_tag(false);
 update public.position_evaluation_entries set organization_id='00000000-0000-0000-0000-000000000002';select pg_temp.check_tag(false);
 do $$begin
  if has_function_privilege('anon','public.get_person_relationship_tags(uuid,uuid[])','execute') then raise exception 'anon';end if;
@@ -39,7 +44,7 @@ do $$begin
  perform set_config('test.actor','',true);
  begin perform public.get_person_relationship_tags('00000000-0000-0000-0000-000000000001','{}');raise exception 'session bypass';exception when insufficient_privilege then null;end;
 end$$;
-rollback;select 'PASS: 12 SQL checks, isolated model; existing authorization helper replaced only by test stub';
+rollback;select 'PASS: 15 SQL checks, isolated model; existing authorization helper replaced only by test stub';
 `;
 const output=run(db,sql);await mkdir("docs/qa/evidence/person-status-v271",{recursive:true});await writeFile("docs/qa/evidence/person-status-v271/sql.txt",output);console.log(output.slice(-220));
 }finally{run("postgres",`drop database ${db}`);}

@@ -49,7 +49,7 @@
   },
   "local": {
     "nodeDirected": 15,
-    "sqlModelChecks": 12,
+    "sqlModelChecks": 15,
     "typecheck": true,
     "build": true,
     "webBuild": true,
