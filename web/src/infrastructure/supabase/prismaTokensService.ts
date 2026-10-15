@@ -2,7 +2,7 @@ import {supabase} from "./client";
 import type {TokenFunction,TokenQuote,TokenOverview,TokenPlatform} from "../../domain/prismaTokens";
 function camelize(v:unknown):unknown {
  if(Array.isArray(v))return v.map(camelize);
- if(v&&typeof v==="object")return Object.fromEntries(Object.entries(v).map(([k,x])=>[k.replace(/_([a-z])/g,(_,c:string)=>c.toUpperCase()),camelize(x)]));
+ if(v&&typeof v==="object")return Object.fromEntries(Object.entries(v).map(([k,x])=>[k.replace(/_([a-z0-9])/g,(_,c:string)=>c.toUpperCase()),camelize(x)]));
  return v;
 }
 export function tokenOperationError(message:string):string {

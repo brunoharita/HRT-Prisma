@@ -48,3 +48,7 @@ Rollback conserva schema/ledger/política2.0.0 e preços/quotes/workers1.0.0. Im
 ## Desvios / alterações autorizadas / conclusão
 
 Nenhum desvio de regra ou ampliação de escopo identificado. Fonte humana mais recente supersede validade antiga e aniversário, conforme contrato. Implementação local validada; finalização CI/produtiva/sincronização pendente.
+
+## Correção encontrada no smoke autenticado
+
+Primeiro release1b763ad passou CIfeature38668393341/main38668568152 e ativou banco/novo frontend. Migração remota20261015020049/fingerprint fc0065bdeb92f6ac52ea5b9bb847ab4177874d4e898051b4db86b1e7da1ffa20 igual;14conjuntos, saldos/debitos/grants/RLS e16consumidores preservados. Web iniciou com404transitório no probe e estabilizou200sem redeploy. Autenticação salva permitiu consulta real: saldo/calendário corretos, mas previsão/referência indisponíveis. Defeito localizado no decoder camelize: window_start_7/window_start_30 mantinham underscore antes de dígitos, diferente da fixture camelCase. Corrigido só decoder para sufixos alfanuméricos e acrescentado teste de payload real snake_case, incluindo referência disponível mesmo com história insuficiente. Três testes de cotação/planejamento/wire e build web PASS. Sem alteração/reaplicação do banco, contrato, regra ou versão2.6.2; novo SHA de frontend será validado/publicado e smoke repetido somente nas áreas afetadas antes do fechamento. A primeira consulta com falha não é PASS deD-06produtivo.
