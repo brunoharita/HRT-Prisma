@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 491
-source_manifest_sha256: b45c91289c93c5ffdd27916e70e6c641db6e83621ec20a1686aadff1ee4bce08
+documentation_source_count: 492
+source_manifest_sha256: f7eb0909ff198c56a9c2787dbc1429156ec4fea55a792dd3f76072313f185d20
 -->
 
 # Tudo sobre o Prisma
@@ -2643,11 +2643,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.76.2
+version: 2.76.3
 last_verified: 2026-10-15
 ---
 
 # Estado atual do Prisma
+
+## Editor manual 2.7.3: rolagem integral
+
+Correção do relato de15/10/2026: modo manual herdava altura fixa e overflow hidden do split PDF, cortando campos como Áreas de atuação. CSS exclusivamente manual permite altura natural/rolagem da página e alinha header/cartão em largura máxima1320, sem margens internas excessivas. Cadastro novo e atualização preservam referências, abas, salvar/retomar e comparação humana; split não manual mantém dimensões/overflow anteriores. Sem alteração de backend, dados, Knowledge, IA/Tokens ou publicação de Perfil. Acordo/mapa/execução/AoT em `docs/qa/manual-editor-scroll-v273.md`; rollout depende da evidência final.
 
 ## Pessoas 2.7.2: áreas e funções do Knowledge
 
@@ -5783,6 +5787,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+Patch **2.7.3**,15/10/2026: correção de rolagem/recorte e largura do editor manual, restaurando D-UX-01 aprovado em2.7.0. Sem contrato persistido novo. Somente web e documentação; preservar revisão PDF e fluxo de rascunho/comparação. Evidência em `docs/qa/manual-editor-scroll-v273.md`.
 
 Entrega autorizada por Bruno em15/10/2026: **2.7.2**, áreas/funções na lista de Pessoas e filtros do Knowledge, cache e IA fechada para agrupamentos de navegação. `people-directory-1.0.0` não modifica contratos de Perfil/Score/matching ou cria catálogo/tarifa. Destinos banco, knowledge-agent e web, sujeitos à evidência de publicação do AoT `people-taxonomy-v272`.
 
@@ -29491,6 +29497,31 @@ A configuração publica portas apenas em loopback. Não existe endpoint SaaS ob
 2. reunir 8 a 12 currículos reais autorizados com referência humana;
 3. executar A/B e registrar relatório sanitizado;
 4. somente se a meta e a superioridade passarem, decidir cutover e validar QA autenticado.
+
+---
+
+## Source: `docs/qa/manual-editor-scroll-v273.md`
+
+# Acordo, execução e AoT: rolagem do editor manual 2.7.3
+
+Baseline 7e5d8f4, runtime2.7.2. Relato de Bruno e screenshot em15/10/2026: editor manual de Perfil existente corta conteúdo no rodapé e desperdiça espaço lateral. Imagem é contraprova, não novo desenho normativo. Correção delimitada restaura o comportamento aprovado em agreement-manual-profile-v270, D-UX-01 (área de edição ampla e seções acessíveis).
+
+Acordo1.0.0: D-01 permitir rolagem da página manual até todos os campos, sem altura fixa/recorte herdados da revisão PDF. D-02 manter abas, valores de referência, campos, rascunho, comparação humana e navegação; alinhar cartão/área editável para retirar margens brancas internas excessivas. P-01 não alterar semântica, writers, dados/versões, IA/Tokens, PDF ou comparação. F-01 redesenho do formulário, remoção da referência e edição direta dos agrupamentos Knowledge. A-01 CSS restrito ao modo manual e detalhes menores de largura. CA-01 reproduzir antes, testar desktop/celular, editar área e salvar rascunho sintético sem publicar, preservar revisão não manual; tipos/build/versão/contexto/CI e smoke seletivo.
+
+Execução congelada: D-01/02 e P-01, F-01/A-01 acima; branch codex/manual-editor-scroll-v273; publicar patch2.7.3 pela autorização permanente de correções. Classe B, sem backend/banco ou fronteira sensível alterados.
+
+GOV-01 inicial: formulário manual/rolagem/layout `direct`, incluindo cadastro novo e atualização; revisão PDF/Perfil não manual `plausible_indirect` por CSS compartilhado, preservar altura/painéis/rolagem próprios. Salvar/comparar/navegação `critical_transversal`, verificar callback e rascunho no browser sintético. Knowledge/Pessoas/Score/seleção/ingestão/Tokens/auth/banco `no_impact_identified`: CSS apenas em ancestral manual e registry de versão, sem mudança de serviços/contratos. Regressão mínima CA-01, sem suíte integral local. Fechamento exige evidência visual equivalente, CI obrigatório, dispatcher web, rollback e sincronização. Estado inicial NOT TESTED.
+
+## AoT local
+
+| Acordo | Implementação e prova | Estado |
+| --- | --- | --- |
+| D-01 | Altura natural/overflow visível exclusivamente manual. Baseline1448: frame670px/conteúdo1893px, Áreas fora do recorte após wheel. Depois: nenhum ancestral recorta, campo visível e editável em2232/1448/390 | PASS |
+| D-02 | Header/cartão alinhados em1320px e editor ocupa sua largura; seis cenários cadastro/atualização salvam a área declarada em rascunho, comparação continua disponível, nenhuma publicação automática | PASS |
+| P-01 | Três cenários não manuais conservam overflow hidden e altura própria. Diff só CSS manual/registry/testes/docs, zero chamadas externas no teste; sem writers alterados | PASS |
+| CA-01 |9 cenários browser,5 testes registry, tipos root/web, build web, lint/contexto/diff PASS. CI/produção pendentes até recibo final | PARTIAL |
+
+Imagens e medições em `evidence/manual-editor-scroll-v273`, mesmos dados sintéticos/estado update/viewport1448 antes/depois; desktop2232 e celular390 adicionais. Referência é contraprova do recorte; nenhuma composição nova foi tratada como aprovada. Ajuste de largura é acabamento da área ampla já aprovada. O seletor exato de comparação no teste ignorava nome acessível composto; corrigido para correspondência textual após inspecionar botões, sem alterar produto. Não se refez nenhuma jornada/dado humano em produção para testar gravação.
 
 ---
 

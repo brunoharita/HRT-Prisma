@@ -1,0 +1,126 @@
+{
+  "results": [
+    {
+      "width": 2232,
+      "state": "update",
+      "clipped": [],
+      "bottom": 524.21875,
+      "viewport": 900,
+      "visible": true,
+      "pageWidth": 2232,
+      "viewportWidth": 2232,
+      "frame": {
+        "height": 1893,
+        "scrollHeight": 1893,
+        "overflow": "visible",
+        "width": 1318
+      }
+    },
+    {
+      "width": 2232,
+      "state": "full",
+      "clipped": [],
+      "bottom": 524.21875,
+      "viewport": 900,
+      "visible": true,
+      "pageWidth": 2232,
+      "viewportWidth": 2232,
+      "frame": {
+        "height": 1893,
+        "scrollHeight": 1893,
+        "overflow": "visible",
+        "width": 1318
+      }
+    },
+    {
+      "width": 2232,
+      "preservedNonManual": {
+        "overflow": "hidden",
+        "height": 670,
+        "manual": false
+      }
+    },
+    {
+      "width": 1448,
+      "state": "update",
+      "clipped": [],
+      "bottom": 524.484375,
+      "viewport": 900,
+      "visible": true,
+      "pageWidth": 1448,
+      "viewportWidth": 1448,
+      "frame": {
+        "height": 1893,
+        "scrollHeight": 1893,
+        "overflow": "visible",
+        "width": 1318
+      }
+    },
+    {
+      "width": 1448,
+      "state": "full",
+      "clipped": [],
+      "bottom": 524.484375,
+      "viewport": 900,
+      "visible": true,
+      "pageWidth": 1448,
+      "viewportWidth": 1448,
+      "frame": {
+        "height": 1893,
+        "scrollHeight": 1893,
+        "overflow": "visible",
+        "width": 1318
+      }
+    },
+    {
+      "width": 1448,
+      "preservedNonManual": {
+        "overflow": "hidden",
+        "height": 670,
+        "manual": false
+      }
+    },
+    {
+      "width": 390,
+      "state": "update",
+      "clipped": [],
+      "bottom": 570.3125,
+      "viewport": 900,
+      "visible": true,
+      "pageWidth": 390,
+      "viewportWidth": 390,
+      "frame": {
+        "height": 2657,
+        "scrollHeight": 2657,
+        "overflow": "visible",
+        "width": 356
+      }
+    },
+    {
+      "width": 390,
+      "state": "full",
+      "clipped": [],
+      "bottom": 535.5625,
+      "viewport": 900,
+      "visible": true,
+      "pageWidth": 390,
+      "viewportWidth": 390,
+      "frame": {
+        "height": 2101,
+        "scrollHeight": 2101,
+        "overflow": "visible",
+        "width": 356
+      }
+    },
+    {
+      "width": 390,
+      "preservedNonManual": {
+        "overflow": "hidden",
+        "height": 583,
+        "manual": false
+      }
+    }
+  ],
+  "errors": [],
+  "outbound": []
+}

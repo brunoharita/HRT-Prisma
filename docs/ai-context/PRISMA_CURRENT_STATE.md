@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.76.2
+version: 2.76.3
 last_verified: 2026-10-15
 ---
 
 # Estado atual do Prisma
+
+## Editor manual 2.7.3: rolagem integral
+
+Correção do relato de15/10/2026: modo manual herdava altura fixa e overflow hidden do split PDF, cortando campos como Áreas de atuação. CSS exclusivamente manual permite altura natural/rolagem da página e alinha header/cartão em largura máxima1320, sem margens internas excessivas. Cadastro novo e atualização preservam referências, abas, salvar/retomar e comparação humana; split não manual mantém dimensões/overflow anteriores. Sem alteração de backend, dados, Knowledge, IA/Tokens ou publicação de Perfil. Acordo/mapa/execução/AoT em `docs/qa/manual-editor-scroll-v273.md`; rollout depende da evidência final.
 
 ## Pessoas 2.7.2: áreas e funções do Knowledge
 
