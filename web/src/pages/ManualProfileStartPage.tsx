@@ -44,7 +44,7 @@ export function ManualProfileStartPage({ activeMembership, onNavigate }: { activ
   return <PrismaPage className="prisma-manual-profile-start">
     <PrismaPageHeader icon={<EditOutlined />} title="Preencher manualmente" description="Identifique a Pessoa para verificar possíveis duplicidades. Depois, preencha as seções profissionais no editor. Você pode salvar um rascunho parcial e continuar depois, sem PDF ou consumo de Tokens Prisma." />
     <PrismaCard title="Identificação inicial">
-      {error ? <Alert showIcon type="error" title={error} /> : null}
+      {error ? <Alert showIcon type="error" title={error} action={<Button disabled={busy} onClick={() => form.submit()}>Verificar novamente</Button>} /> : null}
       <Form form={form} layout="vertical" requiredMark="optional" disabled={busy} onValuesChange={() => { setDirty(true); setCandidates(null); }} onFinish={() => void start()}>
         <Form.Item name="fullName" label="Nome completo" rules={[{ required: true, whitespace: true, min: 2, max: 160, message: "Informe o nome completo, de 2 a 160 caracteres." }]}><Input autoComplete="name" /></Form.Item>
         <Form.Item name="email" label="E-mail" rules={[{ type: "email", max: 254, message: "Informe um e-mail válido ou deixe vazio no rascunho." }]}><Input autoComplete="email" /></Form.Item>

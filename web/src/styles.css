@@ -7174,3 +7174,9 @@ textarea {
   .prisma-review-page--manual > .ant-alert .ant-alert-close-icon { grid-column: 3; grid-row: 1; }
   .prisma-review-page--manual > .ant-alert .ant-alert-icon { margin-inline-end: 0; }
 }
+
+@media (max-width: 767px) {
+  .prisma-manual-profile-start .ant-alert-error { display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px; align-items: start; }
+  .prisma-manual-profile-start .ant-alert-error .ant-alert-content { grid-column: 2; min-width: 0; }
+  .prisma-manual-profile-start .ant-alert-error .ant-alert-actions { grid-column: 2; margin: 0; }
+}

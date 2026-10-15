@@ -5,6 +5,7 @@ export const OPERATOR_FEEDBACK_VERSION = "1.0.0";
 export const PHONE_CORRECTION_MESSAGE = "Telefone: informe apenas um número com DDD, por exemplo (11) 98888-7777. Se houver vários números, escolha qual usar neste campo. Você também pode deixá-lo vazio se houver um e-mail informado.";
 
 interface OperatorFeedback {
+
   message: string;
   category: OperationErrorCategory;
   recovery: OperationRecovery;
@@ -12,6 +13,14 @@ interface OperatorFeedback {
 }
 
 export const OPERATOR_FEEDBACK: Readonly<Record<string, OperatorFeedback>> = {
+  manual_duplicate_confirmation_required: { message: "Há possíveis duplicidades. Verifique as correspondências antes de confirmar um novo cadastro.", category: "validation", recovery: "review-fields" },
+  manual_request_conflict: { message: "Esta operação já foi usada com outros dados. Atualize a tela para continuar com segurança.", category: "conflict", recovery: "reload" },
+  manual_name_required: { message: "Informe o nome completo para iniciar o rascunho manual.", category: "validation", recovery: "review-fields", fieldPath: "identity.fullName" },
+  manual_email_invalid: { message: "Informe um e-mail válido ou deixe o campo vazio no rascunho.", category: "validation", recovery: "review-fields", fieldPath: "contact.email" },
+  manual_phone_invalid: { message: PHONE_CORRECTION_MESSAGE, category: "validation", recovery: "review-fields", fieldPath: "contact.phone" },
+  manual_contract_invalid: { message: "Confira os campos preenchidos e as listas antes de salvar. O rascunho anterior e o Perfil vigente foram preservados.", category: "validation", recovery: "review-fields" },
+  manual_request_invalid: { message: "Os dados da solicitação não estão completos. Reabra o cadastro manual para continuar.", category: "validation", recovery: "reload" },
+  manual_person_unavailable: { message: "Esta Pessoa não está disponível para uma nova revisão. Volte à lista e abra um cadastro ativo.", category: "stale-state", recovery: "reload" },
   reviewed_phone_invalid: { message: PHONE_CORRECTION_MESSAGE, category: "validation", recovery: "review-fields", fieldPath: "contact.phone" },
   "reviewed phone is invalid": { message: PHONE_CORRECTION_MESSAGE, category: "validation", recovery: "review-fields", fieldPath: "contact.phone" },
   full_name_required: { message: "Nome completo: preencha o nome da pessoa antes de continuar.", category: "validation", recovery: "review-fields", fieldPath: "identity.fullName" },

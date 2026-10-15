@@ -90,7 +90,7 @@ export const personIngestionService = {
   },
   async startManualProfile(organizationId: string, personId: string | null, identity: { fullName: string; email: string; phone: string }, confirmNew: boolean, operationKey: string): Promise<{personId:string;reviewId:string}> {
     const { data, error } = await supabase.rpc("start_manual_profile_review" as never, { p_organization_id: organizationId,p_person_id:personId,p_identity:identity,p_confirm_new:confirmNew,p_idempotency_key:operationKey } as never);
-    if (error) throw new Error(error.message === "manual_duplicate_confirmation_required" ? "Há possíveis duplicidades. Verifique as correspondências antes de confirmar um novo cadastro." : error.message === "manual_request_conflict" ? "Esta operação já foi usada com outros dados. Atualize a tela para continuar com segurança." : "Não foi possível iniciar o preenchimento manual. Os dados existentes foram preservados. Confira nome, e-mail e telefone e tente novamente.");
+    throwReviewError(error, "Não foi possível iniciar o preenchimento manual. Os dados existentes foram preservados. Confira a identificação e tente novamente.");
     const row = (data as unknown as Array<{person_id:string;review_id:string}>)[0];
     if (!row) throw new Error("O rascunho não foi confirmado. Tente novamente para recuperar a mesma operação.");
     return {personId:row.person_id,reviewId:row.review_id};
