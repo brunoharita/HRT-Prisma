@@ -23,6 +23,8 @@ CREATE TRIGGER
 CREATE FUNCTION
 CREATE TRIGGER
 CREATE FUNCTION
+CREATE TRIGGER
+CREATE FUNCTION
 CREATE FUNCTION
 CREATE FUNCTION
 CREATE FUNCTION
@@ -243,30 +245,46 @@ INSERT 0 1
  
 (1 row)
 
+INSERT 0 1
+INSERT 0 1
+DELETE 1
+ m83_assert 
+------------
+ 
+(1 row)
+
+DELETE 1
+ m83_assert 
+------------
+ 
+(1 row)
+
 ROLLBACK
 
-psql:tmp/people-directory-verification.sql:335: NOTICE:  PASS: approved exact role
-psql:tmp/people-directory-verification.sql:336: NOTICE:  PASS: approved exact area grounded in same experience
-psql:tmp/people-directory-verification.sql:337: NOTICE:  PASS: never promote coordinator to manager
-psql:tmp/people-directory-verification.sql:338: NOTICE:  PASS: general area not applied to unrelated experience
-psql:tmp/people-directory-verification.sql:339: NOTICE:  PASS: denied (P0001)
-psql:tmp/people-directory-verification.sql:340: NOTICE:  PASS: denied (P0001)
-psql:tmp/people-directory-verification.sql:341: NOTICE:  PASS: zero cap denies
-psql:tmp/people-directory-verification.sql:342: NOTICE:  PASS: missing cap denies
-psql:tmp/people-directory-verification.sql:343: NOTICE:  PASS: one bounded call reserved
-psql:tmp/people-directory-verification.sql:345: NOTICE:  PASS: existing competency consumer observes shared daily limit
-psql:tmp/people-directory-verification.sql:349: NOTICE:  PASS: directory preserves original role
-psql:tmp/people-directory-verification.sql:350: NOTICE:  PASS: denied (42501)
-psql:tmp/people-directory-verification.sql:351: NOTICE:  PASS: denied (42501)
-psql:tmp/people-directory-verification.sql:352: NOTICE:  PASS: denied (42501)
-psql:tmp/people-directory-verification.sql:356: NOTICE:  PASS: member reads approved professional directory
-psql:tmp/people-directory-verification.sql:360: NOTICE:  PASS: denied (42501)
-psql:tmp/people-directory-verification.sql:364: NOTICE:  PASS: deprecated references disappear immediately
-psql:tmp/people-directory-verification.sql:366: NOTICE:  PASS: superseded profile is excluded
-psql:tmp/people-directory-verification.sql:367: NOTICE:  PASS: anon ACL
-psql:tmp/people-directory-verification.sql:368: NOTICE:  PASS: cache RLS enabled without client policies
-psql:tmp/people-directory-verification.sql:370: NOTICE:  PASS: superseded and orphan contexts never leave backend
-psql:tmp/people-directory-verification.sql:374: NOTICE:  PASS: exact alias cannot promote coordinator to manager
-psql:tmp/people-directory-verification.sql:375: NOTICE:  PASS: denied (P0001)
-psql:tmp/people-directory-verification.sql:377: NOTICE:  PASS: AI association is explicitly derived navigation
-psql:tmp/people-directory-verification.sql:379: NOTICE:  PASS: unchanged context is not queried again
+psql:tmp/people-directory-verification.sql:353: NOTICE:  PASS: approved exact role
+psql:tmp/people-directory-verification.sql:354: NOTICE:  PASS: approved exact area grounded in same experience
+psql:tmp/people-directory-verification.sql:355: NOTICE:  PASS: never promote coordinator to manager
+psql:tmp/people-directory-verification.sql:356: NOTICE:  PASS: general area not applied to unrelated experience
+psql:tmp/people-directory-verification.sql:357: NOTICE:  PASS: denied (P0001)
+psql:tmp/people-directory-verification.sql:358: NOTICE:  PASS: denied (P0001)
+psql:tmp/people-directory-verification.sql:359: NOTICE:  PASS: zero cap denies
+psql:tmp/people-directory-verification.sql:360: NOTICE:  PASS: missing cap denies
+psql:tmp/people-directory-verification.sql:361: NOTICE:  PASS: one bounded call reserved
+psql:tmp/people-directory-verification.sql:363: NOTICE:  PASS: existing competency consumer observes shared daily limit
+psql:tmp/people-directory-verification.sql:367: NOTICE:  PASS: directory preserves original role
+psql:tmp/people-directory-verification.sql:368: NOTICE:  PASS: denied (42501)
+psql:tmp/people-directory-verification.sql:369: NOTICE:  PASS: denied (42501)
+psql:tmp/people-directory-verification.sql:370: NOTICE:  PASS: denied (42501)
+psql:tmp/people-directory-verification.sql:374: NOTICE:  PASS: member reads approved professional directory
+psql:tmp/people-directory-verification.sql:378: NOTICE:  PASS: denied (42501)
+psql:tmp/people-directory-verification.sql:382: NOTICE:  PASS: deprecated references disappear immediately
+psql:tmp/people-directory-verification.sql:384: NOTICE:  PASS: superseded profile is excluded
+psql:tmp/people-directory-verification.sql:385: NOTICE:  PASS: anon ACL
+psql:tmp/people-directory-verification.sql:386: NOTICE:  PASS: cache RLS enabled without client policies
+psql:tmp/people-directory-verification.sql:388: NOTICE:  PASS: superseded and orphan contexts never leave backend
+psql:tmp/people-directory-verification.sql:392: NOTICE:  PASS: exact alias cannot promote coordinator to manager
+psql:tmp/people-directory-verification.sql:393: NOTICE:  PASS: denied (P0001)
+psql:tmp/people-directory-verification.sql:395: NOTICE:  PASS: AI association is explicitly derived navigation
+psql:tmp/people-directory-verification.sql:397: NOTICE:  PASS: unchanged context is not queried again
+psql:tmp/people-directory-verification.sql:402: NOTICE:  PASS: shared context retained while another source exists
+psql:tmp/people-directory-verification.sql:404: NOTICE:  PASS: last person source deletion purges derived context

@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 491
-source_manifest_sha256: 18b3704776e310bea45b34fd2b06d266f970d57b55899d83abea24b64e308d0a
+source_manifest_sha256: 4ab941f459325bfcaf4d7b3a51aed1bb4284462d28bfa6824b7912d3516ad38c
 -->
 
 # Tudo sobre o Prisma
@@ -5477,6 +5477,8 @@ Worker `people_directory` no knowledge-agent mantém JWT gateway e segredo Vault
 Modelo reutiliza `KNOWLEDGE_RESEARCH_MODEL=gpt-5.6-luna`, sem fallback. Usa opt-in existente `allow_external_knowledge_enrichment`, histórico `withAiHistory`/`people_directory` e o MESMO orçamento operacional de normalização (caps existentes, 20/dia e 200/mês, não um orçamento adicional). Reserva considera ambos os consumidores sob o mesmo lock. Não adiciona tarifa/débito comercial. Falha/limite desabilita apenas agrupamento, preservando consulta e operações manuais. Retry automático limitado a três tentativas, intervalo de um dia. Sem candidatos seguros, nenhuma classificação é forçada.
 
 `get_people_directory` exige sessão e papel ativo na empresa. Retorna somente projeção profissional dos Perfis aprovados; cache não tem permissão cliente. Frontend junta por pessoa E ID do Perfil vigente. Combinar filtros significa mesma experiência, inclusive na trajetória completa. Atual/mais recente inclui todas as atuações em andamento; sem atuações atuais usa o último término conhecido, preservando empates. Datas incompletas/futuras não criam cronologia: a trajetória completa continua disponível. Busca textual inclui cargo original, empresa e agrupamentos, inclusive sem equivalência segura. Erro opcional da projeção é explícito e não bloqueia a lista. Ajustes continuam nos fluxos existentes de edição/republicação do Perfil e curadoria de aliases do Knowledge, sem novo trabalho obrigatório.
+
+Exclusão de Perfil/Pessoa limpa contextos derivados de todas as versões da taxonomia quando não existe outro Perfil da mesma empresa com contexto idêntico. Contexto sem fonte vigente nunca é enviado ao provedor. O cache compartilhado não atravessa empresas.
 
 Rollback: reverter web e knowledge-agent ao SHA anterior; desativar somente cron `prisma-people-directory`. A migração aditiva pode permanecer com RLS/ACL fechadas. Não apagar cache ou histórico em rollback rotineiro. Orçamento da normalização continua conservador contando as reservas já realizadas.
 
@@ -29567,6 +29569,16 @@ Execução: implementar integralmente D-01..05/P-01..02, preservar F-01, usar A-
 | Publicação web/banco/knowledge-agent | direct | dispatcher, rollback, CI, health/versão e smoke autenticado |
 
 Fechamento exige CA-01, owner docs/contexto/ledger, evidências e publicação dos destinos derivados do diff. Sem QA remoto separado, integração sensível usa PostgreSQL local isolado antes de produção. Estado inicial dos acordos: NOT TESTED. AoT final será completado com resultados, sem presumir sucesso.
+
+## Validação local e preservação
+
+18 testes Node dirigidos (diretório, cronologia e destaques existentes, versão), 4 testes Deno (worker novo e normalização anterior), 22 testes de tooling/contexto, checagem Deno do entrypoint completo, tipos root/web, build web, lint/contexto/ledger PASS. SQL isolado executa resolver, papéis/RLS reais do schema local; tabelas novas de classificação vêm do DDL existente, fila antiga é fixture mínima para testar orçamento, cron.schedule é stub sem rede. Cobre 27 verificações, incluindo alias, nível, áreas gerais, candidatos/lease inválidos, caps ausentes/zero, orçamento compartilhado, recruiter/member/anon/tenant, despublicação, supersessão, contexto sem fonte, cache e exclusão compartilhada. Não prova execução real do cron/provider, que depende do smoke de publicação.
+
+Browser sintético usa componentes de produção e transportes locais, sem banco/provedor remoto: desktop1448 e celular390; colunas, cargo original, combinação na mesma experiência, trajetória, limpeza, ausência do agrupamento e navegação PASS, zero erros e zero chamadas externas. Evidências `evidence/people-taxonomy-v272/browser`. Referência inicial é contraprova; mantém tabela clara, hierarquia/ações existentes e agrupamento próximo dos filtros, sem redesenho adicional. Celular usa rolagem interna da tabela, sem overflow da página.
+
+Descoberta de preservação: cache sem FK de pessoa poderia sobreviver à exclusão. Mapa revisado: exclusão é `critical_transversal`; trigger remove contexto sem outra fonte, teste real SQL cobre retenção compartilhada e remoção da última fonte. Esta correção pertence ao mesmo contrato; foi concluída antes do deploy. Os três módulos publicados de normalização/histórico anteriores foram comparados integralmente com knowledge-agent20 e permanecem idênticos; entrada nova tem o mesmo gateway JWT e segredo do monitor.
+
+Dispatcher: somente nova migração, knowledge-agent e web; Parser/Paddle/synthesis/mail não são destinos. A recomendação genérica `pnpm run test` foi reduzida à cobertura dirigida acima conforme AGENTS8/10; CI obrigatório executa a foundation completa. Primeiro CI funcional38765060578 SUCCESS; correção de preservação exige novo CI no SHA final. Publicação ainda não comprovada nesta etapa.
 
 ---
 

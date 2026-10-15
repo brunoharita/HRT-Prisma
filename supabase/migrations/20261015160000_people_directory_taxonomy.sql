@@ -81,6 +81,23 @@ language plpgsql security definer set search_path='' as $$begin perform private.
 create trigger capture_people_directory after insert or update of review_status,superseded_at on public.professional_profiles
   for each row execute function private.capture_people_directory();
 
+-- Respect the existing person deletion lifecycle, including historical taxonomy keys.
+-- An identical context may be shared inside the tenant; retain only while a source exists.
+create function private.purge_deleted_people_directory() returns trigger
+language plpgsql security definer set search_path='' as $$
+begin
+  delete from public.people_directory_contexts c where c.organization_id=old.organization_id
+    and exists(select 1 from jsonb_array_elements(case when jsonb_typeof(old.profile_data->'experiences')='array'
+      then old.profile_data->'experiences' else '[]'::jsonb end) e
+      where private.people_directory_input(e,old.profile_data->'areasOfExpertise')=c.input)
+    and not exists(select 1 from public.professional_profiles p cross join lateral jsonb_array_elements(
+      case when jsonb_typeof(p.profile_data->'experiences')='array' then p.profile_data->'experiences' else '[]'::jsonb end) e
+      where p.organization_id=c.organization_id and private.people_directory_input(e,p.profile_data->'areasOfExpertise')=c.input);
+  return old;
+end $$;
+create trigger purge_deleted_people_directory after delete on public.professional_profiles
+  for each row execute function private.purge_deleted_people_directory();
+
 -- Library publication invalidates the cache automatically, without a list-open write.
 create function private.refresh_people_directory_knowledge() returns trigger
 language plpgsql security definer set search_path='' as $$
@@ -211,7 +228,7 @@ begin
 end $$;
 
 revoke all on function private.people_directory_input(jsonb,jsonb),private.people_directory_key(uuid,jsonb),private.people_directory_level(text),
-  private.people_directory_allowed(uuid,uuid,text),private.enqueue_people_directory(uuid),private.capture_people_directory(),private.refresh_people_directory_knowledge()
+  private.people_directory_allowed(uuid,uuid,text),private.enqueue_people_directory(uuid),private.capture_people_directory(),private.purge_deleted_people_directory(),private.refresh_people_directory_knowledge()
   from public,anon,authenticated;
 revoke all on function public.claim_people_directory(),public.reserve_people_directory_call(uuid,uuid,integer,integer),public.complete_people_directory(uuid,uuid,jsonb,text) from public,anon,authenticated;
 grant execute on function public.claim_people_directory(),public.reserve_people_directory_call(uuid,uuid,integer,integer),public.complete_people_directory(uuid,uuid,jsonb,text) to service_role;

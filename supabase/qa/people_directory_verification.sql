@@ -70,3 +70,10 @@ select public.complete_people_directory((job->>'id')::uuid,(job->>'lease')::uuid
 select m83_assert(public.get_people_directory(m83_id('a'))->0->'areas'->0->>'method'='ai_grouping','AI association is explicitly derived navigation');
 select private.enqueue_people_directory(m83_id('profile'));
 select m83_assert(public.claim_people_directory() is null,'unchanged context is not queried again');
+insert into public.people(id,organization_id,full_name) values(m83_id('second-person'),m83_id('a'),'Outro sintético');
+insert into public.professional_profiles(id,organization_id,person_id,profile_data,extraction_version,inference_version,embedding_version,prompt_version,model_version,profile_version,review_status,approved_at)
+ select m83_id('shared-profile'),organization_id,m83_id('second-person'),profile_data,'fixture','none','none','fixture','fixture',1,'approved',now() from public.professional_profiles where id=m83_id('profile');
+delete from public.professional_profiles where id=m83_id('profile');
+select m83_assert(exists(select 1 from public.people_directory_contexts where input->>'role'='Coordenador de TI'),'shared context retained while another source exists');
+delete from public.professional_profiles where id=m83_id('shared-profile');
+select m83_assert(not exists(select 1 from public.people_directory_contexts where input->>'role'='Coordenador de TI'),'last person source deletion purges derived context');

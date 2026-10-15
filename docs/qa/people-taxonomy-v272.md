@@ -29,3 +29,13 @@ Execução: implementar integralmente D-01..05/P-01..02, preservar F-01, usar A-
 | Publicação web/banco/knowledge-agent | direct | dispatcher, rollback, CI, health/versão e smoke autenticado |
 
 Fechamento exige CA-01, owner docs/contexto/ledger, evidências e publicação dos destinos derivados do diff. Sem QA remoto separado, integração sensível usa PostgreSQL local isolado antes de produção. Estado inicial dos acordos: NOT TESTED. AoT final será completado com resultados, sem presumir sucesso.
+
+## Validação local e preservação
+
+18 testes Node dirigidos (diretório, cronologia e destaques existentes, versão), 4 testes Deno (worker novo e normalização anterior), 22 testes de tooling/contexto, checagem Deno do entrypoint completo, tipos root/web, build web, lint/contexto/ledger PASS. SQL isolado executa resolver, papéis/RLS reais do schema local; tabelas novas de classificação vêm do DDL existente, fila antiga é fixture mínima para testar orçamento, cron.schedule é stub sem rede. Cobre 27 verificações, incluindo alias, nível, áreas gerais, candidatos/lease inválidos, caps ausentes/zero, orçamento compartilhado, recruiter/member/anon/tenant, despublicação, supersessão, contexto sem fonte, cache e exclusão compartilhada. Não prova execução real do cron/provider, que depende do smoke de publicação.
+
+Browser sintético usa componentes de produção e transportes locais, sem banco/provedor remoto: desktop1448 e celular390; colunas, cargo original, combinação na mesma experiência, trajetória, limpeza, ausência do agrupamento e navegação PASS, zero erros e zero chamadas externas. Evidências `evidence/people-taxonomy-v272/browser`. Referência inicial é contraprova; mantém tabela clara, hierarquia/ações existentes e agrupamento próximo dos filtros, sem redesenho adicional. Celular usa rolagem interna da tabela, sem overflow da página.
+
+Descoberta de preservação: cache sem FK de pessoa poderia sobreviver à exclusão. Mapa revisado: exclusão é `critical_transversal`; trigger remove contexto sem outra fonte, teste real SQL cobre retenção compartilhada e remoção da última fonte. Esta correção pertence ao mesmo contrato; foi concluída antes do deploy. Os três módulos publicados de normalização/histórico anteriores foram comparados integralmente com knowledge-agent20 e permanecem idênticos; entrada nova tem o mesmo gateway JWT e segredo do monitor.
+
+Dispatcher: somente nova migração, knowledge-agent e web; Parser/Paddle/synthesis/mail não são destinos. A recomendação genérica `pnpm run test` foi reduzida à cobertura dirigida acima conforme AGENTS8/10; CI obrigatório executa a foundation completa. Primeiro CI funcional38765060578 SUCCESS; correção de preservação exige novo CI no SHA final. Publicação ainda não comprovada nesta etapa.
