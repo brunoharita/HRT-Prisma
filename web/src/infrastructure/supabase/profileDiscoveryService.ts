@@ -1,3 +1,4 @@
+import { loadPersonCandidacies } from "./personRelationshipService";
 import type { PostgrestError } from "@supabase/supabase-js";
 import {
   searchPublishedProfiles,
@@ -104,9 +105,10 @@ async function materializePublishedProfileCandidates(
   profiles: Array<{ id: string; person_id: string; profile_version: number; profile_data: import("./database.types.js").Json; approved_at: string | null; created_at: string }>,
 ): Promise<PublishedProfileCandidate[]> {
   const ids = profiles.map((profile) => profile.person_id);
+  const candidacies = includePrivateLocation ? await loadPersonCandidacies(organizationId,ids) : new Map<string,boolean>();
   const [peopleResult, privateResult, observations] = await Promise.all([
     supabase.from("people")
-      .select("id, full_name, lifecycle, operational_status")
+      .select("id, full_name, lifecycle, is_active_employee, operational_status")
       .eq("organization_id", organizationId)
       .in("id", ids)
       .neq("operational_status", "merged"),
@@ -135,6 +137,8 @@ async function materializePublishedProfileCandidates(
       personId: person.id,
       fullName: person.full_name,
       lifecycle: person.lifecycle,
+      isActiveEmployee: person.is_active_employee === true,
+      isCandidate: candidacies.get(person.id) === true,
       operationalStatus: person.operational_status,
       location: locations.get(person.id) ?? null,
       profileId: profile.id,

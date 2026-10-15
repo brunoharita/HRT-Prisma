@@ -149,4 +149,4 @@ const educationLevels = [
   { label: "Graduação", value: "undergraduate" }, { label: "Pós-graduação", value: "postgraduate" },
 ];
 const languageLevels = [{ label: "Básico", value: "basico" }, { label: "Intermediário", value: "intermediario" }, { label: "Avançado", value: "avancado" }, { label: "Fluente ou nativo", value: "fluente" }];
-const lifecycleOptions = [{ label: "Candidato", value: "candidate" }, { label: "Colaborador", value: "employee" }, { label: "Ex-colaborador", value: "former_employee" }, { label: "Ex-candidato", value: "former_candidate" }, { label: "Banco de talentos", value: "talent_pool" }];
+const lifecycleOptions = [{ label: "Candidato", value: "candidate" }, { label: "Colaborador", value: "employee" }];

@@ -1,3 +1,4 @@
+import { loadPersonCandidacies } from "./personRelationshipService";
 import type { Json } from "./database.types";
 import { supabase } from "./client";
 import { normalizeDraftPeriods } from "../../domain/resumeDates.js";
@@ -289,6 +290,7 @@ export const personIngestionService = {
       .maybeSingle();
     throwIfError(error, "Não foi possível carregar a Pessoa.");
     if (!person) return null;
+    const candidacies = await loadPersonCandidacies(organizationId,[personId]).catch(() => new Map<string,boolean>());
     const [privateResult, documentResult, profileResult, reviewResult] = await Promise.all([
       supabase.from("person_private_data")
         .select("person_id, email, phone_e164, phone_country_iso2, phone_country_label, phone_country_code, phone_national_number, birth_date, city, country_code, notes")
@@ -342,10 +344,10 @@ export const personIngestionService = {
     throwIfError(draftResult.error, "Não foi possível carregar os dados estruturados.");
     return {
       manualReviews: (reviewResult.data ?? []).filter(r => r.source_kind === "manual").map(r => ({ id: r.id, state: r.state, createdAt: r.created_at })),
-      person: toPersonSummary(person, privateResult.data ?? undefined, {
+      person: {...toPersonSummary(person, privateResult.data ?? undefined, {
         currentProfile: currentProfileRow ? toCurrentProfileSummary(currentProfileRow) : null,
         documents: timeline,
-      }),
+      }), isCandidate: candidacies.get(personId)},
       documents: timeline,
       selectedDocument,
       pages: (pageResult.data ?? []).map((page) => ({

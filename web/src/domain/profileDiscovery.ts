@@ -1,3 +1,4 @@
+import { personRelationshipLabels } from "./personRelationship.js";
 import { buildPrismaProfileView, type CanonicalKnowledgeTerm, type PrismaProfileView } from "./canonicalProfile.js";
 import type { StructuredDraft } from "./personIngestion.js";
 import { parseResumePeriod, resumePeriodDurationDays } from "../../../src/domain/resumeDates.js";
@@ -26,6 +27,8 @@ export interface ProfileSearchQuery {
 }
 
 export interface PublishedProfileCandidate {
+  isActiveEmployee?: boolean;
+  isCandidate?: boolean;
   personId: string;
   fullName: string;
   lifecycle: string;
@@ -91,7 +94,8 @@ export function searchPublishedProfiles(
     if (query.educationLevel && !education.some((item) => item.level === query.educationLevel)) return [];
     if (query.certification && !candidate.profileData.certifications.some((item) => includes(item, query.certification))) return [];
     if (query.language && !candidate.profileData.languages.some((item) => languageMatches(item, query.language, query.languageLevel))) return [];
-    if (query.lifecycle && candidate.lifecycle !== query.lifecycle) return [];
+    if (query.lifecycle === "employee" && !candidate.isActiveEmployee) return [];
+    if (query.lifecycle === "candidate" && !candidate.isCandidate) return [];
     if (query.operationalStatus && candidate.operationalStatus !== query.operationalStatus) return [];
     if (query.city && !matchesText(candidate.location, query.city)) return [];
 
@@ -100,7 +104,7 @@ export function searchPublishedProfiles(
       fullName: candidate.fullName,
       profile: candidate.profileData,
       location: candidate.location,
-      lifecycleLabel: lifecycleLabel(candidate.lifecycle),
+      lifecycleLabel: personRelationshipLabels(candidate).join(" · ") || null,
       operationalStatusLabel: candidate.operationalStatus === "active" ? "Ativo" : "Arquivado",
       knowledge: candidate.knowledge,
       version: { profileId: candidate.profileId, number: candidate.profileVersion, publishedAt: candidate.publishedAt, current: true },
@@ -192,8 +196,4 @@ function unique(values: string[]): string[] {
 
 function formatYears(value: number): string {
   return `${new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 1 }).format(value)} ${value === 1 ? "ano" : "anos"}`;
-}
-
-function lifecycleLabel(value: string): string {
-  return ({ candidate: "Candidato", employee: "Colaborador", former_employee: "Ex-colaborador", former_candidate: "Ex-candidato", talent_pool: "Banco de talentos" } as Record<string, string>)[value] ?? "Pessoa";
 }

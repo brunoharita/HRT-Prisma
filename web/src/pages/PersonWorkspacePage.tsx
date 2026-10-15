@@ -364,14 +364,6 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate, re
     finally { setBusy(false); }
   }
 
-  async function changeLifecycle(lifecycle: string) {
-    if (!workspace) return;
-    setBusy(true); setError(null);
-    try { await personIngestionService.updateLifecycle(activeMembership.organizationId, personId, lifecycle, workspace.person.updatedAt); await refresh(); setSuccess("Vínculo da Pessoa atualizado sem criar uma nova versão de Perfil."); }
-    catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível atualizar o vínculo."); }
-    finally { setBusy(false); }
-  }
-
   function toggleArchive() {
     if (!workspace) return;
     const archive = workspace.person.operationalStatus !== "archived";
@@ -536,7 +528,7 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate, re
 
   const header = (<PersonCenterHeader
         canManual={activeMembership.role !== "member"}
-        isActiveEmployee={workspace.person.isActiveEmployee === true}
+        isActiveEmployee={workspace.person.operationalStatus === "active" && workspace.person.isActiveEmployee === true}
         onManual={() => void (async () => {
           setBusy(true); setError(null);
           try { const result = await personIngestionService.startManualProfile(activeMembership.organizationId,personId,{fullName:workspace.person.fullName,email:"",phone:""},false,`manual-existing:${personId}:${crypto.randomUUID()}`); onNavigate(`/profiles/${personId}/reviews/${result.reviewId}`); }
@@ -545,13 +537,12 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate, re
         })()}
         canDeletePerson={canDeletePerson}
         model={viewModel}
-        lifecycle={workspace.person.lifecycle}
+        isCandidate={workspace.person.isCandidate}
         operationalStatus={workspace.person.operationalStatus}
         onBack={() => onNavigate("/profiles")}
         onArchive={toggleArchive}
         onCreateRevision={() => { setRevisionSource(currentProfileVersion ? "current" : "document"); setRevisionVersionId(profileVersions.find((item) => item.supersededAt)?.id ?? null); setRevisionDocumentId(workspace.documents[0]?.id ?? null); setRevisionOpen(true); }}
         onEdit={() => onNavigate(`/profiles/${personId}/edit`)}
-        onLifecycle={(value) => void changeLifecycle(value)}
         onMerge={() => onNavigate(`/profiles/${personId}/merge`)}
         onDeletePerson={() => void handleDeletePerson()}
         onIssueSelfAccess={issueSelfServiceAccess}
@@ -595,9 +586,9 @@ function PersonCenterSkeleton() {
   return <div className="prisma-person-center-skeleton"><Skeleton active avatar paragraph={{ rows: 3 }} /><div className="prisma-person-center-skeleton__grid"><Skeleton active paragraph={{ rows: 5 }} /><Skeleton active paragraph={{ rows: 5 }} /></div><Skeleton active paragraph={{ rows: 10 }} /></div>;
 }
 
-function PersonCenterHeader({ canManual, isActiveEmployee, onManual, model, lifecycle, operationalStatus, canDeletePerson, onBack, onCreateRevision, onEdit, onImport, onVersions, onOpenOperations, onArchive, onMerge, onDeletePerson, onIssueSelfAccess, onLifecycle }: {
+function PersonCenterHeader({ canManual, isActiveEmployee, onManual, model, isCandidate, operationalStatus, canDeletePerson, onBack, onCreateRevision, onEdit, onImport, onVersions, onOpenOperations, onArchive, onMerge, onDeletePerson, onIssueSelfAccess }: {
   model: PersonCenterViewModel;
-  lifecycle: string;
+  isCandidate?: boolean | undefined;
   operationalStatus: "active" | "archived" | "merged" | "deleting";
   canDeletePerson: boolean;
   canManual: boolean;
@@ -613,18 +604,17 @@ function PersonCenterHeader({ canManual, isActiveEmployee, onManual, model, life
   onIssueSelfAccess: (contactKind: "email" | "phone") => void;
   onImport: () => void;
   onVersions: () => void;
-  onLifecycle: (value: string) => void;
 }) {
   return (
     <header className="prisma-person-center-header">
       <Button className="prisma-person-center-header__back" onClick={onBack} type="text">Ir para Pessoas</Button>
       <div className="prisma-person-center-header__main">
         <div className="prisma-person-center-header__identity">
-          <div className="prisma-person-identity-name"><div className="prisma-canonical-avatar" aria-hidden="true">{model.identity.fullName.trim().split(/\s+/).slice(0, 2).map(part => part[0]).join("").toUpperCase()}</div><Typography.Title level={1}>{model.identity.fullName}</Typography.Title></div>{isActiveEmployee ? <Tag color="blue">Funcionário ativo da empresa</Tag> : null}
+          <div className="prisma-person-identity-name"><div className="prisma-canonical-avatar" aria-hidden="true">{model.identity.fullName.trim().split(/\s+/).slice(0, 2).map(part => part[0]).join("").toUpperCase()}</div><Typography.Title level={1}>{model.identity.fullName}</Typography.Title></div>{isActiveEmployee ? <Tag color="blue">Colaborador</Tag> : null}
           {model.identity.professionalTitle ? <Typography.Paragraph className="prisma-person-center-header__title">{model.identity.professionalTitle}</Typography.Paragraph> : null}
           <div className="prisma-person-center-header__metadata">
             {model.identity.location ? <span><EnvironmentOutlined /> {model.identity.location}</span> : null}
-            <Tag color="blue">{lifecycle === "candidate" ? "Candidato" : lifecycle === "employee" ? "Colaborador" : "Banco de talentos"}</Tag><Tag color={operationalStatus === "active" ? "green" : "default"}>{operationalStatus === "active" ? "Ativa" : operationalStatus === "archived" ? "Arquivada" : "Exclusão em andamento"}</Tag>
+            {isCandidate ? <Tag color="blue">Candidato</Tag> : null}{isCandidate === undefined ? <Typography.Text type="secondary">Participação não verificada</Typography.Text> : null}<Tag color={operationalStatus === "active" ? "green" : "default"}>{operationalStatus === "active" ? "Ativa" : operationalStatus === "archived" ? "Arquivada" : "Exclusão em andamento"}</Tag>
           </div>
         </div>
         <Space className="prisma-person-center-header__actions" wrap>
@@ -635,9 +625,6 @@ function PersonCenterHeader({ canManual, isActiveEmployee, onManual, model, life
           <Dropdown menu={{ items: [
             { key: "merge", disabled: operationalStatus === "deleting", icon: <UserSwitchOutlined />, label: "Mesclar Pessoas", onClick: onMerge },
             { type: "divider" },
-            { key: "candidate", label: "Vínculo: Candidato", disabled: operationalStatus === "deleting" || lifecycle === "candidate", onClick: () => onLifecycle("candidate") },
-            { key: "employee", label: "Vínculo: Colaborador", disabled: operationalStatus === "deleting" || lifecycle === "employee", onClick: () => onLifecycle("employee") },
-            { key: "talent_pool", label: "Vínculo: Banco de talentos", disabled: operationalStatus === "deleting" || lifecycle === "talent_pool", onClick: () => onLifecycle("talent_pool") },
             { type: "divider" },
             { key: "archive", disabled: operationalStatus === "deleting", danger: operationalStatus !== "archived", label: operationalStatus === "archived" ? "Reativar Pessoa" : "Arquivar Pessoa", onClick: onArchive },
             ...(canDeletePerson ? [

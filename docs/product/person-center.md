@@ -1,5 +1,9 @@
 # Página unificada da Pessoa
 
+## Identificação atual — 2.7.1
+
+Candidato é uma condição derivada de pelo menos uma participação em andamento em processo ativo nesta empresa. Participação concluída, decisão não prosseguir e processo encerrado não justificam a tag; outra participação válida mantém a condição. Colaborador exige Pessoa ativa e funcionário ativo confirmado como Sim. As duas tags coexistem; sem fatos correspondentes nenhuma aparece. Banco de talentos e os demais lifecycle antigos não são classificações atuais nem ações editáveis. O histórico persistido permanece intacto. Busca/comparação/Perfil usam as mesmas fontes atuais. Papéis sem acesso aos processos não recebem informação de candidatura.
+
 ## Entrada manual e funcionário ativo — 2.7.0
 
 Pessoas oferece **Preencher manualmente** ao lado de **Importar currículo**. Identificação inicial verifica duplicidades possíveis e permite abrir cadastro existente ou confirmar outra Pessoa. Editor estruturado reutiliza abas/navegação por registros da revisão, com grupos opcionais vazios recolhidos, adicionar/editar/remover listas e todas as seções profissionais existentes. Não requer PDF/IA. Nome identifica o rascunho; contato/conteúdo profissional mínimos continuam necessários para publicar. Salvar não aprova/publica. A Central indica rascunho disponível e permite retomada.

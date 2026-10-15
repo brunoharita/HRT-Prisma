@@ -10,7 +10,7 @@ import { PersonProfessionalEvidenceMap } from "../components/profile/PersonProfe
 import { buildPrismaProfileView } from "../domain/canonicalProfile";
 import type { ProfessionalEvidenceAssociation } from "../domain/personProfessionalEvidence";
 import type { PersonProfileView, PrismaDataRepository } from "../domain/prismaData";
-import { describeLifecycle } from "../domain/prismaData";
+import { personRelationshipLabels } from "../domain/personRelationship";
 import type { OrganizationMembership } from "../shared/access";
 import { PrismaCard } from "../ui/PrismaCard";
 import { PrismaPage } from "../ui/PrismaPage";
@@ -48,7 +48,7 @@ export function PersonProfilePage({ activeMembership, personId, repository, onNa
     fullName: view.person.fullName,
     profile: view.profile,
     location: view.privateContact?.location ?? null,
-    lifecycleLabel: describeLifecycle(view.person.lifecycle),
+    lifecycleLabel: personRelationshipLabels(view.person).join(" · ") || null,
     operationalStatusLabel: ({active:"Ativa",archived:"Arquivada",merged:"Mesclada",deleting:"Exclusão em andamento"} as Record<string,string>)[view.operationalStatus ?? ""] ?? null,
     knowledge: view.normalizedKnowledge.map((item) => ({ originalTerm: item.originalTerm, canonicalLabel: item.canonicalLabel, state: item.state })),
     version: {

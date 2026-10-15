@@ -90,6 +90,7 @@ export interface PersonEditorValue {
 }
 
 export interface PersonWorkspaceSummary {
+  isCandidate?: boolean | undefined;
   isActiveEmployee?: boolean;
   id: string;
   organizationId: string;

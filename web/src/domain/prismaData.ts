@@ -48,6 +48,8 @@ export interface PeopleQuery {
 }
 
 export interface PersonListItem {
+  isActiveEmployee?: boolean;
+  isCandidate?: boolean;
   id: string;
   organizationId: string;
   fullName: string;

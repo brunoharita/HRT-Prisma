@@ -1,3 +1,4 @@
+import { loadPersonCandidacies } from "./personRelationshipService";
 import type { PostgrestError } from "@supabase/supabase-js";
 import {
   DataAccessFailure,
@@ -233,13 +234,14 @@ export const prismaRepository: PrismaDataRepository = {
   async loadPersonProfile(organizationId, personId, role) {
     const { data: person, error } = await supabase
       .from("people")
-      .select("id, organization_id, full_name, lifecycle, operational_status, created_at")
+      .select("id, organization_id, full_name, lifecycle, is_active_employee, operational_status, created_at")
       .eq("organization_id", organizationId)
       .eq("id", personId)
       .maybeSingle();
     throwIfError(error, "Não foi possível carregar a pessoa solicitada.");
     if (!person) return null;
 
+    const candidacies = role !== "member" ? await loadPersonCandidacies(organizationId,[personId]) : new Map<string,boolean>();
     const profileRow = await loadCurrentProfileRow(organizationId, personId);
     const profile = profileRow ? decodeProfile(profileRow, person.full_name) : null;
     const [evidenceResult, inferenceResult, competencyResult, knowledgeResult, professionalEvidenceResult, contactResult] = await Promise.all([
@@ -264,7 +266,7 @@ export const prismaRepository: PrismaDataRepository = {
     throwIfError(inferenceResult.error, "Não foi possível carregar as inferências do perfil.");
 
     return {
-      person: toPersonListItem(person, Boolean(profile)),
+      person: {...toPersonListItem(person, Boolean(profile)),isActiveEmployee:person.operational_status === "active" && person.is_active_employee === true,isCandidate:candidacies.get(personId) === true},
       operationalStatus: readString(person.operational_status),
       profile,
       evidence: (evidenceResult.data ?? []).map((item) => ({

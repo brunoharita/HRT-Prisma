@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 488
-source_manifest_sha256: f03c833add960027ef99a74f6b669699e0a8bd846bca26f8fb841694e4fd3bfb
+documentation_source_count: 489
+source_manifest_sha256: c2cfc8e63ce287e9aa5fedd7dd12cc2527ae68b96807d8587efb6c5a9fab1387
 -->
 
 # Tudo sobre o Prisma
@@ -2643,11 +2643,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.76.0
+version: 2.76.1
 last_verified: 2026-10-15
 ---
 
 # Estado atual do Prisma
+
+## Tags factuais da Pessoa — 2.7.1
+
+Decisão aprovada: Candidato somente por participação em andamento em processo ativo; fechamento individual, decisão não prosseguir ou processo fechado excluem, outra participação válida mantém. Colaborador somente por Pessoa ativa/funcionário confirmado; podem coexistir. Banco de talentos e edição manual de lifecycle removidos da apresentação; dados/históricos preservados. Consulta minimizada reutiliza autorização de acompanhamento, sem ampliar acesso member e sem novos writers. Busca/comparação/Perfil alinhados. Acordo/execução/AoT e limites em `docs/qa/person-status-v271.md`.
 
 ## Perfil manual, funcionário ativo e tarifas por vigência — 2.7.0 publicada
 
@@ -12064,6 +12068,10 @@ Exemplos foram consolidados em regras sem virar dados reais; etapas recomendadas
 ## Source: `docs/product/person-center.md`
 
 # Página unificada da Pessoa
+
+## Identificação atual — 2.7.1
+
+Candidato é uma condição derivada de pelo menos uma participação em andamento em processo ativo nesta empresa. Participação concluída, decisão não prosseguir e processo encerrado não justificam a tag; outra participação válida mantém a condição. Colaborador exige Pessoa ativa e funcionário ativo confirmado como Sim. As duas tags coexistem; sem fatos correspondentes nenhuma aparece. Banco de talentos e os demais lifecycle antigos não são classificações atuais nem ações editáveis. O histórico persistido permanece intacto. Busca/comparação/Perfil usam as mesmas fontes atuais. Papéis sem acesso aos processos não recebem informação de candidatura.
 
 ## Entrada manual e funcionário ativo — 2.7.0
 
@@ -29844,6 +29852,22 @@ Para medir ganho em entregas futuras, registrar no AoT existente, sem nova taref
 ## Recuperação
 
 Interromper a ferramenta não altera produto ou dados remotos. A compilação atualiza somente os artefatos ignorados existentes. A seleção sem filtro permanece disponível; reverter este commit recupera o executor anterior. Não remover `tmp` inteiro: relatórios podem ser descartados individualmente após uso, preservando outros arquivos do usuário.
+
+---
+
+## Source: `docs/qa/person-status-v271.md`
+
+# Acordo, execução e AoT — 2.7.1
+
+Acordo1.0.0 aprovado por Bruno nesta conversa: D-01 Candidato somente por participação em andamento em processo ativo; encerramento individual ou decisão não prosseguir excluem, outra participação válida mantém. D-02 Colaborador somente por vínculo ativo confirmado, independente de candidatura. D-03 sem condição, sem tag; retirar Banco de talentos e edição manual da classificação. P-01 não inferir vínculo/candidatura nem modificar história, decisões, Perfil, Score ou processos. F-01 migração destrutiva dos antigos lifecycle, redesenho e mudanças de seleção. A-01 reutilizar autorização e estruturas existentes, preservar dados legados sem apresentação atual. CA-01 cobrir combinações, participação encerrada/rejeitada/processo fechado, tenant/role/anon e smoke publicado.
+
+Execução congelada: implementar integralmente D-01/02/03 e P-01 no branch codex/person-status-v271, baseline0ad3803; publicar2.7.1 em main/produção conforme autorização expressa. A imagem fornecida é contraprova do rótulo indevido; a estrutura visual permanece.
+
+Mapa GOV-01 antes da implementação: identificação/busca/comparação/filter são direct; dependências compartilhadas são consulta de Perfil/Pessoa e autorização de acompanhamento; processos/auth são critical_transversal, sem novo writer ou permissão de papel; PDF/manual/Tokens/Score/matching no_impact_identified após rastrear consumidores, pois somente atributos de apresentação e uma consulta read-only são afetados. Preservar origem das tags, fluxo manual/PDF, dados privados, histórico e permissões. Baseline funcional2.7.0/0ad3803. Validação mínima: tipos/build, testes dirigidos de tags/release, SQL isolado positivo/negativo, contexto/ledger/lint e CI obrigatório; smoke autenticado de leitura após deploy. Fechamento exige destinos do dispatcher, migration verificada, rollback e fontes sincronizadas.
+
+Implementação: RPC minimizado get_person_relationship_tags reutiliza authorize_position_follow_up, limita200 IDs, escopo organization/person e não expõe dados de decisões. Candidato exige processo ativo, etapa conhecida em andamento e ausência de decisão do_not_proceed. Colaborador vem exclusivamente de is_active_employee; duas tags coexistem. Superfícies abandonam lifecycle legado, incluindo ações e filtros de Banco de talentos. Dados históricos permanecem intactos. Member conserva autorização anterior: não consulta processos; ausência de acesso não cria candidatura. Falha opcional da consulta no workspace fica não verificada e preserva operação manual.
+
+AoT: evidências e estado operacional serão consolidados após validação/publicação. Teste SQL usa modelo isolado e stub do helper de autorização, sem afirmar teste integral do helper produtivo existente. Sem QA remoto separado, nenhum registro humano ou financeiro fictício em produção.
 
 ---
 

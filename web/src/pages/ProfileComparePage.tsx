@@ -1,3 +1,4 @@
+import { personRelationshipLabels } from "../domain/personRelationship";
 import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
 import { ProfileFilled as PrismaPageIcon } from "@ant-design/icons";
 import { useViewState } from "../ui/PrismaNavigation";
@@ -52,7 +53,7 @@ function toView(candidate: PublishedProfileCandidate): PrismaProfileView {
     fullName: candidate.fullName,
     profile: candidate.profileData,
     location: candidate.location,
-    lifecycleLabel: lifecycleLabel(candidate.lifecycle),
+    lifecycleLabel: personRelationshipLabels(candidate).join(" · ") || null,
     operationalStatusLabel: candidate.operationalStatus === "active" ? "Ativo" : "Arquivado",
     knowledge: candidate.knowledge,
     version: { profileId: candidate.profileId, number: candidate.profileVersion, publishedAt: candidate.publishedAt, current: true },
@@ -68,8 +69,4 @@ function ComparisonHighlights({ profile }: { profile: PrismaProfileView }) {
   ].filter((item): item is string => Boolean(item));
   if (!highlights.length) return null;
   return <section className="prisma-comparison-highlights"><Typography.Title level={3}>Destaques objetivos</Typography.Title><ul>{highlights.map((item) => <li key={item}><CheckOutlined /> {item}</li>)}</ul></section>;
-}
-
-function lifecycleLabel(value: string): string {
-  return ({ candidate: "Candidato", employee: "Colaborador", former_employee: "Ex-colaborador", former_candidate: "Ex-candidato", talent_pool: "Banco de talentos" } as Record<string, string>)[value] ?? "Pessoa";
 }

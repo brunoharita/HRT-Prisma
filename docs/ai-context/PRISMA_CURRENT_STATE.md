@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.76.0
+version: 2.76.1
 last_verified: 2026-10-15
 ---
 
 # Estado atual do Prisma
+
+## Tags factuais da Pessoa — 2.7.1
+
+Decisão aprovada: Candidato somente por participação em andamento em processo ativo; fechamento individual, decisão não prosseguir ou processo fechado excluem, outra participação válida mantém. Colaborador somente por Pessoa ativa/funcionário confirmado; podem coexistir. Banco de talentos e edição manual de lifecycle removidos da apresentação; dados/históricos preservados. Consulta minimizada reutiliza autorização de acompanhamento, sem ampliar acesso member e sem novos writers. Busca/comparação/Perfil alinhados. Acordo/execução/AoT e limites em `docs/qa/person-status-v271.md`.
 
 ## Perfil manual, funcionário ativo e tarifas por vigência — 2.7.0 publicada
 
