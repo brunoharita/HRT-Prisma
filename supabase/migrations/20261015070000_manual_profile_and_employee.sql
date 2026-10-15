@@ -98,6 +98,8 @@ create function private.assert_manual_profile_fields(payload jsonb) returns void
 language plpgsql immutable set search_path='' as $$
 declare field record; val text;
 begin
+  if not private.is_valid_structured_resume_summary(payload) or not private.is_valid_review_field_lifecycle(payload,true)
+    or not private.is_valid_education_classification(payload,true) then raise exception using errcode='22023',message='manual_contract_invalid'; end if;
   if length(btrim(coalesce(payload#>>'{identity,fullName}',''))) not between 2 and 160 then perform private.raise_review_action_required('full_name_required','identity.fullName'); end if;
   val:=nullif(btrim(payload#>>'{contact,email}'),'');
   if val is not null and (length(val)>320 or val !~ '^[^[:space:]@]+@[^[:space:]@]+\.[^[:space:]@]+$') then raise exception using errcode='22023',message='manual_email_invalid'; end if;
@@ -233,6 +235,11 @@ grant execute on function public.start_manual_profile_review(uuid,uuid,jsonb,boo
 -- Permit partial manual drafts only. Preserve all shape gates and PDF behavior.
 do $$ declare definition text; marker text;
 begin
+  definition:=pg_get_functiondef('public.save_profile_review(uuid,uuid,integer,jsonb,text,text)'::regprocedure);
+  marker:='  next_revision := review.lock_version + 1;';
+  if (length(definition)-length(replace(definition,marker,'')))/length(marker)<>1 then raise exception 'manual save preflight baseline changed'; end if;
+  execute replace(definition,marker,'  if review.source_kind=''manual'' then perform private.assert_manual_profile_fields(p_reviewed_data); end if;'||chr(10)||marker);
+
   definition:=pg_get_functiondef('private.enforce_saved_profile_review_lifecycle()'::regprocedure);
   marker:='  if nullif(btrim(new.reviewed_data #>> ''{contact,phone}''), '''') is null';
   if strpos(definition,marker)=0 then raise exception 'review contact guard baseline changed'; end if;

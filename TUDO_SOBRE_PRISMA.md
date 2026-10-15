@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 488
-source_manifest_sha256: 0f4ae673a60922875e35b3ee2e519bef6a70efba46bdcfb5e54041bc4610d0e8
+source_manifest_sha256: 592e7fce17f639b23d0e4f96ef31d1c1cb8c2ae488324ee11c305ff395b37eed
 -->
 
 # Tudo sobre o Prisma
@@ -21347,7 +21347,7 @@ Adaptações são previstas em D-M02/04/A-01. Alerta de erro espremido no celula
 
 ## Segurança, desvios e execução
 
-Novos RPCs exigem reviewer/tenant, limitam12 candidatos, verificam ator/fingerprint e serializam criação antes de existir Pessoa. Revisão/Perfil usam lock/base vigente. Dados privados novos são transacionais e separados; logs operacionais sem PII. Histórico obrigatório do vínculo não gera decisão de contratação/sucessão. Ausência de dado opcional não é fato negativo. Não há nova tecnologia/fornecedor ou desvio funcional identificado no escopo validado.
+Novos RPCs exigem reviewer/tenant, limitam12 candidatos, verificam ator/fingerprint e serializam criação antes de existir Pessoa. Revisão/Perfil usam lock/base vigente. Dados privados novos são transacionais e separados; logs operacionais sem PII. Preflight manual roda antes da inserção de revisão: conteúdo inválido recebe código sanitizado antes de uma constraint produzir detalhe com valores da linha. Negativa de e-mail inválido cobre esta fronteira. Histórico obrigatório do vínculo não gera decisão de contratação/sucessão. Ausência de dado opcional não é fato negativo. Não há nova tecnologia/fornecedor ou desvio funcional identificado no escopo validado.
 
 Baseline produtivo revelou inner `approve_profile_review` executável por authenticated, divergente da fronteira documental aprovada. A migration restaura a fronteira revogando essa entrada interna; o único consumidor frontend permanece `publish_profile_review`/Delta. Não amplia autoridade.
 

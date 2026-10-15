@@ -407,62 +407,62 @@ RESET
 
 ROLLBACK
 
-psql:tmp/manual-profile-local.sql:413: NOTICE:  PASS: anon cannot create manual profile
-psql:tmp/manual-profile-local.sql:414: NOTICE:  PASS: publication inner writer remains private
-psql:tmp/manual-profile-local.sql:415: NOTICE:  PASS: direct review writes remain denied
-psql:tmp/manual-profile-local.sql:419: NOTICE:  PASS: denied (22023)
-psql:tmp/manual-profile-local.sql:420: NOTICE:  PASS: denied (22023)
-psql:tmp/manual-profile-local.sql:422: NOTICE:  PASS: new Person defaults No and draft is not generated profile
-psql:tmp/manual-profile-local.sql:423: NOTICE:  PASS: manual draft does not fabricate document
-psql:tmp/manual-profile-local.sql:424: NOTICE:  PASS: manual draft does not fabricate extraction attempt
-psql:tmp/manual-profile-local.sql:425: NOTICE:  PASS: manual draft does not fabricate evidence
-psql:tmp/manual-profile-local.sql:426: NOTICE:  PASS: partial draft is never published
-psql:tmp/manual-profile-local.sql:427: NOTICE:  PASS: replay returns original draft
-psql:tmp/manual-profile-local.sql:428: NOTICE:  PASS: creation replay never duplicates Person
-psql:tmp/manual-profile-local.sql:429: NOTICE:  PASS: denied (23505)
-psql:tmp/manual-profile-local.sql:430: NOTICE:  PASS: duplicate exact normalized name
-psql:tmp/manual-profile-local.sql:431: NOTICE:  PASS: denied (23505)
-psql:tmp/manual-profile-local.sql:433: NOTICE:  PASS: manual origin is explicit without source document
-psql:tmp/manual-profile-local.sql:436: NOTICE:  PASS: partial draft saves without contact and resumes persisted
-psql:tmp/manual-profile-local.sql:437: NOTICE:  PASS: denied (22023)
-psql:tmp/manual-profile-local.sql:439: NOTICE:  PASS: failed publication preserves empty current profile
-psql:tmp/manual-profile-local.sql:440: NOTICE:  PASS: migration defaults existing Person to administrative No
-psql:tmp/manual-profile-local.sql:452: NOTICE:  PASS: all structured sections and multiple records saved
-psql:tmp/manual-profile-local.sql:453: NOTICE:  PASS: per-fact manual origin author and date stored
-psql:tmp/manual-profile-local.sql:454: NOTICE:  PASS: denied (P0001)
-psql:tmp/manual-profile-local.sql:455: NOTICE:  PASS: denied (23514)
-psql:tmp/manual-profile-local.sql:457: NOTICE:  PASS: human publication creates version with true manual provenance and private separation
-psql:tmp/manual-profile-local.sql:458: NOTICE:  PASS: contact persisted privately
-psql:tmp/manual-profile-local.sql:459: NOTICE:  PASS: publication replay reuses same version
-psql:tmp/manual-profile-local.sql:460: NOTICE:  PASS: publication replay does not duplicate version
-psql:tmp/manual-profile-local.sql:462: NOTICE:  PASS: existing current profile prefills every professional fact faithfully
-psql:tmp/manual-profile-local.sql:463: NOTICE:  PASS: private contact prefills from private registry
-psql:tmp/manual-profile-local.sql:464: NOTICE:  PASS: prefilled private data does not fabricate a new manual author or extraction origin
-psql:tmp/manual-profile-local.sql:465: NOTICE:  PASS: resume returns existing manual draft without reset
-psql:tmp/manual-profile-local.sql:469: NOTICE:  PASS: saving or leaving draft preserves entire published version
-psql:tmp/manual-profile-local.sql:471: NOTICE:  PASS: new version updates requested fact while omissions preserve prior experiences
-psql:tmp/manual-profile-local.sql:472: NOTICE:  PASS: previous historical version is preserved, only superseded timestamp changes
-psql:tmp/manual-profile-local.sql:473: NOTICE:  PASS: omitted preserved facts keep original manual provenance
-psql:tmp/manual-profile-local.sql:475: NOTICE:  PASS: authorized reviewer sets active employee Yes
-psql:tmp/manual-profile-local.sql:476: NOTICE:  PASS: employee Yes has mandatory author date history
-psql:tmp/manual-profile-local.sql:478: NOTICE:  PASS: employee No records second immutable historical change
-psql:tmp/manual-profile-local.sql:479: NOTICE:  PASS: employee changes never change current professional version
-psql:tmp/manual-profile-local.sql:480: NOTICE:  PASS: denied (23502)
-psql:tmp/manual-profile-local.sql:481: NOTICE:  PASS: duplicate normalized email
-psql:tmp/manual-profile-local.sql:482: NOTICE:  PASS: duplicate normalized phone
-psql:tmp/manual-profile-local.sql:483: NOTICE:  PASS: denied (42501)
-psql:tmp/manual-profile-local.sql:484: NOTICE:  PASS: denied (42501)
-psql:tmp/manual-profile-local.sql:486: NOTICE:  PASS: denied (42501)
-psql:tmp/manual-profile-local.sql:487: NOTICE:  PASS: denied (42501)
-psql:tmp/manual-profile-local.sql:488: NOTICE:  PASS: denied (42501)
-psql:tmp/manual-profile-local.sql:490: NOTICE:  PASS: member cannot alter active employee through direct DML
-psql:tmp/manual-profile-local.sql:492: NOTICE:  PASS: denied (42501)
+psql:tmp/manual-profile-local.sql:420: NOTICE:  PASS: anon cannot create manual profile
+psql:tmp/manual-profile-local.sql:421: NOTICE:  PASS: publication inner writer remains private
+psql:tmp/manual-profile-local.sql:422: NOTICE:  PASS: direct review writes remain denied
+psql:tmp/manual-profile-local.sql:426: NOTICE:  PASS: denied (22023)
+psql:tmp/manual-profile-local.sql:427: NOTICE:  PASS: denied (22023)
+psql:tmp/manual-profile-local.sql:429: NOTICE:  PASS: new Person defaults No and draft is not generated profile
+psql:tmp/manual-profile-local.sql:430: NOTICE:  PASS: manual draft does not fabricate document
+psql:tmp/manual-profile-local.sql:431: NOTICE:  PASS: manual draft does not fabricate extraction attempt
+psql:tmp/manual-profile-local.sql:432: NOTICE:  PASS: manual draft does not fabricate evidence
+psql:tmp/manual-profile-local.sql:433: NOTICE:  PASS: partial draft is never published
+psql:tmp/manual-profile-local.sql:434: NOTICE:  PASS: replay returns original draft
+psql:tmp/manual-profile-local.sql:435: NOTICE:  PASS: creation replay never duplicates Person
+psql:tmp/manual-profile-local.sql:436: NOTICE:  PASS: denied (23505)
+psql:tmp/manual-profile-local.sql:437: NOTICE:  PASS: duplicate exact normalized name
+psql:tmp/manual-profile-local.sql:438: NOTICE:  PASS: denied (23505)
+psql:tmp/manual-profile-local.sql:440: NOTICE:  PASS: manual origin is explicit without source document
+psql:tmp/manual-profile-local.sql:443: NOTICE:  PASS: partial draft saves without contact and resumes persisted
+psql:tmp/manual-profile-local.sql:444: NOTICE:  PASS: denied (22023)
+psql:tmp/manual-profile-local.sql:446: NOTICE:  PASS: failed publication preserves empty current profile
+psql:tmp/manual-profile-local.sql:447: NOTICE:  PASS: migration defaults existing Person to administrative No
+psql:tmp/manual-profile-local.sql:459: NOTICE:  PASS: all structured sections and multiple records saved
+psql:tmp/manual-profile-local.sql:460: NOTICE:  PASS: per-fact manual origin author and date stored
+psql:tmp/manual-profile-local.sql:461: NOTICE:  PASS: denied (P0001)
+psql:tmp/manual-profile-local.sql:462: NOTICE:  PASS: denied (22023)
+psql:tmp/manual-profile-local.sql:464: NOTICE:  PASS: human publication creates version with true manual provenance and private separation
+psql:tmp/manual-profile-local.sql:465: NOTICE:  PASS: contact persisted privately
+psql:tmp/manual-profile-local.sql:466: NOTICE:  PASS: publication replay reuses same version
+psql:tmp/manual-profile-local.sql:467: NOTICE:  PASS: publication replay does not duplicate version
+psql:tmp/manual-profile-local.sql:469: NOTICE:  PASS: existing current profile prefills every professional fact faithfully
+psql:tmp/manual-profile-local.sql:470: NOTICE:  PASS: private contact prefills from private registry
+psql:tmp/manual-profile-local.sql:471: NOTICE:  PASS: prefilled private data does not fabricate a new manual author or extraction origin
+psql:tmp/manual-profile-local.sql:472: NOTICE:  PASS: resume returns existing manual draft without reset
+psql:tmp/manual-profile-local.sql:476: NOTICE:  PASS: saving or leaving draft preserves entire published version
+psql:tmp/manual-profile-local.sql:478: NOTICE:  PASS: new version updates requested fact while omissions preserve prior experiences
+psql:tmp/manual-profile-local.sql:479: NOTICE:  PASS: previous historical version is preserved, only superseded timestamp changes
+psql:tmp/manual-profile-local.sql:480: NOTICE:  PASS: omitted preserved facts keep original manual provenance
+psql:tmp/manual-profile-local.sql:482: NOTICE:  PASS: authorized reviewer sets active employee Yes
+psql:tmp/manual-profile-local.sql:483: NOTICE:  PASS: employee Yes has mandatory author date history
+psql:tmp/manual-profile-local.sql:485: NOTICE:  PASS: employee No records second immutable historical change
+psql:tmp/manual-profile-local.sql:486: NOTICE:  PASS: employee changes never change current professional version
+psql:tmp/manual-profile-local.sql:487: NOTICE:  PASS: denied (23502)
+psql:tmp/manual-profile-local.sql:488: NOTICE:  PASS: duplicate normalized email
+psql:tmp/manual-profile-local.sql:489: NOTICE:  PASS: duplicate normalized phone
+psql:tmp/manual-profile-local.sql:490: NOTICE:  PASS: denied (42501)
+psql:tmp/manual-profile-local.sql:491: NOTICE:  PASS: denied (42501)
+psql:tmp/manual-profile-local.sql:493: NOTICE:  PASS: denied (42501)
 psql:tmp/manual-profile-local.sql:494: NOTICE:  PASS: denied (42501)
-psql:tmp/manual-profile-local.sql:503: NOTICE:  PASS: only explicit human removal removes the selected stable record
-psql:tmp/manual-profile-local.sql:504: NOTICE:  PASS: explicit removal remains in immutable audit
-psql:tmp/manual-profile-local.sql:507: NOTICE:  PASS: denied (P0001)
-psql:tmp/manual-profile-local.sql:508: NOTICE:  PASS: current-version conflict preserves manual draft
-psql:tmp/manual-profile-local.sql:509: NOTICE:  PASS: failed stale publication preserves the current restored profile
-psql:tmp/manual-profile-local.sql:510: NOTICE:  PASS: restoration preserves original manual fact provenance
-psql:tmp/manual-profile-local.sql:511: NOTICE:  PASS: manual lifecycle still has zero fabricated documents and evidence
-psql:tmp/manual-profile-local.sql:513: NOTICE:  PASS: manual draft and publication never enqueue synthesis AI
+psql:tmp/manual-profile-local.sql:495: NOTICE:  PASS: denied (42501)
+psql:tmp/manual-profile-local.sql:497: NOTICE:  PASS: member cannot alter active employee through direct DML
+psql:tmp/manual-profile-local.sql:499: NOTICE:  PASS: denied (42501)
+psql:tmp/manual-profile-local.sql:501: NOTICE:  PASS: denied (42501)
+psql:tmp/manual-profile-local.sql:510: NOTICE:  PASS: only explicit human removal removes the selected stable record
+psql:tmp/manual-profile-local.sql:511: NOTICE:  PASS: explicit removal remains in immutable audit
+psql:tmp/manual-profile-local.sql:514: NOTICE:  PASS: denied (P0001)
+psql:tmp/manual-profile-local.sql:515: NOTICE:  PASS: current-version conflict preserves manual draft
+psql:tmp/manual-profile-local.sql:516: NOTICE:  PASS: failed stale publication preserves the current restored profile
+psql:tmp/manual-profile-local.sql:517: NOTICE:  PASS: restoration preserves original manual fact provenance
+psql:tmp/manual-profile-local.sql:518: NOTICE:  PASS: manual lifecycle still has zero fabricated documents and evidence
+psql:tmp/manual-profile-local.sql:520: NOTICE:  PASS: manual draft and publication never enqueue synthesis AI
