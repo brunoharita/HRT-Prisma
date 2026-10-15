@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 494
-source_manifest_sha256: d95ee3662e0d606b7e3fbe03999a660b1d68e381cc6067af4669d250e89fef03
+source_manifest_sha256: 4cbae2a97ea48ba9ff1e3cc5a9f75e8f02ce8be40804e0ead2a4b4c2f4df7e60
 -->
 
 # Tudo sobre o Prisma
@@ -30298,6 +30298,8 @@ Evidência local em `evidence/professional-areas-v274`: SQL descartável, browse
 GOV-01 final: resolvers genéricos/normalização de competências reclassificados como `direct` para excluir o novo tipo e impedir que aliases de macroáreas contaminem competências. Prova SQL de RH unresolved na normalização genérica e rejeição do vínculo/classificação como competência; funções/Score/matching/seleção/tarifas preservados, sem novos consumidores dessas informações. Relacionamentos restantes iguais ao mapa inicial. F-01 preservado no diff: sem hierarquia formal ou merge de identidades. Referência visual é contraprova anterior; mantém editor/tabela/componentes existentes, não há mockup normativo novo.
 
 Limites: QA sintético local não prova acurácia empírica da classificação nem comportamento autenticado de todos os tenants. Catálogo IA limitado a60candidatos; todos os registros continuam selecionáveis manualmente. IA gradual dentro dos caps existentes, sem orçamento novo. Publicação/CI/smoke/sincronização ainda em andamento; status operacional PARTIAL até receipt.
+
+Dependência descoberta no CI38804302185: decodificador gerado do matching exige sincronização exata com personIngestionService. Gerado novamente (somente retenção dos dois campos opcionais), matching-trajectory passa a destino direto de compatibilidade. Regressão mínima:3testes matchingRuntime (paridade de datas/score/decoder), sem alteração de regras/prompt/modelo. Primeiro CI falhou por snapshot desatualizado, nenhum destino produtivo foi alterado antes de corrigir.
 
 ---
 
