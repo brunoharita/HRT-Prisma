@@ -1,0 +1,1189 @@
+{
+  "date": "2026-10-14",
+  "projectRef": "ioldpnqqvobprjiontre",
+  "implementationSha": "1b763ad09baf0b973d40e85efd9a0f4a33e06dcb",
+  "functionalSha": "0f7d8dd9137f22d13552875be3ee28c5fd11124c",
+  "version": "2.6.2",
+  "migration": {
+    "version": "20261015020049",
+    "name": "tokens_calendar_wallet",
+    "sha256": "fc0065bdeb92f6ac52ea5b9bb847ab4177874d4e898051b4db86b1e7da1ffa20"
+  },
+  "ci": {
+    "implementationFeature": 38668393341,
+    "implementationMain": 38668568152,
+    "correctedFeature": 38669159290,
+    "correctedMain": 38669375301,
+    "conclusion": "success"
+  },
+  "preservation": {
+    "protectedData": true,
+    "debitHistory": true,
+    "lotAmounts": true,
+    "tableSecurity": true,
+    "unchangedConsumerFunctions": true,
+    "aclOfReplacedFunctions": true
+  },
+  "protectedAfter": [
+    {
+      "evidence": {
+        "debits": {
+          "count": 4,
+          "fingerprint": "1abadde47e217214f52f46d0789ea9f4"
+        },
+        "security": [
+          {
+            "acl": "{postgres=arwdDxtm/postgres}",
+            "rls": true,
+            "name": "private.prisma_token_accounts"
+          },
+          {
+            "acl": "{postgres=arwdDxtm/postgres}",
+            "rls": true,
+            "name": "private.prisma_token_allocations"
+          },
+          {
+            "acl": "{postgres=arwdDxtm/postgres}",
+            "rls": true,
+            "name": "private.prisma_token_lots"
+          },
+          {
+            "acl": "{postgres=arwdDxtm/postgres}",
+            "rls": true,
+            "name": "private.prisma_token_movements"
+          },
+          {
+            "acl": "{postgres=arwdDxtm/postgres}",
+            "rls": true,
+            "name": "private.prisma_token_orders"
+          },
+          {
+            "acl": "{postgres=arwdDxtm/postgres}",
+            "rls": true,
+            "name": "private.prisma_token_packages"
+          },
+          {
+            "acl": "{postgres=arwdDxtm/postgres}",
+            "rls": true,
+            "name": "private.prisma_token_quotes"
+          },
+          {
+            "acl": "{postgres=arwdDxtm/postgres}",
+            "rls": true,
+            "name": "private.prisma_token_rates"
+          },
+          {
+            "acl": "{postgres=arwdDxtm/postgres}",
+            "rls": true,
+            "name": "private.prisma_token_reservations"
+          }
+        ],
+        "functions": [
+          {
+            "acl": "{postgres=X/postgres,service_role=X/postgres}",
+            "body": "c78b0dcaa4c53246fb23e45e722b8ff7",
+            "signature": "assessment_activity_analysis_finish(uuid,uuid,boolean,jsonb,jsonb,jsonb)"
+          },
+          {
+            "acl": "{postgres=X/postgres,authenticated=X/postgres}",
+            "body": "fa0b60bae3f4edaa15f1f5969e93d8d1",
+            "signature": "assessment_activity_analysis_start(uuid,uuid,uuid,uuid)"
+          },
+          {
+            "acl": "{postgres=X/postgres,service_role=X/postgres}",
+            "body": "7a6cf02831f9ec687f04a7d56e81e0cf",
+            "signature": "complete_m51c_external_generation(uuid,jsonb,jsonb)"
+          },
+          {
+            "acl": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+            "body": "2c6ef1dbb6d6e1ffc9f05d79793f8379",
+            "signature": "complete_profile_synthesis(text,uuid,uuid,jsonb,text,integer,integer,integer,text,jsonb)"
+          },
+          {
+            "acl": "{postgres=X/postgres,service_role=X/postgres}",
+            "body": "b12278364628fe87e566a0ab15ecd0e7",
+            "signature": "fail_m51c_external_generation(uuid,text)"
+          },
+          {
+            "acl": "{postgres=X/postgres,service_role=X/postgres}",
+            "body": "cbc362849c5094cd86706b78c6946156",
+            "signature": "position_assessment_generation_finish(uuid,uuid,jsonb,numeric,boolean)"
+          },
+          {
+            "acl": "{postgres=X/postgres,authenticated=X/postgres}",
+            "body": "8de90153352f347b85a153bb5b4e7037",
+            "signature": "position_assessment_generation_request(uuid,uuid,uuid,jsonb,uuid)"
+          },
+          {
+            "acl": "{postgres=X/postgres,authenticated=X/postgres}",
+            "body": "a809e39e695e2b4a5d6e9e38fc07f1fe",
+            "signature": "prisma_tokens(text,uuid,jsonb)"
+          },
+          {
+            "acl": "{postgres=X/postgres}",
+            "body": "6eda9262cd30e6f7595a53ea9be7513e",
+            "signature": "private.assessment_activity_view(private.assessment_activity_analyses,text)"
+          },
+          {
+            "acl": "{postgres=X/postgres}",
+            "body": "0f465e8a8ebbb789dc34b675217fff69",
+            "signature": "private.company_question_request_before_v251(uuid,uuid,integer,text,integer,text,uuid)"
+          },
+          {
+            "acl": "{postgres=X/postgres}",
+            "body": "0bf6b6d4de1aaa9298c36e34403127b6",
+            "signature": "private.enqueue_profile_synthesis(uuid)"
+          },
+          {
+            "acl": "{postgres=X/postgres}",
+            "body": "971fdb9a06ce091ed8233bda996ece15",
+            "signature": "private.prisma_token_balance(uuid)"
+          },
+          {
+            "acl": "{postgres=X/postgres}",
+            "body": "54ece21e14a8cf117a59be6b2590b145",
+            "signature": "private.prisma_token_bind_synthesis(uuid,jsonb,uuid)"
+          },
+          {
+            "acl": "{postgres=X/postgres}",
+            "body": "add653087081b54703a20f00bd8745ce",
+            "signature": "private.prisma_token_ensure(uuid,timestamp with time zone)"
+          },
+          {
+            "acl": "{postgres=X/postgres}",
+            "body": "678f65cf97f1c2e1c98c8a6ca173d7a1",
+            "signature": "private.prisma_token_lot_details(uuid)"
+          },
+          {
+            "acl": "{postgres=X/postgres}",
+            "body": "3708307c0c2a483f3170a18b910fb3bd",
+            "signature": "private.prisma_token_movement_details(uuid,uuid,boolean)"
+          },
+          {
+            "acl": "{postgres=X/postgres}",
+            "body": "2223df72510c9dadf03495f2dddce372",
+            "signature": "private.prisma_token_planning_data(uuid)"
+          },
+          {
+            "acl": "{postgres=X/postgres}",
+            "body": "93829c132d804f02fb20d4c1fdfc69b4",
+            "signature": "private.prisma_token_reserve(uuid,text,uuid,uuid,integer)"
+          },
+          {
+            "acl": "{postgres=X/postgres}",
+            "body": "951eecafe4976674df271cd6c89429e2",
+            "signature": "private.prisma_token_settle(uuid,text,uuid,boolean,text)"
+          },
+          {
+            "acl": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+            "body": "8051406d4bed8145f05d5dddca1d00dd",
+            "signature": "record_ai_worker_history_v1(text,text,jsonb)"
+          },
+          {
+            "acl": "{postgres=X/postgres,authenticated=X/postgres}",
+            "body": "43ca2a983668343033366a967fa3b04e",
+            "signature": "request_profile_synthesis(uuid,uuid,uuid,uuid)"
+          },
+          {
+            "acl": "{postgres=X/postgres,authenticated=X/postgres}",
+            "body": "3bb9683306d095e4db459d3d2ba86b23",
+            "signature": "retry_profile_synthesis(uuid,uuid,uuid,uuid)"
+          }
+        ],
+        "protected": [
+          {
+            "count": 6,
+            "object": "ai_requests",
+            "fingerprint": "bf7987a8042e01b2cb19457fca57dd3b"
+          },
+          {
+            "count": 37,
+            "object": "assessment_items",
+            "fingerprint": "8a9d67f6209335b36e7cc8254a3ac570"
+          },
+          {
+            "count": 40,
+            "object": "match_evaluations",
+            "fingerprint": "6d6da272d802f8b70d506740d04276e4"
+          },
+          {
+            "count": 11,
+            "object": "people",
+            "fingerprint": "682dab403f6a5a8dbae50b5cf8c6195b"
+          },
+          {
+            "count": 2,
+            "object": "position_assessment_attempts",
+            "fingerprint": "9614d5db96699c358c4b0723071b5e6b"
+          },
+          {
+            "count": 2,
+            "object": "position_assessments",
+            "fingerprint": "92880e197efbd95e313c4dc79c4884c9"
+          },
+          {
+            "count": 1,
+            "object": "position_evaluation_processes",
+            "fingerprint": "b265a47b8c0063ebf94306f7de42468a"
+          },
+          {
+            "count": 4,
+            "object": "prisma_token_allocations",
+            "fingerprint": "7c84a87a61c644ac5abbd3d9b259cf15"
+          },
+          {
+            "count": 9,
+            "object": "prisma_token_quotes",
+            "fingerprint": "75ebe99538b9385692e3ddbef3551ddd"
+          },
+          {
+            "count": 7,
+            "object": "prisma_token_rates",
+            "fingerprint": "40249913415255c8d9d5f56ea31ef009"
+          },
+          {
+            "count": 4,
+            "object": "prisma_token_reservations",
+            "fingerprint": "e3ed33c4125b38b407365e2196679375"
+          },
+          {
+            "count": 15,
+            "object": "professional_profiles",
+            "fingerprint": "d6827a96e4e504f8e4f76d342cae0826"
+          },
+          {
+            "count": 6,
+            "object": "profile_synthesis_jobs",
+            "fingerprint": "51ca0ff9545f2f225c4d7806592795c2"
+          },
+          {
+            "count": 8,
+            "object": "vacancies",
+            "fingerprint": "568c8e887d030b08e8cd32ef59c5feb8"
+          }
+        ],
+        "lotAmounts": [
+          {
+            "id": "118ffc54-d4ba-4df2-8d64-730ceac025c8",
+            "total": 1000000,
+            "source": "monthly",
+            "remaining": 1000000,
+            "organizationId": "b0000000-0000-4000-8000-000000000001"
+          },
+          {
+            "id": "5d74339e-06b7-42c0-afe9-aecbfa4c10f1",
+            "total": 1000000,
+            "source": "monthly",
+            "remaining": 941421,
+            "organizationId": "5dcad29a-1dd2-4c12-9adb-8015a79bea4e"
+          }
+        ]
+      }
+    }
+  ],
+  "functionBodies": [
+    {
+      "name": "private.prisma_token_ensure",
+      "bodyMatches": true,
+      "runtime": {
+        "name": "private.prisma_token_ensure",
+        "body": "58779138d86f8379d01b50601665f738",
+        "security_definer": true,
+        "acl": "{postgres=X/postgres}",
+        "config": [
+          "search_path=\"\""
+        ]
+      }
+    },
+    {
+      "name": "private.prisma_token_lot_details",
+      "bodyMatches": true,
+      "runtime": {
+        "name": "private.prisma_token_lot_details",
+        "body": "4ff9e87d5e2a570c555b5d81c3fae505",
+        "security_definer": false,
+        "acl": "{postgres=X/postgres}",
+        "config": [
+          "search_path=\"\""
+        ]
+      }
+    },
+    {
+      "name": "private.prisma_token_movement_details",
+      "bodyMatches": true,
+      "runtime": {
+        "name": "private.prisma_token_movement_details",
+        "body": "44237c5fa3c2373fb0ca00f0399ebaa2",
+        "security_definer": false,
+        "acl": "{postgres=X/postgres}",
+        "config": [
+          "search_path=\"\""
+        ]
+      }
+    },
+    {
+      "name": "private.prisma_token_planning_data",
+      "bodyMatches": true,
+      "runtime": {
+        "name": "private.prisma_token_planning_data",
+        "body": "f528d935395455c038f4a947cc3ce2de",
+        "security_definer": false,
+        "acl": "{postgres=X/postgres}",
+        "config": [
+          "search_path=\"\""
+        ]
+      }
+    },
+    {
+      "name": "private.prisma_token_reserve",
+      "bodyMatches": true,
+      "runtime": {
+        "name": "private.prisma_token_reserve",
+        "body": "ea3a1ff6ce574a7c8d9b885a1a16887f",
+        "security_definer": true,
+        "acl": "{postgres=X/postgres}",
+        "config": [
+          "search_path=\"\""
+        ]
+      }
+    },
+    {
+      "name": "public.prisma_tokens",
+      "bodyMatches": true,
+      "runtime": {
+        "name": "public.prisma_tokens",
+        "body": "92fc7cb93e67f497624b0eafad48711b",
+        "security_definer": true,
+        "acl": "{postgres=X/postgres,authenticated=X/postgres}",
+        "config": [
+          "search_path=\"\""
+        ]
+      }
+    }
+  ],
+  "policy": {
+    "calendarAccounts": 2,
+    "totalAccounts": 2,
+    "allPackages30days": true,
+    "monthlyLotExpiryAtNextMonth": true,
+    "noDuplicateFranchise": true
+  },
+  "runtime": {
+    "before": [
+      {
+        "name": "/prisma-web",
+        "id": "4dd5b59bf6084ad3b2b1e41b3cf420832e16c2ad0c8ca60da0114be2223d89af",
+        "image": "sha256:541ac6a5ab2efc9a8837844d5a3ffd4ee390487b2ac9c7083ebc36b571812b74",
+        "status": "running",
+        "health": null,
+        "restarts": 0
+      },
+      {
+        "name": "/prisma-parser-ia",
+        "id": "e8bc778c8c00e1f25f54bc1df7e0a78fd0c31f324d847125ff87ded81f1a5fd5",
+        "image": "sha256:8542b81cebc337e052b89bcf9b1ba459ecf0824a0a4a993d8feb614401615039",
+        "status": "running",
+        "health": "healthy",
+        "restarts": 0
+      },
+      {
+        "name": "/prisma-paddle-gateway",
+        "id": "8fb76416f61cd0baf27b14a4fe4e2692e6384487f740337ba5f424145f104653",
+        "image": "sha256:cf414afdb189d3906df09633566e75d56a56dc7779e21a73e80830b0b71c9b73",
+        "status": "running",
+        "health": null,
+        "restarts": 0
+      },
+      {
+        "name": "/hrt-mail-forwarder",
+        "id": "b257a83cbb370299dc3666d120a22b47f7fb5acfc4a73516a78b821ae43fea6a",
+        "image": "sha256:ffc0f2a53e093cec01c4a91e652b29b0ede4808ecc2f461df9e6faa52940cc31",
+        "status": "running",
+        "health": "healthy",
+        "restarts": 0
+      },
+      {
+        "name": "/prisma-profile-synthesis",
+        "id": "db6c5c0ef238534ba2967dce3bbf80e9e8c94089ca7bb48b84f4e523961b00d7",
+        "image": "sha256:2fdccaea0fb50449f9f5e800ada1925c690fab319e4d3708ade0f831c7e99167",
+        "status": "running",
+        "health": "healthy",
+        "restarts": 0
+      },
+      {
+        "name": "/paddle-vl-llama-test",
+        "id": "d991a574e45eb002ce05e6c0fc9e448f4a4ed5f6128aaac049ea8cbdb24e4b8f",
+        "image": "sha256:b15cd87030b2eb8a284d398c095e03c6ba8baf386b68e1b83ab8b46e9555ffe8",
+        "status": "running",
+        "health": "unhealthy",
+        "restarts": 0
+      },
+      {
+        "name": "/paddle-vl-prisma-test",
+        "id": "2e83e5ef4a5bcc882eb415c23f7099a814dd09798976ba4ea575806d2c883006",
+        "image": "sha256:4b19acbf5174fdd67410258a348a8485c23ceb6c22358530c51373141f43a4e2",
+        "status": "exited",
+        "health": null,
+        "restarts": 0
+      },
+      {
+        "name": "/paddle-structure-1",
+        "id": "b0be4c3994881f54b19b00cbba85a432fe8b3e53bd1a2ae0cdedf771599be90d",
+        "image": "sha256:a2aed573f63f74047233f2af9ba9d2b2fb2aba66b891e41f3db488b230c3c29a",
+        "status": "exited",
+        "health": null,
+        "restarts": 0
+      },
+      {
+        "name": "/paddle-vision-recovery-1",
+        "id": "24ed7d12632d4a1ba358ae82718914208e151284d14c791984e89a07e895f97f",
+        "image": "sha256:4b19acbf5174fdd67410258a348a8485c23ceb6c22358530c51373141f43a4e2",
+        "status": "exited",
+        "health": null,
+        "restarts": 17
+      },
+      {
+        "name": "/traefik-traefik-1",
+        "id": "5e25fdc6d2e6fd3c622972310f67f640b80cac70538e17b42a529d1935488bc6",
+        "image": "sha256:f86a2cab1b5c649070c49f883c743dd32d8485a56e3368c5f93b9e91f1e91259",
+        "status": "running",
+        "health": null,
+        "restarts": 0
+      }
+    ],
+    "initial": [
+      {
+        "name": "/prisma-web",
+        "id": "db01de35c0a19a47a36880cf307b99b1c0509570d6afae9f84108553cc974fcb",
+        "image": "sha256:b98c225fd15389046af3f980bd61c991eb4a0bc8dd2f7dad62b0291b73612583",
+        "status": "running",
+        "health": null,
+        "restarts": 0
+      },
+      {
+        "name": "/prisma-parser-ia",
+        "id": "e8bc778c8c00e1f25f54bc1df7e0a78fd0c31f324d847125ff87ded81f1a5fd5",
+        "image": "sha256:8542b81cebc337e052b89bcf9b1ba459ecf0824a0a4a993d8feb614401615039",
+        "status": "running",
+        "health": "healthy",
+        "restarts": 0
+      },
+      {
+        "name": "/prisma-paddle-gateway",
+        "id": "8fb76416f61cd0baf27b14a4fe4e2692e6384487f740337ba5f424145f104653",
+        "image": "sha256:cf414afdb189d3906df09633566e75d56a56dc7779e21a73e80830b0b71c9b73",
+        "status": "running",
+        "health": null,
+        "restarts": 0
+      },
+      {
+        "name": "/hrt-mail-forwarder",
+        "id": "b257a83cbb370299dc3666d120a22b47f7fb5acfc4a73516a78b821ae43fea6a",
+        "image": "sha256:ffc0f2a53e093cec01c4a91e652b29b0ede4808ecc2f461df9e6faa52940cc31",
+        "status": "running",
+        "health": "healthy",
+        "restarts": 0
+      },
+      {
+        "name": "/prisma-profile-synthesis",
+        "id": "db6c5c0ef238534ba2967dce3bbf80e9e8c94089ca7bb48b84f4e523961b00d7",
+        "image": "sha256:2fdccaea0fb50449f9f5e800ada1925c690fab319e4d3708ade0f831c7e99167",
+        "status": "running",
+        "health": "healthy",
+        "restarts": 0
+      },
+      {
+        "name": "/paddle-vl-llama-test",
+        "id": "d991a574e45eb002ce05e6c0fc9e448f4a4ed5f6128aaac049ea8cbdb24e4b8f",
+        "image": "sha256:b15cd87030b2eb8a284d398c095e03c6ba8baf386b68e1b83ab8b46e9555ffe8",
+        "status": "running",
+        "health": "unhealthy",
+        "restarts": 0
+      },
+      {
+        "name": "/paddle-vl-prisma-test",
+        "id": "2e83e5ef4a5bcc882eb415c23f7099a814dd09798976ba4ea575806d2c883006",
+        "image": "sha256:4b19acbf5174fdd67410258a348a8485c23ceb6c22358530c51373141f43a4e2",
+        "status": "exited",
+        "health": null,
+        "restarts": 0
+      },
+      {
+        "name": "/paddle-structure-1",
+        "id": "b0be4c3994881f54b19b00cbba85a432fe8b3e53bd1a2ae0cdedf771599be90d",
+        "image": "sha256:a2aed573f63f74047233f2af9ba9d2b2fb2aba66b891e41f3db488b230c3c29a",
+        "status": "exited",
+        "health": null,
+        "restarts": 0
+      },
+      {
+        "name": "/paddle-vision-recovery-1",
+        "id": "24ed7d12632d4a1ba358ae82718914208e151284d14c791984e89a07e895f97f",
+        "image": "sha256:4b19acbf5174fdd67410258a348a8485c23ceb6c22358530c51373141f43a4e2",
+        "status": "exited",
+        "health": null,
+        "restarts": 17
+      },
+      {
+        "name": "/traefik-traefik-1",
+        "id": "5e25fdc6d2e6fd3c622972310f67f640b80cac70538e17b42a529d1935488bc6",
+        "image": "sha256:f86a2cab1b5c649070c49f883c743dd32d8485a56e3368c5f93b9e91f1e91259",
+        "status": "running",
+        "health": null,
+        "restarts": 0
+      }
+    ],
+    "final": [
+      {
+        "name": "/prisma-web",
+        "id": "025ab4354600f65b340cb9cbe07a0b123d1242c7724b62fd284f42e0397e5a85",
+        "image": "sha256:7dc9d02e6c28117cf7dd756cfab518f0221cf592900c09b29fd9ed2b619fb9e9",
+        "status": "running",
+        "health": null,
+        "restarts": 0
+      },
+      {
+        "name": "/prisma-parser-ia",
+        "id": "e8bc778c8c00e1f25f54bc1df7e0a78fd0c31f324d847125ff87ded81f1a5fd5",
+        "image": "sha256:8542b81cebc337e052b89bcf9b1ba459ecf0824a0a4a993d8feb614401615039",
+        "status": "running",
+        "health": "healthy",
+        "restarts": 0
+      },
+      {
+        "name": "/prisma-paddle-gateway",
+        "id": "8fb76416f61cd0baf27b14a4fe4e2692e6384487f740337ba5f424145f104653",
+        "image": "sha256:cf414afdb189d3906df09633566e75d56a56dc7779e21a73e80830b0b71c9b73",
+        "status": "running",
+        "health": null,
+        "restarts": 0
+      },
+      {
+        "name": "/hrt-mail-forwarder",
+        "id": "b257a83cbb370299dc3666d120a22b47f7fb5acfc4a73516a78b821ae43fea6a",
+        "image": "sha256:ffc0f2a53e093cec01c4a91e652b29b0ede4808ecc2f461df9e6faa52940cc31",
+        "status": "running",
+        "health": "healthy",
+        "restarts": 0
+      },
+      {
+        "name": "/prisma-profile-synthesis",
+        "id": "db6c5c0ef238534ba2967dce3bbf80e9e8c94089ca7bb48b84f4e523961b00d7",
+        "image": "sha256:2fdccaea0fb50449f9f5e800ada1925c690fab319e4d3708ade0f831c7e99167",
+        "status": "running",
+        "health": "healthy",
+        "restarts": 0
+      },
+      {
+        "name": "/paddle-vl-llama-test",
+        "id": "d991a574e45eb002ce05e6c0fc9e448f4a4ed5f6128aaac049ea8cbdb24e4b8f",
+        "image": "sha256:b15cd87030b2eb8a284d398c095e03c6ba8baf386b68e1b83ab8b46e9555ffe8",
+        "status": "running",
+        "health": "unhealthy",
+        "restarts": 0
+      },
+      {
+        "name": "/paddle-vl-prisma-test",
+        "id": "2e83e5ef4a5bcc882eb415c23f7099a814dd09798976ba4ea575806d2c883006",
+        "image": "sha256:4b19acbf5174fdd67410258a348a8485c23ceb6c22358530c51373141f43a4e2",
+        "status": "exited",
+        "health": null,
+        "restarts": 0
+      },
+      {
+        "name": "/paddle-structure-1",
+        "id": "b0be4c3994881f54b19b00cbba85a432fe8b3e53bd1a2ae0cdedf771599be90d",
+        "image": "sha256:a2aed573f63f74047233f2af9ba9d2b2fb2aba66b891e41f3db488b230c3c29a",
+        "status": "exited",
+        "health": null,
+        "restarts": 0
+      },
+      {
+        "name": "/paddle-vision-recovery-1",
+        "id": "24ed7d12632d4a1ba358ae82718914208e151284d14c791984e89a07e895f97f",
+        "image": "sha256:4b19acbf5174fdd67410258a348a8485c23ceb6c22358530c51373141f43a4e2",
+        "status": "exited",
+        "health": null,
+        "restarts": 17
+      },
+      {
+        "name": "/traefik-traefik-1",
+        "id": "5e25fdc6d2e6fd3c622972310f67f640b80cac70538e17b42a529d1935488bc6",
+        "image": "sha256:f86a2cab1b5c649070c49f883c743dd32d8485a56e3368c5f93b9e91f1e91259",
+        "status": "running",
+        "health": null,
+        "restarts": 0
+      }
+    ],
+    "assetsBefore": [
+      "antd-vendor-B5BXDqMa.css",
+      "antd-vendor-B8xYIvt7.js",
+      "antd-vendor-ByE9Q9KR.js",
+      "antd-vendor-CHFW8v3e.js",
+      "antd-vendor-CXZT2PR9.js",
+      "antd-vendor-CjXMNByx.js",
+      "antd-vendor-CtJM5RaI.js",
+      "antd-vendor-Cv3JrkhW.js",
+      "antd-vendor-DHbX9DCK.js",
+      "antd-vendor-DlIGisEt.js",
+      "antd-vendor-d_h0UQWm.js",
+      "antd-vendor-g5prliAM.js",
+      "cursor-editorTextHighlight-kG3uUOwL.svg",
+      "index--UEZRN8K.css",
+      "index-0nrX6U2B.css",
+      "index-3YpXv5z1.js",
+      "index-4IgPGlVX.css",
+      "index-7QXHjNYA.js",
+      "index-Ao0o7VQg.css",
+      "index-B-jkzCiv.js",
+      "index-B0hQe_rJ.css",
+      "index-B1VLzj0w.js",
+      "index-B1nbqs-I.js",
+      "index-B1qtTueB.css",
+      "index-B34q2Hty.js",
+      "index-B51hI8rf.js",
+      "index-B5c5w9fD.js",
+      "index-B7O0Br1A.js",
+      "index-B7cFfC2q.css",
+      "index-BAd2AujR.css",
+      "index-BB_GaV8_.js",
+      "index-BBuB0uPi.css",
+      "index-BD5oAFpi.js",
+      "index-BDgM567D.js",
+      "index-BJ2-6jFV.css",
+      "index-BJhlErwd.css",
+      "index-BKFy5rqK.js",
+      "index-BKzrsnuR.css",
+      "index-BMKzDWj6.js",
+      "index-BOWOaFXg.js",
+      "index-BOtKNzFq.css",
+      "index-BTwYoic1.js",
+      "index-BULt_Q8I.js",
+      "index-BVZOTuTW.js",
+      "index-BVoxMGqS.js",
+      "index-BVxMGhRs.js",
+      "index-BZ5dcuRA.css",
+      "index-B_LpCj8z.css",
+      "index-Bb7zYU6E.css",
+      "index-Bdtd6sWX.css",
+      "index-Beiv2NZm.js",
+      "index-BgJSvehn.js",
+      "index-BiucK513.js",
+      "index-BjB3jE2B.js",
+      "index-Bmf6zu4g.css",
+      "index-BnkTz1MZ.js",
+      "index-BslhjZCk.css",
+      "index-Btvjl667.js",
+      "index-BuKOGLjh.js",
+      "index-Bx4s26MG.js",
+      "index-ByP4lZJ1.js",
+      "index-C2XmZklw.js",
+      "index-C2dfaVN2.js",
+      "index-C31HnJo-.js",
+      "index-C9LidSYt.css",
+      "index-CA9shKY5.css",
+      "index-CDKFx_r_.js",
+      "index-CFcUSPiK.js",
+      "index-CJQAl63j.js",
+      "index-CKGo3_Dp.js",
+      "index-CLPsleuU.js",
+      "index-CNZ6sVmM.js",
+      "index-CR5aA1Nt.js",
+      "index-CRZpFhQX.css",
+      "index-CRzVplOQ.js",
+      "index-CYOKCXBz.css",
+      "index-CZy1fvSi.js",
+      "index-C_78P29W.js",
+      "index-CevH3Gd0.js",
+      "index-CirI3MOO.css",
+      "index-ClsKH7Z6.js",
+      "index-Clzf8H4g.js",
+      "index-CojoUXHG.js",
+      "index-CpKy076p.js",
+      "index-CrdUh4pd.js",
+      "index-Cty9HDMh.js",
+      "index-CzBhB4wa.js",
+      "index-CzkpPEj1.js",
+      "index-D2JYwvYJ.js",
+      "index-D5a-QQ4v.css",
+      "index-D9MhdRDD.js",
+      "index-DAxCd3bY.js",
+      "index-DBIvvNZ4.js",
+      "index-DBi0z66M.js",
+      "index-DF5igKQH.js",
+      "index-DFDrQjyr.js",
+      "index-DJ4BvPHd.js",
+      "index-DJw3yNX4.css",
+      "index-DK5yn7O4.css",
+      "index-DL_LSgEm.js",
+      "index-DLsZ7LDH.js",
+      "index-DMRz36bQ.css",
+      "index-DMrwuf7f.js",
+      "index-DNIRepJ6.js",
+      "index-DNo2wXLm.js",
+      "index-DPQG9PZL.js",
+      "index-DRjBm9Jx.js",
+      "index-DU5ijjcH.js",
+      "index-DWUcWmLT.css",
+      "index-DXR2YtfX.js",
+      "index-DcEUBlOc.css",
+      "index-Dcf1_L61.js",
+      "index-Dj1ptfOm.js",
+      "index-DjiZ1bdV.js",
+      "index-DkpVtkOZ.css",
+      "index-DnkjVj4R.css",
+      "index-DoGiIjJ6.css",
+      "index-Du_r-q7r.js",
+      "index-DvwvWRwm.js",
+      "index-DwEGF6pC.js",
+      "index-DxCL2PFY.js",
+      "index-EOT1QpDk.css",
+      "index-H71Tt97t.js",
+      "index-M6OhG8_Q.css",
+      "index-NtLZfLyW.css",
+      "index-OR2VzZHo.css",
+      "index-P-OxSozg.css",
+      "index-PztwCX-I.js",
+      "index-RIGLq5_D.css",
+      "index-S0Dgydwu.js",
+      "index-SNTMzHER.css",
+      "index-TuU_pSVo.css",
+      "index-UBaPsgie.js",
+      "index-Xq8-89J_.js",
+      "index-XyQq-C2w.css",
+      "index-YwMItBJ9.js",
+      "index-ZnvydxsY.js",
+      "index-b8La5Fvb.js",
+      "index-cFAsS5C0.js",
+      "index-cWXnsQmF.css",
+      "index-dtaS_G60.js",
+      "index-g0DDLxX2.js",
+      "index-pEv3u2f-.js",
+      "index-rbZQYeBh.js",
+      "index-rtOypyJ0.js",
+      "index-sVw5w6Ck.js",
+      "index-vRFh5Jq0.js",
+      "index-xjbWcLcI.css",
+      "login",
+      "pdf-5RoAUGLr.js",
+      "pdf-6A1M_hLy.js",
+      "pdf-B4D73Uk8.js",
+      "pdf-B4dqKZJ5.js",
+      "pdf-B7Xvqm6n.js",
+      "pdf-B8-F2vaZ.js",
+      "pdf-B8jG2B9S.js",
+      "pdf-BBuYISw5.js",
+      "pdf-BC75zGaa.js",
+      "pdf-BFMEzR_c.js",
+      "pdf-BFha682m.js",
+      "pdf-BGdUSJEe.js",
+      "pdf-BHJ0U6Kv.js",
+      "pdf-BHWpnsdb.js",
+      "pdf-BJLYRi4R.js",
+      "pdf-BKi1b7Fk.js",
+      "pdf-BLWlq-_1.js",
+      "pdf-BLlz9Fgn.js",
+      "pdf-BQc3o60P.js",
+      "pdf-BRkIvc5f.js",
+      "pdf-BShiHvPs.js",
+      "pdf-BTeaD8tv.js",
+      "pdf-BVzpdXUG.js",
+      "pdf-BdAqHehP.js",
+      "pdf-BjGbnVuR.js",
+      "pdf-BnoiIRzd.js",
+      "pdf-BptVAaMg.js",
+      "pdf-Bqqi1zf4.js",
+      "pdf-BreQmiYC.js",
+      "pdf-BwXYFCwP.js",
+      "pdf-Bwc53hDR.js",
+      "pdf-BwospZvp.js",
+      "pdf-Bzj_hvb_.js",
+      "pdf-C5vHHBgZ.js",
+      "pdf-C9cXVGTd.js",
+      "pdf-CEsdJ16g.js",
+      "pdf-CMTsSXz5.js",
+      "pdf-CRMMYzMc.js",
+      "pdf-CSDBrSx6.js",
+      "pdf-CSlsnBNM.js",
+      "pdf-CcijlxWL.js",
+      "pdf-CfwfN8vX.js",
+      "pdf-CgF3KLSr.js",
+      "pdf-Ch-BlM8f.js",
+      "pdf-Cm1Vb1He.js",
+      "pdf-CqZ4TWn-.js",
+      "pdf-Cun6aB7-.js",
+      "pdf-CvXyxvix.js",
+      "pdf-CwIwt_ds.js",
+      "pdf-CwMl0XMu.js",
+      "pdf-D-XYoLK2.js",
+      "pdf-D0FK88Nn.js",
+      "pdf-D0ObcLYn.js",
+      "pdf-D10oKJYN.js",
+      "pdf-D7G7GsnQ.js",
+      "pdf-DBLTgRxT.js",
+      "pdf-DBakH8YY.js",
+      "pdf-DC0LiHKP.js",
+      "pdf-DGyYHl6d.js",
+      "pdf-DKKVeWny.js",
+      "pdf-DN-2Ds0j.js",
+      "pdf-DNUCREwX.js",
+      "pdf-DQyo54sF.js",
+      "pdf-DSgjxLoy.js",
+      "pdf-DTU6T4fY.js",
+      "pdf-DbVcHHVN.js",
+      "pdf-DiTlpvHb.js",
+      "pdf-Dk3bhh0C.js",
+      "pdf-DklP76UZ.js",
+      "pdf-DsYDJXmT.js",
+      "pdf-Du5hpUXa.js",
+      "pdf-DzU3WeKp.js",
+      "pdf-HadcUghH.js",
+      "pdf-KRGoKNPc.js",
+      "pdf-NF7_AB4D.js",
+      "pdf-NaaiU_eb.js",
+      "pdf-S-7yWV58.js",
+      "pdf-TAct0Zj1.js",
+      "pdf-TLYxEDV5.js",
+      "pdf-TNNq7O8z.js",
+      "pdf-bsKXewZK.js",
+      "pdf-c_O17tTm.js",
+      "pdf-cnEbk4KD.js",
+      "pdf-gf2DiZzf.js",
+      "pdf-hVa3qxPA.js",
+      "pdf-hx5T6pJb.js",
+      "pdf-nm25FzeV.js",
+      "pdf-oIYYLB5C.js",
+      "pdf-v3WiGml3.js",
+      "pdf-vVyDwL-4.js",
+      "pdf-weI_SZaY.js",
+      "pdf.worker.min-qwK7q_zL.mjs",
+      "react-vendor-BdxMnOeJ.js",
+      "rolldown-runtime-C0FnF6B9.js",
+      "src-SuYvKHvm.js",
+      "supabase-vendor-DoXvCMLf.js",
+      "tesseract-core.wasm-DJna89ck.js",
+      "tesseract-core.wasm-DTqDpzeW.js",
+      "worker.min-32WLk7pY.js",
+      "worker.min-DvrjHhfF.js"
+    ],
+    "assetsFinal": [
+      "antd-vendor-B5BXDqMa.css",
+      "antd-vendor-B8xYIvt7.js",
+      "antd-vendor-ByE9Q9KR.js",
+      "antd-vendor-CHFW8v3e.js",
+      "antd-vendor-CXZT2PR9.js",
+      "antd-vendor-CjXMNByx.js",
+      "antd-vendor-CtJM5RaI.js",
+      "antd-vendor-Cv3JrkhW.js",
+      "antd-vendor-DHbX9DCK.js",
+      "antd-vendor-DlIGisEt.js",
+      "antd-vendor-d_h0UQWm.js",
+      "antd-vendor-g5prliAM.js",
+      "cursor-editorTextHighlight-kG3uUOwL.svg",
+      "index--UEZRN8K.css",
+      "index-0nrX6U2B.css",
+      "index-3YpXv5z1.js",
+      "index-4IgPGlVX.css",
+      "index-7QXHjNYA.js",
+      "index-Ao0o7VQg.css",
+      "index-B-jkzCiv.js",
+      "index-B0hQe_rJ.css",
+      "index-B1VLzj0w.js",
+      "index-B1nbqs-I.js",
+      "index-B1qtTueB.css",
+      "index-B34q2Hty.js",
+      "index-B51hI8rf.js",
+      "index-B5c5w9fD.js",
+      "index-B7O0Br1A.js",
+      "index-B7cFfC2q.css",
+      "index-BAd2AujR.css",
+      "index-BB_GaV8_.js",
+      "index-BBuB0uPi.css",
+      "index-BD5oAFpi.js",
+      "index-BDgM567D.js",
+      "index-BJ2-6jFV.css",
+      "index-BJhlErwd.css",
+      "index-BKFy5rqK.js",
+      "index-BKzrsnuR.css",
+      "index-BMKzDWj6.js",
+      "index-BMknrr5K.js",
+      "index-BOWOaFXg.js",
+      "index-BOtKNzFq.css",
+      "index-BTwYoic1.js",
+      "index-BULt_Q8I.js",
+      "index-BVZOTuTW.js",
+      "index-BVoxMGqS.js",
+      "index-BVxMGhRs.js",
+      "index-BZ5dcuRA.css",
+      "index-B_LpCj8z.css",
+      "index-Bb7zYU6E.css",
+      "index-Bdtd6sWX.css",
+      "index-Beiv2NZm.js",
+      "index-BgJSvehn.js",
+      "index-BiucK513.js",
+      "index-BjB3jE2B.js",
+      "index-Bmf6zu4g.css",
+      "index-BnkTz1MZ.js",
+      "index-BslhjZCk.css",
+      "index-Btvjl667.js",
+      "index-BuKOGLjh.js",
+      "index-Bx4s26MG.js",
+      "index-ByP4lZJ1.js",
+      "index-C2XmZklw.js",
+      "index-C2dfaVN2.js",
+      "index-C31HnJo-.js",
+      "index-C9LidSYt.css",
+      "index-CA9shKY5.css",
+      "index-CDKFx_r_.js",
+      "index-CFcUSPiK.js",
+      "index-CJQAl63j.js",
+      "index-CKGo3_Dp.js",
+      "index-CLPsleuU.js",
+      "index-CNZ6sVmM.js",
+      "index-CR5aA1Nt.js",
+      "index-CRZpFhQX.css",
+      "index-CRzVplOQ.js",
+      "index-CYOKCXBz.css",
+      "index-CZy1fvSi.js",
+      "index-C_78P29W.js",
+      "index-CevH3Gd0.js",
+      "index-CirI3MOO.css",
+      "index-ClsKH7Z6.js",
+      "index-Clzf8H4g.js",
+      "index-CojoUXHG.js",
+      "index-CpKy076p.js",
+      "index-CrdUh4pd.js",
+      "index-Cty9HDMh.js",
+      "index-CzBhB4wa.js",
+      "index-CzkpPEj1.js",
+      "index-D2JYwvYJ.js",
+      "index-D5a-QQ4v.css",
+      "index-D9MhdRDD.js",
+      "index-DAxCd3bY.js",
+      "index-DBIvvNZ4.js",
+      "index-DBi0z66M.js",
+      "index-DF5igKQH.js",
+      "index-DFDrQjyr.js",
+      "index-DJ4BvPHd.js",
+      "index-DJw3yNX4.css",
+      "index-DK5yn7O4.css",
+      "index-DL_LSgEm.js",
+      "index-DLsZ7LDH.js",
+      "index-DMRz36bQ.css",
+      "index-DMV6m1To.js",
+      "index-DMrwuf7f.js",
+      "index-DNIRepJ6.js",
+      "index-DNo2wXLm.js",
+      "index-DPQG9PZL.js",
+      "index-DRjBm9Jx.js",
+      "index-DU5ijjcH.js",
+      "index-DWUcWmLT.css",
+      "index-DXR2YtfX.js",
+      "index-DcEUBlOc.css",
+      "index-Dcf1_L61.js",
+      "index-Dj1ptfOm.js",
+      "index-DjiZ1bdV.js",
+      "index-DkpVtkOZ.css",
+      "index-DnkjVj4R.css",
+      "index-DoGiIjJ6.css",
+      "index-DrxR0sH8.css",
+      "index-Du_r-q7r.js",
+      "index-DvwvWRwm.js",
+      "index-DwEGF6pC.js",
+      "index-DxCL2PFY.js",
+      "index-EOT1QpDk.css",
+      "index-H71Tt97t.js",
+      "index-M6OhG8_Q.css",
+      "index-NtLZfLyW.css",
+      "index-OR2VzZHo.css",
+      "index-P-OxSozg.css",
+      "index-PztwCX-I.js",
+      "index-RIGLq5_D.css",
+      "index-S0Dgydwu.js",
+      "index-SNTMzHER.css",
+      "index-TuU_pSVo.css",
+      "index-UBaPsgie.js",
+      "index-Xq8-89J_.js",
+      "index-XyQq-C2w.css",
+      "index-YwMItBJ9.js",
+      "index-ZnvydxsY.js",
+      "index-b8La5Fvb.js",
+      "index-cFAsS5C0.js",
+      "index-cWXnsQmF.css",
+      "index-dtaS_G60.js",
+      "index-g0DDLxX2.js",
+      "index-pEv3u2f-.js",
+      "index-rbZQYeBh.js",
+      "index-rtOypyJ0.js",
+      "index-sVw5w6Ck.js",
+      "index-vRFh5Jq0.js",
+      "index-xjbWcLcI.css",
+      "login",
+      "pdf-5RoAUGLr.js",
+      "pdf-6A1M_hLy.js",
+      "pdf-B4D73Uk8.js",
+      "pdf-B4dqKZJ5.js",
+      "pdf-B7Xvqm6n.js",
+      "pdf-B8-F2vaZ.js",
+      "pdf-B8jG2B9S.js",
+      "pdf-BBuYISw5.js",
+      "pdf-BC75zGaa.js",
+      "pdf-BFMEzR_c.js",
+      "pdf-BFha682m.js",
+      "pdf-BGdUSJEe.js",
+      "pdf-BHJ0U6Kv.js",
+      "pdf-BHWpnsdb.js",
+      "pdf-BJLYRi4R.js",
+      "pdf-BKi1b7Fk.js",
+      "pdf-BLWlq-_1.js",
+      "pdf-BLlz9Fgn.js",
+      "pdf-BQc3o60P.js",
+      "pdf-BRkIvc5f.js",
+      "pdf-BShiHvPs.js",
+      "pdf-BTeaD8tv.js",
+      "pdf-BVzpdXUG.js",
+      "pdf-BdAqHehP.js",
+      "pdf-BjGbnVuR.js",
+      "pdf-BnoiIRzd.js",
+      "pdf-BptVAaMg.js",
+      "pdf-Bqqi1zf4.js",
+      "pdf-BreQmiYC.js",
+      "pdf-BwXYFCwP.js",
+      "pdf-Bwc53hDR.js",
+      "pdf-BwospZvp.js",
+      "pdf-Bzj_hvb_.js",
+      "pdf-C5vHHBgZ.js",
+      "pdf-C9cXVGTd.js",
+      "pdf-CEsdJ16g.js",
+      "pdf-CMTsSXz5.js",
+      "pdf-CRMMYzMc.js",
+      "pdf-CSDBrSx6.js",
+      "pdf-CSlsnBNM.js",
+      "pdf-CcijlxWL.js",
+      "pdf-CfwfN8vX.js",
+      "pdf-CgF3KLSr.js",
+      "pdf-Ch-BlM8f.js",
+      "pdf-Cm1Vb1He.js",
+      "pdf-CqZ4TWn-.js",
+      "pdf-Cun6aB7-.js",
+      "pdf-CvXyxvix.js",
+      "pdf-CwIwt_ds.js",
+      "pdf-CwMl0XMu.js",
+      "pdf-D-XYoLK2.js",
+      "pdf-D0FK88Nn.js",
+      "pdf-D0ObcLYn.js",
+      "pdf-D10oKJYN.js",
+      "pdf-D7G7GsnQ.js",
+      "pdf-DBLTgRxT.js",
+      "pdf-DBakH8YY.js",
+      "pdf-DC0LiHKP.js",
+      "pdf-DGyYHl6d.js",
+      "pdf-DKKVeWny.js",
+      "pdf-DN-2Ds0j.js",
+      "pdf-DNUCREwX.js",
+      "pdf-DQyo54sF.js",
+      "pdf-DSgjxLoy.js",
+      "pdf-DTU6T4fY.js",
+      "pdf-DZyDnbVa.js",
+      "pdf-DbVcHHVN.js",
+      "pdf-DiTlpvHb.js",
+      "pdf-Dk3bhh0C.js",
+      "pdf-DklP76UZ.js",
+      "pdf-DsYDJXmT.js",
+      "pdf-Du5hpUXa.js",
+      "pdf-DxRYuUnz.js",
+      "pdf-DzU3WeKp.js",
+      "pdf-HadcUghH.js",
+      "pdf-KRGoKNPc.js",
+      "pdf-NF7_AB4D.js",
+      "pdf-NaaiU_eb.js",
+      "pdf-S-7yWV58.js",
+      "pdf-TAct0Zj1.js",
+      "pdf-TLYxEDV5.js",
+      "pdf-TNNq7O8z.js",
+      "pdf-bsKXewZK.js",
+      "pdf-c_O17tTm.js",
+      "pdf-cnEbk4KD.js",
+      "pdf-gf2DiZzf.js",
+      "pdf-hVa3qxPA.js",
+      "pdf-hx5T6pJb.js",
+      "pdf-nm25FzeV.js",
+      "pdf-oIYYLB5C.js",
+      "pdf-v3WiGml3.js",
+      "pdf-vVyDwL-4.js",
+      "pdf-weI_SZaY.js",
+      "pdf.worker.min-qwK7q_zL.mjs",
+      "react-vendor-BdxMnOeJ.js",
+      "rolldown-runtime-C0FnF6B9.js",
+      "src-SuYvKHvm.js",
+      "supabase-vendor-DoXvCMLf.js",
+      "tesseract-core.wasm-DJna89ck.js",
+      "tesseract-core.wasm-DTqDpzeW.js",
+      "worker.min-32WLk7pY.js",
+      "worker.min-DvrjHhfF.js"
+    ],
+    "rollbackBeforeInitial": "sha256:541ac6a5ab2efc9a8837844d5a3ffd4ee390487b2ac9c7083ebc36b571812b74",
+    "rollbackBeforeCorrection": "sha256:b98c225fd15389046af3f980bd61c991eb4a0bc8dd2f7dad62b0291b73612583",
+    "adjacentContainersPreserved": 9,
+    "immediateDeployProbe": "Both web recreations returned transient404 after start; independent smoke200 confirmed stabilization; no deploy was repeated for404.",
+    "necessaryCorrection": "Initial authenticated read exposed numeric-suffix snake_case decoding issue; targeted wire regression added; web-only correction validated/published, database not reapplied."
+  },
+  "publicSmoke": {
+    "routes": [
+      {
+        "path": "/",
+        "status": 200
+      },
+      {
+        "path": "/tokens",
+        "status": 200
+      },
+      {
+        "path": "/platform-tokens",
+        "status": 200
+      },
+      {
+        "path": "/assessment/",
+        "status": 200
+      }
+    ],
+    "functionalSha": "0f7d8dd9137f22d13552875be3ee28c5fd11124c",
+    "version": "2.6.2",
+    "js": "/assets/index-BMknrr5K.js",
+    "shaInBundle": true,
+    "versionInBundle": true,
+    "walletCss": true
+  },
+  "authenticated": {
+    "access": "Existing saved access through internal browser, no credential values read or exported",
+    "role": "super_admin",
+    "companyPage": true,
+    "companyCalendar": true,
+    "companyDailyReference": true,
+    "historyInsufficientExplicit": true,
+    "superCompanyDetail": true,
+    "superDailyReference": true,
+    "packageValidityRows": 3,
+    "registerPackage": true,
+    "registerRate": true,
+    "legacyMonthInput": false,
+    "paidAiCalls": 0,
+    "commercialOrdersCreated": 0,
+    "limitations": [
+      "Sufficient-history projections verified with deterministic fixtures; real account correctly has less than a full observed window.",
+      "Production validation covered authenticated consultation with super; owner/admin/operator authority covered by local negative SQL and UI fixtures.",
+      "No payment or paid-generation production transaction was simulated."
+    ]
+  },
+  "securityAdvisors": {
+    "beforeCount": 4,
+    "afterCount": 4,
+    "newFindings": [],
+    "removedFindings": []
+  },
+  "limits": [
+    "No separate remote QA; schema-only local clone/rollback fixtures validate transactional rules.",
+    "No paid AI/payment/order creation in production. Real authenticated super consultation only; other role authority validated locally.",
+    "Sufficient-history forecast validated with deterministic examples; real account correctly shows insufficient observation."
+  ]
+}

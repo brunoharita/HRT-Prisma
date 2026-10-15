@@ -1551,6 +1551,16 @@
       "remoteCanonicalLength": 22329,
       "verifiedAt": "2026-10-14",
       "fingerprintMethod": "strip-line-comments-collapse-whitespace-v1"
+    },
+    {
+      "name": "tokens_calendar_wallet",
+      "localVersion": "20261014230000",
+      "remoteVersion": "20261015020049",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "localStatementSha256": "fc0065bdeb92f6ac52ea5b9bb847ab4177874d4e898051b4db86b1e7da1ffa20",
+      "remoteStatementSha256": "fc0065bdeb92f6ac52ea5b9bb847ab4177874d4e898051b4db86b1e7da1ffa20",
+      "verifiedAt": "2026-10-14"
     }
   ],
   "localOnly": [
@@ -1591,11 +1601,11 @@
   ],
   "lastIncrementalVerification": {
     "date": "2026-10-14",
-    "movement": "selection-outcome-v261",
+    "movement": "tokens-v262",
     "names": [
-      "selection_process_outcome"
+      "tokens_calendar_wallet"
     ],
-    "evidence": "docs/qa/evidence/selection-outcome-v261/production/publication.json",
+    "evidence": "docs/qa/evidence/tokens-v262/production/publication.json",
     "historicalSnapshotVerifiedAtUnchanged": true
   }
 }
