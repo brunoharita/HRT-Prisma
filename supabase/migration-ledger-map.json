@@ -1572,6 +1572,17 @@
       "remoteStatementSha256": "0bfe9fc806b9566253670b2c510c3645a3ad6e85f5f3360c4ab72aa1cc83b8c3",
       "fingerprintMethod": "strip-CR-trim-exterior-whitespace-v1",
       "verifiedAt": "2026-10-15"
+    },
+    {
+      "name": "person_relationship_tags",
+      "localVersion": "20261015130000",
+      "remoteVersion": "20261015131141",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "fingerprintMethod": "strip-CR-trim-exterior-whitespace-v1",
+      "localCanonicalLength": 1386,
+      "remoteCanonicalLength": 1386,
+      "verifiedAt": "2026-10-15"
     }
   ],
   "localOnly": [
@@ -1612,11 +1623,11 @@
   ],
   "lastIncrementalVerification": {
     "date": "2026-10-15",
-    "movement": "manual-profile-v270",
+    "movement": "person-status-v271",
     "names": [
-      "manual_profile_and_employee"
+      "person_relationship_tags"
     ],
-    "evidence": "docs/qa/evidence/manual-profile-v270/publication.json",
+    "evidence": "docs/qa/evidence/person-status-v271/publication.json",
     "historicalSnapshotVerifiedAtUnchanged": true
   }
 }

@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 489
-source_manifest_sha256: c2cfc8e63ce287e9aa5fedd7dd12cc2527ae68b96807d8587efb6c5a9fab1387
+source_manifest_sha256: 24d16fb35a7d81ae6737a895ee578b49fff5cd792f18e7148c9ab7fa994cfc3e
 -->
 
 # Tudo sobre o Prisma
@@ -2649,9 +2649,9 @@ last_verified: 2026-10-15
 
 # Estado atual do Prisma
 
-## Tags factuais da Pessoa — 2.7.1
+## Tags factuais da Pessoa — 2.7.1 publicada
 
-Decisão aprovada: Candidato somente por participação em andamento em processo ativo; fechamento individual, decisão não prosseguir ou processo fechado excluem, outra participação válida mantém. Colaborador somente por Pessoa ativa/funcionário confirmado; podem coexistir. Banco de talentos e edição manual de lifecycle removidos da apresentação; dados/históricos preservados. Consulta minimizada reutiliza autorização de acompanhamento, sem ampliar acesso member e sem novos writers. Busca/comparação/Perfil alinhados. Acordo/execução/AoT e limites em `docs/qa/person-status-v271.md`.
+Decisão aprovada: Candidato somente por participação em andamento em processo ativo; fechamento individual, decisão não prosseguir ou processo fechado excluem, outra participação válida mantém. Colaborador somente por Pessoa ativa/funcionário confirmado; podem coexistir. Banco de talentos e edição manual de lifecycle removidos da apresentação; dados/históricos preservados. Consulta minimizada reutiliza autorização de acompanhamento, sem ampliar acesso member e sem novos writers. Busca/comparação/Perfil alinhados. Publicada no SHA funcional65987d608d32d2d751ef3b3ebfaed0f03b834695, CI branch38740352525/main38740657994 SUCCESS;15Node/12SQL modelo/tipos/build/contextos PASS. Migration remota20261015131141 integralmente igual ao Git, hashes Pessoas/participações/processos preservados. Somente banco/web, rollback e259assets anteriores conferidos; nove containers intactos. Smoke autenticado2.7.1: Pessoa original sem tag indevida e sem ações de classificação antiga. Sem testes com gravação humana real em produção; fechamento documental sem rebuild. Acordo/execução/AoT e limites em `docs/qa/person-status-v271.md`.
 
 ## Perfil manual, funcionário ativo e tarifas por vigência — 2.7.0 publicada
 
@@ -29867,7 +29867,19 @@ Mapa GOV-01 antes da implementação: identificação/busca/comparação/filter 
 
 Implementação: RPC minimizado get_person_relationship_tags reutiliza authorize_position_follow_up, limita200 IDs, escopo organization/person e não expõe dados de decisões. Candidato exige processo ativo, etapa conhecida em andamento e ausência de decisão do_not_proceed. Colaborador vem exclusivamente de is_active_employee; duas tags coexistem. Superfícies abandonam lifecycle legado, incluindo ações e filtros de Banco de talentos. Dados históricos permanecem intactos. Member conserva autorização anterior: não consulta processos; ausência de acesso não cria candidatura. Falha opcional da consulta no workspace fica não verificada e preserva operação manual.
 
-AoT: evidências e estado operacional serão consolidados após validação/publicação. Teste SQL usa modelo isolado e stub do helper de autorização, sem afirmar teste integral do helper produtivo existente. Sem QA remoto separado, nenhum registro humano ou financeiro fictício em produção.
+## AoT concluído
+
+| Acordo | Implementação / teste / evidência | Estado |
+| --- | --- | --- |
+| D-01 | RPC tenant/processo/etapa/decisão; SQL sem participação, ativa, negativa, encerrada, processo fechado/reaberto e isolamento; header original sem Candidato | PASS |
+| D-02 | boolean confirmado e Pessoa ativa; testes nenhuma/individual/duas tags/arquivada; busca e comparação usam a mesma fonte | PASS |
+| D-03 | classificações e ações antigas retiradas; dropdown produtivo sem vínculo editável, original sem tag inventada | PASS |
+| P-01 | nova consulta somente leitura; hashes de Pessoas11/participações2/processos1 iguais antes/depois; sem writers de Perfil/Score/Tokens/seleção alterados | PASS |
+| CA-01 |15 testes Node dirigidos,12 checks SQL modelo, tipos/build/web/lint/contexto PASS; CI branch38740352525/main38740657994 SUCCESS; smoke autenticado somente leitura | PASS |
+
+Publicada no SHA funcional65987d608d32d2d751ef3b3ebfaed0f03b834695. Migration local20261015130000/alias remoto20261015131141 integralmente igual ao Git após normalização CR/whitespace exterior; anon sem execute, authenticated com execução e autorização backend existente intacta. Apenas banco e web publicados. Web7375f10bb3e6 running/zero reinícios, rollback retém imagem53e26dbc,259assets anteriores com hashes exatos e nove containers adjacentes intactos. Probe404na recriação estabilizou sem redeploy. Fonte/evidência em `evidence/person-status-v271/publication.json`. Fechamento documental/contexto/ledger sincroniza main/GitHub/VPS sem rebuild.
+
+Limites: teste SQL usa modelo isolado e stub do helper de autorização, sem afirmar teste integral do helper produtivo existente, cujo corpo foi revisado remoto e permanece igual. Sem QA remoto separado, nenhum registro humano/financeiro fictício ou decisão real alterado em produção. Combinações positivas/negativas são determinísticas; smoke autenticado confirmou versão2.7.1, Pessoa original sem tag indevida e retirada das antigas ações. Não há desvio funcional identificado.
 
 ---
 

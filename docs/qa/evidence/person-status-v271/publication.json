@@ -1,0 +1,64 @@
+{
+  "version": "2.7.1",
+  "functionalSHA": "65987d608d32d2d751ef3b3ebfaed0f03b834695",
+  "ci": {
+    "branch": 38740352525,
+    "main": 38740657994,
+    "status": "success"
+  },
+  "database": {
+    "anon": false,
+    "people": {
+      "hash": "d69e0b81df18a0881331ad8db58700ff",
+      "count": 11
+    },
+    "entries": {
+      "hash": "b0cb4bbdb44d588c9b7c8254799142c7",
+      "count": 2
+    },
+    "migration": {
+      "name": "person_relationship_tags",
+      "version": "20261015131141"
+    },
+    "processes": {
+      "hash": "b265a47b8c0063ebf94306f7de42468a",
+      "count": 1
+    },
+    "authenticated": true,
+    "preserved": true,
+    "fullSQLMatchesGit": true
+  },
+  "runtime": {
+    "container": "7375f10bb3e6",
+    "image": "sha256:98c74f57daff24579560e2459e0e5eeaac1b2eace29fab07a70d43b50f3a3fb5",
+    "running": true,
+    "restarts": 0,
+    "rollback": "prisma-web:rollback-before-65987d608d32",
+    "rollbackImage": "sha256:53e26dbcd3bee8fef505dc15cf27cd3e4c17e40f80fa1686dc01ad5c777a6fe7",
+    "adjacentContainersPreserved": 9,
+    "previousAssetHashesPreserved": 259,
+    "failedAssetChecks": 0
+  },
+  "smoke": {
+    "publicHTTP": 200,
+    "authenticatedVersion": "2.7.1",
+    "originalPersonHeader": "Sem Candidato/Colaborador/Banco de talentos; cadastro Ativa preservado",
+    "manualEntryAvailable": true,
+    "legacyManualRelationshipActionsAbsent": true,
+    "productionWritesForTest": false
+  },
+  "local": {
+    "nodeDirected": 15,
+    "sqlModelChecks": 12,
+    "typecheck": true,
+    "build": true,
+    "webBuild": true,
+    "lint": true,
+    "context": true
+  },
+  "limitations": [
+    "SQL local model uses a stub for the existing authorization helper; deployed helper reviewed unchanged.",
+    "No separate remote QA. No real selection decisions or employee status mutated for test.",
+    "Candidate and employee positive combinations covered deterministically; production smoke read-only."
+  ]
+}
