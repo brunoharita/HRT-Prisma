@@ -1,0 +1,18 @@
+{
+  "version": "2.7.3",
+  "functionalSHA": "233f65f2fef3f4963794da1cfbb48fffc19faae8",
+  "ci": { "branch": 38794437790, "main": 38794682804, "status": "success" },
+  "destinations": { "web": true, "database": false, "edgeFunctions": [] },
+  "runtime": { "container": "6a8ec5d1b1e1", "running": true, "restarts": 0, "http": 200, "image": "d75ac5f3becd1da5a1ad325676236241a395c361b451dcd31b0b175ce5bb8137", "rollback": "prisma-web:rollback-before-233f65f2fef3", "legacyAssetsSha256": "PASS", "adjacentActiveContainersPreserved": 6 },
+  "authenticatedSmoke": {
+    "existingManualDraft": true,
+    "samePersonAsReported": true,
+    "separateTab": true,
+    "originalUserFormReloaded": false,
+    "realDataSavedOrPublished": false,
+    "before": { "frameHeight": 618, "contentHeight": 3706, "overflow": "hidden" },
+    "after": { "version": "2.7.3", "frameHeight": 3706, "contentHeight": 3706, "overflow": "visible", "maxWidth": 1320, "areasVisible": true, "areasEditable": true }
+  },
+  "validation": { "browserScenarios": 9, "registryTests": 5, "toolingTests": 22, "types": "PASS", "webBuild": "PASS", "context": "PASS", "lint": "PASS" },
+  "limitations": ["Production smoke only reads the existing draft; save/publication verified with synthetic transport.", "No complete redesign or removal of comparison surfaces."]
+}

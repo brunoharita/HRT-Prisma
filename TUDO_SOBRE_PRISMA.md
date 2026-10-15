@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 492
-source_manifest_sha256: f7eb0909ff198c56a9c2787dbc1429156ec4fea55a792dd3f76072313f185d20
+source_manifest_sha256: a4246a3e78c4dc6b1448de5ae6b5977d2d7e19a31008ec687616b5b27ba911ff
 -->
 
 # Tudo sobre o Prisma
@@ -2651,7 +2651,7 @@ last_verified: 2026-10-15
 
 ## Editor manual 2.7.3: rolagem integral
 
-Correção do relato de15/10/2026: modo manual herdava altura fixa e overflow hidden do split PDF, cortando campos como Áreas de atuação. CSS exclusivamente manual permite altura natural/rolagem da página e alinha header/cartão em largura máxima1320, sem margens internas excessivas. Cadastro novo e atualização preservam referências, abas, salvar/retomar e comparação humana; split não manual mantém dimensões/overflow anteriores. Sem alteração de backend, dados, Knowledge, IA/Tokens ou publicação de Perfil. Acordo/mapa/execução/AoT em `docs/qa/manual-editor-scroll-v273.md`; rollout depende da evidência final.
+Correção do relato de15/10/2026: modo manual herdava altura fixa e overflow hidden do split PDF, cortando campos como Áreas de atuação. CSS exclusivamente manual permite altura natural/rolagem da página e alinha header/cartão em largura máxima1320, sem margens internas excessivas. Cadastro novo e atualização preservam referências, abas, salvar/retomar e comparação humana; split não manual mantém dimensões/overflow anteriores. Sem alteração de backend, dados, Knowledge, IA/Tokens ou publicação de Perfil. Publicada no SHA funcional233f65f2fef3f4963794da1cfbb48fffc19faae8, CI branch38794437790/main38794682804 SUCCESS; web running/restart0/HTTP200 e rollback/assets anteriores preservados. Mesmo rascunho real conferido sem escrita: frame antes618/conteúdo3706 recortado, depois3706/3706 visível e Áreas habilitada.9cenários browser sintético e tipos/build/contexto PASS. Acordo/mapa/execução/AoT e limites em `docs/qa/manual-editor-scroll-v273.md`.
 
 ## Pessoas 2.7.2: áreas e funções do Knowledge
 
@@ -29519,9 +29519,17 @@ GOV-01 inicial: formulário manual/rolagem/layout `direct`, incluindo cadastro n
 | D-01 | Altura natural/overflow visível exclusivamente manual. Baseline1448: frame670px/conteúdo1893px, Áreas fora do recorte após wheel. Depois: nenhum ancestral recorta, campo visível e editável em2232/1448/390 | PASS |
 | D-02 | Header/cartão alinhados em1320px e editor ocupa sua largura; seis cenários cadastro/atualização salvam a área declarada em rascunho, comparação continua disponível, nenhuma publicação automática | PASS |
 | P-01 | Três cenários não manuais conservam overflow hidden e altura própria. Diff só CSS manual/registry/testes/docs, zero chamadas externas no teste; sem writers alterados | PASS |
-| CA-01 |9 cenários browser,5 testes registry, tipos root/web, build web, lint/contexto/diff PASS. CI/produção pendentes até recibo final | PARTIAL |
+| CA-01 |9 cenários browser,5 testes registry,22tooling, tipos root/web, build web, lint/contexto/diff e CI branch38794437790/main38794682804 PASS; smoke do mesmo rascunho real sem escrita | PASS |
 
 Imagens e medições em `evidence/manual-editor-scroll-v273`, mesmos dados sintéticos/estado update/viewport1448 antes/depois; desktop2232 e celular390 adicionais. Referência é contraprova do recorte; nenhuma composição nova foi tratada como aprovada. Ajuste de largura é acabamento da área ampla já aprovada. O seletor exato de comparação no teste ignorava nome acessível composto; corrigido para correspondência textual após inspecionar botões, sem alterar produto. Não se refez nenhuma jornada/dado humano em produção para testar gravação.
+
+## Publicação e fechamento
+
+Publicada2.7.3 no SHA funcional233f65f2fef3f4963794da1cfbb48fffc19faae8, main/origin/VPS; CI branch38794437790/main38794682804 SUCCESS. Dispatcher restringiu a web, sem acesso/publicação de banco ou Edge. Web6a8ec5d1b1e1 running/restart0/HTTP200; rollback retém2.7.2 e todos os assets anteriores foram conferidos por SHA256. Seis containers ativos adjacentes mantêm IDs; teste previamente unhealthy permanece assim.
+
+Smoke autenticado abriu o rascunho já existente da Pessoa indicada em aba separada, sem criar/revisar/salvar/publicar dados reais e sem recarregar o formulário original do usuário. Antes: frame618px/conteúdo3706px/overflow hidden. Depois: versão2.7.3, frame/conteúdo3706px, overflow visible, largura máxima1320px, Áreas de atuação visível no viewport e input habilitado. Nenhuma exposição de currículo ou contato na evidência Git. Seleção de campo é só navegação local do editor.
+
+Sem desvios funcionais identificados. Layout com referência/edição, validações, rascunho e comparação mantidos; a intervenção não equivale a redesenho completo. Fechamento documental/contexto/evidência sincroniza fontes sem novo build/deploy. Evidência estruturada em `evidence/manual-editor-scroll-v273/publication.json`.
 
 ---
 

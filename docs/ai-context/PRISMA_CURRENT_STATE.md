@@ -10,7 +10,7 @@ last_verified: 2026-10-15
 
 ## Editor manual 2.7.3: rolagem integral
 
-Correção do relato de15/10/2026: modo manual herdava altura fixa e overflow hidden do split PDF, cortando campos como Áreas de atuação. CSS exclusivamente manual permite altura natural/rolagem da página e alinha header/cartão em largura máxima1320, sem margens internas excessivas. Cadastro novo e atualização preservam referências, abas, salvar/retomar e comparação humana; split não manual mantém dimensões/overflow anteriores. Sem alteração de backend, dados, Knowledge, IA/Tokens ou publicação de Perfil. Acordo/mapa/execução/AoT em `docs/qa/manual-editor-scroll-v273.md`; rollout depende da evidência final.
+Correção do relato de15/10/2026: modo manual herdava altura fixa e overflow hidden do split PDF, cortando campos como Áreas de atuação. CSS exclusivamente manual permite altura natural/rolagem da página e alinha header/cartão em largura máxima1320, sem margens internas excessivas. Cadastro novo e atualização preservam referências, abas, salvar/retomar e comparação humana; split não manual mantém dimensões/overflow anteriores. Sem alteração de backend, dados, Knowledge, IA/Tokens ou publicação de Perfil. Publicada no SHA funcional233f65f2fef3f4963794da1cfbb48fffc19faae8, CI branch38794437790/main38794682804 SUCCESS; web running/restart0/HTTP200 e rollback/assets anteriores preservados. Mesmo rascunho real conferido sem escrita: frame antes618/conteúdo3706 recortado, depois3706/3706 visível e Áreas habilitada.9cenários browser sintético e tipos/build/contexto PASS. Acordo/mapa/execução/AoT e limites em `docs/qa/manual-editor-scroll-v273.md`.
 
 ## Pessoas 2.7.2: áreas e funções do Knowledge
 
