@@ -14,6 +14,7 @@ sql+=await readFile('supabase/migrations/20261010120000_process_assessment.sql',
 sql+=await readFile('supabase/qa/process_assessment_verification.sql','utf8');
 for(const name of ['20261005013000_profile_synthesis_diagnostics','20261005034000_profile_synthesis_sections','20261005034500_profile_synthesis_retry_upgrade','20261010180000_prisma_tokens','20261010181000_prisma_tokens_consumers']) sql+=await readFile(`supabase/migrations/${name}.sql`,'utf8');
 const nonround=process.argv.includes('--nonround-rates');
+const calendar=process.argv.includes('--calendar-wallet');
 if(nonround){
  sql+=await readFile('supabase/qa/prisma_token_nonround_before.sql','utf8');
  const migration=await readFile('supabase/migrations/20261012130000_prisma_token_nonround_rates.sql','utf8');
@@ -42,7 +43,14 @@ rollback to approved_activity_rate;
 }
 if(content){sql+=await readFile('supabase/migrations/20261013193000_assessment_content_signals.sql','utf8');sql+=await readFile('supabase/qa/assessment_content_signals_verification.sql','utf8');sql+=await readFile('supabase/migrations/20261013205000_assessment_content_selection_scope.sql','utf8');sql+=await readFile('supabase/qa/assessment_content_selection_scope_verification.sql','utf8');}
 if(timeline){sql+='\nreset role; create temp table tl_attempts_before as select to_jsonb(t) data from public.position_assessment_attempts t; create temp table tl_assessments_before as select to_jsonb(t) data from public.position_assessments t; create temp table tl_analyses_before as select to_jsonb(t) data from private.assessment_activity_analyses t;\n';sql+=await readFile('supabase/migrations/20261014100000_assessment_response_timeline.sql','utf8');sql+=await readFile('supabase/qa/assessment_response_timeline_verification.sql','utf8');}
+if(calendar){
+ sql+=await readFile('supabase/migrations/20261013120000_assessment_activity_analysis.sql','utf8');
+ sql+=await readFile('supabase/migrations/20261013130000_assessment_activity_analysis_rate.sql','utf8');
+ sql+=await readFile('supabase/qa/tokens_calendar_before.sql','utf8');
+ sql+=await readFile('supabase/migrations/20261014230000_tokens_calendar_wallet.sql','utf8');
+ sql+=await readFile('supabase/qa/tokens_calendar_verification.sql','utf8');
+}
 sql+='\nrollback;';
-const dir=timeline?'docs/qa/evidence/assessment-question-timeline/sql':content?'docs/qa/evidence/assessment-content-signals/sql':activity?'docs/qa/evidence/assessment-activity-v252/sql':nonround?'docs/qa/evidence/tokens-nonround-rates/sql':'docs/qa/evidence/tokens-prisma-v240/sql';await mkdir(dir,{recursive:true});await mkdir('tmp',{recursive:true});await writeFile('tmp/tokens-prisma-local.sql',sql);
+const dir=calendar?'docs/qa/evidence/tokens-v262/sql':timeline?'docs/qa/evidence/assessment-question-timeline/sql':content?'docs/qa/evidence/assessment-content-signals/sql':activity?'docs/qa/evidence/assessment-activity-v252/sql':nonround?'docs/qa/evidence/tokens-nonround-rates/sql':'docs/qa/evidence/tokens-prisma-v240/sql';await mkdir(dir,{recursive:true});await mkdir('tmp',{recursive:true});await writeFile('tmp/tokens-prisma-local.sql',sql);
 const r=spawnSync('C:/Program Files/PostgreSQL/17/bin/psql.exe',['-X','-h','127.0.0.1','-p','55479','-U','prisma_v202_qa','-d','import_evidence_v202','-v','ON_ERROR_STOP=1','-f','tmp/tokens-prisma-local.sql'],{encoding:'utf8',windowsHide:true});
-const rawOutput=(r.stdout+'\n'+r.stderr).replaceAll('\r\n','\n');const output=activity?rawOutput.split('\n').map(line=>line.trimEnd()).join('\n'):rawOutput;await writeFile(`${dir}/sql.txt`,output);console.log(output.slice(-6500));process.exitCode=r.status??1;
+const rawOutput=(r.stdout+'\n'+r.stderr).replaceAll('\r\n','\n');const output=activity||calendar?rawOutput.split('\n').map(line=>line.trimEnd()).join('\n'):rawOutput;await writeFile(`${dir}/sql.txt`,output);console.log(output.slice(-6500));process.exitCode=r.status??1;

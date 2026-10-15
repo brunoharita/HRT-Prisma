@@ -1,0 +1,71 @@
+{
+  "checks": [
+    {
+      "name": "1448: composition and planning",
+      "pass": true
+    },
+    {
+      "name": "1448:30day expiry notice and priority",
+      "pass": true
+    },
+    {
+      "name": "1448: no global horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "desktop: sources left wider than planning",
+      "pass": true
+    },
+    {
+      "name": "1448: history links quantity and origin",
+      "pass": true
+    },
+    {
+      "name": "1448: monthly totals",
+      "pass": true
+    },
+    {
+      "name": "1448: refresh retains current wallet",
+      "pass": true
+    },
+    {
+      "name": "1448: financial catalog only on demand",
+      "pass": true
+    },
+    {
+      "name": "1448: payment and30days explicit",
+      "pass": true
+    },
+    {
+      "name": "1448: failed request preserves modal",
+      "pass": true
+    },
+    {
+      "name": "1448: retry reuses operation ID",
+      "pass": true
+    },
+    {
+      "name": "1448: operational role hides financial and other usage",
+      "pass": true
+    },
+    {
+      "name": "1448: super sees same composition",
+      "pass": true
+    },
+    {
+      "name": "1448: calendar configure no anniversary field",
+      "pass": true
+    },
+    {
+      "name": "1448: no months control",
+      "pass": true
+    },
+    {
+      "name": "1448: no exceptions or external requests",
+      "pass": true
+    }
+  ],
+  "limits": [
+    "Components with synthetic transport; SQL validates backend authority. No paid AI, production orders or human decisions."
+  ]
+}

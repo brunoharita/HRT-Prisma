@@ -1,0 +1,135 @@
+{
+  "checks": [
+    {
+      "name": "390: composition and planning",
+      "pass": true
+    },
+    {
+      "name": "390:30day expiry notice and priority",
+      "pass": true
+    },
+    {
+      "name": "390: no global horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "390: expandable mobile sources",
+      "pass": true
+    },
+    {
+      "name": "390: history links quantity and origin",
+      "pass": true
+    },
+    {
+      "name": "390: monthly totals",
+      "pass": true
+    },
+    {
+      "name": "390: refresh retains current wallet",
+      "pass": true
+    },
+    {
+      "name": "390: financial catalog only on demand",
+      "pass": true
+    },
+    {
+      "name": "390: payment and30days explicit",
+      "pass": true
+    },
+    {
+      "name": "390: failed request preserves modal",
+      "pass": true
+    },
+    {
+      "name": "390: retry reuses operation ID",
+      "pass": true
+    },
+    {
+      "name": "390: operational role hides financial and other usage",
+      "pass": true
+    },
+    {
+      "name": "390: super sees same composition",
+      "pass": true
+    },
+    {
+      "name": "390: calendar configure no anniversary field",
+      "pass": true
+    },
+    {
+      "name": "390: no months control",
+      "pass": true
+    },
+    {
+      "name": "390: no exceptions or external requests",
+      "pass": true
+    },
+    {
+      "name": "320: composition and planning",
+      "pass": true
+    },
+    {
+      "name": "320:30day expiry notice and priority",
+      "pass": true
+    },
+    {
+      "name": "320: no global horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "320: expandable mobile sources",
+      "pass": true
+    },
+    {
+      "name": "320: history links quantity and origin",
+      "pass": true
+    },
+    {
+      "name": "320: monthly totals",
+      "pass": true
+    },
+    {
+      "name": "320: refresh retains current wallet",
+      "pass": true
+    },
+    {
+      "name": "320: financial catalog only on demand",
+      "pass": true
+    },
+    {
+      "name": "320: payment and30days explicit",
+      "pass": true
+    },
+    {
+      "name": "320: failed request preserves modal",
+      "pass": true
+    },
+    {
+      "name": "320: retry reuses operation ID",
+      "pass": true
+    },
+    {
+      "name": "320: operational role hides financial and other usage",
+      "pass": true
+    },
+    {
+      "name": "320: super sees same composition",
+      "pass": true
+    },
+    {
+      "name": "320: calendar configure no anniversary field",
+      "pass": true
+    },
+    {
+      "name": "320: no months control",
+      "pass": true
+    },
+    {
+      "name": "320: no exceptions or external requests",
+      "pass": true
+    }
+  ],
+  "limits": [
+    "Components with synthetic transport; SQL validates backend authority. No paid AI, production orders or human decisions."
+  ]
+}

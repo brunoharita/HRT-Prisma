@@ -1,5 +1,5 @@
 import {spawnSync,spawn} from 'node:child_process';import {readFile,writeFile,mkdir} from 'node:fs/promises';
-const exe='C:/Program Files/PostgreSQL/17/bin/',args=['-X','-h','127.0.0.1','-p','55479','-U','prisma_v202_qa','-v','ON_ERROR_STOP=1'],db='prisma_tokens_concurrency_v240',checks=[];
+const exe='C:/Program Files/PostgreSQL/17/bin/',args=['-X','-h','127.0.0.1','-p','55479','-U','prisma_v202_qa','-v','ON_ERROR_STOP=1'],db=process.argv.includes('--calendar-wallet')?'prisma_tokens_concurrency_v262':'prisma_tokens_concurrency_v240',checks=[];
 function psql(database,query){const r=spawnSync(exe+'psql.exe',[...args,'-d',database,'-At','-c',query],{encoding:'utf8',windowsHide:true});if(r.status!==0)throw Error(r.stderr.slice(-1200));return r.stdout.trim();}
 function concurrent(query){return new Promise(resolve=>{const p=spawn(exe+'psql.exe',[...args,'-d',db,'-At','-c',query],{windowsHide:true});let out='',err='';p.stdout.on('data',x=>out+=x);p.stderr.on('data',x=>err+=x);p.on('exit',status=>resolve({status,out,err}));});}
 if(psql('import_evidence_v202','select count(*) from public.people')!=='0')throw Error('LOCAL empty baseline required');if(psql('postgres',`select count(*) from pg_database where datname='${db}'`)!=='0')throw Error('Dedicated LOCAL concurrency database exists; do not overwrite');
@@ -29,5 +29,5 @@ try{
  const renewal=await Promise.all([1,2].map(()=>concurrent(`begin;${auth}select public.prisma_tokens('overview','${c}')->>'available';select pg_sleep(0.15);commit;`)));
  checks.push({name:'first simultaneous consultations grant monthly franchise once',pass:renewal.every(x=>x.status===0)&&psql(db,`select count(*) from private.prisma_token_lots where organization_id='${c}'`)==='1'});
  if(checks.some(c=>!c.pass))throw Error('TOKEN_CONCURRENCY_FAILED');
-}finally{psql('postgres',`drop database ${db}`);await mkdir('docs/qa/evidence/tokens-prisma-v240/concurrency',{recursive:true});await writeFile('docs/qa/evidence/tokens-prisma-v240/concurrency/checks.json',JSON.stringify({environment:'Owned LOCAL PostgreSQL17 schema-only clone removed after run',checks},null,2));}
+}finally{psql('postgres',`drop database ${db}`);await mkdir(process.argv.includes('--calendar-wallet')?'docs/qa/evidence/tokens-v262/concurrency':'docs/qa/evidence/tokens-prisma-v240/concurrency',{recursive:true});await writeFile((process.argv.includes('--calendar-wallet')?'docs/qa/evidence/tokens-v262/concurrency':'docs/qa/evidence/tokens-prisma-v240/concurrency')+'/checks.json',JSON.stringify({environment:'Owned LOCAL PostgreSQL17 schema-only clone removed after run',checks},null,2));}
 console.log(JSON.stringify({passed:checks.length,total:checks.length}));

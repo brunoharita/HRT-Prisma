@@ -1,0 +1,435 @@
+{
+  "project": "ioldpnqqvobprjiontre",
+  "baselineSha": "330f7e667d7429c66fba838a41f20b774696eceb",
+  "protected": [
+    {
+      "evidence": {
+        "debits": {
+          "count": 4,
+          "fingerprint": "1abadde47e217214f52f46d0789ea9f4"
+        },
+        "security": [
+          {
+            "acl": "{postgres=arwdDxtm/postgres}",
+            "rls": true,
+            "name": "private.prisma_token_accounts"
+          },
+          {
+            "acl": "{postgres=arwdDxtm/postgres}",
+            "rls": true,
+            "name": "private.prisma_token_allocations"
+          },
+          {
+            "acl": "{postgres=arwdDxtm/postgres}",
+            "rls": true,
+            "name": "private.prisma_token_lots"
+          },
+          {
+            "acl": "{postgres=arwdDxtm/postgres}",
+            "rls": true,
+            "name": "private.prisma_token_movements"
+          },
+          {
+            "acl": "{postgres=arwdDxtm/postgres}",
+            "rls": true,
+            "name": "private.prisma_token_orders"
+          },
+          {
+            "acl": "{postgres=arwdDxtm/postgres}",
+            "rls": true,
+            "name": "private.prisma_token_packages"
+          },
+          {
+            "acl": "{postgres=arwdDxtm/postgres}",
+            "rls": true,
+            "name": "private.prisma_token_quotes"
+          },
+          {
+            "acl": "{postgres=arwdDxtm/postgres}",
+            "rls": true,
+            "name": "private.prisma_token_rates"
+          },
+          {
+            "acl": "{postgres=arwdDxtm/postgres}",
+            "rls": true,
+            "name": "private.prisma_token_reservations"
+          }
+        ],
+        "functions": [
+          {
+            "acl": "{postgres=X/postgres,service_role=X/postgres}",
+            "body": "c78b0dcaa4c53246fb23e45e722b8ff7",
+            "signature": "assessment_activity_analysis_finish(uuid,uuid,boolean,jsonb,jsonb,jsonb)"
+          },
+          {
+            "acl": "{postgres=X/postgres,authenticated=X/postgres}",
+            "body": "fa0b60bae3f4edaa15f1f5969e93d8d1",
+            "signature": "assessment_activity_analysis_start(uuid,uuid,uuid,uuid)"
+          },
+          {
+            "acl": "{postgres=X/postgres,service_role=X/postgres}",
+            "body": "7a6cf02831f9ec687f04a7d56e81e0cf",
+            "signature": "complete_m51c_external_generation(uuid,jsonb,jsonb)"
+          },
+          {
+            "acl": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+            "body": "2c6ef1dbb6d6e1ffc9f05d79793f8379",
+            "signature": "complete_profile_synthesis(text,uuid,uuid,jsonb,text,integer,integer,integer,text,jsonb)"
+          },
+          {
+            "acl": "{postgres=X/postgres,service_role=X/postgres}",
+            "body": "b12278364628fe87e566a0ab15ecd0e7",
+            "signature": "fail_m51c_external_generation(uuid,text)"
+          },
+          {
+            "acl": "{postgres=X/postgres,service_role=X/postgres}",
+            "body": "cbc362849c5094cd86706b78c6946156",
+            "signature": "position_assessment_generation_finish(uuid,uuid,jsonb,numeric,boolean)"
+          },
+          {
+            "acl": "{postgres=X/postgres,authenticated=X/postgres}",
+            "body": "8de90153352f347b85a153bb5b4e7037",
+            "signature": "position_assessment_generation_request(uuid,uuid,uuid,jsonb,uuid)"
+          },
+          {
+            "acl": "{postgres=X/postgres,authenticated=X/postgres}",
+            "body": "7e34fe2bd3ada61d0da629b37e5f9e12",
+            "signature": "prisma_tokens(text,uuid,jsonb)"
+          },
+          {
+            "acl": "{postgres=X/postgres}",
+            "body": "6eda9262cd30e6f7595a53ea9be7513e",
+            "signature": "private.assessment_activity_view(private.assessment_activity_analyses,text)"
+          },
+          {
+            "acl": "{postgres=X/postgres}",
+            "body": "0f465e8a8ebbb789dc34b675217fff69",
+            "signature": "private.company_question_request_before_v251(uuid,uuid,integer,text,integer,text,uuid)"
+          },
+          {
+            "acl": "{postgres=X/postgres}",
+            "body": "0bf6b6d4de1aaa9298c36e34403127b6",
+            "signature": "private.enqueue_profile_synthesis(uuid)"
+          },
+          {
+            "acl": "{postgres=X/postgres}",
+            "body": "971fdb9a06ce091ed8233bda996ece15",
+            "signature": "private.prisma_token_balance(uuid)"
+          },
+          {
+            "acl": "{postgres=X/postgres}",
+            "body": "54ece21e14a8cf117a59be6b2590b145",
+            "signature": "private.prisma_token_bind_synthesis(uuid,jsonb,uuid)"
+          },
+          {
+            "acl": "{postgres=X/postgres}",
+            "body": "4bdf2a20c495cf5366ccc783c7aecc09",
+            "signature": "private.prisma_token_ensure(uuid,timestamp with time zone)"
+          },
+          {
+            "acl": "{postgres=X/postgres}",
+            "body": "50a4b1e72a79167cd1c43e94b9f8a02d",
+            "signature": "private.prisma_token_reserve(uuid,text,uuid,uuid,integer)"
+          },
+          {
+            "acl": "{postgres=X/postgres}",
+            "body": "951eecafe4976674df271cd6c89429e2",
+            "signature": "private.prisma_token_settle(uuid,text,uuid,boolean,text)"
+          },
+          {
+            "acl": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+            "body": "8051406d4bed8145f05d5dddca1d00dd",
+            "signature": "record_ai_worker_history_v1(text,text,jsonb)"
+          },
+          {
+            "acl": "{postgres=X/postgres,authenticated=X/postgres}",
+            "body": "43ca2a983668343033366a967fa3b04e",
+            "signature": "request_profile_synthesis(uuid,uuid,uuid,uuid)"
+          },
+          {
+            "acl": "{postgres=X/postgres,authenticated=X/postgres}",
+            "body": "3bb9683306d095e4db459d3d2ba86b23",
+            "signature": "retry_profile_synthesis(uuid,uuid,uuid,uuid)"
+          }
+        ],
+        "protected": [
+          {
+            "count": 6,
+            "object": "ai_requests",
+            "fingerprint": "bf7987a8042e01b2cb19457fca57dd3b"
+          },
+          {
+            "count": 37,
+            "object": "assessment_items",
+            "fingerprint": "8a9d67f6209335b36e7cc8254a3ac570"
+          },
+          {
+            "count": 40,
+            "object": "match_evaluations",
+            "fingerprint": "6d6da272d802f8b70d506740d04276e4"
+          },
+          {
+            "count": 11,
+            "object": "people",
+            "fingerprint": "682dab403f6a5a8dbae50b5cf8c6195b"
+          },
+          {
+            "count": 2,
+            "object": "position_assessment_attempts",
+            "fingerprint": "9614d5db96699c358c4b0723071b5e6b"
+          },
+          {
+            "count": 2,
+            "object": "position_assessments",
+            "fingerprint": "92880e197efbd95e313c4dc79c4884c9"
+          },
+          {
+            "count": 1,
+            "object": "position_evaluation_processes",
+            "fingerprint": "b265a47b8c0063ebf94306f7de42468a"
+          },
+          {
+            "count": 4,
+            "object": "prisma_token_allocations",
+            "fingerprint": "7c84a87a61c644ac5abbd3d9b259cf15"
+          },
+          {
+            "count": 9,
+            "object": "prisma_token_quotes",
+            "fingerprint": "75ebe99538b9385692e3ddbef3551ddd"
+          },
+          {
+            "count": 7,
+            "object": "prisma_token_rates",
+            "fingerprint": "40249913415255c8d9d5f56ea31ef009"
+          },
+          {
+            "count": 4,
+            "object": "prisma_token_reservations",
+            "fingerprint": "e3ed33c4125b38b407365e2196679375"
+          },
+          {
+            "count": 15,
+            "object": "professional_profiles",
+            "fingerprint": "d6827a96e4e504f8e4f76d342cae0826"
+          },
+          {
+            "count": 6,
+            "object": "profile_synthesis_jobs",
+            "fingerprint": "51ca0ff9545f2f225c4d7806592795c2"
+          },
+          {
+            "count": 8,
+            "object": "vacancies",
+            "fingerprint": "568c8e887d030b08e8cd32ef59c5feb8"
+          }
+        ],
+        "lotAmounts": [
+          {
+            "id": "118ffc54-d4ba-4df2-8d64-730ceac025c8",
+            "total": 1000000,
+            "source": "monthly",
+            "remaining": 1000000,
+            "organizationId": "b0000000-0000-4000-8000-000000000001"
+          },
+          {
+            "id": "5d74339e-06b7-42c0-afe9-aecbfa4c10f1",
+            "total": 1000000,
+            "source": "monthly",
+            "remaining": 941421,
+            "organizationId": "5dcad29a-1dd2-4c12-9adb-8015a79bea4e"
+          }
+        ]
+      }
+    }
+  ],
+  "policy": [
+    {
+      "evidence": {
+        "lots": [
+          {
+            "total": 1000000,
+            "source": "monthly",
+            "expired": false,
+            "remaining": 1000000,
+            "created_at": "2026-10-11T11:14:26.201734+00:00",
+            "expires_at": "2026-11-11T03:00:00+00:00"
+          },
+          {
+            "total": 1000000,
+            "source": "monthly",
+            "expired": false,
+            "remaining": 941421,
+            "created_at": "2026-10-11T11:14:23.922701+00:00",
+            "expires_at": "2026-11-11T03:00:00+00:00"
+          }
+        ],
+        "orders": {
+          "count": 0,
+          "pending": 0,
+          "released": 0
+        },
+        "accounts": [
+          {
+            "active": true,
+            "next_period": "2026-11-11",
+            "cycle_anchor": "2026-10-11",
+            "current_period": "2026-10-11",
+            "monthly_tokens": 1000000,
+            "organization_id": "5dcad29a-1dd2-4c12-9adb-8015a79bea4e",
+            "pending_cycle_day": null,
+            "pending_monthly_tokens": null
+          },
+          {
+            "active": true,
+            "next_period": "2026-11-11",
+            "cycle_anchor": "2026-10-11",
+            "current_period": "2026-10-11",
+            "monthly_tokens": 1000000,
+            "organization_id": "b0000000-0000-4000-8000-000000000001",
+            "pending_cycle_day": null,
+            "pending_monthly_tokens": null
+          }
+        ],
+        "packages": [
+          {
+            "name": "Complemento",
+            "tokens": 1000000,
+            "price_cents": 4900,
+            "validity_months": 12
+          },
+          {
+            "name": "Expansão",
+            "tokens": 3000000,
+            "price_cents": 12900,
+            "validity_months": 12
+          },
+          {
+            "name": "Volume",
+            "tokens": 10000000,
+            "price_cents": 34900,
+            "validity_months": 12
+          }
+        ],
+        "functions": [
+          {
+            "acl": "{postgres=X/postgres,authenticated=X/postgres}",
+            "body": "7e34fe2bd3ada61d0da629b37e5f9e12",
+            "signature": "prisma_tokens(text,uuid,jsonb)"
+          },
+          {
+            "acl": "{postgres=X/postgres}",
+            "body": "971fdb9a06ce091ed8233bda996ece15",
+            "signature": "private.prisma_token_balance(uuid)"
+          },
+          {
+            "acl": "{postgres=X/postgres}",
+            "body": "54ece21e14a8cf117a59be6b2590b145",
+            "signature": "private.prisma_token_bind_synthesis(uuid,jsonb,uuid)"
+          },
+          {
+            "acl": "{postgres=X/postgres}",
+            "body": "4bdf2a20c495cf5366ccc783c7aecc09",
+            "signature": "private.prisma_token_ensure(uuid,timestamp with time zone)"
+          },
+          {
+            "acl": "{postgres=X/postgres}",
+            "body": "50a4b1e72a79167cd1c43e94b9f8a02d",
+            "signature": "private.prisma_token_reserve(uuid,text,uuid,uuid,integer)"
+          },
+          {
+            "acl": "{postgres=X/postgres}",
+            "body": "951eecafe4976674df271cd6c89429e2",
+            "signature": "private.prisma_token_settle(uuid,text,uuid,boolean,text)"
+          }
+        ],
+        "reservations": {
+          "count": 4,
+          "pending": 0
+        }
+      }
+    }
+  ],
+  "containers": [
+    {
+      "name": "/prisma-web",
+      "id": "4dd5b59bf6084ad3b2b1e41b3cf420832e16c2ad0c8ca60da0114be2223d89af",
+      "image": "sha256:541ac6a5ab2efc9a8837844d5a3ffd4ee390487b2ac9c7083ebc36b571812b74",
+      "status": "running",
+      "health": null,
+      "restarts": 0
+    },
+    {
+      "name": "/prisma-parser-ia",
+      "id": "e8bc778c8c00e1f25f54bc1df7e0a78fd0c31f324d847125ff87ded81f1a5fd5",
+      "image": "sha256:8542b81cebc337e052b89bcf9b1ba459ecf0824a0a4a993d8feb614401615039",
+      "status": "running",
+      "health": "healthy",
+      "restarts": 0
+    },
+    {
+      "name": "/prisma-paddle-gateway",
+      "id": "8fb76416f61cd0baf27b14a4fe4e2692e6384487f740337ba5f424145f104653",
+      "image": "sha256:cf414afdb189d3906df09633566e75d56a56dc7779e21a73e80830b0b71c9b73",
+      "status": "running",
+      "health": null,
+      "restarts": 0
+    },
+    {
+      "name": "/hrt-mail-forwarder",
+      "id": "b257a83cbb370299dc3666d120a22b47f7fb5acfc4a73516a78b821ae43fea6a",
+      "image": "sha256:ffc0f2a53e093cec01c4a91e652b29b0ede4808ecc2f461df9e6faa52940cc31",
+      "status": "running",
+      "health": "healthy",
+      "restarts": 0
+    },
+    {
+      "name": "/prisma-profile-synthesis",
+      "id": "db6c5c0ef238534ba2967dce3bbf80e9e8c94089ca7bb48b84f4e523961b00d7",
+      "image": "sha256:2fdccaea0fb50449f9f5e800ada1925c690fab319e4d3708ade0f831c7e99167",
+      "status": "running",
+      "health": "healthy",
+      "restarts": 0
+    },
+    {
+      "name": "/paddle-vl-llama-test",
+      "id": "d991a574e45eb002ce05e6c0fc9e448f4a4ed5f6128aaac049ea8cbdb24e4b8f",
+      "image": "sha256:b15cd87030b2eb8a284d398c095e03c6ba8baf386b68e1b83ab8b46e9555ffe8",
+      "status": "running",
+      "health": "unhealthy",
+      "restarts": 0
+    },
+    {
+      "name": "/paddle-vl-prisma-test",
+      "id": "2e83e5ef4a5bcc882eb415c23f7099a814dd09798976ba4ea575806d2c883006",
+      "image": "sha256:4b19acbf5174fdd67410258a348a8485c23ceb6c22358530c51373141f43a4e2",
+      "status": "exited",
+      "health": null,
+      "restarts": 0
+    },
+    {
+      "name": "/paddle-structure-1",
+      "id": "b0be4c3994881f54b19b00cbba85a432fe8b3e53bd1a2ae0cdedf771599be90d",
+      "image": "sha256:a2aed573f63f74047233f2af9ba9d2b2fb2aba66b891e41f3db488b230c3c29a",
+      "status": "exited",
+      "health": null,
+      "restarts": 0
+    },
+    {
+      "name": "/paddle-vision-recovery-1",
+      "id": "24ed7d12632d4a1ba358ae82718914208e151284d14c791984e89a07e895f97f",
+      "image": "sha256:4b19acbf5174fdd67410258a348a8485c23ceb6c22358530c51373141f43a4e2",
+      "status": "exited",
+      "health": null,
+      "restarts": 17
+    },
+    {
+      "name": "/traefik-traefik-1",
+      "id": "5e25fdc6d2e6fd3c622972310f67f640b80cac70538e17b42a529d1935488bc6",
+      "image": "sha256:f86a2cab1b5c649070c49f883c743dd32d8485a56e3368c5f93b9e91f1e91259",
+      "status": "running",
+      "health": null,
+      "restarts": 0
+    }
+  ]
+}

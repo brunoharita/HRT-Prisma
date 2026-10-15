@@ -31,8 +31,8 @@ export async function takeTokenQuote(org:string,fn:TokenFunction,quantity:number
  if(quotes.get(id)?.id===q.id)quotes.delete(id);return q;
 }
 export const prismaTokensService={
- async overview(org:string){const v=await tokenRpc<TokenOverview>("overview",org);if(v?.contract!=="prisma-tokens-1.0.0"||v.organizationId!==org||!Number.isSafeInteger(v.available)||v.available<0||!Array.isArray(v.movements)||!Array.isArray(v.reservations)||!Array.isArray(v.rates))throw Error("Saldo indisponível. Atualize a consulta.");return v;},
- async platform(){const v=await tokenRpc<TokenPlatform>("platform");if(v?.contract!=="prisma-tokens-1.0.0"||!Array.isArray(v.companies)||!Array.isArray(v.packages))throw Error("Gestão indisponível. Atualize a consulta.");return v;},
+ async overview(org:string){const v=await tokenRpc<TokenOverview>("overview",org);if(v?.contract!=="prisma-tokens-2.0.0"||v.organizationId!==org||!Number.isSafeInteger(v.available)||v.available<0||!Array.isArray(v.movements)||!Array.isArray(v.reservations)||!Array.isArray(v.rates)||!Array.isArray(v.lots)||v.account?.policyVersion!=="prisma-token-policy-2.0.0"||v.lots.some(l=>![l.available,l.remaining,l.total].every(n=>Number.isSafeInteger(n)&&n>=0)||l.available>l.remaining||l.remaining>l.total||!Number.isFinite(Date.parse(l.expiresAt)))||v.lots.reduce((n,l)=>n+l.available,0)!==v.available)throw Error("Saldo indisponível. Atualize a consulta.");return v;},
+ async platform(){const v=await tokenRpc<TokenPlatform>("platform");if(v?.contract!=="prisma-tokens-2.0.0"||!Array.isArray(v.companies)||!Array.isArray(v.packages))throw Error("Gestão indisponível. Atualize a consulta.");return v;},
  mutate:tokenRpc,
 };
 

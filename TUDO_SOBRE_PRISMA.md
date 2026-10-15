@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 482
-source_manifest_sha256: eff540a934151932b6046148a90d879bc8a9b677a1d99b7b6e62e24f591e4610
+documentation_source_count: 485
+source_manifest_sha256: 08a8c4825e401a5445117dc94d9c9dbc75cd2f8ba9172dfdeedeeb8ec5bb64fa
 -->
 
 # Tudo sobre o Prisma
@@ -2643,11 +2643,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.74.18
+version: 2.75.0
 last_verified: 2026-10-14
 ---
 
 # Estado atual do Prisma
+
+## Tokens Prisma por origem — 2.6.2 em validação
+
+Proposta3 aprovada: saldo por origem e histórico à esquerda, planejamento/solicitação à direita; mobile expansível, detalhe de empresa equivalente no super. Franquia padrão1M por mês calendário de Brasília, sem acumulação, parcial integral e migração sem duplicação. Pacotes30dias exatos após liberação paga, inclusive anteriores desde aquisição original; franquia primeiro e demais FEFO. Reservas/cotações/debitos/tarifas e dados humanos preservados. Gestão2.0.0/política2.0.0, quote1.0.0; previsão determinística7/30dias completos incluindo zeros, observabilidade obrigatória, expirações/renovação, referência diária sem limite. Nenhuma IA/provedor novo. Acordo/mapa/execução `docs/qa/tokens-v262.md`; publicação ainda não verificada, evidência no AoT. Destinos previstos banco/web apenas.
 
 ## Escolha no encerramento e histórico da participação — 2.6.1 publicada
 
@@ -5151,6 +5155,10 @@ Não existe API HTTP nem event bus no estado atual. O M2-C persiste eventos oper
 O M5.1B autoriza somente execução sintética local/QA pela fronteira tokenizada. Não autoriza Pessoas reais, provider externo, produção, geração por IA, proctoring, certificação ou decisão automática.
 
 Boundary externo `m51c-assessment-item-generator-2.0.0`, requisição `m51c-assessment-item-generation-request-2.0.0`: cotação explícita e destino válido obrigatórios. Requisição1.0.0 é aceita somente com os mesmos campos obrigatórios e guardas; cliente antigo sem cotação falha sem cobrar. Schema de proposta/prompt históricos permanecem. Uso do fornecedor ausente não vira zero nem entrega gratuita; a falha libera reserva comercial e mantém histórico técnico do custo conhecido ou indisponível.
+
+## Tokens Prisma2.6.2
+
+Gestão `prisma-tokens-2.0.0` e conta `policy_version=prisma-token-policy-2.0.0`: calendário mensal Brasília, pacotes `validity_days=30` e prioridade franquia→demais FEFO. Campos legacy de meses permanecem no storage como histórico, sem uso pela API2.0.0. Quote `prisma-token-quote-1.0.0` e limites dos quatro consumidores preservados. Overview inclui lotes nomeados com aquisição/validade/disponível, movimentos com quantidade/operação/fontes/contexto quando rastreáveis e `planning` apenas para gestor. Planejamento `prisma-token-planning-1.0.0`: relógio/janelas/fuso/renovação/início observável e série30dias completa autorizada; simulação apenas consultiva e sem IA. Contrato/agreement integral e aceites em `docs/qa/tokens-v262.md`; ADR-083 revisado. Ausência de histórico/contexto não vira dado inventado.
 
 ---
 
@@ -10209,6 +10217,12 @@ Publicação/consulta/invalidação do Perfil deixam de criar novas sínteses au
 
 Rollback de aplicação deve conservar schema, ledger, pedidos e reservas. Clientes antigos sem cotação continuam consultando/reutilizando, mas nova execução paga é recusada. Não reverter para escritores sem reserva nem apagar a migration para recuperar disponibilidade. Publicar banco antes de Edge/gateway/Parser/web; imagens anteriores preservadas para recuperação com a proteção comercial ainda ativa.
 
+## Revisão aprovada em14/10/2026 — 2.6.2
+
+O Product Owner escolheu a proposta3 e substituiu aniversário por mês calendário de Brasília, prazo de compra por30dias exatos e prioridade somente FEFO por franquia primeiro seguida de FEFO dos demais créditos. Sem exceção de prazo anterior, pois ainda sem clientes em uso. Acordo integral `docs/qa/tokens-v262.md`1.0.0. Política `prisma-token-policy-2.0.0` e gestão `prisma-tokens-2.0.0` tornam a mudança explícita; quote/consumidores1.0.0 conservados. Fonte do saldo/ledger e confirmação de pagamento continuam os mesmos; nenhum fornecedor ou biblioteca nova.
+
+Previsão determinística sobre ledger existente em vez de IA ou serviço financeiro externo: decisão específica sobre lotes, prioridade, zeros, histórico observado, expiração e renovação, sem nova autoridade. Reutiliza Intl/componentes/SQL e não gera custo técnico de provedor. Quantidade de franquia mantém configuração do super para próximo mês, padrão1M. Bonificações/restituições e reservas já emitidas conservam suas regras/alocações; pacotes comprados passam30dias desde aquisição original. Não retrocobra nem remove histórico. Rollback conserva dados e requer frontend de gestão compatível com envelope2.0.0.
+
 ---
 
 ## Source: `docs/decisions/ADR-084-assessment-activity-analysis.md`
@@ -11150,6 +11164,16 @@ Migration `20261012130000_prisma_token_nonround_rates.sql`: insere três revisõ
 ## Análise da atividade da avaliação2.5.2
 
 Bruno aprovou em13/10/2026 a nova categoria assessment_activity_analysis, tarifa inicial6.193 Tokens Prisma por análise concluída da tentativa. Migration20261013130000 é aditiva, bloqueia categoria já configurada e preserva as outras tarifas/cotações/reservas. Resultado salvo é consulta gratuita; nova base exige ação/cotação explícitas, falha sem resultado libera reserva, confirmação incerta não repete chamada paga. Usos aparecem no histórico comercial separado; custo do provider permanece técnico/global segundo contratos existentes. Acordo1.1.0/AoT assessment-activity-v252 registram ativação e publicação.
+
+## Política calendário / carteira por origem — 2.6.2
+
+`20261014230000_tokens_calendar_wallet.sql` é a única migration do movimento. Ordem: validar local/CI, aplicar banco, publicar web do mesmo SHA; não publicar Edge/Parser/gateway/Síntese/mail. Quote/worker1.0.0 e tarifas intactos. RPC de gestão2.0.0, política persistida2.0.0; clientes antigos de gestão recusam envelope incompatível durante o intervalo entre banco/web, sem bypass da cobrança. Rollback preserva banco/ledger/30dias/calendário; imagem2.6.1 continua os demais fluxos, mas gestão exige correção/roll-forward compatível2.0.0. Não restaurar writers antigos nem reverter semântica ou apagar saldos/histórico.
+
+Migration trava organizações antes das tabelas comerciais para respeitar a ordem das reservas. Converte o lote mensal vigente (mesmo ID/total/remaining) em mês calendário e encurta seu vencimento; falha se houver mais de um lote mensal vivo por conta, exigindo revisão. Adicionais recalculados desde released_at/created_at+720horas; com reserva vencida conserva alocação até settle/conciliação. Metadados antigos de meses ficam apenas no storage histórico; API/tela usam validity_days=30. Configuração auditada com movimento zero; cotações/reservas/debitos/dados humanos não são reescritos. Sem concessão repetida, backfill de meses ou expurgo. Conta ganha policy_version/created_at; início observável conservador vem do primeiro lote.
+
+Planejamento lê série diária autorizada de30dias com zeros do servidor e relógio/fuso/janelas/renovação fornecidos pelo PostgreSQL. Cliente faz apenas simulação pura de apresentação; permissões e disponibilidade de reserva continuam no backend. Insuficiência de história não é consumo zero. Composição e séries de empresa só para gestores; operador não recebe projeção agregada nem preços. Helpers privados sem EXECUTE cliente/worker.
+
+QA: `node scripts/test-prisma-tokens-sql.mjs --calendar-wallet`; `node scripts/test-prisma-tokens-concurrency.mjs --calendar-wallet`; Node tokenPlanning/prismaTokensService; browser tokensCalendar e tokensCalendarStates. Fixture normativa14/10/2026,800.461=615.032+185.429,34.168/dia, média41.425, possível esgotamento28/10 após expiração20/10. Evidência local sintética, sem fornecedor pago/pedido/pagamento produtivo fictício. Novos fatos operacionais e limites no AoT tokens-v262.
 
 ---
 
@@ -12116,15 +12140,15 @@ A amostra atual é sintética e representativa. Ela permite comprovar a mecânic
 
 # Tokens Prisma — gestão de uso de IA
 
-Produto 2.4.0; contrato `prisma-tokens-1.0.0`, ADR-083. Tokens Prisma são créditos comerciais próprios. Não correspondem a tokens de entrada/saída da OpenAI ou Anthropic.
+Produto 2.6.2; gestão `prisma-tokens-2.0.0`, política `prisma-token-policy-2.0.0`, cotação `prisma-token-quote-1.0.0`, ADR-083 revisado. Tokens Prisma são créditos comerciais próprios. Não correspondem a tokens de entrada/saída da OpenAI ou Anthropic.
 
-Cada empresa começa com 1.000.000 tokens mensais, sem acumulação. Nas novas cotações, questão gerada custa 2.347; importação por Parser IA custa 14.785; síntese profissional custa 6.193. Cache, banco aprovado, consulta, revisão, gravação e envio não consomem novamente. O consumo aparece como texto secundário antes da ação. Reserva reduz o disponível; entrega válida confirma o débito, falha sem entrega libera. Saldo baixo gera aviso discreto; insuficiência preserva rascunho e ações manuais.
+Cada empresa começa com 1.000.000 tokens por mês calendário de Brasília: dia1 às00h até a virada seguinte, sem acumulação ou meses retroativos. Ativação parcial recebe integral até a virada. A migração aproveita o lote vigente sem duplicar franquia. Nas novas cotações, questão gerada custa 2.347; importação por Parser IA custa 14.785; síntese profissional custa 6.193. Cache, banco aprovado, consulta, revisão, gravação e envio não consomem novamente. O consumo aparece como texto secundário antes da ação. Reserva reduz o disponível; entrega válida confirma o débito, falha sem entrega libera. Saldo baixo gera aviso discreto; insuficiência preserva rascunho e ações manuais.
 
 Em Administração → Tokens Prisma (`/tokens`), owner/admin acompanham saldo por origem, reservas, consumo, renovação, validade, tabela de consumo, histórico por mês/função/usuário e solicitações. Recruiter/member veem saldo compartilhado e próprio consumo, sem catálogo financeiro nem pedidos; member conserva autorização de síntese, sem ganhar acesso ao Parser ou gerador de questões.
 
-Pacotes iniciais: Complemento 1.000.000 / R$49; Expansão 3.000.000 / R$129; Volume 10.000.000 / R$349. Validade 12 meses após liberação. São condições comerciais aprovadas e configuráveis, sem alegação de margem financeira validada. Solicitar não cobra nem libera saldo. Super usuário encaminha para pagamento, verifica recebimento e informa referência para liberar uma única vez. Cancelamento/recusa exigem motivo. Oferta de pedido solicitado vale sete dias; o preço permanece congelado ao encaminhar para pagamento.
+Pacotes iniciais: Complemento 1.000.000 / R$49; Expansão 3.000.000 / R$129; Volume 10.000.000 / R$349. Validade fixa de30dias exatos (720horas) após pagamento confirmado e liberação. A regra aplica a adicionais existentes desde sua aquisição original, sem prazo reiniciado no deploy ou exceção legada. Bonificações/restituições conservam sua validade própria. São condições comerciais aprovadas e configuráveis, sem alegação de margem financeira validada. Solicitar não cobra nem libera saldo. Super usuário encaminha para pagamento, verifica recebimento e informa referência para liberar uma única vez. Cancelamento/recusa exigem motivo. Oferta de pedido solicitado vale sete dias; o preço permanece congelado ao encaminhar para pagamento.
 
-Em Administração → Gestão de Tokens (`/platform-tokens`), super usuário administra Pacotes e preços, Empresas, Solicitações, Consumo e movimentações. Mudanças de preço/tarifa criam versões com vigência; cotação válida conserva tarifa anterior. Franquia e novo dia do ciclo são agendados para a próxima renovação; o ciclo de transição termina na primeira ocorrência posterior do dia escolhido, podendo ser mais curto, e meses curtos usam último dia sem perder a âncora. Suspensão bloqueia novas reservas, preservando entrega pendente, saldo e histórico. Bonificações/restituições são lançamentos motivados, sem edição direta de saldo. Reservas incertas são conciliadas com evidência e motivo, nunca disparando IA.
+Em Administração → Gestão de Tokens (`/platform-tokens`), super usuário administra Pacotes e preços, Empresas, Solicitações, Consumo e movimentações. Mudanças de preço/tarifa criam versões com vigência; cotação válida conserva tarifa anterior. Quantidade da franquia pode ser agendada para o próximo mês; não há escolha de aniversário ou prazo em meses para pacotes. Suspensão bloqueia novas reservas, preservando entrega pendente, saldo e histórico. Bonificações/restituições são lançamentos motivados, sem edição direta de saldo. Reservas incertas são conciliadas com evidência e motivo, nunca disparando IA.
 
 Não há compra automática, checkout, e-mail de cobrança ou cobrança retroativa. Matching, Knowledge e serviços internos não foram incluídos nas tarifas deste movimento.
 
@@ -12133,6 +12157,14 @@ No Banco de questões 2.5.0, a integração externa M5.1C também exige a cotaç
 ## Tarifas não redondas — 12/10/2026
 
 Configuração `prisma-token-tariffs-2026-10-12`, autorizada pelo Product Owner: valores comerciais fixos por função, sem arredondamento nem aleatoriedade. Vinte questões custam 46.940 Tokens Prisma. Inclui geração pelo processo e pelo Banco de questões. Três revisões aditivas preservam tarifas anteriores, cotações válidas e reservas com seus valores congelados; franquia, pacotes, preços e permissões permanecem. A interface existente consulta a tarifa vigente, formata em pt-BR e conserva consumo secundário. Não há correspondência inventada com uso medido do provedor. Acordo e evidências: `docs/qa/tokens-nonround-rates.md` e AoT correspondente.
+
+## Saldo por origem e planejamento — 2.6.2
+
+Proposta3 aprovada: saldo total discreto, franquia primeiro e demais lotes por vencimento; origem/quantidade disponível/prioridade/aquisição/validade junto de cada lote. Nova reserva usa franquia válida antes de adicional, mesmo que o adicional vença antes; pode dividir entre lotes. Reservas anteriores mantêm alocações e tarifa; vencimento não invalida sua liquidação nem permite reativar crédito vencido em falha. Créditos disponíveis excluem reservas e vencidos.
+
+Movimentações e Uso por função abaixo; planejamento e solicitação na lateral. Celular empilha origens expansíveis, planejamento e histórico. Super escolhe empresa e vê composição equivalente com ações administrativas/pedidos; lista, pacotes/preços/tarifas e histórico/conciliação/custos técnicos continuam em abas próprias. Preços no catálogo solicitado, sem destaque no fluxo operacional. Histórico oferece filtros de origem/função/usuário/mês, detalhes de quantidade/alocação/operação e contexto de avaliação quando registrado. Metadados ausentes no legado permanecem explicitamente não registrados.
+
+Previsão `prisma-token-planning-1.0.0`, sem IA: média dos7ou30dias completos anteriores em Brasília, incluindo zeros; exige observação de toda a janela desde a concessão comercial inicial. Histórico insuficiente, nenhum consumo, suspensão e dados incompatíveis têm estados próprios. Simula consumo constante com prioridade e eventos de expiração até próxima renovação; nunca apenas saldo/média. Referência diária = piso(franquia disponível/tempo restante em dias), orientativa, não limite. Método/período/atualização acessíveis; avisos discretos de vencimento próximo, esgotamento projetado e insuficiência. Nova IA paga insuficiente não bloqueia consultas/ações manuais/rascunhos. Acordo/mapa/execução `docs/qa/tokens-v262.md`, AoT correspondente e referência normativa versionada.
 
 ---
 
@@ -23842,6 +23874,61 @@ A CI inicial38101216159 detectou aviso novo sem ação contextual. Corrigido: fa
 
 ---
 
+## Source: `docs/qa/aot-tokens-v262.md`
+
+# AoT — Tokens Prisma por origem2.6.2
+
+Acordo/execução/mapa `tokens-v262.md`1.0.0, escolha explícita de Bruno da proposta3 e autorização main/produção. Baseline330f7e667d7429c66fba838a41f20b774696eceb, runtime2.6.1. Branch `codex/tokens-v262`; risco D. Evidência em `evidence/tokens-v262/`. Finalização produtiva ainda pendente neste snapshot.
+
+## Agreements → implementação → teste/evidência
+
+| ID | Implementação | Teste/evidência | Status |
+| --- | --- | --- | --- |
+| D-01 | Ensure calendário Brasília, lote vigente reaproveitado e fonte única mês | SQL migração/identidade/remaining/grant único,29fev/UTC/ano/parcial/inatividade/configuração futura;5disputas compartilhadas | PASS local |
+| D-02 | validity_days30/720horas; origem original de aquisição, sem grace reset | SQL legado31dias expira, solicitar não libera e pagamento/replay720h; UI remove meses | PASS local |
+| D-03 | Reserva mensal primeiro, depois FEFO; settle/quote existentes | SQL divisão5000+resto, adicional mais cedo/later, reservas/cotações/alocações/debitos congelados, falha/terminal/vencido pendente; concorrência5 | PASS local |
+| D-04 | TokenWallet origens+histórico à esquerda e planejamento/ações à direita; detalhe super equivalente | Referência3 e render1448/390/320,48checks principais e revisão visual, fonte/apresentação acessível | PASS local |
+| D-05 | Guards atuais, helpers privados sem EXECUTE; overview operador restrito, super seleciona | SQL anon/inativo/tenant/papéis/claims, planejamento/preços ocultos; browser operador/troca de empresa | PASS local |
+| D-06 | Série diária autorizada/relógio servidor, simulação pura por eventos | Node média/zeros/janelas/observabilidade/vencimento/prioridade/renovação/reservas/fuso; estadosUI insuficiente/zero | PASS local |
+| D-07 | Filtros origem/função/usuário/mês, detalhes quantidade/alocação/ref/contexto | SQL snapshot, browser detalhes e filtro; links preservam processo histórico/Pessoa ou explicitam ausência, sem fallback atual inventado | PASS local |
+| D-08 | Cadastro/preço/tarifa/retirada, pedidos/pagamento, configuração, concessões e conciliação conservados | SQL release sem pagamento negado/replay; browser pedido+retry, liberação e cadastro7900centavos; campos de meses/aniversário removidos | PASS local |
+| D-09 | Loading por operação, conteúdo retido, escopo/retry/modal preservados | Browser refresh/erro/rascunho/retry/idempotency/troca obsoleta; tipo/build/loading guards | PASS local |
+| D-10 | Registro2.6.2, contratos2.0.0 e docs/contextos | Validação local/CI/publicação/smoke/sincronização ainda em andamento | PARTIAL |
+
+## Proibições
+
+P-01 PASS local: sem duplicação de franquia/débito/liberação, compra solicitada sem crédito, prazo desde aquisição e mensal primeiro mesmo com adicional prestes a vencer. P-02 PASS local: autorização backend e grants negativos, dados de Pessoas/Perfis/provas/matching e tarifas/cotações preservados; sem IA paga, pedido/pagamento real fictício, preço para operador ou custo técnico para cliente. P-UX-01 PASS local: estrutura3 reconhecível, sem dashboard KPI/linha do tempo/moeda em destaque; método e indisponibilidade explícitos.
+
+## Mapa de impacto final / preservação
+
+O mapa mantém as relações do acordo. Contas/ciclo/lotes/pacotes, reserva/pagamento/ledger, telas empresa/super e projeção são direct. Auth/tenant/RLS critical_transversal com negativas. Quatro consumidores são plausible_indirect: contratos quote/worker1.0.0 e tarifas intactos; regressão SQL comercial existente executa avaliação/Parser/síntese e nova reserva/liquidação de análise de atividade, sem provedor. Shell/versão/loading plausible_indirect com build/guards e viewport. Pessoas/Perfis/Score/processos/Knowledge e nove serviços adjacentes no_impact_identified: nenhum writer ou destino desses domínios no diff;14conjuntos produtivos e19corpos de funções capturados, preservação pós-publicação pendente. Nenhuma biblioteca nova.
+
+Novidade separada: política2.0.0 e UX3. Preservação: replay/quote congelada/entrega humana/price rate/configuração do super/conciliador/cache/rascunho continuam; não se usou sucesso visual como prova de semântica SQL. Dados reais não foram exportados: baseline produtiva contém somente agregados/hashes e metadados necessários.
+
+## Fidelidade visual
+
+Referência normativa `reference/tokens-v262/03-saldo-por-origem.png`, hash no acordo. Mesma fixture fictícia:14/10/2026 às00h,800.461=615.032+185.429, renovação01/11, adicional20/09→20/10, média41.425, referência34.168, previsão28/10. Capturas company/super-company1448/390/320 em evidence/browser. Desktop mantém área larga de origens e movimentos e coluna menor de planejamento/ações/pedidos; mobile expande origens e empilha planejamento/histórico. Shell real, acessibilidade e quantidades exatas substituem decoração e pessoas ilustrativas. Campos/método e avisos completos aumentam altura em relação à prancha ilustrativa, sem trocar topologia/ordem/agrupamento/ação. Ajuste de densidade após comparação e min-width/flex-basis corrigiram overflow320 e filtros mobile truncados. Sem desvio material de composição identificado.
+
+## Validação proporcional / limites
+
+LOCAL PostgreSQL17 descartável import_evidence_v202:202asserts transacionais com rollback (regressão comercial/consumidores e calendário),5disputas reais em clone de schema próprio removido ao fim. Node dirigido38 PASS (cotação, planejamento e links históricos, loading/avisos e release/context); extensão de link/fuso retestada no módulo afetado. Build TypeScript/tipos web/build web PASS no fonte final; testes de versão2.6.2/navegação preservados. Browser48checks principais1448/390/320,9estados adicionais, comparação visual e zero chamadas externas nas fixtures. JSONs separados desktop16/mobile32; repetição mobile ocorreu só após correção de flex/legibilidade. SQL repetido somente após correções/adições de fronteiras afetadas. Sem suíte integral local; CI obrigatório permanece.
+
+Falhas QA resolvidas: alias SQL day precisava AS; negativos owner/B inicialmente testavam um usuário que a fixture vinculava legitimamente às duas empresas, vínculo removido só da fixture para caso realmente sem associação; sem mudança no helper global de autorização. Seletores Fechar duplicado/NBSP/opções virtualizadas foram ajustados; não eram defeitos do produto. O build completo também identificou tipagem estreita na fixture e expectativa antiga2.6.1 no teste de release; ambos atualizados sem alterar regra funcional. Defeito real de overflow320/filtros foi corrigido via min-width/flex-basis. Não foi necessário redefinir papel nem enfraquecer gate.
+
+Nenhum QA remoto separado. Acesso salvo do navegador foi reutilizado com sucesso para preparar o smoke autenticado, sem exposição de credenciais. Consulta produtiva pós-release ainda pendente, sem chamar IA ou criar pedido fictício. Validade/calendar migration altera somente os dados explicitamente autorizados; histórico de debitos permanece.
+
+## Git / QA / produção / rollback
+
+Ainda não publicado neste snapshot. Supabase Prisma ioldpnqqvobprjiontre ACTIVE_HEALTHY verificado; contas2/lotes2/pedidos0/pending0. Tokens mensais atuais conservados, vencimentos serão antecipados para01/11. Nove containers adjacentes devem permanecer idênticos; somente web recriada e migration nova. Advisors baseline capturados para comparação, sem ampliar correção a achados históricos.
+
+Rollback conserva schema/ledger/política2.0.0 e preços/quotes/workers1.0.0. Imagem anterior disponível para recuperação dos demais fluxos; tela de gestão anterior não interpreta envelope2.0.0, exige correção/roll-forward compatível. Não reverter writers/autoridade, semântica de saldo nem expurgar dados. Fechamento factual pós-release em commit documental não reconstrói runtime.
+
+## Desvios / alterações autorizadas / conclusão
+
+Nenhum desvio de regra ou ampliação de escopo identificado. Fonte humana mais recente supersede validade antiga e aniversário, conforme contrato. Implementação local validada; finalização CI/produtiva/sincronização pendente.
+
+---
+
 ## Source: `docs/qa/aot-trajectory-evidence-recovery.md`
 
 # AoT — recuperação da evidência semântica
@@ -29914,6 +30001,63 @@ Limite: jornadas autenticadas com candidatos reais NOT TESTED. A prova funcional
 
 ---
 
+## Source: `docs/qa/reference/tokens-v262/regras-aprovadas.md`
+
+# Tokens Prisma: três propostas visuais
+
+14/10/2026. Material de decisão, com dados e pessoas fictícios. Nenhum desenvolvimento, alteração de produto, cadastro, migração, publicação ou chamada paga de IA do Prisma realizada. Imagens geradas com a ferramenta integrada image_gen; prompts completos em `prompts.json`. A composição escolhida ainda depende da decisão do Product Owner. Estes mockups não são telas do sistema em produção.
+
+## Regras comuns às alternativas
+
+- Franquia de1.000.000 por mês calendário no horário de Brasília. Início no dia1 às00h e término na virada para o mês seguinte, sem acumulação. Ativação durante o mês recebe franquia integral até essa virada.
+- Cada adicional dura30dias a partir do pagamento confirmado e efetiva liberação. Solicitar não cobra, concede ou inicia a validade. Nenhuma exceção de12meses para pacotes antigos: Bruno esclareceu que ainda não há clientes utilizando. Na implementação, validade é calculada a partir da aquisição/liberação real, sem inventar novo prazo de30dias a partir da migração.
+- Consumo primeiro na franquia; depois nos adicionais pelo vencimento mais próximo. Pode dividir uma operação entre origens. Pacote pode expirar enquanto há franquia: informação e aviso visíveis.
+- Disponível exclui reservas e créditos vencidos; operações em andamento aparecem separadas quando existirem. Débito só com entrega válida; falha sem entrega libera; reexecução idempotente, histórico e autoridade humana preservados.
+- Empresa vê apenas seus dados. Owner/admin veem composição, consumo, planejamento, pacotes e solicitações. Super seleciona a empresa e vê as mesmas informações, além da gestão. Operadores continuam com indicação discreta por ação, sem catálogo financeiro.
+- Previsão determinística, sem LLM, baseada nos últimos7dias completos incluindo dias sem uso; alternativa de30dias. Considera vencimentos, prioridade e renovação. Sem histórico suficiente, mostrar indisponibilidade; sem consumo recente, informar essa condição. Não garantir uma data futura.
+- Referência diária da franquia = saldo disponível da franquia / tempo restante até renovar. É orientação para o saldo durar, não incentivo a gastar, limite ou bloqueio diário. Vencimentos dos adicionais ficam explícitos separadamente.
+- Histórico por data/período/função/usuário/operação, quantidade, consumo e origem; link contextual autorizado. Em falta de saldo, bloquear apenas nova IA paga, preservando rascunhos, consultas e ações manuais.
+- Preço somente no contexto de pacote para gestores. Sem compra ou liberação automática. Fluxo: solicitar → aguardar pagamento → super verificar comprovante/referência → liberar uma única vez. Recusa/cancelamento motivados.
+- Gestão do super mantém cadastro de pacotes/preços e versões de tarifas em seções próprias. Não oferecer dia de renovação por aniversário nem validade de12meses.
+
+## Dados de comparação
+
+Mesmo estado nas três opções:14/10/2026 às00h de Brasília. Disponível800.461 = franquia615.032 + adicionais185.429. Consumo no mês384.968 = currículos206.990 + questões140.820 + sínteses37.158. Reservas atuais inexistentes no exemplo; não são omitidas por regra.
+
+A média ilustrativa41.425/dia vem de289.972 em7dias completos, arredondada somente para apresentação. Referência34.168/dia = piso(615.032/18). Próxima renovação01/11. O adicional adquirido20/09 às09h vence20/10 às09h, exatos30dias depois. Como a franquia é consumida primeiro e dura mais que esse pacote, o adicional pode expirar sem ser utilizado. Nesse ritmo, a franquia acaba por volta de28/10. Não usar saldo total/média ignorando essa expiração.
+
+## 1. Visão geral compacta
+
+Imagem `01-visao-geral.png`. Empresa: cabeçalho, faixa com saldo e composição, previsão e referência diária; uso por função, próximos vencimentos e últimas utilizações. Super: lista de empresas, detalhe selecionado e solicitação com confirmação de pagamento. Mobile empilha esses grupos e mantém vencimentos acessíveis.
+
+Menu empresa: Administração → Tokens Prisma. Menu super: Administração → Gestão de Tokens. Processo: conferir resumo → abrir histórico/pacotes → solicitar se necessário → acompanhar status. Super localiza empresa → confere composição/solicitação → confirma pagamento → libera. Pacotes e tarifas em aba própria.
+
+Ponto forte: leitura rápida, familiaridade com os cards existentes. Custo de UX: concentra mais indicadores no início; exige conter a ênfase no consumo e evitar CTAs repetidos na implementação.
+
+## 2. Planejamento do mês
+
+Imagem `02-planejamento.png`. Empresa: linha do tempo como área principal; saldo/composição em coluna lateral. Eventos de vencimento, possível esgotamento e renovação explicitam o futuro. Uso por função, histórico e pacotes ficam em abas abaixo. Super acompanha a mesma linha do tempo da empresa selecionada e os pedidos. Mobile converte a linha horizontal em agenda vertical.
+
+Mesmos menus e processo comercial. Entrada prioriza entender se o saldo dura até a renovação; detalhes e solicitação vêm depois. Pagamento confirmado continua obrigatório para liberar, sem simples aprovação comercial equivalente a crédito.
+
+Ponto forte: compreensão dos prazos e do efeito das expirações. Custo de UX: planejamento ocupa mais espaço e o histórico fica um nível abaixo. Linha do tempo deve comunicar estimativa e não induzir certeza.
+
+## 3. Saldo por origem — recomendada
+
+Imagem `03-saldo-por-origem.png`. Empresa: saldo total discreto, duas origens ordenadas e numeradas, com franquia primeiro e cada pacote abaixo; prioridade e validade junto dos valores. Movimentações por origem/função logo abaixo; planejamento lateral compacto. Super usa a mesma organização dentro do detalhe da empresa e tem ações administrativas/solicitações separadas. Mobile transforma origens em blocos expansíveis, mantendo total e vencimentos visíveis.
+
+Mesmos menus. Processo: compreender de onde vem o saldo → conferir uso/histórico → consultar referência/previsão → solicitar pacote quando necessário. Super seleciona empresa → revisa origens/pedidos → registra pagamento verificado → libera. Cadastro de preços/tarifas e configuração da franquia em abas próprias.
+
+Ponto forte: traduz diretamente a regra de consumo e funciona com múltiplos pacotes sem dar destaque financeiro. Custo de UX: precisa de filtro/expansão quando há muitos lotes. A previsão permanece visível, mas secundária à composição.
+
+## Recomendação
+
+Escolher a3: saldo e origem explicados antes da projeção, preços restritos ao contexto comercial, histórico próximo e prioridade inequívoca. Conservar a previsão e referência na lateral; oferecer a linha do tempo da2 como detalhe opcional somente se aprovada, sem incorporar escopo automaticamente.
+
+As imagens são referências de composição e hierarquia, não contratos de texto nem dados reais. Rótulos periféricos de menu, nomes, datas de exemplo e detalhes decorativos são ilustrativos; regras acima e a decisão explícita do Product Owner prevalecem. Nenhuma alternativa ainda foi escolhida para implementação.
+
+---
+
 ## Source: `docs/qa/release-checklist.md`
 
 # Checklist de release
@@ -30501,6 +30645,63 @@ A preencher em aot-tokens-prisma-v240.md. Status inicial dos requisitos: NOT TES
 
 ## Revisão do mapa antes da publicação
 Descobertas: transporte exige repasse da cotação e publicação seletiva do gateway, reclassificado direct; síntese possuía enfileiramento automático em publicação/consulta, agora guardado por invocação explícita conforme D-04/P-01. Autorização anterior member/síntese preservada, sem ampliar Parser/avaliação. Restituições/bonificações e pedidos compartilham chave estável por modal para repetir retorno perdido. Locks ordenados organização antes de assessment/history/job evitam inversão entre solicitação e conclusão. Alteração do dia mensal entra na próxima renovação, com transição explícita na UI/documentação.
+
+---
+
+## Source: `docs/qa/tokens-v262.md`
+
+# Agreement, execução e mapa — Tokens Prisma2.6.2
+
+Versão1.0.0. Aprovado pela escolha explícita de Bruno da proposta3 e autorização de implementar/validar/publicar2.6.2 em main e produção. Supersede regras de aniversário, validade12meses de pacotes e prioridade somente FEFO do acordo2.4.0/ADR-083; conserva tarifas, cotação, reserva, entrega, pagamento verificado e autoridade. Fonte integral `reference/tokens-v262/regras-aprovadas.md`; referência normativa `reference/tokens-v262/03-saldo-por-origem.png`, SHA25636ea2a29e4657357f05b0ff61723dbc0a6d885aaa6af274c27b4684c8d174817. Exemplo de dados não é dado humano real.
+
+Baseline14/10/2026: main/origin/VPS330f7e667d7429c66fba838a41f20b774696eceb, app2.6.1. Supabase Prisma ioldpnqqvobprjiontre ACTIVE_HEALTHY, PG17; único remoto produtivo, sem QA separado. Duas contas com franquia1M, dois lotes mensais com vencimento11/11; nenhum pedido/adicional ou reserva pendente. Banco LOCAL descartável import_evidence_v202/127.0.0.1:55479 sem Pessoas/tabelas comerciais. Risco D integrado; sem nova biblioteca/provedor/arquitetura de cobrança.
+
+## Agreement congelado
+
+- D-01: franquia inicial1.000.000 por mês calendário de Brasília; dia1 às00h renova e restante expira, sem acumular/compensar meses inativos. Ativação no meio do mês recebe integral até próxima virada. Migrar o lote vigente para o mês corrente sem duplicar concessão, conservar total/remaining/reservas e movimentos anteriores; próximas concessões idempotentes. Quantidade configurável pelo super continua para próximo mês; aniversário deixa de ser configurável.
+- D-02: todos os pacotes/adicionais duram30dias exatos após pagamento confirmado e liberação. Solicitação não inicia prazo/cobra/libera. Recalcular existentes desde aquisição/liberação original, sem exceção legada12meses nem reiniciar prazo na migração. Manter histórico/pedidos/preços/tarifas e reservas existentes. Bonificações/restituições permanecem distintas de pacotes, motivadas e com validade já registrada.
+- D-03: toda nova reserva consome franquia válida primeiro, depois outros lotes por validade mais próxima. Dividir entre origens quando necessário. Disponível exclui reserva e vencidos. Preservar congelamento da tarifa, replay, serialização, débito por entrega válida, falha sem débito, terminal conflitante negado e conciliação motivada; uma reserva já emitida conserva alocações/valor.
+- D-04: proposta3: título e saldo total discreto; área principal larga à esquerda com origens ordenadas e numeradas, prioridade/saldo/validade junto de cada origem; movimentações e uso por função abaixo. Coluna menor à direita com planejamento e solicitação. Mobile empilha total, origens em blocos expansíveis e planejamento, com histórico e solicitação acessíveis. Mesmo desenho dentro do detalhe de empresa selecionada no super, com voltar para lista e ações administrativas separadas.
+- D-05: owner/admin consultam somente própria empresa, saldo/composição/consumo/detalhe/histórico/pacotes/pedidos; super seleciona empresa e vê dados equivalentes mais cadastro/gestão. Operadores conservam apenas saldo e próprio consumo sem compra/catálogo financeiro/consumo alheio. Backend autentica usuário ativo e tenant; super continua acesso autorizado global e custos técnicos privados, sem expor esses custos aos clientes.
+- D-06: previsão determinística e sem IA por últimos7dias completos de Brasília, incluindo zeros; alternativa30dias. Requer observabilidade de toda a janela, senão histórico insuficiente; consumo zero explicitamente informado. Considera cada vencimento, prioridade e próxima renovação, não saldo/média simples. Mostrar possível esgotamento antes da renovação ou saldo suficiente até renovar, sem garantia. Referência diária da franquia disponível/tempo restante é orientação, nunca limite diário. Método/período e atualização acessíveis. Suspensão/ausência de configuração não inventam previsão.
+- D-07: histórico com período/função/usuário/origem, data/quantidade/tokens e vínculo contextual autorizado quando existente. Dados antigos sem vínculo continuam disponíveis com indicação explícita. Avisos discretos de pacote próximo do vencimento (mesmo com franquia), risco de acabar antes de renovar e insuficiência; insuficiência bloqueia somente nova IA paga, preservando consulta/ações manuais/rascunhos. Valores antes da ação continuam discretos.
+- D-08: empresa solicita com quantidade/preço total/validade30dias claros e acompanha; super encaminha, verifica pagamento/referência e libera uma única vez; cancelar/recusar com motivo. Cadastro de pacotes/preços e versões de tarifas separado e sem campos de aniversário/meses. Preservar bonificação/restituição/retirada de oferta/reconciliação e custos técnicos internos.
+- D-09: feedback visível até conclusão/erro, sem zeros/estados vazios provisórios, preservar conteúdo/filtros/modal/rascunho e retry; troca de empresa cancela resultados e mutações obsoletos. Navegação, autorização e responsividade do shell preservadas.
+- D-10: versão2.6.2, owner docs/decisão/contratos/Context Pack/AoT, testes proporcionais e publicação seletiva banco+web, smoke/rollback/sincronização local/origin/VPS. Nenhuma IA paga ou pedido/pagamento humano fictício em produção.
+- P-01: não conceder franquia duplicada, saldo negativo, débito duplo, renovar validade na compra solicitada, reiniciar30dias no deploy, consumir adicional antes da franquia ou liberar mediante simples aprovação sem pagamento.
+- P-02: não expor outra empresa/usuário, preços aos operadores, custo técnico aos clientes, secrets/PII ou autoridade somente no frontend. Não alterar IA/modelo/prompt/Score/Perfil/provas/respostas/decisões humanas; reuso/cache continuam gratuitos.
+- P-UX-01: não substituir a composição por dashboard de KPIs/linha do tempo, não dar destaque financeiro, ocultar origem/vencimento, remover gestão existente ou gerar previsões sem dados/método.
+- F-01: checkout/compra/e-mail automático, novos fornecedores/dependências, automação de contratação, IA para previsão, novos serviços, preços/tarifas/pacotes de quantidade novos, linha do tempo da proposta2 e manutenção de outros módulos.
+- A-01: reusar PostgreSQL/RPC/ledger/componentes existentes; detalhes de composição acessível e metadados/método versionados; contabilização exata e arredondamento apenas na apresentação; validade especial de concessões existente; divisão em componentes e validação dirigida. Contrato novo de gestão pode ser versionado preservando quote/consumidores1.0.0.
+- Q: nenhum material pendente.
+
+## Critérios de aceite e validação mínima suficiente
+
+CA-01/02/03: SQL transacional LOCAL com fronteiras UTC/Brasília, janeiro/fevereiro/ano, ativação parcial, meses saltados, migração sem duplicação e sem perda de reserva,30dias exatos/pagamento/replay, franquia antes de adicional mais próximo do vencimento, divisão de origens, expiração e falha/retry/terminal negativo. Disputas reais de reserva, renovação e liberação. Fotos agregadas remotas comprovam somente deltas autorizados.
+
+CA-04/05/07/08/09: componentes reais com transporte sintético estabilizado, mesma fixture normativa:14/10/2026 às00h, saldo800.461=615.032+185.429, renovação01/11, adicional20/09→20/10, média41.425/dia, referência34.168 e possível esgotamento28/10. Comparação visual1448/390, limite320, empresa/super/operador, origem/filtros/detalhes/pagamento sem evidência/falha/loading/retry/troca de escopo. Negativas SQL anon/inativo/tenant/papel/claims/grants/RLS. Shell/navegação/release e cotação/executores afetados dirigidos; nenhum gate integral local por padrão.
+
+CA-06: Node determinístico testa média com zeros/observabilidade insuficiente/sem consumo, arredondamento, reservas, expiração antes da franquia acabar, múltiplos pacotes, renovação antes do esgotamento, fusos e fronteiras. Sem chamada de IA. Método backend/cliente mantém autoridade e isolamento.
+
+CA-10: tipos/build, lint e contexto/ledger; plano dispatcher a partir do diff, CI obrigatório, fingerprint/corpos/grants/RLS e dados protegidos produtivos, SHA/assets/versão/rotas/rollback/serviços preservados. Reutilizar sessão/acesso seguro para smoke autenticado de consulta; se indisponível, registrar tentativas/limite explicitamente sem fabricar PASS. Fechar após critérios suficientes, sem testes repetidos sem alteração/falha relevante.
+
+## Mapa GOV-01
+
+| Área/capacidade | Relação | Baseline/prova mínima |
+| --- | --- | --- |
+| Contas/franquia/ciclo/lotes/pacotes | direct | Baseline produtiva agregada; SQL calendário/migração/30dias/idempotência e delta remoto autorizado |
+| Reservas/alocações/saldo/débito/pedidos/pagamento | direct | SQL antes/depois e disputas, replay/negativas, histórico/cotações preservados |
+| Tela empresa e detalhe super | direct | Imagem3 normativa, mesma fixture/viewports, filtros/histórico/fluxo comercial/estados |
+| Projeção e referência diária | direct | Node determinístico e backend DTO autorizado, método/calendário/expirações |
+| Auth/RLS/tenant/auditoria obrigatória | critical_transversal | Papel/anon/tenant/claims e grants/RLS negativos; comparação remota sem mudança de autoridade |
+| Geração avaliação/banco/Parser/síntese/análise de atividade | plausible_indirect | Todas usam reserve/settle comuns; cobertura dos quatro tipos/falha/replay, corpos executores preservados, regressão comercial existente |
+| Shell/navegação/loading/versão | plausible_indirect | Tipos/build e testes dirigidos,1448/390/320 sem overflow |
+| Provas/Perfis/Pessoas/Score/processos/Knowledge/decisões | no_impact_identified | Sem escritor ou dados desses domínios no movimento; hashes remotos/corpos consumidores e regressão comercial |
+| Edge/Parser/gateway/Síntese/mail/Paddle/Traefik | no_impact_identified | Nenhum código desses serviços muda; plano seletivo, nove containers adjacentes/IDs/imagens/estado antes/depois |
+
+## Execução congelada
+
+Implementar todos D/P/F/A/CA acima; não reinterpretar regra nem composição. Publicação já autorizada por Bruno e AGENTS§7. Acordo e referência completos lidos; imagem é normativa para topologia/hierarquia/ordem/proporções/agrupamento/ações e ilustrativa nos registros/marcações periféricas. Responsivo conformeD-04. Encerrar em `aot-tokens-v262.md` com novidade e preservação separadas, desvios e limites. Mudança pós-publicação de evidências não reabre runtime nem repete testes funcionais válidos.
 
 ---
 

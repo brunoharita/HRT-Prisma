@@ -6,3 +6,37 @@
 .prisma-tokens .ant-card-head-title{white-space:normal;overflow-wrap:anywhere;}
 
 .prisma-tokens .tokens-function{display:grid;grid-template-columns:minmax(100px,1.5fr) minmax(60px,2fr) auto;gap:12px;align-items:center;margin:16px 0}.prisma-tokens .tokens-function .ant-progress{margin:0}@media(max-width:768px){.prisma-tokens .tokens-function{grid-template-columns:1fr auto}.prisma-tokens .tokens-function .ant-progress{grid-column:1/-1;grid-row:2}.prisma-tokens .tokens-function>span:last-child{grid-column:2;grid-row:1}}
+
+.prisma-tokens .tokens-wallet-layout{display:grid;grid-template-columns:minmax(0,2.4fr) minmax(260px,1fr);gap:20px;align-items:start}
+.prisma-tokens .tokens-wallet-main,.prisma-tokens .tokens-wallet-aside{min-width:0}
+.prisma-tokens .tokens-wallet-aside{display:flex;flex-direction:column;gap:16px}
+.prisma-tokens .tokens-source-title{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.prisma-tokens .tokens-source-title>span:last-child{font-size:16px;font-weight:400}
+.prisma-tokens .tokens-source{padding:18px 0;border-bottom:1px solid #e4eaf3}
+.prisma-tokens .tokens-source:last-child{border:0}
+.prisma-tokens .tokens-source.is-selected{background:#f2f7ff}
+.prisma-tokens .tokens-source-heading{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.prisma-tokens .tokens-source-heading>strong{flex:1;min-width:140px}
+.prisma-tokens .tokens-source-heading>span:not(.tokens-priority):not(.ant-tag){font-size:14px}
+.prisma-tokens .tokens-priority{display:inline-flex;align-items:center;justify-content:center;background:#2878ff;color:white;border-radius:50%;height:24px;width:24px;flex-shrink:0;font-size:14px}
+.prisma-tokens .tokens-source-metrics{display:grid;grid-template-columns:auto minmax(70px,1fr) auto;gap:12px;align-items:center;margin:14px 0 0 36px;font-size:13px}
+.prisma-tokens .tokens-source-metrics .ant-progress{margin:0}
+.prisma-tokens .tokens-planning-entry{padding:16px 0;border-bottom:1px solid #e4eaf3}
+.prisma-tokens .tokens-planning-entry p{margin:6px 0 0}
+.prisma-tokens .tokens-wallet-aside .ant-select{width:100%;max-width:100%}
+.prisma-tokens .tokens-wallet-aside details{margin-top:16px}
+.prisma-tokens summary{cursor:pointer}
+.prisma-tokens .tokens-expiry-notice{border-left:3px solid #d49100;padding:8px 12px;color:#725016;background:#fffbef;font-size:13px}
+.prisma-tokens .tokens-sources-mobile{display:none}
+.prisma-tokens .tokens-filter>*{flex:1 1 150px;min-width:0}
+.prisma-tokens .tokens-filter .ant-select{max-width:100%;width:190px}
+@media(max-width:1100px){.prisma-tokens .tokens-wallet-layout{grid-template-columns:minmax(0,1fr) 260px}.prisma-tokens .tokens-source-metrics{grid-template-columns:1fr 1fr;margin-left:0}.prisma-tokens .tokens-source-metrics .ant-progress{grid-column:1/-1;grid-row:2}}
+@media(max-width:768px){.prisma-tokens .tokens-wallet-layout{display:flex;flex-direction:column;gap:16px}.prisma-tokens .tokens-wallet-main,.prisma-tokens .tokens-wallet-aside{width:100%}.prisma-tokens .tokens-wallet-main{display:contents}.prisma-tokens .tokens-sources{order:0}.prisma-tokens .tokens-wallet-aside{order:1}.prisma-tokens .tokens-wallet-main>.tokens-section{order:2}.prisma-tokens .tokens-sources-desktop{display:none}.prisma-tokens .tokens-sources-mobile{display:block}.prisma-tokens .tokens-source-heading{gap:8px}.prisma-tokens .tokens-source-heading>strong{min-width:0;flex:1 1 100px}.prisma-tokens .tokens-source-heading .ant-tag{white-space:normal;margin:0}.prisma-tokens .tokens-source-metrics{display:flex;flex-direction:column;align-items:stretch;margin-left:0}.prisma-tokens .tokens-source-title{gap:8px}.prisma-tokens .ant-collapse-content-box{overflow-wrap:anywhere}.prisma-tokens .tokens-wallet-aside .ant-card-body{overflow-wrap:anywhere}.prisma-tokens .tokens-event{overflow-wrap:anywhere}}
+
+.prisma-tokens .tokens-source{padding:10px 0}
+.prisma-tokens .tokens-source .tokens-row{margin:8px 0 2px}
+.prisma-tokens .tokens-source .ant-btn-link{font-size:12px;padding:0;height:24px}
+.prisma-tokens .tokens-source-metrics{margin-top:8px}
+.prisma-tokens .tokens-sources .ant-card-body>p{font-size:12px;margin:8px 0}
+.prisma-tokens .tokens-sources{min-width:0;width:100%}.prisma-tokens .tokens-sources-mobile .ant-collapse-header-text{min-width:0}
+@media(max-width:768px){.prisma-tokens .tokens-filter>*{flex-basis:100%}}

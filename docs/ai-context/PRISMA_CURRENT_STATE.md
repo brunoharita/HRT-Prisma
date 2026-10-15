@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.74.18
+version: 2.75.0
 last_verified: 2026-10-14
 ---
 
 # Estado atual do Prisma
+
+## Tokens Prisma por origem — 2.6.2 em validação
+
+Proposta3 aprovada: saldo por origem e histórico à esquerda, planejamento/solicitação à direita; mobile expansível, detalhe de empresa equivalente no super. Franquia padrão1M por mês calendário de Brasília, sem acumulação, parcial integral e migração sem duplicação. Pacotes30dias exatos após liberação paga, inclusive anteriores desde aquisição original; franquia primeiro e demais FEFO. Reservas/cotações/debitos/tarifas e dados humanos preservados. Gestão2.0.0/política2.0.0, quote1.0.0; previsão determinística7/30dias completos incluindo zeros, observabilidade obrigatória, expirações/renovação, referência diária sem limite. Nenhuma IA/provedor novo. Acordo/mapa/execução `docs/qa/tokens-v262.md`; publicação ainda não verificada, evidência no AoT. Destinos previstos banco/web apenas.
 
 ## Escolha no encerramento e histórico da participação — 2.6.1 publicada
 

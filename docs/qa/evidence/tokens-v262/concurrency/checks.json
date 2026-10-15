@@ -1,0 +1,25 @@
+{
+  "environment": "Owned LOCAL PostgreSQL17 schema-only clone removed after run",
+  "checks": [
+    {
+      "name": "parallel distinct consumers cannot overspend shared company balance",
+      "pass": true
+    },
+    {
+      "name": "parallel identical logical calls create one reservation",
+      "pass": true
+    },
+    {
+      "name": "parallel successful settlement creates one debit",
+      "pass": true
+    },
+    {
+      "name": "parallel verified release cannot credit the same order twice",
+      "pass": true
+    },
+    {
+      "name": "first simultaneous consultations grant monthly franchise once",
+      "pass": true
+    }
+  ]
+}
