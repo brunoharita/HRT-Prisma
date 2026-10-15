@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 491
-source_manifest_sha256: 4ab941f459325bfcaf4d7b3a51aed1bb4284462d28bfa6824b7912d3516ad38c
+source_manifest_sha256: b45c91289c93c5ffdd27916e70e6c641db6e83621ec20a1686aadff1ee4bce08
 -->
 
 # Tudo sobre o Prisma
@@ -2651,7 +2651,7 @@ last_verified: 2026-10-15
 
 ## Pessoas 2.7.2: áreas e funções do Knowledge
 
-Implementação autorizada em15/10/2026: tabela clara mantém identificação, estados e ações e acrescenta Área(s) profissional(is), Função/cargo original e Atuação recente. Filtros por identidades existentes do Knowledge, escopo atual/mais recente ou trajetória completa e combinação na mesma experiência. Cache privado e worker fechado do knowledge-agent reutilizam opt-in/modelo e orçamento operacional da normalização, sem nova biblioteca, tarifa ou etapa obrigatória. IA identificada como agrupamento de navegação; Perfis/fatos, Score/matching/seleção preservados. Contrato `people-directory-1.0.0`, documentação em `docs/architecture/people-directory.md`; acordo/mapa/execução/AoT em `docs/qa/people-taxonomy-v272.md`. Validação e rollout dependem dos recibos finais, sem presumir publicação.
+Implementação autorizada em15/10/2026: tabela clara mantém identificação, estados e ações e acrescenta Área(s) profissional(is), Função/cargo original e Atuação recente. Filtros por identidades existentes do Knowledge, escopo atual/mais recente ou trajetória completa e combinação na mesma experiência. Cache privado e worker fechado do knowledge-agent reutilizam opt-in/modelo e orçamento operacional da normalização, sem nova biblioteca, tarifa ou etapa obrigatória. IA identificada como agrupamento de navegação; Perfis/fatos, Score/matching/seleção preservados. Contrato `people-directory-1.0.0`, documentação em `docs/architecture/people-directory.md`; acordo/mapa/execução/AoT em `docs/qa/people-taxonomy-v272.md`. Publicada no SHA funcional b3b00927ba9535e55343dc2dbef3ad598ce85ae7, CI branch38765514836/main38765741144 SUCCESS. Migration20261015160331 conferida integralmente, knowledge-agent21, web running/restart0/HTTP200 e rollback/assets anteriores preservados. Smoke autenticado confirma2.7.2, colunas/filtros e11 cargos originais. Cron recuperou primeiro timeout automaticamente;3 chamadas reais com histórico. Carga inicial71 contextos é gradual dentro dos caps20/dia e200/mês compartilhados; sem alegação de acurácia empírica. Perfis/Pessoas/participações com hashes preservados; evidência e limites no AoT.
 
 ## Tags factuais da Pessoa — 2.7.1 publicada
 
@@ -29579,6 +29579,26 @@ Browser sintético usa componentes de produção e transportes locais, sem banco
 Descoberta de preservação: cache sem FK de pessoa poderia sobreviver à exclusão. Mapa revisado: exclusão é `critical_transversal`; trigger remove contexto sem outra fonte, teste real SQL cobre retenção compartilhada e remoção da última fonte. Esta correção pertence ao mesmo contrato; foi concluída antes do deploy. Os três módulos publicados de normalização/histórico anteriores foram comparados integralmente com knowledge-agent20 e permanecem idênticos; entrada nova tem o mesmo gateway JWT e segredo do monitor.
 
 Dispatcher: somente nova migração, knowledge-agent e web; Parser/Paddle/synthesis/mail não são destinos. A recomendação genérica `pnpm run test` foi reduzida à cobertura dirigida acima conforme AGENTS8/10; CI obrigatório executa a foundation completa. Primeiro CI funcional38765060578 SUCCESS; correção de preservação exige novo CI no SHA final. Publicação ainda não comprovada nesta etapa.
+
+## AoT final e publicação
+
+| Acordo | Implementação, teste e evidência | Estado |
+| --- | --- | --- |
+| D-01 | Colunas e filtros no componente real; browser1448/390 e smoke autenticado2.7.2 com11 cargos originais; Knowledge H1/occupation sem catálogo novo | PASS |
+| D-02 | Mesmos IDs/experiência nas colunas/filtros, temporalidade e empates; Node e seleção conjunta impossível comprovada no browser | PASS |
+| D-03 | Snapshot vigente e índice da experiência; texto original preservado; SQL proíbe promoção coordenador/gerente e exclui supersessão | PASS |
+| D-04 | Resolver aprovado com precedência existente, candidatos fechados, tipos/versões/escopo/hierarquia revalidados, métodos separados; SQL/Deno e3 chamadas reais com histórico | PASS |
+| D-05 | Cache e cron automático, opt-in e orçamento compartilhado, sem IA ao abrir; fallback/navegação/local e retry automático produtivo comprovados | PASS |
+| P-01 | Nenhum writer de Perfil/Score/matching/seleção ou catálogo novo; hashes das16 versões de Perfil, Pessoas e participações iguais antes/depois | PASS |
+| P-02 | RLS/ACL e testes negativos; campos de identidade/contato fora do input, detector conservador, IDs inventados rejeitados, caps zero/ausente negados | PASS |
+| F-01 | Sem redesenho integral, biblioteca paralela, modelo/fonte/tarifa nova; destinos limitados pelo dispatcher | PASS |
+| CA-01 | Checks locais acima; CI final branch38765514836/main38765741144 SUCCESS, publicação/smoke e sincronização registrados | PASS |
+
+SHA funcional b3b00927ba9535e55343dc2dbef3ad598ce85ae7, main/GitHub/VPS. Migration remota20261015160331 integralmente igual ao SQL Git após CR/whitespace externo; ledger apenas acrescenta alias atual, sem reaplicar história. knowledge-agent21 mantém JWT e autenticação interna. Web2b68d0c63682 running/restart0, HTTP200 e rollback98c74f57 retido. Todos os assets do runtime anterior foram conferidos por SHA256 no container novo; seis containers ativos adjacentes mantêm IDs/estado, inclusive teste já unhealthy. Prova em `evidence/people-taxonomy-v272/publication.json`.
+
+O404 imediato na recriação estabilizou sem rebuild/redeploy. Primeiro cron16:04UTC atingiu statement timeout; diagnóstico transacional com service_role e rollback executou em4,05s, sem mudança persistida. Os ciclos16:05/16:06/16:07 retornaram200/complete automaticamente;3 chamadas de IA e seus históricos confirmados. Nenhum ajuste de autenticação/timeout ou operação manual de recuperação foi necessário. Telemetria Statsig da ferramenta de browser falhou fora do Prisma; a sessão real comprovou versão/colunas/filtros e cargos originais normalmente.
+
+Limites: processamento inicial tem71 contextos e respeita20 chamadas/dia e200/mês já existentes; não significa preenchimento imediato de todos. Nos3 primeiros resultados observados, uma função e nenhuma área foram associadas. Não forçar categoria é parte do contrato; testes determinísticos comprovam as regras, não acurácia empírica de toda a base. Sem QA remoto separado, sem inserção de pessoa/decisão fictícia em produção. Agrupamentos novos surgem em consultas posteriores, sem exigir etapa do gestor. Não há desvio funcional identificado; fechamento documental/evidência normaliza whitespace do runner sem reconstruir runtime.
 
 ---
 

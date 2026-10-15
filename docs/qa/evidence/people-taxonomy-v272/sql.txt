@@ -34,16 +34,16 @@ REVOKE
 GRANT
 REVOKE
 GRANT
- enqueue_people_directory 
+ enqueue_people_directory
 --------------------------
 (0 rows)
 
- schedule 
+ schedule
 ----------
         1
 (1 row)
 
-        set_config         
+        set_config
 ---------------------------
  trajectory-evidence-1.2.0
 (1 row)
@@ -64,199 +64,199 @@ INSERT 0 3
 INSERT 0 1
 INSERT 0 3
 UPDATE 1
- enqueue_people_directory 
+ enqueue_people_directory
 --------------------------
- 
+
 (1 row)
 
 CREATE TABLE
 INSERT 0 1
 DO
- m83_assert 
+ m83_assert
 ------------
- 
+
 (1 row)
 
- m83_assert 
+ m83_assert
 ------------
- 
+
 (1 row)
 
- m83_assert 
+ m83_assert
 ------------
- 
+
 (1 row)
 
- m83_assert 
+ m83_assert
 ------------
- 
+
 (1 row)
 
- m83_reject 
+ m83_reject
 ------------
- 
+
 (1 row)
 
- m83_reject 
+ m83_reject
 ------------
- 
+
 (1 row)
 
- m83_assert 
+ m83_assert
 ------------
- 
+
 (1 row)
 
- m83_assert 
+ m83_assert
 ------------
- 
+
 (1 row)
 
- m83_assert 
+ m83_assert
 ------------
- 
+
 (1 row)
 
 INSERT 0 1
- m83_assert 
+ m83_assert
 ------------
- 
+
 (1 row)
 
- complete_people_directory 
+ complete_people_directory
 ---------------------------
- 
+
 (1 row)
 
-              set_config              
+              set_config
 --------------------------------------
  72c08182-63ae-46f7-2888-124d9cf74e60
 (1 row)
 
 SET
- m83_assert 
+ m83_assert
 ------------
- 
+
 (1 row)
 
- m83_reject 
+ m83_reject
 ------------
- 
+
 (1 row)
 
- m83_reject 
+ m83_reject
 ------------
- 
+
 (1 row)
 
- m83_reject 
+ m83_reject
 ------------
- 
+
 (1 row)
 
 RESET
-              set_config              
+              set_config
 --------------------------------------
  fb5558da-3d02-d4f3-b8e3-459bd9f53ecf
 (1 row)
 
 SET
- m83_assert 
+ m83_assert
 ------------
- 
+
 (1 row)
 
 RESET
- set_config 
+ set_config
 ------------
- 
+
 (1 row)
 
 SET
- m83_reject 
+ m83_reject
 ------------
- 
+
 (1 row)
 
 RESET
-              set_config              
+              set_config
 --------------------------------------
  72c08182-63ae-46f7-2888-124d9cf74e60
 (1 row)
 
 UPDATE 1
- m83_assert 
+ m83_assert
 ------------
- 
+
 (1 row)
 
 UPDATE 1
- m83_assert 
+ m83_assert
 ------------
- 
+
 (1 row)
 
- m83_assert 
+ m83_assert
 ------------
- 
+
 (1 row)
 
- m83_assert 
+ m83_assert
 ------------
- 
+
 (1 row)
 
- m83_assert 
+ m83_assert
 ------------
- 
+
 (1 row)
 
 UPDATE 1
 UPDATE 1
 DELETE 1
 INSERT 0 1
- m83_assert 
+ m83_assert
 ------------
- 
+
 (1 row)
 
- m83_reject 
+ m83_reject
 ------------
- 
+
 (1 row)
 
- complete_people_directory 
+ complete_people_directory
 ---------------------------
- 
+
 (1 row)
 
- m83_assert 
+ m83_assert
 ------------
- 
+
 (1 row)
 
- enqueue_people_directory 
+ enqueue_people_directory
 --------------------------
- 
+
 (1 row)
 
- m83_assert 
+ m83_assert
 ------------
- 
+
 (1 row)
 
 INSERT 0 1
 INSERT 0 1
 DELETE 1
- m83_assert 
+ m83_assert
 ------------
- 
+
 (1 row)
 
 DELETE 1
- m83_assert 
+ m83_assert
 ------------
- 
+
 (1 row)
 
 ROLLBACK

@@ -22,5 +22,5 @@ try {
   sql+=await readFile("supabase/qa/people_directory_verification.sql","utf8");
   sql+="\nrollback;";await writeFile("tmp/people-directory-verification.sql",sql);
   result=spawnSync(exe+"psql.exe",[...args,"-d",db,"-f","tmp/people-directory-verification.sql"],{encoding:"utf8",windowsHide:true,maxBuffer:10*1024*1024});
-  const output=[result.stdout,result.stderr].join("\n");await writeFile("docs/qa/evidence/people-taxonomy-v272/sql.txt",output);console.log(output.slice(-5000));assert.equal(result.status,0,"isolated SQL verification");
+  const output=[result.stdout,result.stderr].join("\n").split(/\r?\n/).map(line=>line.trimEnd()).join("\n");await writeFile("docs/qa/evidence/people-taxonomy-v272/sql.txt",output);console.log(output.slice(-5000));assert.equal(result.status,0,"isolated SQL verification");
 } finally {run("postgres",`drop database ${db}`);}

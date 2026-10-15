@@ -1,0 +1,93 @@
+{
+  "version": "2.7.2",
+  "functionalSHA": "b3b00927ba9535e55343dc2dbef3ad598ce85ae7",
+  "ci": {
+    "branch": 38765514836,
+    "main": 38765741144,
+    "status": "success"
+  },
+  "database": {
+    "project": "ioldpnqqvobprjiontre",
+    "migrationVersion": "20261015160331",
+    "sqlMatchesGit": true,
+    "protectedRecordsPreserved": true,
+    "before": {
+      "now": "2026-10-15T15:58:15.077022+00:00",
+      "profiles": 16,
+      "peopleHash": "e0f01a756e2d5d079e1f25b9af23d5a7",
+      "profilesHash": "8bf94db80d042f466089723644405e90",
+      "selectionHash": "414b7b85c4d567d3695be12d492747e2"
+    },
+    "after": {
+      "now": "2026-10-15T16:04:21.008443+00:00",
+      "queue": [
+        {
+          "calls": 0,
+          "total": 71,
+          "status": "queued",
+          "error_code": null
+        }
+      ],
+      "peopleHash": "e0f01a756e2d5d079e1f25b9af23d5a7",
+      "anonExecute": false,
+      "cronEnabled": true,
+      "profilesHash": "8bf94db80d042f466089723644405e90",
+      "selectionHash": "414b7b85c4d567d3695be12d492747e2",
+      "authenticatedExecute": true
+    },
+    "stats": {
+      "queue": [
+        {
+          "calls": 3,
+          "total": 3,
+          "status": "complete",
+          "with_area": 0,
+          "error_code": null,
+          "with_function": 1
+        },
+        {
+          "calls": 0,
+          "total": 68,
+          "status": "queued",
+          "with_area": 0,
+          "error_code": null,
+          "with_function": 0
+        }
+      ],
+      "history": 3,
+      "migration": {
+        "name": "people_directory_taxonomy",
+        "version": "20261015160331"
+      }
+    }
+  },
+  "edge": {
+    "name": "knowledge-agent",
+    "version": 21,
+    "verifyJwt": true
+  },
+  "web": {
+    "container": "2b68d0c63682",
+    "image": "17f2fc01cf0417b30f08e23c6c05d8f5d8c46d92a091da5d27e77841472c5506",
+    "running": true,
+    "restarts": 0,
+    "http": 200,
+    "rollback": "prisma-web:rollback-before-b3b00927ba95"
+  },
+  "browser": {
+    "authenticated": true,
+    "version": true,
+    "areaColumn": 1,
+    "functionColumn": 1,
+    "originalTitles": 11,
+    "areaFilter": 1,
+    "scopeFilter": 1,
+    "realDataMutation": false
+  },
+  "limitations": [
+    "Initial 71 contexts are processed incrementally within existing 20/day and 200/month shared caps.",
+    "Three provider calls observed complete; initial observed area associations zero, one function. No empirical accuracy claim.",
+    "First scheduler claim hit statement timeout; subsequent scheduled runs recovered without intervention or code redeploy.",
+    "No separate remote QA; SQL model uses local repository schema and synthetic data."
+  ]
+}

@@ -1583,6 +1583,17 @@
       "localCanonicalLength": 1386,
       "remoteCanonicalLength": 1386,
       "verifiedAt": "2026-10-15"
+    },
+    {
+      "name": "people_directory_taxonomy",
+      "localVersion": "20261015160000",
+      "remoteVersion": "20261015160331",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "fingerprintMethod": "strip-CR-trim-exterior-whitespace-v1",
+      "localCanonicalLength": 21125,
+      "remoteCanonicalLength": 21125,
+      "verifiedAt": "2026-10-15"
     }
   ],
   "localOnly": [
@@ -1623,11 +1634,11 @@
   ],
   "lastIncrementalVerification": {
     "date": "2026-10-15",
-    "movement": "person-status-v271",
+    "movement": "people-taxonomy-v272",
     "names": [
-      "person_relationship_tags"
+      "people_directory_taxonomy"
     ],
-    "evidence": "docs/qa/evidence/person-status-v271/publication.json",
+    "evidence": "docs/qa/evidence/people-taxonomy-v272/publication.json",
     "historicalSnapshotVerifiedAtUnchanged": true
   }
 }
