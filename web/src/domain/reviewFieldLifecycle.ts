@@ -24,6 +24,7 @@ export interface ReviewDraftIssue {
 }
 
 export interface ReviewDraftValidationContext {
+  allowPartialManualDraft?: boolean;
   existingPhone?: string | null;
   existingEmail?: string | null;
 }
@@ -252,7 +253,7 @@ export function validateReviewDraftForSave(
 
   const effectivePhone = draft.contact.phone?.trim() || context.existingPhone?.trim() || "";
   const effectiveEmail = draft.contact.email?.trim() || context.existingEmail?.trim() || "";
-  if (!effectivePhone && !effectiveEmail) {
+  if (!context.allowPartialManualDraft && !effectivePhone && !effectiveEmail) {
     issues.push({ fieldPath: "contact.phone", message: "Informe telefone ou e-mail para salvar este currículo." });
     issues.push({ fieldPath: "contact.email", message: "Informe telefone ou e-mail para salvar este currículo." });
   }
@@ -326,7 +327,7 @@ export function validateReviewDraftForSave(
     if (item.value.trim().length > 4_000) issues.push({ fieldPath: `customSections.${section.id}.items.${item.id}.value`, message: "Conteúdo deve ter no máximo 4.000 caracteres. Reduza o texto deste item antes de salvar." });
   }));
 
-  if (!hasMaterialProfessionalInformation(draft)) {
+  if (!context.allowPartialManualDraft && !hasMaterialProfessionalInformation(draft)) {
     issues.push({ fieldPath: "professionalTitle", message: "Informe ao menos um conteúdo profissional, como resumo, objetivo, experiência, formação ou competência, antes de salvar." });
   }
   return issues;

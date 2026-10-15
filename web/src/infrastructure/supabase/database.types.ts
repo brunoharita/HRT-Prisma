@@ -47,6 +47,7 @@ export interface Database {
         updated_at: string;
       }>;
       people: Table<{
+        is_active_employee: boolean;
         id: string;
         organization_id: string;
         full_name: string;
@@ -229,6 +230,7 @@ export interface Database {
         created_at: string;
       }>;
       professional_profiles: Table<{
+        field_provenance: Json;
         id: string;
         organization_id: string;
         person_id: string;
@@ -466,7 +468,8 @@ export interface Database {
         processing_attempt_id: string | null;
         base_profile_id: string | null;
         base_profile_version: number | null;
-        source_kind: "document" | "profile";
+        source_kind: "document" | "profile" | "manual";
+        field_provenance: Json;
         source_profile_id: string | null;
         current_profile_id_at_start: string | null;
         current_profile_version_at_start: number | null;

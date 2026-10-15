@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.75.0
-last_verified: 2026-10-14
+version: 2.76.0
+last_verified: 2026-10-15
 ---
 
 # Estado atual do Prisma
+
+## Perfil manual, funcionário ativo e tarifas por vigência — 2.7.0 em validação
+
+Acordo aprovado1.0.0 e execução congelada em `docs/qa/agreement-manual-profile-v270.md` e `execution-manual-profile-v270.md`. Editor existente adaptado para criar/retomar rascunho parcial sem PDF/IA/Tokens e atualizar vigente com prefill privado separado e Delta antes da publicação. Novo writer manual com origem real, proveniência por fato/autor/data, replay/locks/duplicidade humana e tenant backend; nenhuma fonte/evidência artificial. Funcionário ativo é boolean da Pessoa no tenant, default Não administrativo, com autoria/data no histórico, filtro Sim/Não e indicação discreta quando confirmado, sem inferência/contratação/sucessão. Tarifas atuais seguem vigência backend e versões futuras ficam Programadas no histórico. Valores/política comercial preservados. SQL local/concorrência e UI sintética estão em validação; publicação nova ainda não afirmada. Estado final e limites no `docs/qa/aot-manual-profile-v270.md`.
 
 ## Tokens Prisma por origem — 2.6.2 publicada
 

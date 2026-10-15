@@ -4,7 +4,7 @@ import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { PrismaDisclosure } from "../ui/PrismaDisclosure";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { SaveOutlined } from "@ant-design/icons";
-import { Alert, Button, Form, Input, Select, Skeleton, Space, Typography } from "antd";
+import { Alert, Button, Form, Input, Radio, Select, Skeleton, Space, Typography } from "antd";
 import type { PersonEditorValue, PersonWorkspaceSummary } from "../domain/personIngestion";
 import { personIngestionService } from "../infrastructure/supabase/personIngestionService";
 import type { OrganizationMembership } from "../shared/access";
@@ -30,6 +30,7 @@ const COUNTRY_OPTIONS = [
 
 const EMPTY_PERSON: PersonEditorValue = {
   fullName: "",
+  isActiveEmployee: false,
   email: "",
   phoneCountryIso2: "BR",
   phoneCountryLabel: "Brasil",
@@ -50,6 +51,9 @@ export function PersonFormPage({ activeMembership, personId, onNavigate }: Perso
   const [person, setPerson] = useState<PersonWorkspaceSummary | null>(null);
   const [loading, setLoading] = useState(Boolean(personId));
   const [saving, setSaving] = useState(false);
+  const [employeeHistory, setEmployeeHistory] = useState<Awaited<ReturnType<typeof personIngestionService.employeeHistory>>>([]);
+  const [historyLoading, setHistoryLoading] = useState(Boolean(personId));
+  const [historyError, setHistoryError] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   useLoadingFeedback({ "Carregando cadastro da Pessoa…": loading, "Salvando cadastro da Pessoa…": saving });
 
@@ -66,7 +70,7 @@ export function PersonFormPage({ activeMembership, personId, onNavigate }: Perso
         if (!current) return;
         if (!workspace) throw new Error("Pessoa não encontrada nesta empresa.");
         setPerson(workspace.person);
-        const value = workspace.person.privateData;
+        const value = { ...workspace.person.privateData, isActiveEmployee: workspace.person.isActiveEmployee === true };
         form.setFieldsValue({ ...value, phoneCountry: `${value.phoneCountryIso2}|${value.phoneCountryLabel}|${value.phoneCountryCode}` });
         baseline.current = JSON.stringify(form.getFieldsValue(true));
       })
@@ -74,6 +78,14 @@ export function PersonFormPage({ activeMembership, personId, onNavigate }: Perso
       .finally(() => { if (current) setLoading(false); });
     return () => { current = false; };
   }, [activeMembership.organizationId, form, personId]);
+
+  useEffect(() => {
+    setEmployeeHistory([]); setHistoryError(null); setHistoryLoading(Boolean(personId));
+    if (!personId) return;
+    let current = true;
+    void personIngestionService.employeeHistory(activeMembership.organizationId,personId).then(rows => { if(current) setEmployeeHistory(rows); }).catch(() => {if(current) setHistoryError("Histórico de vínculo indisponível. O cadastro permanece disponível.");}).finally(() => { if(current) setHistoryLoading(false); });
+    return () => {current=false;};
+  },[activeMembership.organizationId,personId]);
 
   async function handleSave(values: PersonEditorValue & { phoneCountry: string }) {
     setSaving(true);
@@ -118,6 +130,7 @@ export function PersonFormPage({ activeMembership, personId, onNavigate }: Perso
             <Form.Item label="Nome completo" name="fullName" rules={[{ required: true, whitespace: true, message: "Informe o nome completo." }]}>
               <Input autoComplete="name" placeholder="Nome completo da Pessoa" />
             </Form.Item>
+            <Form.Item label="Funcionário ativo da empresa?" name="isActiveEmployee" extra="Selecione Sim somente quando confirmado. Não é o padrão administrativo e não significa ex-funcionário ou que nunca trabalhou na empresa."><Radio.Group options={[{value:false,label:"Não"},{value:true,label:"Sim"}]} /></Form.Item>
             <Form.Item label="E-mail" name="email" rules={[{ type: "email", message: "Informe um e-mail válido." }]}>
               <Input autoComplete="email" placeholder="pessoa@exemplo.com" />
             </Form.Item>
@@ -151,6 +164,7 @@ export function PersonFormPage({ activeMembership, personId, onNavigate }: Perso
         </PrismaCard>
         <PrismaCard className="prisma-person-summary-card">
           <Typography.Title level={4}>Resumo</Typography.Title>
+          <PrismaDisclosure title="Histórico do vínculo de funcionário">{historyLoading ? <p>Consultando histórico…</p> : historyError ? <p>{historyError}</p> : employeeHistory.length ? employeeHistory.map(event => <p key={event.id}>{event.current ? "Sim" : "Não"} · {formatDate(event.createdAt)} · Responsável: {event.actorAuthUserId}</p>) : <p>Nenhuma alteração registrada. O padrão Não é administrativo e não descreve vínculos anteriores.</p>}</PrismaDisclosure>
           <SummaryRow label="Origem" value={describeSource(person?.latestSourceType ?? null)} />
           <SummaryRow label="Última atualização" value={person ? formatDate(person.updatedAt) : "A definir"} />
           <SummaryRow label="Status" value={<ProfileStateTag state={person?.profileState ?? "not_generated"} />} />

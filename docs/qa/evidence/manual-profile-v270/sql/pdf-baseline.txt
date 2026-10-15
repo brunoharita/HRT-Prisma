@@ -1,0 +1,144 @@
+BEGIN
+CREATE FUNCTION
+REVOKE
+COMMENT
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE TABLE
+GRANT
+INSERT 0 3
+INSERT 0 1
+INSERT 0 2
+INSERT 0 3
+INSERT 0 3
+INSERT 0 3
+INSERT 0 5
+INSERT 0 5
+ s202_assert
+-------------
+
+(1 row)
+
+ s202_assert
+-------------
+
+(1 row)
+
+SET
+              set_config
+--------------------------------------
+ 381bf39c-011c-aa6e-e390-6f750404cb24
+(1 row)
+
+DO
+              set_config
+--------------------------------------
+ f79ede49-3a8e-8387-f233-f723916ae8e5
+(1 row)
+
+ s202_reject
+-------------
+
+(1 row)
+
+ s202_reject
+-------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 7feeb225-3ba9-1e8d-3200-50e8ab826ead
+(1 row)
+
+ s202_assert
+-------------
+
+(1 row)
+
+ s202_reject
+-------------
+
+(1 row)
+
+ set_config
+------------
+
+(1 row)
+
+ s202_reject
+-------------
+
+(1 row)
+
+RESET
+INSERT 0 1
+ s202_assert
+-------------
+
+(1 row)
+
+ s202_reject
+-------------
+
+(1 row)
+
+ROLLBACK
+             verification
+--------------------------------------
+ S202_PUBLICATION_QA_PASS_ROLLED_BACK
+(1 row)
+
+psql:tmp/manual-profile-pdf-baseline.sql:98: NOTICE:  PASS: anonymous publication denied
+psql:tmp/manual-profile-pdf-baseline.sql:99: NOTICE:  PASS: learning trigger remains private
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: denied (P0001)
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: stale review rolls back without changing Profile/review
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: first publication completes for synthetic Person 1
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: source IDs/items/order unchanged for Person 1
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: evidence links and source descriptors unchanged through publication
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: review and Profile committed atomically
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: publication replay reuses immutable version
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: replay adds no confirmations/events
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: denied (P0001)
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: stale review rolls back without changing Profile/review
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: first publication completes for synthetic Person 2
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: source IDs/items/order unchanged for Person 2
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: evidence links and source descriptors unchanged through publication
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: review and Profile committed atomically
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: publication replay reuses immutable version
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: replay adds no confirmations/events
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: same normalized heading with different source IDs reuses canonical definition
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: confirmation ledger preserves each source key
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: denied (P0001)
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: stale review rolls back without changing Profile/review
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: first publication completes for synthetic Person 3
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: source IDs/items/order unchanged for Person 3
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: evidence links and source descriptors unchanged through publication
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: review and Profile committed atomically
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: publication replay reuses immutable version
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: replay adds no confirmations/events
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: denied (P0001)
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: stale review rolls back without changing Profile/review
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: first publication completes for synthetic Person 4
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: source IDs/items/order unchanged for Person 4
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: evidence links and source descriptors unchanged through publication
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: review and Profile committed atomically
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: publication replay reuses immutable version
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: replay adds no confirmations/events
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: denied (P0001)
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: stale review rolls back without changing Profile/review
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: first publication completes for synthetic Person 5
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: source IDs/items/order unchanged for Person 5
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: evidence links and source descriptors unchanged through publication
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: review and Profile committed atomically
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: publication replay reuses immutable version
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: replay adds no confirmations/events
+psql:tmp/manual-profile-pdf-baseline.sql:152: NOTICE:  PASS: same key format/rename retained; changed key with renamed heading also reuses definition
+psql:tmp/manual-profile-pdf-baseline.sql:154: NOTICE:  PASS: denied (42501)
+psql:tmp/manual-profile-pdf-baseline.sql:155: NOTICE:  PASS: denied (42501)
+psql:tmp/manual-profile-pdf-baseline.sql:157: NOTICE:  PASS: catalog RLS isolates tenants
+psql:tmp/manual-profile-pdf-baseline.sql:158: NOTICE:  PASS: denied (42501)
+psql:tmp/manual-profile-pdf-baseline.sql:160: NOTICE:  PASS: denied (42501)
+psql:tmp/manual-profile-pdf-baseline.sql:165: NOTICE:  PASS: same name is independent across tenants
+psql:tmp/manual-profile-pdf-baseline.sql:166: NOTICE:  PASS: denied (55000)

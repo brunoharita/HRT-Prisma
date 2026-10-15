@@ -1,0 +1,23 @@
+import assert from "node:assert/strict";
+import { readFile, writeFile, mkdir } from "node:fs/promises";
+import { spawnSync } from "node:child_process";
+// Reuse the existing deterministic PDF/intake/review/publication corpus before/after the new migration.
+const generated = spawnSync(process.execPath, ["scripts/verify-import-evidence.mjs", "55479", "import_evidence_v202", "--publication", "--generate-only"], { encoding: "utf8", windowsHide: true, maxBuffer: 8 * 1024 * 1024 });
+await mkdir("docs/qa/evidence/manual-profile-v270/sql", { recursive: true });
+assert.equal(generated.status, 0, generated.stderr.slice(-1800));
+const psqlArgs = ["-X", "-h", "127.0.0.1", "-p", "55479", "-U", "prisma_v202_qa", "-d", "import_evidence_v202", "-v", "ON_ERROR_STOP=1"];
+const prerequisites = (await readFile("supabase/migrations/20261004023000_custom_section_publication_identity.sql", "utf8")).replace(/^begin;\s*$/mg, "").replace(/^commit;\s*$/mg, "");
+const source = await readFile("tmp/import-evidence-v202-qa/verification.sql", "utf8");
+await writeFile("tmp/manual-profile-pdf-baseline.sql", source.replace("begin;", () => "begin;\n" + prerequisites));
+const clean = text => text.replaceAll("\r", "").split("\n").map(line => line.trimEnd()).join("\n");
+const baseline = spawnSync("C:/Program Files/PostgreSQL/17/bin/psql.exe", [...psqlArgs, "-f", "tmp/manual-profile-pdf-baseline.sql"], { encoding: "utf8", windowsHide: true, maxBuffer: 8 * 1024 * 1024 });
+await writeFile("docs/qa/evidence/manual-profile-v270/sql/pdf-baseline.txt", clean(baseline.stdout + baseline.stderr));
+assert.equal(baseline.status, 0, baseline.stderr.slice(-1800));
+let migration = "";
+for (const name of ["20261004040000_review_period_format_preflight", "20261015070000_manual_profile_and_employee"]) migration += (await readFile(`supabase/migrations/${name}.sql`, "utf8")).replace(/^begin;\s*$/mg, "").replace(/^commit;\s*$/mg, "");
+assert.ok(source.includes("begin;") && source.includes("rollback;"), "Existing corpus must be transactional");
+await writeFile("tmp/manual-profile-pdf-regression.sql", source.replace("begin;", () => "begin;\n" + prerequisites + migration));
+const run = spawnSync("C:/Program Files/PostgreSQL/17/bin/psql.exe", ["-X", "-h", "127.0.0.1", "-p", "55479", "-U", "prisma_v202_qa", "-d", "import_evidence_v202", "-v", "ON_ERROR_STOP=1", "-f", "tmp/manual-profile-pdf-regression.sql"], { encoding: "utf8", windowsHide: true, maxBuffer: 8 * 1024 * 1024 });
+await writeFile("docs/qa/evidence/manual-profile-v270/sql/pdf-regression.txt", clean(run.stdout + run.stderr));
+assert.equal(run.status, 0, run.stderr.slice(-2000));
+console.log("PASS existing deterministic PDF/intake/review/publication corpus before/after manual migration, both rolled back");

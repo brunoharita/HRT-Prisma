@@ -535,6 +535,14 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate, re
   ];
 
   const header = (<PersonCenterHeader
+        canManual={activeMembership.role !== "member"}
+        isActiveEmployee={workspace.person.isActiveEmployee === true}
+        onManual={() => void (async () => {
+          setBusy(true); setError(null);
+          try { const result = await personIngestionService.startManualProfile(activeMembership.organizationId,personId,{fullName:workspace.person.fullName,email:"",phone:""},false,`manual-existing:${personId}:${crypto.randomUUID()}`); onNavigate(`/profiles/${personId}/reviews/${result.reviewId}`); }
+          catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível abrir o rascunho."); }
+          finally { setBusy(false); }
+        })()}
         canDeletePerson={canDeletePerson}
         model={viewModel}
         lifecycle={workspace.person.lifecycle}
@@ -551,7 +559,7 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate, re
         onVersions={() => onNavigate(`/profiles/${personId}/versions`)}
         onOpenOperations={() => onNavigate(`/profiles/${personId}/processes`)}
       />);
-  const notices = (<>{error ? <Alert closable description="O Perfil atual permanece preservado." title={error} onClose={() => setError(null)} showIcon type="error" action={<Button disabled={busy} onClick={() => { void refresh().catch(() => setError("A Central da Pessoa não pôde ser consultada. Tente atualizar a consulta novamente.")); }}>Consultar estado da pessoa</Button>} /> : null}
+  const notices = (<>{workspace.manualReviews?.filter(review => review.state === "draft").map(review => <Alert key={review.id} showIcon type="info" title="Rascunho manual disponível" description="Continue o preenchimento quando quiser. O Perfil vigente permanece preservado." action={<Button onClick={() => onNavigate(`/profiles/${personId}/reviews/${review.id}`)}>Continuar preenchimento</Button>} />)}{error ? <Alert closable description="O Perfil atual permanece preservado." title={error} onClose={() => setError(null)} showIcon type="error" action={<Button disabled={busy} onClick={() => { void refresh().catch(() => setError("A Central da Pessoa não pôde ser consultada. Tente atualizar a consulta novamente.")); }}>Consultar estado da pessoa</Button>} /> : null}
       {success ? <Alert closable title={success} onClose={() => setSuccess(null)} showIcon type="success" /> : null}
       {workspace.person.operationalStatus === "archived" ? <Alert action={<Button onClick={toggleArchive}>Reativar Pessoa</Button>} description="Documentos, Perfis e histórico permanecem disponíveis para consulta. Reative a Pessoa antes de iniciar uma nova operação." showIcon title="Pessoa arquivada" type="warning" /> : null}
       {workspace.person.operationalStatus === "deleting" ? <Alert action={canDeletePerson ? <Button danger loading={busy} onClick={() => void handleDeletePerson()}>Retomar exclusão</Button> : undefined} description="Novas alterações estão bloqueadas. O Prisma retomará a mesma operação idempotente e só informará sucesso depois de verificar banco e arquivos." showIcon title="Exclusão definitiva em andamento" type="error" /> : null}</>);
@@ -587,11 +595,14 @@ function PersonCenterSkeleton() {
   return <div className="prisma-person-center-skeleton"><Skeleton active avatar paragraph={{ rows: 3 }} /><div className="prisma-person-center-skeleton__grid"><Skeleton active paragraph={{ rows: 5 }} /><Skeleton active paragraph={{ rows: 5 }} /></div><Skeleton active paragraph={{ rows: 10 }} /></div>;
 }
 
-function PersonCenterHeader({ model, lifecycle, operationalStatus, canDeletePerson, onBack, onCreateRevision, onEdit, onImport, onVersions, onOpenOperations, onArchive, onMerge, onDeletePerson, onIssueSelfAccess, onLifecycle }: {
+function PersonCenterHeader({ canManual, isActiveEmployee, onManual, model, lifecycle, operationalStatus, canDeletePerson, onBack, onCreateRevision, onEdit, onImport, onVersions, onOpenOperations, onArchive, onMerge, onDeletePerson, onIssueSelfAccess, onLifecycle }: {
   model: PersonCenterViewModel;
   lifecycle: string;
   operationalStatus: "active" | "archived" | "merged" | "deleting";
   canDeletePerson: boolean;
+  canManual: boolean;
+  isActiveEmployee: boolean;
+  onManual: () => void;
   onBack: () => void;
   onCreateRevision: () => void;
   onEdit: () => void;
@@ -609,7 +620,7 @@ function PersonCenterHeader({ model, lifecycle, operationalStatus, canDeletePers
       <Button className="prisma-person-center-header__back" onClick={onBack} type="text">Ir para Pessoas</Button>
       <div className="prisma-person-center-header__main">
         <div className="prisma-person-center-header__identity">
-          <div className="prisma-person-identity-name"><div className="prisma-canonical-avatar" aria-hidden="true">{model.identity.fullName.trim().split(/\s+/).slice(0, 2).map(part => part[0]).join("").toUpperCase()}</div><Typography.Title level={1}>{model.identity.fullName}</Typography.Title></div>
+          <div className="prisma-person-identity-name"><div className="prisma-canonical-avatar" aria-hidden="true">{model.identity.fullName.trim().split(/\s+/).slice(0, 2).map(part => part[0]).join("").toUpperCase()}</div><Typography.Title level={1}>{model.identity.fullName}</Typography.Title></div>{isActiveEmployee ? <Tag color="blue">Funcionário ativo da empresa</Tag> : null}
           {model.identity.professionalTitle ? <Typography.Paragraph className="prisma-person-center-header__title">{model.identity.professionalTitle}</Typography.Paragraph> : null}
           <div className="prisma-person-center-header__metadata">
             {model.identity.location ? <span><EnvironmentOutlined /> {model.identity.location}</span> : null}
@@ -617,6 +628,7 @@ function PersonCenterHeader({ model, lifecycle, operationalStatus, canDeletePers
           </div>
         </div>
         <Space className="prisma-person-center-header__actions" wrap>
+          {canManual ? <Button disabled={operationalStatus !== "active"} icon={<EditOutlined />} onClick={onManual}>{model.currentProfile ? "Atualizar perfil manualmente" : "Preencher manualmente"}</Button> : null}
           <Button disabled={operationalStatus !== "active"} icon={<ImportOutlined />} onClick={onImport} type={model.currentProfile ? "default" : "primary"}>Nova importação</Button>
           <Button disabled={operationalStatus !== "active"} icon={<EditOutlined />} onClick={onCreateRevision} type={model.currentProfile ? "primary" : "default"}>Criar revisão</Button>
           <Button icon={<HistoryOutlined />} onClick={onVersions}>Versões</Button>

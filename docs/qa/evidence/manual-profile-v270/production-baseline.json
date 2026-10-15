@@ -1,0 +1,50 @@
+{
+  "project": "ioldpnqqvobprjiontre",
+  "records": [
+    {
+      "object": "people",
+      "records": 11,
+      "fingerprint": "5f8addefabc7ebea075ca085bd5dd4a2"
+    },
+    {
+      "object": "profiles",
+      "records": 15,
+      "fingerprint": "c1116a5ca5b939c78d04f4994cd725cc"
+    },
+    {
+      "object": "private_data",
+      "records": 11,
+      "fingerprint": "3f7476aee9e11ebdcb799d1b2787d9ee"
+    },
+    {
+      "object": "documents",
+      "records": 12,
+      "fingerprint": "4da3a2b795c5c35c3b2b44dd6b685d8d"
+    },
+    {
+      "object": "assessments",
+      "records": 2,
+      "fingerprint": "1857da46c7c56536be48440082e6bc0d"
+    },
+    {
+      "object": "follow_up",
+      "records": 1,
+      "fingerprint": "8c5144359d894473c0dbf0f3eff70422"
+    },
+    {
+      "object": "token_accounts",
+      "records": 2,
+      "fingerprint": "f9572c52cdc39a8ac178ff7a78e8d1c3"
+    },
+    {
+      "object": "token_rates",
+      "records": 7,
+      "fingerprint": "00744d49fcb2e440c996b08ca10756cb"
+    },
+    {
+      "object": "token_reservations",
+      "records": 4,
+      "fingerprint": "5b00d313392d0c5479ce307400551042"
+    }
+  ]
+}

@@ -44,6 +44,7 @@ type OperationalFilter = "active" | "archived" | "all";
 export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
   const canManagePeople = activeMembership.role !== "member";
   const [search, setSearch] = useViewState("search", "");
+  const [employeeFilter, setEmployeeFilter] = useViewState<"all" | "yes" | "no">("employeeFilter", "all");
   const [profileFilter, setProfileFilter] = useViewState<ProfileFilter>("profileFilter", "all");
   const [importFilter, setImportFilter] = useViewState<ImportFilter>("importFilter", "all");
   const [operationalFilter, setOperationalFilter] = useViewState<OperationalFilter>("operationalFilter", "active");
@@ -74,11 +75,11 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
       || (profileFilter === "approved" && Boolean(person.currentProfile))
       || (profileFilter === "without_profile" && !person.currentProfile);
     const matchesImport = importFilter === "all" || presentDocument(person.latestDocument).state === importFilter;
-    return matchesOperational && matchesProfile && matchesImport;
-  }), [importFilter, operationalFilter, people, profileFilter]);
-  const hasFilters = Boolean(search || profileFilter !== "all" || importFilter !== "all" || operationalFilter !== "active");
+    return matchesOperational && matchesProfile && matchesImport && (employeeFilter === "all" || (person.isActiveEmployee === true) === (employeeFilter === "yes"));
+  }), [employeeFilter, importFilter, operationalFilter, people, profileFilter]);
+  const hasFilters = Boolean(employeeFilter !== "all" || search || profileFilter !== "all" || importFilter !== "all" || operationalFilter !== "active");
   const resetPage = () => setPagination((current) => ({ ...current, current: 1 }));
-  const clearFilters = () => { setSearch(""); setProfileFilter("all"); setImportFilter("all"); setOperationalFilter("active"); resetPage(); };
+  const clearFilters = () => { setEmployeeFilter("all"); setSearch(""); setProfileFilter("all"); setImportFilter("all"); setOperationalFilter("active"); resetPage(); };
   const activePeople = people.filter((person) => person.operationalStatus === "active");
   const approvedProfiles = activePeople.filter((person) => person.currentProfile).length;
   const awaitingReview = activePeople.filter((person) => person.pendingReviewCount > 0).length;
@@ -142,6 +143,7 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
         title="Pessoas"
         description="Gerencie as pessoas e acompanhe, separadamente, o Perfil atual e as importações recentes."
         actions={<Space wrap>
+            {canManagePeople ? <Button icon={<PlusOutlined />} onClick={() => onNavigate("/profiles/manual")}>Preencher manualmente</Button> : null}
             {canManagePeople ? <Button icon={<FileAddOutlined />} onClick={() => onNavigate("/profiles/import")} type="primary">Importar currículo</Button> : null}
             <Dropdown menu={{ items: [
               { key: "search", label: "Encontrar pessoas", icon: <SearchOutlined /> },
@@ -175,6 +177,7 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
             ]}
             value={operationalFilter}
           />
+          <Select aria-label="Filtrar funcionário ativo" value={employeeFilter} onChange={(value) => { setEmployeeFilter(value); resetPage(); }} options={[{value:"all",label:"Funcionário ativo: todos"},{value:"yes",label:"Funcionário ativo: Sim"},{value:"no",label:"Funcionário ativo: Não"}]} />
           <Select<ProfileFilter>
             aria-label="Filtrar perfil atual"
             onChange={(value) => { setProfileFilter(value); resetPage(); }}

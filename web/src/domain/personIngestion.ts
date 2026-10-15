@@ -76,6 +76,7 @@ export type ProcessingState =
 
 export interface PersonEditorValue {
   fullName: string;
+  isActiveEmployee?: boolean;
   email: string;
   phoneCountryIso2: string;
   phoneCountryLabel: string;
@@ -89,6 +90,7 @@ export interface PersonEditorValue {
 }
 
 export interface PersonWorkspaceSummary {
+  isActiveEmployee?: boolean;
   id: string;
   organizationId: string;
   fullName: string;
@@ -349,7 +351,8 @@ export interface ProfileReviewWorkspace {
   personId: string;
   personName: string;
   personPrivateContact: { phone: string | null; email: string | null };
-  sourceKind: "document" | "profile";
+  sourceKind: "document" | "profile" | "manual";
+  fieldProvenance?: Record<string, { origin: string; actorAuthUserId?: string; recordedAt?: string; reviewId?: string; revision?: number; sourceProfileId?: string }>;
   sourceProfileId: string | null;
   sourceProfileVersion: number | null;
   documentId: string | null;
@@ -379,6 +382,7 @@ export interface ProfileReviewWorkspace {
 }
 
 export interface ProfileVersionView {
+  manualEntry?: boolean;
   id: string;
   profileVersion: number;
   profileData: StructuredDraft;
@@ -410,6 +414,7 @@ export interface ProcessingAttemptView {
 }
 
 export interface PersonIngestionWorkspace {
+  manualReviews?: Array<{ id: string; state: string; createdAt: string }>;
   person: PersonWorkspaceSummary;
   documents: PersonDocumentTimelineItem[];
   selectedDocument: PersonDocumentTimelineItem | null;

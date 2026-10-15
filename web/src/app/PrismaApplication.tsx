@@ -30,6 +30,7 @@ import { PasswordChangePage } from "../pages/PasswordChangePage";
 import { PeoplePage } from "../pages/PeoplePage";
 import { DocumentDetailPage } from "../pages/DocumentDetailPage";
 import { DocumentOperationsPage } from "../pages/DocumentOperationsPage";
+import { ManualProfileStartPage } from "../pages/ManualProfileStartPage";
 import { PersonFormPage } from "../pages/PersonFormPage";
 import { PersonProfilePage } from "../pages/PersonProfilePage";
 import { ProfileSearchPage } from "../pages/ProfileSearchPage";
@@ -409,6 +410,7 @@ function renderRouteContent(
   if (route.path === "/" && activeMembership) {
     return <HomePage activeMembership={activeMembership} repository={prismaRepository} onNavigate={onNavigate} />;
   }
+  if (route.path === "/profiles/manual" && activeMembership) return <ManualProfileStartPage activeMembership={activeMembership} onNavigate={onNavigate} />;
   if (route.path === "/profiles/new" && activeMembership) {
     return <PersonFormPage activeMembership={activeMembership} onNavigate={onNavigate} />;
   }
@@ -662,6 +664,7 @@ function findRoute(pathname: string): AppRoute {
   if (vacancyEditMatch?.[1]) return { path: "/vacancies", vacancyId: vacancyEditMatch[1], vacancyView: "edit", rule: reviewerRule };
   const vacancyMatch = /^\/vacancies\/([^/]+)$/.exec(normalized);
   if (vacancyMatch?.[1]) return { path: "/vacancies", vacancyId: vacancyMatch[1], vacancyView: "detail", rule: reviewerRule };
+  if (normalized === "/profiles/manual") return { path: "/profiles/manual", rule: reviewerRule };
   if (normalized === "/profiles/new") return { path: "/profiles/new", profileMode: "create", rule: { requiresAuth: true, requiresMembership: true, allowedRoles: ["super_admin", "owner", "admin", "recruiter"] } };
   if (normalized === "/profiles/import") return { path: "/profiles", profileView: "import", rule: reviewerRule };
   if (normalized === "/profiles/processes") return { path: "/profiles", profileView: "operations", rule: reviewerRule };

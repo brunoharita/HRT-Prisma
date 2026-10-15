@@ -1,0 +1,26 @@
+[
+  {
+    "name": "concurrent replay creates one Person and one manual draft",
+    "pass": true
+  },
+  {
+    "name": "competing draft saves produce one success and one conflict",
+    "pass": true
+  },
+  {
+    "name": "competing publication replay produces one immutable version",
+    "pass": true
+  },
+  {
+    "name": "different concurrent creation keys still require human duplicate decision",
+    "pass": true
+  },
+  {
+    "name": "manual concurrency never creates documents attempts or extraction evidence",
+    "pass": true
+  },
+  {
+    "name": "original profile survives further drafts",
+    "pass": true
+  }
+]

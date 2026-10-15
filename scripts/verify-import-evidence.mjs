@@ -72,6 +72,7 @@ select s202_assert(not has_function_privilege('anon','private.review_period_form
 }
 const path = resolve(directory, "verification.sql");
 await writeFile(path, sql);
+if (process.argv[5] === "--generate-only") process.exit(0);
 const command = process.platform === "win32" ? "C:/Program Files/PostgreSQL/17/bin/psql.exe" : "psql";
 const verification = spawnSync(command, ["-X", "-h", "127.0.0.1", "-p", port, "-U", "prisma_v202_qa", "-d", database, "-v", "ON_ERROR_STOP=1", "-f", path], { stdio: "inherit", windowsHide: true, timeout: 60000 });
 if (verification.error) throw verification.error;

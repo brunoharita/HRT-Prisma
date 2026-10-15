@@ -1,5 +1,7 @@
 # Tokens Prisma — gestão de uso de IA
 
+Em2.7.0, Pacotes e tarifas distingue **Tarifas atuais** (aberta inicialmente) e **Histórico de tarifas**. A atual segue a cotação backend: `effective_at <= now`, maior vigência, depois criação e ID decrescentes. Cada operação aparece uma vez; versões anteriores/futuras são agrupadas por vigência decrescente, com futuras **Programada**. Nenhum preço/saldo/política/cotação/reserva/cobrança histórica muda; os cadastros/controles comerciais permanecem. Cadastro manual estruturado não exige IA nem consome Tokens Prisma.
+
 Produto 2.6.2; gestão `prisma-tokens-2.0.0`, política `prisma-token-policy-2.0.0`, cotação `prisma-token-quote-1.0.0`, ADR-083 revisado. Tokens Prisma são créditos comerciais próprios. Não correspondem a tokens de entrada/saída da OpenAI ou Anthropic.
 
 Cada empresa começa com 1.000.000 tokens por mês calendário de Brasília: dia1 às00h até a virada seguinte, sem acumulação ou meses retroativos. Ativação parcial recebe integral até a virada. A migração aproveita o lote vigente sem duplicar franquia. Nas novas cotações, questão gerada custa 2.347; importação por Parser IA custa 14.785; síntese profissional custa 6.193. Cache, banco aprovado, consulta, revisão, gravação e envio não consomem novamente. O consumo aparece como texto secundário antes da ação. Reserva reduz o disponível; entrega válida confirma o débito, falha sem entrega libera. Saldo baixo gera aviso discreto; insuficiência preserva rascunho e ações manuais.

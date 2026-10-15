@@ -4,7 +4,7 @@ export const formatTokens = (value:number) => new Intl.NumberFormat("pt-BR",{max
 export const formatTokenPrice = (cents:number) => new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL"}).format(cents/100);
 export interface TokenQuote {contract:"prisma-token-quote-1.0.0";organizationId:string;id:string;functionName:TokenFunction;quantity:number;tokensPerUnit:number;amount:number;available:number;expiresAt:string;}
 export interface TokenPackage {id:string;name:string;tokens:number;priceCents:number;validityDays:30;active?:boolean;effectiveAt?:string;}
-export interface TokenRate {id:string;functionName:TokenFunction;tokensPerUnit:number;effectiveAt:string;}
+export interface TokenRate {id:string;functionName:TokenFunction;tokensPerUnit:number;effectiveAt:string;createdAt?:string;}
 export interface TokenAccount {organizationId:string;monthlyTokens:number;pendingMonthlyTokens:number|null;pendingCycleDay:number|null;currentPeriod:string;nextPeriod:string;cycleAnchor:string;createdAt:string;policyVersion:"prisma-token-policy-2.0.0";active:boolean;name?:string;available?:number;}
 export interface TokenLot {id:string;organizationId:string;source:"monthly"|"additional"|"bonus"|"refund";total:number;remaining:number;available:number;expiresAt:string;acquiredAt:string;name:string;}
 export interface TokenMovement {id:number;organizationId:string;kind:string;amount:number;actorId:string|null;actorName?:string|null;functionName:TokenFunction|null;referenceId:string|null;reason:string|null;createdAt:string;quantity:number|null;operationId:string|null;sources:{lotId:string;source:TokenLot["source"];amount:number;expiresAt:string}[];assessmentContext:{assessmentId:string;vacancyId:string;processId:string|null;personId:string|null}|null;}

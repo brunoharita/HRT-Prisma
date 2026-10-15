@@ -2,6 +2,9 @@
 
 ## Contratos
 
+- `manual-profile` 1.0.0: extensão aditiva review/Delta, rascunho sem fonte artificial e proveniência por fato.
+- `employee-status` 1.0.0: boolean da Pessoa no tenant, default false administrativo, auditoria de alterações humanas.
+
 - `profile-publication-delta` 2.0.0
 - `professional-profile` 6.0.0
 - `person-ingestion` 12.0.0

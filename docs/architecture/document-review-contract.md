@@ -1,5 +1,15 @@
 # Contrato de documentos, operações e revisão humana
 
+## Preenchimento manual estruturado — 2.7.0
+
+Contrato aditivo `manual-profile-1.0.0`, acordo `docs/qa/agreement-manual-profile-v270.md`1.0.0. `start_manual_profile_review` cria ou retoma revisão `source_kind=manual`, sem Documento/Tentativa/evidência artificial; atualizações partem do Perfil vigente e do cadastro privado separado. `extracted_data` é reutilizado como snapshot de referência da revisão, sem significar extração quando a origem é manual. Não há parser/LLM, quote/reserva/débito neste caminho.
+
+Criação e replay são serializados por empresa, com chave/fingerprint/ator no ledger existente, revalidação de possíveis duplicidades pelo backend e confirmação humana antes de criar outro cadastro. Reutilizam-se regras exatas de nome normalizado, e-mail e telefone do intake. Correspondência não é merge/vínculo automático. Revisões têm lock otimista; somente uma revisão manual draft por empresa/Pessoa. Contato/conteúdo profissional podem estar ausentes no rascunho manual; identidade, formatos e integridade dos campos preenchidos continuam obrigatórios. Publicação conserva mínimos de contato/conteúdo profissional, classificações e todos os gates do Delta. `approve_profile_review` fica interno, sem EXECUTE authenticated; `publish_profile_review` permanece a fronteira pública autorizada.
+
+`field_provenance` em revisão/versão registra declaração manual por fato/campo, ator/data/revisão; listas usam IDs estáveis e hashes de valores. Fatos preservados mantêm proveniência; história anterior sem anotação referencia a versão de origem, sem inventar evidência. O mapa também acompanha intervenções humanas nas revisões documentais/de versões; metadados técnicos/classificador não são fatos humanos. Restauro conserva proveniência da base. Contato/identidade continuam fora de `profile_data`. O Delta conserva omissões e exige decisão explícita para remoção; snapshots históricos e autoria permanecem.
+
+Migration, negativos, disputas e limites no AoT `docs/qa/aot-manual-profile-v270.md`. Código/documentação não provam rollout sem verificação operacional.
+
 ## Orientação ao operador — v2.0.3
 
 `operator-feedback-1.0.0` é o catálogo de apresentação do cliente; o envelope persistido `operation-feedback-2.0.0` permanece. Motivos conhecidos de recusa, inclusive códigos legados, informam em português o que alterar ou qual etapa reabrir. Quando o campo é conhecido, a recuperação usa o foco existente. Detalhes brutos do banco, dados privados e identificadores técnicos não são exibidos. Erros desconhecidos continuam sem correção de campo inventada; falhas de sessão/permissão têm precedência sobre orientação de preenchimento.

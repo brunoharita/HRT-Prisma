@@ -161,7 +161,7 @@ export function ProfileDeltaPage({ activeMembership, personId, documentId, revie
       <PrismaPageHeader icon={<PrismaPageIcon />}
         title={delta.firstPublication ? "Revisão da primeira versão do perfil" : "Comparação com o perfil atual"}
         description={delta.firstPublication ? "Revise o conhecimento que formará o primeiro Perfil Prisma antes de publicar." : "Veja exatamente o que a nova versão altera e o que permanece preservado antes de publicar."}
-        actions={<Card className="prisma-delta-file-card" size="small"><FilePdfOutlined /><span><strong>{workspace.sourceKind === "profile" ? `Perfil v${workspace.sourceProfileVersion ?? workspace.baseProfileVersion}` : workspace.documentName}</strong><small>{workspace.sourceKind === "profile" ? "Versão usada como base" : `Documento v${workspace.documentVersion}`}</small></span></Card>}
+        actions={<Card className="prisma-delta-file-card" size="small"><FilePdfOutlined /><span><strong>{workspace.sourceKind === "manual" ? "Preenchimento manual" : workspace.sourceKind === "profile" ? `Perfil v${workspace.sourceProfileVersion ?? workspace.baseProfileVersion}` : workspace.documentName}</strong><small>{workspace.sourceKind === "manual" ? "Informações declaradas; sem IA" : workspace.sourceKind === "profile" ? "Versão usada como base" : `Documento v${workspace.documentVersion}`}</small></span></Card>}
       />
       <Button onClick={() => returnToReview()} type="text">Ir para revisão</Button>
       <Steps className="prisma-m81-publication-steps" current={2} items={[{ title: "Dados extraídos" }, { title: "Revisão" }, { title: "Comparação" }, { title: "Publicação" }]} size="small" />

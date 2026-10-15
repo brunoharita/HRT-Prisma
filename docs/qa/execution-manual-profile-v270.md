@@ -1,0 +1,5 @@
+# Execução congelada — Prisma 2.7.0
+
+Versão 1.0.0. Implementar integralmente o [Acordo aprovado](agreement-manual-profile-v270.md), versão **1.0.0**, lido integralmente nesta execução: todos D-T01..03, D-M01..10, D-V01..05, D-UX-01; P-T01, P-M01..02, P-V01, P-G01, P-UX-01; F-01..02; A-01..02/A-UX-01; todos CA, mapa GOV-01 e baseline. Nenhuma pendência material. Não reinterpretar ou reduzir requisitos.
+
+Autorização: Bruno já aprovou implementação em main e produção2.7.0, segura e ágil. Usar branch codex/ e worktree limpo para preservar drafts, reutilizar editor/Delta/publicação/duplicidade/autorização existentes, sem IA no manual. Registrar evidências durante execução no `aot-manual-profile-v270.md`. Validar minimamente cada fronteira afetada, negativos/disputas e UX renderizada; CI obrigatório permanece. Gerar/check contexto da árvore exata; publicar por SHA explícito somente destinos derivados do diff, verificar identidade real/rollback/smoke e sincronizar. Não criar dados humanos/IA/pagamentos fictícios em produção. Parar somente por decisão material realmente nova ou segurança sem resolução; não pedir aprovação repetida.

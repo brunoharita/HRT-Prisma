@@ -1,5 +1,15 @@
 # Página unificada da Pessoa
 
+## Entrada manual e funcionário ativo — 2.7.0
+
+Pessoas oferece **Preencher manualmente** ao lado de **Importar currículo**. Identificação inicial verifica duplicidades possíveis e permite abrir cadastro existente ou confirmar outra Pessoa. Editor estruturado reutiliza abas/navegação por registros da revisão, com grupos opcionais vazios recolhidos, adicionar/editar/remover listas e todas as seções profissionais existentes. Não requer PDF/IA. Nome identifica o rascunho; contato/conteúdo profissional mínimos continuam necessários para publicar. Salvar não aprova/publica. A Central indica rascunho disponível e permite retomada.
+
+**Atualizar perfil manualmente** inicia cópia do vigente e preenche contato a partir do cadastro privado separado. Comparação e publicação explícitas produzem nova versão; falha/cancelamento/omissão não removem a anterior. Declarações têm origem/autoria/data e nunca se tornam extração PDF ou verificação Prisma. Preenchimento manual não consome Tokens; IA existente permanece opcional e separada.
+
+**Funcionário ativo da empresa?** é atributo administrativo booleano da Pessoa no tenant, somente Sim/Não e default Não, inclusive para anteriores. Não descreve vínculo anterior/ex-funcionário/nunca funcionário. Autorizado pode alterar em Editar Pessoa; responsável/data e valores anteriores/novos ficam no histórico. Sim aparece discretamente na identificação do Perfil; Pessoas filtra Sim/Não. Não altera currículo, avaliações, processos, matching ou elegibilidade para sucessão; nenhuma inferência por currículo/IA.
+
+Acordo1.0.0: `docs/qa/agreement-manual-profile-v270.md`; provas/rollout: `docs/qa/aot-manual-profile-v270.md`. Descrições de versões anteriores abaixo mantêm seu contexto histórico.
+
 ## Entrada e fronteira de produto
 
 Prisma v2.1.0 abre diretamente o Resumo profissional ao selecionar uma Pessoa. As rotas `/profiles/:personId` e o bookmark legado `/profiles/:personId/profile` apresentam a mesma página, sem Central → Ver perfil. Acordo normativo: `docs/qa/agreement-person-unified-v210.md` versão1.0.0; execução/AoT no mesmo diretório.

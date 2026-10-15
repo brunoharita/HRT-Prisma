@@ -1,0 +1,103 @@
+{
+  "results": [
+    {
+      "name": "1448 manual and PDF entries accessible together",
+      "pass": true
+    },
+    {
+      "name": "1448 employee Yes filter selects only confirmed",
+      "pass": true
+    },
+    {
+      "name": "1448 No filter includes legacy absence administratively",
+      "pass": true
+    },
+    {
+      "name": "people-filter-1448 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "390 manual and PDF entries accessible together",
+      "pass": true
+    },
+    {
+      "name": "390 employee Yes filter selects only confirmed",
+      "pass": true
+    },
+    {
+      "name": "390 No filter includes legacy absence administratively",
+      "pass": true
+    },
+    {
+      "name": "people-filter-390 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "320 manual and PDF entries accessible together",
+      "pass": true
+    },
+    {
+      "name": "320 employee Yes filter selects only confirmed",
+      "pass": true
+    },
+    {
+      "name": "320 No filter includes legacy absence administratively",
+      "pass": true
+    },
+    {
+      "name": "people-filter-320 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "1448 loading never shows a false empty form",
+      "pass": true
+    },
+    {
+      "name": "loading-1448 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "1448 save failure preserves typed draft and published authority",
+      "pass": true
+    },
+    {
+      "name": "save-error-1448 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "rates-1448 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "390 loading never shows a false empty form",
+      "pass": true
+    },
+    {
+      "name": "loading-390 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "390 save failure preserves typed draft and published authority",
+      "pass": true
+    },
+    {
+      "name": "save-error-390 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "rates-390 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "no client runtime errors",
+      "pass": true
+    },
+    {
+      "name": "manual lifecycle makes zero external network/AI/token calls",
+      "pass": true
+    }
+  ],
+  "errors": [],
+  "outbound": [],
+  "limits": "Synthetic local browser transport; database authority separately verified in SQL."
+}

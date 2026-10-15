@@ -1,4 +1,5 @@
-import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
+import { PrismaDisclosure } from "../../ui/PrismaDisclosure";
 import {ReadableRecord} from "../../ui/ReadableRecord";
 import {
   ArrowLeftOutlined,
@@ -41,6 +42,8 @@ import {
   resolveEducationReviewClassification,
   type ReviewDraftIssue,
 } from "../../domain/reviewFieldLifecycle";
+
+const ManualReviewContext = createContext(false);
 
 interface StructuredReviewPanelProps {
   workspace: ProfileReviewWorkspace;
@@ -242,10 +245,10 @@ export function StructuredReviewPanel({
       : null;
 
   return (
-    <section aria-label="Revisão estruturada" className="prisma-structured-review">
+    <ManualReviewContext.Provider value={workspace.sourceKind !== "document"}><section aria-label="Revisão estruturada" className="prisma-structured-review">
       <div className="prisma-review-panel-topline">
         <Typography.Text type="secondary">{viewOnly ? "Modo de visualização" : "Modo de edição"}</Typography.Text>
-        <Tag color="blue"><FileSearchOutlined /> {viewOnly ? "Somente leitura" : "Assistida por evidência"}</Tag>
+        <Tag color="blue"><FileSearchOutlined /> {workspace.sourceKind === "manual" ? "Informações declaradas" : viewOnly ? "Somente leitura" : "Assistida por evidência"}</Tag>
       </div>
       {editable && (validationIssues.length > 0 || validationWarnings.length > 0) ? (
         <div className="prisma-review-format-summary" aria-label="Campos para conferir">
@@ -292,6 +295,10 @@ export function StructuredReviewPanel({
         />
       ) : null}
       {editable && hasTransientChanges && !hasUnsavedChanges ? <Alert description="Preencha o campo manualmente ou selecione sua área no documento. Um formulário vazio pode ser cancelado e não exige salvamento nem justificativa." showIcon title="Novo campo aguardando conteúdo" type="info" action={<Button onClick={() => navigateIssue(selectedFieldPath)}>Preencher novo campo</Button>} /> : null}
+      {workspace.sourceKind === "manual" ? <Alert showIcon type="info" title="Origem das informações" description={(() => {
+        const source = workspace.fieldProvenance?.[selectedFieldPath];
+        return source?.origin === "manual" ? `Declaração manual registrada em ${new Date(source.recordedAt!).toLocaleString("pt-BR")}. Autoria preservada no histórico da revisão. Alterações novas serão atribuídas a você ao salvar.` : source?.origin === "inherited_profile" ? "Informação preservada do Perfil usado como base; a origem anterior permanece rastreável. Alterações serão registradas como declaração manual." : "Preencha somente informações declaradas. Autoria e data serão registradas ao salvar; isto não cria evidência de PDF ou verificação pelo Prisma.";
+      })()} /> : null}
       <Tabs
         activeKey={activeTab}
         className="prisma-review-tabs"
@@ -309,7 +316,7 @@ export function StructuredReviewPanel({
       <section className="prisma-linked-evidence" aria-labelledby="linked-evidence-title">
         <div className="prisma-review-section-title">
           <div><Typography.Text id="linked-evidence-title" strong>Evidências vinculadas</Typography.Text><small>{selectedFieldPath}</small></div>
-          {editable ? <Tooltip title={evidenceBlockedReason}>
+          {editable && workspace.documentId ? <Tooltip title={evidenceBlockedReason}>
             <Button aria-describedby={hasUnsavedChanges ? "prisma-review-unsaved-alert" : undefined} aria-label={evidenceBlockedReason ? `Adicionar evidência. ${evidenceBlockedReason}` : undefined} className={evidenceBlockedReason ? "prisma-review-action--blocked" : ""} disabled={!editable || busy || !canSelectEvidence} icon={hasUnsavedChanges || !canSelectEvidence ? <LockOutlined /> : <PlusOutlined />} onClick={() => onStartSelection(selectedFieldPath)} size="small">Adicionar evidência</Button>
           </Tooltip> : null}
         </div>
@@ -346,7 +353,7 @@ export function StructuredReviewPanel({
             })}
           </div>
         ) : <Empty description="Sem evidência vinculada" image={Empty.PRESENTED_IMAGE_SIMPLE} />}
-        {editable ? <Tooltip title={evidenceBlockedReason}>
+        {editable && workspace.documentId ? <Tooltip title={evidenceBlockedReason}>
         <Button aria-describedby={hasUnsavedChanges ? "prisma-review-unsaved-alert" : undefined} aria-label={evidenceBlockedReason ? `Selecionar uma nova área. ${evidenceBlockedReason}` : undefined} block className={["prisma-add-evidence-card", evidenceBlockedReason ? "prisma-review-action--blocked" : ""].filter(Boolean).join(" ")} disabled={!editable || busy || !canSelectEvidence} icon={hasUnsavedChanges || !canSelectEvidence ? <LockOutlined /> : <PlusOutlined />} onClick={() => onStartSelection(selectedFieldPath)} type="dashed">
           Selecione uma nova área no documento
         </Button>
@@ -366,7 +373,7 @@ export function StructuredReviewPanel({
       <Drawer open={historyOpen} onClose={() => setHistoryOpen(false)} placement="right" size="large" title="Histórico completo da revisão">
         <Timeline items={fullHistory(workspace)} />
       </Drawer>
-    </section>
+    </section></ManualReviewContext.Provider>
   );
 
   function commonProps() {
@@ -522,8 +529,8 @@ export function StructuredReviewPanel({
       <div className="prisma-review-field-stack">
         <div className="prisma-review-section-title prisma-custom-section-heading">
           <div>
-            <Typography.Title level={5}>Informações do currículo</Typography.Title>
-            <Typography.Text type="secondary">Áreas confirmadas como conteúdo do perfil, inclusive estruturas próprias deste currículo.</Typography.Text>
+            <Typography.Title level={5}>{workspace.sourceKind === "manual" ? "Informações profissionais" : "Informações do currículo"}</Typography.Title>
+            <Typography.Text type="secondary">{workspace.sourceKind === "manual" ? "Acrescente informações profissionais em seções e registros, sem PDF." : "Áreas confirmadas como conteúdo do perfil, inclusive estruturas próprias deste currículo."}</Typography.Text>
           </div>
           {editable ? (
             <Tooltip title={hasUnsavedChanges ? "Salve as alterações atuais para criar uma área personalizada." : null}>
@@ -532,8 +539,8 @@ export function StructuredReviewPanel({
           ) : null}
         </div>
         {TagField({ fieldPath: "certifications", label: "Certificações" })}
-        {(draft.toolsAndTechnologies?.length || workspace.extractedData.toolsAndTechnologies?.length) ? TagField({ fieldPath: "toolsAndTechnologies", label: "Ferramentas e tecnologias" }) : null}
-        {(draft.professionalContexts?.length || workspace.extractedData.professionalContexts?.length) ? TagField({ fieldPath: "professionalContexts", label: "Contextos profissionais" }) : null}
+        {(workspace.sourceKind === "manual" || draft.toolsAndTechnologies?.length || workspace.extractedData.toolsAndTechnologies?.length) ? TagField({ fieldPath: "toolsAndTechnologies", label: "Ferramentas e tecnologias" }) : null}
+        {(workspace.sourceKind === "manual" || draft.professionalContexts?.length || workspace.extractedData.professionalContexts?.length) ? TagField({ fieldPath: "professionalContexts", label: "Contextos profissionais" }) : null}
         {draft.customSections.map((section) => {
           const extractedSection = workspace.extractedData.customSections.find((candidate) => candidate.id === section.id);
           const sectionIndex = draft.customSections.findIndex((candidate) => candidate.id === section.id);
@@ -635,6 +642,7 @@ interface SummaryEditorProps extends CommonEditorProps {
 
 function SummaryEditor({ workspace, draft, editable, selectedFieldPath, onDraftChange, onFieldSelect, validationIssues, removedResults, onAddResult, onRemoveResult, onUndoRemoval }: SummaryEditorProps) {
   const validationMessage = (fieldPath: string) => validationIssues.find((issue) => fieldPathMatches(issue.fieldPath, fieldPath))?.message ?? null;
+  const manual = workspace.sourceKind === "manual";
   const fields = [
     { path: "identity.fullName", label: "Nome completo", required: true, extracted: workspace.extractedData.identity.fullName, value: draft.identity.fullName, update: (value: string) => onDraftChange({ ...draft, identity: { fullName: value || null } }) },
     { path: "contact.city", label: "Cidade", extracted: workspace.extractedData.contact.city, value: draft.contact.city, update: (value: string) => onDraftChange({ ...draft, contact: { ...draft.contact, city: value || null } }) },
@@ -649,26 +657,33 @@ function SummaryEditor({ workspace, draft, editable, selectedFieldPath, onDraftC
         <Typography.Title level={5}>Identificação e contato</Typography.Title>
         <Typography.Text type="secondary">Dados privados, visíveis somente para perfis autorizados.</Typography.Text>
       </div>
-      {fields.map((field) => (
+      {fields.slice(0, 1).map((field) => (
         <ReviewField editable={editable} extracted={field.extracted ?? "Não identificado"} fieldPath={field.path} key={field.path} label={field.label} onChange={field.update} onSelect={onFieldSelect} required={"required" in field && field.required} selected={fieldPathMatches(selectedFieldPath, field.path)} validationMessage={validationMessage(field.path)} value={field.value ?? ""} />
       ))}
 
+      <ManualSection manual={manual} title="Contato e localização (opcionais no rascunho)" open={Object.values(draft.contact).some(Boolean) || selectedFieldPath.startsWith("contact.")}>
+        {fields.slice(1).map(field => <ReviewField editable={editable} extracted={field.extracted ?? "Não identificado"} fieldPath={field.path} key={field.path} label={field.label} onChange={field.update} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, field.path)} validationMessage={validationMessage(field.path)} value={field.value ?? ""} />)}
+      </ManualSection>
       <Divider />
+      <ManualSection manual={manual} title="Posicionamento profissional" open={Boolean(draft.professionalTitle || draft.areasOfExpertise.length || ["professionalTitle","areasOfExpertise"].includes(selectedFieldPath))}>
       <div className="prisma-summary-section-heading">
         <Typography.Title level={5}>Posicionamento profissional</Typography.Title>
-        <Typography.Text type="secondary">Título e áreas declaradas no currículo, sem inferir objetivo ou senioridade ausentes.</Typography.Text>
+        <Typography.Text type="secondary">{manual ? "Título e áreas declarados pela Pessoa, sem inferir informações ausentes." : "Título e áreas declaradas no currículo, sem inferir objetivo ou senioridade ausentes."}</Typography.Text>
       </div>
       <ReviewField editable={editable} extracted={workspace.extractedData.professionalTitle ?? "Não identificado"} fieldPath="professionalTitle" label="Cargo ou título profissional" onChange={(value) => onDraftChange({ ...draft, professionalTitle: value || null })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, "professionalTitle")} validationMessage={validationMessage("professionalTitle")} value={draft.professionalTitle ?? ""} />
       <SummaryTagField editable={editable} extracted={workspace.extractedData.areasOfExpertise} fieldPath="areasOfExpertise" label="Áreas de atuação" onChange={(values) => onDraftChange({ ...draft, areasOfExpertise: values })} onSelect={onFieldSelect} selectedFieldPath={selectedFieldPath} validationMessage={validationMessage("areasOfExpertise")} value={draft.areasOfExpertise} />
 
       <Divider />
+      </ManualSection>
+      <ManualSection manual={manual} title="Resumo e objetivo profissional" open={Boolean(draft.summary || draft.professionalObjective || ["summary","professionalObjective"].includes(selectedFieldPath))}>
       <div className="prisma-summary-section-heading">
         <Typography.Title level={5}>Narrativa profissional</Typography.Title>
-        <Typography.Text type="secondary">O resumo é extraído da seção correspondente do currículo. Quando ela não existe, o campo permanece vazio para revisão, sem síntese automática.</Typography.Text>
+        <Typography.Text type="secondary">{manual ? "Registre o resumo e o objetivo declarados. Este preenchimento não gera síntese por IA." : "O resumo é extraído da seção correspondente do currículo. Quando ela não existe, o campo permanece vazio para revisão, sem síntese automática."}</Typography.Text>
       </div>
       <ReviewField editable={editable} extracted={workspace.extractedData.professionalObjective ?? "Não identificado"} fieldPath="professionalObjective" label="Objetivo profissional" multiline onChange={(value) => onDraftChange({ ...draft, professionalObjective: value || null })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, "professionalObjective")} validationMessage={validationMessage("professionalObjective")} value={draft.professionalObjective ?? ""} />
       <ReviewField editable={editable} extracted={workspace.extractedData.summary ?? "Não identificado"} fieldPath="summary" label="Resumo profissional" multiline onChange={(value) => onDraftChange({ ...draft, summary: value || null })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, "summary")} validationMessage={validationMessage("summary")} value={draft.summary ?? ""} />
 
+      </ManualSection>
       <Divider />
       <div className="prisma-summary-section-heading prisma-review-section-title">
         <div><Typography.Title level={5}>Principais resultados</Typography.Title><Typography.Text type="secondary">Cada resultado possui revisão e evidência independentes.</Typography.Text></div>
@@ -679,7 +694,7 @@ function SummaryEditor({ workspace, draft, editable, selectedFieldPath, onDraftC
         const extracted = workspace.extractedData.keyResults.find((item) => item.id === result.id);
         const persisted = workspace.reviewedData.keyResults.some((item) => item.id === result.id);
         return <div className="prisma-repeatable-review-item" key={result.id}><ReviewField editable={editable} extracted={extracted?.value ?? "Não identificado na extração original"} fieldPath={fieldPath} label={`Resultado ${index + 1}`} multiline onChange={(value) => onDraftChange({ ...draft, keyResults: draft.keyResults.map((item) => item.id === result.id ? { ...item, value } : item) })} onSelect={onFieldSelect} selected={fieldPathMatches(selectedFieldPath, fieldPath)} validationMessage={validationMessage(fieldPath)} value={result.value} />{editable ? <Popconfirm onConfirm={() => onRemoveResult(result.id)} title={persisted ? "Não incluir este resultado no perfil?" : "Cancelar a inclusão deste resultado?"}><Button danger={persisted} icon={<DeleteOutlined />} size="small">{persisted ? "Remover resultado" : "Cancelar inclusão"}</Button></Popconfirm> : null}{editable && !result.value.trim() ? <Typography.Text type="secondary">Novo resultado. Preencha-o ou cancele a inclusão; não é necessário salvar enquanto estiver vazio.</Typography.Text> : null}</div>;
-      }) : <Empty description={editable ? "Nenhum resultado principal identificado. Selecione uma região do currículo para criar um resultado com evidência." : "Nenhum resultado principal foi aprovado para este currículo."} image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+      }) : <Empty description={manual ? "Nenhum resultado declarado. Use Adicionar resultado quando necessário." : editable ? "Nenhum resultado principal identificado. Selecione uma região do currículo para criar um resultado com evidência." : "Nenhum resultado principal foi aprovado para este currículo."} image={Empty.PRESENTED_IMAGE_SIMPLE} />}
       {removedResults.map((entry) => <Alert action={<Button onClick={() => onUndoRemoval(entry)} size="small">Desfazer</Button>} key={entry.key} showIcon title={`${entry.label} ao salvar.`} type="warning" />)}
     </div>
   );
@@ -748,8 +763,13 @@ function ReviewField({ label, fieldPath, extracted, value, editable, multiline =
   );
 }
 
+function ManualSection({ manual, title, open, children }: { manual: boolean; title: string; open: boolean; children: ReactNode }) {
+  return manual ? <PrismaDisclosure title={title} open={open}>{children}</PrismaDisclosure> : <>{children}</>;
+}
+
 function ValueSurface({ label, value, onSelect }: { label: string; value: string; onSelect?: () => void }) {
-  return <div className="prisma-extracted-surface" onClick={(event) => { event.stopPropagation(); onSelect?.(); }}><small>{label}</small><p>{value}</p></div>;
+  const manual = useContext(ManualReviewContext);
+  return <div className="prisma-extracted-surface" onClick={(event) => { event.stopPropagation(); onSelect?.(); }}><small>{manual && label === "Extraído pelo Prisma" ? "Valor de referência" : label}</small><p>{manual && value.includes("extração original") ? "Sem valor de referência" : value}</p></div>;
 }
 
 const educationLevelOptions: DefaultOptionType[] = [

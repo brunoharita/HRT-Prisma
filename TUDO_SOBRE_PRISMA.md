@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 485
-source_manifest_sha256: 31e938deff85a8c9173e4d576a77e1b17a004b1b17ea3792add54911b42ac275
+documentation_source_count: 488
+source_manifest_sha256: 0f4ae673a60922875e35b3ee2e519bef6a70efba46bdcfb5e54041bc4610d0e8
 -->
 
 # Tudo sobre o Prisma
@@ -2643,11 +2643,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.75.0
-last_verified: 2026-10-14
+version: 2.76.0
+last_verified: 2026-10-15
 ---
 
 # Estado atual do Prisma
+
+## Perfil manual, funcionário ativo e tarifas por vigência — 2.7.0 em validação
+
+Acordo aprovado1.0.0 e execução congelada em `docs/qa/agreement-manual-profile-v270.md` e `execution-manual-profile-v270.md`. Editor existente adaptado para criar/retomar rascunho parcial sem PDF/IA/Tokens e atualizar vigente com prefill privado separado e Delta antes da publicação. Novo writer manual com origem real, proveniência por fato/autor/data, replay/locks/duplicidade humana e tenant backend; nenhuma fonte/evidência artificial. Funcionário ativo é boolean da Pessoa no tenant, default Não administrativo, com autoria/data no histórico, filtro Sim/Não e indicação discreta quando confirmado, sem inferência/contratação/sucessão. Tarifas atuais seguem vigência backend e versões futuras ficam Programadas no histórico. Valores/política comercial preservados. SQL local/concorrência e UI sintética estão em validação; publicação nova ainda não afirmada. Estado final e limites no `docs/qa/aot-manual-profile-v270.md`.
 
 ## Tokens Prisma por origem — 2.6.2 publicada
 
@@ -5023,6 +5027,8 @@ Implementação deve ser separada em movimentos menores: contratos e versões, s
 
 # Catálogo de contratos
 
+`manual-profile-1.0.0` e `employee-status-1.0.0` (v2.7.0): revisão estruturada sem PDF/IA, rascunho parcial e publicação humana pelo Delta; prefill vigente/privados separados, proveniência por campo/autor/data, histórico e omissões preservadas. Boolean administrativo por Pessoa/empresa, default false, alterações autorizadas/auditadas sem consequências automáticas de contratação/sucessão. Owners: `document-review-contract.md`, `profile-document-lifecycle.md`, `docs/product/person-center.md`; acordo/AoT manual-profile-v270. Contratos anteriores são estendidos, sem reescrever versões históricas; rollout só conforme evidência operacional do AoT.
+
 `company-question-reuse-1.0.0` (v2.5.1): integração privada após aprovação humana, incluindo recuperação de decisões persistidas. Conteúdo produzido pela empresa permanece exclusivo da organização; servidor nega geração/publicação global e mantém as globais institucionais existentes. Projeção transacional/idempotente, evidência original, auditoria backend sem nova decisão humana, sem IA/convite/cobrança. Contratos de prova/portal e item1.0.0 preservados; proveniência mantém versão original da questão. Owner `docs/product/question-bank.md`, acordo1.0.0 e AoT2.5.1.
 
 Banco de questões 2.5.0: delta `question-bank-human-review-2.0.0`, com justificativa vazia permitida somente na aprovação comum; motivos nas exceções/rejeição/ajustes, autoria/snapshot/auditoria obrigatórios. `approve_and_publish_question_bank_proposal` compõe aprovação/publicação existentes em transação idempotente, sem novos papéis. Workspace M5.1C ganha campos aditivos completos e permissões calculadas no servidor; nulos de snapshot preservados. Request externo mantém schema/prompt histórico e acrescenta `tokenQuoteId`, utilizando `prisma-tokens-1.0.0` e a tarifa existente de questões. Replays não invocam novamente o fornecedor. Owner: `docs/product/question-bank.md`; acordo1.0.0 e AoT2.5.0.
@@ -5278,6 +5284,16 @@ A política jurídica temporal, legal hold, backups, exportação e anonimizaç�
 
 # Contrato de documentos, operações e revisão humana
 
+## Preenchimento manual estruturado — 2.7.0
+
+Contrato aditivo `manual-profile-1.0.0`, acordo `docs/qa/agreement-manual-profile-v270.md`1.0.0. `start_manual_profile_review` cria ou retoma revisão `source_kind=manual`, sem Documento/Tentativa/evidência artificial; atualizações partem do Perfil vigente e do cadastro privado separado. `extracted_data` é reutilizado como snapshot de referência da revisão, sem significar extração quando a origem é manual. Não há parser/LLM, quote/reserva/débito neste caminho.
+
+Criação e replay são serializados por empresa, com chave/fingerprint/ator no ledger existente, revalidação de possíveis duplicidades pelo backend e confirmação humana antes de criar outro cadastro. Reutilizam-se regras exatas de nome normalizado, e-mail e telefone do intake. Correspondência não é merge/vínculo automático. Revisões têm lock otimista; somente uma revisão manual draft por empresa/Pessoa. Contato/conteúdo profissional podem estar ausentes no rascunho manual; identidade, formatos e integridade dos campos preenchidos continuam obrigatórios. Publicação conserva mínimos de contato/conteúdo profissional, classificações e todos os gates do Delta. `approve_profile_review` fica interno, sem EXECUTE authenticated; `publish_profile_review` permanece a fronteira pública autorizada.
+
+`field_provenance` em revisão/versão registra declaração manual por fato/campo, ator/data/revisão; listas usam IDs estáveis e hashes de valores. Fatos preservados mantêm proveniência; história anterior sem anotação referencia a versão de origem, sem inventar evidência. O mapa também acompanha intervenções humanas nas revisões documentais/de versões; metadados técnicos/classificador não são fatos humanos. Restauro conserva proveniência da base. Contato/identidade continuam fora de `profile_data`. O Delta conserva omissões e exige decisão explícita para remoção; snapshots históricos e autoria permanecem.
+
+Migration, negativos, disputas e limites no AoT `docs/qa/aot-manual-profile-v270.md`. Código/documentação não provam rollout sem verificação operacional.
+
 ## Orientação ao operador — v2.0.3
 
 `operator-feedback-1.0.0` é o catálogo de apresentação do cliente; o envelope persistido `operation-feedback-2.0.0` permanece. Motivos conhecidos de recusa, inclusive códigos legados, informam em português o que alterar ou qual etapa reabrir. Quando o campo é conhecido, a recuperação usa o foco existente. Detalhes brutos do banco, dados privados e identificadores técnicos não são exibidos. Erros desconhecidos continuam sem correção de campo inventada; falhas de sessão/permissão têm precedência sobre orientação de preenchimento.
@@ -5512,6 +5528,9 @@ Novos Perfis aprovados pela publicação M2-C geram observações para competên
 # Arquitetura do ciclo de vida de Perfil e documento
 
 ## Contratos
+
+- `manual-profile` 1.0.0: extensão aditiva review/Delta, rascunho sem fonte artificial e proveniência por fato.
+- `employee-status` 1.0.0: boolean da Pessoa no tenant, default false administrativo, auditoria de alterações humanas.
 
 - `profile-publication-delta` 2.0.0
 - `professional-profile` 6.0.0
@@ -12046,6 +12065,16 @@ Exemplos foram consolidados em regras sem virar dados reais; etapas recomendadas
 
 # Página unificada da Pessoa
 
+## Entrada manual e funcionário ativo — 2.7.0
+
+Pessoas oferece **Preencher manualmente** ao lado de **Importar currículo**. Identificação inicial verifica duplicidades possíveis e permite abrir cadastro existente ou confirmar outra Pessoa. Editor estruturado reutiliza abas/navegação por registros da revisão, com grupos opcionais vazios recolhidos, adicionar/editar/remover listas e todas as seções profissionais existentes. Não requer PDF/IA. Nome identifica o rascunho; contato/conteúdo profissional mínimos continuam necessários para publicar. Salvar não aprova/publica. A Central indica rascunho disponível e permite retomada.
+
+**Atualizar perfil manualmente** inicia cópia do vigente e preenche contato a partir do cadastro privado separado. Comparação e publicação explícitas produzem nova versão; falha/cancelamento/omissão não removem a anterior. Declarações têm origem/autoria/data e nunca se tornam extração PDF ou verificação Prisma. Preenchimento manual não consome Tokens; IA existente permanece opcional e separada.
+
+**Funcionário ativo da empresa?** é atributo administrativo booleano da Pessoa no tenant, somente Sim/Não e default Não, inclusive para anteriores. Não descreve vínculo anterior/ex-funcionário/nunca funcionário. Autorizado pode alterar em Editar Pessoa; responsável/data e valores anteriores/novos ficam no histórico. Sim aparece discretamente na identificação do Perfil; Pessoas filtra Sim/Não. Não altera currículo, avaliações, processos, matching ou elegibilidade para sucessão; nenhuma inferência por currículo/IA.
+
+Acordo1.0.0: `docs/qa/agreement-manual-profile-v270.md`; provas/rollout: `docs/qa/aot-manual-profile-v270.md`. Descrições de versões anteriores abaixo mantêm seu contexto histórico.
+
 ## Entrada e fronteira de produto
 
 Prisma v2.1.0 abre diretamente o Resumo profissional ao selecionar uma Pessoa. As rotas `/profiles/:personId` e o bookmark legado `/profiles/:personId/profile` apresentam a mesma página, sem Central → Ver perfil. Acordo normativo: `docs/qa/agreement-person-unified-v210.md` versão1.0.0; execução/AoT no mesmo diretório.
@@ -12139,6 +12168,8 @@ A amostra atual é sintética e representativa. Ela permite comprovar a mecânic
 ## Source: `docs/product/prisma-tokens.md`
 
 # Tokens Prisma — gestão de uso de IA
+
+Em2.7.0, Pacotes e tarifas distingue **Tarifas atuais** (aberta inicialmente) e **Histórico de tarifas**. A atual segue a cotação backend: `effective_at <= now`, maior vigência, depois criação e ID decrescentes. Cada operação aparece uma vez; versões anteriores/futuras são agrupadas por vigência decrescente, com futuras **Programada**. Nenhum preço/saldo/política/cotação/reserva/cobrança histórica muda; os cadastros/controles comerciais permanecem. Cadastro manual estruturado não exige IA nem consome Tokens Prisma.
 
 Produto 2.6.2; gestão `prisma-tokens-2.0.0`, política `prisma-token-policy-2.0.0`, cotação `prisma-token-quote-1.0.0`, ADR-083 revisado. Tokens Prisma são créditos comerciais próprios. Não correspondem a tokens de entrada/saída da OpenAI ou Anthropic.
 
@@ -15502,6 +15533,90 @@ Escopo: interpretar a relação entre o trabalho descrito na Posição e a traje
 | Release | `direct` | web, Edge Function e migration conforme diff |
 
 Baseline: `98bb6cc919d1c90dac04a0bf7e2cf1d6cc1674d2`. Nenhuma aceitação presume que todas as profissões já tenham qualidade empiricamente comprovada.
+
+---
+
+## Source: `docs/qa/agreement-manual-profile-v270.md`
+
+# Acordo aprovado — Prisma 2.7.0
+
+Contrato 1.0.0, `agreed`, congelado em 15/10/2026. Product Owner: Bruno. Fonte: autorização expressa transportada do chat `01a1283d-53e1-7f30-9439-391840e48d56` para esta execução: implementar as concordâncias, em main e produção, versão 2.7.0, de forma segura e ágil. Nenhum Q material pendente. Este documento registra o acordo já aprovado, sem nova decisão de produto.
+
+## DEVE
+
+- D-T01: Gestão de Tokens Prisma > Pacotes e tarifas separa Tarifas atuais, aberta por padrão, e Histórico de tarifas.
+- D-T02: atuais: uma linha por operação, consumo e início da vigência; somente a tarifa válida agora segundo o backend. Versão futura não substitui a vigente.
+- D-T03: histórico: versões anteriores agrupadas pela data de vigência, decrescentes, operação e consumo daquele período. Futuras identificadas como Programada.
+- D-M01: oferecer Preencher manualmente como alternativa a Importar currículo, preservando acesso e funcionamento do PDF.
+- D-M02: reutilizar/adaptar o editor estruturado da revisão anterior à publicação, vazio e sem PDF. Texto livre pode ser secundário e nunca substitui o editor estruturado.
+- D-M03: cobrir identificação/contato, resumo, experiências, formação, competências, idiomas e todas as demais seções já suportadas, sem reduzir informações ou contratos.
+- D-M04: listas permitem adicionar/editar/remover registros estruturados, com orientação breve; vazias discretas e expansíveis. Desktop/mobile com componentes acessíveis. Inspecionar e reutilizar a organização, agrupamento e interação da revisão existente.
+- D-M05: salvar rascunho parcial e retomar sem obrigar todas as seções; preservar mínimos de identidade/autorização/integridade e validar campos preenchidos. Rascunho não é publicação nem perfil completo.
+- D-M06: publicação por ação explícita autorizada, validando campos e pendências relevantes. Reutilizar revisão/publicação e separar Pessoa/Perfil/Documento/Tentativa quando aplicável. Cadastro básico não cria perfil profissional completo.
+- D-M07: origem manual por informação/registro, autoria e data; nunca apresentar como extração PDF ou verificação Prisma. Não fabricar documento, citação, geometria ou evidência. Informação declarada separada de inferência.
+- D-M08: digitar/salvar/revisar/publicar manualmente não consome Tokens nem aciona parser/LLM automaticamente. IA existente continua opcional, com acionamento/consumo próprios; nenhum recurso de IA novo.
+- D-M09: identificar duplicidades possíveis antes da criação manual usando regras existentes; mostrar correspondências e acesso ao cadastro existente. Confirmação humana, sem merge/vínculo automático ou exposição entre empresas.
+- D-M10: atualizar perfil existente com prefill fiel do vigente, sem novo PDF/redigitação, comparação antes da nova versão; preservar vigente durante rascunho/falha/cancelamento, histórico, autoria, omissões e remoção explícita. Dados privados separados.
+- D-V01: Funcionário ativo da empresa? somente Sim/Não, sem terceiro estado. Decisão final: sem informação suficiente, Não.
+- D-V02: padrão Não; existentes sem informação ficam Não. Não significa ex-funcionário ou que nunca trabalhou na empresa. Substitui proposta rejeitada Não informado.
+- D-V03: atributo da Pessoa na empresa/tenant, separado do currículo/perfil, alterável por autorizado com responsável/data no histórico. Sem inferência por currículo/IA.
+- D-V04: exibir em identificação/cadastro, indicação discreta no perfil quando Sim e filtro Funcionário ativo: Sim/Não em Pessoas.
+- D-V05: alteração preserva perfil/avaliações/histórico, não exclui de processos nem concede sucessão automática.
+
+## PROIBIDO
+
+- P-T01: não apagar histórico, alterar preços/valores, recalcular cobranças antigas/cotações congeladas ou política comercial; preservar catálogo/cadastro de tarifas/pacotes e controles.
+- P-M01: não exigir PDF/IA/texto livre para cadastro estruturado, inventar fatos/contatos/CPF/datas/competências ou converter ausência em negativo.
+- P-M02: não sobrescrever silenciosamente publicado, descartar dados/listas, aprovar automaticamente rascunho ou cobrar preenchimento manual.
+- P-V01: não criar estado desconhecido/null na experiência, classificação IA ou usar Não administrativo como prova de nunca ter sido funcionário.
+- P-G01: preservar tenant fora do frontend, RLS/ACL/papéis, privados/proveniência/revisão humana/histórico/PDF/vigente/avaliações/processos/matching e política comercial: franquia calendário/1M padrão, pacotes30dias, franquia primeiro, cotação/reserva/liquidação.
+
+## FORA DE ESCOPO E AUTONOMIA
+
+- F-01: sucessão, matrícula, gestor, organograma, cargo interno e novos modelos IA. Vínculo apenas prepara evolução futura.
+- F-02: melhorias adjacentes, tarifas/preços, extração, Score/matching e contratação.
+- A-01: reutilizar componentes/formulários/duplicidade/comparador/serviços/validações/fluxos; detalhes técnicos menores delegados, sem reduzir regras ou substituir editor por texto livre.
+- A-02: versionar acordo, execução integral e AoT sem nova aprovação; interromper somente por conflito/decisão material nova ou segurança sem resolução.
+
+## Modelo UX após inspeção
+
+Referência: `StructuredReviewPanel.tsx` e `ProfileReviewPage.tsx` no baseline abaixo. Alvo normativo para organização e interação; nenhuma imagem nova de resultado aprovada. Screenshot de tarifas de origem era exemplo do problema, não layout normativo.
+
+- D-UX-01: manter header/contexto, ações de salvar/continuar, abas Resumo/Experiência/Formação/Competências/Idiomas/Outros, identificação/contato no Resumo, edição de um registro de lista por vez com navegação e adicionar/remover; seções vazias sob demanda. Sem documento manual não há painel de PDF fictício; usar área de edição ampla. Histórico e comparação permanecem acessíveis. No celular, abas com rolagem e campos/ações empilhados, sem overflow global.
+- P-UX-01: não converter em formulário obrigatório monolítico, texto livre único ou esconder seções suportadas por estarem vazias.
+- A-UX-01: tokens existentes, componentes acessíveis e detalhes de acabamento/posicionamento responsivo.
+- CA-UX-01: render real do editor existente e adaptado com dados/estado equivalentes em desktop e mobile; registrar diferenças necessárias pela ausência de PDF e estados vazio/parcial/loading/erro no AoT.
+
+## Critérios de aceite / menor validação suficiente
+
+| IDs | Aceite e evidência exigida |
+| --- | --- |
+| CA-T01/02/03 | Teste determinístico atual/antiga/futura, empate e ordem/grupos; UI renderizada com atuais aberta; nenhum writer financeiro alterado |
+| CA-M01/02/03/04 | Navegação manual/PDF, editor completo e listas múltiplas, vazio/partial e desktop/mobile renderizados |
+| CA-M05/06/07/08 | SQL local transacional: rascunho parcial/retomada, validações, origem/autoria/data por alteração, publicação humana, nenhum documento/evidência/IA/débito criado; tipos/build e testes de ciclo |
+| CA-M09 | Duplicidade nome/email/telefone segundo regras existentes, escolha humana/abrir existente, tenant negativo, replay/concorrência sem duplicação |
+| CA-M10 | Prefill vigente, Delta, nova versão, histórico e vigente preservados em cancelamento/falha/conflito; omissão preservada e remoção explícita; privados fora do Perfil |
+| CA-V01/02/03/04/05 | Boolean default e existentes Não; edição autorizada/auditada, filtro/identificação/indicação; perfil e processos intactos |
+| CA-G01 | SQL negativo anon/papéis/inativo/tenant/replay/concorrência, ACL/RLS e fronteira publicação; regressão PDF/publicação/privados/contratos afetados, sem PII em logs |
+| CA-RELEASE | Versão2.7.0; owner docs/current-state/contexto árvore exata; tipos/build/lint/contexto/ledger e plano dispatcher sem suíte integral local; CI obrigatório, publicação seletiva SHA explícito, baseline/rollback/smoke/sincronização local/GitHub/VPS |
+
+## Mapa inicial GOV-01
+
+Baseline: local/origin/main `519423b648416f5765995b59282a7d1b1d1e733b`, v2.6.2. Estado publicado é declaração do current-state até verificação operacional específica. Worktree isolado limpo, rascunhos alheios preservados. Classe D (schema/PII/writers/autorização); tarifas isoladamente B. Nenhuma nova biblioteca/tecnologia, reutilização Prisma suficiente.
+
+| Capacidade / área | Relação | Dependência e proteção | Regressão/evidência |
+| --- | --- | --- | --- |
+| Tarifas atuais/históricas | direct | Seleção backend effective_at<=now, desempate created_at/id | Determinístico + render sem mutação financeira |
+| Pessoa/rascunho manual/vínculo | direct | Novo writer usa autorização existente, tenant, lock/replay e auditoria; boolean separado | SQL positivo/negativo/disputas; UI create/update/filter |
+| Revisão/editor/Delta/publicação | direct | Contrato estruturado, versões, omissões e remoção explícita | Regressão dirigida e publicação local sintética |
+| Importação PDF/documento/tentativas | plausible_indirect | Editor/writers compartilhados, guardas PDF preservadas | Testes de revisão/publicação/documentos, baseline sem mudança de extração |
+| Auth/RLS/ACL/privados/proveniência | critical_transversal | Autorização backend e dados privados fora do profissional | SQL negativo + inspeção grants/RLS; logs sem PII |
+| Score/matching/avaliações/processos | plausible_indirect | Consumidores de perfil publicado/people | Contratos compartilhados dirigidos e snapshots SQL; vínculo não altera elegibilidade/processos |
+| Franquia/pacotes/cotações/reserva/débito | no_impact_identified | Apresentação temporal somente, caminho manual não chama executores | Snapshot/corpos financeiros e spy de rede manual |
+| Shell/navegação/versão | plausible_indirect | Novas entradas, registry | Tipos/build e smoke responsivo |
+| IA/Parser/gateway/Paddle/síntese/mail | no_impact_identified | Nenhum runtime ou modelo novo; manual não usa IA | Plano seletivo e containers adjacentes preservados |
+
+Conclusão exige todos D e P aplicáveis PASS com prova; limitações reais não podem virar PASS. Publicação autorizada expressamente e por AGENTS§7. Não reabrir escopo no fechamento.
 
 ---
 
@@ -21142,6 +21257,103 @@ Implementação integrada por fast-forward em `main`, GitHub e VPS no SHA funcio
 ## Conclusão
 
 `PARTIAL`: implementação, validação local, CI, migration remota, Edge e web/VPS aprovados; permanecem parciais o corpus universal independente, o smoke autenticado de matching e a confirmação conectada do fluxo Knowledge Inbox. Nenhum desses limites foi mascarado como qualidade universal comprovada.
+
+---
+
+## Source: `docs/qa/aot-manual-profile-v270.md`
+
+# AoT — Prisma 2.7.0
+
+Acordo `agreement-manual-profile-v270.md`1.0.0; execução `execution-manual-profile-v270.md`1.0.0. Autorização expressa de Bruno para main/produção2.7.0. Baseline local/origin/VPS `519423b648416f5765995b59282a7d1b1d1e733b`,2.6.2. Branch isolada `codex/prisma-v270-manual-profile`; drafts alheios preservados.
+
+**Estado: validação local concluída, publicação operacional pendente.** PASS abaixo refere-se ao ambiente indicado, sem presumir rollout.
+
+## Matriz de acordos
+
+| ID | Implementação e evidência | Status / ambiente |
+| --- | --- | --- |
+| D-T01 | TokenRates, atuais aberta; browser rates1448/390/320 | PASS local |
+| D-T02 | classifyTokenRates, effective<=now/criação/ID; teste temporal/imutabilidade | PASS local |
+| D-T03 | histórico descendente/futuras Programada; Node + renders | PASS local |
+| D-M01 | entradas manual/PDF simultâneas, rota protegida; browser people | PASS local |
+| D-M02 | revisão/editor existentes sem fonte PDF fictícia; vazio/full/fluxo completo | PASS local |
+| D-M03 | StructuredDraft completo; SQL todas seções/listas, Node normalização, UI Outros/custom | PASS local |
+| D-M04 | abas/grupos vazios recolhidos e registros navegáveis/add/edit/remove;1448/390/320 | PASS local |
+| D-M05 | source_kind manual, parcial/lock/retomada; SQL save sem contato/sem publicação; UI save/retomada/falha | PASS local |
+| D-M06 | Delta explícito e inner approval privado; SQL negativa/replay/versão, browser comparação antes de publicar | PASS local |
+| D-M07 | field_provenance por fato/autor/data; manual1.0.0 e privados herdados person_registry; SQL origem/restauro/sem fontes fictícias, UI referência | PASS local |
+| D-M08 | sem parser/LLM/quote/débito; SQL zero jobs e browser zero rede externa/IA/Tokens; gate explícito produtivo inspecionado | PASS local + leitura remota |
+| D-M09 | regras existentes/tenant/confirmação humana/replay/lock; SQL nome/email/telefone/negativas,6 disputas, UI duplicidade e troca de tenant | PASS local |
+| D-M10 | vigente + privados em prefill, Delta/merge/remoção/versões; SQL fidelidade/vigente intacto/omissão/remoção auditada/conflito/restauro; UI falha preserva texto | PASS local |
+| D-V01 | boolean NOT NULL, exatamente2 rádios; null negado | PASS local |
+| D-V02 | DEFAULT false novos/anteriores; SQL legado/default, filtro Não inclui ausência antiga, orientação administrativa | PASS local |
+| D-V03 | Pessoa/tenant separado, trigger autorização+autor/data/old/new; SQL Sim→Não/negativas e histórico UI | PASS local |
+| D-V04 | identificação/cadastro/tag Sim/filtro; browser person/workspace/people-filter | PASS local |
+| D-V05 | somente boolean/auditoria, SQL vigente intacto; cadeia people sem gatilhos de seleção; diff sem escritores adjacentes | PASS local; hashes finais pendentes |
+| D-UX-01 |6 abas/mesma organização/campos/listas, manual sem fonte artificial; comparação visual abaixo | PASS local |
+
+## Proibições e fora de escopo
+
+| ID | Prova | Status |
+| --- | --- | --- |
+| P-T01 | nenhum writer/preço/cotação/saldo alterado, helper imutável; foto financeira baseline | PASS local; foto final pendente |
+| P-M01 | SQL/browser sem PDF/IA obrigatórios, fatos humanos explícitos, zero fonte fabricada | PASS local |
+| P-M02 | rascunho não publica, Delta/versões/omissão/replay/falha/remoção e zero IA | PASS local |
+| P-V01 | NOT NULL/default false/UI binária, sem inferência/classificação histórica | PASS local |
+| P-G01 | negativos auth/tenant/role, PDF antes/depois, privados/versões e fronteira humana | PASS local; operacional final pendente |
+| P-UX-01 | editor completo/abas/grupos opcionais, sem texto livre substituto | PASS local |
+| F-01/F-02 | sem sucessão/organograma/matrícula/IA/preços/extração/Score/matching/contratação no diff | PASS revisão |
+
+## Mapa final GOV-01
+
+| Capacidade | Relação | Baseline, regressão e evidência |
+| --- | --- | --- |
+| Tarifas | direct | regra backend e tabela antiga baseline; Node temporal + UI atual/antiga/futura PASS |
+| Manual/Pessoa/vínculo | direct | novo writer/boolean, exige auth/tenant/lock/replay/auditoria;59SQL +6 disputas PASS |
+| Editor/Delta/versões/privados | direct | fluxos existentes no SHA baseline;59Node e SQL novo/versão/remoção/privados, UI PASS |
+| PDF/documentos/tentativas | plausible_indirect | guards documentais mantidos e proveniência aditiva; corpus52checks antes/depois, ambos rollback PASS |
+| Auth/RLS/ACL/proveniência | critical_transversal | require_document_reviewer backend e DML negado; SQL negativo/contato herdado honesto; final remoto pendente |
+| Score/matching/avaliações/processos | plausible_indirect | nenhum writer alterado; people só tinha guard de exclusão e BEFORE DELETE; hashes produtivos antes/depois |
+| Franquia/pacotes/quote/reserve/settle | no_impact_identified | apenas apresentação temporal; nenhum novo writer financeiro/consumidor IA; helper imutável e fotos remotas |
+| Síntese | plausible_indirect | reclassificada após traçar evento de publicação; gate Tokens explicit_only já produtivo preservado e reproduzido no SQL; zero enfileiramento PASS |
+| Shell/navegação/release | plausible_indirect | rota/entradas/registry; tipos/build/rotas e renders PASS |
+| Parser/gateway/Paddle/mail/Traefik | no_impact_identified | nenhum runtime/código alterado; plano seletivo e IDs dos containers antes/depois |
+
+`evidence/manual-profile-v270/production-baseline.json`:9 conjuntos com contagens/hashes, sem PII exportada. VPS checkout igual ao baseline. Só existe projeto Prisma no conector; não há QA remoto separado. Não se usou banco compartilhado como laboratório.
+
+## Provas e limites da validação
+
+- `scripts/test-manual-profile-sql.mjs`:59 checks, positivos/negativos, publicação/restauro/conflito/remoção/replay/autoria/default/tenant e zero jobs IA. Usa banco novo `manual_profile_qa_v270`, schema lógico e rollback; remove banco no finally. Base antiga vazia tinha arquivo físico de tabela ausente: não foi reparada ou modificada. Bootstrap local reproduz normalização de períodos e gate de síntese explícita já vigentes.
+- `scripts/test-manual-profile-concurrency.mjs`:6 checks em sessões simultâneas, banco exclusivo removido. Uma Pessoa/draft por replay, conflito entre saves, uma versão por publicação e duplicidade humana mesmo com chaves diferentes.
+- `scripts/test-manual-profile-pdf-regression.mjs`:52 checks no corpus determinístico existente antes/depois da migration, ambos rollback. Bootstrap inclui identidade canônica de seção personalizada já aprovada, ausente na base antiga. Sem provedor pago.
+-59Node dirigidos em manual/tarifas/review/Delta/lifecycle/educação/custom sections/rotas/release PASS. Build raiz, tipos web e build web PASS; warnings conhecidos de chunks/import estático+dinâmico, sem erro.
+- `browser/checks.json`:89 assertivas; `browser/people-checks.json`:24, sem erro de runtime ou rede externa. Componentes reais, transporte sintético,1448/390/320. Não equivale a comportamento de pessoas reais autenticadas.
+- Browser integrado adicional: consulta de duplicidade com2,5s, troca de empresa durante a consulta; nome limpo, resposta obsoleta descartada e nenhuma navegação/criação residual após conclusão. Form de vínculo limpa histórico ao trocar contexto e informa carregamento/indisponibilidade sem bloquear o cadastro.
+- Lint/contexto/ledger PASS;22 checks de Tokens/planejamento/dispatcher PASS. Plano confirmado: somente banco e web; nenhum runtime adjacente. Dispatcher sugere teste geral como roteador, substituído localmente pela cobertura dirigida59SQL,59Node,52PDF,6disputas,113browser+escopo e22tooling, sem gate integral local. CI/publicação pendentes. Nenhuma suíte integral local executada; CI obrigatório permanece.
+
+## Fidelidade visual
+
+Referência é o editor existente, sem nova imagem normativa aprovada. Harness `tests/browser/manual-profile-v270.tsx`, runner `scripts/test-manual-profile-browser.mjs`.
+
+| Referência/render | Estado/dados e viewport | Comparação e adaptações | Status |
+| --- | --- | --- | --- |
+| reference-editor/editor-full | mesma fixture/aba Resumo,1448/390/320 |6 abas/ordem/campos/grupos/ações preservados; manual remove fonte inexistente/amplia editor | PASS |
+| editor-empty/manual-lists | vazio/parcial/2experiências,1448/390/320 | grupos vazios recolhidos; novo manual só coluna editável; update mantém referência e Delta | PASS |
+| comparison | rascunho salvo,1448/390/320 | comparação antes de publicação humana | PASS |
+| rates | atual/antiga/futura,1448/390/320 | atual aberta, histórico e Programada, tabela com rolagem interna | PASS |
+| duplicates/person/workspace/people-filter/loading/save-error | desktop/mobile aplicáveis | escolha humana/binário/tag/retomada/filtro, loading sem falsos zeros e falha preserva texto | PASS |
+
+Adaptações são previstas em D-M02/04/A-01. Alerta de erro espremido no celular foi corrigido exclusivamente no manual e revalidado. Falhas iniciais de seletores de ícones/menus virtuais foram corrigidas nos testes sem mudanças indevidas de produto. Screenshots identificam evidência renderizada; testes funcionais sozinhos não foram usados como prova visual.
+
+## Segurança, desvios e execução
+
+Novos RPCs exigem reviewer/tenant, limitam12 candidatos, verificam ator/fingerprint e serializam criação antes de existir Pessoa. Revisão/Perfil usam lock/base vigente. Dados privados novos são transacionais e separados; logs operacionais sem PII. Histórico obrigatório do vínculo não gera decisão de contratação/sucessão. Ausência de dado opcional não é fato negativo. Não há nova tecnologia/fornecedor ou desvio funcional identificado no escopo validado.
+
+Baseline produtivo revelou inner `approve_profile_review` executável por authenticated, divergente da fronteira documental aprovada. A migration restaura a fronteira revogando essa entrada interna; o único consumidor frontend permanece `publish_profile_review`/Delta. Não amplia autoridade.
+
+## Publicação, rollback e sincronização
+
+Pendentes. Sessão produtiva salva reutilizada com sucesso no browser integrado, sem extrair/expor credenciais; homepage2.6.2 confirmada antes da publicação. Não criar Pessoas/Perfis/débitos/pedidos/pagamentos fictícios em produção. Publicar somente destinos derivados do diff e SHA explícito; banco compatível antes de web. Verificar dados/ACL/RLS/migration, CI/main/runtime/rotas/assets/rollback/containers. Consolidar fatos finais sem reconstrução desnecessária.
 
 ---
 
@@ -27884,6 +28096,16 @@ Entregar em uma mudança coerente: generalização do interpretador e do prompt;
 Não criar taxonomia paralela, não reprocessar históricos, não pesquisar Pessoas externamente, não publicar aprendizado automaticamente e não tratar falha/ausência como incapacidade ou zero.
 
 Validar antes de liberar: corpus sintético separado da calibração; positivos/negativos e invariância de nomenclatura; testes de autoridade/tenant/cache/snapshot/citações; build, typecheck, lint, runtime gerado, release plan e smoke proporcional. Atualizar Context Pack e AoT com PASS/PARTIAL/BLOCKED real. Se qualquer CA crítica falhar, não declarar M8.6 concluído nem publicar a ativação como validada.
+
+---
+
+## Source: `docs/qa/execution-manual-profile-v270.md`
+
+# Execução congelada — Prisma 2.7.0
+
+Versão 1.0.0. Implementar integralmente o [Acordo aprovado](agreement-manual-profile-v270.md), versão **1.0.0**, lido integralmente nesta execução: todos D-T01..03, D-M01..10, D-V01..05, D-UX-01; P-T01, P-M01..02, P-V01, P-G01, P-UX-01; F-01..02; A-01..02/A-UX-01; todos CA, mapa GOV-01 e baseline. Nenhuma pendência material. Não reinterpretar ou reduzir requisitos.
+
+Autorização: Bruno já aprovou implementação em main e produção2.7.0, segura e ágil. Usar branch codex/ e worktree limpo para preservar drafts, reutilizar editor/Delta/publicação/duplicidade/autorização existentes, sem IA no manual. Registrar evidências durante execução no `aot-manual-profile-v270.md`. Validar minimamente cada fronteira afetada, negativos/disputas e UX renderizada; CI obrigatório permanece. Gerar/check contexto da árvore exata; publicar por SHA explícito somente destinos derivados do diff, verificar identidade real/rollback/smoke e sincronizar. Não criar dados humanos/IA/pagamentos fictícios em produção. Parar somente por decisão material realmente nova ou segurança sem resolução; não pedir aprovação repetida.
 
 ---
 

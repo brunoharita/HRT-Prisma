@@ -83,6 +83,23 @@ function isMissingStorageObject(error: { statusCode?: string | number | undefine
 }
 
 export const personIngestionService = {
+  async findManualDuplicates(organizationId: string, identity: { fullName: string; email: string; phone: string }): Promise<ResumeDuplicateCandidate[]> {
+    const { data, error } = await supabase.rpc("find_manual_profile_duplicates" as never, { p_organization_id: organizationId, p_identity: identity } as never);
+    throwIfError(error, "Não foi possível verificar possíveis duplicidades. Tente novamente antes de criar.");
+    return (data as unknown as Array<{person_id:string;full_name:string;email:string|null;phone:string|null;reasons:ResumeDuplicateCandidate["reasons"];strong:boolean}>).map(r => ({ personId:r.person_id,fullName:r.full_name,email:r.email,phone:r.phone,reasons:r.reasons,strong:r.strong }));
+  },
+  async startManualProfile(organizationId: string, personId: string | null, identity: { fullName: string; email: string; phone: string }, confirmNew: boolean, operationKey: string): Promise<{personId:string;reviewId:string}> {
+    const { data, error } = await supabase.rpc("start_manual_profile_review" as never, { p_organization_id: organizationId,p_person_id:personId,p_identity:identity,p_confirm_new:confirmNew,p_idempotency_key:operationKey } as never);
+    if (error) throw new Error(error.message === "manual_duplicate_confirmation_required" ? "Há possíveis duplicidades. Verifique as correspondências antes de confirmar um novo cadastro." : error.message === "manual_request_conflict" ? "Esta operação já foi usada com outros dados. Atualize a tela para continuar com segurança." : "Não foi possível iniciar o preenchimento manual. Os dados existentes foram preservados. Confira nome, e-mail e telefone e tente novamente.");
+    const row = (data as unknown as Array<{person_id:string;review_id:string}>)[0];
+    if (!row) throw new Error("O rascunho não foi confirmado. Tente novamente para recuperar a mesma operação.");
+    return {personId:row.person_id,reviewId:row.review_id};
+  },
+  async employeeHistory(organizationId: string, personId: string) {
+    const {data,error}=await supabase.from("person_ingestion_events").select("id,actor_auth_user_id,created_at,metadata").eq("organization_id",organizationId).eq("person_id",personId).eq("event_type","employee_status_changed").order("created_at",{ascending:false}).limit(50);
+    throwIfError(error,"Não foi possível consultar o histórico do vínculo.");
+    return (data??[]).map(row=>({id:row.id,actorAuthUserId:row.actor_auth_user_id,createdAt:row.created_at,current:(row.metadata as {current?:boolean}).current===true}));
+  },
   async beginResumeIntake(
     organizationId: string,
     input: ProcessedDocumentInput,
@@ -195,7 +212,7 @@ export const personIngestionService = {
   async listPeople(organizationId: string, search: string, includePrivateData = true): Promise<PersonWorkspaceSummary[]> {
     const { data: people, error } = await supabase
       .from("people")
-      .select("id, organization_id, full_name, lifecycle, operational_status, archived_at, merged_into_person_id, profile_state, latest_source_type, latest_source_at, created_at, updated_at")
+      .select("id, organization_id, full_name, is_active_employee, lifecycle, operational_status, archived_at, merged_into_person_id, profile_state, latest_source_type, latest_source_at, created_at, updated_at")
       .eq("organization_id", organizationId)
       .neq("operational_status", "merged")
       .order("updated_at", { ascending: false });
@@ -266,7 +283,7 @@ export const personIngestionService = {
   async loadWorkspace(organizationId: string, personId: string, selectedDocumentId?: string): Promise<PersonIngestionWorkspace | null> {
     const { data: person, error } = await supabase
       .from("people")
-      .select("id, organization_id, full_name, lifecycle, operational_status, archived_at, merged_into_person_id, profile_state, latest_source_type, latest_source_at, created_at, updated_at")
+      .select("id, organization_id, full_name, is_active_employee, lifecycle, operational_status, archived_at, merged_into_person_id, profile_state, latest_source_type, latest_source_at, created_at, updated_at")
       .eq("organization_id", organizationId)
       .eq("id", personId)
       .maybeSingle();
@@ -283,7 +300,7 @@ export const personIngestionService = {
         .select("id, person_id, source_document_id, profile_version, approved_at, created_at, superseded_at")
         .eq("organization_id", organizationId).eq("person_id", personId),
       supabase.from("profile_reviews")
-        .select("id, document_id, state, created_at")
+        .select("id, document_id, source_kind, state, created_at")
         .eq("organization_id", organizationId).eq("person_id", personId).order("created_at", { ascending: false }),
     ]);
     throwIfError(privateResult.error, "Não foi possível carregar os dados básicos da Pessoa.");
@@ -324,6 +341,7 @@ export const personIngestionService = {
     throwIfError(pageResult.error, "Não foi possível carregar o texto extraído.");
     throwIfError(draftResult.error, "Não foi possível carregar os dados estruturados.");
     return {
+      manualReviews: (reviewResult.data ?? []).filter(r => r.source_kind === "manual").map(r => ({ id: r.id, state: r.state, createdAt: r.created_at })),
       person: toPersonSummary(person, privateResult.data ?? undefined, {
         currentProfile: currentProfileRow ? toCurrentProfileSummary(currentProfileRow) : null,
         documents: timeline,
@@ -346,12 +364,12 @@ export const personIngestionService = {
     const now = new Date().toISOString();
     let resolvedPersonId = personId;
     if (personId) {
-      const { error } = await supabase.from("people").update({ full_name: value.fullName.trim(), updated_at: now })
+      const { error } = await supabase.from("people").update({ full_name: value.fullName.trim(), ...(typeof value.isActiveEmployee === "boolean" ? { is_active_employee: value.isActiveEmployee } : {}), updated_at: now })
         .eq("organization_id", organizationId).eq("id", personId);
       throwIfError(error, "Não foi possível atualizar a Pessoa.");
     } else {
       const { data, error } = await supabase.from("people")
-        .insert({ organization_id: organizationId, full_name: value.fullName.trim(), lifecycle: "candidate" })
+        .insert({ organization_id: organizationId, full_name: value.fullName.trim(), is_active_employee: value.isActiveEmployee === true, lifecycle: "candidate" })
         .select("id").single();
       throwIfError(error, "Não foi possível criar a Pessoa.");
       if (!data) throw new Error("A Pessoa foi criada sem retorno de identificador.");
@@ -937,7 +955,7 @@ export const personIngestionService = {
 
   async loadProfileReview(organizationId: string, reviewId: string): Promise<ProfileReviewWorkspace | null> {
     const { data: review, error } = await supabase.from("profile_reviews")
-      .select("id, person_id, document_id, processing_attempt_id, source_kind, source_profile_id, state, lock_version, extracted_data, reviewed_data, base_profile_version, approved_profile_id, approved_at")
+      .select("id, person_id, document_id, processing_attempt_id, field_provenance, source_kind, source_profile_id, field_provenance, state, lock_version, extracted_data, reviewed_data, base_profile_version, approved_profile_id, approved_at")
       .eq("organization_id", organizationId).eq("id", reviewId).maybeSingle();
     throwIfError(error, "Não foi possível carregar a revisão.");
     if (!review) return null;
@@ -1019,7 +1037,7 @@ export const personIngestionService = {
       ...(Array.isArray(page.layout_blocks) ? { layoutLines: page.layout_blocks as unknown as NonNullable<ExtractedPage["layoutLines"]> } : {}),
       ...(Array.isArray(page.field_evidence) ? { fieldEvidence: page.field_evidence as unknown as NonNullable<ExtractedPage["fieldEvidence"]> } : {}),
     }));
-    const legacySummaryFallback = buildAdaptiveExtraction(pages).draft;
+    const legacySummaryFallback = review.source_kind === "document" ? buildAdaptiveExtraction(pages).draft : undefined;
     return {
       id: review.id,
       personId: review.person_id,
@@ -1029,6 +1047,7 @@ export const personIngestionService = {
         email: personPrivateResult.data?.email ?? null,
       },
       sourceKind: review.source_kind,
+      fieldProvenance: review.field_provenance as NonNullable<ProfileReviewWorkspace["fieldProvenance"]>,
       sourceProfileId: review.source_profile_id,
       sourceProfileVersion: sourceProfileResult.data?.profile_version ?? null,
       documentId: review.document_id,
@@ -1151,7 +1170,7 @@ export const personIngestionService = {
 
   async listProfileVersions(organizationId: string, personId: string): Promise<ProfileVersionView[]> {
     const { data, error } = await supabase.from("professional_profiles")
-      .select("id, profile_version, profile_data, review_status, source_document_id, processing_attempt_id, approved_by_auth_user_id, approved_at, created_at, superseded_at, publication_origin, restored_from_profile_id, source_document_snapshot")
+      .select("id, profile_version, profile_data, review_status, source_document_id, processing_attempt_id, approved_by_auth_user_id, approved_at, created_at, superseded_at, publication_origin, restored_from_profile_id, source_document_snapshot, extraction_version")
       .eq("organization_id", organizationId).eq("person_id", personId).order("profile_version", { ascending: false });
     throwIfError(error, "Não foi possível carregar as versões do Perfil Prisma.");
     return (data ?? []).map((profile) => ({
@@ -1162,6 +1181,7 @@ export const personIngestionService = {
       sourceDocumentId: profile.source_document_id,
       origin: profile.publication_origin,
       restoredFromProfileId: profile.restored_from_profile_id,
+      manualEntry: profile.extraction_version === "manual-profile-1.0.0",
       sourceDocumentName: isRecord(profile.source_document_snapshot) && typeof profile.source_document_snapshot.filename === "string" ? profile.source_document_snapshot.filename : null,
       processingAttemptId: profile.processing_attempt_id,
       approvedByAuthUserId: profile.approved_by_auth_user_id,
@@ -1392,6 +1412,7 @@ function toPersonSummary(person: {
   id: string;
   organization_id: string;
   full_name: string;
+  is_active_employee?: boolean;
   lifecycle: string;
   operational_status: "active" | "archived" | "merged" | "deleting";
   archived_at: string | null;
@@ -1416,6 +1437,7 @@ function toPersonSummary(person: {
     id: person.id,
     organizationId: person.organization_id,
     fullName: person.full_name,
+    isActiveEmployee: person.is_active_employee === true,
     lifecycle: person.lifecycle,
     operationalStatus: person.operational_status,
     archivedAt: person.archived_at,
@@ -1430,6 +1452,7 @@ function toPersonSummary(person: {
     pendingReviewCount: countPendingReviews(context.documents),
     privateData: {
       fullName: person.full_name,
+      isActiveEmployee: person.is_active_employee === true,
       email: privateRow?.email ?? "",
       phoneCountryIso2: privateRow?.phone_country_iso2 ?? "BR",
       phoneCountryLabel: privateRow?.phone_country_label ?? "Brasil",
