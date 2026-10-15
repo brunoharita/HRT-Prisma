@@ -1,5 +1,7 @@
 # Versionamento
 
+Entrega autorizada por Bruno em15/10/2026: **2.7.2**, áreas/funções na lista de Pessoas e filtros do Knowledge, cache e IA fechada para agrupamentos de navegação. `people-directory-1.0.0` não modifica contratos de Perfil/Score/matching ou cria catálogo/tarifa. Destinos banco, knowledge-agent e web, sujeitos à evidência de publicação do AoT `people-taxonomy-v272`.
+
 Decisão de Bruno em14/10/2026: publicar **Prisma v2.6.0**, primeira entrega do movimento6. Registry mantém toda a história e inicia0. `selection-process-management-1.0.0` versiona a consulta tenant-scoped, gestão separada e criação explícita por Posição desocupada/sem processo ativo. start_position_selection_process mantém assinatura/ACL e permite primeiro ciclo vazio; índice/trigger garantem concorrência e elegibilidade. Acompanhamento1.0.0, prova2.0.0/portal1.0.0, Score/Perfil/matching/IA/tarifas preservados. Destinos somente migration nova e web; acordo/execução/AoT selection-processes-v260 e delta ADR-082. Rollout depende dos recibos finais.
 
 Decisão de Bruno em10/10/2026: publicar **Prisma v2.3.4**, primeira proposta de cards compactos na descoberta de Pessoas e indicação persistida de acompanhamento no processo atual. Registry acrescenta a entrega4 ao movimento3 e marca3como pulada por solicitação explícita, sem entrega fictícia. Sem mudança de contrato persistido, matching, IA, banco ou backend. Rollout somente web; acordo/execução/AoT `people-compact-v234` registram validação e publicação.

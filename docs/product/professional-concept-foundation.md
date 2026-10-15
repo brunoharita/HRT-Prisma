@@ -11,3 +11,6 @@ O Prisma preserva três camadas distintas: o termo observado no documento, a nor
 O modelo distingue `occupation`, `skill`, `competency`, `knowledge`, `technology`, `methodology` e `certification`. Relações e mappings são tipados, versionados e atribuídos. A Taxonomia Profissional Prisma reutiliza esta infraestrutura em dois domínios separados: Taxonomia Ocupacional `position-taxonomy-1.0.0` e Taxonomia de Competências `competency-taxonomy-1.0.0`. Internet enriquece a Knowledge Base, nunca uma Pessoa. A IA pesquisa e propõe; um humano autorizado publica.
 
 Mudanças publicadas criam change set e impactos somente para perfis com observações relacionadas. Reinterpretação reaplica Knowledge à mesma evidência, gera draft para o contrato M2-C e não sobrescreve perfil aprovado. A política organizacional começa em `off`.
+# Diretório de Pessoas: aplicação da taxonomia
+
+Desde 2.7.2, o diretório apresenta áreas e funções do Knowledge por experiência do Perfil aprovado. Agrupamento de IA é inferência para navegação, identificado como tal; cargo original e fatos permanecem disponíveis. Área e função combinadas nos filtros pertencem à mesma experiência. Não há outra biblioteca ou aprovação obrigatória por pessoa. Contrato e limites: `docs/architecture/people-directory.md`.

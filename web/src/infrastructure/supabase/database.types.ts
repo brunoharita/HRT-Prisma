@@ -1297,6 +1297,7 @@ export interface Database {
       }
     Views: Record<string, never>;
     Functions: {
+      get_people_directory: { Args: { p_organization_id: string }; Returns: Json };
       get_position_follow_up: {
         Args: { p_organization_id: string; p_vacancy_id?: string | null; p_person_id?: string | null };
         Returns: Json;

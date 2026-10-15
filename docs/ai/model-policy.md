@@ -66,3 +66,6 @@ A política geral de custo versus capacidade deve ser revalidada no catálogo of
 ## Profile synthesis v2.0.5
 
 Função lógica Profile synthesis: OpenAI `gpt-5.6-luna`, reasoning low, contrato `profile-synthesis-1.0.0`, sem fallback. Reaproveitamento condicionado ao benchmark sintético detalhado/pobre/injeção (três chamadas, 7–14s), conferido antes da ativação. Não substitui Extraction, Matching ou humano. Schema/proveniência, limites e reavaliação em `profile-synthesis.md`.
+## Diretório de Pessoas 2.7.2
+
+`people_directory` reutiliza o modelo Knowledge aprovado `gpt-5.6-luna`, opt-in, segredo do scheduler e histórico existentes. Interpretação fechada sobre candidatos aprovados; não pesquisa web ou publica conceitos. Limites operacionais são compartilhados com a normalização (20/dia, 200/mês), sem elevar o total nem criar tarifa. Input minimizado por experiência, sem identidade/empregador/contato, com detector de conteúdo identificável; falha preserva original. Cache inclui contexto/empresa/Knowledge/método/modelo. Ver `docs/architecture/people-directory.md` e testes determinísticos de saída fechada/injeção/limite/fallback no AoT 2.7.2.

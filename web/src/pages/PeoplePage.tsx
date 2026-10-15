@@ -14,7 +14,7 @@ import {
   TeamOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
-import { Alert, Button, Dropdown, Empty, Input, Select, Skeleton, Space, Statistic, Table, Tag, Typography } from "antd";
+import { Alert, Button, Dropdown, Empty, Input, Select, Skeleton, Space, Statistic, Table, Tag, Tooltip, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import {
   currentProfileDescription,
@@ -23,6 +23,7 @@ import {
   type DocumentOperationalState,
 } from "../domain/documentPresentation";
 import type { PersonWorkspaceSummary } from "../domain/personIngestion";
+import { directoryEntries, matchesDirectory, type DirectoryConcept, type DirectoryEntry, type DirectoryScope } from "../domain/peopleDirectory";
 import type { PrismaDataRepository } from "../domain/prismaData";
 import { personIngestionService } from "../infrastructure/supabase/personIngestionService";
 import type { OrganizationMembership } from "../shared/access";
@@ -44,6 +45,9 @@ type OperationalFilter = "active" | "archived" | "all";
 export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
   const canManagePeople = activeMembership.role !== "member";
   const [search, setSearch] = useViewState("search", "");
+  const [areaFilter, setAreaFilter] = useViewState("directoryArea", "");
+  const [functionFilter, setFunctionFilter] = useViewState("directoryFunction", "");
+  const [directoryScope, setDirectoryScope] = useViewState<DirectoryScope>("directoryScope", "recent");
   const [employeeFilter, setEmployeeFilter] = useViewState<"all" | "yes" | "no">("employeeFilter", "all");
   const [profileFilter, setProfileFilter] = useViewState<ProfileFilter>("profileFilter", "all");
   const [importFilter, setImportFilter] = useViewState<ImportFilter>("importFilter", "all");
@@ -75,11 +79,15 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
       || (profileFilter === "approved" && Boolean(person.currentProfile))
       || (profileFilter === "without_profile" && !person.currentProfile);
     const matchesImport = importFilter === "all" || presentDocument(person.latestDocument).state === importFilter;
-    return matchesOperational && matchesProfile && matchesImport && (employeeFilter === "all" || (person.isActiveEmployee === true) === (employeeFilter === "yes"));
-  }), [employeeFilter, importFilter, operationalFilter, people, profileFilter]);
-  const hasFilters = Boolean(employeeFilter !== "all" || search || profileFilter !== "all" || importFilter !== "all" || operationalFilter !== "active");
+    const matchesProfessional = !areaFilter && !functionFilter || directoryEntries(person.professionalDirectory,directoryScope).entries.some(e => matchesDirectory(e,areaFilter,functionFilter));
+    return matchesProfessional && matchesOperational && matchesProfile && matchesImport && (employeeFilter === "all" || (person.isActiveEmployee === true) === (employeeFilter === "yes"));
+  }), [areaFilter,functionFilter,directoryScope,employeeFilter, importFilter, operationalFilter, people, profileFilter]);
+  const hasFilters = Boolean(areaFilter || functionFilter || employeeFilter !== "all" || search || profileFilter !== "all" || importFilter !== "all" || operationalFilter !== "active");
+  const scopedEntries = people.flatMap(p => directoryEntries(p.professionalDirectory,directoryScope).entries);
+  const conceptOptions = (kind: "area" | "function") => Array.from(new Map(scopedEntries.flatMap(e => kind === "area" ? e.areas : e.function ? [e.function] : []).map(c => [c.id,{value:c.id,label:c.label}])).values()).sort((a,b) => a.label.localeCompare(b.label,"pt-BR"));
+  const shownEntries = (person: PersonWorkspaceSummary) => directoryEntries(person.professionalDirectory,directoryScope).entries.filter(e => matchesDirectory(e,areaFilter,functionFilter));
   const resetPage = () => setPagination((current) => ({ ...current, current: 1 }));
-  const clearFilters = () => { setEmployeeFilter("all"); setSearch(""); setProfileFilter("all"); setImportFilter("all"); setOperationalFilter("active"); resetPage(); };
+  const clearFilters = () => { setAreaFilter(""); setFunctionFilter(""); setDirectoryScope("recent"); setEmployeeFilter("all"); setSearch(""); setProfileFilter("all"); setImportFilter("all"); setOperationalFilter("active"); resetPage(); };
   const activePeople = people.filter((person) => person.operationalStatus === "active");
   const approvedProfiles = activePeople.filter((person) => person.currentProfile).length;
   const awaitingReview = activePeople.filter((person) => person.pendingReviewCount > 0).length;
@@ -103,9 +111,28 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
       ),
     },
     {
+      title: "Área(s) profissional(is)", key: "professionalAreas", width: 210,
+      render: (_,person) => <DirectoryConcepts concepts={shownEntries(person).flatMap(e => e.areas)} entries={shownEntries(person)} fallback={directoryFallback(person,directoryScope)} />,
+    },
+    {
+      title: "Função / cargo", key: "professionalFunction", width: 240,
+      render: (_,person) => {
+        const entries = shownEntries(person);
+        return <div className="prisma-directory-cell"><DirectoryConcepts concepts={entries.flatMap(e => e.function ? [e.function] : [])} entries={entries} fallback="Sem função agrupada" />
+          {entries.map(e => <small key={e.experienceIndex}>Original: {e.originalRole || "Cargo não informado"}</small>)}
+          {!entries.length ? <small>{directoryFallback(person,directoryScope)}</small> : null}
+        </div>;
+      },
+    },
+    {
+      title: directoryScope === "recent" ? "Atuação recente" : "Atuação na trajetória", key: "professionalExperience", width: 225,
+      render: (_,person) => <div className="prisma-directory-cell">{shownEntries(person).map(e => <div key={e.experienceIndex}><strong>{e.organization || "Empresa não informada"}</strong><small>{e.period || "Período não informado"}</small></div>)}
+        {!shownEntries(person).length ? <small>{directoryFallback(person,directoryScope)}</small> : null}</div>,
+    },
+    {
       title: "Perfil atual",
       key: "currentProfile",
-      width: 190,
+      width: 165,
       render: (_, person) => (
         <div className="prisma-person-state-cell">
           <Tag color={person.currentProfile ? "green" : "default"}>{currentProfileLabel(person.currentProfile)}</Tag>
@@ -116,14 +143,14 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
     {
       title: "Última importação",
       key: "latestDocument",
-      width: 310,
+      width: 225,
       render: (_, person) => {
         const presentation = presentDocument(person.latestDocument);
         return (
           <div className="prisma-person-import-cell">
             <Tag color={documentTagColor(presentation.state)}>{presentation.label}</Tag>
             <strong>{person.latestDocument ? `Documento v${person.latestDocument.documentVersion} · ${formatRelativeDate(person.latestDocument.createdAt)}` : "Nenhum documento recente"}</strong>
-            <small>{presentation.description} {presentation.requiresAction ? `Próximo passo: ${presentation.nextAction}.` : ""}</small>
+            {presentation.requiresAction ? <small>{presentation.description} Próximo passo: {presentation.nextAction}.</small> : null}
           </div>
         );
       },
@@ -141,7 +168,7 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
     <PrismaPage className="prisma-m2b-page prisma-people-page">
       <PrismaPageHeader icon={<PrismaPageIcon />}
         title="Pessoas"
-        description="Gerencie as pessoas e acompanhe, separadamente, o Perfil atual e as importações recentes."
+        description="Consulte áreas, funções e experiências a partir dos Perfis aprovados."
         actions={<Space wrap>
             {canManagePeople ? <Button icon={<PlusOutlined />} onClick={() => onNavigate("/profiles/manual")}>Preencher manualmente</Button> : null}
             {canManagePeople ? <Button icon={<FileAddOutlined />} onClick={() => onNavigate("/profiles/import")} type="primary">Importar currículo</Button> : null}
@@ -159,13 +186,19 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
       <PrismaCard className="prisma-people-toolbar prisma-m2b-toolbar">
         <Input
           allowClear
-          aria-label="Buscar por nome, e-mail ou organização"
+          aria-label="Buscar por nome, e-mail, empresa, área ou cargo"
           onChange={(event) => { setSearch(event.target.value); resetPage(); }}
-          placeholder="Buscar por nome, e-mail ou organização..."
+          placeholder="Buscar por nome, e-mail, empresa, área ou cargo..."
           prefix={<SearchOutlined />}
           value={search}
         />
         <Button icon={<FilterOutlined />} onClick={() => setShowFilters((value) => !value)} aria-expanded={showFilters}>Filtros</Button>
+        <div className="prisma-directory-filters">
+          <Select aria-label="Filtrar área profissional" placeholder="Todas as áreas" allowClear showSearch optionFilterProp="label" value={areaFilter || undefined} options={conceptOptions("area")} onChange={value => {setAreaFilter(value ?? "");resetPage();}} />
+          <Select aria-label="Filtrar função profissional" placeholder="Todas as funções" allowClear showSearch optionFilterProp="label" value={functionFilter || undefined} options={conceptOptions("function")} onChange={value => {setFunctionFilter(value ?? "");resetPage();}} />
+          <Select<DirectoryScope> aria-label="Período da atuação" value={directoryScope} options={[{value:"recent",label:"Atual / mais recente"},{value:"trajectory",label:"Trajetória completa"}]} onChange={value => {setDirectoryScope(value);resetPage();}} />
+          {hasFilters ? <Button type="link" onClick={clearFilters}>Limpar filtros</Button> : null}
+        </div>
         {showFilters ? <div className="prisma-people-filters">
           <Select<OperationalFilter>
             aria-label="Filtrar situação da Pessoa"
@@ -213,7 +246,7 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
             locale={{ emptyText: <PrismaState compact kind={hasFilters ? "filtered" : "empty"} description={hasFilters ? "Ajuste os filtros para ampliar a busca." : canManagePeople ? "Importe um currículo para criar o primeiro perfil profissional." : "As pessoas cadastradas e disponíveis nesta empresa aparecerão aqui."} {...(hasFilters ? { action: { label: "Limpar filtros", onClick: clearFilters } } : canManagePeople ? { action: { label: "Importar currículo", onClick: () => onNavigate("/profiles/import") } } : {})} /> }}
             pagination={{ ...pagination, onChange: (current, pageSize) => setPagination({ current, pageSize }), showSizeChanger: true, showTotal: (total, range) => `${range[0]}-${range[1]} de ${total}` }}
             rowKey="id"
-            scroll={{ x: 850 }}
+            scroll={{ x: 1415 }}
             size="middle"
             tableLayout="fixed"
             onRow={(person) => ({ onDoubleClick: () => onNavigate(personPath(person.id)) })}
@@ -227,10 +260,28 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
         <PeopleMetric loading={loading} unavailable={Boolean(error)} icon={<UploadOutlined />} label="Importações hoje" value={importedToday} tone="processing" />
       </div></details>
       <Typography.Text className="prisma-table-scope-note" type="secondary">
-        Perfil aprovado e importação são estados independentes. A busca mostra apenas informações acessíveis na empresa ativa.
+        Agrupamentos identificados por IA auxiliam a navegação. Cargo original e Perfil aprovado são preservados. Área e função filtradas correspondem à mesma experiência.
       </Typography.Text>
     </PrismaPage>
   );
+}
+
+function directoryFallback(person: PersonWorkspaceSummary,scope: DirectoryScope): string {
+  if (!person.currentProfile) return "Sem Perfil aprovado";
+  if (!person.professionalDirectory) return "Agrupamento indisponível";
+  if (!person.professionalDirectory.length) return "Sem experiência informada";
+  if (scope === "recent" && !directoryEntries(person.professionalDirectory,scope).chronologyKnown) return "Datas insuficientes; consulte a trajetória";
+  return person.professionalDirectory.some(e => e.status === "queued" || e.status === "processing") ? "Agrupamento em preparação" : "Sem área agrupada";
+}
+function DirectoryConcepts({concepts,entries,fallback}: {concepts:DirectoryConcept[];entries:DirectoryEntry[];fallback:string}) {
+  const unique = Array.from(new Map(concepts.map(c => [c.id,c])).values());
+  return <div className="prisma-directory-cell">{unique.length ? unique.map(c => {
+    const sources = entries.filter(e => e.areas.some(a => a.id === c.id) || e.function?.id === c.id);
+    const ai = sources.some(e => [...e.areas,...(e.function ? [e.function] : [])].some(a => a.id === c.id && a.method === "ai_grouping"));
+    return <Tooltip key={c.id} title={`${ai ? "Agrupamento sugerido por IA" : "Alias aprovado do Knowledge"}. ${sources.map(e => `${e.originalRole || "Experiência"} · ${e.organization || "Empresa não informada"} · ${e.period || "Sem período"} · Perfil v${e.profileVersion}`).join("; ")}. Knowledge v${c.version}.`}>
+      <span tabIndex={0} className="prisma-directory-concept">{c.label}{ai ? <small className="prisma-directory-ai">IA</small> : null}</span>
+    </Tooltip>;
+  }) : <small>{fallback}</small>}</div>;
 }
 
 function PeopleMetric({ icon, label, value, tone, loading, unavailable }: { icon: React.ReactNode; label: string; value: number; tone: string; loading: boolean; unavailable: boolean }) {

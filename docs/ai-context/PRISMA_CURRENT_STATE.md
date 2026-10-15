@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.76.1
+version: 2.76.2
 last_verified: 2026-10-15
 ---
 
 # Estado atual do Prisma
+
+## Pessoas 2.7.2: áreas e funções do Knowledge
+
+Implementação autorizada em15/10/2026: tabela clara mantém identificação, estados e ações e acrescenta Área(s) profissional(is), Função/cargo original e Atuação recente. Filtros por identidades existentes do Knowledge, escopo atual/mais recente ou trajetória completa e combinação na mesma experiência. Cache privado e worker fechado do knowledge-agent reutilizam opt-in/modelo e orçamento operacional da normalização, sem nova biblioteca, tarifa ou etapa obrigatória. IA identificada como agrupamento de navegação; Perfis/fatos, Score/matching/seleção preservados. Contrato `people-directory-1.0.0`, documentação em `docs/architecture/people-directory.md`; acordo/mapa/execução/AoT em `docs/qa/people-taxonomy-v272.md`. Validação e rollout dependem dos recibos finais, sem presumir publicação.
 
 ## Tags factuais da Pessoa — 2.7.1 publicada
 

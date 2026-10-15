@@ -1,0 +1,24 @@
+{
+  "results": [
+    {
+      "width": 1448,
+      "sameExperience": true
+    },
+    {
+      "width": 1448,
+      "fallback": true,
+      "navigation": true
+    },
+    {
+      "width": 390,
+      "sameExperience": true
+    },
+    {
+      "width": 390,
+      "fallback": true,
+      "navigation": true
+    }
+  ],
+  "errors": [],
+  "outbound": []
+}

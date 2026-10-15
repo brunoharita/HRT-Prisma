@@ -1,6 +1,7 @@
 import {withAiHistory,recordAiCacheHit} from "../../../src/infrastructure/aiHistory.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.112.3";
 import { processCompetencyNormalization } from "./competencyNormalization.ts";
+import { processPeopleDirectory } from "./peopleDirectory.ts";
 
 type Scope = "global" | "organization";
 type SourceClass = "official_occupational_taxonomy" | "official_vendor_documentation"
@@ -74,13 +75,13 @@ Deno.serve(async (request) => {
   try {
     if (request.method !== "POST") return jsonResponse(405, { error: "METHOD_NOT_ALLOWED" });
     const payload = await request.json();
-    if (payload?.mode === "competency_normalization") {
+    if (payload?.mode === "competency_normalization" || payload?.mode === "people_directory") {
       const serviceClient = createServiceClient();
       const { data: authorized, error } = await serviceClient.rpc("authorize_knowledge_source_monitor", {
         p_secret: request.headers.get("x-prisma-monitor-secret") ?? "",
       });
       if (error || authorized !== true) return jsonResponse(401, { error: "UNAUTHORIZED_NORMALIZATION_INVOCATION" });
-      return jsonResponse(200, await processCompetencyNormalization(serviceClient));
+      return jsonResponse(200, payload.mode === "people_directory" ? await processPeopleDirectory(serviceClient) : await processCompetencyNormalization(serviceClient));
     }
     requireEnabledConfiguration();
     const serviceClient = createServiceClient();

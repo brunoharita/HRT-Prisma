@@ -1,4 +1,5 @@
 import { loadPersonCandidacies } from "./personRelationshipService";
+import { directorySearch } from "../../domain/peopleDirectory";
 import type { Json } from "./database.types";
 import { supabase } from "./client";
 import { normalizeDraftPeriods } from "../../domain/resumeDates.js";
@@ -221,7 +222,7 @@ export const personIngestionService = {
     const rows = people ?? [];
     if (rows.length === 0) return [];
     const personIds = rows.map((person) => person.id);
-    const [privateResult, documentResult, profileResult] = await Promise.all([
+    const [privateResult, documentResult, profileResult, directoryResult] = await Promise.all([
       includePrivateData
         ? supabase.from("person_private_data")
           .select("person_id, email, phone_e164, phone_country_iso2, phone_country_label, phone_country_code, phone_national_number, birth_date, city, country_code, notes")
@@ -233,6 +234,7 @@ export const personIngestionService = {
       supabase.from("professional_profiles")
         .select("id, person_id, source_document_id, profile_version, approved_at, created_at, superseded_at")
         .eq("organization_id", organizationId).in("person_id", personIds),
+      supabase.rpc("get_people_directory", { p_organization_id: organizationId }),
     ]);
     const { data: privateRows, error: privateError } = privateResult;
     throwIfError(privateError, "Não foi possível carregar os dados privados permitidos.");
@@ -268,16 +270,21 @@ export const personIngestionService = {
     const knowledgePersonIds = new Set((knowledgeMatches.data ?? []).map((match) => match.person_id));
     return rows.map((person) => {
       const timeline = documentsByPerson.get(person.id) ?? [];
-      return toPersonSummary(person, privateByPerson.get(person.id), {
+      const summary = toPersonSummary(person, privateByPerson.get(person.id), {
         currentProfile: currentProfileByPerson.get(person.id) ?? null,
         documents: timeline,
       });
+      summary.professionalDirectory = directoryResult.error || !Array.isArray(directoryResult.data) ? null
+        : (directoryResult.data as unknown as import("../../domain/peopleDirectory").DirectoryEntry[])
+          .filter(entry => entry.personId === person.id && entry.profileId === summary.currentProfile?.id);
+      return summary;
     })
       .filter((person) => !normalizedSearch || knowledgePersonIds.has(person.id) || normalizeSearch([
         person.fullName,
         person.privateData.email,
         person.privateData.phoneE164,
         person.privateData.phoneNationalNumber,
+        directorySearch(person.professionalDirectory),
       ].join(" ")).includes(normalizedSearch));
   },
 

@@ -90,6 +90,7 @@ export interface PersonEditorValue {
 }
 
 export interface PersonWorkspaceSummary {
+  professionalDirectory?: import("./peopleDirectory.js").DirectoryEntry[] | null;
   isCandidate?: boolean | undefined;
   isActiveEmployee?: boolean;
   id: string;

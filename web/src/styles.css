@@ -7180,3 +7180,11 @@ textarea {
   .prisma-manual-profile-start .ant-alert-error .ant-alert-content { grid-column: 2; min-width: 0; }
   .prisma-manual-profile-start .ant-alert-error .ant-alert-actions { grid-column: 2; margin: 0; }
 }
+.prisma-directory-filters { display:flex; flex:1 0 100%; gap:12px; flex-wrap:wrap; }
+.prisma-directory-filters .ant-select { flex:1 1 220px; min-width:0; }
+.prisma-directory-cell { display:flex; flex-direction:column; gap:5px; overflow-wrap:anywhere; }
+.prisma-directory-cell small { display:block; color:var(--prisma-text-secondary,#52647d); font-size:12px; line-height:1.5; }
+.prisma-directory-concept { display:inline; font-weight:500; }
+.prisma-directory-cell .prisma-directory-ai { display:inline-block; margin-left:6px; padding:0 5px; border-radius:4px; background:#edf2ff; color:#315fa8; font-size:10px; }
+.prisma-people-page .prisma-people-table-card .ant-table { background:#fff; }
+@media(max-width:600px) { .prisma-directory-filters .ant-select { flex-basis:100%; } }

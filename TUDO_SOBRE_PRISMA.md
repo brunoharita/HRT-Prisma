@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 489
-source_manifest_sha256: 1b483ababfb1fb73631a65270f93823c8ce3efd33e8a8df3070c8d2ba32e9fd6
+documentation_source_count: 491
+source_manifest_sha256: 18b3704776e310bea45b34fd2b06d266f970d57b55899d83abea24b64e308d0a
 -->
 
 # Tudo sobre o Prisma
@@ -2643,11 +2643,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.76.1
+version: 2.76.2
 last_verified: 2026-10-15
 ---
 
 # Estado atual do Prisma
+
+## Pessoas 2.7.2: áreas e funções do Knowledge
+
+Implementação autorizada em15/10/2026: tabela clara mantém identificação, estados e ações e acrescenta Área(s) profissional(is), Função/cargo original e Atuação recente. Filtros por identidades existentes do Knowledge, escopo atual/mais recente ou trajetória completa e combinação na mesma experiência. Cache privado e worker fechado do knowledge-agent reutilizam opt-in/modelo e orçamento operacional da normalização, sem nova biblioteca, tarifa ou etapa obrigatória. IA identificada como agrupamento de navegação; Perfis/fatos, Score/matching/seleção preservados. Contrato `people-directory-1.0.0`, documentação em `docs/architecture/people-directory.md`; acordo/mapa/execução/AoT em `docs/qa/people-taxonomy-v272.md`. Validação e rollout dependem dos recibos finais, sem presumir publicação.
 
 ## Tags factuais da Pessoa — 2.7.1 publicada
 
@@ -4371,6 +4375,9 @@ A política geral de custo versus capacidade deve ser revalidada no catálogo of
 ## Profile synthesis v2.0.5
 
 Função lógica Profile synthesis: OpenAI `gpt-5.6-luna`, reasoning low, contrato `profile-synthesis-1.0.0`, sem fallback. Reaproveitamento condicionado ao benchmark sintético detalhado/pobre/injeção (três chamadas, 7–14s), conferido antes da ativação. Não substitui Extraction, Matching ou humano. Schema/proveniência, limites e reavaliação em `profile-synthesis.md`.
+## Diretório de Pessoas 2.7.2
+
+`people_directory` reutiliza o modelo Knowledge aprovado `gpt-5.6-luna`, opt-in, segredo do scheduler e histórico existentes. Interpretação fechada sobre candidatos aprovados; não pesquisa web ou publica conceitos. Limites operacionais são compartilhados com a normalização (20/dia, 200/mês), sem elevar o total nem criar tarifa. Input minimizado por experiência, sem identidade/empregador/contato, com detector de conteúdo identificável; falha preserva original. Cache inclui contexto/empresa/Knowledge/método/modelo. Ver `docs/architecture/people-directory.md` e testes determinísticos de saída fechada/injeção/limite/fallback no AoT 2.7.2.
 
 ---
 
@@ -5455,6 +5462,26 @@ Flags não substituem autorização, RLS, migration, contrato ou aprovação de 
 
 ---
 
+## Source: `docs/architecture/people-directory.md`
+
+# Agrupamento profissional do diretório de Pessoas
+
+Contrato `people-directory-1.0.0`, entrega 2.7.2. Derivação de navegação do Perfil aprovado vigente, sem alteração de fatos, seleção, Score, matching ou evidência de competência.
+
+Cada experiência preserva índice no snapshot, Perfil/versão, cargo original, organização e período. Áreas referenciam conceitos aprovados classificados no subgrupo existente H1 do Knowledge; funções referenciam ocupações aprovadas. Não há novo catálogo. Alias exato usa `resolve_knowledge_term_v2`, incluindo precedência da empresa. Alias que muda classe hierárquica não equivale ao cargo para esta apresentação. Áreas gerais só alimentam a resolução exata quando mencionadas na mesma experiência, com proteção conservadora para negação.
+
+`people_directory_contexts` é cache/fila privado por empresa e contexto profissional, não cadastro de categorias. Chave inclui input limitado, versões global/empresa, método e modelo aprovado. Publicação de Perfil ou Knowledge enfileira incrementalmente; consulta não escreve nem invoca provedor. Apenas experiências de Perfis aprovados ainda vigentes podem ser processadas. Leases, tentativas limitadas e reserva atômica protegem concorrência; resultado antigo não é consultado sob outra chave. Despublicação de referência e supersessão de Perfil invalidam sua apresentação imediatamente. Dados originais e histórico não são substituídos.
+
+Worker `people_directory` no knowledge-agent mantém JWT gateway e segredo Vault do monitor, além de service_role nas RPCs de trabalho. IA sem ferramentas/web, `store:false`, recebe somente cargo/responsabilidades limitados e referências candidatas existentes; nome/ID da pessoa, contatos, empregador, currículo integral e datas não entram no payload. Detector conservador bloqueia contato/documento identificável. Saída no máximo três IDs de áreas e uma função; tipos, snapshot, versões, empresa e hierarquia são validados novamente no banco. Não cria conceitos/aliases nem curadoria humana. Métodos `approved_exact_alias` e `ai_grouping` permanecem distintos e visíveis; referência de família não promove cargo.
+
+Modelo reutiliza `KNOWLEDGE_RESEARCH_MODEL=gpt-5.6-luna`, sem fallback. Usa opt-in existente `allow_external_knowledge_enrichment`, histórico `withAiHistory`/`people_directory` e o MESMO orçamento operacional de normalização (caps existentes, 20/dia e 200/mês, não um orçamento adicional). Reserva considera ambos os consumidores sob o mesmo lock. Não adiciona tarifa/débito comercial. Falha/limite desabilita apenas agrupamento, preservando consulta e operações manuais. Retry automático limitado a três tentativas, intervalo de um dia. Sem candidatos seguros, nenhuma classificação é forçada.
+
+`get_people_directory` exige sessão e papel ativo na empresa. Retorna somente projeção profissional dos Perfis aprovados; cache não tem permissão cliente. Frontend junta por pessoa E ID do Perfil vigente. Combinar filtros significa mesma experiência, inclusive na trajetória completa. Atual/mais recente inclui todas as atuações em andamento; sem atuações atuais usa o último término conhecido, preservando empates. Datas incompletas/futuras não criam cronologia: a trajetória completa continua disponível. Busca textual inclui cargo original, empresa e agrupamentos, inclusive sem equivalência segura. Erro opcional da projeção é explícito e não bloqueia a lista. Ajustes continuam nos fluxos existentes de edição/republicação do Perfil e curadoria de aliases do Knowledge, sem novo trabalho obrigatório.
+
+Rollback: reverter web e knowledge-agent ao SHA anterior; desativar somente cron `prisma-people-directory`. A migração aditiva pode permanecer com RLS/ACL fechadas. Não apagar cache ou histórico em rollback rotineiro. Orçamento da normalização continua conservador contando as reservas já realizadas.
+
+---
+
 ## Source: `docs/architecture/process-assessment.md`
 
 # Contratos da prova comum por processo
@@ -5754,6 +5781,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+Entrega autorizada por Bruno em15/10/2026: **2.7.2**, áreas/funções na lista de Pessoas e filtros do Knowledge, cache e IA fechada para agrupamentos de navegação. `people-directory-1.0.0` não modifica contratos de Perfil/Score/matching ou cria catálogo/tarifa. Destinos banco, knowledge-agent e web, sujeitos à evidência de publicação do AoT `people-taxonomy-v272`.
 
 Decisão de Bruno em14/10/2026: publicar **Prisma v2.6.0**, primeira entrega do movimento6. Registry mantém toda a história e inicia0. `selection-process-management-1.0.0` versiona a consulta tenant-scoped, gestão separada e criação explícita por Posição desocupada/sem processo ativo. start_position_selection_process mantém assinatura/ACL e permite primeiro ciclo vazio; índice/trigger garantem concorrência e elegibilidade. Acompanhamento1.0.0, prova2.0.0/portal1.0.0, Score/Perfil/matching/IA/tarifas preservados. Destinos somente migration nova e web; acordo/execução/AoT selection-processes-v260 e delta ADR-082. Rollout depende dos recibos finais.
 
@@ -12364,6 +12393,9 @@ O Prisma preserva três camadas distintas: o termo observado no documento, a nor
 O modelo distingue `occupation`, `skill`, `competency`, `knowledge`, `technology`, `methodology` e `certification`. Relações e mappings são tipados, versionados e atribuídos. A Taxonomia Profissional Prisma reutiliza esta infraestrutura em dois domínios separados: Taxonomia Ocupacional `position-taxonomy-1.0.0` e Taxonomia de Competências `competency-taxonomy-1.0.0`. Internet enriquece a Knowledge Base, nunca uma Pessoa. A IA pesquisa e propõe; um humano autorizado publica.
 
 Mudanças publicadas criam change set e impactos somente para perfis com observações relacionadas. Reinterpretação reaplica Knowledge à mesma evidência, gera draft para o contrato M2-C e não sobrescreve perfil aprovado. A política organizacional começa em `off`.
+# Diretório de Pessoas: aplicação da taxonomia
+
+Desde 2.7.2, o diretório apresenta áreas e funções do Knowledge por experiência do Perfil aprovado. Agrupamento de IA é inferência para navegação, identificado como tal; cargo original e fatos permanecem disponíveis. Área e função combinadas nos filtros pertencem à mesma experiência. Não há outra biblioteca ou aprovação obrigatória por pessoa. Contrato e limites: `docs/architecture/people-directory.md`.
 
 ---
 
@@ -29499,6 +29531,42 @@ Os cenários que alteraram memberships ou papel foram executados em transações
 ## Limitação aberta
 
 O QA possui um único usuário Auth utilizável. O cadastro público não criou identidades adicionais e não houve manipulação direta de `auth.users`. A validação visual autenticada desktop/mobile depende de login manual com a credencial QA já provisionada. Até essa evidência existir, o movimento não deve ser declarado integralmente concluído.
+
+---
+
+## Source: `docs/qa/people-taxonomy-v272.md`
+
+# Acordo, execução e AoT: Pessoas 2.7.2
+
+Acordo 1.0.0 aprovado por Bruno nesta conversa em 15/10/2026. Pedido autoriza implementação, integração em main e publicação. Baseline 12ef517 (runtime 2.7.1). Branch codex/people-taxonomy-v272.
+
+## Acordo congelado e execução
+
+- D-01: acrescentar Área(s) profissional(is), Função/cargo e Atuação recente na tabela clara de Pessoas; conservar identificação, ações, estados de Perfil/importação e filtros atuais. Área e função usam identidades aprovadas do Knowledge, sem outra biblioteca.
+- D-02: filtros por área e função usam as mesmas associações das colunas. Escopo atual/mais recente ou trajetória completa. Combinação área/função deve corresponder à mesma experiência. Cronologia desconhecida permanece explícita.
+- D-03: partir exclusivamente do Perfil aprovado vigente. Manter texto original do cargo, organização, período, experiência/Perfil de origem, método e versões. Não promover nível hierárquico por alias ocupacional.
+- D-04: priorizar aliases exatos aprovados com precedência da empresa. IA fechada pode associar aos candidatos existentes, identificada como agrupamento inferido para navegação. Não publica conceitos/aliases globais. Declarações gerais de áreas não comprovam sua aplicação a cada experiência.
+- D-05: processamento automático em segundo plano, cache por empresa/contexto/taxonomia/método/modelo; limites e opt-in existentes de Knowledge. Não consultar IA na abertura da lista/filtros. Falha/ambiguidade mantém consulta textual e exibe ausência de agrupamento, sem fila obrigatória para gestor. Correção pode usar edição/republicação existente do Perfil ou curadoria existente dos aliases do Knowledge.
+- P-01: não criar biblioteca paralela, alterar fatos/versões do Perfil, Score, matching, decisões de seleção ou publicar curadoria humana automaticamente.
+- P-02: não cruzar empresas, expor currículo integral/identidade à IA, aceitar IDs não candidatos ou classificações despublicadas, nem ampliar orçamento/etapas obrigatórias.
+- F-01: redesenho integral da página, limpeza geral da biblioteca, novos modelos/fontes externas e novas tarifas comerciais.
+- A-01: nomes internos, armazenamento de projeção/cache, paginação e adaptação responsiva dentro dos componentes atuais são delegados à engenharia.
+- CA-01: testes determinísticos cobrem temporalidade, combinação na mesma experiência, origem, fallback e hierarquia; integração SQL isolada cobre alias/escopo/candidatos/lease/budget/RLS; tipos/build e testes da IA não dependem de provedor real. Evidência visual desktop/mobile e smoke publicado. CI obrigatório, release seletivo e sincronização.
+
+Execução: implementar integralmente D-01..05/P-01..02, preservar F-01, usar A-01. Referência visual fornecida é contraprova da pobreza informacional; manter tabela clara e ações do diretório, acrescentando colunas e filtros sem adotar redesign não escolhido.
+
+## GOV-01 inicial e fechamento mínimo
+
+| Capacidade | Relação | Preservação / validação mínima |
+| --- | --- | --- |
+| Lista, filtros e busca de Pessoas | direct | testes de seleção conjunta/temporalidade/fallback, UI real em desktop/mobile |
+| Knowledge e normalização | direct | resolver existente, candidatos aprovados, cache, limites compartilhados; testes negativos e regressão da normalização atual |
+| Perfil manual/PDF publicado | plausible_indirect | trigger somente projeção, originais imutáveis; testes SQL de publicação/supersessão e regressão dirigida |
+| Autorização e privacidade | critical_transversal | tenant/RLS/anon/member, IA minimizada, sem contato ou currículo integral |
+| Score, matching, seleção e Tokens | no_impact_identified | rastrear leitores/escritores; projeção exclusiva da lista e orçamento operacional existente, sem tarifa/débito |
+| Publicação web/banco/knowledge-agent | direct | dispatcher, rollback, CI, health/versão e smoke autenticado |
+
+Fechamento exige CA-01, owner docs/contexto/ledger, evidências e publicação dos destinos derivados do diff. Sem QA remoto separado, integração sensível usa PostgreSQL local isolado antes de produção. Estado inicial dos acordos: NOT TESTED. AoT final será completado com resultados, sem presumir sucesso.
 
 ---
 

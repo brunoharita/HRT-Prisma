@@ -1,0 +1,272 @@
+BEGIN
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE TABLE
+CREATE SCHEMA
+CREATE FUNCTION
+CREATE TABLE
+ALTER TABLE
+REVOKE
+GRANT
+CREATE INDEX
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE TRIGGER
+CREATE FUNCTION
+CREATE TRIGGER
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+REVOKE
+REVOKE
+GRANT
+REVOKE
+GRANT
+ enqueue_people_directory 
+--------------------------
+(0 rows)
+
+ schedule 
+----------
+        1
+(1 row)
+
+        set_config         
+---------------------------
+ trajectory-evidence-1.2.0
+(1 row)
+
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+INSERT 0 1
+INSERT 0 2
+INSERT 0 4
+INSERT 0 4
+INSERT 0 4
+INSERT 0 1
+INSERT 0 2
+INSERT 0 1
+INSERT 0 1
+INSERT 0 3
+INSERT 0 1
+INSERT 0 3
+UPDATE 1
+ enqueue_people_directory 
+--------------------------
+ 
+(1 row)
+
+CREATE TABLE
+INSERT 0 1
+DO
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+INSERT 0 1
+ m83_assert 
+------------
+ 
+(1 row)
+
+ complete_people_directory 
+---------------------------
+ 
+(1 row)
+
+              set_config              
+--------------------------------------
+ 72c08182-63ae-46f7-2888-124d9cf74e60
+(1 row)
+
+SET
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+RESET
+              set_config              
+--------------------------------------
+ fb5558da-3d02-d4f3-b8e3-459bd9f53ecf
+(1 row)
+
+SET
+ m83_assert 
+------------
+ 
+(1 row)
+
+RESET
+ set_config 
+------------
+ 
+(1 row)
+
+SET
+ m83_reject 
+------------
+ 
+(1 row)
+
+RESET
+              set_config              
+--------------------------------------
+ 72c08182-63ae-46f7-2888-124d9cf74e60
+(1 row)
+
+UPDATE 1
+ m83_assert 
+------------
+ 
+(1 row)
+
+UPDATE 1
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+UPDATE 1
+UPDATE 1
+DELETE 1
+INSERT 0 1
+ m83_assert 
+------------
+ 
+(1 row)
+
+ m83_reject 
+------------
+ 
+(1 row)
+
+ complete_people_directory 
+---------------------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+ enqueue_people_directory 
+--------------------------
+ 
+(1 row)
+
+ m83_assert 
+------------
+ 
+(1 row)
+
+ROLLBACK
+
+psql:tmp/people-directory-verification.sql:335: NOTICE:  PASS: approved exact role
+psql:tmp/people-directory-verification.sql:336: NOTICE:  PASS: approved exact area grounded in same experience
+psql:tmp/people-directory-verification.sql:337: NOTICE:  PASS: never promote coordinator to manager
+psql:tmp/people-directory-verification.sql:338: NOTICE:  PASS: general area not applied to unrelated experience
+psql:tmp/people-directory-verification.sql:339: NOTICE:  PASS: denied (P0001)
+psql:tmp/people-directory-verification.sql:340: NOTICE:  PASS: denied (P0001)
+psql:tmp/people-directory-verification.sql:341: NOTICE:  PASS: zero cap denies
+psql:tmp/people-directory-verification.sql:342: NOTICE:  PASS: missing cap denies
+psql:tmp/people-directory-verification.sql:343: NOTICE:  PASS: one bounded call reserved
+psql:tmp/people-directory-verification.sql:345: NOTICE:  PASS: existing competency consumer observes shared daily limit
+psql:tmp/people-directory-verification.sql:349: NOTICE:  PASS: directory preserves original role
+psql:tmp/people-directory-verification.sql:350: NOTICE:  PASS: denied (42501)
+psql:tmp/people-directory-verification.sql:351: NOTICE:  PASS: denied (42501)
+psql:tmp/people-directory-verification.sql:352: NOTICE:  PASS: denied (42501)
+psql:tmp/people-directory-verification.sql:356: NOTICE:  PASS: member reads approved professional directory
+psql:tmp/people-directory-verification.sql:360: NOTICE:  PASS: denied (42501)
+psql:tmp/people-directory-verification.sql:364: NOTICE:  PASS: deprecated references disappear immediately
+psql:tmp/people-directory-verification.sql:366: NOTICE:  PASS: superseded profile is excluded
+psql:tmp/people-directory-verification.sql:367: NOTICE:  PASS: anon ACL
+psql:tmp/people-directory-verification.sql:368: NOTICE:  PASS: cache RLS enabled without client policies
+psql:tmp/people-directory-verification.sql:370: NOTICE:  PASS: superseded and orphan contexts never leave backend
+psql:tmp/people-directory-verification.sql:374: NOTICE:  PASS: exact alias cannot promote coordinator to manager
+psql:tmp/people-directory-verification.sql:375: NOTICE:  PASS: denied (P0001)
+psql:tmp/people-directory-verification.sql:377: NOTICE:  PASS: AI association is explicitly derived navigation
+psql:tmp/people-directory-verification.sql:379: NOTICE:  PASS: unchanged context is not queried again
