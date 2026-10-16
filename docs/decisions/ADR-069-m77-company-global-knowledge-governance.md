@@ -10,6 +10,10 @@ Somente Super Admin lê e decide a fila de propostas. Pode usar o `knowledge-age
 
 ## Consequências
 
+### Decisão superveniente16/10/2026 — knowledge-global-decision-2.0.0
+
+Bruno aprovou2.8.1: contribuições globais de empresas pendentes oferecem Aprovar na Base Global ou Manter somente local, com justificativa opcional em ambas. Rejeitar deixa de ser uma nova decisão, inclusive via cliente antigo/RPC; status e auditorias históricos rejected permanecem. A regra substitui a alternativa rejeitar/adiar de D-05 do acordo M7.7, sem mudar D-07/P-04. Reutiliza deferred como resultado mantido local, explicitamente rotulado na UI, sem novo enum/tabela. Aprovação conserva RPCv2, taxonomia, bloqueio de certificações, autor/data/ação; manutenção local conserva origem e auditoria transacional. Motivo vazio vira null nesta última; não é substituído por uma justificativa inventada. O metadado técnico preexistente de classificação na aprovação continua distinto da justificativa opcional da proposta. Legado, macroáreas e outras curadorias ficam fora deste delta. Acordo/execução/AoT `docs/qa/*knowledge-decisions-v281.md` registram aceite e rollout. Assinatura SQL/ACL mantidas; novas tentativas de rejected ou decisão nula são recusadas, sem reescrita histórica.
+
 Não há nova Knowledge, provider, embedding ou pesquisa automática. A extensão acrescenta a origem estruturada da contribuição à proposta e restringe a fila global por RLS. Histórico e decisões continuam auditáveis; reinterpretação permanece manual e baseada em impacto.
 
 ## Extensão aprovada em15/10/2026 — Macroáreas

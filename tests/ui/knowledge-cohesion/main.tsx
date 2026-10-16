@@ -20,7 +20,12 @@ const proposalDashboard={...dashboard,proposals:[
  { ...dashboard.proposals[0],id:"certification",status:"awaiting_human_review",proposedConcept:{...dashboard.proposals[0].proposedConcept,canonical_label:"Certificação sintética",concept_type:"certification"} },
  dashboard.proposals[0],
 ]};
-knowledgeService.loadDashboard=async()=>{if(state==="error")throw Error("Falha sintética de consulta");return (state==="empty"?{...dashboard,sources:[],concepts:[],inbox:[],proposals:[],impacts:[]}:state==="proposals"?proposalDashboard:dashboard) as never;};
+const decisionDashboard={...proposalDashboard,proposals:[...proposalDashboard.proposals,
+ {...dashboard.proposals[0],id:"unclassified",status:"awaiting_human_review",proposedConcept:{...dashboard.proposals[0].proposedConcept,canonical_label:"Sem classificação",subgroup_id:null}},
+ {...dashboard.proposals[0],id:"rejected-history",status:"rejected",proposedConcept:{...dashboard.proposals[0].proposedConcept,canonical_label:"Rejeição histórica preservada"}},
+]};
+const decisions:{id:string;action:string;reason:string;subgroupId?:string|null}[]=[];Object.assign(window,{__knowledgeDecisions:decisions});
+knowledgeService.loadDashboard=async()=>{if(state==="error")throw Error("Falha sintética de consulta");return (state==="empty"?{...dashboard,sources:[],concepts:[],inbox:[],proposals:[],impacts:[]}:state==="proposals"?proposalDashboard:state==="decisions"?decisionDashboard:dashboard) as never;};
 knowledgeService.listCompetencyMacroGroups=async()=>state==="empty"?[]:[{code:"hard",label:"Competências técnicas",definition:"Conhecimentos profissionais",sortOrder:1},{code:"soft",label:"Competências comportamentais",definition:"Práticas de relacionamento",sortOrder:2}];
 knowledgeService.listCompetencySubgroups=async()=>state==="empty"?[]:[{id:"strategy",code:"H4",macroGroupCode:"hard",label:"Estratégia e gestão",definition:"Definir prioridades e acompanhar os resultados.",classificationQuestion:"Qual é o contexto profissional?",examples:["Planejamento"],scope:"global",sortOrder:1}] as never;
 professionalAreaService.load=async()=>({options:state==="empty"?[]:[{id:"area",label:"Recursos Humanos",description:"Gestão de pessoas e desenvolvimento organizacional.",aliases:["RH","HRBP"],active:true,version:1,scope:local?"organization":"global",organizationId:local?"synthetic":null}],suggestion:[]}) as never;
@@ -28,4 +33,9 @@ professionalAreaService.contributions=async()=>[];
 prismaRepository.loadHomeSummary=async()=>({peopleCount:0,structuredProfilesCount:0,openVacanciesCount:0,knowledgeSources:state==="empty"?[]:[{id:"CBO",name:"CBO",status:"current",published:true,version:"2026.1",releaseDate:"2026-01-01",lastCheckedAt:"2026-10-10"}]}) as never;
 for(const name of ["save","decide"] as const)professionalAreaService[name]=async()=>{writes.push(name);throw Error("Unexpected write");};
 for(const name of ["research","researchGlobalContribution","approveProposal","decideGlobalContribution","saveSettings","dispatchReinterpretation","transitionLegacyProposal"] as const)knowledgeService[name]=async()=>{writes.push(name);throw Error("Unexpected write");};
+if(state==="decisions"){
+ const decide=(id:string,action:string,reason:string,subgroupId?:string|null)=>{writes.push(action);decisions.push({id,action,reason,subgroupId});if(params.get("failDecision")==="1")throw Error("Falha sintética de decisão");const row=decisionDashboard.proposals.find(p=>p.id===id);if(row)row.status=action;return {} as never;};
+ knowledgeService.approveProposal=async(id,subgroupId,reason)=>decide(id,"approved",reason,subgroupId);
+ knowledgeService.decideGlobalContribution=async(id,action,reason)=>decide(id,action,reason);
+}
 createRoot(document.getElementById("app")!).render(<ConfigProvider locale={ptBR} theme={prismaTheme}><KnowledgePage profile={local?"owner":"super_admin"} activeMembership={{organizationId:"synthetic",organizationName:"Empresa sintética",groupId:null,groupName:null,role:local?"owner":"super_admin"}}/></ConfigProvider>);

@@ -1,0 +1,5 @@
+# Execução — decisões de Conhecimento2.8.1
+
+Implementar integralmente `docs/qa/agreement-knowledge-decisions-v281.md`1.0.0, lido por completo, D-01..05/P-01..02/F-01/A-01/CA-01..03. Fonte: autorização explícita de Bruno16/10/2026, incluindo produção e nova versão2.8.1. Sem pergunta material pendente.
+
+Reutilizar handlers/RPCs e deferred como resultado mantido local; retirar rejeição e gate de motivo global no frontend, manter guardas de classificação. Migration substitui somente decide_knowledge_global_contribution: aceita exclusivamente deferred, normaliza motivo vazio para null, mantém auth/locks/estado/auditoria/ACL. Aprovação global já aceita motivo opcional no servidor; preservar seu código. Não alterar legado ou histórico. Registry acrescenta2.8.1. Roteiro local PostgreSQL17 descartável e browser sintético com cliques explícitos; nenhum teste de mutação em produção. Local -> prova proporcional -> CI -> migration seletiva -> web -> smoke somente leitura -> sincronização. Sem suíte integral local.

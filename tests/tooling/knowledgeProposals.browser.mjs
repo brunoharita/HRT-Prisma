@@ -5,7 +5,7 @@ import {execFileSync} from "node:child_process";
 import {createServer} from "vite";
 
 const baseline=process.argv.includes("--baseline"),base="c4ef51011fe0e82b17f3cbb2896828d0fb61251b";
-const dir="docs/qa/evidence/knowledge-proposals-overflow/"+(baseline?"before":"after"),checks=[],measurements=[];
+const dir=baseline?"docs/qa/evidence/knowledge-proposals-overflow/before":"docs/qa/evidence/knowledge-decisions-v281/reflow",checks=[],measurements=[];
 await mkdir(dir,{recursive:true});
 const check=(name,value)=>{checks.push({name,pass:Boolean(value)});assert.ok(value,name);};
 const server=await createServer({configFile:"tests/ui/visual-foundation.vite.config.mts",cacheDir:"tmp/vite-knowledge-proposals",server:{port:5830},plugins:baseline?[{name:"proposals-baseline",enforce:"pre",transform(_code,id){const path=id.replaceAll("\\","/");for(const file of ["web/src/styles.css","web/src/pages/KnowledgePage.tsx"])if(path.endsWith("/"+file))return execFileSync("git",["show",base+":"+file],{encoding:"utf8"});}}]:[]});
@@ -22,11 +22,11 @@ try {
   await page.locator(".prisma-knowledge-proposals .ant-card").first().waitFor();
   const cards=page.locator(".prisma-knowledge-proposals > .ant-card"),pending=cards.nth(0);
   check(width+" all proposal states",await cards.count()===5);
-  check(width+" four global actions",(await pending.getByRole("button").allTextContents()).join("|")==="Pesquisar com IA|Aprovar|Manter somente local|Rejeitar");
-  check(width+" reason required",!(await pending.getByRole("button",{name:"Aprovar",exact:true}).isEnabled()));
-  const reason=pending.getByPlaceholder("Motivo auditável da decisão global");await reason.fill("Revisão sintética preservada");
-  check(width+" valid reason enables explicit decision",await pending.getByRole("button",{name:"Aprovar",exact:true}).isEnabled());
-  check(width+" certification stays blocked",!(await cards.nth(3).getByRole("button",{name:"Aprovar",exact:true}).isEnabled()));
+  check(width+" global actions",(await pending.getByRole("button").allTextContents()).join("|")===(baseline?"Pesquisar com IA|Aprovar|Manter somente local|Rejeitar":"Pesquisar com IA|Aprovar na Base Global|Manter somente local"));
+  check(width+" reason gate matches contract",(await pending.getByRole("button",{name:baseline?"Aprovar":"Aprovar na Base Global",exact:true}).isEnabled())===!baseline);
+  const reason=pending.getByPlaceholder(baseline?"Motivo auditável da decisão global":"Justificativa (opcional)");await reason.fill("Revisão sintética preservada");
+  check(width+" valid reason enables explicit decision",await pending.getByRole("button",{name:baseline?"Aprovar":"Aprovar na Base Global",exact:true}).isEnabled());
+  check(width+" certification stays blocked",!(await cards.nth(3).getByRole("button",{name:baseline?"Aprovar":"Aprovar na Base Global",exact:true}).isEnabled()));
   const subgroup=pending.getByRole("combobox");await subgroup.focus();await page.keyboard.press("ArrowDown");await page.keyboard.press("Enter");
   const selected=await pending.locator(".ant-select").innerText();
   await page.setViewportSize({width:width===390?1448:390,height:1000});
@@ -37,7 +37,7 @@ try {
   if(pageOverflow)console.log(JSON.stringify(await page.evaluate(()=>Array.from(document.querySelectorAll('body *')).filter(e=>{const r=e.getBoundingClientRect();return r.width>0&&r.right>innerWidth+1;}).map(e=>({tag:e.tagName,class:e.className,right:Math.round(e.getBoundingClientRect().right)})).slice(0,20))));
   measurements.push({width,pageOverflow,cards:geometry});
   for(let i=0;i<5;i++)await cards.nth(i).screenshot({path:dir+"/"+width+"-"+i+".png"});
-  if(!baseline){check(width+" page contained",!pageOverflow);check(width+" all card content contained",geometry.every(c=>!c.overflow.length));const before=JSON.parse(await readFile("docs/qa/evidence/knowledge-proposals-overflow/before/results.json","utf8")).measurements.find(m=>m.width===width);check(width+" full text preserved",geometry.every((c,i)=>c.content===before.cards[i].content));}
+  if(!baseline){check(width+" page contained",!pageOverflow);check(width+" all card content contained",geometry.every(c=>!c.overflow.length));const before=JSON.parse(await readFile("docs/qa/evidence/knowledge-proposals-overflow/before/results.json","utf8")).measurements.find(m=>m.width===width);check(width+" full text preserved",geometry.every((c,i)=>c.content===before.cards[i].content.replaceAll("Rejeitar","").replaceAll("Pesquisar com IAAprovar","Pesquisar com IAAprovar na Base Global")));}
   check(width+" no implicit writes",await page.evaluate(()=>window.__knowledgeWrites.length===0));
   check(width+" no runtime errors",errors.length===0);
   const overview=page.getByRole("tab",{name:"Visão Geral",exact:true});await overview.focus();await page.keyboard.press("Enter");

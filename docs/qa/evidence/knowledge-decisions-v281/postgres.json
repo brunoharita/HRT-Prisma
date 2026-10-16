@@ -1,0 +1,121 @@
+{
+  "engine": "PostgreSQL17 local disposable",
+  "checks": [
+    {
+      "name": "confirmed local PG17",
+      "pass": true
+    },
+    {
+      "name": "migration does not rewrite historical rejection",
+      "pass": true
+    },
+    {
+      "name": "deferred accepts optional reason 10",
+      "pass": true
+    },
+    {
+      "name": "audited actor date action and exact optional reason 10",
+      "pass": true
+    },
+    {
+      "name": "deferred accepts optional reason 11",
+      "pass": true
+    },
+    {
+      "name": "audited actor date action and exact optional reason 11",
+      "pass": true
+    },
+    {
+      "name": "deferred accepts optional reason 12",
+      "pass": true
+    },
+    {
+      "name": "audited actor date action and exact optional reason 12",
+      "pass": true
+    },
+    {
+      "name": "deferred accepts optional reason 13",
+      "pass": true
+    },
+    {
+      "name": "audited actor date action and exact optional reason 13",
+      "pass": true
+    },
+    {
+      "name": "unsupported decision blocked 'rejected'",
+      "pass": true
+    },
+    {
+      "name": "unsupported decision blocked null",
+      "pass": true
+    },
+    {
+      "name": "unsupported decision blocked 'approved'",
+      "pass": true
+    },
+    {
+      "name": "unsupported decision blocked 'unknown'",
+      "pass": true
+    },
+    {
+      "name": "anonymous execute denied",
+      "pass": true
+    },
+    {
+      "name": "missing actor denied",
+      "pass": true
+    },
+    {
+      "name": "ordinary user denied",
+      "pass": true
+    },
+    {
+      "name": "organization proposal denied",
+      "pass": true
+    },
+    {
+      "name": "missing origin denied",
+      "pass": true
+    },
+    {
+      "name": "completed proposal denied",
+      "pass": true
+    },
+    {
+      "name": "historical rejection cannot be redecided",
+      "pass": true
+    },
+    {
+      "name": "retry cannot duplicate decision",
+      "pass": true
+    },
+    {
+      "name": "missing proposal denied",
+      "pass": true
+    },
+    {
+      "name": "mandatory audit failure aborts transaction",
+      "pass": true
+    },
+    {
+      "name": "audit failure leaves proposal pending",
+      "pass": true
+    },
+    {
+      "name": "exactly four successful audits",
+      "pass": true
+    },
+    {
+      "name": "local knowledge unchanged",
+      "pass": true
+    },
+    {
+      "name": "historical rejection still intact",
+      "pass": true
+    },
+    {
+      "name": "ACL authenticated yes anon no service role preserved",
+      "pass": true
+    }
+  ]
+}

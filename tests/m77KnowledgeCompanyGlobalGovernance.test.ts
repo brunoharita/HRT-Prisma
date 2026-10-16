@@ -36,5 +36,6 @@ test("M7.7 apresenta candidatos informativos e audita decisões sem publicação
   assert.match(reviewMigration, /p_decision not in \('rejected', 'deferred'\)/);
   assert.match(page, /Candidatos globais para análise/);
   assert.match(page, /Manter somente local/);
-  assert.match(page, /Contribuição global rejeitada; origem local preservada/);
+  assert.doesNotMatch(page, /Contribuição global rejeitada|>Rejeitar</);
+  assert.match(page, /Justificativa \(opcional\)/);
 });

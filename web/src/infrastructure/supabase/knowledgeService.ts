@@ -135,7 +135,7 @@ export const knowledgeService = {
     if (error) throw supabaseOperationError(error, "Não foi possível regularizar a proposta legada.");
     return data;
   },
-  async decideGlobalContribution(proposalId: string, decision: "rejected" | "deferred", reason: string) {
+  async decideGlobalContribution(proposalId: string, decision: "deferred", reason: string) {
     const { data, error } = await supabase.rpc("decide_knowledge_global_contribution", {
       p_proposal_id: proposalId, p_decision: decision, p_reason: reason,
     });

@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.80.1
+version: 2.81.0
 last_verified: 2026-10-16
 ---
 
 # Estado atual do Prisma
+
+## Decisões de Conhecimento —2.8.1
+
+Entrega autorizada por Bruno16/10/2026, implementada localmente: contribuições globais pendentes de empresa têm Aprovar na Base Global e Manter somente local, justificativa opcional. Remove nova rejeição inclusive no servidor, preserva histórico rejected e rótulo Mantido somente local para deferred. Contrato knowledge-global-decision-2.0.0, delta ADR-069. Mantém Super Admin, origem, auditoria, classificação/certificações e transição legada; criação/pesquisa/macroáreas/Score/perfis não mudam. Migration20261016153000_knowledge_global_decisions_v2 e web2.8.1; estado de publicação/evidência no AoT `docs/qa/aot-knowledge-decisions-v281.md`. Implementação não prova rollout.
 
 ## Correção de contenção das Propostas — 2.8.0
 

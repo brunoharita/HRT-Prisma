@@ -1,0 +1,60 @@
+import assert from "node:assert/strict";
+import {execFileSync} from "node:child_process";
+import {readFileSync,mkdirSync,writeFileSync} from "node:fs";
+const psql=process.env.PRISMA_PSQL??(process.platform==="win32"?"C:/Program Files/PostgreSQL/17/bin/psql.exe":"psql"),checks=[];
+const args=["-X","-qAt","-v","ON_ERROR_STOP=1","-v","VERBOSITY=verbose","-h","127.0.0.1","-p",process.env.PRISMA_TEST_PG_PORT??"5840","-U","prisma_test","-d","postgres","-f","-"];
+const run=sql=>execFileSync(psql,args,{input:sql,encoding:"utf8",stdio:["pipe","pipe","pipe"]}).trim();
+const check=(name,pass)=>{checks.push({name,pass:Boolean(pass)});assert.ok(pass,name);};
+const id=n=>`00000000-0000-4000-8000-${String(n).padStart(12,"0")}`;
+const superId=id(1),userId=id(2),originId=id(3);
+const asUser=(sql,user=superId,role="authenticated")=>`set role ${role};select set_config('request.jwt.claim.sub','${user??""}',false);${sql};`;
+const call=(n,decision="'deferred'",reason="null")=>`select * from public.decide_knowledge_global_contribution('${id(n)}',${decision},${reason})`;
+const fail=(name,sql,code)=>{let failed=false;try{run(sql);}catch(e){failed=String(e.stderr).includes(code);}check(name,failed);};
+const foundation=readFileSync("supabase/migrations/20260826201154_m4_knowledge_foundation.sql","utf8");
+const helper=foundation.match(/create or replace function private\.require_knowledge_admin[\s\S]*?\$\$;/)?.[0];assert.ok(helper);
+const migration=readFileSync("supabase/migrations/20261016153000_knowledge_global_decisions_v2.sql","utf8");
+try{
+ check("confirmed local PG17",run("select host(inet_server_addr()) || '|' || current_setting('server_version_num')").startsWith("127.0.0.1|17"));
+ run(`create schema private;create schema auth;create role anon;create role authenticated;create role service_role;
+ create type public.membership_role as enum('super_admin','owner','admin');
+ create table auth.test_actors(id uuid primary key,super_admin boolean);
+ insert into auth.test_actors values('${superId}',true),('${userId}',false);
+ create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$;
+ create function private.is_super_admin(p_id uuid) returns boolean language sql stable as $$ select coalesce((select super_admin from auth.test_actors where id=p_id),false) $$;
+ create function private.has_org_role(uuid,public.membership_role[]) returns boolean language sql stable as $$ select false $$;
+ ${helper}
+ create table public.knowledge_proposals(id uuid primary key,scope text,origin_organization_id uuid,status text,original_proposal jsonb,decided_at timestamptz,decided_by_auth_user_id uuid,decision_reason text);
+ create table public.knowledge_approvals(proposal_id uuid,action text,original_proposal jsonb,decided_proposal jsonb,actor_auth_user_id uuid not null,reason text check(reason is distinct from '__audit_failure__'));
+ create table public.test_local_concept(id uuid,label text,status text);
+ insert into public.test_local_concept values('${originId}','Conhecimento local sintético','approved');
+ insert into public.knowledge_proposals select ('00000000-0000-4000-8000-'||lpad(n::text,12,'0'))::uuid,'global','${originId}','awaiting_human_review','{"synthetic":true}',null,null,null from generate_series(10,30) n;
+ insert into public.knowledge_proposals values('${id(40)}','global','${originId}','rejected','{"historical":true}',now(),'${superId}','Motivo histórico');
+ update public.knowledge_proposals set scope='organization' where id='${id(20)}';
+ update public.knowledge_proposals set origin_organization_id=null where id='${id(21)}';
+ update public.knowledge_proposals set status='approved' where id='${id(22)}';`);
+ const history=run(`select row_to_json(p)::text from public.knowledge_proposals p where id='${id(40)}'`);
+ run(migration);run("grant execute on function public.decide_knowledge_global_contribution(uuid,text,text) to service_role;");run(migration);
+ check("migration does not rewrite historical rejection",history===run(`select row_to_json(p)::text from public.knowledge_proposals p where id='${id(40)}'`));
+ for(const [n,reason,expected] of [[10,"null",null],[11,"''",null],[12,"'   '",null],[13,"' x '","x"]]){
+  check("deferred accepts optional reason "+n,run(asUser(call(n,"'deferred'",reason))).includes("deferred"));
+  const row=JSON.parse(run(`select row_to_json(q) from(select p.status,p.decided_by_auth_user_id as actor,p.decision_reason as reason,p.decided_at is not null as dated,a.actor_auth_user_id as audit_actor,a.reason as audit_reason,a.decided_proposal->>'local_origin_preserved' as preserved from public.knowledge_proposals p join public.knowledge_approvals a on a.proposal_id=p.id where p.id='${id(n)}')q`));
+  check("audited actor date action and exact optional reason "+n,row.status==="deferred"&&row.actor===superId&&row.audit_actor===superId&&row.dated&&row.reason===expected&&row.audit_reason===expected&&row.preserved==="true");
+ }
+ for(const decision of ["'rejected'","null","'approved'","'unknown'"])fail("unsupported decision blocked "+decision,asUser(call(14,decision)),"22023");
+ fail("anonymous execute denied",asUser(call(14),null,"anon"),"42501");
+ fail("missing actor denied",asUser(call(14),null),"28000");
+ fail("ordinary user denied",asUser(call(14),userId),"42501");
+ fail("organization proposal denied",asUser(call(20)),"P0002");
+ fail("missing origin denied",asUser(call(21)),"P0002");
+ fail("completed proposal denied",asUser(call(22)),"55000");
+ fail("historical rejection cannot be redecided",asUser(call(40)),"55000");
+ fail("retry cannot duplicate decision",asUser(call(10)),"55000");
+ fail("missing proposal denied",asUser(call(99)),"P0002");
+ fail("mandatory audit failure aborts transaction",asUser(call(15,"'deferred'","'__audit_failure__'")),"23514");
+ check("audit failure leaves proposal pending",run(`select status from public.knowledge_proposals where id='${id(15)}'`)==="awaiting_human_review");
+ check("exactly four successful audits",run("select count(*) from public.knowledge_approvals")==="4");
+ check("local knowledge unchanged",run("select label||'|'||status from public.test_local_concept")==="Conhecimento local sintético|approved");
+ check("historical rejection still intact",history===run(`select row_to_json(p)::text from public.knowledge_proposals p where id='${id(40)}'`));
+ check("ACL authenticated yes anon no service role preserved",run("select has_function_privilege('authenticated','public.decide_knowledge_global_contribution(uuid,text,text)','execute') and not has_function_privilege('anon','public.decide_knowledge_global_contribution(uuid,text,text)','execute') and has_function_privilege('service_role','public.decide_knowledge_global_contribution(uuid,text,text)','execute')")==="t");
+}finally{mkdirSync("docs/qa/evidence/knowledge-decisions-v281",{recursive:true});writeFileSync("docs/qa/evidence/knowledge-decisions-v281/postgres.json",JSON.stringify({engine:"PostgreSQL17 local disposable",checks},null,2));}
+console.log(JSON.stringify({checks:checks.length,pass:true}));

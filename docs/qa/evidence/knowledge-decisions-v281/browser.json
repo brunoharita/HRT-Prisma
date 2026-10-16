@@ -1,0 +1,124 @@
+{
+  "checks": [
+    {
+      "name": "1448 no implicit decisions",
+      "pass": true
+    },
+    {
+      "name": "1448 no rejection action",
+      "pass": true
+    },
+    {
+      "name": "1448 historical rejection stays readable",
+      "pass": true
+    },
+    {
+      "name": "1448 both decisions enabled without reason",
+      "pass": true
+    },
+    {
+      "name": "1448 classification and certification remain required",
+      "pass": true
+    },
+    {
+      "name": "1448 exact explicit decisions and optional reasons",
+      "pass": true
+    },
+    {
+      "name": "1448 subgroup preserved and occupation has none",
+      "pass": true
+    },
+    {
+      "name": "1448 final decisions have no active actions",
+      "pass": true
+    },
+    {
+      "name": "1448 no runtime exceptions",
+      "pass": true
+    },
+    {
+      "name": "390 no implicit decisions",
+      "pass": true
+    },
+    {
+      "name": "390 no rejection action",
+      "pass": true
+    },
+    {
+      "name": "390 historical rejection stays readable",
+      "pass": true
+    },
+    {
+      "name": "390 both decisions enabled without reason",
+      "pass": true
+    },
+    {
+      "name": "390 classification and certification remain required",
+      "pass": true
+    },
+    {
+      "name": "390 exact explicit decisions and optional reasons",
+      "pass": true
+    },
+    {
+      "name": "390 subgroup preserved and occupation has none",
+      "pass": true
+    },
+    {
+      "name": "390 final decisions have no active actions",
+      "pass": true
+    },
+    {
+      "name": "390 no runtime exceptions",
+      "pass": true
+    },
+    {
+      "name": "320 no implicit decisions",
+      "pass": true
+    },
+    {
+      "name": "320 no rejection action",
+      "pass": true
+    },
+    {
+      "name": "320 historical rejection stays readable",
+      "pass": true
+    },
+    {
+      "name": "320 both decisions enabled without reason",
+      "pass": true
+    },
+    {
+      "name": "320 classification and certification remain required",
+      "pass": true
+    },
+    {
+      "name": "320 exact explicit decisions and optional reasons",
+      "pass": true
+    },
+    {
+      "name": "320 subgroup preserved and occupation has none",
+      "pass": true
+    },
+    {
+      "name": "320 final decisions have no active actions",
+      "pass": true
+    },
+    {
+      "name": "320 no runtime exceptions",
+      "pass": true
+    },
+    {
+      "name": "server error leaves pending decision available",
+      "pass": true
+    },
+    {
+      "name": "server error preserves optional reason",
+      "pass": true
+    },
+    {
+      "name": "company profile has no global decisions tab",
+      "pass": true
+    }
+  ]
+}

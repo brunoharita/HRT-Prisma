@@ -1,5 +1,7 @@
 # Versionamento
 
+Entrega2.8.1 autorizada por Bruno em16/10/2026: curadoria de contribuições globais com Aprovar na Base Global/Manter somente local e justificativa opcional. Rejeitar indisponível para novas decisões, mantendo histórico, autoridade/auditoria e origem local. Contrato knowledge-global-decision-2.0.0 (delta ADR-069); migration seletiva e web, sem outros serviços. Registry acrescenta a entrega1 ao movimento8;2.8.0 e demais entregas preservadas. Publicação comprovada no AoT `docs/qa/aot-knowledge-decisions-v281.md`.
+
 Patch **2.7.3**,15/10/2026: correção de rolagem/recorte e largura do editor manual, restaurando D-UX-01 aprovado em2.7.0. Sem contrato persistido novo. Somente web e documentação; preservar revisão PDF e fluxo de rascunho/comparação. Evidência em `docs/qa/manual-editor-scroll-v273.md`.
 
 Entrega autorizada por Bruno em15/10/2026: **2.7.2**, áreas/funções na lista de Pessoas e filtros do Knowledge, cache e IA fechada para agrupamentos de navegação. `people-directory-1.0.0` não modifica contratos de Perfil/Score/matching ou cria catálogo/tarifa. Destinos banco, knowledge-agent e web, sujeitos à evidência de publicação do AoT `people-taxonomy-v272`.
