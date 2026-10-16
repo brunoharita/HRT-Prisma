@@ -1,0 +1,631 @@
+{
+  "at": "2026-10-16T15:29:05.851Z",
+  "readOnly": true,
+  "version": "2.8.1",
+  "measurements": [
+    {
+      "cards": [
+        {
+          "actions": [
+            {
+              "disabled": false,
+              "text": "Pesquisar com IA"
+            },
+            {
+              "disabled": false,
+              "text": "Aprovar na Base Global"
+            },
+            {
+              "disabled": false,
+              "text": "Manter somente local"
+            }
+          ],
+          "overflow": [],
+          "reasons": [
+            {
+              "label": "Justificativa da decisão global (opcional)",
+              "value": ""
+            }
+          ],
+          "width": 514
+        },
+        {
+          "actions": [
+            {
+              "disabled": false,
+              "text": "Pesquisar com IA"
+            },
+            {
+              "disabled": false,
+              "text": "Aprovar na Base Global"
+            },
+            {
+              "disabled": false,
+              "text": "Manter somente local"
+            }
+          ],
+          "overflow": [],
+          "reasons": [
+            {
+              "label": "Justificativa da decisão global (opcional)",
+              "value": ""
+            }
+          ],
+          "width": 514
+        },
+        {
+          "actions": [
+            {
+              "disabled": false,
+              "text": "Pesquisar com IA"
+            },
+            {
+              "disabled": false,
+              "text": "Aprovar na Base Global"
+            },
+            {
+              "disabled": false,
+              "text": "Manter somente local"
+            }
+          ],
+          "overflow": [],
+          "reasons": [
+            {
+              "label": "Justificativa da decisão global (opcional)",
+              "value": ""
+            }
+          ],
+          "width": 514
+        },
+        {
+          "actions": [
+            {
+              "disabled": false,
+              "text": "Pesquisar com IA"
+            },
+            {
+              "disabled": false,
+              "text": "Aprovar na Base Global"
+            },
+            {
+              "disabled": false,
+              "text": "Manter somente local"
+            }
+          ],
+          "overflow": [],
+          "reasons": [
+            {
+              "label": "Justificativa da decisão global (opcional)",
+              "value": ""
+            }
+          ],
+          "width": 514
+        },
+        {
+          "actions": [
+            {
+              "disabled": false,
+              "text": "Pesquisar com IA"
+            },
+            {
+              "disabled": false,
+              "text": "Aprovar na Base Global"
+            },
+            {
+              "disabled": false,
+              "text": "Manter somente local"
+            }
+          ],
+          "overflow": [],
+          "reasons": [
+            {
+              "label": "Justificativa da decisão global (opcional)",
+              "value": ""
+            }
+          ],
+          "width": 514
+        },
+        {
+          "actions": [
+            {
+              "disabled": false,
+              "text": "Pesquisar com IA"
+            },
+            {
+              "disabled": false,
+              "text": "Aprovar na Base Global"
+            },
+            {
+              "disabled": false,
+              "text": "Manter somente local"
+            }
+          ],
+          "overflow": [],
+          "reasons": [
+            {
+              "label": "Justificativa da decisão global (opcional)",
+              "value": ""
+            }
+          ],
+          "width": 514
+        },
+        {
+          "actions": [],
+          "overflow": [],
+          "reasons": [],
+          "width": 514
+        }
+      ],
+      "pageOverflow": false,
+      "width": 1448
+    },
+    {
+      "cards": [
+        {
+          "actions": [
+            {
+              "disabled": false,
+              "text": "Pesquisar com IA"
+            },
+            {
+              "disabled": false,
+              "text": "Aprovar na Base Global"
+            },
+            {
+              "disabled": false,
+              "text": "Manter somente local"
+            }
+          ],
+          "overflow": [],
+          "reasons": [
+            {
+              "label": "Justificativa da decisão global (opcional)",
+              "value": ""
+            }
+          ],
+          "width": 426
+        },
+        {
+          "actions": [
+            {
+              "disabled": false,
+              "text": "Pesquisar com IA"
+            },
+            {
+              "disabled": false,
+              "text": "Aprovar na Base Global"
+            },
+            {
+              "disabled": false,
+              "text": "Manter somente local"
+            }
+          ],
+          "overflow": [],
+          "reasons": [
+            {
+              "label": "Justificativa da decisão global (opcional)",
+              "value": ""
+            }
+          ],
+          "width": 426
+        },
+        {
+          "actions": [
+            {
+              "disabled": false,
+              "text": "Pesquisar com IA"
+            },
+            {
+              "disabled": false,
+              "text": "Aprovar na Base Global"
+            },
+            {
+              "disabled": false,
+              "text": "Manter somente local"
+            }
+          ],
+          "overflow": [],
+          "reasons": [
+            {
+              "label": "Justificativa da decisão global (opcional)",
+              "value": ""
+            }
+          ],
+          "width": 426
+        },
+        {
+          "actions": [
+            {
+              "disabled": false,
+              "text": "Pesquisar com IA"
+            },
+            {
+              "disabled": false,
+              "text": "Aprovar na Base Global"
+            },
+            {
+              "disabled": false,
+              "text": "Manter somente local"
+            }
+          ],
+          "overflow": [],
+          "reasons": [
+            {
+              "label": "Justificativa da decisão global (opcional)",
+              "value": ""
+            }
+          ],
+          "width": 426
+        },
+        {
+          "actions": [
+            {
+              "disabled": false,
+              "text": "Pesquisar com IA"
+            },
+            {
+              "disabled": false,
+              "text": "Aprovar na Base Global"
+            },
+            {
+              "disabled": false,
+              "text": "Manter somente local"
+            }
+          ],
+          "overflow": [],
+          "reasons": [
+            {
+              "label": "Justificativa da decisão global (opcional)",
+              "value": ""
+            }
+          ],
+          "width": 426
+        },
+        {
+          "actions": [
+            {
+              "disabled": false,
+              "text": "Pesquisar com IA"
+            },
+            {
+              "disabled": false,
+              "text": "Aprovar na Base Global"
+            },
+            {
+              "disabled": false,
+              "text": "Manter somente local"
+            }
+          ],
+          "overflow": [],
+          "reasons": [
+            {
+              "label": "Justificativa da decisão global (opcional)",
+              "value": ""
+            }
+          ],
+          "width": 426
+        },
+        {
+          "actions": [],
+          "overflow": [],
+          "reasons": [],
+          "width": 426
+        }
+      ],
+      "pageOverflow": false,
+      "width": 1265
+    },
+    {
+      "cards": [
+        {
+          "actions": [
+            {
+              "disabled": false,
+              "text": "Pesquisar com IA"
+            },
+            {
+              "disabled": false,
+              "text": "Aprovar na Base Global"
+            },
+            {
+              "disabled": false,
+              "text": "Manter somente local"
+            }
+          ],
+          "overflow": [],
+          "reasons": [
+            {
+              "label": "Justificativa da decisão global (opcional)",
+              "value": ""
+            }
+          ],
+          "width": 309
+        },
+        {
+          "actions": [
+            {
+              "disabled": false,
+              "text": "Pesquisar com IA"
+            },
+            {
+              "disabled": false,
+              "text": "Aprovar na Base Global"
+            },
+            {
+              "disabled": false,
+              "text": "Manter somente local"
+            }
+          ],
+          "overflow": [],
+          "reasons": [
+            {
+              "label": "Justificativa da decisão global (opcional)",
+              "value": ""
+            }
+          ],
+          "width": 309
+        },
+        {
+          "actions": [
+            {
+              "disabled": false,
+              "text": "Pesquisar com IA"
+            },
+            {
+              "disabled": false,
+              "text": "Aprovar na Base Global"
+            },
+            {
+              "disabled": false,
+              "text": "Manter somente local"
+            }
+          ],
+          "overflow": [],
+          "reasons": [
+            {
+              "label": "Justificativa da decisão global (opcional)",
+              "value": ""
+            }
+          ],
+          "width": 309
+        },
+        {
+          "actions": [
+            {
+              "disabled": false,
+              "text": "Pesquisar com IA"
+            },
+            {
+              "disabled": false,
+              "text": "Aprovar na Base Global"
+            },
+            {
+              "disabled": false,
+              "text": "Manter somente local"
+            }
+          ],
+          "overflow": [],
+          "reasons": [
+            {
+              "label": "Justificativa da decisão global (opcional)",
+              "value": ""
+            }
+          ],
+          "width": 309
+        },
+        {
+          "actions": [
+            {
+              "disabled": false,
+              "text": "Pesquisar com IA"
+            },
+            {
+              "disabled": false,
+              "text": "Aprovar na Base Global"
+            },
+            {
+              "disabled": false,
+              "text": "Manter somente local"
+            }
+          ],
+          "overflow": [],
+          "reasons": [
+            {
+              "label": "Justificativa da decisão global (opcional)",
+              "value": ""
+            }
+          ],
+          "width": 309
+        },
+        {
+          "actions": [
+            {
+              "disabled": false,
+              "text": "Pesquisar com IA"
+            },
+            {
+              "disabled": false,
+              "text": "Aprovar na Base Global"
+            },
+            {
+              "disabled": false,
+              "text": "Manter somente local"
+            }
+          ],
+          "overflow": [],
+          "reasons": [
+            {
+              "label": "Justificativa da decisão global (opcional)",
+              "value": ""
+            }
+          ],
+          "width": 309
+        },
+        {
+          "actions": [],
+          "overflow": [],
+          "reasons": [],
+          "width": 309
+        }
+      ],
+      "pageOverflow": false,
+      "width": 390
+    },
+    {
+      "cards": [
+        {
+          "actions": [
+            {
+              "disabled": false,
+              "text": "Pesquisar com IA"
+            },
+            {
+              "disabled": false,
+              "text": "Aprovar na Base Global"
+            },
+            {
+              "disabled": false,
+              "text": "Manter somente local"
+            }
+          ],
+          "overflow": [],
+          "reasons": [
+            {
+              "label": "Justificativa da decisão global (opcional)",
+              "value": ""
+            }
+          ],
+          "width": 254
+        },
+        {
+          "actions": [
+            {
+              "disabled": false,
+              "text": "Pesquisar com IA"
+            },
+            {
+              "disabled": false,
+              "text": "Aprovar na Base Global"
+            },
+            {
+              "disabled": false,
+              "text": "Manter somente local"
+            }
+          ],
+          "overflow": [],
+          "reasons": [
+            {
+              "label": "Justificativa da decisão global (opcional)",
+              "value": ""
+            }
+          ],
+          "width": 254
+        },
+        {
+          "actions": [
+            {
+              "disabled": false,
+              "text": "Pesquisar com IA"
+            },
+            {
+              "disabled": false,
+              "text": "Aprovar na Base Global"
+            },
+            {
+              "disabled": false,
+              "text": "Manter somente local"
+            }
+          ],
+          "overflow": [],
+          "reasons": [
+            {
+              "label": "Justificativa da decisão global (opcional)",
+              "value": ""
+            }
+          ],
+          "width": 254
+        },
+        {
+          "actions": [
+            {
+              "disabled": false,
+              "text": "Pesquisar com IA"
+            },
+            {
+              "disabled": false,
+              "text": "Aprovar na Base Global"
+            },
+            {
+              "disabled": false,
+              "text": "Manter somente local"
+            }
+          ],
+          "overflow": [],
+          "reasons": [
+            {
+              "label": "Justificativa da decisão global (opcional)",
+              "value": ""
+            }
+          ],
+          "width": 254
+        },
+        {
+          "actions": [
+            {
+              "disabled": false,
+              "text": "Pesquisar com IA"
+            },
+            {
+              "disabled": false,
+              "text": "Aprovar na Base Global"
+            },
+            {
+              "disabled": false,
+              "text": "Manter somente local"
+            }
+          ],
+          "overflow": [],
+          "reasons": [
+            {
+              "label": "Justificativa da decisão global (opcional)",
+              "value": ""
+            }
+          ],
+          "width": 254
+        },
+        {
+          "actions": [
+            {
+              "disabled": false,
+              "text": "Pesquisar com IA"
+            },
+            {
+              "disabled": false,
+              "text": "Aprovar na Base Global"
+            },
+            {
+              "disabled": false,
+              "text": "Manter somente local"
+            }
+          ],
+          "overflow": [],
+          "reasons": [
+            {
+              "label": "Justificativa da decisão global (opcional)",
+              "value": ""
+            }
+          ],
+          "width": 254
+        },
+        {
+          "actions": [],
+          "overflow": [],
+          "reasons": [],
+          "width": 254
+        }
+      ],
+      "pageOverflow": false,
+      "width": 320
+    }
+  ]
+}

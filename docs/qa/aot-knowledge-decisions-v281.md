@@ -21,7 +21,7 @@ Validação mínima e término: SQL real em PG17 local com fixtures e sem dados 
 | --- | --- | --- | --- |
 | D-01/02 |2decisões, motivo opcional, service tipado somente deferred |30checks de clique/estado/falha/histórico,78com reflow | PASS |
 | D-03/04,P-01/02 | Migration real aceita apenas deferred e motivo opcional; auth/locks/estado/auditoria/ACL preservados |29checks PG17 local;13testes de contrato/legado/release; sem mutações de teste remotas | PASS |
-| D-05 | UI/registry2.8.1, baseline responsivo preservado | Tipos root/web, builds, lint/foundation PASS; CI/rollout/smoke/sync pendentes | PARTIAL |
+| D-05 | UI/registry2.8.1 e migration publicadas, baseline responsivo preservado | CI branch38923619141/main38923649537 SUCCESS; fingerprint/ACL,7checks HTTP/SHA/assets e28cartões reais PASS | PASS |
 
 Desvios: nenhum. Limites/recibos serão completados durante a execução.
 
@@ -34,3 +34,15 @@ Browser com componentes reais/transporte sintético:30checks em1448/390/320, qua
 13testes focados de decisões/M7.7/legado/registry PASS; tipos root/web e build web, lint/foundation PASS. Avisos AntD/chunk/import dinâmico são anteriores e não geraram exceções. Sem suíte integral local; CI geral continua obrigatório. Arquivos e releases históricos não foram reescritos.
 
 Produção é remoto único; nenhuma QA remota separada. Método local é SQL real descartável mais browser sintético. Rollout só após CI, migration revisada antes do web; manter histórico e auditoria é obrigatório. Rollback web por imagem anterior; DB por forward fix preservando a recusa de novas rejeições, sem script que reescreva decisões reais.
+
+## Publicação e conferência produtiva
+
+Migration knowledge_global_decisions_v2 aplicada seletivamente pelo conector ao Prisma ioldpnqqvobprjiontre. Local20261016153000 e ledger remoto20261016152614: normalized statements MD5 igual0a82c5bb4b15dbb2bdfa0485052cb4d6; corpo instalado MD576af8cc3be1f4fc031856ea76ce48fe9. ACL preservada postgres/authenticated/service_role, anon sem EXECUTE, security definer/search_path vazio anteriores; helper/approvalv2/base/classificação não alterados. `database.json` registra prova. Map adiciona somente este alias e verificação incremental, sem alterar snapshot histórico, reparar ledger ou liberar db push geral.
+
+Runtime89881d8bff6ad53c2c511be780d3a05621fd18c8 publicado16/10/2026 12:27:34 BRT,2.8.1, após CI branch38923619141/main38923649537 SUCCESS. Plano45arquivos: só migration nova e web; Edge/Parser/gateway/mail/Synthesis SKIPPED.7checks HTTP/entry/CSS/SHA/versão/entry anterior PASS em `publication.json`. Script recebeu404 transitório imediatamente após recriação; verificação independente recebeu200 e confirmou o runtime, sem rebuild adicional.
+
+`production-geometry.json` confirma sessão autenticada Super Admin em1448/1265/390/320,7cartões por largura (6pendentes), campo opcional vazio e3ações habilitadas por pendente (pesquisa auxiliar +2decisões), sem Rejeitar ou overflow de página/cartão. `production-desktop.jpg` e `production-mobile.jpg` inspecionados; desktop recorta a região de conteúdo, sem menu da conta. Nenhuma proposta real foi decidida, nenhum campo produtivo alterado, nenhuma pesquisa/IA disparada. A primeira medição imediata após cruzar o breakpoint pegou o menu responsivo em transição, com largura de cartão21/2px; `production-resize-transient.json` preserva esse diagnóstico. Após estabilização visual, cartões309/254px e prova completa PASS, sem editar produto ou repetir a bateria local por esse artefato de medição.
+
+Web82aa16703d68 running/0restarts; imagem sha256:ed3738cb9fecbc1f9011e02983683b1c4025155c6dddc612c626639533aac41a, nginx -t PASS. Rollback prisma-web:rollback-before-89881d8bff6a aponta à anterior sha256:57ebbaea04b6c4441c6c9299ca5c6a9cde64af153008e04659fd1c802c823c58. Não exercido. Parser e8bc778c8c00, gateway8fb76416f61c, mailb257a83cbb37, Synthesisdb6c5c0ef238, Paddled991a574e45e e Traefik5e25fdc6d2e6 preservaram IDs. Cluster PostgreSQL local encerrado após29checks.
+
+Capacidades diretas/críticas PASS; guardas, histórico, origem, legado e versão anterior preservados pelas provas descritas; nenhum impacto identificado nos serviços/dados fora do mapa. D-01..05/P-01..02 PASS, sem desvios pendentes. Transações produtivas reais NOT TESTED por opção deliberada de preservação; SQL local e cliques sintéticos são evidência delimitada. Fechamento documental e alias do ledger seguem commit/CI/sync, sem novo deploy/rebuild ou reexecução de testes funcionais válidos. CI do HEAD final permanece obrigatório; runtime continua89881d8. Avisos antigos de housekeeping de worktrees Git não impediram operações; nenhuma worktree/lock alheia removida.

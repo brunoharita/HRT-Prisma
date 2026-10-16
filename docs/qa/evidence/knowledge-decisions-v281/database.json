@@ -1,0 +1,18 @@
+{
+  "beforeSourceMd5": "53e372d34030033883224bdcfd77fd3b",
+  "afterSourceMd5": "76af8cc3be1f4fc031856ea76ce48fe9",
+  "expectedAcl": "{postgres=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+  "projectRef": "ioldpnqqvobprjiontre",
+  "migration": "knowledge_global_decisions_v2",
+  "localVersion": "20261016153000",
+  "remoteVersion": "20261016152614",
+  "installedSourceMd5": "76af8cc3be1f4fc031856ea76ce48fe9",
+  "installedAcl": "{postgres=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+  "anonExec": false,
+  "authenticatedExec": true,
+  "securityDefiner": true,
+  "searchPath": "",
+  "productionMutationsTested": false,
+  "localNormalizedStatementsMd5": "0a82c5bb4b15dbb2bdfa0485052cb4d6",
+  "remoteNormalizedStatementsMd5": "0a82c5bb4b15dbb2bdfa0485052cb4d6"
+}

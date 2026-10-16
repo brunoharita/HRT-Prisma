@@ -1,0 +1,93 @@
+{
+  "command": "plan",
+  "plan": {
+    "version": "1.0.6",
+    "files": [
+      "FONTE_GPT_PRISMA.md",
+      "TUDO_SOBRE_PRISMA.md",
+      "docs/ai-context/PRISMA_CURRENT_STATE.md",
+      "docs/architecture/versioning.md",
+      "docs/decisions/ADR-069-m77-company-global-knowledge-governance.md",
+      "docs/qa/agreement-knowledge-decisions-v281.md",
+      "docs/qa/aot-knowledge-decisions-v281.md",
+      "docs/qa/evidence/knowledge-decisions-v281/browser.json",
+      "docs/qa/evidence/knowledge-decisions-v281/pending-1448.png",
+      "docs/qa/evidence/knowledge-decisions-v281/pending-320.png",
+      "docs/qa/evidence/knowledge-decisions-v281/pending-390.png",
+      "docs/qa/evidence/knowledge-decisions-v281/postgres.json",
+      "docs/qa/evidence/knowledge-decisions-v281/reflow/1265-0.png",
+      "docs/qa/evidence/knowledge-decisions-v281/reflow/1265-1.png",
+      "docs/qa/evidence/knowledge-decisions-v281/reflow/1265-2.png",
+      "docs/qa/evidence/knowledge-decisions-v281/reflow/1265-3.png",
+      "docs/qa/evidence/knowledge-decisions-v281/reflow/1265-4.png",
+      "docs/qa/evidence/knowledge-decisions-v281/reflow/1448-0.png",
+      "docs/qa/evidence/knowledge-decisions-v281/reflow/1448-1.png",
+      "docs/qa/evidence/knowledge-decisions-v281/reflow/1448-2.png",
+      "docs/qa/evidence/knowledge-decisions-v281/reflow/1448-3.png",
+      "docs/qa/evidence/knowledge-decisions-v281/reflow/1448-4.png",
+      "docs/qa/evidence/knowledge-decisions-v281/reflow/320-0.png",
+      "docs/qa/evidence/knowledge-decisions-v281/reflow/320-1.png",
+      "docs/qa/evidence/knowledge-decisions-v281/reflow/320-2.png",
+      "docs/qa/evidence/knowledge-decisions-v281/reflow/320-3.png",
+      "docs/qa/evidence/knowledge-decisions-v281/reflow/320-4.png",
+      "docs/qa/evidence/knowledge-decisions-v281/reflow/390-0.png",
+      "docs/qa/evidence/knowledge-decisions-v281/reflow/390-1.png",
+      "docs/qa/evidence/knowledge-decisions-v281/reflow/390-2.png",
+      "docs/qa/evidence/knowledge-decisions-v281/reflow/390-3.png",
+      "docs/qa/evidence/knowledge-decisions-v281/reflow/390-4.png",
+      "docs/qa/evidence/knowledge-decisions-v281/reflow/results.json",
+      "docs/qa/execution-knowledge-decisions-v281.md",
+      "supabase/migrations/20261016153000_knowledge_global_decisions_v2.sql",
+      "tests/knowledgeGlobalDecisions.test.ts",
+      "tests/m77KnowledgeCompanyGlobalGovernance.test.ts",
+      "tests/productRelease.test.ts",
+      "tests/tooling/knowledgeDecisions.browser.mjs",
+      "tests/tooling/knowledgeDecisions.postgres.mjs",
+      "tests/tooling/knowledgeProposals.browser.mjs",
+      "tests/ui/knowledge-cohesion/main.tsx",
+      "web/src/config/releaseRegistry.ts",
+      "web/src/infrastructure/supabase/knowledgeService.ts",
+      "web/src/pages/KnowledgePage.tsx"
+    ],
+    "impact": {
+      "surfaces": [
+        "context-pack",
+        "database",
+        "documentation",
+        "generated-context",
+        "hosting",
+        "tests",
+        "web"
+      ],
+      "edgeFunctions": [],
+      "migrations": [
+        "supabase/migrations/20261016153000_knowledge_global_decisions_v2.sql"
+      ],
+      "modifiedMigrations": [],
+      "unknown": []
+    },
+    "validationCommands": [
+      "git diff --check",
+      "pnpm run generate:prisma-context",
+      "pnpm run check:prisma-context",
+      "pnpm run typecheck:web",
+      "pnpm run build:web",
+      "pnpm run test",
+      "pnpm run check:supabase-ledger"
+    ],
+    "deployments": {
+      "git": true,
+      "database": [
+        "supabase/migrations/20261016153000_knowledge_global_decisions_v2.sql"
+      ],
+      "edgeFunctions": [],
+      "web": true,
+      "parserIa": false,
+      "paddleGateway": false,
+      "profileSynthesis": false,
+      "mailForwarder": false
+    },
+    "blockedReasons": [],
+    "publishable": true
+  }
+}

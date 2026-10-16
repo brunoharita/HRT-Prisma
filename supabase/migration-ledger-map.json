@@ -1604,6 +1604,11 @@
       "name": "professional_areas",
       "localVersion": "20261015203100",
       "remoteVersion": "20261015204950"
+    },
+    {
+      "name": "knowledge_global_decisions_v2",
+      "localVersion": "20261016153000",
+      "remoteVersion": "20261016152614"
     }
   ],
   "localOnly": [
@@ -1643,13 +1648,12 @@
     }
   ],
   "lastIncrementalVerification": {
-    "date": "2026-10-15",
-    "movement": "professional-areas-v274",
+    "date": "2026-10-16",
+    "movement": "knowledge-decisions-v281",
     "names": [
-      "professional_area_type",
-      "professional_areas"
+      "knowledge_global_decisions_v2"
     ],
-    "evidence": "docs/qa/evidence/professional-areas-v274/publication.json",
+    "evidence": "docs/qa/evidence/knowledge-decisions-v281/database.json",
     "historicalSnapshotVerifiedAtUnchanged": true
   }
 }

@@ -1,0 +1,43 @@
+{
+  "at": "2026-10-16T15:27:54.907677+00:00",
+  "runtimeSha": "89881d8bff6ad53c2c511be780d3a05621fd18c8",
+  "version": "2.8.1",
+  "entry": "/assets/index-KxIjr8vd.js",
+  "ci": {
+    "branch": 38923619141,
+    "main": 38923649537
+  },
+  "checks": [
+    {
+      "name": "HTTP /knowledge",
+      "pass": true
+    },
+    {
+      "name": "HTTP /assets/index-KxIjr8vd.js",
+      "pass": true
+    },
+    {
+      "name": "published SHA",
+      "pass": true
+    },
+    {
+      "name": "v2.8.1 delivery in bundle",
+      "pass": true
+    },
+    {
+      "name": "HTTP /assets/antd-vendor-B5BXDqMa.css",
+      "pass": true
+    },
+    {
+      "name": "HTTP /assets/index-Cj1OG7py.css",
+      "pass": true
+    },
+    {
+      "name": "HTTP /assets/index-CFGqRHlC.js",
+      "pass": true
+    }
+  ],
+  "webContainer": "82aa16703d68",
+  "rollback": "prisma-web:rollback-before-89881d8bff6a",
+  "databaseEvidence": "database.json"
+}
