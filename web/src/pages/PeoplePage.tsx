@@ -108,27 +108,30 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
     },
     {
       title: "Área Profissional", key: "professionalAreas", width: 210,
-      render: (_,person) => <DirectoryConcepts concepts={person.professionalAreas ?? []} entries={[]} fallback={person.professionalAreas === null ? "Áreas indisponíveis" : "Sem área selecionada ou agrupada"} />,
+      render: (_,person) => <DirectoryConcepts concepts={person.professionalAreas ?? []} entries={[]} fallback={person.professionalAreas === null ? "Indisponível" : "Não informada"} />,
     },
     {
       title: "Função/Cargo", key: "professionalFunction", width: 260,
-      render: (_,person) => latestDirectoryEntry(person.professionalDirectory)?.originalRole || latestExperienceFallback(person),
+      render: (_,person) => {
+        const role = latestDirectoryEntry(person.professionalDirectory)?.originalRole;
+        return role || <span className="prisma-person-missing">{latestExperienceFallback(person)}</span>;
+      },
     },
     {
       title: "Última empresa", key: "professionalExperience", width: 235,
       render: (_,person) => {
         const entry = latestDirectoryEntry(person.professionalDirectory);
-        return entry ? <div className="prisma-directory-cell"><strong>{entry.organization || "Não informado"}</strong><small>{entry.period || "Período não informado"}</small></div> : <small>{latestExperienceFallback(person)}</small>;
+        return entry ? <div className="prisma-directory-cell"><span className={entry.organization ? undefined : "prisma-person-missing"}>{entry.organization || "Não informado"}</span><small>{entry.period || "Período não informado"}</small></div> : <span className="prisma-person-missing">{latestExperienceFallback(person)}</span>;
       },
     },
     {
       title: "Cidade", key: "city", width: 150,
-      render: (_,person) => person.privateData.city || "Não informado",
+      render: (_,person) => person.privateData.city || <span className="prisma-person-missing">Não informado</span>,
     },
     {
       title: "Data do Perfil", key: "profileDate", width: 150,
       sorter: (a,b) => Date.parse(a.currentProfile?.approvedAt ?? "1970-01-01") - Date.parse(b.currentProfile?.approvedAt ?? "1970-01-01"),
-      render: (_,person) => person.currentProfile?.approvedAt ? formatProfileDate(person.currentProfile.approvedAt) : "Não informado",
+      render: (_,person) => person.currentProfile?.approvedAt ? formatProfileDate(person.currentProfile.approvedAt) : <span className="prisma-person-missing">Não informado</span>,
     },
   ];
 
@@ -234,20 +237,21 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
 }
 
 function latestExperienceFallback(person: PersonWorkspaceSummary): string {
-  if (!person.currentProfile) return "Sem Perfil aprovado";
-  if (!person.professionalDirectory) return "Experiência indisponível";
+  if (!person.currentProfile) return "Não informado";
+  if (!person.professionalDirectory) return "Indisponível";
   if (!person.professionalDirectory.length) return "Não informado";
-  return latestDirectoryEntry(person.professionalDirectory) ? "Não informado" : "Última experiência não identificada";
+  return latestDirectoryEntry(person.professionalDirectory) ? "Não informado" : "Experiência não identificada";
 }
 function DirectoryConcepts({concepts,entries,fallback}: {concepts:DirectoryConcept[];entries:DirectoryEntry[];fallback:string}) {
   const unique = Array.from(new Map(concepts.map(c => [c.id,c])).values());
   return <div className="prisma-directory-cell">{unique.length ? unique.map(c => {
     const sources = entries.filter(e => e.areas.some(a => a.id === c.id) || e.function?.id === c.id);
     const ai = c.method === "ai_grouping" || sources.some(e => [...e.areas,...(e.function ? [e.function] : [])].some(a => a.id === c.id && a.method === "ai_grouping"));
+    const lastSpace = c.label.lastIndexOf(" ");
     return <Tooltip key={c.id} title={`${c.method === "human_confirmed" ? "Área selecionada pelo gestor" : ai ? "Agrupamento sugerido por IA" : "Termo aprovado do Knowledge"}. ${sources.map(e => `${e.originalRole || "Experiência"} · ${e.organization || "Empresa não informada"} · ${e.period || "Sem período"} · Perfil v${e.profileVersion}`).join("; ")}. Knowledge v${c.version}.`}>
-      <span tabIndex={0} className="prisma-directory-concept">{c.label}{ai ? <small className="prisma-directory-ai">IA</small> : null}</span>
+      <span tabIndex={0} className="prisma-directory-concept">{ai ? <>{c.label.slice(0,lastSpace+1)}<span className="prisma-directory-label-tail">{c.label.slice(lastSpace+1)}<small className="prisma-directory-ai">IA</small></span></> : c.label}</span>
     </Tooltip>;
-  }) : <small>{fallback}</small>}</div>;
+  }) : <span className="prisma-person-missing">{fallback}</span>}</div>;
 }
 
 function PeopleMetric({ icon, label, value, tone, loading, unavailable }: { icon: React.ReactNode; label: string; value: number; tone: string; loading: boolean; unavailable: boolean }) {

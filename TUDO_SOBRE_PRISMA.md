@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 495
-source_manifest_sha256: f4d7cf5b4fb35c996eccc52a548512cef515c21bdbc4f922fb25d29b68e19ad7
+documentation_source_count: 496
+source_manifest_sha256: 4813bfc8b79bf8f1251e33ee4625f52ef412f1b38e6f7a7aa98cd0723059d042
 -->
 
 # Tudo sobre o Prisma
@@ -2648,6 +2648,10 @@ last_verified: 2026-10-15
 ---
 
 # Estado atual do Prisma
+
+## Pessoas2.7.6: tipografia e alinhamento
+
+Tabela de Pessoas com conteúdo principal14px/20px/peso400, nome600; e-mail/período12px/18px, espaçamento4px. Células pelo topo; ausências com tamanho principal/cor secundária; selo IA junto à última palavra. Seis colunas, filtros, tooltips, dados e regras preservados. Acordo/evidência em docs/qa/people-typography-v276.md. Somente frontend.
 
 ## Pessoas2.7.5: leitura profissional direta
 
@@ -29749,6 +29753,41 @@ SHA funcional b3b00927ba9535e55343dc2dbef3ad598ce85ae7, main/GitHub/VPS. Migrati
 O404 imediato na recriação estabilizou sem rebuild/redeploy. Primeiro cron16:04UTC atingiu statement timeout; diagnóstico transacional com service_role e rollback executou em4,05s, sem mudança persistida. Os ciclos16:05/16:06/16:07 retornaram200/complete automaticamente;3 chamadas de IA e seus históricos confirmados. Nenhum ajuste de autenticação/timeout ou operação manual de recuperação foi necessário. Telemetria Statsig da ferramenta de browser falhou fora do Prisma; a sessão real comprovou versão/colunas/filtros e cargos originais normalmente.
 
 Limites: processamento inicial tem71 contextos e respeita20 chamadas/dia e200/mês já existentes; não significa preenchimento imediato de todos. Nos3 primeiros resultados observados, uma função e nenhuma área foram associadas. Não forçar categoria é parte do contrato; testes determinísticos comprovam as regras, não acurácia empírica de toda a base. Sem QA remoto separado, sem inserção de pessoa/decisão fictícia em produção. Agrupamentos novos surgem em consultas posteriores, sem exigir etapa do gestor. Não há desvio funcional identificado; fechamento documental/evidência normaliza whitespace do runner sem reconstruir runtime.
+
+---
+
+## Source: `docs/qa/people-typography-v276.md`
+
+# Pessoas: tipografia e alinhamento2.7.6
+
+Acordo aprovado por Bruno, baseline64746ca (2.7.5). Classe B, visual delimitada.
+
+- D-UX-01 nome, área, cargo, empresa, cidade e data em14px/20px; peso400, nome600 como acesso navegável.
+- D-UX-02 e-mail e período em12px/18px, cor secundária e espaçamento4px consistente.
+- D-UX-03 células e avatar/texto alinhados pelo topo; múltiplas áreas não centralizam as demais colunas.
+- D-UX-04 ausência em14px/20px e cor secundária, textos curtos sem confundir indisponibilidade com ausência; selo IA acompanha a última palavra, sem linha isolada.
+- P-01 preservar seis colunas, dados originais, tooltip/proveniência, filtros, navegação, cronologia e responsividade. Sem impacto em IA/banco/publicação de Perfis.
+- F-01 redesign de tabela/editor, classificações, regras de negócio e pipeline.
+- A-01 CSS restrito à tabela de Pessoas e marcação mínima; reutilizar componentes atuais. Versão2.7.6, somente web.
+- Q nenhuma. Screenshot é contraprova da inconsistência. Manter topologia: cabeçalho/ações, busca/filtros, tabela clara/paginação; sem alteração de ordem/proporções. Referência normativa é a hierarquia tipográfica aprovada.
+- CA-01 mesmas fixtures/viewports1448/390 antes/depois, estilos computados, posição inicial e badge, ausência e navegação/filtros preservados.
+
+Execução implementa D-UX-01..04 e impede P-01, dentro de F-01/A-01. Validação mínima: browser visual e regressão existente, tipos/build web, teste de versão, lint/contexto, CI obrigatório e smoke seletivo. Sem suíte integral local.
+
+## GOV-01
+
+| Capacidade | Relação | Baseline/preservação/prova |
+| --- | --- | --- |
+| Tabela de Pessoas/tipografia/alinhamento | direct | 2.7.5; screenshots antes/depois, computed styles/bounding boxes1448/390 |
+| Filtros/navegação/tooltips/ausências | plausible_indirect | mesmos componentes; regressão browser existente e foco/proveniência |
+| CSS compartilhado/editor/IA/Auth/dados/Score | no_impact_identified | regras novas restritas à tabela; sem writers/serviços/domínio alterados; diff e CI |
+| Hospedagem/rollover de assets | critical_transversal | só web; SHA/versão/assets anteriores/rollback e serviços preservados |
+
+## AoT
+
+D-UX-01..04/P-01 PASS:18assertivas de estilos/alinhamentos/ausências/badge/proveniência,24regressões de colunas/filtros/navegação em1448/390, screenshots antes/depois na mesma fixture e viewport. Escopo CSS revisado: somente tabela de Pessoas. Tipos/build web,5testes de versão, lint e Context Pack PASS. Fixture corrige o teste de tooltip para usar hover, interação já existente. Sem novo comportamento funcional.
+
+QA sintético local, sem dados ou chamadas de IA reais. CI e publicação ainda pendentes; esta evidência não equivale a jornada autenticada real.
 
 ---
 

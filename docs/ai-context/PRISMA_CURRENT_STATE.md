@@ -8,6 +8,10 @@ last_verified: 2026-10-15
 
 # Estado atual do Prisma
 
+## Pessoas2.7.6: tipografia e alinhamento
+
+Tabela de Pessoas com conteúdo principal14px/20px/peso400, nome600; e-mail/período12px/18px, espaçamento4px. Células pelo topo; ausências com tamanho principal/cor secundária; selo IA junto à última palavra. Seis colunas, filtros, tooltips, dados e regras preservados. Acordo/evidência em docs/qa/people-typography-v276.md. Somente frontend.
+
 ## Pessoas2.7.5: leitura profissional direta
 
 Seis colunas: Pessoa, Área Profissional, Função/Cargo original, Última empresa/período, Cidade e Data do Perfil (approvedAt vigente). Cargo/empresa usam uma única experiência: em andamento com início mais recente, senão término mais recente; empate/datas insuficientes ficam explícitos. Sem dependência do agrupamento de funções. Todos/Todas explícitos em cada filtro e limpeza global remove também busca/situação; filtro de cargo usa o texto exibido. Sem novo banco, IA ou publicação de Perfis. Acordo/evidência em docs/qa/people-columns-v275.md.
