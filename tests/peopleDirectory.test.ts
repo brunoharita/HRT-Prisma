@@ -1,11 +1,25 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { directoryEntries, matchesDirectory, directorySearch, type DirectoryEntry } from "../web/src/domain/peopleDirectory.js";
+import { directoryEntries, latestDirectoryEntry, matchesDirectory, directorySearch, type DirectoryEntry } from "../web/src/domain/peopleDirectory.js";
 import { readDirectoryAnswer, safeDirectoryInput } from "../src/knowledge/peopleDirectory.js";
 const concept = (id:string) => ({id,label:id,version:1,method:"ai_grouping" as const});
 const entry = (index:number,period:string,area:string,role:string): DirectoryEntry => ({personId:"person",profileId:"approved",profileVersion:2,experienceIndex:index,
   originalRole:role,organization:"Empresa",period,status:"complete",methodVersion:"people-directory-1.0.0",globalVersion:1,organizationVersion:0,areas:[concept(area)],function:concept(role)});
 const today = new Date(2026,9,15);
+
+test("directory latest: one original job, independent of grouping, safe chronology",()=>{
+  const old=entry(0,"Jan/2020 - Dez/2022","RH","Analista");
+  const current={...entry(1,"Jan/2023 - Atual","TI","Gerente de TI"),function:null,status:"queued"};
+  const newer=entry(2,"Jan/2024 - Atual","RH","HRBP");
+  assert.equal(latestDirectoryEntry([old,current,newer],today),newer);
+  assert.equal(latestDirectoryEntry([old,current],today)?.originalRole,"Gerente de TI");
+  assert.equal(latestDirectoryEntry([old,entry(3,"Jan/2023 - Dez/2024","TI","Diretor")],today)?.originalRole,"Diretor");
+  assert.equal(latestDirectoryEntry([old,{...old,experienceIndex:4}],today),null);
+  assert.equal(latestDirectoryEntry([{...old,period:null}],today),null);
+  assert.equal(latestDirectoryEntry([entry(4,"Jan/2027 - Atual","TI","Futuro")],today),null);
+  assert.equal(latestDirectoryEntry([entry(4,"2021 - 2022","TI","Anterior"),entry(5,"2023 - 2024","TI","Mais recente")],today)?.originalRole,"Mais recente");
+  assert.equal(latestDirectoryEntry(null,today),null);
+});
 test("directory: all current jobs, latest closed ties, trajectory and unknown dates",()=>{
   const old=entry(0,"Jan/2020 - Dez/2022","RH","Analista"), current=entry(1,"Jan/2023 - Atual","TI","Gerente"), other=entry(2,"Jan/2024 - Atual","Operações","Diretor");
   assert.deepEqual(directoryEntries([old,current,other],"recent",today).entries,[current,other]);

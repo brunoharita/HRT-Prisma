@@ -17,13 +17,11 @@ import {
 import { Alert, Button, Dropdown, Empty, Input, Select, Skeleton, Space, Statistic, Table, Tag, Tooltip, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import {
-  currentProfileDescription,
-  currentProfileLabel,
   presentDocument,
   type DocumentOperationalState,
 } from "../domain/documentPresentation";
 import type { PersonWorkspaceSummary } from "../domain/personIngestion";
-import { directoryEntries, matchesDirectory, type DirectoryConcept, type DirectoryEntry, type DirectoryScope } from "../domain/peopleDirectory";
+import { latestDirectoryEntry, type DirectoryConcept, type DirectoryEntry } from "../domain/peopleDirectory";
 import type { PrismaDataRepository } from "../domain/prismaData";
 import { personIngestionService } from "../infrastructure/supabase/personIngestionService";
 import type { OrganizationMembership } from "../shared/access";
@@ -46,8 +44,7 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
   const canManagePeople = activeMembership.role !== "member";
   const [search, setSearch] = useViewState("search", "");
   const [areaFilter, setAreaFilter] = useViewState("directoryArea", "");
-  const [functionFilter, setFunctionFilter] = useViewState("directoryFunction", "");
-  const [directoryScope, setDirectoryScope] = useViewState<DirectoryScope>("directoryScope", "recent");
+  const [functionFilter, setFunctionFilter] = useViewState("latestRole", "");
   const [employeeFilter, setEmployeeFilter] = useViewState<"all" | "yes" | "no">("employeeFilter", "all");
   const [profileFilter, setProfileFilter] = useViewState<ProfileFilter>("profileFilter", "all");
   const [importFilter, setImportFilter] = useViewState<ImportFilter>("importFilter", "all");
@@ -79,15 +76,14 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
       || (profileFilter === "approved" && Boolean(person.currentProfile))
       || (profileFilter === "without_profile" && !person.currentProfile);
     const matchesImport = importFilter === "all" || presentDocument(person.latestDocument).state === importFilter;
-    const matchesProfessional = (!areaFilter || person.professionalAreas?.some(a => a.id === areaFilter)) && (!functionFilter || directoryEntries(person.professionalDirectory,directoryScope).entries.some(e => matchesDirectory(e,"",functionFilter)));
+    const matchesProfessional = (!areaFilter || person.professionalAreas?.some(a => a.id === areaFilter)) && (!functionFilter || latestDirectoryEntry(person.professionalDirectory)?.originalRole === functionFilter);
     return matchesProfessional && matchesOperational && matchesProfile && matchesImport && (employeeFilter === "all" || (person.isActiveEmployee === true) === (employeeFilter === "yes"));
-  }), [areaFilter,functionFilter,directoryScope,employeeFilter, importFilter, operationalFilter, people, profileFilter]);
-  const hasFilters = Boolean(areaFilter || functionFilter || employeeFilter !== "all" || search || profileFilter !== "all" || importFilter !== "all" || operationalFilter !== "active");
-  const scopedEntries = people.flatMap(p => directoryEntries(p.professionalDirectory,directoryScope).entries);
-  const conceptOptions = (kind: "area" | "function") => Array.from(new Map((kind === "area" ? people.flatMap(p => p.professionalAreas ?? []) : scopedEntries.flatMap(e => e.function ? [e.function] : [])).map(c => [c.id,{value:c.id,label:c.label}])).values()).sort((a,b) => a.label.localeCompare(b.label,"pt-BR"));
-  const shownEntries = (person: PersonWorkspaceSummary) => directoryEntries(person.professionalDirectory,directoryScope).entries.filter(e => matchesDirectory(e,"",functionFilter));
+  }), [areaFilter,functionFilter,employeeFilter, importFilter, operationalFilter, people, profileFilter]);
+  const hasFilters = Boolean(areaFilter || functionFilter || employeeFilter !== "all" || search || profileFilter !== "all" || importFilter !== "all" || operationalFilter !== "all");
+  const areaOptions = Array.from(new Map(people.flatMap(p => p.professionalAreas ?? []).map(c => [c.id,{value:c.id,label:c.label}])).values()).sort((a,b) => a.label.localeCompare(b.label,"pt-BR"));
+  const roleOptions = [...new Set(people.map(p => latestDirectoryEntry(p.professionalDirectory)?.originalRole).filter((role): role is string => Boolean(role)))].sort((a,b) => a.localeCompare(b,"pt-BR")).map(role => ({value:role,label:role}));
   const resetPage = () => setPagination((current) => ({ ...current, current: 1 }));
-  const clearFilters = () => { setAreaFilter(""); setFunctionFilter(""); setDirectoryScope("recent"); setEmployeeFilter("all"); setSearch(""); setProfileFilter("all"); setImportFilter("all"); setOperationalFilter("active"); resetPage(); };
+  const clearFilters = () => { setAreaFilter(""); setFunctionFilter(""); setEmployeeFilter("all"); setSearch(""); setProfileFilter("all"); setImportFilter("all"); setOperationalFilter("all"); resetPage(); };
   const activePeople = people.filter((person) => person.operationalStatus === "active");
   const approvedProfiles = activePeople.filter((person) => person.currentProfile).length;
   const awaitingReview = activePeople.filter((person) => person.pendingReviewCount > 0).length;
@@ -111,56 +107,28 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
       ),
     },
     {
-      title: "Área(s) profissional(is)", key: "professionalAreas", width: 210,
+      title: "Área Profissional", key: "professionalAreas", width: 210,
       render: (_,person) => <DirectoryConcepts concepts={person.professionalAreas ?? []} entries={[]} fallback={person.professionalAreas === null ? "Áreas indisponíveis" : "Sem área selecionada ou agrupada"} />,
     },
     {
-      title: "Função / cargo", key: "professionalFunction", width: 240,
+      title: "Função/Cargo", key: "professionalFunction", width: 260,
+      render: (_,person) => latestDirectoryEntry(person.professionalDirectory)?.originalRole || latestExperienceFallback(person),
+    },
+    {
+      title: "Última empresa", key: "professionalExperience", width: 235,
       render: (_,person) => {
-        const entries = shownEntries(person);
-        return <div className="prisma-directory-cell"><DirectoryConcepts concepts={entries.flatMap(e => e.function ? [e.function] : [])} entries={entries} fallback="Sem função agrupada" />
-          {entries.map(e => <small key={e.experienceIndex}>Original: {e.originalRole || "Cargo não informado"}</small>)}
-          {!entries.length ? <small>{directoryFallback(person,directoryScope)}</small> : null}
-        </div>;
+        const entry = latestDirectoryEntry(person.professionalDirectory);
+        return entry ? <div className="prisma-directory-cell"><strong>{entry.organization || "Não informado"}</strong><small>{entry.period || "Período não informado"}</small></div> : <small>{latestExperienceFallback(person)}</small>;
       },
     },
     {
-      title: directoryScope === "recent" ? "Atuação recente" : "Atuação na trajetória", key: "professionalExperience", width: 225,
-      render: (_,person) => <div className="prisma-directory-cell">{shownEntries(person).map(e => <div key={e.experienceIndex}><strong>{e.organization || "Empresa não informada"}</strong><small>{e.period || "Período não informado"}</small></div>)}
-        {!shownEntries(person).length ? <small>{directoryFallback(person,directoryScope)}</small> : null}</div>,
+      title: "Cidade", key: "city", width: 150,
+      render: (_,person) => person.privateData.city || "Não informado",
     },
     {
-      title: "Perfil atual",
-      key: "currentProfile",
-      width: 165,
-      render: (_, person) => (
-        <div className="prisma-person-state-cell">
-          <Tag color={person.currentProfile ? "green" : "default"}>{currentProfileLabel(person.currentProfile)}</Tag>
-          <small>{currentProfileDescription(person.currentProfile)}</small>
-        </div>
-      ),
-    },
-    {
-      title: "Última importação",
-      key: "latestDocument",
-      width: 225,
-      render: (_, person) => {
-        const presentation = presentDocument(person.latestDocument);
-        return (
-          <div className="prisma-person-import-cell">
-            <Tag color={documentTagColor(presentation.state)}>{presentation.label}</Tag>
-            <strong>{person.latestDocument ? `Documento v${person.latestDocument.documentVersion} · ${formatRelativeDate(person.latestDocument.createdAt)}` : "Nenhum documento recente"}</strong>
-            {presentation.requiresAction ? <small>{presentation.description} Próximo passo: {presentation.nextAction}.</small> : null}
-          </div>
-        );
-      },
-    },
-    {
-      title: "Ações",
-      key: "actions",
-      width: 100,
-      align: "center",
-      render: (_, person) => <Button icon={<EyeOutlined />} onClick={() => onNavigate(personPath(person.id))}>Abrir</Button>,
+      title: "Data do Perfil", key: "profileDate", width: 150,
+      sorter: (a,b) => Date.parse(a.currentProfile?.approvedAt ?? "1970-01-01") - Date.parse(b.currentProfile?.approvedAt ?? "1970-01-01"),
+      render: (_,person) => person.currentProfile?.approvedAt ? formatProfileDate(person.currentProfile.approvedAt) : "Não informado",
     },
   ];
 
@@ -194,9 +162,8 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
         />
         <Button icon={<FilterOutlined />} onClick={() => setShowFilters((value) => !value)} aria-expanded={showFilters}>Filtros</Button>
         <div className="prisma-directory-filters">
-          <Select aria-label="Filtrar área profissional" placeholder="Todas as áreas" allowClear showSearch optionFilterProp="label" value={areaFilter || undefined} options={conceptOptions("area")} onChange={value => {setAreaFilter(value ?? "");resetPage();}} />
-          <Select aria-label="Filtrar função profissional" placeholder="Todas as funções" allowClear showSearch optionFilterProp="label" value={functionFilter || undefined} options={conceptOptions("function")} onChange={value => {setFunctionFilter(value ?? "");resetPage();}} />
-          <Select<DirectoryScope> aria-label="Período da atuação" value={directoryScope} options={[{value:"recent",label:"Atual / mais recente"},{value:"trajectory",label:"Trajetória completa"}]} onChange={value => {setDirectoryScope(value);resetPage();}} />
+          <Select aria-label="Filtrar área profissional" placeholder="Todas as áreas" allowClear showSearch optionFilterProp="label" value={areaFilter || undefined} options={[{value:"",label:"Todas as áreas"},...areaOptions]} onChange={value => {setAreaFilter(value ?? "");resetPage();}} />
+          <Select aria-label="Filtrar cargo" placeholder="Todos os cargos" allowClear showSearch optionFilterProp="label" value={functionFilter || undefined} options={[{value:"",label:"Todos os cargos"},...roleOptions]} onChange={value => {setFunctionFilter(value ?? "");resetPage();}} />
           {hasFilters ? <Button type="link" onClick={clearFilters}>Limpar filtros</Button> : null}
         </div>
         {showFilters ? <div className="prisma-people-filters">
@@ -260,18 +227,17 @@ export function PeoplePage({ activeMembership, onNavigate }: PeoplePageProps) {
         <PeopleMetric loading={loading} unavailable={Boolean(error)} icon={<UploadOutlined />} label="Importações hoje" value={importedToday} tone="processing" />
       </div></details>
       <Typography.Text className="prisma-table-scope-note" type="secondary">
-        Agrupamentos identificados por IA auxiliam a navegação. Cargo original e Perfil aprovado são preservados. Área e função filtradas correspondem à mesma experiência.
+        Áreas profissionais do Perfil vigente. Cargo, empresa e período correspondem à última experiência identificável. Data do Perfil corresponde à publicação.
       </Typography.Text>
     </PrismaPage>
   );
 }
 
-function directoryFallback(person: PersonWorkspaceSummary,scope: DirectoryScope): string {
+function latestExperienceFallback(person: PersonWorkspaceSummary): string {
   if (!person.currentProfile) return "Sem Perfil aprovado";
-  if (!person.professionalDirectory) return "Agrupamento indisponível";
-  if (!person.professionalDirectory.length) return "Sem experiência informada";
-  if (scope === "recent" && !directoryEntries(person.professionalDirectory,scope).chronologyKnown) return "Datas insuficientes; consulte a trajetória";
-  return person.professionalDirectory.some(e => e.status === "queued" || e.status === "processing") ? "Agrupamento em preparação" : "Sem área agrupada";
+  if (!person.professionalDirectory) return "Experiência indisponível";
+  if (!person.professionalDirectory.length) return "Não informado";
+  return latestDirectoryEntry(person.professionalDirectory) ? "Não informado" : "Última experiência não identificada";
 }
 function DirectoryConcepts({concepts,entries,fallback}: {concepts:DirectoryConcept[];entries:DirectoryEntry[];fallback:string}) {
   const unique = Array.from(new Map(concepts.map(c => [c.id,c])).values());
@@ -296,26 +262,15 @@ export function ProfileStateTag({ state }: { state: PersonWorkspaceSummary["prof
   return <Tag>Sem perfil aprovado</Tag>;
 }
 
-function documentTagColor(state: DocumentOperationalState): string {
-  if (state === "processed") return "green";
-  if (state === "requires_review") return "gold";
-  if (state === "technical_failure") return "red";
-  if (state === "processing") return "blue";
-  return "default";
-}
-
 function isToday(value: string): boolean {
   const date = new Date(value);
   const today = new Date();
   return date.getFullYear() === today.getFullYear() && date.getMonth() === today.getMonth() && date.getDate() === today.getDate();
 }
 
-function formatRelativeDate(value: string): string {
-  const elapsedDays = Math.max(0, Math.floor((Date.now() - new Date(value).getTime()) / 86_400_000));
-  if (elapsedDays === 0) return "enviado hoje";
-  if (elapsedDays === 1) return "enviado há 1 dia";
-  if (elapsedDays < 30) return `enviado há ${elapsedDays} dias`;
-  return new Intl.DateTimeFormat("pt-BR", { dateStyle: "short" }).format(new Date(value));
+function formatProfileDate(value: string): string {
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? "Não informado" : new Intl.DateTimeFormat("pt-BR", {dateStyle:"short"}).format(date);
 }
 
 function initials(fullName: string): string {

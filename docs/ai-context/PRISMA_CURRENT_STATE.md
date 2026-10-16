@@ -8,6 +8,10 @@ last_verified: 2026-10-15
 
 # Estado atual do Prisma
 
+## Pessoas2.7.5: leitura profissional direta
+
+Seis colunas: Pessoa, Área Profissional, Função/Cargo original, Última empresa/período, Cidade e Data do Perfil (approvedAt vigente). Cargo/empresa usam uma única experiência: em andamento com início mais recente, senão término mais recente; empate/datas insuficientes ficam explícitos. Sem dependência do agrupamento de funções. Todos/Todas explícitos em cada filtro e limpeza global remove também busca/situação; filtro de cargo usa o texto exibido. Sem novo banco, IA ou publicação de Perfis. Acordo/evidência em docs/qa/people-columns-v275.md.
+
 ## Áreas profissionais2.7.4: cadastro global/local e curadoria
 
 Implementação autorizada em15/10/2026 reutiliza Knowledge/ADR-069 com tipo professional_area,16 macroáreas editoriais iniciais, cadastro e edição versionada, contribuição global separada e curadoria exclusiva do Super Admin. Seleção humana opcional no Perfil, inclusive vazia, prevalece; texto original preservado. IA fechada usa somente macroáreas global/local no orçamento compartilhado existente, sem publicação ou nova tarifa. Pessoas usa área do Perfil, independente de cronologia; funções continuam por experiência. Contrato e limites em `docs/architecture/professional-areas.md`; acordo/mapa/execução/AoT em `docs/qa/professional-areas-v274.md`. Publicada no runtime cbb3f9c03d0fa415b110dd40820c873757160812, CI branch38804832934/main38805046744 SUCCESS; migrations20261015204943/20261015204950 iguais à fonte, knowledge-agent22 e matching-trajectory19 com JWT preservado (somente decoder gerado adicional no matching). Web running/restart0/HTTP200, rollback/assets anteriores e6containers adjacentes preservados. Smoke autenticado confirma catálogo, HRBP→RH e seletor no mesmo rascunho sem escrita; Pessoas/16Perfis com hashes preservados.49SQL/27Node/3matching/5Deno/22tooling e19cenários browser PASS. Classificação inicial está gradual: limite diário compartilhado já consumido,3BUDGET_LIMITED/11queued na observação, sem aumento de orçamento; seleção manual imediata. Fechamento detalha limitações e evidências sem alegar acurácia empírica.

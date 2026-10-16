@@ -1,0 +1,98 @@
+[
+  {
+    "name": "1448 six columns",
+    "pass": true
+  },
+  {
+    "name": "1448 header order",
+    "pass": true
+  },
+  {
+    "name": "1448 original latest job",
+    "pass": true
+  },
+  {
+    "name": "1448 one company",
+    "pass": true
+  },
+  {
+    "name": "1448 city and publication",
+    "pass": true
+  },
+  {
+    "name": "1448 no grouping noise",
+    "pass": true
+  },
+  {
+    "name": "1448 all areas restores results",
+    "pass": true
+  },
+  {
+    "name": "1448 original role filter",
+    "pass": true
+  },
+  {
+    "name": "1448 all roles restores results",
+    "pass": true
+  },
+  {
+    "name": "1448 clear removes operational restriction",
+    "pass": true
+  },
+  {
+    "name": "1448 navigation",
+    "pass": true
+  },
+  {
+    "name": "1448 no runtime errors",
+    "pass": true
+  },
+  {
+    "name": "390 six columns",
+    "pass": true
+  },
+  {
+    "name": "390 header order",
+    "pass": true
+  },
+  {
+    "name": "390 original latest job",
+    "pass": true
+  },
+  {
+    "name": "390 one company",
+    "pass": true
+  },
+  {
+    "name": "390 city and publication",
+    "pass": true
+  },
+  {
+    "name": "390 no grouping noise",
+    "pass": true
+  },
+  {
+    "name": "390 all areas restores results",
+    "pass": true
+  },
+  {
+    "name": "390 original role filter",
+    "pass": true
+  },
+  {
+    "name": "390 all roles restores results",
+    "pass": true
+  },
+  {
+    "name": "390 clear removes operational restriction",
+    "pass": true
+  },
+  {
+    "name": "390 navigation",
+    "pass": true
+  },
+  {
+    "name": "390 no runtime errors",
+    "pass": true
+  }
+]

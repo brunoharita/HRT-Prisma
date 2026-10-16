@@ -81,8 +81,9 @@ test("people, operations, hub, and review source preserve navigation and entity 
 
   assert.match(people, /const personPath = \(personId: string\) => `\/profiles\/\$\{personId\}`/);
   assert.doesNotMatch(people, /personPath[\s\S]{0,120}\/edit/);
-  assert.match(people, /title: "Perfil atual"/);
-  assert.match(people, /title: "Última importação"/);
+  assert.match(people, /title: "Data do Perfil"/);
+  assert.match(people, /title: "Última empresa"/);
+  assert.doesNotMatch(people, /title: "Perfil atual"|title: "Última importação"/);
   assert.match(operations, /title: "Status do documento"/);
   assert.match(operations, /title: "Perfil atual"/);
   assert.match(operations, /currentProfileLabel\(document\.currentProfile\)/);
