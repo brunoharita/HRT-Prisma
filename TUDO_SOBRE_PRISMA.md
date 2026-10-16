@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 495
-source_manifest_sha256: 4427a4c57ed9dc4a5bd871b09ae8d325218072f76089f2d5131095e4c4f926a5
+source_manifest_sha256: dab03f4e461c449aaaa9068a2adb10231f189593a21c2b19ffaeadfb59f02dd7
 -->
 
 # Tudo sobre o Prisma
@@ -29661,6 +29661,8 @@ D-01..04/P-01 PASS em24assertivas browser1448/390 (colunas/ordem/cargo sem agrup
 Interferências locais: pnpm11 tentou verificar/reinstalar dependências do worktree; usado verify-deps-before-run=false apenas nos comandos da sessão, sem reinstalar/apagar módulos. Browser sintético corrigido com variável publishable requerida e seletor de botão com ícone. Teste legado ainda exigia colunas removidas: atualizado para o novo acordo. Nenhuma dessas correções altera produção ou amplia escopo.
 
 Publicação/CI/smoke pendentes; fechamento operacional será acrescentado após verificação. Tempos UTC: início01:59:14, preparação/implementação até02:03:03 (3m49s, inclui checks sobrepostos); validação local em curso. Não somar durações de jobs paralelos como tempo total.
+
+CI38838840051 detectou expectativa de versão2.7.4 em productRelease.test ainda não atualizada; corrigida para2.7.5 e contador5. É omissão de preparação da release, sem falha funcional de Pessoas. Nova validação necessária apenas para esse teste e CI. Nenhuma produção alterada antes da correção.
 
 ---
 

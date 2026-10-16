@@ -34,3 +34,5 @@ D-01..04/P-01 PASS em24assertivas browser1448/390 (colunas/ordem/cargo sem agrup
 Interferências locais: pnpm11 tentou verificar/reinstalar dependências do worktree; usado verify-deps-before-run=false apenas nos comandos da sessão, sem reinstalar/apagar módulos. Browser sintético corrigido com variável publishable requerida e seletor de botão com ícone. Teste legado ainda exigia colunas removidas: atualizado para o novo acordo. Nenhuma dessas correções altera produção ou amplia escopo.
 
 Publicação/CI/smoke pendentes; fechamento operacional será acrescentado após verificação. Tempos UTC: início01:59:14, preparação/implementação até02:03:03 (3m49s, inclui checks sobrepostos); validação local em curso. Não somar durações de jobs paralelos como tempo total.
+
+CI38838840051 detectou expectativa de versão2.7.4 em productRelease.test ainda não atualizada; corrigida para2.7.5 e contador5. É omissão de preparação da release, sem falha funcional de Pessoas. Nova validação necessária apenas para esse teste e CI. Nenhuma produção alterada antes da correção.
