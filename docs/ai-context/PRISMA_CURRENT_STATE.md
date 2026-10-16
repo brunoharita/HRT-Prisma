@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.80.0
+version: 2.80.1
 last_verified: 2026-10-16
 ---
 
 # Estado atual do Prisma
+
+## Correção de contenção das Propostas — 2.8.0
+
+Correção autorizada em16/10/2026: reflow das ações, candidatos/fontes longos e campos restrito à aba Propostas. Mantém produto2.8.0 e contratos de domínio; nenhuma decisão ou pesquisa implícita. Validação/estado operacional no AoT `docs/qa/aot-knowledge-proposals-overflow.md`; implementação local não prova publicação. A cobertura anterior com proposta aprovada não provava ações pendentes, lacuna coberta por novo cenário sintético pareado desktop/celular.
 
 ## V2M8: padronização visual 2.8.0
 

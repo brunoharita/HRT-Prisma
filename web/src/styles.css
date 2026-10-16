@@ -3868,6 +3868,23 @@ textarea {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
 }
 
+.prisma-knowledge-proposals :is(.ant-card, .ant-card-body, .ant-space-item, .ant-alert-section) {
+  min-width: 0;
+}
+
+.prisma-knowledge-proposals .ant-space-item { max-width: 100%; }
+.prisma-knowledge-proposals .ant-select { width: 100%; }
+.prisma-knowledge-proposals .ant-card-head-title { white-space: normal; overflow-wrap: anywhere; }
+
+.prisma-knowledge-proposals :is(.ant-tag, .ant-btn) {
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.prisma-knowledge-proposals .ant-btn { height: auto; min-height: var(--ant-control-height, 32px); }
+.prisma-knowledge-proposals :is(p, a, .ant-alert-title, .ant-alert-description) { overflow-wrap: anywhere; }
+
 @media (max-width: 1280px) {
   .prisma-review-split { grid-template-columns: minmax(380px, 46fr) minmax(490px, 54fr); }
   .prisma-evidence-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }

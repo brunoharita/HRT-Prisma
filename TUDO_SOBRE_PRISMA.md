@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 501
-source_manifest_sha256: 65d9f40630be33ee7df8a9aa56bd198b7f2de6e724fba62d7b553947980e079c
+documentation_source_count: 504
+source_manifest_sha256: 8030bd4d8b38665a5b29d4213c5e3af777b8ff38725ded701312d5fb0a632756
 -->
 
 # Tudo sobre o Prisma
@@ -2643,11 +2643,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.80.0
+version: 2.80.1
 last_verified: 2026-10-16
 ---
 
 # Estado atual do Prisma
+
+## Correção de contenção das Propostas — 2.8.0
+
+Correção autorizada em16/10/2026: reflow das ações, candidatos/fontes longos e campos restrito à aba Propostas. Mantém produto2.8.0 e contratos de domínio; nenhuma decisão ou pesquisa implícita. Validação/estado operacional no AoT `docs/qa/aot-knowledge-proposals-overflow.md`; implementação local não prova publicação. A cobertura anterior com proposta aprovada não provava ações pendentes, lacuna coberta por novo cenário sintético pareado desktop/celular.
 
 ## V2M8: padronização visual 2.8.0
 
@@ -12760,6 +12764,8 @@ Contrato de apresentação atual: `prisma-ux-foundation-1.5.0`. Acordos aprovado
 
 ## Padronização visual V2M8 — 2.8.0
 
+Correção de Propostas,16/10/2026: ações pendentes quebram linhas dentro do cartão; candidatos/fontes longos e campos respeitam a largura disponível, inclusive no celular. Conteúdo, ordem, regras e autoridade de curadoria preservados. Escopo local à aba, reutilizando Space.wrap/AntD; sem mudança de contrato ou incremento da versão2.8.0. Acordo/execução e evidência: `docs/qa/aot-knowledge-proposals-overflow.md`. A fixture anterior de Conhecimento cobria somente proposta aprovada e não provava a contenção das quatro ações pendentes; o novo roteiro cobre explicitamente essa lacuna.
+
 O contrato 1.5.0 amplia a base existente, conforme `docs/qa/agreement-visual-standard-v280.md` 1.0.0 e seu Execution Prompt. Reutiliza ADR-050, Ant Design, `theme.ts`, `foundation.css` e componentes atuais, sem nova biblioteca ou mudança de domínio. A escala representa papéis, não uma conversão indiscriminada de todos os textos.
 
 | Papel | Leitura | Operação compacta |
@@ -14138,6 +14144,28 @@ Implementar D-U01 a D-U05; P-U01 não pode ocorrer; F-U01 fica excluído e A-U01
 - Data: 2026-09-19
 - Evidência: "pode fazer, AoT"
 - Referência imutável: versão 1.0.0 deste arquivo.
+
+---
+
+## Source: `docs/qa/agreement-knowledge-proposals-overflow.md`
+
+# Acordo — contenção de Propostas
+
+Versão 1.0.0, congelada pela autorização explícita de Bruno em16/10/2026: corrigir os estouros, validar desktop/celular e publicar em produção. Baseline c4ef51011fe0e82b17f3cbb2896828d0fb61251b, Prisma2.8.0. Correção de apresentação classe B; versão do produto preservada pela política de correções.
+
+- D-01: ações de propostas pendentes devem permanecer inteiras e acessíveis dentro do cartão, quebrando linhas conforme o espaço.
+- D-02: candidatos, fontes e campos longos devem respeitar a largura disponível, preservando conteúdo e ordem.
+- D-03: manter seleção, motivo, estados desabilitados, origem, autoridade humana e regras/handlers de curadoria.
+- D-04: validar componentes reais em desktop e celular, publicar somente as superfícies derivadas do diff e conferir produção/sincronização.
+- P-01: proibido esconder/cortar conteúdo ou remover ações para resolver o estouro.
+- P-02: proibido decidir propostas, pesquisar com IA ou alterar dados reais durante a validação.
+- F-01: outros fluxos/abas, domínio, backend, banco, contratos persistidos, novas bibliotecas e redesenho da tela.
+- A-01: engenharia escolhe regras locais de flex/reflow, dimensões de teste e fixtures sintéticas, reutilizando AntD/PrismaCard.
+- CA-01 (D-01/02, P-01): medidas de geometria e capturas pareadas sem estouro de página/cartão/candidato; quatro ações globais legíveis, inclusive Rejeitar; testar também ação legada longa.
+- CA-02 (D-03, P-02): motivo e subgrupo retidos após reflow; guardas de aprovação mantidas; contador de escritas zero.
+- CA-03 (D-04): tipos/build/checks afetados, CI, SHA publicado, smoke visual autenticado somente leitura e rollback disponível.
+
+Q: nenhum. Referência visual é a composição existente observada em produção, preservada; apenas reflow/contenção autorizados.
 
 ---
 
@@ -19353,6 +19381,44 @@ Nenhum. O deploy inicial encontrou o checkout da VPS atrasado; ele foi sincroniz
 ## Conclusão
 
 A proposta da empresa ativa volta a aparecer para Super Admin em `Conhecimento > Propostas`, com etiqueta de alcance e o botão existente de aprovação. A decisão de aprovar `Transformação operacional` continua humana, explícita e fora desta correção.
+
+---
+
+## Source: `docs/qa/aot-knowledge-proposals-overflow.md`
+
+# AoT — contenção de Propostas
+
+Acordo/execução: `agreement-knowledge-proposals-overflow.md`1.0.0 e `execution-knowledge-proposals-overflow.md`. Baseline c4ef51011fe0e82b17f3cbb2896828d0fb61251b,2.8.0. Classe B. Reuso: AntD Space.wrap e CSS de contenção local, sem biblioteca/decisão arquitetural nova.
+
+## Mapa de Impacto e Preservação anterior à implementação
+
+| Capacidade | Relação | Baseline e prova proporcional prevista |
+| --- | --- | --- |
+| Propostas: ações, candidatos, fontes e classificação | direct | Produção autenticada: Rejeitar83px além do cartão em6pendentes; alerta candidato4px de scroll interno. Fixture anterior só cobria proposta aprovada. Comparação pareada desktop/celular com dados longos e pendentes. |
+| Curadoria: motivo, subgrupo, guardas e ação humana | critical_transversal | Handlers intactos; fixture sem rede externa, retenção de inputs/reflow e zero escritas; produção somente leitura. |
+| Abas vizinhas/estilo compartilhado | plausible_indirect | Novas regras restritas ao grid de propostas, Space.wrap apenas na linha afetada. Conferência de outra aba e diff. |
+| Banco/IA/serviços/tenant/dados | no_impact_identified | Sem alteração de transportes ou contratos de produto; validação sintética, plano deve excluir esses destinos. |
+| Hospedagem web | direct | Conferir identidade/SHA antes de publicar, CI, rollback, saúde e tela real após publicar; preservar demais contêineres. |
+
+Validação mínima: roteiro focado com componentes reais em1448/1265/390/320px; baseline/depois, guardas e reflow; tipos/build web, lint/foundation e contexto. CI obrigatório, sem validate integral local. Fechamento: D/P com prova necessária PASS, documentação, publicação web e sincronização; limitações explícitas. Nenhuma expansão opcional.
+
+## Acordos → implementação → teste → evidência
+
+| ID | Implementação | Teste/evidência | Estado |
+| --- | --- | --- | --- |
+| D-01/02, P-01 | Space.wrap, min-width0, campos contidos, textos/títulos quebráveis; CSS somente no grid | 20pares de cartões em1448/1265/390/320,48checks após correção | PASS |
+| D-03, P-02 | Handlers intactos; apenas Space recebe wrap | Motivo/subgrupo retidos após reflow, motivo obrigatório/certificação bloqueada,4ações globais e zero escritas | PASS |
+| D-04 | Tipos/build/lint/foundation/contexto PASS; publicação pendente | CI, release e sincronização ainda necessários | PARTIAL |
+
+Desvios: nenhum previsto. Evidências sintéticas não substituem leitura autenticada em produção; nenhuma decisão real será testada. Versão permanece2.8.0, restauração de apresentação já aprovada, sem mudança de contrato persistido.
+
+## Validação local
+
+`tests/tooling/knowledgeProposals.browser.mjs --baseline` recompõe styles.css/KnowledgePage.tsx do SHA baseline, usando a mesma fixture atual;37checks de estado/preservação e reprodução do estouro. Sem flag:48checks PASS,20estados de cartão e20capturas em `evidence/knowledge-proposals-overflow/after`; JSON registra medidas e igualdade integral do texto com before. Cobertura: pendente global com4ações e candidato/fonte longa sem espaços, ocupação sem origem, proposta legada, certificação bloqueada e proposta aprovada, além de retorno à aba Visão Geral. Sem rede externa ou decisões sintéticas/reais. Capturas320 e1448 inspecionadas visualmente. A prova mede geometria e rolagem interna de cada elemento, não só da página.
+
+O primeiro teste de320 encontrou título longo com ellipsis e contribuição para overflow; incluída quebra local do título e revalidado o recorte, seguido da rodada pareada final. Fixture agora tem código H4 explícito. Deprecações AntD existentes e avisos anteriores de chunk/import dinâmico não geraram exceções de runtime. Sem alteração de contrato/handler, sem suíte integral local.
+
+Mapa: capacidades diretas e crítica preservadas localmente PASS; aba vizinha PASS, diff restrito; backend/IA/banco sem impacto identificado pela ausência de mudanças executáveis nesses destinos. Hospedagem permanece PARTIAL até os recibos finais.
 
 ---
 
@@ -25580,6 +25646,16 @@ Contrato: `docs/qa/agreement-knowledge-proposal-visibility.md` 1.0.0.
 2. Aplicar a regra ao carregamento da Knowledge e mostrar o alcance no card.
 3. Atualizar owner docs, Context Pack e AoT.
 4. Executar typecheck web, testes direcionados e build web; revisar diff e publicar somente web/Git.
+
+---
+
+## Source: `docs/qa/execution-knowledge-proposals-overflow.md`
+
+# Execução — contenção de Propostas
+
+Executar integralmente `docs/qa/agreement-knowledge-proposals-overflow.md`1.0.0, lido por completo, D-01..04, P-01..02, F-01, A-01 e CA-01..03. Autorização de Bruno em16/10/2026 inclui produção. Nenhuma decisão material pendente.
+
+Reutilizar Space.wrap e CSS restrito a prisma-knowledge-proposals. Ampliar fixture/roteiro existentes com pendentes, candidatos/fontes longos, ação legada e motivos. Não alterar handlers. Registrar baseline, medidas/capturas e preservação no AoT. Tipos web/build, lint/foundation/contexto e regressão focada; CI obrigatório. Sem suíte integral local. Plano de release deriva do diff commitado; publicar SHA validado somente em prisma-web, smoke autenticado sem mutações, rollback e sincronização. Corrigir apenas falhas necessárias ao escopo.
 
 ---
 

@@ -1,0 +1,507 @@
+{
+  "baseline": true,
+  "base": "c4ef51011fe0e82b17f3cbb2896828d0fb61251b",
+  "checks": [
+    {
+      "name": "1448 all proposal states",
+      "pass": true
+    },
+    {
+      "name": "1448 four global actions",
+      "pass": true
+    },
+    {
+      "name": "1448 reason required",
+      "pass": true
+    },
+    {
+      "name": "1448 valid reason enables explicit decision",
+      "pass": true
+    },
+    {
+      "name": "1448 certification stays blocked",
+      "pass": true
+    },
+    {
+      "name": "1448 reason and subgroup survive reflow",
+      "pass": true
+    },
+    {
+      "name": "1448 no implicit writes",
+      "pass": true
+    },
+    {
+      "name": "1448 no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "1448 neighboring tab retained",
+      "pass": true
+    },
+    {
+      "name": "1265 all proposal states",
+      "pass": true
+    },
+    {
+      "name": "1265 four global actions",
+      "pass": true
+    },
+    {
+      "name": "1265 reason required",
+      "pass": true
+    },
+    {
+      "name": "1265 valid reason enables explicit decision",
+      "pass": true
+    },
+    {
+      "name": "1265 certification stays blocked",
+      "pass": true
+    },
+    {
+      "name": "1265 reason and subgroup survive reflow",
+      "pass": true
+    },
+    {
+      "name": "1265 no implicit writes",
+      "pass": true
+    },
+    {
+      "name": "1265 no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "1265 neighboring tab retained",
+      "pass": true
+    },
+    {
+      "name": "390 all proposal states",
+      "pass": true
+    },
+    {
+      "name": "390 four global actions",
+      "pass": true
+    },
+    {
+      "name": "390 reason required",
+      "pass": true
+    },
+    {
+      "name": "390 valid reason enables explicit decision",
+      "pass": true
+    },
+    {
+      "name": "390 certification stays blocked",
+      "pass": true
+    },
+    {
+      "name": "390 reason and subgroup survive reflow",
+      "pass": true
+    },
+    {
+      "name": "390 no implicit writes",
+      "pass": true
+    },
+    {
+      "name": "390 no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "390 neighboring tab retained",
+      "pass": true
+    },
+    {
+      "name": "320 all proposal states",
+      "pass": true
+    },
+    {
+      "name": "320 four global actions",
+      "pass": true
+    },
+    {
+      "name": "320 reason required",
+      "pass": true
+    },
+    {
+      "name": "320 valid reason enables explicit decision",
+      "pass": true
+    },
+    {
+      "name": "320 certification stays blocked",
+      "pass": true
+    },
+    {
+      "name": "320 reason and subgroup survive reflow",
+      "pass": true
+    },
+    {
+      "name": "320 no implicit writes",
+      "pass": true
+    },
+    {
+      "name": "320 no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "320 neighboring tab retained",
+      "pass": true
+    },
+    {
+      "name": "baseline reproduces actual overflow",
+      "pass": true
+    }
+  ],
+  "measurements": [
+    {
+      "width": 1448,
+      "pageOverflow": false,
+      "cards": [
+        {
+          "title": "Business Process Management (BPM)",
+          "content": "Business Process Management (BPM)CompetênciaContribuição de empresaPendente de revisãoContribuição com descrição e fontes preservadas.H4 · Estratégia e gestãoH4 · Estratégia e gestãoHard Skills > Estratégia e gestãoDefinir prioridades e acompanhar os resultados.Qual é o contexto profissional?Exemplos: PlanejamentoCandidatos globais para análiseBusiness process management BPM software com identificação extensa IdentificadorSemEspacosIdentificadorSemEspacosIdentificadorSemEspacosIdentificadorSemEspacosIdentificadorSemEspacos · prefix https://fonte.example.invalid/referenciareferenciareferenciareferenciareferenciareferenciareferenciareferenciareferenciareferenciareferenciareferenciareferenciareferencia · Fonte sintética · officialRevisão sintética preservadaPesquisar com IAAprovarManter somente localRejeitar",
+          "width": 459.328125,
+          "overflow": [
+            {
+              "tag": "DIV",
+              "text": "Candidatos globais para análiseBusiness process management BPM software com identific",
+              "excess": 914,
+              "right": -19
+            },
+            {
+              "tag": "SPAN",
+              "text": "Business process management BPM software com identificação extensa IdentificadorSemEs",
+              "excess": 0,
+              "right": 893.890625
+            },
+            {
+              "tag": "P",
+              "text": " https://fonte.example.invalid/referenciareferenciareferenciareferenciareferenciarefe",
+              "excess": 762,
+              "right": -19
+            },
+            {
+              "tag": "A",
+              "text": "https://fonte.example.invalid/referenciareferenciareferenciareferenciareferenciarefer",
+              "excess": 0,
+              "right": 743.03125
+            },
+            {
+              "tag": "BUTTON",
+              "text": "Rejeitar",
+              "excess": 0,
+              "right": 56.984375
+            }
+          ]
+        },
+        {
+          "title": "Ocupação sintética",
+          "content": "Ocupação sintéticaOcupaçãoGlobal PrismaPendente de revisãoContribuição com descrição e fontes preservadas.Pesquisar com IAAprovar",
+          "width": 459.328125,
+          "overflow": []
+        },
+        {
+          "title": "Proposta legada sintética",
+          "content": "Proposta legada sintéticaCompetênciaProposta legada · Empresa ativaPendente de revisãoContribuição com descrição e fontes preservadas.H4 · Estratégia e gestãoHard Skills > Estratégia e gestãoDefinir prioridades e acompanhar os resultados.Qual é o contexto profissional?Exemplos: PlanejamentoProposta anterior ao fluxo M7.7Aprovar na empresa preserva esta proposta e cria uma contribuição separada, ainda pendente de decisão na Base Global.Aprovar na empresa e enviar à revisão Global",
+          "width": 459.34375,
+          "overflow": []
+        },
+        {
+          "title": "Certificação sintética",
+          "content": "Certificação sintéticaCertificação legadaContribuição de empresaPendente de revisãoContribuição com descrição e fontes preservadas.H4 · Estratégia e gestãoHard Skills > Estratégia e gestãoDefinir prioridades e acompanhar os resultados.Qual é o contexto profissional?Exemplos: PlanejamentoCertificação é uma credencial. Esta proposta não pode ser aprovada como competência; confira o termo de origem.Consultar termo de origemPesquisar com IAAprovarManter somente localRejeitar",
+          "width": 459.328125,
+          "overflow": [
+            {
+              "tag": "BUTTON",
+              "text": "Rejeitar",
+              "excess": 0,
+              "right": 56.984375
+            }
+          ]
+        },
+        {
+          "title": "Planejamento integrado",
+          "content": "Planejamento integradoCompetênciaContribuição de empresaAprovadoContribuição com descrição e fontes preservadas.H4 · Estratégia e gestãoHard Skills > Estratégia e gestãoDefinir prioridades e acompanhar os resultados.Qual é o contexto profissional?Exemplos: Planejamento",
+          "width": 459.328125,
+          "overflow": []
+        }
+      ]
+    },
+    {
+      "width": 1265,
+      "pageOverflow": false,
+      "cards": [
+        {
+          "title": "Business Process Management (BPM)",
+          "content": "Business Process Management (BPM)CompetênciaContribuição de empresaPendente de revisãoContribuição com descrição e fontes preservadas.H4 · Estratégia e gestãoH4 · Estratégia e gestãoHard Skills > Estratégia e gestãoDefinir prioridades e acompanhar os resultados.Qual é o contexto profissional?Exemplos: PlanejamentoCandidatos globais para análiseBusiness process management BPM software com identificação extensa IdentificadorSemEspacosIdentificadorSemEspacosIdentificadorSemEspacosIdentificadorSemEspacosIdentificadorSemEspacos · prefix https://fonte.example.invalid/referenciareferenciareferenciareferenciareferenciareferenciareferenciareferenciareferenciareferenciareferenciareferenciareferenciareferencia · Fonte sintética · officialRevisão sintética preservadaPesquisar com IAAprovarManter somente localRejeitar",
+          "width": 398.328125,
+          "overflow": [
+            {
+              "tag": "DIV",
+              "text": "Candidatos globais para análiseBusiness process management BPM software com identific",
+              "excess": 975,
+              "right": -19
+            },
+            {
+              "tag": "SPAN",
+              "text": "Business process management BPM software com identificação extensa IdentificadorSemEs",
+              "excess": 0,
+              "right": 954.890625
+            },
+            {
+              "tag": "P",
+              "text": " https://fonte.example.invalid/referenciareferenciareferenciareferenciareferenciarefe",
+              "excess": 823,
+              "right": -19
+            },
+            {
+              "tag": "A",
+              "text": "https://fonte.example.invalid/referenciareferenciareferenciareferenciareferenciarefer",
+              "excess": 0,
+              "right": 804.03125
+            },
+            {
+              "tag": "BUTTON",
+              "text": "Manter somente local",
+              "excess": 0,
+              "right": 29.890625
+            },
+            {
+              "tag": "BUTTON",
+              "text": "Rejeitar",
+              "excess": 0,
+              "right": 117.984375
+            }
+          ]
+        },
+        {
+          "title": "Ocupação sintética",
+          "content": "Ocupação sintéticaOcupaçãoGlobal PrismaPendente de revisãoContribuição com descrição e fontes preservadas.Pesquisar com IAAprovar",
+          "width": 398.328125,
+          "overflow": []
+        },
+        {
+          "title": "Proposta legada sintética",
+          "content": "Proposta legada sintéticaCompetênciaProposta legada · Empresa ativaPendente de revisãoContribuição com descrição e fontes preservadas.H4 · Estratégia e gestãoHard Skills > Estratégia e gestãoDefinir prioridades e acompanhar os resultados.Qual é o contexto profissional?Exemplos: PlanejamentoProposta anterior ao fluxo M7.7Aprovar na empresa preserva esta proposta e cria uma contribuição separada, ainda pendente de decisão na Base Global.Aprovar na empresa e enviar à revisão Global",
+          "width": 398.34375,
+          "overflow": []
+        },
+        {
+          "title": "Certificação sintética",
+          "content": "Certificação sintéticaCertificação legadaContribuição de empresaPendente de revisãoContribuição com descrição e fontes preservadas.H4 · Estratégia e gestãoHard Skills > Estratégia e gestãoDefinir prioridades e acompanhar os resultados.Qual é o contexto profissional?Exemplos: PlanejamentoCertificação é uma credencial. Esta proposta não pode ser aprovada como competência; confira o termo de origem.Consultar termo de origemPesquisar com IAAprovarManter somente localRejeitar",
+          "width": 398.328125,
+          "overflow": [
+            {
+              "tag": "BUTTON",
+              "text": "Manter somente local",
+              "excess": 0,
+              "right": 29.890625
+            },
+            {
+              "tag": "BUTTON",
+              "text": "Rejeitar",
+              "excess": 0,
+              "right": 117.984375
+            }
+          ]
+        },
+        {
+          "title": "Planejamento integrado",
+          "content": "Planejamento integradoCompetênciaContribuição de empresaAprovadoContribuição com descrição e fontes preservadas.H4 · Estratégia e gestãoHard Skills > Estratégia e gestãoDefinir prioridades e acompanhar os resultados.Qual é o contexto profissional?Exemplos: Planejamento",
+          "width": 398.328125,
+          "overflow": []
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "pageOverflow": false,
+      "cards": [
+        {
+          "title": "Business Process Management (BPM)",
+          "content": "Business Process Management (BPM)CompetênciaContribuição de empresaPendente de revisãoContribuição com descrição e fontes preservadas.H4 · Estratégia e gestãoH4 · Estratégia e gestãoHard Skills > Estratégia e gestãoDefinir prioridades e acompanhar os resultados.Qual é o contexto profissional?Exemplos: PlanejamentoCandidatos globais para análiseBusiness process management BPM software com identificação extensa IdentificadorSemEspacosIdentificadorSemEspacosIdentificadorSemEspacosIdentificadorSemEspacosIdentificadorSemEspacos · prefix https://fonte.example.invalid/referenciareferenciareferenciareferenciareferenciareferenciareferenciareferenciareferenciareferenciareferenciareferenciareferenciareferencia · Fonte sintética · officialRevisão sintética preservadaPesquisar com IAAprovarManter somente localRejeitar",
+          "width": 356,
+          "overflow": [
+            {
+              "tag": "DIV",
+              "text": "Business Process Management (BPM)",
+              "excess": 20,
+              "right": -19
+            },
+            {
+              "tag": "DIV",
+              "text": "Candidatos globais para análiseBusiness process management BPM software com identific",
+              "excess": 1011,
+              "right": -16
+            },
+            {
+              "tag": "SPAN",
+              "text": "Business process management BPM software com identificação extensa IdentificadorSemEs",
+              "excess": 0,
+              "right": 994.21875
+            },
+            {
+              "tag": "P",
+              "text": " https://fonte.example.invalid/referenciareferenciareferenciareferenciareferenciarefe",
+              "excess": 859,
+              "right": -16
+            },
+            {
+              "tag": "A",
+              "text": "https://fonte.example.invalid/referenciareferenciareferenciareferenciareferenciarefer",
+              "excess": 0,
+              "right": 843.359375
+            },
+            {
+              "tag": "BUTTON",
+              "text": "Manter somente local",
+              "excess": 0,
+              "right": 69.21875
+            },
+            {
+              "tag": "BUTTON",
+              "text": "Rejeitar",
+              "excess": 0,
+              "right": 157.3125
+            }
+          ]
+        },
+        {
+          "title": "Ocupação sintética",
+          "content": "Ocupação sintéticaOcupaçãoGlobal PrismaPendente de revisãoContribuição com descrição e fontes preservadas.Pesquisar com IAAprovar",
+          "width": 356,
+          "overflow": []
+        },
+        {
+          "title": "Proposta legada sintética",
+          "content": "Proposta legada sintéticaCompetênciaProposta legada · Empresa ativaPendente de revisãoContribuição com descrição e fontes preservadas.H4 · Estratégia e gestãoHard Skills > Estratégia e gestãoDefinir prioridades e acompanhar os resultados.Qual é o contexto profissional?Exemplos: PlanejamentoProposta anterior ao fluxo M7.7Aprovar na empresa preserva esta proposta e cria uma contribuição separada, ainda pendente de decisão na Base Global.Aprovar na empresa e enviar à revisão Global",
+          "width": 356,
+          "overflow": []
+        },
+        {
+          "title": "Certificação sintética",
+          "content": "Certificação sintéticaCertificação legadaContribuição de empresaPendente de revisãoContribuição com descrição e fontes preservadas.H4 · Estratégia e gestãoHard Skills > Estratégia e gestãoDefinir prioridades e acompanhar os resultados.Qual é o contexto profissional?Exemplos: PlanejamentoCertificação é uma credencial. Esta proposta não pode ser aprovada como competência; confira o termo de origem.Consultar termo de origemPesquisar com IAAprovarManter somente localRejeitar",
+          "width": 356,
+          "overflow": [
+            {
+              "tag": "BUTTON",
+              "text": "Manter somente local",
+              "excess": 0,
+              "right": 69.21875
+            },
+            {
+              "tag": "BUTTON",
+              "text": "Rejeitar",
+              "excess": 0,
+              "right": 157.3125
+            }
+          ]
+        },
+        {
+          "title": "Planejamento integrado",
+          "content": "Planejamento integradoCompetênciaContribuição de empresaAprovadoContribuição com descrição e fontes preservadas.H4 · Estratégia e gestãoHard Skills > Estratégia e gestãoDefinir prioridades e acompanhar os resultados.Qual é o contexto profissional?Exemplos: Planejamento",
+          "width": 356,
+          "overflow": []
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "pageOverflow": false,
+      "cards": [
+        {
+          "title": "Business Process Management (BPM)",
+          "content": "Business Process Management (BPM)CompetênciaContribuição de empresaPendente de revisãoContribuição com descrição e fontes preservadas.H4 · Estratégia e gestãoH4 · Estratégia e gestãoHard Skills > Estratégia e gestãoDefinir prioridades e acompanhar os resultados.Qual é o contexto profissional?Exemplos: PlanejamentoCandidatos globais para análiseBusiness process management BPM software com identificação extensa IdentificadorSemEspacosIdentificadorSemEspacosIdentificadorSemEspacosIdentificadorSemEspacosIdentificadorSemEspacos · prefix https://fonte.example.invalid/referenciareferenciareferenciareferenciareferenciareferenciareferenciareferenciareferenciareferenciareferenciareferenciareferenciareferencia · Fonte sintética · officialRevisão sintética preservadaPesquisar com IAAprovarManter somente localRejeitar",
+          "width": 286,
+          "overflow": [
+            {
+              "tag": "DIV",
+              "text": "Business Process Management (BPM)",
+              "excess": 90,
+              "right": -19
+            },
+            {
+              "tag": "DIV",
+              "text": "Candidatos globais para análiseBusiness process management BPM software com identific",
+              "excess": 1081,
+              "right": -16
+            },
+            {
+              "tag": "SPAN",
+              "text": "Business process management BPM software com identificação extensa IdentificadorSemEs",
+              "excess": 0,
+              "right": 1064.21875
+            },
+            {
+              "tag": "P",
+              "text": " https://fonte.example.invalid/referenciareferenciareferenciareferenciareferenciarefe",
+              "excess": 929,
+              "right": -16
+            },
+            {
+              "tag": "A",
+              "text": "https://fonte.example.invalid/referenciareferenciareferenciareferenciareferenciarefer",
+              "excess": 0,
+              "right": 913.359375
+            },
+            {
+              "tag": "BUTTON",
+              "text": "Manter somente local",
+              "excess": 0,
+              "right": 139.21875
+            },
+            {
+              "tag": "BUTTON",
+              "text": "Rejeitar",
+              "excess": 0,
+              "right": 227.3125
+            }
+          ]
+        },
+        {
+          "title": "Ocupação sintética",
+          "content": "Ocupação sintéticaOcupaçãoGlobal PrismaPendente de revisãoContribuição com descrição e fontes preservadas.Pesquisar com IAAprovar",
+          "width": 286,
+          "overflow": []
+        },
+        {
+          "title": "Proposta legada sintética",
+          "content": "Proposta legada sintéticaCompetênciaProposta legada · Empresa ativaPendente de revisãoContribuição com descrição e fontes preservadas.H4 · Estratégia e gestãoHard Skills > Estratégia e gestãoDefinir prioridades e acompanhar os resultados.Qual é o contexto profissional?Exemplos: PlanejamentoProposta anterior ao fluxo M7.7Aprovar na empresa preserva esta proposta e cria uma contribuição separada, ainda pendente de decisão na Base Global.Aprovar na empresa e enviar à revisão Global",
+          "width": 286,
+          "overflow": [
+            {
+              "tag": "BUTTON",
+              "text": "Aprovar na empresa e enviar à revisão Global",
+              "excess": 0,
+              "right": 48.734375
+            }
+          ]
+        },
+        {
+          "title": "Certificação sintética",
+          "content": "Certificação sintéticaCertificação legadaContribuição de empresaPendente de revisãoContribuição com descrição e fontes preservadas.H4 · Estratégia e gestãoHard Skills > Estratégia e gestãoDefinir prioridades e acompanhar os resultados.Qual é o contexto profissional?Exemplos: PlanejamentoCertificação é uma credencial. Esta proposta não pode ser aprovada como competência; confira o termo de origem.Consultar termo de origemPesquisar com IAAprovarManter somente localRejeitar",
+          "width": 286,
+          "overflow": [
+            {
+              "tag": "BUTTON",
+              "text": "Manter somente local",
+              "excess": 0,
+              "right": 139.21875
+            },
+            {
+              "tag": "BUTTON",
+              "text": "Rejeitar",
+              "excess": 0,
+              "right": 227.3125
+            }
+          ]
+        },
+        {
+          "title": "Planejamento integrado",
+          "content": "Planejamento integradoCompetênciaContribuição de empresaAprovadoContribuição com descrição e fontes preservadas.H4 · Estratégia e gestãoHard Skills > Estratégia e gestãoDefinir prioridades e acompanhar os resultados.Qual é o contexto profissional?Exemplos: Planejamento",
+          "width": 286,
+          "overflow": []
+        }
+      ]
+    }
+  ]
+}
