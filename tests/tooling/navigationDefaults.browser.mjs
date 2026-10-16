@@ -17,8 +17,9 @@ try{
   await p.getByText("Encerrados (1)",{exact:true}).click();await stable(p);
   check(width+" closed available",await p.locator(".sp-process").count()===1);
   await p.locator(".sp-process").click();await stable(p);
-  check(width+" remembered explicit selection",await p.locator(".ant-segmented-item-selected input").isChecked());
   check(width+" selected closed preserved",await p.locator(".sp-detail h2").innerText().then(t=>t.includes("Assistente administrativo")));
+  if(width===390){await p.getByRole("button",{name:"Processos seletivos",exact:true}).click();await stable(p);}
+  check(width+" remembered explicit selection",await p.getByRole("radio",{name:"Encerrados (1)",exact:true}).isChecked());
   await p.goto("http://127.0.0.1:5706/selection-processes.html");
   await stable(p);await p.getByText("Todos (3)",{exact:true}).click();await stable(p);
   check(width+" all available",await p.locator(".sp-process").count()===3);

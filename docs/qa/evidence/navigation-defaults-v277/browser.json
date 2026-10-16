@@ -12,11 +12,11 @@
     "pass": true
   },
   {
-    "name": "1448 remembered explicit selection",
+    "name": "1448 selected closed preserved",
     "pass": true
   },
   {
-    "name": "1448 selected closed preserved",
+    "name": "1448 remembered explicit selection",
     "pass": true
   },
   {
@@ -77,6 +77,54 @@
   },
   {
     "name": "390 closed available",
+    "pass": true
+  },
+  {
+    "name": "390 selected closed preserved",
+    "pass": true
+  },
+  {
+    "name": "390 remembered explicit selection",
+    "pass": true
+  },
+  {
+    "name": "390 all available",
+    "pass": true
+  },
+  {
+    "name": "390 zero active remains active",
+    "pass": true
+  },
+  {
+    "name": "390 no status writes",
+    "pass": true
+  },
+  {
+    "name": "390 global knowledge order",
+    "pass": true
+  },
+  {
+    "name": "390 global overview active",
+    "pass": true
+  },
+  {
+    "name": "390 global area accessible",
+    "pass": true
+  },
+  {
+    "name": "390 local knowledge order",
+    "pass": true
+  },
+  {
+    "name": "390 local overview active",
+    "pass": true
+  },
+  {
+    "name": "390 local area accessible",
+    "pass": true
+  },
+  {
+    "name": "390 no runtime errors",
     "pass": true
   }
 ]

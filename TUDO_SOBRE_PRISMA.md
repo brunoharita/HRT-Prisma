@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 497
-source_manifest_sha256: 304ddd3c38d75dd65c395ee36bbec50235a1710c5edcd8882c23b81eeae2d99e
+source_manifest_sha256: 3f0f0a93bf2d9f278af7df0f32adbe412b5a8d5704a835746587f4bca3f3bec9
 -->
 
 # Tudo sobre o Prisma
@@ -29660,7 +29660,7 @@ Validação mínima: cenários browser acima, testes versão/contrato/rotas, tip
 
 ## AoT local
 
-D-01/D-02/P-01 PASS:32assertivas browser1448/390 (ordem/default ativo, Encerrados/Todos, escolha lembrada, criação volta a ativo, deep link encerrado, zero ativos sem fallback, abas global/local e zero erro).14testes versão/contrato/rotas PASS, incluindo negativas de tenant/role/contrato e separação de resultados. Tipos/build web e lint PASS; escopo revisado restrito a defaults/ordem, IDs e serviços intactos. Screenshots em evidence/navigation-defaults-v277. O seletor do teste móvel foi ajustado para ler a opção lembrada na lista oculta, conforme a navegação sequencial existente; não houve correção de produto motivada pelo teste.
+D-01/D-02/P-01 PASS:32assertivas browser1448/390 (ordem/default ativo, Encerrados/Todos, escolha lembrada, criação volta a ativo, deep link encerrado, zero ativos sem fallback, abas global/local e zero erro).14testes versão/contrato/rotas PASS, incluindo negativas de tenant/role/contrato e separação de resultados. Tipos/build web e lint PASS; escopo revisado restrito a defaults/ordem, IDs e serviços intactos. Screenshots em evidence/navigation-defaults-v277. O teste móvel retorna à lista pelo botão da interface antes de verificar a opção lembrada, respeitando a navegação sequencial existente. As tentativas anteriores de consultar controles ocultos foram falhas do teste; não houve correção de produto motivada por elas.
 
 QA sintético local; única escrita da fixture foi criação explícita autorizada pelo cenário, sem fechamento/resultado fictício em produção. CI/publicação/smoke ainda pendentes. Não equivale a validação autenticada real.
 
