@@ -58,7 +58,7 @@ export function ProfessionalAreas({ organizationId, global, canEdit }: { organiz
       { title: "Situação", render: (_, p) => ({awaiting_human_review:"Aguardando curadoria",approved:"Aprovada",rejected:"Rejeitada",deferred:"Somente local"}[p.status] ?? p.status) },
       { title: "Ação", render: (_, p) => p.status === "awaiting_human_review" ? <Button onClick={() => curate(p)}>Revisar contribuição</Button> : "Decisão registrada" },
     ]} /></> : null}
-    <Modal open={Boolean(editor || review)} title={review ? "Curadoria global da área" : editor?.id ? "Editar área profissional" : "Cadastrar área profissional"} onCancel={() => { setEditor(null); setReview(null); }} footer={review ? <Space wrap>
+    <Modal rootClassName="prisma-content-standard" open={Boolean(editor || review)} title={review ? "Curadoria global da área" : editor?.id ? "Editar área profissional" : "Cadastrar área profissional"} onCancel={() => { setEditor(null); setReview(null); }} footer={review ? <Space wrap>
       <Button disabled={reason.trim().length < 5} loading={loading} onClick={() => void decide("deferred")}>Manter somente local</Button>
       <Button danger disabled={reason.trim().length < 5} loading={loading} onClick={() => void decide("rejected")}>Rejeitar</Button>
       <Button type="primary" disabled={reason.trim().length < 5} loading={loading} onClick={() => void decide("approved")}>{target ? "Associar à área global" : "Aprovar na base global"}</Button>

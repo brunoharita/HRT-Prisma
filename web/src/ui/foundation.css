@@ -211,3 +211,78 @@ body { background: var(--prisma-canvas); }
 .prisma-loading-feedback span { margin-top: 2px; font-size: 14px; line-height: 1.5; }
 @media (max-width: 600px) { .prisma-loading-feedback { right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); padding: 12px; } }
 @media (prefers-reduced-motion: reduce) { .prisma-loading-feedback .ant-spin-dot { animation: none !important; } }
+
+/* Shared reading hierarchy. Opt in per content region, including portal roots. */
+.prisma-content-standard {
+  --prisma-content-body: var(--prisma-font-size, 16px);
+  --prisma-content-detail: var(--prisma-font-size-sm, 14px);
+  --prisma-content-section: var(--prisma-font-size-heading-4, 20px);
+  font-family: var(--prisma-font-family, "Aptos", "Segoe UI", sans-serif);
+  font-size: var(--prisma-content-body);
+  line-height: 24px;
+  font-weight: 400;
+}
+.prisma-content-standard :is(p, .ant-typography, .ant-alert-description, .ant-empty-description, .ant-form, .ant-descriptions-item-content, .ant-table) {
+  font-size: var(--prisma-content-body);
+  line-height: 24px;
+  font-weight: 400;
+}
+.prisma-content-standard :is(h2, h3, h4, h5, .ant-card-head-title, .ant-drawer-title, .ant-modal-title, .prisma-knowledge-health-title) {
+  font-size: var(--prisma-content-section);
+  line-height: 28px;
+  font-weight: 600;
+}
+.prisma-content-standard :is(small, .ant-typography-secondary, .ant-form-item-label > label, .ant-form-item-extra, .ant-tag, .ant-table-thead > tr > th, dt, dd) {
+  font-size: var(--prisma-content-detail);
+  line-height: 20px;
+  font-weight: 400;
+}
+.prisma-content-standard :is(strong, b) { font-weight: 600; }
+.prisma-content-standard .ant-table-thead > tr > th { font-weight: 600; padding: 12px 16px; }
+.prisma-content-standard .ant-table-tbody > tr > td {
+  vertical-align: top;
+  font-size: var(--prisma-content-body);
+  line-height: 24px;
+  font-weight: 400;
+  padding: 12px 16px;
+  overflow-wrap: anywhere;
+}
+.prisma-content-standard :is(.ant-btn, .ant-tabs-tab, .ant-form-item-label > label) {
+  font-size: var(--prisma-content-detail);
+  line-height: 20px;
+}
+.prisma-content-standard .ant-btn { font-weight: 600; }
+.prisma-content-standard :is(.ant-alert-message, .prisma-m81-knowledge-source strong, .prisma-knowledge-source__heading strong, .prisma-knowledge-source__version) {
+  font-size: var(--prisma-content-body);
+  line-height: 24px;
+  font-weight: 600;
+}
+.prisma-content-standard :is(.prisma-m81-settings-group li summary, .prisma-m81-settings-group li p) {
+  font-size: var(--prisma-content-body);
+  line-height: 24px;
+}
+.prisma-content-standard .prisma-m81-settings-group li summary { padding: 12px 0; }
+.prisma-content-standard .prisma-m81-settings-group li p { margin: 8px 0 0; }
+.prisma-content-standard :is(.prisma-m81-knowledge-source small, .prisma-knowledge-source__heading small, .prisma-knowledge-source dl dt, .prisma-knowledge-source dl dd) {
+  font-size: var(--prisma-content-detail);
+  line-height: 20px;
+}
+.prisma-content-standard :is(.prisma-m81-knowledge-source, .prisma-knowledge-source) { gap: 8px; padding: 16px; }
+.prisma-content-standard [role="tabpanel"] > :is(p, .ant-typography) { margin-bottom: 16px; }
+.prisma-content-standard .ant-card { margin-bottom: 16px; }
+.prisma-content-standard .ant-card:last-child { margin-bottom: 0; }
+.prisma-content-standard .ant-descriptions-item-content { overflow-wrap: anywhere; }
+.prisma-content-standard [role="tabpanel"] { min-width: 0; }
+@media (max-width: 600px) {
+  .prisma-knowledge-content > .ant-card-body { padding: 16px; }
+  .prisma-content-standard .ant-space { max-width: 100%; }
+}
+
+.prisma-content-standard .ant-table-tbody .ant-btn-link { font-size: var(--prisma-content-body); line-height: 24px; font-weight: 600; }
+.prisma-content-standard .prisma-m81-settings-group li summary strong { font-weight: 600; }
+.prisma-content-standard .ant-pagination { font-size: var(--prisma-content-detail); line-height: 20px; }
+.prisma-content-standard .ant-table-wrapper { max-width: 100%; min-width: 0; }
+
+.prisma-content-standard .ant-descriptions-item-label { font-size: var(--prisma-content-detail); line-height: 20px; }
+.prisma-content-standard :is(.prisma-m81-settings-grid, .prisma-m81-knowledge-sources, .prisma-knowledge-health-grid, .prisma-m81-knowledge-overview) { gap: 16px; }
+.prisma-content-standard .prisma-m81-settings-grid { margin-top: 16px; }

@@ -5,8 +5,8 @@ context_bundle_version: 2.0.0
 product_version: 2.3.1
 current_state_version: 2.76.4
 current_state_last_verified: 2026-10-15
-documentation_source_count: 497
-source_manifest_sha256: ecb7aab427e6312757477c8199524560fa38bb6dca4e5d60713e838ebf9bbf03
+documentation_source_count: 498
+source_manifest_sha256: 5e1cc98642c205434914f5df94ecc7b99becdac4d952149fcc8df18f9519946b
 -->
 
 # Fonte do GPT para prompts do Prisma

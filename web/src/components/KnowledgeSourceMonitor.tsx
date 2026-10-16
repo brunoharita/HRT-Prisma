@@ -124,7 +124,7 @@ function SourceResolutionDrawer({
   onNavigate: (path: string) => void;
 }) {
   const plan = source ? buildResolutionPlan(source) : null;
-  return <Drawer open={Boolean(source)} onClose={onClose} title={plan?.title ?? "Resolver pendências"} width={560}>
+  return <Drawer rootClassName="prisma-content-standard" open={Boolean(source)} onClose={onClose} title={plan?.title ?? "Resolver pendências"} width={560}>
     {plan ? <>
       <Alert showIcon type={plan.tone} message={plan.summary} />
       <Typography.Title level={5} style={{ marginTop: 24 }}>O que o Prisma fará</Typography.Title>

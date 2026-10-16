@@ -8,6 +8,10 @@ last_verified: 2026-10-15
 
 # Estado atual do Prisma
 
+## Conhecimento2.7.8: coesão entre abas
+
+Todas as abas global/local reutilizam prisma-content-standard da UX Foundation: leitura/valores16, detalhes14, seções20, pesos400/600, tabelas/espaçamentos coerentes. Portais seguem o mesmo escopo; nenhuma regra/serviço/curadoria alterado. Validação compara todas as abas em1448/390. Acordo/evidência docs/qa/knowledge-ux-v278.md.
+
 ## Navegação2.7.7: filtros e abas
 
 Processos inicia Em andamento, com ordem Em andamento/Encerrados/Todos; escolha explícita lembrada continua preservada. Criação retorna a Em andamento. Conhecimento global/local coloca Visão Geral antes de Áreas profissionais, mantendo keys/aba ativa. Sem backend/dados/curadoria/resultado alterados. Evidência docs/qa/navigation-defaults-v277.md.

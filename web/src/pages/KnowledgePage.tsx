@@ -74,7 +74,7 @@ export function KnowledgePage({ profile, activeMembership, initialTab="overview"
     { title: "Status", dataIndex: "status", render: statusTag },
   ], []);
 
-  if (error && !dashboard) return <PrismaPage><Alert message={error} type="error" showIcon action={<Button onClick={() => void load()}>Tentar novamente</Button>} /></PrismaPage>;
+  if (error && !dashboard) return <PrismaPage><Alert className="prisma-content-standard" message={error} type="error" showIcon action={<Button onClick={() => void load()}>Tentar novamente</Button>} /></PrismaPage>;
   const areaTab = { key: "professional-areas", label: "Áreas profissionais", children: <ProfessionalAreas organizationId={organizationId} global={isGlobal} canEdit={isGlobal || activeMembership?.role === "owner" || activeMembership?.role === "admin"} /> };
   const tabs = isGlobal ? [
     { key: "overview", label: "Visão Geral", children: overviewPanel() },
@@ -100,8 +100,8 @@ export function KnowledgePage({ profile, activeMembership, initialTab="overview"
     <PrismaPageHeader icon={<PrismaPageIcon />} title="Conhecimento" description={isGlobal ? "Consulte a base de conhecimento, revise propostas e acompanhe fontes e atualizações." : "Organize o conhecimento da empresa a partir da base Prisma e acompanhe suas contribuições."}
       actions={<Button icon={<ReloadOutlined />} loading={loading} onClick={() => void load()}>Atualizar</Button>} />
     {error ? <Alert message={error} type="error" showIcon closable onClose={() => setError(null)} action={<Button onClick={() => void load()}>Atualizar consulta</Button>} /> : null}
-    <PrismaCard>{loading && !dashboard ? <PrismaState kind="loading" title="Carregando Conhecimento…" /> : <Tabs activeKey={activeTab} onChange={setActiveTab} items={tabs} />}</PrismaCard>
-    <Drawer open={Boolean(selectedConcept)} onClose={() => setSelectedConcept(null)} title="Detalhe do conceito" width={520}>
+    <PrismaCard className="prisma-content-standard prisma-knowledge-content">{loading && !dashboard ? <PrismaState kind="loading" title="Carregando Conhecimento…" /> : <Tabs activeKey={activeTab} onChange={setActiveTab} items={tabs} />}</PrismaCard>
+    <Drawer rootClassName="prisma-content-standard" open={Boolean(selectedConcept)} onClose={() => setSelectedConcept(null)} title="Detalhe do conceito" width={520}>
       {selectedConcept ? <><Descriptions column={1} bordered size="small" items={[
         { key: "name", label: "Nome canônico", children: selectedConcept.canonicalLabel },
         { key: "type", label: "Tipo", children: describeType(selectedConcept.conceptType) },
@@ -120,7 +120,7 @@ export function KnowledgePage({ profile, activeMembership, initialTab="overview"
       <Alert type="info" showIcon style={{ marginTop: 16 }} message="Sobre os níveis" description="Os valores vêm das fontes oficiais e preservam sua escala original. Essencial no ESCO representa relevância para a ocupação. Nível e Importância no O*NET são medidas próprias da fonte e não comprovam senioridade ou competência de uma Pessoa." />
       <Alert type="info" showIcon message={selectedConcept.scope === "global" ? "Conceito global somente leitura fora da autoridade Super Admin." : "Especialização válida apenas no escopo desta organização."} /></> : null}
     </Drawer>
-    <Drawer open={Boolean(selectedInbox)} onClose={() => setSelectedInbox(null)} title="Revisar termo observado" width={600}>
+    <Drawer rootClassName="prisma-content-standard" open={Boolean(selectedInbox)} onClose={() => setSelectedInbox(null)} title="Revisar termo observado" width={600}>
       {selectedInbox ? <Space direction="vertical" size="middle" style={{ width: "100%" }}>
         <Descriptions column={1} bordered size="small" items={[
           { key: "term", label: "Termo original", children: selectedInbox.originalTerm },
@@ -142,7 +142,7 @@ export function KnowledgePage({ profile, activeMembership, initialTab="overview"
         <Button loading={decisionLoading} disabled={!proposalLabel.trim() || decisionReason.trim().length < 5 || (proposalType === "competency" && !proposalSubgroupId)} onClick={async () => { setDecisionLoading(true); try { await knowledgeService.proposeConcept({ inboxId: selectedInbox.id, scope: isGlobal ? "global" : "organization", canonicalLabel: proposalLabel, conceptType: proposalType, subgroupId: proposalType === "competency" ? proposalSubgroupId : null, description: "", reason: decisionReason }); message.success(isGlobal ? "Proposta criada para revisão humana." : "Conhecimento salvo na empresa; contribuição global enviada para revisão."); setSelectedInbox(null); await load(); } catch (reason) { showFailure(reason instanceof Error ? reason.message : "Falha ao criar proposta."); } finally { setDecisionLoading(false); } }}>{isGlobal ? "Criar proposta, sem publicar" : "Salvar na Knowledge da empresa"}</Button>
       </Space> : null}
     </Drawer>
-    <Drawer open={Boolean(selectedSource)} onClose={() => setSelectedSource(null)} title={selectedSource ? `Revisar versão · ${selectedSource.name}` : "Revisar versão"} width={560}>
+    <Drawer rootClassName="prisma-content-standard" open={Boolean(selectedSource)} onClose={() => setSelectedSource(null)} title={selectedSource ? `Revisar versão · ${selectedSource.name}` : "Revisar versão"} width={560}>
       {selectedSource?.pendingVersion ? <Space direction="vertical" size="middle" style={{ width: "100%" }}>
         <Alert type="warning" showIcon message="Versão preparada para publicação" description="A checagem já validou e comparou esta versão. Publicá-la substituirá a versão corrente da base global do Prisma." />
         <Descriptions column={1} bordered size="small" items={[
