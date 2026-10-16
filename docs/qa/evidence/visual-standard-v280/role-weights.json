@@ -1,0 +1,890 @@
+[
+  {
+    "state": "manual-1448",
+    "selector": ".prisma-reviewed-surface > small",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-1448",
+    "selector": ".prisma-review-tabs .ant-tabs-tab",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-tab0-1448",
+    "selector": ".prisma-reviewed-surface > small",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-tab0-1448",
+    "selector": ".prisma-review-tabs .ant-tabs-tab",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-tab1-1448",
+    "selector": ".prisma-reviewed-surface > small",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-tab1-1448",
+    "selector": ".prisma-review-tabs .ant-tabs-tab",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-tab2-1448",
+    "selector": ".prisma-review-tabs .ant-tabs-tab",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-tab3-1448",
+    "selector": ".prisma-reviewed-surface > small",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-tab3-1448",
+    "selector": ".prisma-review-tabs .ant-tabs-tab",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-tab4-1448",
+    "selector": ".prisma-reviewed-surface > small",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-tab4-1448",
+    "selector": ".prisma-review-tabs .ant-tabs-tab",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-tab5-1448",
+    "selector": ".prisma-reviewed-surface > small",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-tab5-1448",
+    "selector": ".prisma-review-tabs .ant-tabs-tab",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "review-reference-1448",
+    "selector": ".prisma-extracted-surface > small",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "review-reference-1448",
+    "selector": ".prisma-reviewed-surface > small",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "review-reference-1448",
+    "selector": ".prisma-review-tabs .ant-tabs-tab",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-empty-1448",
+    "selector": ".prisma-reviewed-surface > small",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-empty-1448",
+    "selector": ".prisma-review-tabs .ant-tabs-tab",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-390",
+    "selector": ".prisma-reviewed-surface > small",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-390",
+    "selector": ".prisma-review-tabs .ant-tabs-tab",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-tab0-390",
+    "selector": ".prisma-reviewed-surface > small",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-tab0-390",
+    "selector": ".prisma-review-tabs .ant-tabs-tab",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-tab1-390",
+    "selector": ".prisma-reviewed-surface > small",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-tab1-390",
+    "selector": ".prisma-review-tabs .ant-tabs-tab",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-tab2-390",
+    "selector": ".prisma-review-tabs .ant-tabs-tab",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-tab3-390",
+    "selector": ".prisma-reviewed-surface > small",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-tab3-390",
+    "selector": ".prisma-review-tabs .ant-tabs-tab",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-tab4-390",
+    "selector": ".prisma-reviewed-surface > small",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-tab4-390",
+    "selector": ".prisma-review-tabs .ant-tabs-tab",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-tab5-390",
+    "selector": ".prisma-reviewed-surface > small",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-tab5-390",
+    "selector": ".prisma-review-tabs .ant-tabs-tab",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "review-reference-390",
+    "selector": ".prisma-extracted-surface > small",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "review-reference-390",
+    "selector": ".prisma-reviewed-surface > small",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "review-reference-390",
+    "selector": ".prisma-review-tabs .ant-tabs-tab",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-empty-390",
+    "selector": ".prisma-reviewed-surface > small",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-empty-390",
+    "selector": ".prisma-review-tabs .ant-tabs-tab",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "selection-1448",
+    "selector": ".sp-process",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "selection-1448",
+    "selector": ".sp-stage-row",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "selection-1448",
+    "selector": ".sp-stage-summary h3",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "selection-1448",
+    "selector": ".sp-detail h2",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "selection-1448",
+    "selector": ".sp-list .ant-segmented-item-label",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "selection-tab0-1448",
+    "selector": ".sp-process",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "selection-tab0-1448",
+    "selector": ".sp-stage-row",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "selection-tab0-1448",
+    "selector": ".sp-stage-summary h3",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "selection-tab0-1448",
+    "selector": ".sp-detail h2",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "selection-tab0-1448",
+    "selector": ".sp-list .ant-segmented-item-label",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "selection-tab1-1448",
+    "selector": ".sp-process",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "selection-tab1-1448",
+    "selector": ".sp-detail h2",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "selection-tab1-1448",
+    "selector": ".sp-list .ant-segmented-item-label",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "selection-tab2-1448",
+    "selector": ".sp-process",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "selection-tab2-1448",
+    "selector": ".sp-detail h2",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "selection-tab2-1448",
+    "selector": ".sp-list .ant-segmented-item-label",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "selection-390",
+    "selector": ".sp-process",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "selection-390",
+    "selector": ".sp-list .ant-segmented-item-label",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "selection-detail-390",
+    "selector": ".sp-stage-row",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "selection-detail-390",
+    "selector": ".sp-stage-summary h3",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "selection-detail-390",
+    "selector": ".sp-detail h2",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "selection-tab0-390",
+    "selector": ".sp-stage-row",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "selection-tab0-390",
+    "selector": ".sp-stage-summary h3",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "selection-tab0-390",
+    "selector": ".sp-detail h2",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "selection-tab1-390",
+    "selector": ".sp-detail h2",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "selection-tab2-390",
+    "selector": ".sp-detail h2",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "foundation-1448",
+    "selector": ".prisma-vacancy-table-wrap td",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "foundation-390",
+    "selector": ".prisma-vacancy-table-wrap td",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "tokens-1448",
+    "selector": ".tokens-source .ant-btn-link",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "tokens-1448",
+    "selector": ".tokens-sources .ant-card-body > p",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "tokens-390",
+    "selector": ".tokens-sources .ant-card-body > p",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "tokens-source-open-390",
+    "selector": ".tokens-sources .ant-card-body > p",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-320",
+    "selector": ".prisma-reviewed-surface > small",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-320",
+    "selector": ".prisma-review-tabs .ant-tabs-tab",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-tab0-320",
+    "selector": ".prisma-reviewed-surface > small",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-tab0-320",
+    "selector": ".prisma-review-tabs .ant-tabs-tab",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-tab1-320",
+    "selector": ".prisma-reviewed-surface > small",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-tab1-320",
+    "selector": ".prisma-review-tabs .ant-tabs-tab",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-tab2-320",
+    "selector": ".prisma-review-tabs .ant-tabs-tab",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-tab3-320",
+    "selector": ".prisma-reviewed-surface > small",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-tab3-320",
+    "selector": ".prisma-review-tabs .ant-tabs-tab",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-tab4-320",
+    "selector": ".prisma-reviewed-surface > small",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-tab4-320",
+    "selector": ".prisma-review-tabs .ant-tabs-tab",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-tab5-320",
+    "selector": ".prisma-reviewed-surface > small",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-tab5-320",
+    "selector": ".prisma-review-tabs .ant-tabs-tab",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "review-reference-320",
+    "selector": ".prisma-extracted-surface > small",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "review-reference-320",
+    "selector": ".prisma-reviewed-surface > small",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "review-reference-320",
+    "selector": ".prisma-review-tabs .ant-tabs-tab",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-empty-320",
+    "selector": ".prisma-reviewed-surface > small",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "manual-empty-320",
+    "selector": ".prisma-review-tabs .ant-tabs-tab",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "selection-empty-1448",
+    "selector": ".sp-list .ant-segmented-item-label",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "selection-error-1448",
+    "selector": ".sp-list .ant-segmented-item-label",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "selection-empty-390",
+    "selector": ".sp-list .ant-segmented-item-label",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "selection-error-390",
+    "selector": ".sp-list .ant-segmented-item-label",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "tokens-empty-1448",
+    "selector": ".tokens-sources .ant-card-body > p",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "tokens-empty-390",
+    "selector": ".tokens-sources .ant-card-body > p",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "person-Competências-1448",
+    "selector": ".prisma-m72-filters > label",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "person-Competências-1448",
+    "selector": ".prisma-m72-collapse-label small",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "person-table-1448",
+    "selector": ".prisma-m81-subgroup-table td",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "person-table-1448",
+    "selector": ".prisma-m81-table-link",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "person-Evidências-1448",
+    "selector": ".prisma-m72-metrics span",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "person-Competências-390",
+    "selector": ".prisma-m72-filters > label",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "person-Competências-390",
+    "selector": ".prisma-m72-collapse-label small",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "person-table-390",
+    "selector": ".prisma-m81-subgroup-table td",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "person-table-390",
+    "selector": ".prisma-m81-table-link",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "person-Evidências-390",
+    "selector": ".prisma-m72-metrics span",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "documents-1448",
+    "selector": ".prisma-operation-date",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "documents-1448",
+    "selector": ".prisma-operation-next-action",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "documents-390",
+    "selector": ".prisma-operation-date",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "documents-390",
+    "selector": ".prisma-operation-next-action",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "person-empty-1448",
+    "selector": ".prisma-m72-filters > label",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "person-error-1448",
+    "selector": ".prisma-m72-filters > label",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "person-empty-390",
+    "selector": ".prisma-m72-filters > label",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "person-error-390",
+    "selector": ".prisma-m72-filters > label",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "followup-1448",
+    "selector": ".pf-person",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "followup-1448",
+    "selector": ".pf-title",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "followup-1448",
+    "selector": ".pf-location",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "followup-1448",
+    "selector": ".pf-card-bottom > .ant-btn",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "followup-drawer-1448",
+    "selector": ".pf-person",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "followup-drawer-1448",
+    "selector": ".pf-title",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "followup-drawer-1448",
+    "selector": ".pf-location",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "followup-drawer-1448",
+    "selector": ".pf-card-bottom > .ant-btn",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "followup-confirm-1448",
+    "selector": ".pf-person",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "followup-confirm-1448",
+    "selector": ".pf-title",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "followup-confirm-1448",
+    "selector": ".pf-location",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "followup-confirm-1448",
+    "selector": ".pf-card-bottom > .ant-btn",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "followup-confirm-1448",
+    "selector": ".ant-modal-confirm-title",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "followup-390",
+    "selector": ".pf-person",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "followup-390",
+    "selector": ".pf-title",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "followup-390",
+    "selector": ".pf-location",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "followup-390",
+    "selector": ".pf-card-bottom > .ant-btn",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "followup-drawer-390",
+    "selector": ".pf-person",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "followup-drawer-390",
+    "selector": ".pf-title",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "followup-drawer-390",
+    "selector": ".pf-location",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "followup-drawer-390",
+    "selector": ".pf-card-bottom > .ant-btn",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "followup-confirm-390",
+    "selector": ".pf-person",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "followup-confirm-390",
+    "selector": ".pf-title",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "followup-confirm-390",
+    "selector": ".pf-location",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "followup-confirm-390",
+    "selector": ".pf-card-bottom > .ant-btn",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "followup-confirm-390",
+    "selector": ".ant-modal-confirm-title",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "bank-1448",
+    "selector": ".prisma-bank-stem",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "bank-1448",
+    "selector": ".prisma-bank-muted",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "bank-drawer-1448",
+    "selector": ".prisma-bank-stem",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "bank-drawer-1448",
+    "selector": ".prisma-bank-context",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "bank-drawer-1448",
+    "selector": ".prisma-bank-muted",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "bank-390",
+    "selector": ".prisma-bank-stem",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "bank-390",
+    "selector": ".prisma-bank-muted",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "bank-drawer-390",
+    "selector": ".prisma-bank-stem",
+    "expected": "600",
+    "pass": true
+  },
+  {
+    "state": "bank-drawer-390",
+    "selector": ".prisma-bank-context",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "bank-drawer-390",
+    "selector": ".prisma-bank-muted",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "bank-empty-1448",
+    "selector": ".prisma-bank-muted",
+    "expected": "400",
+    "pass": true
+  },
+  {
+    "state": "bank-empty-390",
+    "selector": ".prisma-bank-muted",
+    "expected": "400",
+    "pass": true
+  }
+]

@@ -1,0 +1,7 @@
+after followup
+11:22:59 [vite] (client) [console.error] Warning: [antd: Modal] Static function can not consume context like dynamic theme. Please use 'App' component instead.
+11:23:03 [vite] (client) [console.error] Warning: [antd: Modal] Static function can not consume context like dynamic theme. Please use 'App' component instead.
+after bank
+11:23:10 [vite] (client) [console.error] Warning: [antd: Space] `direction` is deprecated. Please use `orientation` instead.
+11:23:14 [vite] (client) [console.error] Warning: [antd: Space] `direction` is deprecated. Please use `orientation` instead.
+{"phase":"after","checks":144,"states":10,"pass":true}

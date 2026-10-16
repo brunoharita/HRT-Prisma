@@ -362,7 +362,7 @@ body { background: var(--prisma-canvas); }
   color: var(--prisma-color-text-secondary, #53637d);
 }
 .prisma-content-standard.prisma-reading .prisma-m81-status-list strong { color: var(--prisma-color-text, #10203a); }
-.prisma-content-standard.prisma-reading .prisma-bank-row .prisma-bank-stem { font-size: var(--prisma-content-body); line-height: 24px; color: var(--prisma-text, #10203a); }
+.prisma-content-standard.prisma-reading .prisma-bank-row .prisma-bank-stem { font-size: var(--prisma-content-body); line-height: 24px; color: var(--prisma-text, #10203a); font-weight: 600; }
 .prisma-content-standard.prisma-reading .prisma-bank-drawer .ant-drawer-extra .ant-btn { font-size: var(--prisma-content-detail); }
 .prisma-content-standard.prisma-reading .tokens-source .ant-btn-link { font-size: var(--prisma-content-detail); line-height: 20px; min-height: 32px; }
 .prisma-content-standard.prisma-reading .tokens-sources .ant-card-body > p { font-size: var(--prisma-content-detail); line-height: 20px; margin-block: 8px; }
@@ -372,7 +372,7 @@ body { background: var(--prisma-canvas); }
 .pf-page .prisma-density-compact .pf-column h2 { font-size: var(--prisma-content-body); line-height: 24px; }
 .pf-page .prisma-density-compact .pf-title { font-size: var(--prisma-content-detail); line-height: 20px; }
 .prisma-content-standard.prisma-reading :is(.pf-location, .pf-age, .pf-score-notice, .pf-saving, .pf-help, .pf-drag-help) { font-size: var(--prisma-content-detail); line-height: 20px; }
-.pf-page .prisma-density-compact .pf-person { color: var(--prisma-content-link); font-size: var(--prisma-content-body); line-height: 24px; }
+.pf-page .prisma-density-compact .pf-person { color: var(--prisma-content-link); font-size: var(--prisma-content-body); line-height: 24px; font-weight: 600; }
 .pf-page .prisma-density-compact .pf-person:hover { color: var(--prisma-content-link-hover); text-decoration: underline; }
 @media (max-width: 767px) {
   .prisma-content-standard.prisma-reading :is(.ant-modal-title, .ant-drawer-title) { overflow-wrap: anywhere; }

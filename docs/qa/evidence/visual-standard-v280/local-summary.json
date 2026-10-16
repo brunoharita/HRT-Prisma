@@ -2,7 +2,7 @@
   "baseline": "a33c3d4d7b779351855fbf173701925afe9e1033",
   "at": "2026-10-16T14:03:26Z",
   "pairedStates": 106,
-  "visualChecks": 737,
+  "visualChecks": 775,
   "reusedSuites": 11,
   "reusedFlowChecks": 806,
   "unitTests": 34,
@@ -11,5 +11,6 @@
     "Synthetic actual components; no authenticated real-person production journey.",
     "Baseline mobile overflow and narrow error text recorded; final paired states pass."
   ],
-  "colorRoleFollowup": "Primary #10203a, secondary #53637d and blue links verified in affected populated/empty/error states"
+  "colorRoleFollowup": "Primary #10203a, secondary #53637d and blue links verified in affected populated/empty/error states",
+  "renderedWeightRoleChecks": 148
 }

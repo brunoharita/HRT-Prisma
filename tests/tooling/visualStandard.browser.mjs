@@ -50,6 +50,7 @@ async function capture(page,key,group){
    const secondary=[".prisma-operation-date",".prisma-m72-filters > label",".prisma-m72-collapse-label small",".prisma-m72-metrics span",".prisma-bank-context",".prisma-bank-muted"].includes(selector);
    const primary=[".prisma-operation-next-action",".prisma-bank-stem"].includes(selector);
    if(items.length&&(secondary||primary))check(key+" semantic text color "+selector,items.every(i=>i.color===(secondary?"rgb(83, 99, 125)":"rgb(16, 32, 58)")));
+   if(items.length){const emphasis=[".pf-person",".prisma-bank-stem",".prisma-m81-table-link",".prisma-m72-filters > label",".prisma-m72-metrics span",".pf-card-bottom > .ant-btn",".tokens-source .ant-btn-link",".sp-stage-summary h3",".sp-detail h2",".ant-modal-confirm-title"].includes(selector);check(key+" semantic weight "+selector,items.every(i=>i.weight===(emphasis?"600":"400")));}
   }
  }
  const filename=key.normalize("NFD").replace(/[\u0300-\u036f]/g,"");
