@@ -10,7 +10,7 @@ last_verified: 2026-10-15
 
 ## Conhecimento2.7.8: coesão entre abas
 
-Todas as abas global/local reutilizam prisma-content-standard da UX Foundation: leitura/valores16, detalhes14, seções20, pesos400/600, tabelas/espaçamentos coerentes. Portais seguem o mesmo escopo; nenhuma regra/serviço/curadoria alterado. Validação compara todas as abas em1448/390. Acordo/evidência docs/qa/knowledge-ux-v278.md.
+Todas as abas global/local reutilizam prisma-content-standard da UX Foundation: leitura/valores16, detalhes14, seções20, pesos400/600, tabelas/espaçamentos coerentes. Portais seguem o mesmo escopo; nenhuma regra/serviço/curadoria alterado. Validação compara todas as abas em1448/390. Acordo/evidência docs/qa/aot-knowledge-ux-v278.md.
 
 ## Navegação2.7.7: filtros e abas
 
