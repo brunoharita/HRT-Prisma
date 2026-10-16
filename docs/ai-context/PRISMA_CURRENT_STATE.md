@@ -8,6 +8,10 @@ last_verified: 2026-10-15
 
 # Estado atual do Prisma
 
+## Navegação2.7.7: filtros e abas
+
+Processos inicia Em andamento, com ordem Em andamento/Encerrados/Todos; escolha explícita lembrada continua preservada. Criação retorna a Em andamento. Conhecimento global/local coloca Visão Geral antes de Áreas profissionais, mantendo keys/aba ativa. Sem backend/dados/curadoria/resultado alterados. Evidência docs/qa/navigation-defaults-v277.md.
+
 ## Pessoas2.7.6: tipografia e alinhamento
 
 Tabela de Pessoas com conteúdo principal14px/20px/peso400, nome600; e-mail/período12px/18px, espaçamento4px. Células pelo topo; ausências com tamanho principal/cor secundária; selo IA junto à última palavra. Seis colunas, filtros, tooltips, dados e regras preservados. Acordo/evidência em docs/qa/people-typography-v276.md. Somente frontend.

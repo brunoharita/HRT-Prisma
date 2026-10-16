@@ -1,0 +1,13 @@
+import {createRoot} from "react-dom/client";
+import {ConfigProvider} from "antd";
+import ptBR from "antd/locale/pt_BR";
+import {KnowledgePage} from "../../../web/src/pages/KnowledgePage";
+import {professionalAreaService} from "../../../web/src/infrastructure/supabase/professionalAreaService";
+import {prismaTheme} from "../../../web/src/ui/theme";
+import "../../../web/src/styles.css";
+import "../../../web/src/ui/foundation.css";
+const params=new URLSearchParams(location.search);
+const role=params.get("scope")==="local"?"owner":"super_admin";
+professionalAreaService.load=async()=>({options:[],selected:[]}) as never;
+professionalAreaService.contributions=async()=>[];
+createRoot(document.getElementById("app")!).render(<ConfigProvider locale={ptBR} theme={prismaTheme}><KnowledgePage profile={role} activeMembership={{organizationId:"synthetic",organizationName:"Empresa sintética",groupId:null,groupName:null,role}} initialTab={params.get("tab")??"overview"}/></ConfigProvider>);

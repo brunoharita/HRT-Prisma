@@ -19,7 +19,7 @@ export function SelectionProcessesPage({activeMembership,onNavigate,selectedId,v
  const org=activeMembership.organizationId;
  const [closing,setClosing]=useState<SelectionProcess|null>(null);
  useEffect(()=>setClosing(null),[org,selectedId]);
- const [filter,setFilter]=useViewState("processFilters",{search:"",status:"all",page:1},"/selection-processes");
+ const [filter,setFilter]=useViewState("processFilters",{search:"",status:"active",page:1},"/selection-processes");
  const [data,setData]=useState<SelectionWorkspace|null>(null),[loading,setLoading]=useState(true),[error,setError]=useState<string|null>(null),[retry,setRetry]=useState(0),[creating,setCreating]=useState(false);
  const [pending,setPending]=useState(false),[tab,setTab]=useState("summary"),[history,setHistory]=useState<FollowUpData|null>(null),[historyError,setHistoryError]=useState<string|null>(null),[historyLoading,setHistoryLoading]=useState(false);
  const lock=useRef(false),generation=useRef(0);
@@ -59,7 +59,7 @@ export function SelectionProcessesPage({activeMembership,onNavigate,selectedId,v
  <div className={`sp-workspace ${selectedId?"sp-detail-open":""}`} aria-busy={loading}>
  <section className="sp-list" aria-label="Lista de processos seletivos">
  <Input aria-label="Buscar processo ou Posição" prefix={<SearchOutlined aria-hidden="true"/>} placeholder="Buscar processo ou Posição" maxLength={200} value={filter.search} onChange={e=>setFilter({...filter,search:e.target.value,page:1})} allowClear/>
- <Segmented block aria-label="Situação dos processos" value={filter.status} onChange={status=>setFilter({...filter,status:String(status),page:1})} options={[{value:"all",label:`Todos${current?` (${current.counts.active+current.counts.closed})`:""}`},{value:"active",label:`Em andamento${current?` (${current.counts.active})`:""}`},{value:"closed",label:`Encerrados${current?` (${current.counts.closed})`:""}`}]}/>
+ <Segmented block aria-label="Situação dos processos" value={filter.status} onChange={status=>setFilter({...filter,status:String(status),page:1})} options={[{value:"active",label:`Em andamento${current?` (${current.counts.active})`:""}`},{value:"closed",label:`Encerrados${current?` (${current.counts.closed})`:""}`},{value:"all",label:`Todos${current?` (${current.counts.active+current.counts.closed})`:""}`}]}/>
  {loading&&!current?<Skeleton active paragraph={{rows:6}}/>:current?.processes.length?<div className="sp-process-list">{current.processes.map(p=><button type="button" key={p.id} className={`sp-process ${selected?.id===p.id?"is-selected":""}`} aria-pressed={selected?.id===p.id} onClick={()=>onNavigate(processPath(p))}>
  <span className="sp-process-title">{p.title} · {p.name}</span><Tag color={p.status==="active"?"blue":"default"}>{p.status==="active"?"Em andamento":"Encerrado"}</Tag>
  <span>{p.candidates} candidatos</span><small>{processOccupancy(p.occupancy)}</small>
@@ -79,7 +79,7 @@ export function SelectionProcessesPage({activeMembership,onNavigate,selectedId,v
  {key:"history",label:"Histórico",children:<div className="sp-tab-content">{historyError?<Alert showIcon type="error" title={historyError} action={<Button onClick={()=>setRetry(n=>n+1)}>Tentar novamente</Button>}/>:historyLoading?<Skeleton active/>:history?<FollowUpHistory history={history.history} operators={history.operators}/>:null}</div>}
  ]}/></>:loading?<Skeleton active paragraph={{rows:6}}/>:<Empty description="Selecione um processo para consultar o resumo."/>}
  </section></div>
- {creating?<CreateSelectionProcessModal organizationId={org} {...(vacancyId?{vacancyId}:{})} onClose={()=>setCreating(false)} onCreated={id=>{setCreating(false);setFilter({search:"",status:"all",page:1});onNavigate(`/selection-processes/${id}`);setRetry(n=>n+1);}}/>:null}
+ {creating?<CreateSelectionProcessModal organizationId={org} {...(vacancyId?{vacancyId}:{})} onClose={()=>setCreating(false)} onCreated={id=>{setCreating(false);setFilter({search:"",status:"active",page:1});onNavigate(`/selection-processes/${id}`);setRetry(n=>n+1);}}/>:null}
  {closing?<CloseSelectionProcessModal key={`${org}:${closing.id}`} organizationId={org} vacancyId={closing.vacancyId} processId={closing.id} onCancel={()=>setClosing(null)} onClosed={()=>{setClosing(null);setRetry(n=>n+1);}}/>:null}
  </PrismaPage>;
 }

@@ -1,0 +1,82 @@
+[
+  {
+    "name": "1448 process option order",
+    "pass": true
+  },
+  {
+    "name": "1448 initial active",
+    "pass": true
+  },
+  {
+    "name": "1448 closed available",
+    "pass": true
+  },
+  {
+    "name": "1448 remembered explicit selection",
+    "pass": true
+  },
+  {
+    "name": "1448 selected closed preserved",
+    "pass": true
+  },
+  {
+    "name": "1448 all available",
+    "pass": true
+  },
+  {
+    "name": "created process returns active",
+    "pass": true
+  },
+  {
+    "name": "closed deep link with active list",
+    "pass": true
+  },
+  {
+    "name": "1448 zero active remains active",
+    "pass": true
+  },
+  {
+    "name": "1448 no status writes",
+    "pass": true
+  },
+  {
+    "name": "1448 global knowledge order",
+    "pass": true
+  },
+  {
+    "name": "1448 global overview active",
+    "pass": true
+  },
+  {
+    "name": "1448 global area accessible",
+    "pass": true
+  },
+  {
+    "name": "1448 local knowledge order",
+    "pass": true
+  },
+  {
+    "name": "1448 local overview active",
+    "pass": true
+  },
+  {
+    "name": "1448 local area accessible",
+    "pass": true
+  },
+  {
+    "name": "1448 no runtime errors",
+    "pass": true
+  },
+  {
+    "name": "390 process option order",
+    "pass": true
+  },
+  {
+    "name": "390 initial active",
+    "pass": true
+  },
+  {
+    "name": "390 closed available",
+    "pass": true
+  }
+]

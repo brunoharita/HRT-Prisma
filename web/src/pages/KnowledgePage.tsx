@@ -77,8 +77,8 @@ export function KnowledgePage({ profile, activeMembership, initialTab="overview"
   if (error && !dashboard) return <PrismaPage><Alert message={error} type="error" showIcon action={<Button onClick={() => void load()}>Tentar novamente</Button>} /></PrismaPage>;
   const areaTab = { key: "professional-areas", label: "Áreas profissionais", children: <ProfessionalAreas organizationId={organizationId} global={isGlobal} canEdit={isGlobal || activeMembership?.role === "owner" || activeMembership?.role === "admin"} /> };
   const tabs = isGlobal ? [
-    areaTab,
     { key: "overview", label: "Visão Geral", children: overviewPanel() },
+    areaTab,
     { key: "structure", label: "Estrutura de competências", children: <KnowledgeStructure organizationId={organizationId}/> },
     { key: "global", label: "Base global de conhecimento", children: conceptsPanel() },
     { key: "sources", label: "Fontes", children: sourcesPanel() },
@@ -86,8 +86,8 @@ export function KnowledgePage({ profile, activeMembership, initialTab="overview"
     { key: "proposals", label: "Propostas", children: proposalsPanel() },
     { key: "impacts", label: "Impactos", children: impactsPanel() },
   ] : [
-    areaTab,
     { key: "overview", label: "Visão Geral", children: overviewPanel() },
+    areaTab,
     { key: "structure", label: "Estrutura de competências", children: <KnowledgeStructure organizationId={organizationId}/> },
     { key: "organization", label: "Conhecimento da empresa", children: conceptsPanel("organization") },
     { key: "global", label: "Base Prisma", children: conceptsPanel("global") },
