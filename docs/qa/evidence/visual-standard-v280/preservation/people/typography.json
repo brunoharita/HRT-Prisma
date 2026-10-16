@@ -1,0 +1,74 @@
+[
+  {
+    "name": "1448 primary size and line",
+    "pass": true
+  },
+  {
+    "name": "1448 name only emphasis",
+    "pass": true
+  },
+  {
+    "name": "1448 top alignment",
+    "pass": true
+  },
+  {
+    "name": "1448 secondary typography",
+    "pass": true
+  },
+  {
+    "name": "1448 secondary alignment",
+    "pass": true
+  },
+  {
+    "name": "1448 missing primary size",
+    "pass": true
+  },
+  {
+    "name": "1448 badge attached to last word",
+    "pass": true
+  },
+  {
+    "name": "1448 provenance accessible",
+    "pass": true
+  },
+  {
+    "name": "1448 no runtime errors",
+    "pass": true
+  },
+  {
+    "name": "390 primary size and line",
+    "pass": true
+  },
+  {
+    "name": "390 name only emphasis",
+    "pass": true
+  },
+  {
+    "name": "390 top alignment",
+    "pass": true
+  },
+  {
+    "name": "390 secondary typography",
+    "pass": true
+  },
+  {
+    "name": "390 secondary alignment",
+    "pass": true
+  },
+  {
+    "name": "390 missing primary size",
+    "pass": true
+  },
+  {
+    "name": "390 badge attached to last word",
+    "pass": true
+  },
+  {
+    "name": "390 provenance accessible",
+    "pass": true
+  },
+  {
+    "name": "390 no runtime errors",
+    "pass": true
+  }
+]

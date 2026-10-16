@@ -5,4 +5,7 @@ export const visualKnowledge={
  listCompetencyMacroGroups:async()=>[{code:"hard",label:"Competências técnicas",definition:"Conhecimentos e práticas profissionais.",sortOrder:1},{code:"soft",label:"Competências comportamentais",definition:"Práticas e relações no trabalho.",sortOrder:2}],
  listCompetencySubgroups:async()=>[],
 };
-export const visualVacancy={list:async()=>[],listRoleTemplates:async()=>[],listOccupants:async()=>[]};
+export const visualVacancy={list:async()=>new URLSearchParams(location.search).get("fixture")==="visual-standard"?[
+ {id:"position-synthetic",title:"Analista de operações e desenvolvimento de processos",area:"Operações",location:"São Paulo, SP",employmentType:"CLT",occupancy:"vacant",occupantName:null,definitionVersion:3,updatedAt:"2026-10-01T12:00:00Z"},
+ {id:"position-occupied",title:"Gerente de tecnologia",area:"Tecnologia",location:"Bauru, SP",employmentType:"CLT",occupancy:"occupied",occupantName:"Pessoa sintética",definitionVersion:2,updatedAt:"2026-10-01T12:00:00Z"},
+]:[],listRoleTemplates:async()=>[],listOccupants:async()=>[]};

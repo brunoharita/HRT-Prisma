@@ -712,7 +712,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
   }
 
   if (loading) return <PrismaPage><div className="prisma-review-loading"><Typography.Title level={3}>Preparando a bancada de revisão...</Typography.Title><Typography.Text type="secondary">Carregando documento, extração, evidências e histórico.</Typography.Text></div></PrismaPage>;
-  if (!workspace || !draft) return <PrismaPage><Alert action={<Button onClick={() => onNavigate(`/profiles/${personId}`)}>Voltar à Central da Pessoa</Button>} description="O Perfil vigente permanece preservado. Reabra o documento pela Central para carregar o estado atual." title={error ?? "Revisão não encontrada nesta empresa."} showIcon type="error" /></PrismaPage>;
+  if (!workspace || !draft) return <PrismaPage className="prisma-content-standard prisma-reading"><Alert action={<Button onClick={() => onNavigate(`/profiles/${personId}`)}>Voltar à Central da Pessoa</Button>} description="O Perfil vigente permanece preservado. Reabra o documento pela Central para carregar o estado atual." title={error ?? "Revisão não encontrada nesta empresa."} showIcon type="error" /></PrismaPage>;
 
   const saveBlockedReason = !editable
     ? "Esta revisão não está mais disponível para edição."
@@ -741,7 +741,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
       : null;
 
   return (
-    <PrismaPage className={`prisma-m2c-page prisma-review-page prisma-review-page--workspace ${workspace.sourceKind === "manual" ? `prisma-review-page--manual ${workspace.baseProfileVersion ? "" : "prisma-review-page--manual-new"}` : ""}`}>
+    <PrismaPage className={`prisma-m2c-page prisma-review-page prisma-review-page--workspace prisma-content-standard prisma-reading ${workspace.sourceKind === "manual" ? `prisma-review-page--manual ${workspace.baseProfileVersion ? "" : "prisma-review-page--manual-new"}` : ""}`}>
       <PrismaPageHeader icon={<PrismaPageIcon />}
         title={workspace.sourceKind === "manual" ? "Preenchimento manual do Perfil" : viewOnly ? "Verificação do currículo" : workspace.sourceKind === "profile" ? "Nova revisão do Perfil" : "Revisão do documento"}
         description={workspace.sourceKind === "manual" ? "Preencha as seções que conhece. Salve o rascunho para continuar depois. Informações declaradas, sem extração de PDF, verificação pelo Prisma ou consumo de Tokens. Compare antes de publicar; o Perfil vigente permanece preservado." : viewOnly
@@ -819,7 +819,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
         </div>
       </div>
 
-      <Modal open={manualSectionOpen} title="Adicionar seção profissional" okText="Adicionar seção" cancelText="Cancelar" onCancel={() => setManualSectionOpen(false)} onOk={() => {
+      <Modal rootClassName="prisma-content-standard prisma-reading" open={manualSectionOpen} title="Adicionar seção profissional" okText="Adicionar seção" cancelText="Cancelar" onCancel={() => setManualSectionOpen(false)} onOk={() => {
         try {
           const result = createCustomSection({ draft, name: customSectionName, format: customSectionFormat, value: manualSectionValue, source: "human" });
           setDraft(result.draft); setSelectedFieldPath(result.fieldPath); setManualSectionOpen(false); setError(null);
@@ -830,7 +830,7 @@ export function ProfileReviewPage({ activeMembership, personId, documentId, revi
         <label>Formato<Select aria-label="Formato da seção manual" value={customSectionFormat} onChange={setCustomSectionFormat} options={[{value:"list",label:"Lista de registros"},{value:"text",label:"Texto"}]} /></label>
         <label>Primeiro registro<Input.TextArea aria-label="Primeiro registro manual" value={manualSectionValue} onChange={event => setManualSectionValue(event.target.value)} maxLength={4000} /></label>
       </Modal>
-      <Modal cancelButtonProps={{ disabled: busy }} cancelText="Cancelar seleção" confirmLoading={busy} okButtonProps={{ disabled: busy || Boolean(competencySelectionResolution?.ambiguous) }} okText="Aplicar seleção" onCancel={closePendingSelection} onOk={() => void applyPendingSelection()} open={!viewOnly && Boolean(pendingSelection)} title="Usar região selecionada">
+      <Modal rootClassName="prisma-content-standard prisma-reading" cancelButtonProps={{ disabled: busy }} cancelText="Cancelar seleção" confirmLoading={busy} okButtonProps={{ disabled: busy || Boolean(competencySelectionResolution?.ambiguous) }} okText="Aplicar seleção" onCancel={closePendingSelection} onOk={() => void applyPendingSelection()} open={!viewOnly && Boolean(pendingSelection)} title="Usar região selecionada">
         {pendingSelection ? <div className="prisma-selection-dialog">
           {selectionError ? <Alert title={selectionError} showIcon type="error" action={<Button onClick={(event) => focusNoticeFields(event.currentTarget)}>Revisar informação selecionada</Button>} /> : null}
           <Alert title={`Página ${pendingSelection.pageNumber} · ${pendingSelection.extractionMethod}`} description={selectedFieldIsTransient ? "Este é um novo campo. A seleção preencherá seu conteúdo e salvará a evidência em uma única operação." : pendingSelection.ocrState === "failed" ? "O texto não foi reconhecido. Informe o valor correto; a região, a autoria e a mudança ficarão registradas automaticamente." : pendingSelection.selectedTextUnits.length ? "Os caracteres destacados no documento são exatamente os usados no texto recuperado." : "O texto foi recuperado sem caixas individuais de caracteres. Revise-o antes de aplicá-lo."} showIcon type={pendingSelection.ocrState === "failed" ? "warning" : "info"} />

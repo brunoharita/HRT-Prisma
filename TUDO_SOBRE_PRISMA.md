@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 498
-source_manifest_sha256: c48a73b9b607da58d8f69ae362f696fa2a7d2613308e15c4fa13490d29f9d48a
+documentation_source_count: 501
+source_manifest_sha256: 4009bc487c6d0497162a9064009d7ce79aea2e032e7489ef5c709c2a72dd7de1
 -->
 
 # Tudo sobre o Prisma
@@ -2643,11 +2643,15 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.76.4
-last_verified: 2026-10-15
+version: 2.80.0
+last_verified: 2026-10-16
 ---
 
 # Estado atual do Prisma
+
+## V2M8: padronização visual 2.8.0
+
+Movimento autorizado por Bruno para implementação e publicação. UX Foundation1.5.0 reutiliza a base existente: leitura16/24, rótulos/metadados14/20, seções24/32 e20/28 por nível, portais24/32. Pessoas mantém14/20 e12/18; Kanban tem variante compacta explícita. Normalização em manual/revisão/comparação, Processos/Acompanhamento, competências/evidências, Posições/documentos, Tokens e Banco de questões. Links textuais usam azul; informação, cartões, botões e estados conservam semântica. Sem domínio, schema, serviços, IA ou dados reais alterados. Acordo1.0.0 e execução em `docs/qa/agreement-visual-standard-v280.md` e `docs/qa/execution-visual-standard-v280.md`. Validação e estado operacional no AoT `docs/qa/aot-visual-standard-v280.md`; publicação ainda em execução até evidência operacional registrada.
 
 ## Conhecimento2.7.8: coesão entre abas
 
@@ -12752,7 +12756,25 @@ Referência normativa: proposta-processos-seletivos-v2m6-2026-10-14/03-lista-pai
 
 # Base transversal de experiência do Prisma
 
-Contrato de apresentação atual: `prisma-ux-foundation-1.4.0`. Acordos aprovados: `docs/qa/agreement-ux-foundation.md` 1.0.0, `docs/qa/agreement-visual-reference-fidelity.md` 1.0.0, `docs/qa/agreement-sidebar-branding-v171.md` 1.0.0 e `docs/qa/agreement-visual-option4-v211.md` 1.0.0. Fontes: decisões de Bruno em2026-09-13,2026-09-18 e2026-10-06. A versão1.3.0 aplica a direção visual4 escolhida para toda a plataforma, preservando organização, navegação e contratos de domínio anteriores.
+Contrato de apresentação atual: `prisma-ux-foundation-1.5.0`. Acordos aprovados: `docs/qa/agreement-ux-foundation.md` 1.0.0, `docs/qa/agreement-visual-reference-fidelity.md` 1.0.0, `docs/qa/agreement-sidebar-branding-v171.md` 1.0.0 e `docs/qa/agreement-visual-option4-v211.md` 1.0.0. Fontes: decisões de Bruno em2026-09-13,2026-09-18 e2026-10-06. A versão1.3.0 aplica a direção visual4 escolhida para toda a plataforma, preservando organização, navegação e contratos de domínio anteriores.
+
+## Padronização visual V2M8 — 2.8.0
+
+O contrato 1.5.0 amplia a base existente, conforme `docs/qa/agreement-visual-standard-v280.md` 1.0.0 e seu Execution Prompt. Reutiliza ADR-050, Ant Design, `theme.ts`, `foundation.css` e componentes atuais, sem nova biblioteca ou mudança de domínio. A escala representa papéis, não uma conversão indiscriminada de todos os textos.
+
+| Papel | Leitura | Operação compacta |
+| --- | --- | --- |
+| Valor/texto principal | 16px/24px, peso400; identificação600 | 16px/24px no Kanban |
+| Rótulo/metadado/ação auxiliar | 14px/20px, peso400; ação600 | 14px/20px, com controles e foco próprios |
+| Cabeçalho de seção | 24px/32px no nível principal; 20px/28px no subordinado | Coluna do Kanban16px/24px, subordinada à página |
+| Modal/drawer de leitura | 24px/32px; seção interna20px/28px | Mesma hierarquia |
+| Tabela Pessoas | Exceção aprovada14px/20px, nome600, outros400 | Complementos12px/18px, preservados |
+
+`prisma-content-standard` conserva o padrão aprovado em Conhecimento. `prisma-reading` estende seus papéis nas páginas normalizadas, com níveis explícitos; portais recebem o mesmo escopo por `rootClassName`. `prisma-density-compact` explicita Kanban/lista móvel: mantém trilhas, quadrado do Score50px, padding14px e ações de14px; não altera score, sequência, estados ou limites de permissão. Títulos de página e métricas/destaques mantêm escala própria; o Resumo da Pessoa conserva sua composição72/28 e os destaques anteriores.
+
+Links textuais usam os tokens de azul e hover do tema; texto informativo permanece na cor textual. Áreas de Conhecimento continuam informativas com Editar separado; conceitos abrem detalhes por links. Botões neutros, cartões clicáveis, foco, seleção, selos, avisos e cores de estado mantêm sua semântica. Tabelas com várias linhas alinham pelo topo e preservam rolagem local. Contenção de grid nos detalhes de competência permite que abas e tabelas rolem localmente no celular, sem esconder conteúdo.
+
+Manual/revisão/comparação, Processos, Acompanhamento, competências/evidências, Posições, documentos, Tokens e Banco de questões consomem os papéis compartilhados. Evidência renderizada e regressão de preservação em `docs/qa/aot-visual-standard-v280.md`; capturas sintéticas não comprovam comportamento autenticado de pessoas reais.
 
 ## Retorno imediato v2.3.1
 
@@ -17989,6 +18011,69 @@ Nenhuma pendência material no escopo autorizado.
 - Data: 2026-09-18.
 - Evidência de aprovação: mensagem “faça isso para garantir que o gpt internalize a regra ao criar prompts que demandem criação ou alteração de telas ou elementos visuais”.
 - Referência para o prompt: este contrato versão 1.0.0 e ADR-061.
+
+---
+
+## Source: `docs/qa/agreement-visual-standard-v280.md`
+
+# Contrato de Acordos — V2M8 Padronização visual
+
+Versão 1.0.0. Fonte: acordo completo aprovado por Bruno e transmitido à execução em 16/10/2026. Autoriza implementação, integração em main e produção 2.8.0. Classe C, apresentação transversal; reutiliza UX Foundation e ADR-050. Sem pendência material. Este documento congela o acordo abaixo, sem nova decisão.
+
+## DEVE
+
+- D-01: Normalizar a apresentação das páginas do Prisma reutilizando docs/product/ux-foundation.md, ADR-050, web/src/ui/theme.ts, foundation.css e componentes existentes. A identidade já estabelecida, fundos claros, estrutura das páginas e contratos permanecem. O objetivo é coesão entre papéis equivalentes, sem redesenhar jornadas.
+- D-02: Adotar escala consistente: leitura/valores 16px; rótulos/metadados 14px; seções 20–24px conforme nível; preservar títulos de página e destaques legitimamente maiores. Formalizar densidades de leitura e operação compacta. A tabela Pessoas mantém o padrão compacto aprovado 14/20 e complementos 12/18; não aumentar tudo indiscriminadamente. Kanban deve manter densidade útil e ações legíveis com variante compacta explícita. Não achatar níveis distintos em um único título ou tamanho.
+- D-03: Padronizar cores de links textuais, identificações e complementos, títulos de seção, filtros, ações de linha e cabeçalhos de modal/drawer. Texto informativo usa cor padrão; links textuais usam azul e foco/hover consistentes. Botões neutros, cartões clicáveis e selos informativos preservam sua semântica própria; não tornar tudo azul nem inventar interações. Bruno aprovou a distinção atual de Conhecimento: nome de área é informativo com Editar separado; conceito global é link azul que abre detalhes.
+- D-04: Aplicar alinhamento superior a registros tabulares com várias linhas, espaçamentos/tokens coerentes, leitura responsiva e rolagem local quando necessária. Preservar controles, seleção, ordenação, filtros, navegação, teclado, foco visível, ações, conteúdo e permissões.
+- D-05: Cobrir as áreas identificadas na auditoria: Processos seletivos (filtros13, seção16 e conteúdo14 locais); Acompanhamento (nome15, cargo/cidade/ações12 e avisos11); manual/revisão do Perfil (rótulos de referência/revisão ~10,6px, abas/orientações locais); competências/evidências da Pessoa (tabelas13, metadados11–12 e links próprios); lista de Posições (células centralizadas verticalmente, títulos próprios); processamento/revisões de documentos (datas/próximas ações12–13 e pesos locais); Tokens Prisma (links12, métricas/avisos13, espaçamento local); Banco de questões e painéis (enunciado15, contexto13, título drawer15 no celular). Verificar as regras efetivas de cascata e runtime antes de editar: foundation.css substitui várias regras antigas de styles.css. Examinar proporcionalmente demais páginas e componentes compartilhados para preservar sua apresentação ao normalizar as dependências comuns.
+- D-06: Consolidar padrões em componentes/classes/tokens compartilhados, substituir exceções locais injustificadas nas áreas afetadas e estender validação visual entre páginas, abas e portais. Não criar outra biblioteca nem dependência sem necessidade material.
+- D-07: Entregar main e produção 2.8.0 com regressão proporcional, documentação, Context Pack e AoT rastreando comportamento novo e preservação. Corrigir regressões causadas pelo movimento antes da publicação.
+
+## PROIBIDO
+
+- P-01: Não retirar ou ocultar informações, evidências, proveniência, histórico, fontes, avisos essenciais ou capacidades para melhorar a aparência.
+- P-02: Não alterar regras de negócio, contratos de domínio/IA, extração, matching/score, taxonomias, dados, isolamento entre empresas ou autoridade humana.
+- P-03: Não mudar ordem/topologia de informação, composição aprovada, navegação, filtros persistidos, confirmação/publicação humana, rascunhos ou semântica de estados como efeito colateral de CSS.
+- P-04: Não declarar garantia absoluta ou PASS com base apenas no diff, em screenshot vazio ou em smoke público. Limitações de evidência devem ser explícitas; achado estático é hipótese até validado na renderização pertinente.
+
+## FORA DE ESCOPO
+
+- F-01: Novas funcionalidades, remodelação de jornadas, novas bibliotecas, alterações de schema/backend/IA, reprocessamentos e dados fictícios na produção.
+
+## AUTONOMIA
+
+- A-01: Engenharia escolhe reaproveitamento, classes, variantes compactas, divisão interna do trabalho, fixtures e verificações mínimas suficientes, sem reinterpretar D/P. Não precisa aguardar outra aprovação para decisões mecânicas no escopo.
+
+## PENDÊNCIAS
+
+Nenhuma.
+
+## CRITÉRIOS DE ACEITE
+
+- CA-01: Papéis equivalentes usam escala/cor/peso/alinhamento consistentes; diferenças legítimas e densidades ficam documentadas.
+- CA-02: Evidência renderizada antes/depois em mesmos dados/estado/viewport nas áreas alteradas; desktop e celular, preenchido/vazio/erro quando aplicável, abas e modal/drawer relevantes; foco e ausência de corte/sobreposição/overflow indevido.
+- CA-03: Jornadas e capacidades protegidas do mapa de impacto continuam operáveis com testes focados de interação, não só screenshots; distinguir falha de fixture/selector de defeito do produto.
+- CA-04: Typecheck/build e testes afetados passam; CI obrigatório para o SHA integrado; publicação por superfícies derivadas do diff; prova de versão/SHA/rotas/assets/saúde e rollback disponível; main/local/origin/VPS sincronizados.
+- CA-05: Nenhum D obrigatório fica sem PASS; limitações de baseline são explícitas. Não concluir com regressão conhecida ou quebra de hierarquia visual.
+
+## GOV-01: mapa inicial e validação mínima
+
+Baseline local e origin/main confirmados em 16/10/2026: a33c3d4d7b779351855fbf173701925afe9e1033, versão 2.7.8. Sem alterações tracked. Rascunhos untracked preservados no checkout canônico; implementação isolada em codex/v2m8-visual. Runtime produtivo será verificado no rollout, não presumido pelo histórico.
+
+| Área/capacidade | Relação | Mecanismo / baseline / prova prevista |
+| --- | --- | --- |
+| Manual/revisão/comparação | direct | Componentes reais com transporte sintético; antes/depois 1448/390, abas, editar/salvar/retomar, publicação humana e validação negativa |
+| Processos/Acompanhamento | direct | Cascata CSS local; busca/filtros, seleção, lista/Kanban, consulta, drawer e ações preservadas; dados/vazio/erro e teclado |
+| Pessoa, competências/evidências | direct | Escala e links; abas, origens e portais; sem mudar destaques ou composição 72/28 |
+| Posições/documentos | direct | Topo tabular e papéis de leitura; navegação, recuperação, histórico e rolagem local |
+| Tokens/Banco de questões | direct | Escala de leitura e portais; saldos/destaques preservados, filtros e consulta; ausência não vira fato |
+| Conhecimento/Home/Settings/Pessoas | plausible_indirect | Seletores opt-in e tokens; regressão de Conhecimento, Pessoas compactas, shell, títulos/destaques e foco |
+| Auth/tenant/humano, rascunhos, navegação | critical_transversal | Sem serviços ou domínio alterados; testes de interação/gates existentes, zero chamadas externas nas fixtures e sem mutação real |
+| Backend/schema/IA/matching | no_impact_identified | Mudanças limitadas a apresentação; inspeção do diff e release:plan devem confirmar web/docs apenas |
+| Hospedagem web | direct | SHA/versão/rotas/assets/health/rollback; preservar outros containers |
+
+Validação mínima: teste novo de papéis computados e capturas pareadas, reutilização de testes de interação diretamente afetados (manual, Processos/Acompanhamento, Pessoas, Conhecimento, Tokens/Banco), typecheck web, build root/web, teste de versão, lint/contexto e CI obrigatório. Não executar suíte integral local. Encerramento: todos D/P aplicáveis comprovados, documentação/contexto, SHA validado integrado/publicado, smoke e sincronização; limitações de evidência sintética explícitas. Referência normativa é a escala aprovada, sem nova imagem alvo; capturas anteriores comprovam preservação estrutural.
 
 ---
 
@@ -24700,6 +24785,89 @@ PASS local. A regra está ativa nas fontes e nos artefatos gerados; sua eficáci
 
 ---
 
+## Source: `docs/qa/aot-visual-standard-v280.md`
+
+# AoT — V2M8 Padronização visual 2.8.0
+
+Contrato: `docs/qa/agreement-visual-standard-v280.md` 1.0.0; execução: `docs/qa/execution-visual-standard-v280.md`. Fonte: aprovação explícita de Bruno em 16/10/2026. Baseline a33c3d4d7b779351855fbf173701925afe9e1033 (2.7.8). Classe C; somente apresentação, sem nova dependência, backend ou dados.
+
+## Matriz de Acordos
+
+| ID | Implementação | Teste/evidência | Status | Ambiente/limite |
+| --- | --- | --- | --- | --- |
+| D-01 | Reutiliza tema, foundation, PrismaPage, AntD e ADR-050 | Capturas/estilos por papel | PASS | Fixture local |
+| D-02 | Leitura16/24, detalhe14/20, seção24/32 e20/28; Pessoas14/20+12/18; Kanban compacto explícito | Medidas computadas, hierarquia e preservação | PASS | Fixture local |
+| D-03 | Tokens de link/hover; escopos de leitura/portais; cartões/estados sem mudança semântica | Cor computada, foco e interações | PASS | Fixture local |
+| D-04 | Topo tabular, rolagem local, contenção de grid e alertas móveis | Desktop1448/celular390 e regressões320 quando existentes | PASS | Limite anterior registrado abaixo |
+| D-05 | Todas as oito famílias da auditoria cobertas | Antes/depois e suites reaproveitadas | PASS | Estados determinísticos |
+| D-06 | Classes/tokens compartilhados e variantes sem biblioteca nova | Diff, build, testes visuais e de interação | PASS | Local/CI |
+| D-07 | Registro2.8.0, docs/contexto, entrega seletiva | Plano, CI, smoke, SHA e sincronização | PARTIAL | Publicação em execução |
+
+## Proibições verificadas
+
+| ID | Guardrail/prova | Status |
+| --- | --- | --- |
+| P-01 | Comparação de conteúdo renderizado nos estados pareados; origens/histórico acessíveis e interações | PASS |
+| P-02 | Handlers, serviços, domínio e dados intactos; testes de apoio e transporte sintético sem saída externa | PASS |
+| P-03 | Mesmas composições/ordem/seleção; rascunhos e publicação humana exercitados | PASS |
+| P-04 | Evidência sintética explicitamente separada de smoke público e autenticação real | PASS |
+
+## Mapa de Impacto e Preservação
+
+| Capacidade | Relação | Baseline/regressão/evidência | Status |
+| --- | --- | --- | --- |
+| Manual/revisão/comparação | direct | Baseline2.7.8, seis abas, valores de referência, vazio/erro; editar/salvar/comparar/publicar apenas por ação humana | PASS |
+| Processos/Acompanhamento | direct | 38/62 desktop, seleção móvel, lista/Kanban, cinco colunas, filtros, detalhes, entrevistas/decisão e histórico | PASS |
+| Pessoa/competências/evidências | direct | Abas, tabela do subgrupo, conceito, evidências, proveniência; Resumo/destaques preservados fora do novo escopo | PASS |
+| Posições/documentos | direct | Lista preenchida, células pelo topo, datas e ação seguinte, detalhe/histórico do documento | PASS |
+| Tokens/Banco | direct | Saldo/destaques, origem, carteira, estados/limites e portais, consulta/ações explícitas | PASS |
+| Conhecimento/Pessoas/Home/Settings | plausible_indirect | Cor de link do tema; tipografiaSM já era14; demais regras opt-in. Regressão Conhecimento e Pessoas, inspeção de dependências | PASS |
+| Autorização/humano/tenant/rascunhos | critical_transversal | Nenhum serviço/handler alterado; testes negativos e interações de apoio sem dados reais | PASS |
+| Backend/schema/IA/matching | no_impact_identified | Diff somente de apresentação/testes/docs; plano de release deve excluir esses destinos | PARTIAL |
+| Hospedagem | direct | Publicar web apenas; CI, rotas/assets/versão/SHA/saúde/rollback, preservar demais containers | PARTIAL |
+
+### Novidade e preservação
+
+Novidade: papéis visuais consistentes e densidade explícita, sem alterar jornada. Preservação: conteúdo, dados, composição, permissões, foco, filtros, rascunhos e autoridade humana, sob evidência proporcional. O mapa inicial permanece; a descoberta de overflow anterior no detalhe de competência e de alerta estreito320 revisa a prova responsiva dessas superfícies diretas, sem novo domínio ou destino.
+
+Limitações do baseline: detalhe de competência no celular390 excedia a página (406px), e revisão preenchida320 tinha overflow horizontal, reproduzido com fonte exata do baseline; alerta de erro no editor320 podia reduzir texto a uma coluna estreita ao lado da ação. Contenção e distribuição responsiva corrigidas nas superfícies normalizadas. Deprecações AntD e chave sintética repetida de tentativa documental são avisos anteriores de fixture/API, sem exceção de runtime. Nenhuma captura vazia substitui prova preenchida.
+
+## Fora de escopo preservado
+
+F-01 PASS: diff de apresentação/testes/docs; sem funcionalidade, schema, backend, IA, nova biblioteca, reprocessamento ou dados fictícios produtivos. Plano ainda será registrado antes da publicação.
+
+## Evidência de fidelidade visual
+
+Referência normativa: escala e hierarquia do acordo, UX Foundation e composições existentes. Nenhuma nova imagem alvo foi fornecida. `evidence/visual-standard-v280/before` e `after` identificam pares no mesmo viewport/dado/estado. `before.json`/`after.json` registram papéis computados, conteúdo e overflow; `preservation` guarda testes existentes reaproveitados. A flag baseline usa a fonte exata a33c3d4 para os arquivos de produto, inclusive para ampliar cenários após a implementação.
+
+## Desvios e decisões
+
+Nenhum desvio de produto após comparação integral com D/P/F/A. Sem nova decisão de produto. Nenhuma ampliação de domínio. O Kanban preserva trilhas, ordem, alinhamento, Score50px e regiões de ação; somente papéis de texto/densidade explícita. Pessoas mantém sua escala compacta. Conhecimento mantém área informativa com Editar separado e conceito clicável.
+
+## Validação final
+
+PASS local:106 estados pareados preenchidos/vazios/erro,1448/390 e revisão320;711 verificações de papéis computados, cores de links, hierarquia, conteúdo idêntico normalizado, topo tabular, foco/teclado, ausência de overflow e portais. Confirmação estática do acompanhamento também usa24px e preserva o rascunho ao cancelar. Busca/filtro/abertura da Posição e acesso à Pessoa/histórico técnico do documento exercitados.212 capturas pareadas, além das suites de preservação. Amostras inspecionadas visualmente: Processos1448/390, Kanban1448, revisão390/320, conceito390 e drawer de questão390.
+
+As11suites existentes reaproveitadas passaram806verificações: revisão manual87, acompanhamento34, detalhes30, navegação32, Conhecimento299, Banco191+34, Tokens48+9 e Pessoas18+24. `preservation/runs.json`, resultados JSON e logs `.txt` identificam as fontes e durações. O roteiro manual usa novo recorte `--review-only`; rótulos históricos de vínculo/filtragem são cobertos pelos testes atuais de Pessoas. O seletor de título do acompanhamento foi atualizado ao ciclo explícito já vigente. Tokens usa o roteiro calendário2.6.2, compatível com o baseline, em vez do roteiro2.4.0 que procurava Saldo disponível. Nenhum ajuste de produto motivado por esses seletores.
+
+Tipos web/build root e34testes focados de release/UX/manual/acompanhamento/resultado/questões PASS. Build web final, lint, Foundation, geração e checker de contexto PASS; aviso anterior de chunk grande preservado. Diff integral revisto: TSX muda apenas escopos de apresentação e portais, sem handlers/serviços/domínio. Sem suíte integral local; CI geral obrigatório ainda pendente.
+
+Reprodução: `node tests/tooling/visualStandard.browser.mjs --baseline`, depois sem flag para dados/abas/portais; usar `--states-only` com PRISMA_VISUAL_GROUPS=selection,followup,person,foundation,documents,tokens,bank para os estados adicionais; PRISMA_VISUAL_WIDTHS=320 com grupo manual para o caso estreito. `node tests/tooling/visualStandard.preservation.mjs` reaproveita as11suites em portas/caches isolados. Transportes nunca acessam serviços reais.
+
+## Git / QA / ambiente
+
+Worktree isolado `codex/v2m8-visual`; canônico em main, rascunhos untracked preservados. QA visual local com componentes reais/transporte determinístico, sem banco/LLM/rede externa. Jornada autenticada produtiva com pessoa real NOT TESTED; smoke público não a substitui.
+
+## Tempos e ocorrências
+
+Início observado16/10/2026 10:21 BRT. Baseline/reuso/inventário e criação do worktree até10:26; fonte isolada exclui rascunhos do gerador. Implementação e provas visuais ocorreram com compilação/testes em paralelo, portanto durações de jobs não devem ser somadas como tempo total. A primeira suite manual revelou o alerta320; uma tentativa de navegação expirou durante servidores Vite simultâneos com cache compartilhado. Caches e servidores de fixture foram isolados; nenhum ajuste de produto foi feito para esse timeout. Uma comparação de cor capturou interpolação durante transição; medida estabilizada com prefers-reduced-motion, sem alterar semântica visual.
+
+## Conclusão
+
+Local validado; D-07 permanece PARTIAL até CI, publicação, smoke e sincronização. Nenhuma garantia absoluta: prova sintética de componentes reais não equivale a jornada autenticada produtiva.
+
+---
+
 ## Source: `docs/qa/assessment-invite-deadline-v241.md`
 
 # Acordo, execução e AoT — Prazo e mensagem do convite, correção2.4.1
@@ -28648,6 +28816,18 @@ Versão 1.0.0. Autorizada por Bruno em 2026-09-18. Ler integralmente `docs/qa/ag
 Implementar a regra no contrato do agente, owner de UX, templates de acordo/AoT, protocolo de rastreabilidade, ADR e roteamento do Context Pack. Projetar a seção canônica de fidelidade visual diretamente na fonte compacta do GPT, protegê-la com checker e teste e regenerar os dois artefatos derivados. Não editar artefatos gerados manualmente.
 
 Validar `check:foundation`, o teste de tooling do Context Pack, geração e verificação dos artefatos. Revisar diff e manifesto. Este movimento não altera telas, código de produto, banco, Supabase, IA de runtime, QA ou produção.
+
+---
+
+## Source: `docs/qa/execution-visual-standard-v280.md`
+
+# Execution Prompt — V2M8
+
+Fonte integral e imutável de produto: `docs/qa/agreement-visual-standard-v280.md`, versão 1.0.0, aprovado por Bruno em 16/10/2026. Ler o documento completo. Implementar todos D-01 a D-07 e CA-01 a CA-05; impedir P-01 a P-04; respeitar F-01 e A-01. Nenhum Q material pendente.
+
+Reutilizar foundation.css/theme/componentes e ADR-050. Preservar topologia, hierarquia, fundos claros, navegação, conteúdo, evidência, dados, autoridade e densidade compacta explícita. Capturar baseline antes de alterar produto. Aplicar normalização em manual/revisão, Processos/Acompanhamento, listas, Tokens/Banco; confirmar cascata e runtime. Usar fixtures determinísticas existentes, sem banco/LLM ou dados fictícios produtivos. Seguir mapa GOV-01 e menor validação suficiente do acordo; corrigir regressões do movimento.
+
+Entregar 2.8.0 em main e produção existente mediante plano derivado de diff committed, CI, publicação seletiva, smoke, rollback e sincronização. Preservar todos untracked de Bruno. Atualizar owner docs, Context Pack gerado e AoT no template do repositório. Registrar evidência nova e preservação separadamente, limitações e tempos observados. Não declarar PASS para item obrigatório sem prova.
 
 ---
 

@@ -10,6 +10,7 @@ const entry = resolve("tests/browser/manual-profile-v270.tsx").replaceAll("\\", 
 await writeFile("web/manual-profile-qa.html", `<html lang="pt-BR"><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0"><div id="root"></div><script type="module" src="/@fs/${entry}"></script></body></html>`);
 const results = [], errors = [], outbound = [];
 const onlyPeople = process.argv.includes("--people-only");
+const reviewOnly = process.argv.includes("--review-only");
 const check = (name, pass) => { results.push({ name, pass: Boolean(pass) }); assert.ok(pass, name); };
 let currentPage;
 async function page(view, state = "full", width = 1448, role = "recruiter") {
@@ -113,6 +114,7 @@ try {
     await start.getByRole("tab", { name: "Resumo", exact: true }).waitFor();
     check(`${width} explicit new Person opens structured editor`, await start.evaluate(() => window.qa.calls.filter(x => x === "start-manual").length === 1));
     await start.close();
+    if (reviewOnly) continue;
     const employee = await page("person", "full", width);
     await employee.getByRole("radio", { name: "Não", exact: true }).waitFor();
     check(`${width} employee is exactly binary`, await employee.getByRole("radio").count() === 2);
@@ -128,7 +130,7 @@ try {
     check(`${width} draft can be resumed from Person`, await workspace.getByRole("button", { name: "Continuar preenchimento", exact: true }).isVisible());
     await capture(workspace, `workspace-${width}`); await workspace.close();
   }
-  for (const width of [1448, 390, 320]) {
+  for (const width of reviewOnly ? [] : [1448, 390, 320]) {
     const p = await page("people", "full", width);
     await p.getByText("Pessoa não confirmada", {exact:true}).waitFor();
     check(`${width} manual and PDF entries accessible together`, await p.getByRole("button",{name:/Preencher manualmente$/}).isVisible() && await p.getByRole("button",{name:/Importar currículo$/}).isVisible());

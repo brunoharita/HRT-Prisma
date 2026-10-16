@@ -151,7 +151,7 @@ export function VacanciesPage({ activeMembership, onNavigate }: CommonProps) {
     }
   }
 
-  return <PrismaPage className="prisma-vacancies-page">
+  return <PrismaPage className="prisma-vacancies-page prisma-content-standard prisma-reading">
     <PrismaPageHeader icon={<PrismaPageIcon />} title="Posições" description="Gerencie as necessidades profissionais da sua empresa." actions={<Button icon={<PlusOutlined />} onClick={() => { clearDraft(draftScope); onNavigate("/vacancies/new"); }} type="primary">Nova posição</Button>} />
     {error ? <Alert closable onClose={() => setError(null)} showIcon title={error} type="error" action={<Button onClick={() => onNavigate("/vacancies")}>Consultar posições</Button>} /> : null}
     <PrismaCard className="prisma-vacancy-toolbar">

@@ -36,7 +36,7 @@ export function CompetencyGroupModal({ concept, adapter, onClose, onProjection }
     catch (failure) { setError(failure instanceof Error ? failure.message : "Não foi possível confirmar o grupo. Sua escolha foi preservada."); }
     finally { lock.current = false; setBusy(false); }
   }
-  return <Modal title={concept ? `Definir grupo de ${concept.label}` : "Definir grupo"} open={Boolean(concept)} onCancel={() => { if (!lock.current) onClose(); }} maskClosable={!busy} closable={!busy} width={600}
+  return <Modal rootClassName="prisma-content-standard prisma-reading" title={concept ? `Definir grupo de ${concept.label}` : "Definir grupo"} open={Boolean(concept)} onCancel={() => { if (!lock.current) onClose(); }} maskClosable={!busy} closable={!busy} width={600}
     footer={<Space><Button disabled={busy} onClick={onClose}>{canClassify ? "Cancelar" : "Voltar às competências"}</Button>{canClassify ? <Button type="primary" loading={busy} disabled={loading || !selected || !options.some((item) => item.id === selected)} onClick={() => void save()}>Salvar grupo</Button> : null}</Space>}>
     <p>As evidências já vinculadas serão preservadas. Falta definir o grupo que organiza esta competência.</p>
     {canClassify ? <><p>{concept?.scope === "global" ? "Esta alteração vale para a base global e pode aparecer em outras empresas." : "Esta alteração vale para a Knowledge da empresa e pode aparecer em outros perfis dela."}</p>

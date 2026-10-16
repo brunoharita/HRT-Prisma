@@ -13,7 +13,7 @@ export function CreateSelectionProcessModal({organizationId,vacancyId,onClose,on
   const result=await positionFollowUpService.start(organizationId,chosen.id,chosen.processId,chosen.revision,request.current);
   if(!result.process)throw Error("O processo criado não foi confirmado.");onCreated(result.process.id);
  }catch(e){setError(e instanceof Error?e.message:"Não foi possível criar o processo.");}finally{lock.current=false;setSaving(false);}}
- return <Modal open title="Novo processo seletivo" onCancel={()=>{if(!saving)onClose();}} footer={<><Button disabled={saving} onClick={onClose}>Cancelar</Button><Button type="primary" loading={saving} disabled={!chosen||loading||Boolean(error)} onClick={()=>void create()}>Criar processo seletivo</Button></>}>
+ return <Modal rootClassName="prisma-content-standard prisma-reading" open title="Novo processo seletivo" onCancel={()=>{if(!saving)onClose();}} footer={<><Button disabled={saving} onClick={onClose}>Cancelar</Button><Button type="primary" loading={saving} disabled={!chosen||loading||Boolean(error)} onClick={()=>void create()}>Criar processo seletivo</Button></>}>
  <p>Escolha uma Posição desocupada e sem processo em andamento. O novo processo começa sem candidatos.</p>
  <Input aria-label="Buscar Posição desocupada" placeholder="Buscar Posição" value={search} disabled={saving} onChange={e=>{setSearch(e.target.value);setPage(1);setSelected(undefined);request.current=crypto.randomUUID();}}/>
  {error?<Alert showIcon type="error" title={error} action={<Button disabled={saving} onClick={()=>setRetry(n=>n+1)}>Atualizar Posições</Button>}/>:null}

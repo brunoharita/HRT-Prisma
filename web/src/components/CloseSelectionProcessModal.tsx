@@ -29,7 +29,7 @@ export function CloseSelectionProcessModal({organizationId,vacancyId,processId,o
     }catch(e){if(current===generation.current)setError(e instanceof Error?e.message:"Não foi possível encerrar o processo.");}
     finally{lock.current=false;if(current===generation.current)setPending(false);}
   }
-  return <Modal open title="Encerrar processo seletivo" okText="Encerrar processo" cancelText="Cancelar" confirmLoading={pending} okButtonProps={{disabled:loading||!valid}} cancelButtonProps={{disabled:pending}} closable={!pending} maskClosable={false} onCancel={()=>{if(!pending)onCancel();}} onOk={()=>void close()}>
+  return <Modal rootClassName="prisma-content-standard prisma-reading" open title="Encerrar processo seletivo" okText="Encerrar processo" cancelText="Cancelar" confirmLoading={pending} okButtonProps={{disabled:loading||!valid}} cancelButtonProps={{disabled:pending}} closable={!pending} maskClosable={false} onCancel={()=>{if(!pending)onCancel();}} onOk={()=>void close()}>
     <p>Escolha o resultado final. As avaliações, decisões e o histórico serão preservados.</p>
     {data?.process?<p><strong>{data.process.name}</strong></p>:null}
     {error?<Alert showIcon type="error" title={error} action={<Button disabled={pending} onClick={()=>setRetry(n=>n+1)}>Atualizar participantes</Button>}/>:null}

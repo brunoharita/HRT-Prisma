@@ -1,0 +1,43 @@
+{
+  "checks": [
+    {
+      "name": "obsolete company load cannot replace company list",
+      "pass": true
+    },
+    {
+      "name": "selected company never shows previous company totals",
+      "pass": true
+    },
+    {
+      "name": "release UI requires payment confirmation",
+      "pass": true
+    },
+    {
+      "name": "verified release bound to selected organization",
+      "pass": true
+    },
+    {
+      "name": "price registration preserved",
+      "pass": true
+    },
+    {
+      "name": "insufficient observation does not invent forecast",
+      "pass": true
+    },
+    {
+      "name": "zero days distinguish no usage from missing history",
+      "pass": true
+    },
+    {
+      "name": "overview error retains wallet",
+      "pass": true
+    },
+    {
+      "name": "function filter changes history",
+      "pass": true
+    }
+  ],
+  "limits": [
+    "Synthetic UI states; no paid requests or real commercial mutation."
+  ]
+}

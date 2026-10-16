@@ -305,7 +305,7 @@ export function StructuredReviewPanel({
       })()} /> : null}
       <Tabs
         activeKey={activeTab}
-        className="prisma-review-tabs"
+        className="prisma-review-tabs prisma-content-standard prisma-reading"
         items={[
           { key: "summary", label: tabLabel("summary", "Resumo"), children: <SummaryEditor organizationId={organizationId} {...commonProps()} onAddResult={addResult} onRemoveResult={removeResult} removedResults={removedEntries.filter((entry) => entry.kind === "result")} validationIssues={validationIssues} onUndoRemoval={undoRemoval} /> },
           { key: "experience", label: tabLabel("experience", `Experiência (${draft.experiences.length})`), children: ExperienceEditor() },

@@ -2,11 +2,15 @@
 prisma_context_id: current-state
 owner: engineering-operations
 status: current
-version: 2.76.4
-last_verified: 2026-10-15
+version: 2.80.0
+last_verified: 2026-10-16
 ---
 
 # Estado atual do Prisma
+
+## V2M8: padronização visual 2.8.0
+
+Movimento autorizado por Bruno para implementação e publicação. UX Foundation1.5.0 reutiliza a base existente: leitura16/24, rótulos/metadados14/20, seções24/32 e20/28 por nível, portais24/32. Pessoas mantém14/20 e12/18; Kanban tem variante compacta explícita. Normalização em manual/revisão/comparação, Processos/Acompanhamento, competências/evidências, Posições/documentos, Tokens e Banco de questões. Links textuais usam azul; informação, cartões, botões e estados conservam semântica. Sem domínio, schema, serviços, IA ou dados reais alterados. Acordo1.0.0 e execução em `docs/qa/agreement-visual-standard-v280.md` e `docs/qa/execution-visual-standard-v280.md`. Validação e estado operacional no AoT `docs/qa/aot-visual-standard-v280.md`; publicação ainda em execução até evidência operacional registrada.
 
 ## Conhecimento2.7.8: coesão entre abas
 

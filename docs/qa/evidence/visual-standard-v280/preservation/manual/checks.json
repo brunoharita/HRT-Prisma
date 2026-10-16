@@ -1,0 +1,355 @@
+{
+  "results": [
+    {
+      "name": "1448/empty manual has no visible document pane",
+      "pass": true
+    },
+    {
+      "name": "1448/empty all six review sections preserved",
+      "pass": true
+    },
+    {
+      "name": "1448 empty optional sections collapsed",
+      "pass": true
+    },
+    {
+      "name": "1448 validation error stays readable",
+      "pass": true
+    },
+    {
+      "name": "1448 partial never automatically publishes",
+      "pass": true
+    },
+    {
+      "name": "editor-empty-1448 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "1448/full manual has no visible document pane",
+      "pass": true
+    },
+    {
+      "name": "1448/full all six review sections preserved",
+      "pass": true
+    },
+    {
+      "name": "editor-full-1448 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "1448/error manual has no visible document pane",
+      "pass": true
+    },
+    {
+      "name": "editor-error-1448 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "1448 reference and manual preserve six tabs",
+      "pass": true
+    },
+    {
+      "name": "reference-editor-1448 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "1448 partial saved without requiring all sections",
+      "pass": true
+    },
+    {
+      "name": "1448 repeated structured records keep manual source and no fake evidence",
+      "pass": true
+    },
+    {
+      "name": "manual-lists-1448 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "1448 empty tools and contexts remain editable",
+      "pass": true
+    },
+    {
+      "name": "1448 explicit comparison precedes publication",
+      "pass": true
+    },
+    {
+      "name": "comparison-1448 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "1448 only explicit human publication invokes writer",
+      "pass": true
+    },
+    {
+      "name": "1448 rates default open and future hidden",
+      "pass": true
+    },
+    {
+      "name": "1448 future explicitly scheduled and history retained",
+      "pass": true
+    },
+    {
+      "name": "rates-1448 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "390/empty manual has no visible document pane",
+      "pass": true
+    },
+    {
+      "name": "390/empty all six review sections preserved",
+      "pass": true
+    },
+    {
+      "name": "390 empty optional sections collapsed",
+      "pass": true
+    },
+    {
+      "name": "390 validation error stays readable",
+      "pass": true
+    },
+    {
+      "name": "390 partial never automatically publishes",
+      "pass": true
+    },
+    {
+      "name": "editor-empty-390 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "390/full manual has no visible document pane",
+      "pass": true
+    },
+    {
+      "name": "390/full all six review sections preserved",
+      "pass": true
+    },
+    {
+      "name": "editor-full-390 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "390/error manual has no visible document pane",
+      "pass": true
+    },
+    {
+      "name": "editor-error-390 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "390 reference and manual preserve six tabs",
+      "pass": true
+    },
+    {
+      "name": "reference-editor-390 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "390 partial saved without requiring all sections",
+      "pass": true
+    },
+    {
+      "name": "390 repeated structured records keep manual source and no fake evidence",
+      "pass": true
+    },
+    {
+      "name": "manual-lists-390 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "390 empty tools and contexts remain editable",
+      "pass": true
+    },
+    {
+      "name": "390 explicit comparison precedes publication",
+      "pass": true
+    },
+    {
+      "name": "comparison-390 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "390 only explicit human publication invokes writer",
+      "pass": true
+    },
+    {
+      "name": "390 rates default open and future hidden",
+      "pass": true
+    },
+    {
+      "name": "390 future explicitly scheduled and history retained",
+      "pass": true
+    },
+    {
+      "name": "rates-390 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "320/empty manual has no visible document pane",
+      "pass": true
+    },
+    {
+      "name": "320/empty all six review sections preserved",
+      "pass": true
+    },
+    {
+      "name": "320 empty optional sections collapsed",
+      "pass": true
+    },
+    {
+      "name": "320 validation error stays readable",
+      "pass": true
+    },
+    {
+      "name": "320 partial never automatically publishes",
+      "pass": true
+    },
+    {
+      "name": "editor-empty-320 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "320/full manual has no visible document pane",
+      "pass": true
+    },
+    {
+      "name": "320/full all six review sections preserved",
+      "pass": true
+    },
+    {
+      "name": "editor-full-320 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "320/error manual has no visible document pane",
+      "pass": true
+    },
+    {
+      "name": "editor-error-320 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "320 reference and manual preserve six tabs",
+      "pass": true
+    },
+    {
+      "name": "reference-editor-320 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "320 partial saved without requiring all sections",
+      "pass": true
+    },
+    {
+      "name": "320 repeated structured records keep manual source and no fake evidence",
+      "pass": true
+    },
+    {
+      "name": "manual-lists-320 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "320 empty tools and contexts remain editable",
+      "pass": true
+    },
+    {
+      "name": "320 explicit comparison precedes publication",
+      "pass": true
+    },
+    {
+      "name": "comparison-320 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "320 only explicit human publication invokes writer",
+      "pass": true
+    },
+    {
+      "name": "320 rates default open and future hidden",
+      "pass": true
+    },
+    {
+      "name": "320 future explicitly scheduled and history retained",
+      "pass": true
+    },
+    {
+      "name": "rates-320 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "1448 duplicate suggestion requires human choice",
+      "pass": true
+    },
+    {
+      "name": "duplicates-1448 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "1448 explicit new Person opens structured editor",
+      "pass": true
+    },
+    {
+      "name": "390 duplicate suggestion requires human choice",
+      "pass": true
+    },
+    {
+      "name": "duplicates-390 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "390 explicit new Person opens structured editor",
+      "pass": true
+    },
+    {
+      "name": "1448 loading never shows a false empty form",
+      "pass": true
+    },
+    {
+      "name": "loading-1448 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "1448 save failure preserves typed draft and published authority",
+      "pass": true
+    },
+    {
+      "name": "save-error-1448 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "rates-1448 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "390 loading never shows a false empty form",
+      "pass": true
+    },
+    {
+      "name": "loading-390 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "390 save failure preserves typed draft and published authority",
+      "pass": true
+    },
+    {
+      "name": "save-error-390 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "rates-390 no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "no client runtime errors",
+      "pass": true
+    },
+    {
+      "name": "manual lifecycle makes zero external network/AI/token calls",
+      "pass": true
+    }
+  ],
+  "errors": [],
+  "outbound": [],
+  "limits": "Synthetic local browser transport; database authority separately verified in SQL."
+}

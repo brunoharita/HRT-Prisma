@@ -1,0 +1,33 @@
+1448 process option order true
+1448 initial active true
+1448 closed available true
+1448 selected closed preserved true
+1448 remembered explicit selection true
+1448 all available true
+created process returns active true
+closed deep link with active list true
+1448 zero active remains active true
+1448 no status writes true
+1448 global knowledge order true
+1448 global overview active true
+1448 global area accessible true
+1448 local knowledge order true
+1448 local overview active true
+1448 local area accessible true
+1448 no runtime errors true
+390 process option order true
+390 initial active true
+390 closed available true
+390 selected closed preserved true
+390 remembered explicit selection true
+390 all available true
+390 zero active remains active true
+390 no status writes true
+390 global knowledge order true
+390 global overview active true
+390 global area accessible true
+390 local knowledge order true
+390 local overview active true
+390 local area accessible true
+390 no runtime errors true
+{"checks":32,"pass":true}

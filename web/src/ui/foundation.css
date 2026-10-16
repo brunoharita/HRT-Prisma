@@ -286,3 +286,99 @@ body { background: var(--prisma-canvas); }
 .prisma-content-standard .ant-descriptions-item-label { font-size: var(--prisma-content-detail); line-height: 20px; }
 .prisma-content-standard :is(.prisma-m81-settings-grid, .prisma-m81-knowledge-sources, .prisma-knowledge-health-grid, .prisma-m81-knowledge-overview) { gap: 16px; }
 .prisma-content-standard .prisma-m81-settings-grid { margin-top: 16px; }
+
+/* V2M8: reading roles extend the existing opt-in scope. Page titles and factual
+   highlights retain their own hierarchy. Knowledge keeps its approved density. */
+.prisma-reading {
+  --prisma-content-heading: 24px;
+  --prisma-content-gap: 16px;
+  --prisma-content-inset: 16px;
+  --prisma-content-link: var(--prisma-color-link, #155eef);
+  --prisma-content-link-hover: var(--prisma-color-link-hover, #0b4ed9);
+}
+.prisma-density-compact { --prisma-content-gap: 8px; --prisma-content-inset: 14px; }
+.prisma-content-standard.prisma-reading h2,
+.prisma-content-standard.prisma-reading :is(.ant-modal-title, .ant-modal-confirm-title, .ant-drawer-title) {
+  color: var(--prisma-text, #10203a);
+  font-size: var(--prisma-content-heading);
+  line-height: 32px;
+  font-weight: 600;
+}
+.prisma-content-standard.prisma-reading :is(h3, h4, .ant-card-head-title) {
+  color: var(--prisma-text, #10203a);
+  font-size: var(--prisma-content-section);
+  line-height: 28px;
+  font-weight: 600;
+}
+.prisma-content-standard.prisma-reading h5 { font-size: var(--prisma-content-body); line-height: 24px; font-weight: 600; }
+.prisma-content-standard.prisma-reading :is(.ant-tabs-tab, .ant-segmented-item-label, .ant-select, .ant-pagination, .ant-form-item-label > label) {
+  font-size: var(--prisma-content-detail);
+  line-height: 20px;
+}
+.prisma-content-standard.prisma-reading :is(.ant-btn-link, a:not(.ant-btn), .prisma-m81-table-link) {
+  color: var(--prisma-content-link);
+}
+.prisma-content-standard.prisma-reading :is(.ant-btn-link, a:not(.ant-btn), .prisma-m81-table-link):not(:disabled):not([aria-disabled="true"]):hover {
+  color: var(--prisma-content-link-hover);
+  text-decoration: underline;
+}
+.prisma-content-standard.prisma-reading .ant-btn-link:disabled { color: var(--prisma-color-text-disabled, #8c8c8c); }
+.prisma-content-standard.prisma-reading :is(.ant-btn-link, .ant-btn-text) { white-space: normal; height: auto; text-align: left; }
+.prisma-content-standard.prisma-reading .ant-table-tbody .ant-btn-link { font-size: var(--prisma-content-detail); line-height: 20px; }
+.prisma-content-standard.prisma-reading .ant-descriptions-item-content { font-size: var(--prisma-content-body); line-height: 24px; }
+.prisma-content-standard.prisma-reading :is(.prisma-extracted-surface, .prisma-reviewed-surface) > small {
+  color: var(--prisma-text-secondary, #53637d); font-size: var(--prisma-content-detail); line-height: 20px;
+}
+.prisma-content-standard.prisma-reading :is(.prisma-review-field > .ant-typography, .prisma-review-field-help, .prisma-education-classification-card__footer small, .prisma-academic-select > span, .prisma-academic-select > small, .prisma-education-classification-card__header > div span, .prisma-education-classification-card__footer > div span) {
+  font-size: var(--prisma-content-detail); line-height: 20px;
+}
+.prisma-content-standard.prisma-reading :is(.prisma-education-classification-card__header strong, .prisma-education-classification-card__footer strong, .prisma-m81-publication-field, .prisma-delta-item-primary) {
+  font-size: var(--prisma-content-body); line-height: 24px;
+}
+.prisma-content-standard.prisma-reading :is(.prisma-delta-file-card small, .prisma-delta-item-context, .prisma-delta-item-main > small, .prisma-delta-item-action .ant-typography) {
+  font-size: var(--prisma-content-detail); line-height: 20px;
+}
+.prisma-content-standard.prisma-reading :is(.prisma-operation-date, .prisma-operation-compact-value, .prisma-operation-status-cell small, .prisma-operation-legend-item small) {
+  font-size: var(--prisma-content-detail); line-height: 20px;
+}
+.prisma-content-standard.prisma-reading .prisma-operation-next-action { font-size: var(--prisma-content-body); line-height: 24px; }
+.prisma-content-standard.prisma-reading :is(.prisma-person-name-button, .prisma-person-name-button strong, .prisma-vacancy-title-link) { color: var(--prisma-content-link); }
+.prisma-content-standard.prisma-reading :is(.prisma-person-name-button, .prisma-vacancy-title-link):hover { color: var(--prisma-content-link-hover); text-decoration: underline; }
+.prisma-content-standard.prisma-reading .prisma-vacancy-table-wrap .ant-table-cell { vertical-align: top; }
+.prisma-content-standard.prisma-reading .prisma-m81-subgroup-table { font-size: var(--prisma-content-body); line-height: 24px; }
+.prisma-content-standard.prisma-reading .prisma-m81-subgroup-table :is(th, td) { vertical-align: top; padding: 12px var(--prisma-content-inset); }
+.prisma-content-standard.prisma-reading .prisma-m81-subgroup-table th { font-size: var(--prisma-content-detail); line-height: 20px; }
+.prisma-content-standard.prisma-reading .prisma-m81-table-link { font-family: inherit; font-size: var(--prisma-content-body); line-height: 24px; }
+.prisma-m72-profile.prisma-reading { min-width: 0; grid-template-columns: minmax(0, 1fr); }
+.prisma-content-standard.prisma-reading :is(.prisma-m81-detail-surface, .prisma-m81-detail-surface > .ant-tabs) { min-width: 0; max-width: 100%; }
+.prisma-content-standard.prisma-reading .prisma-m81-detail-breadcrumb { font-size: var(--prisma-content-detail); line-height: 20px; }
+.prisma-content-standard.prisma-reading .prisma-m81-status-list > div { font-size: var(--prisma-content-body); line-height: 24px; }
+.prisma-content-standard.prisma-reading .prisma-m81-status-list > div > :is(strong, span:last-child) { font-size: var(--prisma-content-detail); line-height: 20px; }
+.prisma-content-standard.prisma-reading :is(.prisma-m72-collapse-label small, .prisma-m72-filters > label, .prisma-m72-metrics span, .prisma-m72-evidence-list small, .prisma-m72-recent-evidence time, .prisma-m72-concept-list article > button span:last-child) {
+  font-size: var(--prisma-content-detail); line-height: 20px;
+}
+.prisma-content-standard.prisma-reading :is(.prisma-bank-muted, .prisma-bank-context, .prisma-bank-counts, .prisma-bank-filter-grid > label) { font-size: var(--prisma-content-detail); line-height: 20px; }
+.prisma-content-standard.prisma-reading .prisma-bank-row .prisma-bank-stem { font-size: var(--prisma-content-body); line-height: 24px; color: var(--prisma-text, #10203a); }
+.prisma-content-standard.prisma-reading .prisma-bank-drawer .ant-drawer-extra .ant-btn { font-size: var(--prisma-content-detail); }
+.prisma-content-standard.prisma-reading .tokens-source .ant-btn-link { font-size: var(--prisma-content-detail); line-height: 20px; min-height: 32px; }
+.prisma-content-standard.prisma-reading .tokens-sources .ant-card-body > p { font-size: var(--prisma-content-detail); line-height: 20px; margin-block: 8px; }
+.prisma-content-standard.prisma-reading :is(.tokens-source-metrics, .tokens-expiry-notice) { font-size: var(--prisma-content-detail); line-height: 20px; }
+.pf-page .prisma-density-compact .pf-card-bottom { gap: var(--prisma-content-gap); }
+.pf-page .prisma-density-compact .pf-card { padding: var(--prisma-content-inset); }
+.pf-page .prisma-density-compact .pf-column h2 { font-size: var(--prisma-content-body); line-height: 24px; }
+.pf-page .prisma-density-compact .pf-title { font-size: var(--prisma-content-detail); line-height: 20px; }
+.prisma-content-standard.prisma-reading :is(.pf-location, .pf-age, .pf-score-notice, .pf-saving, .pf-help, .pf-drag-help) { font-size: var(--prisma-content-detail); line-height: 20px; }
+.pf-page .prisma-density-compact .pf-person { color: var(--prisma-content-link); font-size: var(--prisma-content-body); line-height: 24px; }
+.pf-page .prisma-density-compact .pf-person:hover { color: var(--prisma-content-link-hover); text-decoration: underline; }
+@media (max-width: 767px) {
+  .prisma-content-standard.prisma-reading :is(.ant-modal-title, .ant-drawer-title) { overflow-wrap: anywhere; }
+  .prisma-content-standard.prisma-reading .ant-table-wrapper { overflow-x: auto; }
+  .prisma-content-standard.prisma-reading .ant-alert { display: grid; grid-template-columns: 16px minmax(0, 1fr) 16px; gap: 8px; align-items: start; }
+  .prisma-content-standard.prisma-reading .ant-alert-section { grid-column: 2; grid-row: 1; min-width: 0; }
+  .prisma-content-standard.prisma-reading .ant-alert-icon { grid-column: 1; grid-row: 1; margin-inline-end: 0; }
+  .prisma-content-standard.prisma-reading .ant-alert-close-icon { grid-column: 3; grid-row: 1; }
+  .prisma-content-standard.prisma-reading .ant-alert-actions { grid-column: 2 / -1; grid-row: 2; margin: 0; min-width: 0; }
+  .prisma-content-standard.prisma-reading .ant-alert-actions .ant-btn { max-width: 100%; white-space: normal; height: auto; }
+  .prisma-content-standard.prisma-reading .ant-alert:not(:has(.ant-alert-icon)) .ant-alert-section { grid-column: 1 / 3; }
+  .prisma-content-standard.prisma-reading .ant-alert:not(:has(.ant-alert-icon)) .ant-alert-actions { grid-column: 1 / -1; }
+}

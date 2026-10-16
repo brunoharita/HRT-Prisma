@@ -97,7 +97,7 @@ export function PersonProfessionalEvidenceMap({ profile, projection: incomingPro
   }, [surface, focusPending]);
   const openReview = () => { setFocusPending(true); setSurface("competencies"); };
 
-  return <div className={`prisma-m72-profile${curationOpen ? " prisma-m74-open" : ""}`}>
+  return <div className={`prisma-m72-profile${surface === "summary" ? "" : " prisma-content-standard prisma-reading"}${curationOpen ? " prisma-m74-open" : ""}`}>
     <nav aria-label="Áreas do Perfil profissional" className="prisma-m72-tabs">
       {PERSON_SURFACES.map(([key, label]) => <button disabled={curationOpen} aria-current={surface === key ? "page" : undefined} key={key} onClick={() => { setSurface(key); setSelectedConcept(null); setSelectedGroupKey(null); }} type="button">{label}</button>)}
     </nav>
@@ -117,7 +117,7 @@ export function PersonProfessionalEvidenceMap({ profile, projection: incomingPro
     </div> : null}
     {surface === "documents" ? workspace?.documents ?? <PrismaCard><Empty description="Documentos e revisões disponíveis somente para operadores autorizados." image={Empty.PRESENTED_IMAGE_SIMPLE} /></PrismaCard> : null}
     {surface === "history" ? workspace?.history ?? <PrismaCard><Empty description="O histórico operacional exige acesso autorizado." image={Empty.PRESENTED_IMAGE_SIMPLE} /></PrismaCard> : null}
-    <Modal title="Resumo original do currículo" open={originalOpen} onCancel={() => setOriginalOpen(false)} footer={<Button onClick={() => setOriginalOpen(false)}>Voltar à leitura</Button>} width={760}><p className="prisma-person-original-summary">{profile.about?.summary || "O Perfil publicado não possui resumo original."}</p></Modal>
+    <Modal rootClassName="prisma-content-standard prisma-reading" title="Resumo original do currículo" open={originalOpen} onCancel={() => setOriginalOpen(false)} footer={<Button onClick={() => setOriginalOpen(false)}>Voltar à leitura</Button>} width={760}><p className="prisma-person-original-summary">{profile.about?.summary || "O Perfil publicado não possui resumo original."}</p></Modal>
     {surface === "competencies" && selectedConcept ? <><ConceptDetailSurface concept={selectedConcept} onBack={() => setSelectedConcept(null)} onEvidence={setSelectedEvidence} onOpenSource={onOpenSource} />{!selectedConcept.classification ? <Button onClick={() => setClassifyConcept(selectedConcept)}>{curation && (selectedConcept.scope === "organization" || curation.canUseGlobal) ? "Definir grupo" : "Ver orientação"}</Button> : null}</> : null}
     {surface === "competencies" && !selectedConcept && selectedGroup ? <SubgroupDetailSurface group={selectedGroup} onBack={() => setSelectedGroupKey(null)} onConcept={setSelectedConcept} onEvidence={setSelectedEvidence} /> : null}
     {surface === "competencies" && !selectedConcept && !selectedGroup ? <CompetencySurface groups={groups} projection={projection} onConcept={setSelectedConcept} onGroup={setSelectedGroupKey} onEvidence={setSelectedEvidence} onLink={setLinkConcept} onClassify={setClassifyConcept} curation={curation} onProjection={setProjection} onCurationOpen={setCurationOpen} /> : null}
@@ -333,7 +333,7 @@ function EvidenceLinkModal({ adapter, concept, profileId, onClose, onProjection 
     } catch (cause) { setError(cause instanceof Error ? cause.message : "Não foi possível gravar o vínculo."); }
     finally { saveLock.current = false; setBusy(false); }
   };
-  return <Modal title={`Vincular evidência a ${concept?.label ?? "competência"}`} open={Boolean(concept)} onCancel={() => { if (!saveLock.current) onClose(); }} width={640} closable={!busy}
+  return <Modal rootClassName="prisma-content-standard prisma-reading" title={`Vincular evidência a ${concept?.label ?? "competência"}`} open={Boolean(concept)} onCancel={() => { if (!saveLock.current) onClose(); }} width={640} closable={!busy}
     okText={selected.length > 1 ? `Confirmar ${selected.length} vínculos` : "Confirmar vínculo"} okButtonProps={{ disabled: !valid, loading: busy }} onOk={() => void save()} cancelButtonProps={{ disabled: busy }}>
     <Typography.Paragraph type="secondary">Selecione uma ou mais fontes do Perfil publicado. Você não precisa escrever uma justificativa. Esses vínculos não equivalem a uma verificação por Assessment.</Typography.Paragraph>
     {error ? <Alert type="error" showIcon title={error} action={<Space wrap><Button onClick={(event) => focusNoticeFields(event.currentTarget)}>Revisar fontes</Button><Button onClick={() => { void sourceActivity.run(() => adapter.refresh()).then((value) => { onProjection(value); onClose(); }).catch(() => setError("A lista não pôde ser consultada. Sua seleção foi preservada. Tente consultar novamente.")); }}>Consultar vínculos</Button></Space>} /> : null}
@@ -385,7 +385,7 @@ function EvidenceSurface({ groups, projection, onExplain, onOpenSource }: {
 
 function ExplanationDrawer({ concept, evidence, onClose, onOpenSource }: { concept: ProfessionalConceptEvidenceView | null; evidence: ProfessionalEvidenceAssociation | null; onClose: () => void; onOpenSource: (value: ProfessionalEvidenceAssociation) => void }) {
   const selected = evidence ?? concept?.evidences[0] ?? null;
-  return <Drawer destroyOnHidden onClose={onClose} open={Boolean(concept || evidence)} size="large" title="Por que o Prisma está mostrando isso?">
+  return <Drawer rootClassName="prisma-content-standard prisma-reading" destroyOnHidden onClose={onClose} open={Boolean(concept || evidence)} size="large" title="Por que o Prisma está mostrando isso?">
     {selected ? <><EvidenceDetails evidence={selected} onOpenSource={onOpenSource} />{concept && concept.evidences.length > 1 ? <div className="prisma-m72-related-evidence"><Typography.Title level={4}>Outras evidências preservadas</Typography.Title>{concept.evidences.filter((item) => item.id !== selected.id).map((item) => <article key={item.id}><Tag color={natureColors[item.nature]}>{evidenceNatureLabel(item.nature)}</Tag><strong>{item.evidence.title}</strong></article>)}</div> : null}</> : null}
   </Drawer>;
 }

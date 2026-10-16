@@ -35,6 +35,9 @@ export const prismaTheme: ThemeConfig = {
   cssVar: { prefix: "prisma" },
   token: {
     colorPrimary: prismaTokens.color.primary,
+    colorLink: prismaTokens.color.primary,
+    colorLinkHover: prismaTokens.color.primaryHover,
+    colorLinkActive: prismaTokens.color.primaryHover,
     colorSuccess: prismaTokens.color.success,
     colorWarning: prismaTokens.color.warning,
     colorError: prismaTokens.color.danger,
@@ -51,6 +54,7 @@ export const prismaTheme: ThemeConfig = {
     controlHeight: 38,
     fontFamily: '"Aptos", "Segoe UI Variable", "Segoe UI", sans-serif',
     fontSize: 16,
+    fontSizeSM: 14,
     fontSizeHeading1: 36,
     fontSizeHeading2: 28,
     fontSizeHeading3: 22,

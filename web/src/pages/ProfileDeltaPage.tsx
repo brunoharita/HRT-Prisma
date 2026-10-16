@@ -157,7 +157,7 @@ export function ProfileDeltaPage({ activeMembership, personId, documentId, revie
   if (!workspace || !delta) return <PrismaPage><Alert action={<Button onClick={() => onNavigate(`/profiles/${personId}`)}>Voltar à Central da Pessoa</Button>} description="Nenhuma publicação foi realizada. Abra novamente o documento para carregar o estado atual." showIcon title={error ?? "Comparação não encontrada."} type="error" /></PrismaPage>;
   const nextVersion = (currentProfile?.profileVersion ?? 0) + 1;
   return (
-    <PrismaPage className="prisma-delta-page">
+    <PrismaPage className="prisma-delta-page prisma-content-standard prisma-reading">
       <PrismaPageHeader icon={<PrismaPageIcon />}
         title={delta.firstPublication ? "Revisão da primeira versão do perfil" : "Comparação com o perfil atual"}
         description={delta.firstPublication ? "Revise o conhecimento que formará o primeiro Perfil Prisma antes de publicar." : "Veja exatamente o que a nova versão altera e o que permanece preservado antes de publicar."}

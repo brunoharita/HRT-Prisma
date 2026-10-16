@@ -48,11 +48,11 @@ export function SelectionProcessesPage({activeMembership,onNavigate,selectedId,v
   try{await positionFollowUpService.mutate(org,p.vacancyId,"reopen_process",null,p.revision,{},p.id);setRetry(n=>n+1);}
   catch(e){setError(e instanceof Error?e.message:"Não foi possível salvar.");throw e;}finally{lock.current=false;setPending(false);}
  }
- function confirmStatus(p:SelectionProcess){if(p.status==="active"){setClosing(p);return;}Modal.confirm({title:"Reabrir este processo?",content:"O encerramento anterior ficará no histórico. O processo voltará a andamento, sem escolha final vigente. A ocupação da Posição permanece a mesma.",okText:"Reabrir processo",cancelText:"Cancelar",onOk:()=>changeStatus(p)});}
+ function confirmStatus(p:SelectionProcess){if(p.status==="active"){setClosing(p);return;}Modal.confirm({rootClassName:"prisma-content-standard prisma-reading",title:"Reabrir este processo?",content:"O encerramento anterior ficará no histórico. O processo voltará a andamento, sem escolha final vigente. A ocupação da Posição permanece a mesma.",okText:"Reabrir processo",cancelText:"Cancelar",onOk:()=>changeStatus(p)});}
  if(!allowed)return <PrismaPage><Alert type="error" showIcon title="Você não tem acesso aos processos seletivos." action={<Button onClick={()=>onNavigate("/")}>Ir para Início</Button>}/></PrismaPage>;
  const back=()=>onNavigate(vacancyId?`/selection-processes/position/${vacancyId}`:"/selection-processes");
  const canWrite=selected?.isCurrent&&selected.status==="active";
- return <PrismaPage className={`sp-page ${selectedId?"sp-selected":""}`}>
+ return <PrismaPage className={`sp-page prisma-content-standard prisma-reading ${selectedId?"sp-selected":""}`}>
  <PrismaPageHeader icon={<ApartmentOutlined aria-hidden="true"/>} title="Processos seletivos" description={vacancyId?"Processos e histórico da Posição selecionada.":"Gerencie os ciclos de seleção das Posições da empresa."} actions={<Space wrap><Button aria-label="Atualizar processos" icon={<ReloadOutlined aria-hidden="true"/>} loading={loading} onClick={()=>setRetry(n=>n+1)}/><Button type="primary" icon={<PlusOutlined aria-hidden="true"/>} onClick={()=>setCreating(true)}>Novo processo</Button></Space>}/>
  {error?<Alert showIcon type="error" title={error} action={<Button onClick={()=>setRetry(n=>n+1)}>Tentar novamente</Button>}/>:null}
  {vacancyId?<Button type="link" onClick={()=>onNavigate(`/vacancies/${vacancyId}`)}>Ver Posição</Button>:null}

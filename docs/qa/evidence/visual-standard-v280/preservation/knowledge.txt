@@ -1,0 +1,65 @@
+1448/global/data/Visão Geral
+1448/global/data/Áreas profissionais
+1448/global/data/Estrutura de competências
+1448/global/data/Base global de conhecimento
+1448/global/data/Fontes
+1448/global/data/Termos para revisar
+1448/global/data/Propostas
+1448/global/data/Impactos
+1448/global/empty/Visão Geral
+1448/global/empty/Áreas profissionais
+1448/global/empty/Estrutura de competências
+1448/global/empty/Base global de conhecimento
+1448/global/empty/Fontes
+1448/global/empty/Termos para revisar
+1448/global/empty/Propostas
+1448/global/empty/Impactos
+1448/local/data/Visão Geral
+1448/local/data/Áreas profissionais
+1448/local/data/Estrutura de competências
+1448/local/data/Conhecimento da empresa
+1448/local/data/Base Prisma
+1448/local/data/Termos para revisar
+1448/local/data/Impactos
+1448/local/data/Configurações
+1448/local/empty/Visão Geral
+1448/local/empty/Áreas profissionais
+1448/local/empty/Estrutura de competências
+1448/local/empty/Conhecimento da empresa
+1448/local/empty/Base Prisma
+1448/local/empty/Termos para revisar
+1448/local/empty/Impactos
+1448/local/empty/Configurações
+390/global/data/Visão Geral
+390/global/data/Áreas profissionais
+390/global/data/Estrutura de competências
+390/global/data/Base global de conhecimento
+390/global/data/Fontes
+390/global/data/Termos para revisar
+390/global/data/Propostas
+390/global/data/Impactos
+390/global/empty/Visão Geral
+390/global/empty/Áreas profissionais
+390/global/empty/Estrutura de competências
+390/global/empty/Base global de conhecimento
+390/global/empty/Fontes
+390/global/empty/Termos para revisar
+390/global/empty/Propostas
+390/global/empty/Impactos
+390/local/data/Visão Geral
+390/local/data/Áreas profissionais
+390/local/data/Estrutura de competências
+390/local/data/Conhecimento da empresa
+390/local/data/Base Prisma
+390/local/data/Termos para revisar
+390/local/data/Impactos
+390/local/data/Configurações
+390/local/empty/Visão Geral
+390/local/empty/Áreas profissionais
+390/local/empty/Estrutura de competências
+390/local/empty/Conhecimento da empresa
+390/local/empty/Base Prisma
+390/local/empty/Termos para revisar
+390/local/empty/Impactos
+390/local/empty/Configurações
+{"checks":299,"tabs":64,"pass":true}

@@ -1,6 +1,24 @@
 # Base transversal de experiência do Prisma
 
-Contrato de apresentação atual: `prisma-ux-foundation-1.4.0`. Acordos aprovados: `docs/qa/agreement-ux-foundation.md` 1.0.0, `docs/qa/agreement-visual-reference-fidelity.md` 1.0.0, `docs/qa/agreement-sidebar-branding-v171.md` 1.0.0 e `docs/qa/agreement-visual-option4-v211.md` 1.0.0. Fontes: decisões de Bruno em2026-09-13,2026-09-18 e2026-10-06. A versão1.3.0 aplica a direção visual4 escolhida para toda a plataforma, preservando organização, navegação e contratos de domínio anteriores.
+Contrato de apresentação atual: `prisma-ux-foundation-1.5.0`. Acordos aprovados: `docs/qa/agreement-ux-foundation.md` 1.0.0, `docs/qa/agreement-visual-reference-fidelity.md` 1.0.0, `docs/qa/agreement-sidebar-branding-v171.md` 1.0.0 e `docs/qa/agreement-visual-option4-v211.md` 1.0.0. Fontes: decisões de Bruno em2026-09-13,2026-09-18 e2026-10-06. A versão1.3.0 aplica a direção visual4 escolhida para toda a plataforma, preservando organização, navegação e contratos de domínio anteriores.
+
+## Padronização visual V2M8 — 2.8.0
+
+O contrato 1.5.0 amplia a base existente, conforme `docs/qa/agreement-visual-standard-v280.md` 1.0.0 e seu Execution Prompt. Reutiliza ADR-050, Ant Design, `theme.ts`, `foundation.css` e componentes atuais, sem nova biblioteca ou mudança de domínio. A escala representa papéis, não uma conversão indiscriminada de todos os textos.
+
+| Papel | Leitura | Operação compacta |
+| --- | --- | --- |
+| Valor/texto principal | 16px/24px, peso400; identificação600 | 16px/24px no Kanban |
+| Rótulo/metadado/ação auxiliar | 14px/20px, peso400; ação600 | 14px/20px, com controles e foco próprios |
+| Cabeçalho de seção | 24px/32px no nível principal; 20px/28px no subordinado | Coluna do Kanban16px/24px, subordinada à página |
+| Modal/drawer de leitura | 24px/32px; seção interna20px/28px | Mesma hierarquia |
+| Tabela Pessoas | Exceção aprovada14px/20px, nome600, outros400 | Complementos12px/18px, preservados |
+
+`prisma-content-standard` conserva o padrão aprovado em Conhecimento. `prisma-reading` estende seus papéis nas páginas normalizadas, com níveis explícitos; portais recebem o mesmo escopo por `rootClassName`. `prisma-density-compact` explicita Kanban/lista móvel: mantém trilhas, quadrado do Score50px, padding14px e ações de14px; não altera score, sequência, estados ou limites de permissão. Títulos de página e métricas/destaques mantêm escala própria; o Resumo da Pessoa conserva sua composição72/28 e os destaques anteriores.
+
+Links textuais usam os tokens de azul e hover do tema; texto informativo permanece na cor textual. Áreas de Conhecimento continuam informativas com Editar separado; conceitos abrem detalhes por links. Botões neutros, cartões clicáveis, foco, seleção, selos, avisos e cores de estado mantêm sua semântica. Tabelas com várias linhas alinham pelo topo e preservam rolagem local. Contenção de grid nos detalhes de competência permite que abas e tabelas rolem localmente no celular, sem esconder conteúdo.
+
+Manual/revisão/comparação, Processos, Acompanhamento, competências/evidências, Posições, documentos, Tokens e Banco de questões consomem os papéis compartilhados. Evidência renderizada e regressão de preservação em `docs/qa/aot-visual-standard-v280.md`; capturas sintéticas não comprovam comportamento autenticado de pessoas reais.
 
 ## Retorno imediato v2.3.1
 

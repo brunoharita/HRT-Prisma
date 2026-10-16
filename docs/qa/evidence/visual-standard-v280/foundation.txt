@@ -1,0 +1,2 @@
+$ node scripts/check-foundation.mjs
+foundation check passed (18 public tables, 6 processing versions)

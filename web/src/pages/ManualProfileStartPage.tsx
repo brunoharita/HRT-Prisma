@@ -41,7 +41,7 @@ export function ManualProfileStartPage({ activeMembership, onNavigate }: { activ
     } catch (caught) { if (currentOrganization.current === organizationId) setError(caught instanceof Error ? caught.message : "Não foi possível preparar o rascunho."); }
     finally { if (currentOrganization.current === organizationId) { pending.current = false; setBusy(false); } }
   }
-  return <PrismaPage className="prisma-manual-profile-start">
+  return <PrismaPage className="prisma-manual-profile-start prisma-content-standard prisma-reading">
     <PrismaPageHeader icon={<EditOutlined />} title="Preencher manualmente" description="Identifique a Pessoa para verificar possíveis duplicidades. Depois, preencha as seções profissionais no editor. Você pode salvar um rascunho parcial e continuar depois, sem PDF ou consumo de Tokens Prisma." />
     <PrismaCard title="Identificação inicial">
       {error ? <Alert showIcon type="error" title={error} action={<Button disabled={busy} onClick={() => form.submit()}>Verificar novamente</Button>} /> : null}

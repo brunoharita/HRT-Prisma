@@ -15,6 +15,8 @@ import { profileFixture } from "../fixtures/personFlow";
 import type { PersonWorkspaceSummary, ProfileReviewWorkspace, ProfileVersionView, StructuredDraft } from "../../web/src/domain/personIngestion";
 import { professionalAreaService } from "../../web/src/infrastructure/supabase/professionalAreaService";
 import "../../web/src/styles.css";
+import "../../web/src/ui/foundation.css";
+import { prismaTheme } from "../../web/src/ui/theme";
 const areaOptions: import("../../web/src/infrastructure/supabase/professionalAreaService").ProfessionalArea[] = [{id:"area-tech",label:"Tecnologia",description:"Sistemas e infraestrutura",aliases:["TI"],version:1,scope:"global",organizationId:null,active:true},{id:"area-rh",label:"Recursos Humanos",description:"Gestão de pessoas",aliases:["RH","HRBP"],version:1,scope:"global",organizationId:null,active:true}];
 professionalAreaService.load = async () => ({options:structuredClone(areaOptions),suggestion:[]});
 professionalAreaService.save = async (org, area) => { const id=area.id ?? "area-local"; const row={...area,id,organizationId:org,scope:org ? "organization" as const : "global" as const,version:(area.version ?? 0)+1};const index=areaOptions.findIndex(a=>a.id===id);if(index>=0)areaOptions[index]=row;else areaOptions.push(row);return id;};
@@ -74,6 +76,6 @@ function Harness() {
   ]} />;
   else if (route === "navigated") content = <p>Navegação realizada: {qa.navigation}</p>;
   else content = <ProfileReviewPage activeMembership={membership} personId={person.id} reviewId={review.id} onNavigate={navigate} />;
-  return <ConfigProvider><main style={{ padding: 16, minWidth: 0 }}>{state === "scope" ? <button onClick={() => setSelectedMembership({...membership,organizationId:"synthetic-other-org"})}>Trocar empresa sintética</button> : null}{content}</main></ConfigProvider>;
+  return <ConfigProvider theme={prismaTheme}><main style={{ padding: 16, minWidth: 0 }}>{state === "scope" ? <button onClick={() => setSelectedMembership({...membership,organizationId:"synthetic-other-org"})}>Trocar empresa sintética</button> : null}{content}</main></ConfigProvider>;
 }
 createRoot(document.getElementById("root")!).render(<Harness />);

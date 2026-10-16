@@ -144,7 +144,7 @@ export function DocumentOperationsPage({ activeMembership, personId, onNavigate 
   ];
 
   return (
-    <PrismaPage className="prisma-m2c-page prisma-document-operations-page">
+    <PrismaPage className="prisma-m2c-page prisma-document-operations-page prisma-content-standard prisma-reading">
       <PrismaPageHeader icon={<PrismaPageIcon />}
         title={personId ? "Processamento e revisões da Pessoa" : "Processamento e revisões"}
         description={personId

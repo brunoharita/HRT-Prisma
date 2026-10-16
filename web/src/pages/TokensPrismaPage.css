@@ -19,14 +19,14 @@
 .prisma-tokens .tokens-source-heading>strong{flex:1;min-width:140px}
 .prisma-tokens .tokens-source-heading>span:not(.tokens-priority):not(.ant-tag){font-size:14px}
 .prisma-tokens .tokens-priority{display:inline-flex;align-items:center;justify-content:center;background:#2878ff;color:white;border-radius:50%;height:24px;width:24px;flex-shrink:0;font-size:14px}
-.prisma-tokens .tokens-source-metrics{display:grid;grid-template-columns:auto minmax(70px,1fr) auto;gap:12px;align-items:center;margin:14px 0 0 36px;font-size:13px}
+.prisma-tokens .tokens-source-metrics{display:grid;grid-template-columns:auto minmax(70px,1fr) auto;gap:12px;align-items:center;margin:14px 0 0 36px;font-size:var(--prisma-content-detail,14px)}
 .prisma-tokens .tokens-source-metrics .ant-progress{margin:0}
 .prisma-tokens .tokens-planning-entry{padding:16px 0;border-bottom:1px solid #e4eaf3}
 .prisma-tokens .tokens-planning-entry p{margin:6px 0 0}
 .prisma-tokens .tokens-wallet-aside .ant-select{width:100%;max-width:100%}
 .prisma-tokens .tokens-wallet-aside details{margin-top:16px}
 .prisma-tokens summary{cursor:pointer}
-.prisma-tokens .tokens-expiry-notice{border-left:3px solid #d49100;padding:8px 12px;color:#725016;background:#fffbef;font-size:13px}
+.prisma-tokens .tokens-expiry-notice{border-left:3px solid #d49100;padding:8px 12px;color:#725016;background:#fffbef;font-size:var(--prisma-content-detail,14px)}
 .prisma-tokens .tokens-sources-mobile{display:none}
 .prisma-tokens .tokens-filter>*{flex:1 1 150px;min-width:0}
 .prisma-tokens .tokens-filter .ant-select{max-width:100%;width:190px}
@@ -35,8 +35,8 @@
 
 .prisma-tokens .tokens-source{padding:10px 0}
 .prisma-tokens .tokens-source .tokens-row{margin:8px 0 2px}
-.prisma-tokens .tokens-source .ant-btn-link{font-size:12px;padding:0;height:24px}
+.prisma-tokens .tokens-source .ant-btn-link{font-size:var(--prisma-content-detail,14px);padding:0;height:24px}
 .prisma-tokens .tokens-source-metrics{margin-top:8px}
-.prisma-tokens .tokens-sources .ant-card-body>p{font-size:12px;margin:8px 0}
+.prisma-tokens .tokens-sources .ant-card-body>p{font-size:var(--prisma-content-detail,14px);margin:8px 0}
 .prisma-tokens .tokens-sources{min-width:0;width:100%}.prisma-tokens .tokens-sources-mobile .ant-collapse-header-text{min-width:0}
 @media(max-width:768px){.prisma-tokens .tokens-filter>*{flex-basis:100%}}

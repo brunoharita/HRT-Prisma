@@ -1,0 +1,79 @@
+[
+  {
+    "name": "manual",
+    "startedAt": "2026-10-16T13:46:21.421Z",
+    "exitCode": 0,
+    "seconds": 115.643,
+    "source": "scripts/test-manual-profile-browser.mjs"
+  },
+  {
+    "name": "followup",
+    "startedAt": "2026-10-16T13:48:17.297Z",
+    "exitCode": 0,
+    "seconds": 40.964,
+    "source": "tests/tooling/positionFollowUp.browser.mjs"
+  },
+  {
+    "name": "followup-details",
+    "startedAt": "2026-10-16T13:45:07.164Z",
+    "exitCode": 0,
+    "seconds": 22.301,
+    "source": "tests/tooling/operationalFocusFollowUp.browser.mjs"
+  },
+  {
+    "name": "navigation",
+    "startedAt": "2026-10-16T13:45:30.053Z",
+    "exitCode": 0,
+    "seconds": 29.483,
+    "source": "tests/tooling/navigationDefaults.browser.mjs"
+  },
+  {
+    "name": "knowledge",
+    "startedAt": "2026-10-16T13:45:59.542Z",
+    "exitCode": 0,
+    "seconds": 55.962,
+    "source": "tests/tooling/knowledgeCohesion.browser.mjs"
+  },
+  {
+    "name": "bank",
+    "startedAt": "2026-10-16T13:46:56.050Z",
+    "exitCode": 0,
+    "seconds": 114.739,
+    "source": "tests/tooling/questionBank.browser.mjs"
+  },
+  {
+    "name": "bank-states",
+    "startedAt": "2026-10-16T13:48:50.793Z",
+    "exitCode": 0,
+    "seconds": 32.026,
+    "source": "tests/tooling/questionBankStates.browser.mjs"
+  },
+  {
+    "name": "tokens-states",
+    "startedAt": "2026-10-16T13:49:23.046Z",
+    "exitCode": 0,
+    "seconds": 12.553,
+    "source": "tests/tooling/tokensCalendarStates.browser.mjs"
+  },
+  {
+    "name": "tokens",
+    "startedAt": "2026-10-16T13:51:20.373Z",
+    "exitCode": 0,
+    "seconds": 39.126,
+    "source": "tests/tooling/tokensCalendar.browser.mjs"
+  },
+  {
+    "name": "people",
+    "startedAt": "2026-10-16T13:50:10.360Z",
+    "exitCode": 0,
+    "seconds": 17.633,
+    "source": "tests/tooling/peopleTypography.browser.mjs"
+  },
+  {
+    "name": "people-columns",
+    "startedAt": "2026-10-16T13:50:28.035Z",
+    "exitCode": 0,
+    "seconds": 9.076,
+    "source": "tests/tooling/peopleColumns.browser.mjs"
+  }
+]

@@ -126,7 +126,7 @@ export function DocumentDetailPage({ activeMembership, personId, documentId, onN
   ];
 
   return (
-    <PrismaPage className="prisma-m2c-page">
+    <PrismaPage className="prisma-m2c-page prisma-content-standard prisma-reading">
       <PrismaPageHeader
         title={document.filename}
         description={`${workspace.person.fullName} · Documento v${document.documentVersion}`}
