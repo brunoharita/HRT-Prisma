@@ -28,3 +28,12 @@ Validação mínima: cenários browser acima, testes versão/contrato/rotas, tip
 D-01/D-02/P-01 PASS:32assertivas browser1448/390 (ordem/default ativo, Encerrados/Todos, escolha lembrada, criação volta a ativo, deep link encerrado, zero ativos sem fallback, abas global/local e zero erro).14testes versão/contrato/rotas PASS, incluindo negativas de tenant/role/contrato e separação de resultados. Tipos/build web e lint PASS; escopo revisado restrito a defaults/ordem, IDs e serviços intactos. Screenshots em evidence/navigation-defaults-v277. O teste móvel retorna à lista pelo botão da interface antes de verificar a opção lembrada, respeitando a navegação sequencial existente. As tentativas anteriores de consultar controles ocultos foram falhas do teste; não houve correção de produto motivada por elas.
 
 QA sintético local; única escrita da fixture foi criação explícita autorizada pelo cenário, sem fechamento/resultado fictício em produção. CI/publicação/smoke ainda pendentes. Não equivale a validação autenticada real.
+
+
+## AoT operacional
+
+D-01/D-02/P-01 PASS:2.7.7 publicada no runtimea44f160f737a11f52ee3e4c3eeafdb112d8a9622, CIs branch38844686369 e main38844710266 SUCCESS.32checks browser1448/390 e14testes versão/contrato/rotas, tipos/build/lint/contexto aprovados. Defaults e ordem conforme contrato; keys, dados e demais controles intactos.
+
+Plano seletivo somente prisma-web; nenhuma migration/Edge/serviço de IA. Smoke18checks PASS:13HTTP e5bundle/CSS incluindo SHA/versão, rotas Processos/Conhecimento/Pessoas e asset da versão anterior. Container running/0, rollbackprisma-web:rollback-before-a44f160f737a; IDs de parser/gateway/mail/synthesis/Traefik comparados e preservados. Metadados em publication.json. Sem dados ou decisões humanas alteradas em produção. Validação visual é sintética local; jornada autenticada real NOT TESTED. Fechamento documental/contexto sincroniza main/origin/VPS sem rebuild.
+
+O curl imediato do deploy recebeu404 transitório na troca do container; checagem independente após estabilização confirmou18checks PASS/13HTTP200, sem reconstrução adicional. Início03:08:24UTC; publicação verificada03:18:43UTC (10m19s), incluindo segundo ajuste autorizado durante a execução. Fechamento documental/CI/sincronização segue sem novo deploy.
