@@ -35,3 +35,12 @@ Tipos/root build/teste de versão5/lint/build web PASS. Adaptações do teste: A
 Execução reproduzível: iniciar pnpm exec vite --config tests/ui/visual-foundation.vite.config.mts e executar node tests/tooling/knowledgeCohesion.browser.mjs com PRISMA_PLAYWRIGHT_PATH apontando ao runtime Playwright já disponível. Sem instalação/dependência nova. O teste visual é gate de aceite para mudanças nas abas; CI geral permanece obrigatório e não é apresentado como substituto dessa prova visual. CI/rollout ainda pendentes.
 
 Checker de contexto recusou o nome inicial knowledge-ux-v278 por usar prefixo reservado a fontes consolidadas; renomeado para aot-knowledge-ux-v278, referências e exports regenerados, checker PASS antes da integração/produção. Nenhum gate foi contornado.
+
+
+## AoT operacional
+
+D-01..04/P-01 PASS:2.7.8 publicada no runtime488947ccaa1c422b1021d0309fdb3a2c6e362e2a após CIs branch38900220986 e main38900253368 SUCCESS.299assertivas visuais,64estados de abas e66capturas,5testes de versão, tipos/build/lint/contexto PASS. Escopo opt-in reutilizável documentado na UX Foundation; outras telas não recebem a nova classe. Nenhuma nova biblioteca/dependência.
+
+Plano seletivo web apenas. Smoke19checks PASS:13HTTP e6bundle/CSS, SHA/versão/escopo compartilhado, rotas e entry anterior preservados. Container running/0; rollbackprisma-web:rollback-before-488947ccaa1c. IDs de parser/gateway/synthesis/mail/Traefik comparados e preservados. Metadados em publication.json. Nenhuma escrita em dados reais, curadoria, IA ou migração. UI autenticada real NOT TESTED; screenshots são sintéticos, smoke produtivo é público. Fonte documental sincroniza main/origin/VPS sem rebuild adicional.
+
+Curl imediato recebeu404 transitório durante a recriação; smoke independente confirmou13HTTP200 e19checks PASS sem rebuild adicional. Início12:11:50UTC; publicação verificada12:27:41UTC. Fechamento documental/CI/sincronização sem novo runtime.

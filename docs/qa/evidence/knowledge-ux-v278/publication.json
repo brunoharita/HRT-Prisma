@@ -1,0 +1,127 @@
+{
+  "at": "2026-10-16T12:27:40.062Z",
+  "runtimeSha": "488947ccaa1c422b1021d0309fdb3a2c6e362e2a",
+  "version": "2.7.8",
+  "entry": "/assets/index-C7L7zWvI.js",
+  "checks": [
+    {
+      "path": "/",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/login",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/profiles",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/selection-processes",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/knowledge",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/assets/index-C7L7zWvI.js",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/assets/rolldown-runtime-C0FnF6B9.js",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/assets/antd-vendor-CjXMNByx.js",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/assets/supabase-vendor-DoXvCMLf.js",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/assets/react-vendor-BdxMnOeJ.js",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/assets/antd-vendor-B5BXDqMa.css",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/assets/index-D16HLfBX.css",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/assets/index-CnaUsQdv.js",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "name": "validated SHA",
+      "pass": true
+    },
+    {
+      "name": "release 2.7.8",
+      "pass": true
+    },
+    {
+      "name": "profile date column",
+      "pass": true
+    },
+    {
+      "name": "no grouped function fallback",
+      "pass": true
+    },
+    {
+      "name": "shared Knowledge hierarchy",
+      "pass": true
+    },
+    {
+      "name": "Knowledge content scope",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "limitations": "Public HTTP/assets and synthetic local browser; no authenticated real-person workflow or profile write.",
+  "ci": {
+    "branch": 38900220986,
+    "main": 38900253368,
+    "conclusion": "success"
+  },
+  "deployment": {
+    "web": "PUBLISHED",
+    "remaining": []
+  },
+  "host": [
+    "d033580a571c3dd220e1b56c32e4f9cfea3110162a45ab917bb9bb34346e9e1c|running|0|sha256:4de0d8fcfb0382f1c017b6a68c56411377cba42c93fd908fda8741ef152da668",
+    "sha256:3d02a1473435afe2af64244104703bb93bed49fd586d29d3a50c8702534eb03b",
+    "prisma-web|d033580a571c",
+    "prisma-parser-ia|e8bc778c8c00",
+    "prisma-paddle-gateway|8fb76416f61c",
+    "hrt-mail-forwarder|b257a83cbb37",
+    "prisma-profile-synthesis|db6c5c0ef238",
+    "paddle-vl-llama-test|d991a574e45e",
+    "traefik-traefik-1|5e25fdc6d2e6"
+  ],
+  "protectedContainersUnchanged": true,
+  "rollback": "prisma-web:rollback-before-488947ccaa1c",
+  "visual": {
+    "assertions": 299,
+    "tabStates": 64,
+    "screenshots": 66,
+    "path": "checks.json"
+  }
+}
