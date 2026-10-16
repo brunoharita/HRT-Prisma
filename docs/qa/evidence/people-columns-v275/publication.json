@@ -1,0 +1,119 @@
+{
+  "at": "2026-10-16T02:13:30.653Z",
+  "runtimeSha": "40b451341aabfec5782cd41cb04a2130cad78fc7",
+  "version": "2.7.5",
+  "entry": "/assets/index-CkORK5I3.js",
+  "checks": [
+    {
+      "path": "/",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/login",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/profiles",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/profiles/manual",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/profiles/import",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/assets/index-CkORK5I3.js",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/assets/rolldown-runtime-C0FnF6B9.js",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/assets/antd-vendor-CjXMNByx.js",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/assets/supabase-vendor-DoXvCMLf.js",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/assets/react-vendor-BdxMnOeJ.js",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/assets/antd-vendor-B5BXDqMa.css",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/assets/index-MdAT0uuW.css",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/assets/index-DlYz3gDi.js",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "name": "validated SHA",
+      "pass": true
+    },
+    {
+      "name": "release 2.7.5",
+      "pass": true
+    },
+    {
+      "name": "profile date column",
+      "pass": true
+    },
+    {
+      "name": "no grouped function fallback",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "limitations": "Public HTTP/assets and synthetic local browser; no authenticated real-person workflow or profile write.",
+  "ci": {
+    "branch": 38839040394,
+    "main": 38839071442,
+    "conclusion": "success"
+  },
+  "rollout": "web only",
+  "container": "f10e33e5366a",
+  "image": "sha256:b15f9259cc9ce2323ea9ce5a7212c8a496e6b89aa5772f128da38f15985a1103",
+  "rollback": "prisma-web:rollback-before-40b451341aab",
+  "dispatcher": {
+    "command": "publish",
+    "status": "GIT_PUBLISHED",
+    "sha": "40b451341aabfec5782cd41cb04a2130cad78fc7",
+    "branch": "codex/people-columns-v275",
+    "web": "PENDING_VPS_CONFIGURATION",
+    "parserIa": "SKIPPED",
+    "profileSynthesis": "SKIPPED",
+    "mailForwarder": "SKIPPED",
+    "remaining": {
+      "database": [],
+      "edgeFunctions": [],
+      "web": true,
+      "paddleGateway": false,
+      "parserIa": false,
+      "profileSynthesis": false,
+      "mailForwarder": false
+    }
+  }
+}

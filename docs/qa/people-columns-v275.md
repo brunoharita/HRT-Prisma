@@ -36,3 +36,23 @@ Interferências locais: pnpm11 tentou verificar/reinstalar dependências do work
 Publicação/CI/smoke pendentes; fechamento operacional será acrescentado após verificação. Tempos UTC: início01:59:14, preparação/implementação até02:03:03 (3m49s, inclui checks sobrepostos); validação local em curso. Não somar durações de jobs paralelos como tempo total.
 
 CI38838840051 detectou expectativa de versão2.7.4 em productRelease.test ainda não atualizada; corrigida para2.7.5 e contador5. É omissão de preparação da release, sem falha funcional de Pessoas. Nova validação necessária apenas para esse teste e CI. Nenhuma produção alterada antes da correção.
+
+## Publicação e fechamento operacional
+
+PASS: runtime40b451341aabfec5782cd41cb04a2130cad78fc7, versão2.7.5; CIs branch38839040394 e main38839071442 SUCCESS. Os dois CIs executados em paralelo sobre o mesmo SHA após a correção da expectativa de versão. Plano seletivo17arquivos: somente prisma-web, sem banco/Edge/gateway/worker. Integração fast-forward, sem force-push.
+
+| Acordo | Implementação/prova | Status |
+| --- | --- | --- |
+| D-01 | seis colunas na ordem exata e nome navegável;24assertivas browser1448/390 e screenshots | PASS |
+| D-02 | latestDirectoryEntry independente de function/status; cargo/empresa/período do mesmo registro, empates/datas insuficientes explícitos;4testes domínio | PASS |
+| D-03 | approvedAt do Perfil vigente, sem documento ou updatedAt da Pessoa; browser diferencia14/10 da data cadastral15/10 | PASS |
+| D-04 | Todos/Todas em cada seletor, cargos originais, limpeza global incluindo situação/busca; browser reversão de área/cargo e situação all | PASS |
+| P-01 | colunas/fallbacks operacionais removidos conforme acordo; writers/IA/Knowledge/permissões inalterados; diff revisado,25Node dirigidos e CI obrigatório | PASS |
+
+17checks de smoke PASS (13HTTP e4bundle): SHA/versão/coluna/fallback, rotas/importação/manual, assets novos e entry anterior. O script de deploy recebeu404 na troca do container; após estabilização todos retornam200, sem rebuild adicional. Uma expectativa do smoke usava aspas duplas; o minificador emite template literal. Corrigido o teste da string, sem alterar runtime.
+
+Containerwebf10e33e5366a running/0, imagemsha256:b15f9259cc9ce2323ea9ce5a7212c8a496e6b89aa5772f128da38f15985a1103. Rollbackprisma-web:rollback-before-40b451341aab preserva sha256:a96ee1a0198c928e15559be7764dd07c5d630355ad1aa839dd0d47fb2b67ab0f. Parser e8bc778c8c00, gateway8fb76416f61c, synthesisdb6c5c0ef238, mailb257a83cbb37 e Traefik5e25fdc6d2e6 mantêm IDs. Sem escrita em Pessoa real, consumo de IA ou reprocessamento. Fluxo autenticado real NOT TESTED; evidência de UI é sintética e smoke produtivo é público. Nenhum desvio de contrato identificado; sem afirmação de acurácia das áreas.
+
+Tempos decorridos por intervalos UTC, sem somar jobs sobrepostos: preparação/implementação01:59:14–02:03:03=3m49s; validação/evidências/preparação release02:03:03–02:08:14=5m11s; integração/CI/correção da expectativa de versão02:08:14–02:12:00=3m46s; deploy/smoke02:12:00–02:13:30=1m30s. Fechamento documental/sincronização começa02:13:30, término reportado na conversa após CI. Soma até smoke14m16s. Clock da ferramenta é a referência; timestamps dos hosts podem divergir em segundos.
+
+Melhorias de desempenho identificadas: atualizar teste de versão no mesmo passo do registro teria evitado uma rodada de CI; reutilizar bootstrap sintético com nome correto da variável e seletores acessíveis teria evitado duas esperas de timeout; preparar verificações de release antes do primeiro push reduz retrabalho. CI branch/main já paralelos, validação local dirigida e nenhum rebuild por404. Não foi retirado nenhum gate para reduzir tempo. Fechamento documental não exige novo runtime.
