@@ -28,3 +28,12 @@ Execução implementa D-UX-01..04 e impede P-01, dentro de F-01/A-01. Validaçã
 D-UX-01..04/P-01 PASS:18assertivas de estilos/alinhamentos/ausências/badge/proveniência,24regressões de colunas/filtros/navegação em1448/390, screenshots antes/depois na mesma fixture e viewport. Escopo CSS revisado: somente tabela de Pessoas. Tipos/build web,5testes de versão, lint e Context Pack PASS. Fixture corrige o teste de tooltip para usar hover, interação já existente. Sem novo comportamento funcional.
 
 QA sintético local, sem dados ou chamadas de IA reais. CI e publicação ainda pendentes; esta evidência não equivale a jornada autenticada real.
+
+
+## Fechamento operacional
+
+D-UX-01..04/P-01 PASS:18verificações de tipografia/alinhamento/badge/ausências e24de preservação de filtros/navegação;5testes de versão, tipos/build/lint/contexto PASS. Capturas1448/390 antes/depois inspecionadas, sem desvios materiais. Mudança restrita à tabela e marcação de apresentação, sem domínio/serviço/contrato de IA alterado.
+
+2.7.6 publicada no runtime166213640b6a776efd62ad5229aff7625a21dd93 após CIs branch38843350893/main38843360673 SUCCESS. Plano exige somente web. Smoke18checks PASS:13HTTP,4bundle e1CSS; SHA/versão, seletor tipográfico e assets antigos/novos. Host/rollback em publication.json. Parser/gateway/synthesis/mail/Traefik mantêm IDs da versão anterior. Rollbackweb:prisma-web:rollback-before-166213640b6a. Sem reprocessamento, alteração de banco ou chamada de IA. Produção autenticada real NOT TESTED; evidência visual é sintética. Fonte documental sincroniza main/origin/VPS sem rebuild adicional.
+
+Início02:55:41UTC; tipos/build/teste versão/browser/lint/contexto e implementação concluídos antes03:00:40; CI aprovado03:02:12. Tempo restante de publicação/fechamento registrado na conversa. Reutilizado bootstrap validado e teste de versão atualizado antes do primeiro CI; não houve rodada extra de CI por falha de produto ou versão. Tooltip no teste usa hover, interação existente; nenhuma semântica nova.

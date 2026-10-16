@@ -1,0 +1,116 @@
+{
+  "at": "2026-10-16T03:03:28.084Z",
+  "runtimeSha": "166213640b6a776efd62ad5229aff7625a21dd93",
+  "version": "2.7.6",
+  "entry": "/assets/index-Cf5oyNWD.js",
+  "checks": [
+    {
+      "path": "/",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/login",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/profiles",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/profiles/manual",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/profiles/import",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/assets/index-Cf5oyNWD.js",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/assets/rolldown-runtime-C0FnF6B9.js",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/assets/antd-vendor-CjXMNByx.js",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/assets/supabase-vendor-DoXvCMLf.js",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/assets/react-vendor-BdxMnOeJ.js",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/assets/antd-vendor-B5BXDqMa.css",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/assets/index-DhoXKuxU.css",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/assets/index-CkORK5I3.js",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "name": "validated SHA",
+      "pass": true
+    },
+    {
+      "name": "release 2.7.6",
+      "pass": true
+    },
+    {
+      "name": "profile date column",
+      "pass": true
+    },
+    {
+      "name": "no grouped function fallback",
+      "pass": true
+    },
+    {
+      "name": "scoped typography stylesheet",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "limitations": "Public HTTP/assets and synthetic local browser; no authenticated real-person workflow or profile write.",
+  "ci": {
+    "branch": 38843350893,
+    "main": 38843360673,
+    "conclusion": "success"
+  },
+  "deployment": {
+    "web": "PUBLISHED",
+    "remaining": []
+  },
+  "host": [
+    "981431a77433e7908aac56f275ba5cc1d0130646f33c440e412cf66e23f48980|running|0|sha256:09f3adcea12c3f1f4f7700753be2cadf216af2d01823cc66ab01eeacb5621076",
+    "sha256:b15f9259cc9ce2323ea9ce5a7212c8a496e6b89aa5772f128da38f15985a1103",
+    "prisma-web|981431a77433",
+    "prisma-parser-ia|e8bc778c8c00",
+    "prisma-paddle-gateway|8fb76416f61c",
+    "hrt-mail-forwarder|b257a83cbb37",
+    "prisma-profile-synthesis|db6c5c0ef238",
+    "paddle-vl-llama-test|d991a574e45e",
+    "traefik-traefik-1|5e25fdc6d2e6"
+  ],
+  "rollback": "prisma-web:rollback-before-166213640b6a"
+}
