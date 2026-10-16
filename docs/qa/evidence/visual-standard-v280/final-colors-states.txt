@@ -1,0 +1,18 @@
+after person
+11:18:47 [vite] (client) [console.error] Warning: [antd: Modal] `maskClosable` is deprecated. Please use `mask.closable` instead.
+11:18:48 [vite] (client) [console.error] Warning: [antd: Modal] `maskClosable` is deprecated. Please use `mask.closable` instead.
+11:18:50 [vite] (client) [console.error] Warning: [antd: Modal] `maskClosable` is deprecated. Please use `mask.closable` instead.
+11:18:52 [vite] (client) [console.error] Warning: [antd: Modal] `maskClosable` is deprecated. Please use `mask.closable` instead.
+11:18:53 [vite] (client) [console.error] Warning: [antd: Modal] `maskClosable` is deprecated. Please use `mask.closable` instead.
+11:18:54 [vite] (client) [console.error] Warning: [antd: Modal] `maskClosable` is deprecated. Please use `mask.closable` instead.
+after documents
+11:19:05 [vite] (client) [console.error] Encountered two children with the same key, `synthetic-attempt-2`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+11:19:05 [vite] (client) [console.error] Encountered two children with the same key, `synthetic-attempt-2`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+11:19:05 [vite] (client) [console.error] Encountered two children with the same key, `synthetic-attempt-2`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+11:19:13 [vite] (client) [console.error] Encountered two children with the same key, `synthetic-attempt-2`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+11:19:13 [vite] (client) [console.error] Encountered two children with the same key, `synthetic-attempt-2`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+11:19:13 [vite] (client) [console.error] Encountered two children with the same key, `synthetic-attempt-2`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+after bank
+11:19:18 [vite] (client) [console.error] Warning: [antd: Alert] `message` is deprecated. Please use `title` instead.
+11:19:22 [vite] (client) [console.error] Warning: [antd: Alert] `message` is deprecated. Please use `title` instead.
+{"phase":"after","checks":84,"states":12,"pass":true}

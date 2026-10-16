@@ -341,7 +341,7 @@ body { background: var(--prisma-canvas); }
 .prisma-content-standard.prisma-reading :is(.prisma-operation-date, .prisma-operation-compact-value, .prisma-operation-status-cell small, .prisma-operation-legend-item small) {
   font-size: var(--prisma-content-detail); line-height: 20px;
 }
-.prisma-content-standard.prisma-reading .prisma-operation-next-action { font-size: var(--prisma-content-body); line-height: 24px; }
+.prisma-content-standard.prisma-reading .prisma-operation-next-action { color: var(--prisma-color-text, #10203a); font-size: var(--prisma-content-body); line-height: 24px; }
 .prisma-content-standard.prisma-reading :is(.prisma-person-name-button, .prisma-person-name-button strong, .prisma-vacancy-title-link) { color: var(--prisma-content-link); }
 .prisma-content-standard.prisma-reading :is(.prisma-person-name-button, .prisma-vacancy-title-link):hover { color: var(--prisma-content-link-hover); text-decoration: underline; }
 .prisma-content-standard.prisma-reading .prisma-vacancy-table-wrap .ant-table-cell { vertical-align: top; }
@@ -358,6 +358,10 @@ body { background: var(--prisma-canvas); }
   font-size: var(--prisma-content-detail); line-height: 20px;
 }
 .prisma-content-standard.prisma-reading :is(.prisma-bank-muted, .prisma-bank-context, .prisma-bank-counts, .prisma-bank-filter-grid > label) { font-size: var(--prisma-content-detail); line-height: 20px; }
+.prisma-content-standard.prisma-reading :is(.prisma-operation-date, .prisma-operation-compact-value, .prisma-operation-status-cell small, .prisma-operation-legend-item small, .prisma-m81-detail-breadcrumb, .prisma-m81-status-list > div > span:last-child, .prisma-m72-collapse-label small, .prisma-m72-filters > label, .prisma-m72-metrics span, .prisma-m72-evidence-list small, .prisma-m72-recent-evidence time, .prisma-m72-concept-list article > button span:last-child, .prisma-bank-muted, .prisma-bank-context, .prisma-bank-counts, .prisma-bank-filter-grid > label) {
+  color: var(--prisma-color-text-secondary, #53637d);
+}
+.prisma-content-standard.prisma-reading .prisma-m81-status-list strong { color: var(--prisma-color-text, #10203a); }
 .prisma-content-standard.prisma-reading .prisma-bank-row .prisma-bank-stem { font-size: var(--prisma-content-body); line-height: 24px; color: var(--prisma-text, #10203a); }
 .prisma-content-standard.prisma-reading .prisma-bank-drawer .ant-drawer-extra .ant-btn { font-size: var(--prisma-content-detail); }
 .prisma-content-standard.prisma-reading .tokens-source .ant-btn-link { font-size: var(--prisma-content-detail); line-height: 20px; min-height: 32px; }

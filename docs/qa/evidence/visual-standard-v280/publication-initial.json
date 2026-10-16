@@ -1,0 +1,208 @@
+{
+  "at": "2026-10-16T14:12:39.126Z",
+  "runtimeSha": "1220c97c6ca6ea4c14dfa463838d1a34a69e6cac",
+  "version": "2.8.0",
+  "entry": "/assets/index-C7Zw4Tg5.js",
+  "assets": [
+    "/assets/index-C7Zw4Tg5.js",
+    "/assets/rolldown-runtime-C0FnF6B9.js",
+    "/assets/antd-vendor-CjXMNByx.js",
+    "/assets/supabase-vendor-DoXvCMLf.js",
+    "/assets/react-vendor-BdxMnOeJ.js",
+    "/assets/antd-vendor-B5BXDqMa.css",
+    "/assets/index-D79IksNE.css"
+  ],
+  "checks": [
+    {
+      "name": "HTTP /",
+      "pass": true
+    },
+    {
+      "name": "HTTP /login",
+      "pass": true
+    },
+    {
+      "name": "HTTP /profiles",
+      "pass": true
+    },
+    {
+      "name": "HTTP /profiles/processes",
+      "pass": true
+    },
+    {
+      "name": "HTTP /profiles/new/manual",
+      "pass": true
+    },
+    {
+      "name": "HTTP /vacancies",
+      "pass": true
+    },
+    {
+      "name": "HTTP /selection-processes",
+      "pass": true
+    },
+    {
+      "name": "HTTP /knowledge",
+      "pass": true
+    },
+    {
+      "name": "HTTP /settings",
+      "pass": true
+    },
+    {
+      "name": "HTTP /tokens",
+      "pass": true
+    },
+    {
+      "name": "HTTP /assessment-items",
+      "pass": true
+    },
+    {
+      "name": "entry asset found",
+      "pass": true
+    },
+    {
+      "name": "asset /assets/index-C7Zw4Tg5.js",
+      "pass": true
+    },
+    {
+      "name": "asset /assets/rolldown-runtime-C0FnF6B9.js",
+      "pass": true
+    },
+    {
+      "name": "asset /assets/antd-vendor-CjXMNByx.js",
+      "pass": true
+    },
+    {
+      "name": "asset /assets/supabase-vendor-DoXvCMLf.js",
+      "pass": true
+    },
+    {
+      "name": "asset /assets/react-vendor-BdxMnOeJ.js",
+      "pass": true
+    },
+    {
+      "name": "asset /assets/antd-vendor-B5BXDqMa.css",
+      "pass": true
+    },
+    {
+      "name": "asset /assets/index-D79IksNE.css",
+      "pass": true
+    },
+    {
+      "name": "release 2.8.0",
+      "pass": true
+    },
+    {
+      "name": "runtime SHA",
+      "pass": true
+    },
+    {
+      "name": "reading scope",
+      "pass": true
+    },
+    {
+      "name": "compact density",
+      "pass": true
+    },
+    {
+      "name": "heading hierarchy",
+      "pass": true
+    },
+    {
+      "name": "previous entry preserved",
+      "pass": true
+    },
+    {
+      "name": "visible release 1448",
+      "pass": true
+    },
+    {
+      "name": "rendered login/version 1448",
+      "pass": true
+    },
+    {
+      "name": "login reflow 1448",
+      "pass": true
+    },
+    {
+      "name": "login runtime 1448",
+      "pass": true
+    },
+    {
+      "name": "visible release 390",
+      "pass": true
+    },
+    {
+      "name": "rendered login/version 390",
+      "pass": true
+    },
+    {
+      "name": "login reflow 390",
+      "pass": true
+    },
+    {
+      "name": "login runtime 390",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "limitations": "Public HTTP/assets and login rendering; no authenticated real-person workflow or real data mutation.",
+  "deployment": {
+    "web": "PUBLISHED",
+    "database": "SKIPPED",
+    "functions": "SKIPPED",
+    "parser": "SKIPPED",
+    "gateway": "SKIPPED",
+    "mail": "SKIPPED",
+    "synthesis": "SKIPPED"
+  },
+  "ci": {
+    "branch": {
+      "id": 38913086598,
+      "conclusion": "success",
+      "createdAt": "2026-10-16T14:06:22Z",
+      "startedAt": "2026-10-16T14:06:22Z",
+      "updatedAt": "2026-10-16T14:07:57Z"
+    },
+    "main": {
+      "id": 38913390886,
+      "conclusion": "success",
+      "createdAt": "2026-10-16T14:08:40Z",
+      "startedAt": "2026-10-16T14:08:40Z",
+      "updatedAt": "2026-10-16T14:10:00Z"
+    }
+  },
+  "host": [
+    "1220c97c6ca6ea4c14dfa463838d1a34a69e6cac",
+    "9242e162e3d3cae5e231da0fb1838a48799ea430a7103ed68511e126a5ab4efb|running|0|sha256:f0f6178f982818013e9ff5b4b1d1e5131d819dc5a0672ec7c44773253714287d|2026-10-16T14:11:50.753707718Z",
+    "sha256:4de0d8fcfb0382f1c017b6a68c56411377cba42c93fd908fda8741ef152da668",
+    "prisma-web|9242e162e3d3",
+    "prisma-parser-ia|e8bc778c8c00",
+    "prisma-paddle-gateway|8fb76416f61c",
+    "hrt-mail-forwarder|b257a83cbb37",
+    "prisma-profile-synthesis|db6c5c0ef238",
+    "paddle-vl-llama-test|d991a574e45e",
+    "traefik-traefik-1|5e25fdc6d2e6",
+    "nginx: the configuration file /etc/nginx/nginx.conf syntax is ok",
+    "nginx: configuration file /etc/nginx/nginx.conf test is successful"
+  ],
+  "protectedContainers": {
+    "prisma-parser-ia": "e8bc778c8c00",
+    "prisma-paddle-gateway": "8fb76416f61c",
+    "hrt-mail-forwarder": "b257a83cbb37",
+    "prisma-profile-synthesis": "db6c5c0ef238",
+    "paddle-vl-llama-test": "d991a574e45e",
+    "traefik-traefik-1": "5e25fdc6d2e6"
+  },
+  "protectedContainersUnchanged": true,
+  "rollback": "prisma-web:rollback-before-1220c97c6ca6",
+  "rollbackImage": "sha256:4de0d8fcfb0382f1c017b6a68c56411377cba42c93fd908fda8741ef152da668",
+  "initialProbe": "HTTP404 during recreation; stabilized independent smoke PASS, no rebuild",
+  "timing": {
+    "firstVerifiedCheckpoint": "2026-10-16T13:22:14.807Z",
+    "localValidationComplete": "2026-10-16T14:03:26Z",
+    "runtimeStarted": "2026-10-16T14:11:50.753707718Z",
+    "smokeComplete": "2026-10-16T14:12:39.126Z"
+  }
+}

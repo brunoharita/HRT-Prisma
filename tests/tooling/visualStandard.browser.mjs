@@ -46,6 +46,11 @@ async function capture(page,key,group){
   check(key+" content preserved",normalize(prior.text)===normalize(m.text));
   check(key+" portal local reflow",!m.portalOverflow);
   if(m.links.length)check(key+" blue text links",m.links.every(i=>["rgb(21, 94, 239)","rgb(11, 78, 217)"].includes(i.color)));
+  for(const [selector,items]of Object.entries(m.roles)){
+   const secondary=[".prisma-operation-date",".prisma-m72-filters > label",".prisma-m72-collapse-label small",".prisma-m72-metrics span",".prisma-bank-context",".prisma-bank-muted"].includes(selector);
+   const primary=[".prisma-operation-next-action",".prisma-bank-stem"].includes(selector);
+   if(items.length&&(secondary||primary))check(key+" semantic text color "+selector,items.every(i=>i.color===(secondary?"rgb(83, 99, 125)":"rgb(16, 32, 58)")));
+  }
  }
  const filename=key.normalize("NFD").replace(/[\u0300-\u036f]/g,"");
  await page.screenshot({path:dir+"/"+phase+"/"+filename+".png",fullPage:await page.getByRole("dialog").count()===0,animations:"disabled"});

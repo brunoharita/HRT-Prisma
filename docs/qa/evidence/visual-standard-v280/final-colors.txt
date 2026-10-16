@@ -1,0 +1,14 @@
+after person
+11:18:05 [vite] (client) [console.error] Warning: [antd: Modal] `maskClosable` is deprecated. Please use `mask.closable` instead.
+11:18:10 [vite] (client) [console.error] Warning: [antd: Timeline] `items.children` is deprecated. Please use `items.content` instead.
+11:18:14 [vite] (client) [console.error] Warning: [antd: Modal] `maskClosable` is deprecated. Please use `mask.closable` instead.
+11:18:20 [vite] (client) [console.error] Warning: [antd: Timeline] `items.children` is deprecated. Please use `items.content` instead.
+after documents
+11:18:27 [vite] (client) [console.error] Encountered two children with the same key, `synthetic-attempt-2`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+11:18:27 [vite] (client) [console.error] Encountered two children with the same key, `synthetic-attempt-2`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+11:18:30 [vite] (client) [console.error] Encountered two children with the same key, `synthetic-attempt-2`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+11:18:31 [vite] (client) [console.error] Encountered two children with the same key, `synthetic-attempt-2`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+after bank
+11:18:36 [vite] (client) [console.error] Warning: [antd: Space] `direction` is deprecated. Please use `orientation` instead.
+11:18:39 [vite] (client) [console.error] Warning: [antd: Space] `direction` is deprecated. Please use `orientation` instead.
+{"phase":"after","checks":167,"states":22,"pass":true}
