@@ -12,7 +12,7 @@ Contrato: `docs/qa/agreement-visual-standard-v280.md` 1.0.0; execução: `docs/q
 | D-04 | Topo tabular, rolagem local, contenção de grid e alertas móveis | Desktop1448/celular390 e regressões320 quando existentes | PASS | Limite anterior registrado abaixo |
 | D-05 | Todas as oito famílias da auditoria cobertas | Antes/depois e suites reaproveitadas | PASS | Estados determinísticos |
 | D-06 | Classes/tokens compartilhados e variantes sem biblioteca nova | Diff, build, testes visuais e de interação | PASS | Local/CI |
-| D-07 | Registro2.8.0, docs/contexto, entrega seletiva | Plano, CI, smoke, SHA e sincronização | PARTIAL | Publicação em execução |
+| D-07 | Registro2.8.0, docs/contexto e entrega seletiva | CI branch/main, plano web, publicação e33checks de smoke | PASS | Runtime1220c97; documentação de fechamento sincronizada sem rebuild |
 
 ## Proibições verificadas
 
@@ -34,8 +34,8 @@ Contrato: `docs/qa/agreement-visual-standard-v280.md` 1.0.0; execução: `docs/q
 | Tokens/Banco | direct | Saldo/destaques, origem, carteira, estados/limites e portais, consulta/ações explícitas | PASS |
 | Conhecimento/Pessoas/Home/Settings | plausible_indirect | Cor de link do tema; tipografiaSM já era14; demais regras opt-in. Regressão Conhecimento e Pessoas, inspeção de dependências | PASS |
 | Autorização/humano/tenant/rascunhos | critical_transversal | Nenhum serviço/handler alterado; testes negativos e interações de apoio sem dados reais | PASS |
-| Backend/schema/IA/matching | no_impact_identified | Diff somente de apresentação/testes/docs; plano de release deve excluir esses destinos | PARTIAL |
-| Hospedagem | direct | Publicar web apenas; CI, rotas/assets/versão/SHA/saúde/rollback, preservar demais containers | PARTIAL |
+| Backend/schema/IA/matching | no_impact_identified | Diff de apresentação/testes/docs; release-plan.json confirma todos esses destinos SKIPPED | PASS |
+| Hospedagem | direct | Web publicada;33checks PASS, running/0, rollback e IDs protegidos preservados | PASS |
 
 ### Novidade e preservação
 
@@ -45,7 +45,7 @@ Limitações do baseline: detalhe de competência no celular390 excedia a págin
 
 ## Fora de escopo preservado
 
-F-01 PASS: diff de apresentação/testes/docs; sem funcionalidade, schema, backend, IA, nova biblioteca, reprocessamento ou dados fictícios produtivos. Plano ainda será registrado antes da publicação.
+F-01 PASS: diff de apresentação/testes/docs; sem funcionalidade, schema, backend, IA, nova biblioteca, reprocessamento ou dados fictícios produtivos. Plano seletivo registrado em release-plan.json: somente web é destino de runtime.
 
 ## Evidência de fidelidade visual
 
@@ -61,7 +61,7 @@ PASS local:106 estados pareados preenchidos/vazios/erro,1448/390 e revisão320;7
 
 As11suites existentes reaproveitadas passaram806verificações: revisão manual87, acompanhamento34, detalhes30, navegação32, Conhecimento299, Banco191+34, Tokens48+9 e Pessoas18+24. `preservation/runs.json`, resultados JSON e logs `.txt` identificam as fontes e durações. O roteiro manual usa novo recorte `--review-only`; rótulos históricos de vínculo/filtragem são cobertos pelos testes atuais de Pessoas. O seletor de título do acompanhamento foi atualizado ao ciclo explícito já vigente. Tokens usa o roteiro calendário2.6.2, compatível com o baseline, em vez do roteiro2.4.0 que procurava Saldo disponível. Nenhum ajuste de produto motivado por esses seletores.
 
-Tipos web/build root e34testes focados de release/UX/manual/acompanhamento/resultado/questões PASS. Build web final, lint, Foundation, geração e checker de contexto PASS; aviso anterior de chunk grande preservado. Diff integral revisto: TSX muda apenas escopos de apresentação e portais, sem handlers/serviços/domínio. Sem suíte integral local; CI geral obrigatório ainda pendente.
+Tipos web/build root e34testes focados de release/UX/manual/acompanhamento/resultado/questões PASS. Build web final, lint, Foundation, geração e checker de contexto PASS; aviso anterior de chunk grande preservado. Diff integral revisto: TSX muda apenas escopos de apresentação e portais, sem handlers/serviços/domínio. Sem suíte integral local; CI geral obrigatório PASS nos dois refs do SHA funcional1220c97;22testes de tooling de release/contexto também PASS. O dispatcher sugeriu pnpm test como rota geral; a validação local foi deduplicada e limitada aos34testes afetados, conforme AGENTS, e o CI integral permaneceu obrigatório.
 
 Reprodução: `node tests/tooling/visualStandard.browser.mjs --baseline`, depois sem flag para dados/abas/portais; usar `--states-only` com PRISMA_VISUAL_GROUPS=selection,followup,person,foundation,documents,tokens,bank para os estados adicionais; PRISMA_VISUAL_WIDTHS=320 com grupo manual para o caso estreito. `node tests/tooling/visualStandard.preservation.mjs` reaproveita as11suites em portas/caches isolados. Transportes nunca acessam serviços reais.
 
@@ -71,8 +71,20 @@ Worktree isolado `codex/v2m8-visual`; canônico em main, rascunhos untracked pre
 
 ## Tempos e ocorrências
 
-Início observado16/10/2026 10:21 BRT. Baseline/reuso/inventário e criação do worktree até10:26; fonte isolada exclui rascunhos do gerador. Implementação e provas visuais ocorreram com compilação/testes em paralelo, portanto durações de jobs não devem ser somadas como tempo total. A primeira suite manual revelou o alerta320; uma tentativa de navegação expirou durante servidores Vite simultâneos com cache compartilhado. Caches e servidores de fixture foram isolados; nenhum ajuste de produto foi feito para esse timeout. Uma comparação de cor capturou interpolação durante transição; medida estabilizada com prefers-reduced-motion, sem alterar semântica visual.
+Primeiro checkpoint verificável16/10/2026 10:22:14 BRT. Baseline/reuso/inventário e criação do worktree até10:26; fonte isolada exclui rascunhos do gerador. Implementação e provas visuais ocorreram com compilação/testes em paralelo, portanto durações de jobs não devem ser somadas como tempo total. A primeira suite manual revelou o alerta320; uma tentativa de navegação expirou durante servidores Vite simultâneos com cache compartilhado. Caches e servidores de fixture foram isolados; nenhum ajuste de produto foi feito para esse timeout. Uma comparação de cor capturou interpolação durante transição; medida estabilizada com prefers-reduced-motion, sem alterar semântica visual.
 
 ## Conclusão
 
-Local validado; D-07 permanece PARTIAL até CI, publicação, smoke e sincronização. Nenhuma garantia absoluta: prova sintética de componentes reais não equivale a jornada autenticada produtiva.
+Todos D-01..D-07 e P-01..P-04 PASS dentro da evidência delimitada.2.8.0 publicada no SHA funcional1220c97c6ca6ea4c14dfa463838d1a34a69e6cac. Nenhum desvio do acordo. A documentação posterior não muda o runtime nem repete os testes válidos. Prova sintética de componentes reais e smoke público não equivalem a jornada autenticada produtiva.
+
+## Publicação e sincronização operacional
+
+CIs funcionais38913086598 (branch) e38913390886 (main) SUCCESS no SHA1220c97c6ca6ea4c14dfa463838d1a34a69e6cac. Integração ff-only pelo checkout canônico, com rascunhos untracked preservados. Plano447arquivos, majoritariamente evidência: web apenas; nenhum banco/Edge/Parser/gateway/mail/Synthesis publicado. Backend e dados reais não foram acessados pelo movimento.
+
+Runtime iniciado em16/10/2026 11:11:50 BRT.33checks de publicação PASS: rotas/entry/assets, versão2.8.0 e SHA no bundle, classes de leitura/compacta, hierarquia24px, entry anterior preservado e login real em1448/390 com senha/rodapé/reflow sem exceções. `publication.json` registra horários, CIs, imagem, IDs protegidos e limites. Contêiner running/0; nginx -t PASS; rollbackprisma-web:rollback-before-1220c97c6ca6 aponta à imagem anterior4de0d8fc. Nenhum contêiner protegido mudou de ID. O primeiro curl do script retornou404 transitório durante recriação; smoke independente estável passou sem reconstrução adicional. A imagem anterior está disponível, sem exercício de rollback em produção.
+
+Artefatos de screenshot foram normalizados para nomes ASCII após o dispatcher identificar quoting octal de nomes acentuados como caminhos desconhecidos; novo plano PASS sem contornar o gate. O Git emitiu avisos de permissão ao tentar housekeeping de worktrees antigas; nenhuma worktree/lock alheia foi removida ou alterada.
+
+O fechamento documental posterior segue ff-only, CI obrigatório e pull na VPS, sem rebuild de web. SHA de runtime permanece1220c97; HEAD documental pode avançar e deve coincidir em main/origin/worktree/VPS ao término. Conferir o CI do HEAD final no GitHub; este documento não tenta autorreferenciar o próprio commit.
+
+Oportunidades concretas de reduzir tempo: reutilizar este harness com cache/portas isoladas desde o início; selecionar os roteiros vigentes antes da bateria (ciclos explícitos, carteiras calendário e filtros atuais); configurar estados de leitura e escrita separadamente nas fixtures e medir apenas depois de estabilizar animações. A maior parte do retrabalho local veio de roteiros históricos e seletores/fixtures, não de defeitos introduzidos. As durações de suites em runs.json se sobrepõem a outras verificações e não representam tempo sequencial total.

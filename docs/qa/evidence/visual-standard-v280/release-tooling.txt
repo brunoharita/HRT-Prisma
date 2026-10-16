@@ -1,0 +1,31 @@
+$ node --test tests/tooling/releaseDispatcher.test.mjs tests/tooling/prismaContext.test.mjs
+✔ gera fonte compacta e exportação completa com o mesmo manifesto (560.2763ms)
+✔ fonte compacta contém contexto vigente e encaminha aprofundamento ao Codex (245.3678ms)
+✔ comparação normalizada distingue conteúdo e aceita LF ou CRLF (0.4185ms)
+✔ corporate forwarding deploys independently of every Prisma runtime (3.7872ms)
+✔ shared AI history routes its actual consumers and the portal preserves independent hosting (0.9832ms)
+✔ synthesis worker has an independent destination and preserves the Parser (0.3229ms)
+✔ parses git name-status including renames (0.5216ms)
+✔ routes documentation without Supabase or VPS (0.3223ms)
+✔ release tooling does not redeploy the application (0.3967ms)
+✔ dispatcher resolves pnpm through the Windows command shim (17.2275ms)
+✔ routes web changes only to web and hosting (0.6366ms)
+✔ shared resume normalization explicitly routes web and hosted Parser (0.774ms)
+✔ Parser-only changes do not rebuild frontend, gateway or other destinations (0.6708ms)
+✔ publication applies only the planned Parser and records its pending destination (2.5434ms)
+✔ routes only the named Edge Function (0.3115ms)
+✔ shared trajectory source routes both consumers without publishing unrelated services (0.2416ms)
+✔ new migrations are publishable and historical edits fail closed (0.2532ms)
+✔ unknown paths block publication (0.1246ms)
+✔ validates migration identity and publish guard arguments (1.5968ms)
+✔ publication guards fail closed before external mutation (0.7344ms)
+✔ writes one structured release receipt (14.4287ms)
+✔ gateway transport is released without touching Parser, web, mail or synthesis (0.3492ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1015.5788

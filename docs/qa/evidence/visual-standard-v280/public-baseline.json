@@ -1,0 +1,135 @@
+{
+  "at": "2026-10-16T14:09:31.047Z",
+  "runtimeSha": "488947ccaa1c422b1021d0309fdb3a2c6e362e2a",
+  "version": "2.7.8",
+  "entry": "/assets/index-C7L7zWvI.js",
+  "assets": [
+    "/assets/index-C7L7zWvI.js",
+    "/assets/rolldown-runtime-C0FnF6B9.js",
+    "/assets/antd-vendor-CjXMNByx.js",
+    "/assets/supabase-vendor-DoXvCMLf.js",
+    "/assets/react-vendor-BdxMnOeJ.js",
+    "/assets/antd-vendor-B5BXDqMa.css",
+    "/assets/index-D16HLfBX.css"
+  ],
+  "checks": [
+    {
+      "name": "HTTP /",
+      "pass": true
+    },
+    {
+      "name": "HTTP /login",
+      "pass": true
+    },
+    {
+      "name": "HTTP /profiles",
+      "pass": true
+    },
+    {
+      "name": "HTTP /profiles/processes",
+      "pass": true
+    },
+    {
+      "name": "HTTP /profiles/new/manual",
+      "pass": true
+    },
+    {
+      "name": "HTTP /vacancies",
+      "pass": true
+    },
+    {
+      "name": "HTTP /selection-processes",
+      "pass": true
+    },
+    {
+      "name": "HTTP /knowledge",
+      "pass": true
+    },
+    {
+      "name": "HTTP /settings",
+      "pass": true
+    },
+    {
+      "name": "HTTP /tokens",
+      "pass": true
+    },
+    {
+      "name": "HTTP /assessment-items",
+      "pass": true
+    },
+    {
+      "name": "entry asset found",
+      "pass": true
+    },
+    {
+      "name": "asset /assets/index-C7L7zWvI.js",
+      "pass": true
+    },
+    {
+      "name": "asset /assets/rolldown-runtime-C0FnF6B9.js",
+      "pass": true
+    },
+    {
+      "name": "asset /assets/antd-vendor-CjXMNByx.js",
+      "pass": true
+    },
+    {
+      "name": "asset /assets/supabase-vendor-DoXvCMLf.js",
+      "pass": true
+    },
+    {
+      "name": "asset /assets/react-vendor-BdxMnOeJ.js",
+      "pass": true
+    },
+    {
+      "name": "asset /assets/antd-vendor-B5BXDqMa.css",
+      "pass": true
+    },
+    {
+      "name": "asset /assets/index-D16HLfBX.css",
+      "pass": true
+    },
+    {
+      "name": "release 2.7.8",
+      "pass": true
+    },
+    {
+      "name": "runtime SHA",
+      "pass": true
+    },
+    {
+      "name": "visible release 1448",
+      "pass": true
+    },
+    {
+      "name": "rendered login/version 1448",
+      "pass": true
+    },
+    {
+      "name": "login reflow 1448",
+      "pass": true
+    },
+    {
+      "name": "login runtime 1448",
+      "pass": true
+    },
+    {
+      "name": "visible release 390",
+      "pass": true
+    },
+    {
+      "name": "rendered login/version 390",
+      "pass": true
+    },
+    {
+      "name": "login reflow 390",
+      "pass": true
+    },
+    {
+      "name": "login runtime 390",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "limitations": "Public HTTP/assets and login rendering; no authenticated real-person workflow or real data mutation."
+}

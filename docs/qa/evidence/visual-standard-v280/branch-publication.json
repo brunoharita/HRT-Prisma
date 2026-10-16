@@ -1,0 +1,19 @@
+{
+  "command": "publish",
+  "status": "GIT_PUBLISHED",
+  "sha": "1220c97c6ca6ea4c14dfa463838d1a34a69e6cac",
+  "branch": "codex/v2m8-visual",
+  "web": "PENDING_VPS_CONFIGURATION",
+  "parserIa": "SKIPPED",
+  "profileSynthesis": "SKIPPED",
+  "mailForwarder": "SKIPPED",
+  "remaining": {
+    "database": [],
+    "edgeFunctions": [],
+    "web": true,
+    "paddleGateway": false,
+    "parserIa": false,
+    "profileSynthesis": false,
+    "mailForwarder": false
+  }
+}
