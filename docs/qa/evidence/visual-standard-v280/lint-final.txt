@@ -1,0 +1,2 @@
+$ node scripts/lint.mjs
+lint passed (1758 files)

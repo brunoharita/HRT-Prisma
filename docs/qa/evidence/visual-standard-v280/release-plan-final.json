@@ -1,0 +1,83 @@
+{
+  "command": "plan",
+  "plan": {
+    "version": "1.0.6",
+    "files": [
+      "FONTE_GPT_PRISMA.md",
+      "TUDO_SOBRE_PRISMA.md",
+      "docs/ai-context/PRISMA_CURRENT_STATE.md",
+      "docs/product/ux-foundation.md",
+      "docs/qa/aot-visual-standard-v280.md",
+      "docs/qa/evidence/visual-standard-v280/after.json",
+      "docs/qa/evidence/visual-standard-v280/after/bank-1448.png",
+      "docs/qa/evidence/visual-standard-v280/after/bank-390.png",
+      "docs/qa/evidence/visual-standard-v280/after/bank-drawer-1448.png",
+      "docs/qa/evidence/visual-standard-v280/after/bank-drawer-390.png",
+      "docs/qa/evidence/visual-standard-v280/after/bank-empty-1448.png",
+      "docs/qa/evidence/visual-standard-v280/after/bank-empty-390.png",
+      "docs/qa/evidence/visual-standard-v280/after/documents-1448.png",
+      "docs/qa/evidence/visual-standard-v280/after/followup-1448.png",
+      "docs/qa/evidence/visual-standard-v280/after/followup-390.png",
+      "docs/qa/evidence/visual-standard-v280/after/followup-confirm-1448.png",
+      "docs/qa/evidence/visual-standard-v280/after/followup-drawer-1448.png",
+      "docs/qa/evidence/visual-standard-v280/after/person-390.png",
+      "docs/qa/evidence/visual-standard-v280/after/person-Competencias-1448.png",
+      "docs/qa/evidence/visual-standard-v280/after/person-Competencias-390.png",
+      "docs/qa/evidence/visual-standard-v280/after/person-Evidencias-1448.png",
+      "docs/qa/evidence/visual-standard-v280/after/person-Evidencias-390.png",
+      "docs/qa/evidence/visual-standard-v280/after/person-concept-1448.png",
+      "docs/qa/evidence/visual-standard-v280/after/person-concept-390.png",
+      "docs/qa/evidence/visual-standard-v280/after/person-empty-1448.png",
+      "docs/qa/evidence/visual-standard-v280/after/person-empty-390.png",
+      "docs/qa/evidence/visual-standard-v280/after/person-error-1448.png",
+      "docs/qa/evidence/visual-standard-v280/after/person-error-390.png",
+      "docs/qa/evidence/visual-standard-v280/after/person-table-1448.png",
+      "docs/qa/evidence/visual-standard-v280/after/person-table-390.png",
+      "docs/qa/evidence/visual-standard-v280/colors-build.txt",
+      "docs/qa/evidence/visual-standard-v280/final-colors-states.txt",
+      "docs/qa/evidence/visual-standard-v280/final-colors.txt",
+      "docs/qa/evidence/visual-standard-v280/final-weights-build.txt",
+      "docs/qa/evidence/visual-standard-v280/final-weights-states.txt",
+      "docs/qa/evidence/visual-standard-v280/final-weights.txt",
+      "docs/qa/evidence/visual-standard-v280/local-summary.json",
+      "docs/qa/evidence/visual-standard-v280/publication-initial.json",
+      "docs/qa/evidence/visual-standard-v280/role-weights.json",
+      "tests/tooling/visualStandard.browser.mjs",
+      "web/src/ui/foundation.css"
+    ],
+    "impact": {
+      "surfaces": [
+        "context-pack",
+        "documentation",
+        "generated-context",
+        "hosting",
+        "tests",
+        "web"
+      ],
+      "edgeFunctions": [],
+      "migrations": [],
+      "modifiedMigrations": [],
+      "unknown": []
+    },
+    "validationCommands": [
+      "git diff --check",
+      "pnpm run generate:prisma-context",
+      "pnpm run check:prisma-context",
+      "pnpm run typecheck:web",
+      "pnpm run build:web",
+      "pnpm run test"
+    ],
+    "deployments": {
+      "git": true,
+      "database": [],
+      "edgeFunctions": [],
+      "web": true,
+      "parserIa": false,
+      "paddleGateway": false,
+      "profileSynthesis": false,
+      "mailForwarder": false
+    },
+    "blockedReasons": [],
+    "publishable": true
+  }
+}

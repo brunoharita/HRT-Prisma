@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 501
-source_manifest_sha256: 2d909997f57c8d77d7d90be0ec1d49f8d3bea588c671163ba2e49903d37c766b
+source_manifest_sha256: 65d9f40630be33ee7df8a9aa56bd198b7f2de6e724fba62d7b553947980e079c
 -->
 
 # Tudo sobre o Prisma
@@ -2651,7 +2651,7 @@ last_verified: 2026-10-16
 
 ## V2M8: padronização visual 2.8.0
 
-Movimento aprovado por Bruno, implementado e publicado em16/10/2026. Runtime1220c97c6ca6ea4c14dfa463838d1a34a69e6cac, versão2.8.0, CIs branch38913086598/main38913390886 SUCCESS;33checks de smoke PASS, rollback disponível e demais containers preservados. UX Foundation1.5.0 reutiliza a base existente: leitura16/24, rótulos/metadados14/20, seções24/32 e20/28 por nível, portais24/32. Pessoas mantém14/20 e12/18; Kanban tem variante compacta explícita. Normalização em manual/revisão/comparação, Processos/Acompanhamento, competências/evidências, Posições/documentos, Tokens e Banco de questões. Links textuais usam azul; informação, cartões, botões e estados conservam semântica. Sem domínio, schema, serviços, IA ou dados reais alterados. Acordo1.0.0 e execução em `docs/qa/agreement-visual-standard-v280.md` e `docs/qa/execution-visual-standard-v280.md`. Validação:106estados pareados,775checks visuais,806checks em11suites de preservação,34testes focados e22de tooling. Tipos/build/lint/contexto/CI PASS. AoT e limites em `docs/qa/aot-visual-standard-v280.md`. Smoke público/login não comprova jornada autenticada real. A conferência final de D-03 identificou tons informativos legados; complemento validado localmente em execução de CI/rollout, sem mudar a versão2.8.0.
+Movimento aprovado por Bruno, implementado e publicado em16/10/2026. Runtime final10b0c0ec9e911428c2ea43431958644e8ecd6f5b, versão2.8.0, CIs branch38915645661/main38915669662 SUCCESS;33checks de smoke PASS, rollback disponível e demais containers preservados. UX Foundation1.5.0 reutiliza a base existente: leitura16/24, rótulos/metadados14/20, seções24/32 e20/28 por nível, portais24/32. Pessoas mantém14/20 e12/18; Kanban tem variante compacta explícita. Normalização em manual/revisão/comparação, Processos/Acompanhamento, competências/evidências, Posições/documentos, Tokens e Banco de questões. Links textuais usam azul; informação, cartões, botões e estados conservam semântica. Sem domínio, schema, serviços, IA ou dados reais alterados. Acordo1.0.0 e execução em `docs/qa/agreement-visual-standard-v280.md` e `docs/qa/execution-visual-standard-v280.md`. Validação:106estados pareados,775checks visuais,806checks em11suites de preservação,34testes focados e22de tooling. Tipos/build/lint/contexto/CI PASS. AoT e limites em `docs/qa/aot-visual-standard-v280.md`. Smoke público/login não comprova jornada autenticada real. A conferência final completou cores e pesos por papel, com148confrontos de peso além dos775checks visuais; complemento publicado sem mudar a versão2.8.0. Rascunhos, dados, estado e serviços protegidos preservados. Fechamento documental sincroniza sem novo runtime.
 
 ## Conhecimento2.7.8: coesão entre abas
 
@@ -24797,11 +24797,11 @@ Contrato: `docs/qa/agreement-visual-standard-v280.md` 1.0.0; execução: `docs/q
 | --- | --- | --- | --- | --- |
 | D-01 | Reutiliza tema, foundation, PrismaPage, AntD e ADR-050 | Capturas/estilos por papel | PASS | Fixture local |
 | D-02 | Leitura16/24, detalhe14/20, seção24/32 e20/28; Pessoas14/20+12/18; Kanban compacto explícito | Medidas computadas, hierarquia e preservação | PASS | Fixture local |
-| D-03 | Tokens de link/hover, texto principal e complementar; semântica preservada |775checks incluindo RGB por papel e foco/interações | PARTIAL | Correção final de cor validada localmente; rollout em execução |
+| D-03 | Tokens de link/hover, texto principal e complementar; semântica preservada |775checks,148confrontos de peso,106pares e SHA publicado | PASS | Runtime final10b0c0e |
 | D-04 | Topo tabular, rolagem local, contenção de grid e alertas móveis | Desktop1448/celular390 e regressões320 quando existentes | PASS | Limite anterior registrado abaixo |
 | D-05 | Todas as oito famílias da auditoria cobertas | Antes/depois e suites reaproveitadas | PASS | Estados determinísticos |
 | D-06 | Classes/tokens compartilhados e variantes sem biblioteca nova | Diff, build, testes visuais e de interação | PASS | Local/CI |
-| D-07 | Registro2.8.0, docs/contexto e entrega seletiva | CI branch/main, plano web, publicação e smoke | PARTIAL | Complemento D-03 aguardando CI/rollout |
+| D-07 | Registro2.8.0, docs/contexto e entrega seletiva | CI branch/main, plano web, publicação e33checks de smoke | PASS | Runtime final10b0c0e; fechamento documental sem rebuild |
 
 ## Proibições verificadas
 
@@ -24842,7 +24842,7 @@ Referência normativa: escala e hierarquia do acordo, UX Foundation e composiç�
 
 ## Desvios e decisões
 
-Desvio transitório de implementação em D-03 no primeiro runtime2.8.0: tons locais remanescentes em documentos, competências e contexto de questões. Corrigidos e comprovados localmente antes do fechamento; a publicação do complemento está em execução. Nenhuma regra do acordo foi reinterpretada. Sem nova decisão de produto. Nenhuma ampliação de domínio. O Kanban preserva trilhas, ordem, alinhamento, Score50px e regiões de ação; somente papéis de texto/densidade explícita. Pessoas mantém sua escala compacta. Conhecimento mantém área informativa com Editar separado e conceito clicável.
+Desvio transitório de implementação em D-03 no primeiro runtime2.8.0: tons locais remanescentes em documentos, competências e contexto de questões. Corrigidos, comprovados e publicados no runtime final10b0c0e antes do fechamento. Nenhum desvio pendente. Nenhuma regra do acordo foi reinterpretada. Sem nova decisão de produto. Nenhuma ampliação de domínio. O Kanban preserva trilhas, ordem, alinhamento, Score50px e regiões de ação; somente papéis de texto/densidade explícita. Pessoas mantém sua escala compacta. Conhecimento mantém área informativa com Editar separado e conceito clicável.
 
 ## Validação final
 
@@ -24864,9 +24864,9 @@ Primeiro checkpoint verificável16/10/2026 10:22:14 BRT. Baseline/reuso/inventá
 
 ## Conclusão
 
-2.8.0 inicialmente publicada no SHA1220c97c6ca6ea4c14dfa463838d1a34a69e6cac. D-03/D-07 reabertos durante a conferência final para concluir os tokens de cores informativas;775checks locais e106pares PASS, rollout do complemento em execução. A documentação posterior não muda o runtime nem repete os testes válidos. Prova sintética de componentes reais e smoke público não equivalem a jornada autenticada produtiva.
+D-01..D-07 e P-01..P-04 PASS dentro da cobertura delimitada.2.8.0 final publicada no SHA10b0c0ec9e911428c2ea43431958644e8ecd6f5b;775checks visuais,148confrontos de peso e106pares PASS. O desvio transitório de cor/ênfase do primeiro runtime foi corrigido; nenhum desvio pendente. A documentação posterior não muda o runtime nem repete os testes válidos. Prova sintética de componentes reais e smoke público não equivalem a jornada autenticada produtiva.
 
-## Publicação e sincronização operacional
+## Primeira publicação — histórico superado pelo runtime final abaixo
 
 CIs funcionais38913086598 (branch) e38913390886 (main) SUCCESS no SHA1220c97c6ca6ea4c14dfa463838d1a34a69e6cac. Integração ff-only pelo checkout canônico, com rascunhos untracked preservados. Plano447arquivos, majoritariamente evidência: web apenas; nenhum banco/Edge/Parser/gateway/mail/Synthesis publicado. Backend e dados reais não foram acessados pelo movimento.
 
@@ -24880,9 +24880,17 @@ Oportunidades concretas de reduzir tempo: reutilizar este harness com cache/port
 
 ### Complemento de D-03 no mesmo V2M8
 
-A conferência de RGB no JSON renderizado revelou #42526b nas datas/próximas ações, #536584/#6d7b98 em filtros/complementos de competências e #52637a no contexto de questões. Esse requisito precisava de prova mais precisa do que apenas tipografia/links. A base agora usa os tokens de texto principal#10203a e secundário#53637d nessas superfícies, preservando cores de avisos/estados. Nova asserção por papel evita repetir a lacuna. Revalidação proporcional:22estados de dados/abas/portais e12de vazio/erro nas três áreas;775checks acumulados em106pares, sem falha. Build web PASS. Os806checks de interação anteriores continuam válidos: o complemento não altera geometria, handlers, estados ou dados. CI e rollout do SHA com o complemento serão conferidos antes de encerrar.
+A conferência de RGB no JSON renderizado revelou #42526b nas datas/próximas ações, #536584/#6d7b98 em filtros/complementos de competências e #52637a no contexto de questões. Esse requisito precisava de prova mais precisa do que apenas tipografia/links. A base agora usa os tokens de texto principal#10203a e secundário#53637d nessas superfícies, preservando cores de avisos/estados. Nova asserção por papel evita repetir a lacuna. Revalidação proporcional:22estados de dados/abas/portais e12de vazio/erro nas três áreas;775checks acumulados em106pares, sem falha. Build web PASS. Os806checks de interação anteriores continuam válidos: o complemento não altera geometria, handlers, estados ou dados. CI e rollout finais PASS no SHA10b0c0e, conforme registro abaixo.
 
-A mesma revisão final explicitou peso600 para nomes clicáveis no Kanban e preservou o peso600 dos enunciados no Banco, impedindo que a regra genérica de leitura os achatasse. Esses dois papéis foram renderizados novamente em10estados de dados/portais e8de vazio/erro. `role-weights.json` confronta todos os papéis já renderizados com400/600, incluindo as ênfases legítimas de indicadores/filtro de verificação. Sem nova decisão, jornada ou regra; complemento ainda do mesmo V2M8 e da versão2.8.0.
+A mesma revisão final explicitou peso600 para nomes clicáveis no Kanban e preservou o peso600 dos enunciados no Banco, impedindo que a regra genérica de leitura os achatasse. Esses dois papéis foram renderizados novamente em10estados de dados/portais e8de vazio/erro. `role-weights.json` confronta todos os papéis já renderizados com400/600, incluindo as ênfases legítimas de indicadores/filtro de verificação. Sem nova decisão, jornada ou regra; complemento concluído no mesmo V2M8 e na versão2.8.0.
+
+## Encerramento operacional final
+
+SHA funcional definitivo10b0c0ec9e911428c2ea43431958644e8ecd6f5b, versão2.8.0. CIs38915645661 (branch) e38915669662 (main) SUCCESS. Novo plano web apenas,33checks produtivos PASS, login1448/390 renderizado, runtime iniciado em11:28:51 BRT e smoke final às2026-10-16T14:29:18.345Z. Contêiner3366b94175e4, running/0, nginx válido; rollbackprisma-web:rollback-before-10b0c0ec9e91 preserva a imagem do primeiro runtime2.8.0. Os6containers protegidos mantêm os IDs do baseline. O404 inicial de recriação estabilizou sem rebuild extra; a segunda publicação foi necessária para concluir D-02/D-03, não por alteração documental. `publication-initial.json` preserva a primeira publicação e `publication.json` registra a final.
+
+O primeiro checkpoint verificável foi10:22:14 BRT; o primeiro smoke produtivo passou11:12:39, e o complemento final foi verificado11:29 BRT. Esse intervalo inclui testes, renderizações, correções, CI e dois rollouts, com jobs sobrepostos. A oportunidade principal de economia é confrontar tamanho/cor/peso/alinhamento por papel desde a primeira bateria, além de iniciar com fixtures/seletores vigentes e caches isolados. Não basta contar assertivas ou confiar no diff para provar um papel ainda não medido.
+
+A sincronização documental final usa ff-only e CI no HEAD integrado, com pull na VPS e confirmação de que o mesmo container/imagem do runtime final continua ativo. Sem novo build/deploy ou repetição dos testes funcionais válidos. A prova autenticada com pessoa real permanece NOT TESTED, fora do alcance destas fixtures/smokes; não há regressão conhecida na cobertura executada.
 
 ---
 

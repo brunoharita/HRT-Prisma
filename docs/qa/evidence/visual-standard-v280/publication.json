@@ -1,16 +1,16 @@
 {
-  "at": "2026-10-16T14:12:39.126Z",
-  "runtimeSha": "1220c97c6ca6ea4c14dfa463838d1a34a69e6cac",
+  "at": "2026-10-16T14:29:18.345Z",
+  "runtimeSha": "10b0c0ec9e911428c2ea43431958644e8ecd6f5b",
   "version": "2.8.0",
-  "entry": "/assets/index-C7Zw4Tg5.js",
+  "entry": "/assets/index-C8NRJ4E8.js",
   "assets": [
-    "/assets/index-C7Zw4Tg5.js",
+    "/assets/index-C8NRJ4E8.js",
     "/assets/rolldown-runtime-C0FnF6B9.js",
     "/assets/antd-vendor-CjXMNByx.js",
     "/assets/supabase-vendor-DoXvCMLf.js",
     "/assets/react-vendor-BdxMnOeJ.js",
     "/assets/antd-vendor-B5BXDqMa.css",
-    "/assets/index-D79IksNE.css"
+    "/assets/index-VKRLptk1.css"
   ],
   "checks": [
     {
@@ -62,7 +62,7 @@
       "pass": true
     },
     {
-      "name": "asset /assets/index-C7Zw4Tg5.js",
+      "name": "asset /assets/index-C8NRJ4E8.js",
       "pass": true
     },
     {
@@ -86,7 +86,7 @@
       "pass": true
     },
     {
-      "name": "asset /assets/index-D79IksNE.css",
+      "name": "asset /assets/index-VKRLptk1.css",
       "pass": true
     },
     {
@@ -159,25 +159,25 @@
   },
   "ci": {
     "branch": {
-      "id": 38913086598,
+      "id": 38915645661,
       "conclusion": "success",
-      "createdAt": "2026-10-16T14:06:22Z",
-      "startedAt": "2026-10-16T14:06:22Z",
-      "updatedAt": "2026-10-16T14:07:57Z"
+      "createdAt": "2026-10-16T14:25:28Z",
+      "startedAt": "2026-10-16T14:25:28Z",
+      "updatedAt": "2026-10-16T14:26:39Z"
     },
     "main": {
-      "id": 38913390886,
+      "id": 38915669662,
       "conclusion": "success",
-      "createdAt": "2026-10-16T14:08:40Z",
-      "startedAt": "2026-10-16T14:08:40Z",
-      "updatedAt": "2026-10-16T14:10:00Z"
+      "createdAt": "2026-10-16T14:25:39Z",
+      "startedAt": "2026-10-16T14:25:39Z",
+      "updatedAt": "2026-10-16T14:27:21Z"
     }
   },
   "host": [
-    "1220c97c6ca6ea4c14dfa463838d1a34a69e6cac",
-    "9242e162e3d3cae5e231da0fb1838a48799ea430a7103ed68511e126a5ab4efb|running|0|sha256:f0f6178f982818013e9ff5b4b1d1e5131d819dc5a0672ec7c44773253714287d|2026-10-16T14:11:50.753707718Z",
-    "sha256:4de0d8fcfb0382f1c017b6a68c56411377cba42c93fd908fda8741ef152da668",
-    "prisma-web|9242e162e3d3",
+    "10b0c0ec9e911428c2ea43431958644e8ecd6f5b",
+    "3366b94175e4d91486dbf2c57b6df173f9669b937afc582235070cfe457edd3d|running|0|sha256:2298f378f7286cbba12bcf58c74dd4e6d1f741c3b5ac96c9a68a325be3e12a0a|2026-10-16T14:28:51.083212836Z",
+    "sha256:f0f6178f982818013e9ff5b4b1d1e5131d819dc5a0672ec7c44773253714287d",
+    "prisma-web|3366b94175e4",
     "prisma-parser-ia|e8bc778c8c00",
     "prisma-paddle-gateway|8fb76416f61c",
     "hrt-mail-forwarder|b257a83cbb37",
@@ -196,13 +196,15 @@
     "traefik-traefik-1": "5e25fdc6d2e6"
   },
   "protectedContainersUnchanged": true,
-  "rollback": "prisma-web:rollback-before-1220c97c6ca6",
-  "rollbackImage": "sha256:4de0d8fcfb0382f1c017b6a68c56411377cba42c93fd908fda8741ef152da668",
-  "initialProbe": "HTTP404 during recreation; stabilized independent smoke PASS, no rebuild",
+  "rollback": "prisma-web:rollback-before-10b0c0ec9e91",
+  "rollbackImage": "sha256:f0f6178f982818013e9ff5b4b1d1e5131d819dc5a0672ec7c44773253714287d",
+  "initialProbe": "HTTP404 during recreation; stabilized independent smoke PASS without rebuild",
+  "previousRuntime": "1220c97c6ca6ea4c14dfa463838d1a34a69e6cac",
   "timing": {
     "firstVerifiedCheckpoint": "2026-10-16T13:22:14.807Z",
-    "localValidationComplete": "2026-10-16T14:03:26Z",
-    "runtimeStarted": "2026-10-16T14:11:50.753707718Z",
-    "smokeComplete": "2026-10-16T14:12:39.126Z"
+    "localInitialValidationComplete": "2026-10-16T14:03:26Z",
+    "finalRoleValidationComplete": "2026-10-16T14:23:57Z",
+    "runtimeStarted": "2026-10-16T14:28:51.083212836Z",
+    "smokeComplete": "2026-10-16T14:29:18.345Z"
   }
 }
