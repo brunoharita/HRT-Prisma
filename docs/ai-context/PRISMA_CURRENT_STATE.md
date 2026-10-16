@@ -10,7 +10,7 @@ last_verified: 2026-10-16
 
 ## Correção de contenção das Propostas — 2.8.0
 
-Correção autorizada em16/10/2026: reflow das ações, candidatos/fontes longos e campos restrito à aba Propostas. Mantém produto2.8.0 e contratos de domínio; nenhuma decisão ou pesquisa implícita. Validação/estado operacional no AoT `docs/qa/aot-knowledge-proposals-overflow.md`; implementação local não prova publicação. A cobertura anterior com proposta aprovada não provava ações pendentes, lacuna coberta por novo cenário sintético pareado desktop/celular.
+Correção autorizada e publicada em16/10/2026 no runtime eab0961ae19001f3d98c5db6028cbaf2f93ceaeb: reflow das ações, títulos, candidatos/fontes longos e campos restrito à aba Propostas. Mantém produto2.8.0 e contratos de domínio; nenhuma decisão ou pesquisa implícita.48checks locais com20pares, tipos/build/lint/foundation/contexto e CI branch38920306393/main38920447973 PASS. Conferência produtiva autenticada em1448/1265/390/320,28cartões medidos sem overflow e4ações preservadas por pendente; somente leitura, sem transações reais de curadoria. Rollback/saúde/serviços preservados e7checks HTTP/SHA/assets PASS; somente web publicada. AoT `docs/qa/aot-knowledge-proposals-overflow.md`. A cobertura anterior com proposta aprovada não provava ações pendentes, lacuna coberta por novo cenário sintético pareado desktop/celular.
 
 ## V2M8: padronização visual 2.8.0
 

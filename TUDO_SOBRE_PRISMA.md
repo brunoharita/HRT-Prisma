@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 504
-source_manifest_sha256: 8030bd4d8b38665a5b29d4213c5e3af777b8ff38725ded701312d5fb0a632756
+source_manifest_sha256: 4c9b57669b1537269794c445ee0d0504750895482c2fb7a968f4f279115dd038
 -->
 
 # Tudo sobre o Prisma
@@ -2651,7 +2651,7 @@ last_verified: 2026-10-16
 
 ## Correção de contenção das Propostas — 2.8.0
 
-Correção autorizada em16/10/2026: reflow das ações, candidatos/fontes longos e campos restrito à aba Propostas. Mantém produto2.8.0 e contratos de domínio; nenhuma decisão ou pesquisa implícita. Validação/estado operacional no AoT `docs/qa/aot-knowledge-proposals-overflow.md`; implementação local não prova publicação. A cobertura anterior com proposta aprovada não provava ações pendentes, lacuna coberta por novo cenário sintético pareado desktop/celular.
+Correção autorizada e publicada em16/10/2026 no runtime eab0961ae19001f3d98c5db6028cbaf2f93ceaeb: reflow das ações, títulos, candidatos/fontes longos e campos restrito à aba Propostas. Mantém produto2.8.0 e contratos de domínio; nenhuma decisão ou pesquisa implícita.48checks locais com20pares, tipos/build/lint/foundation/contexto e CI branch38920306393/main38920447973 PASS. Conferência produtiva autenticada em1448/1265/390/320,28cartões medidos sem overflow e4ações preservadas por pendente; somente leitura, sem transações reais de curadoria. Rollback/saúde/serviços preservados e7checks HTTP/SHA/assets PASS; somente web publicada. AoT `docs/qa/aot-knowledge-proposals-overflow.md`. A cobertura anterior com proposta aprovada não provava ações pendentes, lacuna coberta por novo cenário sintético pareado desktop/celular.
 
 ## V2M8: padronização visual 2.8.0
 
@@ -19408,7 +19408,7 @@ Validação mínima: roteiro focado com componentes reais em1448/1265/390/320px;
 | --- | --- | --- | --- |
 | D-01/02, P-01 | Space.wrap, min-width0, campos contidos, textos/títulos quebráveis; CSS somente no grid | 20pares de cartões em1448/1265/390/320,48checks após correção | PASS |
 | D-03, P-02 | Handlers intactos; apenas Space recebe wrap | Motivo/subgrupo retidos após reflow, motivo obrigatório/certificação bloqueada,4ações globais e zero escritas | PASS |
-| D-04 | Tipos/build/lint/foundation/contexto PASS; publicação pendente | CI, release e sincronização ainda necessários | PARTIAL |
+| D-04 | Tipos/build/lint/foundation/contexto PASS; runtime eab0961 publicado | CI branch38920306393/main38920447973 SUCCESS,7checks HTTP/SHA/assets,28cartões reais sem overflow | PASS |
 
 Desvios: nenhum previsto. Evidências sintéticas não substituem leitura autenticada em produção; nenhuma decisão real será testada. Versão permanece2.8.0, restauração de apresentação já aprovada, sem mudança de contrato persistido.
 
@@ -19418,7 +19418,17 @@ Desvios: nenhum previsto. Evidências sintéticas não substituem leitura autent
 
 O primeiro teste de320 encontrou título longo com ellipsis e contribuição para overflow; incluída quebra local do título e revalidado o recorte, seguido da rodada pareada final. Fixture agora tem código H4 explícito. Deprecações AntD existentes e avisos anteriores de chunk/import dinâmico não geraram exceções de runtime. Sem alteração de contrato/handler, sem suíte integral local.
 
-Mapa: capacidades diretas e crítica preservadas localmente PASS; aba vizinha PASS, diff restrito; backend/IA/banco sem impacto identificado pela ausência de mudanças executáveis nesses destinos. Hospedagem permanece PARTIAL até os recibos finais.
+Mapa: capacidades diretas e crítica preservadas localmente PASS; aba vizinha PASS, diff restrito; backend/IA/banco sem impacto identificado pela ausência de mudanças executáveis nesses destinos, confirmado pelo dispatcher. Hospedagem PASS conforme publicação abaixo.
+
+## Publicação e preservação produtiva
+
+Runtime eab0961ae19001f3d98c5db6028cbaf2f93ceaeb publicado em16/10/2026 12:03:39 BRT, versão2.8.0. Plano53arquivos (40capturas pareadas), somente prisma-web; banco/Edge/Parser/gateway/mail/Synthesis SKIPPED. O dispatcher sugeriu pnpm test geral; local deduplicado para roteiro diretamente afetado, mantendo CI integral obrigatório nos refs de branch/main. Integração ff-only; rascunhos untracked canônicos preservados.
+
+`publication.json`:7checks HTTP/entry/CSS/SHA e entry anterior preservado PASS. `production-geometry.json`: sessão real autenticada,1448/1265/390/320px,7cartões por largura (6pendentes com4ações,1aprovado), sem overflow da página, elementos dos cartões ou candidatos. Capturas `production-desktop.jpg` e `production-mobile.jpg` inspecionadas; desktop recorta a região de conteúdo para excluir o menu da conta. Nenhuma edição de motivo/subgrupo, decisão, pesquisa/IA ou mutação real acionada. Produção valida apresentação em sessão Super Admin; transações reais de curadoria não foram exercitadas, intencionalmente.
+
+Contêiner prisma-web4aab0302e45f running/0restarts; imagem sha256:57ebbaea04b6c4441c6c9299ca5c6a9cde64af153008e04659fd1c802c823c58. nginx -t PASS. Rollback prisma-web:rollback-before-eab0961ae190 aponta à imagem anterior sha256:2298f378f7286cbba12bcf58c74dd4e6d1f741c3b5ac96c9a68a325be3e12a0a; não foi necessário exercê-lo. Parser e8bc778c8c00, gateway8fb76416f61c, mailb257a83cbb37, Synthesisdb6c5c0ef238, Paddled991a574e45e e Traefik5e25fdc6d2e6 mantiveram IDs. O curl imediato do script recebeu404 transitório após recriação; smoke independente recebeu200 e confirmou o SHA/assets, sem rebuild adicional.
+
+Fechamento documental posterior apenas registra evidências e sincroniza refs/VPS, mantendo o runtime eab0961 e o mesmo contêiner. CI do fechamento continua obrigatório. Avisos antigos de permissões em housekeeping de worktrees Git não impediram operações; nenhuma worktree/lock alheia foi removida. Todos D/P e mapa PASS dentro da cobertura declarada; nenhum desvio ou resíduo funcional conhecido.
 
 ---
 
