@@ -9,9 +9,9 @@ last_verified: 2026-10-17
 
 # Estado atual do Prisma
 
-## Feedback de senha e campos bloqueados —3.0.4
+## Feedback de senha e campos bloqueados —3.0.4 publicada
 
-Cadastro de usuário/Owner com requisitos pendentes vermelhos, atendidos verdes com check e estado acessível, atualizados durante digitação/substituição/exclusão sem blur. Observação/política existentes mantidas; quatro campos Owner desabilitados com aparência cinza legível e valores canônicos preservados.112browser/17Node dirigidos PASS, sem alterar política, backend ou trocar credenciais reais; publicação e limites no AoT `docs/qa/aot-password-feedback-v304.md`.
+Cadastro de usuário/Owner com requisitos pendentes vermelhos, atendidos verdes com check e estado acessível, atualizados durante digitação/substituição/exclusão sem blur. Observação/política existentes mantidas; quatro campos Owner desabilitados com aparência cinza legível e valores canônicos preservados.112browser/17Node dirigidos PASS, sem alterar política, backend ou trocar credenciais reais; runtime0c4af48bc0d81a55f731f96d385c006c1749dc6d publicado somente web, CI branch e22smokes públicos PASS, demais serviços/rollback preservados. Sem jornada humana autenticada de produção; publicação e limites no AoT `docs/qa/aot-password-feedback-v304.md`.
 
 ## Ordenação de grupos e empresas —3.0.3 publicada
 

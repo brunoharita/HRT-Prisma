@@ -1,0 +1,93 @@
+{
+  "checks": [
+    {
+      "name": "route /",
+      "pass": true
+    },
+    {
+      "name": "route /organizations",
+      "pass": true
+    },
+    {
+      "name": "route /users",
+      "pass": true
+    },
+    {
+      "name": "route /sign-in",
+      "pass": true
+    },
+    {
+      "name": "current asset /assets/index-DMfnIVCf.js",
+      "pass": true
+    },
+    {
+      "name": "runtime version3.0.4",
+      "pass": true
+    },
+    {
+      "name": "runtime expected SHA",
+      "pass": true
+    },
+    {
+      "name": "current asset /assets/rolldown-runtime-C0FnF6B9.js",
+      "pass": true
+    },
+    {
+      "name": "current asset /assets/antd-vendor-BaKnhCyQ.js",
+      "pass": true
+    },
+    {
+      "name": "current asset /assets/supabase-vendor-DoXvCMLf.js",
+      "pass": true
+    },
+    {
+      "name": "current asset /assets/react-vendor-BdxMnOeJ.js",
+      "pass": true
+    },
+    {
+      "name": "current asset /assets/antd-vendor-B5BXDqMa.css",
+      "pass": true
+    },
+    {
+      "name": "current asset /assets/index-CQ71JCvp.css",
+      "pass": true
+    },
+    {
+      "name": "previous tab asset /assets/index-DWCvriK7.js",
+      "pass": true
+    },
+    {
+      "name": "previous tab asset /assets/rolldown-runtime-C0FnF6B9.js",
+      "pass": true
+    },
+    {
+      "name": "previous tab asset /assets/antd-vendor-BaKnhCyQ.js",
+      "pass": true
+    },
+    {
+      "name": "previous tab asset /assets/supabase-vendor-DoXvCMLf.js",
+      "pass": true
+    },
+    {
+      "name": "previous tab asset /assets/react-vendor-BdxMnOeJ.js",
+      "pass": true
+    },
+    {
+      "name": "previous tab asset /assets/antd-vendor-B5BXDqMa.css",
+      "pass": true
+    },
+    {
+      "name": "previous tab asset /assets/index-BBoH4nqL.css",
+      "pass": true
+    },
+    {
+      "name": "anonymous Owner form route protected",
+      "pass": true
+    },
+    {
+      "name": "no runtime exception",
+      "pass": true
+    }
+  ],
+  "limits": "Anonymous fresh production browser; no account created, no email, no authenticated human journey"
+}

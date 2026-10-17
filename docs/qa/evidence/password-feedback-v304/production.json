@@ -1,0 +1,21 @@
+{
+  "runtimeSha": "0c4af48bc0d81a55f731f96d385c006c1749dc6d",
+  "version": "3.0.4",
+  "branchCI": {
+    "id": 39043902727,
+    "status": "SUCCESS"
+  },
+  "selectiveDeployment": "prisma-web only",
+  "otherContainersImagesRestarts": "UNCHANGED",
+  "webContainer": "7c4ecae2f554",
+  "webImage": "sha256:254b5079fe0e8188a459065cacf5be709d01c93edc7e43b40ac4c128326a1151",
+  "rollback": "prisma-web:rollback-before-0c4af48bc0d8",
+  "rollbackImage": "sha256:fa91a97ff9616293d87739dd71b43fbb6b651524e87f9dfd669ce2d2f0dc4e67",
+  "publicSmokeChecks": 22,
+  "deploymentNote": "Immediate HEAD404 after recreation recovered; independent22smokes passed without another build.",
+  "limits": "Local real form with synthetic transports; fresh anonymous production browser only. No real credential/account/email, no authenticated human production journey. No database/Edge accessed or published.",
+  "mainCI": {
+    "id": 39044038017,
+    "status": "SUCCESS"
+  }
+}

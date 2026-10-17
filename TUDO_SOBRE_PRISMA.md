@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 520
-source_manifest_sha256: f6d0af76cddc45b2d111fed537ca08e5d236b0a20745341a8c72c9730e6985bd
+source_manifest_sha256: 3790bb5e6205832b72c9c3572e117ae743ea793539d15bdd266e1c2971a0afb3
 -->
 
 # Tudo sobre o Prisma
@@ -2650,9 +2650,9 @@ last_verified: 2026-10-17
 
 # Estado atual do Prisma
 
-## Feedback de senha e campos bloqueados —3.0.4
+## Feedback de senha e campos bloqueados —3.0.4 publicada
 
-Cadastro de usuário/Owner com requisitos pendentes vermelhos, atendidos verdes com check e estado acessível, atualizados durante digitação/substituição/exclusão sem blur. Observação/política existentes mantidas; quatro campos Owner desabilitados com aparência cinza legível e valores canônicos preservados.112browser/17Node dirigidos PASS, sem alterar política, backend ou trocar credenciais reais; publicação e limites no AoT `docs/qa/aot-password-feedback-v304.md`.
+Cadastro de usuário/Owner com requisitos pendentes vermelhos, atendidos verdes com check e estado acessível, atualizados durante digitação/substituição/exclusão sem blur. Observação/política existentes mantidas; quatro campos Owner desabilitados com aparência cinza legível e valores canônicos preservados.112browser/17Node dirigidos PASS, sem alterar política, backend ou trocar credenciais reais; runtime0c4af48bc0d81a55f731f96d385c006c1749dc6d publicado somente web, CI branch e22smokes públicos PASS, demais serviços/rollback preservados. Sem jornada humana autenticada de produção; publicação e limites no AoT `docs/qa/aot-password-feedback-v304.md`.
 
 ## Ordenação de grupos e empresas —3.0.3 publicada
 
@@ -22942,7 +22942,7 @@ Sem novas dependências ou reclassificações em relação ao acordo.
 | Autoridade/canonicalidade | critical_transversal | Backend intacto, mesmas fontes canônicas e submit; quatro disabled/valores/rota protegida | PASS |
 | Troca de senha/recuperação/banco/Edge/outros fluxos | no_impact_identified | Nenhum arquivo/serviço desses destinos muda; classe local nova evita aplicar regra a checklist compartilhado de troca | PASS |
 
-As regressões acima PASS. Plano de release e prova operacional pendentes; não se declara rollout com evidência local.
+As regressões acima PASS. Plano confirmou somente web; prova operacional registrada abaixo, sem confundir fixture com jornada humana.
 
 ## Fidelidade visual / privacidade
 
@@ -22952,7 +22952,7 @@ Senha sintética única gerada apenas em memória por execução; campos mascara
 
 ## Validação / ambientes
 
-112browser PASS (52novos/60regressão);17Node/tooling PASS (política, identidade/rota Owner, avisos e versão). Tipos/build web PASS, build TypeScript PASS. Checklist/disabled inspecionados em desktop/mobile. Lint/foundation/contexto/CI/publicação em execução. Sem QA remoto separado; navegador usa formulário e navegação reais com transporte sintético, sem identidade humana real ou e-mail. Isso não prova jornada humana autenticada em produção.
+112browser PASS (52novos/60regressão);17Node/tooling PASS (política, identidade/rota Owner, avisos e versão). Tipos/build web PASS, build TypeScript PASS. Checklist/disabled inspecionados em desktop/mobile. Lint/foundation/contexto PASS; CI branch39043902727 SUCCESS, publicação web/smoke confirmados abaixo. Plano é auxílio: pnpm test genérico substituído localmente por17testes pertinentes, CI integral mantida. Sem QA remoto separado; navegador usa formulário e navegação reais com transporte sintético, sem identidade humana real ou e-mail. Isso não prova jornada humana autenticada em produção.
 
 ## Desvios
 
@@ -22960,7 +22960,13 @@ Nenhum desvio material identificado ou novo requisito de política. O nome de us
 
 ## Git / publicação / fechamento
 
-Pendente. Publicação somente web, rollback/serviços/assets/SHA/CI e sincronização a registrar. Não executar validate integral local nem reabrir testes válidos depois da publicação.
+Runtime3.0.4 `0c4af48bc0d81a55f731f96d385c006c1749dc6d` integrado em main e publicado somente prisma-web. Identidade/remote da VPS conferidos; banco/Edge não acessados/publicados. Contêiner7c4ecae2f554, imagem254b5079fe0e, restarts0. Demais5contêineres/imagens/restarts iguais, comparação automática PASS. Rollback `prisma-web:rollback-before-0c4af48bc0d8`, imagemfa91a97ff961. HEAD imediato retornou404 transitório após recriação;22smokes independentes de quatro rotas, sete assets atuais/sete anteriores, versão/SHA, rota contextual anônima protegida e ausência de exceções confirmaram recuperação sem rebuild. Evidências production.json/public-smoke.json/containers-before.txt/containers-after.txt.
+
+Fechamento documental/contexto em commit posterior, sem alteração funcional nem novo build/deploy. CI main/fechamento conferidas no encerramento e disponíveis nos checks; status final no chat. Resíduos antigos de manutenção Git de worktrees com permissão negada preservados; não impediram commit/FF e não foram limpos. Trabalho alheio/untracked do checkout canônico preservado.
+
+## Conclusão
+
+D/P/CA PASS nos limites declarados, sem desvio material. Jornada humana autenticada de produção NOT TESTED, sem cadastros ou credenciais reais criados/alterados pela tarefa. Fechamento exige CI final e sincronização Git/VPS, sem repetir validações funcionais já aprovadas.
 
 ---
 
