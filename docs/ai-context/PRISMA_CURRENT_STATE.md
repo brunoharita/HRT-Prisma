@@ -9,9 +9,9 @@ last_verified: 2026-10-17
 
 # Estado atual do Prisma
 
-## Retomada de importação —3.1.1 em validação
+## Retomada de importação —3.1.1 publicada
 
-A tela de documento mostra custo/saldo e atualização da previsão antes da retomada com IA. Os dois botões aguardam previsão vigente e saldo suficiente; confirmação vincula a versão exibida, revalida no clique e bloqueia duplicidade. Falha permite atualizar e retomar conscientemente. Pipeline privado e publicação humana preservados. Investigação somente leitura confirmou tentativa histórica12/09 com diagnóstico genérico e documento posterior do mesmo PDF aprovado; correções antigas de listas/LinkedIn estão no código, sem evidência para atribuir a causa específica daquela tentativa. Nenhuma escrita de dados reais ou IA paga. Acordo/execução/AoT resume-recovery-v3111.0.0;51testes Node e55checks browser dirigidos PASS, publicação pendente.
+Página de documento consulta/exibe custo e saldo, com atualização acessível antes da retomada com IA. Ambos botões aguardam previsão válida/saldo suficiente, revalidam a versão confirmada no clique e bloqueiam duplicidade; expiração e falhas são recuperáveis. Contratos privados/SHA/intake/revisão/publicação humana preservados. Investigação por leitura confirmou tentativa histórica12/09 com diagnóstico genérico e documento posterior aprovado do mesmo PDF; correções antigas de listas/LinkedIn presentes, sem atribuir causa específica ausente. Hash dos documentos idêntico antes/depois; nenhuma escrita real/IA paga. Runtime5e210b90290edc985dfa61f75adb0949e52ad3e3, web78ac70337c45/running0; CI branch39079063691/main39079140863 SUCCESS.59Node/55browser/25smokes públicos PASS; tipos/build/lint/contexto PASS.404 imediato transitório verificado sem rebuild; assets,rollback3.1.0,recuperação3.0.7,configuração e5serviços preservados. Somente web publicada; sem QA remoto separado ou retomada autenticada de Pessoa real. Acordo/execução/AoT resume-recovery-v3111.0.0 e recibos registram limites. Fechamento documental sincroniza checkouts sem rebuild.
 
 ## Evolução de UX —3.1.0 publicada
 

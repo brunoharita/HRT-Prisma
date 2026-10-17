@@ -1,0 +1,13 @@
+{
+  "runtimeSha": "5e210b90290edc985dfa61f75adb0949e52ad3e3",
+  "dispatcherExit": 22,
+  "reason": "Immediate post-recreation root HEAD returned transient HTTP404.",
+  "recovery": "No redeploy or rebuild. Independent runtime, SHA/version/assets/routes/rollback checks subsequently passed.",
+  "publicSmokeChecks": 25,
+  "protectedServices": 5,
+  "configurationPreserved": true,
+  "documentHashBefore": "5c5f70959584ae9f3e543f252cda4b68",
+  "documentHashAfter": "5c5f70959584ae9f3e543f252cda4b68",
+  "originalDocument": "failed/not_ready, unchanged",
+  "laterSamePdfDocument": "approved/approved, unchanged"
+}
