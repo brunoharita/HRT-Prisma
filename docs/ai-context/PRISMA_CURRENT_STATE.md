@@ -9,9 +9,9 @@ last_verified: 2026-10-17
 
 # Estado atual do Prisma
 
-## Cadastrar Owner — 3.0.1 em validação
+## Cadastrar Owner — 3.0.1 publicada
 
-Correção autorizada por Bruno em17/10/2026 com versão explícita3.0.1. Botão contextual transporta grupo; servidor resolve username (nome do grupo minúsculo sem espaços + .owner), Owner, grupo e primeira empresa. Quatro campos bloqueados, dados pessoais/credenciais editáveis. Contrato owner-onboarding-1.0.0, RPCs novas service-only, revalidação sob lock e audit transacional; cadastro genérico e persistência anterior preservados. Sem renomear pessoas, resolver conflitos por sufixos ou ativar grupo automaticamente. Acordo1.0.0 e AoT owner-onboarding-v301 registram validação/publicação; documentação não prova rollout.
+Correção autorizada por Bruno em17/10/2026 com versão explícita3.0.1, publicada no runtime aa580ac515083df5098280e86dc5f3146308df41. Botão contextual transporta grupo; servidor resolve username (nome do grupo minúsculo sem espaços + .owner), Owner, grupo e primeira empresa. Quatro campos bloqueados, dados pessoais/credenciais editáveis. Contrato owner-onboarding-1.0.0, RPCs novas service-only, revalidação sob lock e audit transacional; cadastro genérico e persistência anterior preservados. Sem renomear pessoas, resolver conflitos por sufixos ou ativar grupo automaticamente. Migration local20261017122000/remota20261017123255, platform-users7/JWT=true/fontes conferidas e somente web.129SQL/60browser/25Node/7tooling/19cenários Deno PASS; CI branch39032855589/main39032960042 SUCCESS.19smokes produtivos PASS, versão/SHA/assets, acesso anônimo recusado; sem contas/e-mails reais ou jornada humana autenticada de criação em produção. Contagens/persistência genérica e outros serviços preservados; comparação advisors sem novos alertas. Acordo1.0.0 e AoT owner-onboarding-v301 registram evidência, rollback e limites.
 
 ## V3M0 — administração multiempresa 2.9.0 publicada
 

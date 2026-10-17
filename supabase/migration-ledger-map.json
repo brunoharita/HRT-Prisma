@@ -1614,6 +1614,11 @@
       "name": "multiempresa_v3",
       "localVersion": "20261017040000",
       "remoteVersion": "20261017045918"
+    },
+    {
+      "name": "owner_onboarding_v301",
+      "localVersion": "20261017122000",
+      "remoteVersion": "20261017123255"
     }
   ],
   "localOnly": [
@@ -1654,11 +1659,11 @@
   ],
   "lastIncrementalVerification": {
     "date": "2026-10-17",
-    "movement": "v3m0-multiempresa",
+    "movement": "owner-onboarding-v301",
     "names": [
-      "multiempresa_v3"
+      "owner_onboarding_v301"
     ],
-    "evidence": "docs/qa/evidence/v3m0-multiempresa/production.json",
+    "evidence": "docs/qa/evidence/owner-onboarding-v301/production.json",
     "historicalSnapshotVerifiedAtUnchanged": true
   }
 }

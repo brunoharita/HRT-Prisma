@@ -1,0 +1,152 @@
+{
+  "release": "3.0.1",
+  "runtimeSha": "aa580ac515083df5098280e86dc5f3146308df41",
+  "verifiedAt": "2026-10-17 12:35:56 UTC",
+  "project": "ioldpnqqvobprjiontre",
+  "migration": {
+    "name": "owner_onboarding_v301",
+    "localVersion": "20261017122000",
+    "remoteVersion": "20261017123255"
+  },
+  "ci": {
+    "branch": "https://github.com/brunoharita/HRT-Prisma/actions/runs/39032855589",
+    "main": "https://github.com/brunoharita/HRT-Prisma/actions/runs/39032960042",
+    "conclusion": "success"
+  },
+  "edge": {
+    "name": "platform-users",
+    "previousVersion": 6,
+    "version": 7,
+    "verify_jwt": true,
+    "sourceMatches": true
+  },
+  "database": {
+    "genericPersistenceDefinitionUnchanged": true,
+    "before": {
+      "users": 7,
+      "memberships": 9,
+      "people": 12,
+      "profiles": 18,
+      "token_movements": 9
+    },
+    "after": {
+      "users": 7,
+      "memberships": 9,
+      "people": 12,
+      "profiles": 18,
+      "token_movements": 9
+    },
+    "clientContextDenied": true,
+    "anonMutationDenied": true,
+    "clientMutationDenied": true,
+    "serviceMutationAllowed": true,
+    "privateHelperDenied": true
+  },
+  "advisors": {
+    "categoriesBefore": [
+      {
+        "name": "rls_enabled_no_policy",
+        "level": "INFO",
+        "count": 37
+      },
+      {
+        "name": "anon_security_definer_function_executable",
+        "level": "WARN",
+        "count": 4
+      },
+      {
+        "name": "authenticated_security_definer_function_executable",
+        "level": "WARN",
+        "count": 135
+      },
+      {
+        "name": "auth_leaked_password_protection",
+        "level": "WARN",
+        "count": 1
+      }
+    ],
+    "categoriesAfter": [
+      {
+        "name": "rls_enabled_no_policy",
+        "level": "INFO",
+        "count": 37
+      },
+      {
+        "name": "anon_security_definer_function_executable",
+        "level": "WARN",
+        "count": 4
+      },
+      {
+        "name": "authenticated_security_definer_function_executable",
+        "level": "WARN",
+        "count": 135
+      },
+      {
+        "name": "auth_leaked_password_protection",
+        "level": "WARN",
+        "count": 1
+      }
+    ],
+    "newFindings": [],
+    "comparison": "Excludes observed_at timestamps; existing findings unchanged"
+  },
+  "web": {
+    "routes200": [
+      "/",
+      "/sign-in",
+      "/organizations",
+      "/organizations/00000000-0000-4000-8000-000000000100/owner/new"
+    ],
+    "smokeChecks": 19,
+    "report": "public-smoke.json",
+    "container": "25f070cfe474",
+    "image": "sha256:0234fee91436f2f3ac8a7a9fb96c0e355d7bf37ad37a9e8a5e5aa7cce1518523",
+    "restartCount": 0,
+    "rollbackTag": "prisma-web:rollback-before-aa580ac51508",
+    "rollbackImage": "sha256:df551231090c819da8d6a3c1a06e4fb190640b6f2e093671977df7479ea7731d",
+    "transientImmediateHead404": "independent routes/assets/browser recovered; no extra build"
+  },
+  "otherServices": [
+    {
+      "name": "prisma-parser-ia",
+      "id": "e8bc778c8c00",
+      "containerAndImagePreserved": true,
+      "restartBefore": 0,
+      "restartAfter": 0
+    },
+    {
+      "name": "prisma-paddle-gateway",
+      "id": "8fb76416f61c",
+      "containerAndImagePreserved": true,
+      "restartBefore": 0,
+      "restartAfter": 0
+    },
+    {
+      "name": "hrt-mail-forwarder",
+      "id": "b257a83cbb37",
+      "containerAndImagePreserved": true,
+      "restartBefore": 0,
+      "restartAfter": 0
+    },
+    {
+      "name": "prisma-profile-synthesis",
+      "id": "db6c5c0ef238",
+      "containerAndImagePreserved": true,
+      "restartBefore": 0,
+      "restartAfter": 0
+    },
+    {
+      "name": "traefik-traefik-1",
+      "id": "5e25fdc6d2e6",
+      "containerAndImagePreserved": true,
+      "restartBefore": 0,
+      "restartAfter": 0
+    }
+  ],
+  "limits": [
+    "No real identity/email/paid AI used to test",
+    "Anonymous production browser and read-only SQL are bounded evidence, not authenticated real-person account creation",
+    "Owner context positive/tampering/concurrency/audit proved in local SQL and real handlers with synthetic fetch",
+    "Final documentation/ledger commit synchronized separately without runtime rebuild"
+  ]
+}

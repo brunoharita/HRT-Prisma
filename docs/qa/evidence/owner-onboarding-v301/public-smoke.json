@@ -1,0 +1,81 @@
+{
+  "checks": [
+    {
+      "name": "current asset /assets/index-Bat8o6ym.js",
+      "pass": true
+    },
+    {
+      "name": "runtime version3.0.1",
+      "pass": true
+    },
+    {
+      "name": "runtime expected SHA",
+      "pass": true
+    },
+    {
+      "name": "current asset /assets/rolldown-runtime-C0FnF6B9.js",
+      "pass": true
+    },
+    {
+      "name": "current asset /assets/antd-vendor-CjXMNByx.js",
+      "pass": true
+    },
+    {
+      "name": "current asset /assets/supabase-vendor-DoXvCMLf.js",
+      "pass": true
+    },
+    {
+      "name": "current asset /assets/react-vendor-BdxMnOeJ.js",
+      "pass": true
+    },
+    {
+      "name": "current asset /assets/antd-vendor-B5BXDqMa.css",
+      "pass": true
+    },
+    {
+      "name": "current asset /assets/index-DPKY5unz.css",
+      "pass": true
+    },
+    {
+      "name": "previous tab asset /assets/index-BmRTkk4q.js",
+      "pass": true
+    },
+    {
+      "name": "previous tab asset /assets/rolldown-runtime-C0FnF6B9.js",
+      "pass": true
+    },
+    {
+      "name": "previous tab asset /assets/antd-vendor-CjXMNByx.js",
+      "pass": true
+    },
+    {
+      "name": "previous tab asset /assets/supabase-vendor-DoXvCMLf.js",
+      "pass": true
+    },
+    {
+      "name": "previous tab asset /assets/react-vendor-BdxMnOeJ.js",
+      "pass": true
+    },
+    {
+      "name": "previous tab asset /assets/antd-vendor-B5BXDqMa.css",
+      "pass": true
+    },
+    {
+      "name": "previous tab asset /assets/index-BmxgsHSw.css",
+      "pass": true
+    },
+    {
+      "name": "owner context rejects anonymous",
+      "pass": true
+    },
+    {
+      "name": "anonymous contextual route protected",
+      "pass": true
+    },
+    {
+      "name": "no runtime exception",
+      "pass": true
+    }
+  ],
+  "limits": "Anonymous fresh production browser; no account created, no email, no authenticated human journey"
+}

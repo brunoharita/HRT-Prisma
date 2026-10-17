@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 514
-source_manifest_sha256: 9db7024f177c49fc50a68530c1c47fd941f44e0eb5f6a1ecf95303790591e8f5
+source_manifest_sha256: 40e9e44ebeb1447d22799886e6380c4cc7626ad9427987a50612e2d8bd16fa01
 -->
 
 # Tudo sobre o Prisma
@@ -2650,9 +2650,9 @@ last_verified: 2026-10-17
 
 # Estado atual do Prisma
 
-## Cadastrar Owner — 3.0.1 em validação
+## Cadastrar Owner — 3.0.1 publicada
 
-Correção autorizada por Bruno em17/10/2026 com versão explícita3.0.1. Botão contextual transporta grupo; servidor resolve username (nome do grupo minúsculo sem espaços + .owner), Owner, grupo e primeira empresa. Quatro campos bloqueados, dados pessoais/credenciais editáveis. Contrato owner-onboarding-1.0.0, RPCs novas service-only, revalidação sob lock e audit transacional; cadastro genérico e persistência anterior preservados. Sem renomear pessoas, resolver conflitos por sufixos ou ativar grupo automaticamente. Acordo1.0.0 e AoT owner-onboarding-v301 registram validação/publicação; documentação não prova rollout.
+Correção autorizada por Bruno em17/10/2026 com versão explícita3.0.1, publicada no runtime aa580ac515083df5098280e86dc5f3146308df41. Botão contextual transporta grupo; servidor resolve username (nome do grupo minúsculo sem espaços + .owner), Owner, grupo e primeira empresa. Quatro campos bloqueados, dados pessoais/credenciais editáveis. Contrato owner-onboarding-1.0.0, RPCs novas service-only, revalidação sob lock e audit transacional; cadastro genérico e persistência anterior preservados. Sem renomear pessoas, resolver conflitos por sufixos ou ativar grupo automaticamente. Migration local20261017122000/remota20261017123255, platform-users7/JWT=true/fontes conferidas e somente web.129SQL/60browser/25Node/7tooling/19cenários Deno PASS; CI branch39032855589/main39032960042 SUCCESS.19smokes produtivos PASS, versão/SHA/assets, acesso anônimo recusado; sem contas/e-mails reais ou jornada humana autenticada de criação em produção. Contagens/persistência genérica e outros serviços preservados; comparação advisors sem novos alertas. Acordo1.0.0 e AoT owner-onboarding-v301 registram evidência, rollback e limites.
 
 ## V3M0 — administração multiempresa 2.9.0 publicada
 
@@ -22560,7 +22560,7 @@ Contrato `docs/qa/agreement-owner-onboarding-v301.md`1.0.0, aprovado neste chat1
 | D-02 | Username derivado no SQL, sem alternativa silenciosa | SQL129/Edge: HRT Solutions, conflito, caracteres não suportados e comprimento; UI mostra canonical | PASS | Nenhum Owner existente renomeado |
 | D-03 | Contexto service-only, ativo Super, preparação, primeira empresa, contrato; revalidação sob lock, audit e compensação | SQL129 inclui26 novos checks; duas conexões Owner concorrentes, rollback por auditoria; Deno2/19cenários (7 genéricos+12 contextuais) | PASS | PG17 isolado, handler real com fetch sintético |
 | D-04 | Fluxo genérico/edição preservados, retorno a grupos, nenhuma ativação implícita | Node25/tooling7 e regressões multiempresa103 incluídas nos129; browser genérico/editável/erro/retorno | PASS | Não substitui jornada humana autenticada |
-| D-05 | Contexto/CI e publicação seletiva | Checks locais abaixo; rollout pendente | PARTIAL | Sem mutação de teste em produção |
+| D-05 | Contexto/CI e publicação seletiva | Checks locais e publicação abaixo; production.json/public-smoke.json | PASS | Sem mutação de teste em produção |
 
 ## Proibições verificadas
 
@@ -22595,11 +22595,15 @@ Ocorrências locais: Deno exigiu objeto estrutural para resposta JSON, corrigido
 
 ## Git / QA / ambiente
 
-Worktree de tarefa reutilizado, branch codex/owner-onboarding-v301; checkout canônico e arquivos alheios preservados. Destinos esperados: migration nova, platform-users e web. Rollback web/Edge anteriores preservados; correção SQL forward, RPCs legadas não redefinidas.
+Worktree de tarefa reutilizado, branch codex/owner-onboarding-v301; checkout canônico e arquivos alheios preservados. Dispatcher confirmou somente migration nova, platform-users e web. Integração FF em main no checkout canônico, sem ignorar proteção de worktrees. CI branch39032855589/main39032960042 SUCCESS (suíte geral, ledger, deploy e audit de dependências). Runtime aa580ac515083df5098280e86dc5f3146308df41; versão3.0.1. Migration local20261017122000/remota20261017123255 aplicada; platform-users7 ACTIVE/JWT=true e fonte baixada idêntica ao commit. Definição remota da save_platform_user_v3 anterior byte-idêntica; grants clientes/anon negados nas RPCs novas, execução service-only permitida e helper privado negado. Contagens usuários7/vínculos9/Pessoas12/Perfis18/movimentosTokens9 preservadas. Nenhum cadastro real foi criado/alterado para testar.
+
+Somente prisma-web recriado:25f070cfe474/imagem0234fee91436/restarts0. Parser, gateway, e-mail, synthesis e Traefik mantêm IDs/imagens/restarts0. Rollback prisma-web:rollback-before-aa580ac51508 aponta para a imagem anterior df551231090c. Edge anterior6 preservada como baseline; correções SQL forward, RPCs legadas não redefinidas. HEAD imediatamente após recriação recebeu404 transitório; rotas/assets/browser independentes confirmaram estabilização sem novo build. Quatro rotas200 e19smokes públicos PASS: sete assets atuais, sete da versão anterior, versão/SHA, Edge anônima negada, rota contextual anônima redirecionada ao login e nenhuma exceção. Evidências production.json/public-smoke.json/production-login.png.
+
+Advisors antes/depois têm categorias/contagens e achados iguais, excluindo timestamps observed_at; nenhum achado novo. O baseline continua com37informações RLS sem policy,4avisos de funções anon,135de funções autenticadas e1de proteção de senha vazada. Não é declaração de segurança integral nem mudança desses contratos; revisão fora do escopo. Fonte dos critérios: [linter Supabase](https://supabase.com/docs/guides/database/database-linter). Resíduos Git de manutenção de worktrees antigos com permissão negada foram preservados; não impedem commits/FF e não foram limpos. Sincronização documental posterior não reconstrói runtime nem repete testes funcionais válidos.
 
 ## Conclusão
 
-Local PASS; entrega geral PARTIAL até publicação/smoke/CI/sincronização.
+Entrega PASS nos critérios aprovados; código, migração, Edge e web publicados. Fechamento de evidência/contexto/ledger sincronizado separadamente em Git/VPS, sem rebuild. Jornada de criação humana autenticada de produção permanece NOT TESTED; não é substituída por SQL/smoke público ou browser sintético.
 
 ---
 
