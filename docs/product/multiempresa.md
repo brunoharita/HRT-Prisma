@@ -23,3 +23,7 @@ Proposta2 aprovada: grupos recolhíveis, resumos separados por borda e espaço, 
 ## Ordenação —3.0.3
 
 Ordenar por Nome, Data de criação ou Data de atualização, em direção crescente ou decrescente; padrão Nome A–Z, com collation pt-BR e números naturais. Empresas herdam critério/direção, usando seus próprios nomes/datas e mantendo o selo Principal. A data escolhida é exibida para referência; ausentes/inválidas ficam indisponíveis e por último em ambas as direções. Empates por nome/ID. Busca, refresh e grupo aberto são preservados. O updated_at é do próprio registro, sem agregar mudanças de empresas ao grupo. Consulta organization-administration1.1.0 adiciona createdAt/updatedAt existentes, mantendo aceitação1.0.0, filtros, grants e mutações anteriores. Acordo/AoT groups-sorting-v303.
+
+## Feedback do cadastro de usuário/Owner —3.0.4
+
+Requisitos de senha observados continuamente: pendente vermelho, atendido verde com check e indicação acessível; exclusão/substituição reverte estado sem blur e confirmação exige não vazios/iguais. Campos bloqueados do formulário recebem aparência cinza legível. No Owner username/perfil/grupo/empresas permanecem canônicos e desabilitados; dados pessoais editáveis e cadastro genérico preservados. Política/servidor/envio de credencial e recuperação não mudam. Acordo/AoT password-feedback-v304.

@@ -17,6 +17,7 @@ import {
 } from "antd";
 import {
   InfoCircleOutlined,
+  CheckOutlined,
   LockOutlined,
   MailOutlined,
   PhoneOutlined,
@@ -305,7 +306,7 @@ export function UserFormPage({ mode, userId, ownerGroupId, onNavigate }: UserFor
       />
       {error ? <Alert className="prisma-shell-alert" message={error} showIcon type="error" action={<Button onClick={(event) => focusNoticeFields(event.currentTarget)}>Ver campos do formulário</Button>} /> : null}
       {info ? <Alert className="prisma-shell-alert" message={info} showIcon type="success" /> : null}
-      <Form<UserFormValues> className={ownerOnboarding ? "prisma-owner-onboarding" : undefined} onValuesChange={() => setDirty(true)} form={form} initialValues={defaultValues} layout="vertical" onFinish={(values) => void handleSubmit(values)} requiredMark={false}>
+      <Form<UserFormValues> className={`prisma-user-form${ownerOnboarding ? " prisma-owner-onboarding" : ""}`} onValuesChange={() => setDirty(true)} form={form} initialValues={defaultValues} layout="vertical" onFinish={(values) => void handleSubmit(values)} requiredMark={false}>
         <PrismaCard className="prisma-user-form-card">
           <section className="prisma-user-form-section">
             <h2>Dados básicos</h2>
@@ -330,7 +331,7 @@ export function UserFormPage({ mode, userId, ownerGroupId, onNavigate }: UserFor
                   },
                 ]}
               >
-                <Input placeholder="joao.silva" readOnly={ownerOnboarding} />
+                <Input placeholder="joao.silva" disabled={ownerOnboarding} />
               </Form.Item>
               <Form.Item label="E-mail *" name="email" rules={[{ required: true, type: "email", message: "Informe um e-mail válido." }]}>
                 <Input prefix={<MailOutlined />} placeholder="joao.silva@empresa.com" />
@@ -553,5 +554,8 @@ function describeOrganizationPlaceholder(profile: PlatformAccessProfile, selecte
 }
 
 function PasswordRuleItem({ satisfied, text }: { satisfied: boolean; text: string }) {
-  return <li className={satisfied ? "is-satisfied" : ""}>{text}</li>;
+  return <li className={satisfied ? "is-satisfied" : "is-pending"}>
+    <span className="prisma-user-rule-icon" aria-hidden="true">{satisfied ? <CheckOutlined /> : "•"}</span>
+    <span>{text}</span><span className="prisma-user-rule-status">{satisfied ? "Atendido" : "Pendente"}</span>
+  </li>;
 }

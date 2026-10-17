@@ -3,11 +3,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.85.0
+version: 2.86.0
 last_verified: 2026-10-17
 ---
 
 # Estado atual do Prisma
+
+## Feedback de senha e campos bloqueados —3.0.4
+
+Cadastro de usuário/Owner com requisitos pendentes vermelhos, atendidos verdes com check e estado acessível, atualizados durante digitação/substituição/exclusão sem blur. Observação/política existentes mantidas; quatro campos Owner desabilitados com aparência cinza legível e valores canônicos preservados.112browser/17Node dirigidos PASS, sem alterar política, backend ou trocar credenciais reais; publicação e limites no AoT `docs/qa/aot-password-feedback-v304.md`.
 
 ## Ordenação de grupos e empresas —3.0.3 publicada
 

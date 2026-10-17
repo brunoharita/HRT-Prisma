@@ -1,0 +1,19 @@
+{
+  "baseline": "375c9e4c599773e3bdf9c47623ebf0cb8cb268eb",
+  "browser": 112,
+  "newBrowser": 52,
+  "previousRegression": 60,
+  "nodeTooling": 17,
+  "viewports": [
+    1448,
+    390,
+    320
+  ],
+  "checks": {
+    "typecheck:web": "PASS",
+    "build": "PASS",
+    "build:web": "PASS",
+    "git diff --check": "PASS"
+  },
+  "limits": "Real form/navigation with synthetic transport; no real password, account or email. Unique synthetic credential generated in memory only; masked screenshots. Before-blur UI state/color/check checked through render, without network mutation."
+}

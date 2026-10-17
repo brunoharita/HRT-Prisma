@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 518
-source_manifest_sha256: c0afe08ce458a5878fa22398dbbcd443dd6bcd0d4ac275ebd7e481c7d983052e
+documentation_source_count: 520
+source_manifest_sha256: f6d0af76cddc45b2d111fed537ca08e5d236b0a20745341a8c72c9730e6985bd
 -->
 
 # Tudo sobre o Prisma
@@ -2644,11 +2644,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.85.0
+version: 2.86.0
 last_verified: 2026-10-17
 ---
 
 # Estado atual do Prisma
+
+## Feedback de senha e campos bloqueados —3.0.4
+
+Cadastro de usuário/Owner com requisitos pendentes vermelhos, atendidos verdes com check e estado acessível, atualizados durante digitação/substituição/exclusão sem blur. Observação/política existentes mantidas; quatro campos Owner desabilitados com aparência cinza legível e valores canônicos preservados.112browser/17Node dirigidos PASS, sem alterar política, backend ou trocar credenciais reais; publicação e limites no AoT `docs/qa/aot-password-feedback-v304.md`.
 
 ## Ordenação de grupos e empresas —3.0.3 publicada
 
@@ -12104,6 +12108,10 @@ Proposta2 aprovada: grupos recolhíveis, resumos separados por borda e espaço, 
 
 Ordenar por Nome, Data de criação ou Data de atualização, em direção crescente ou decrescente; padrão Nome A–Z, com collation pt-BR e números naturais. Empresas herdam critério/direção, usando seus próprios nomes/datas e mantendo o selo Principal. A data escolhida é exibida para referência; ausentes/inválidas ficam indisponíveis e por último em ambas as direções. Empates por nome/ID. Busca, refresh e grupo aberto são preservados. O updated_at é do próprio registro, sem agregar mudanças de empresas ao grupo. Consulta organization-administration1.1.0 adiciona createdAt/updatedAt existentes, mantendo aceitação1.0.0, filtros, grants e mutações anteriores. Acordo/AoT groups-sorting-v303.
 
+## Feedback do cadastro de usuário/Owner —3.0.4
+
+Requisitos de senha observados continuamente: pendente vermelho, atendido verde com check e indicação acessível; exclusão/substituição reverte estado sem blur e confirmação exige não vazios/iguais. Campos bloqueados do formulário recebem aparência cinza legível. No Owner username/perfil/grupo/empresas permanecem canônicos e desabilitados; dados pessoais editáveis e cadastro genérico preservados. Política/servidor/envio de credencial e recuperação não mudam. Acordo/AoT password-feedback-v304.
+
 ---
 
 ## Source: `docs/product/person-center-redesign-spec.md`
@@ -16608,6 +16616,36 @@ Baseline verificado: SHA `efdadeb64fbe8399d718018cf6080cb9737774e6` local/origin
 | Paddle/experimento inativo | no_impact_identified | ausentes da rota automática; containers/modelos/portas existentes não alterados | inspeção antes/depois |
 
 Imagem anexada é evidência de incidente, não alvo de redesenho. Fidelidade visual não aplicável: nenhuma alteração de tela.
+
+---
+
+## Source: `docs/qa/agreement-password-feedback-v304.md`
+
+# Senha reativa e campos bloqueados — acordo e execução1.0.0
+
+Bruno determinou no chat17/10/2026: requisitos reagem imediatamente, pendente com fonte vermelha, atendido com fonte/check verdes; campos não editáveis com aparência de inativados. Baseline375c9e4c599773e3bdf9c47623ebf0cb8cb268eb, runtime3.0.3 a67c32b2824585e5006102ad33c0dbc155aaafe1. Entrega3.0.4. Screenshot fornecida é referência normativa da composição/ordem existente e contraexemplo dos estados visuais; dados pessoais/credenciais são ilustrativos e não serão copiados para evidência/fixtures.
+
+- D-01: seis requisitos do cadastro atualizam a cada digitação, colagem/substituição e exclusão, sem blur; confirmação reage a ambos campos e exige não vazios/iguais. Preservar observação Form.useWatch existente quando comprovada suficiente.
+- D-UX-01: pendente vermelho; atendido fonte verde e check verde; ao perder requisito volta a pendente e perde check. Ícone/texto de estado acessível, sem depender só da cor, sem mudar posição do painel ou layout.
+- D-UX-02: campos bloqueados no formulário têm fundo/borda/texto de desabilitado, com valores legíveis. No Owner são username, perfil, grupo e empresas canônicos; não editar e não perder valor no envio. Campos pessoais/editáveis e cadastro genérico preservados.
+- P-01: sem mudar política de senha, validação no servidor/salvar, permissões, origem Owner, credenciais, persistência, envio de e-mail ou valores protegidos. Sem envio de senha por keystroke, logs ou gravação de senhas em evidência.
+- F-01: recuperação/troca de senha, backend/Auth/Edge/banco, regras novas, design global e outros formulários.
+- A-01: reutilizar watch, política e componentes atuais; CSS isolado ao cadastro de usuário, tokens/cores com contraste e affordances acessíveis. Validação sintética com senha única gerada em memória, nunca em logs/artefatos; screenshots mascaradas.
+- CA-01: browser real em1448/390/320 com foco mantido, cada requisito antes/depois, inserção/substituição/exclusão, confirmação em ambos, cores/checks computados e ausência de chamadas implícitas; screenshots sem credencial visível, sem overflow.
+- CA-02: quatro locks/valores/estilo, campos pessoais e cadastro genérico, envio Owner com campos canônicos, senha automática/erro/retorno preservados. Tipos/build, política/rotas e testes dirigidos; CI obrigatória.
+- CA-03: documentação/contexto/versão3.0.4 e publicação apenas web; smoke de versão/SHA/assets/rotas, rollback/serviços e sincronização.
+
+## Mapa de impacto / mínimo suficiente
+
+| Área | Relação | Baseline / prova |
+| --- | --- | --- |
+| Requisitos e campos bloqueados do cadastro | direct | Watch/estados3.0.3; browser foco/cores/checks/estilos em três larguras |
+| Política/submit manual e automático | plausible_indirect | Função compartilhada inalterada; testes de contrato e regressão browser submit/erro |
+| Owner/usuário genérico | plausible_indirect | Mesmo contexto/handlers;60checks existentes mais novos cenários |
+| Autoridade/canonicalidade | critical_transversal | Backend e payload mantidos; quatro locks/valores no browser/rotas; sem alterar servidor |
+| Troca de senha/outros fluxos/banco/Edge | no_impact_identified | CSS opt-in no cadastro e componente local; diff e plano seletivo, sem acessar esses destinos |
+
+ClasseB, sem nova dependência/ADR ou Q material. Execução incorpora D/P/F/A e CA acima. Encerrar após evidência obrigatória/CI/publicação/sincronização; não executar validate integral local. Jornada humana autenticada não será inventada a partir de fixture.
 
 ---
 
@@ -22873,6 +22911,56 @@ Sem desvio de produto. Rejeição inicial da revisão automática exigiu autoriz
 ## Conclusão
 
 D-01 a D-06 e P-01 a P-03 PASS com os limites de observação descritos. Importação automática online ativada na KVM2, Prisma v2.0.1 publicada em main/produção, frontend autenticado disponível. Jornada com currículo real até revisão/publicação e avaliação ampliada de qualidade: NOT TESTED, fora deste smoke, sem criação de Pessoa ou Perfil de teste. Fechamento documental deve ser sincronizado por fast-forward sem rebuild do runtime funcional validado.
+
+---
+
+## Source: `docs/qa/aot-password-feedback-v304.md`
+
+# AoT — Senha reativa e campos bloqueados3.0.4
+
+Contrato `docs/qa/agreement-password-feedback-v304.md`1.0.0, decisão de Bruno no chat17/10/2026. Baseline375c9e4/runtime3.0.3 a67c32b. Evidência `docs/qa/evidence/password-feedback-v304/`.
+
+## Matriz de acordos / proibições
+
+| ID | Implementação / prova | Status |
+| --- | --- | --- |
+| D-01 | Form.useWatch e política existentes preservados; browser digita, preenche/substitui e apaga sem blur, ambos campos | PASS |
+| D-UX-01 | Item local com estado pendente/atendido, vermelho/verde, check e texto acessível; CSS/color/ícone computados no browser | PASS |
+| D-UX-02 | Username disabled no Owner; quatro controles com estilo cinza legível; valores canônicos, genérico e campos pessoais preservados | PASS |
+| P-01 | Diff sem política/server/Auth/serviço; watcher local sem chamadas, fixtures não enviam enquanto digita; nenhuma credencial em logs/evidências | PASS |
+| F-01 | CSS opt-in prisma-user-form/componente local, sem mudar PasswordChangePage nem estilos globais/backend | PASS |
+
+## Mapa de impacto e preservação
+
+Sem novas dependências ou reclassificações em relação ao acordo.
+
+| Área | Relação | Baseline / regressão | Status |
+| --- | --- | --- | --- |
+| Checklist/locks | direct |3.0.3;52checks novos de transições/foco/estilo/ícones/canonicalidade/mascara em1448/390/320 | PASS |
+| Política/salvar manual e automático | plausible_indirect | Política compartilhada intacta;17Node/tooling e casos de automático/erro/draft anteriores | PASS |
+| Owner/genérico | plausible_indirect |60checks browser anteriores, rota/reload/submit/recuperação/edição genérica | PASS |
+| Autoridade/canonicalidade | critical_transversal | Backend intacto, mesmas fontes canônicas e submit; quatro disabled/valores/rota protegida | PASS |
+| Troca de senha/recuperação/banco/Edge/outros fluxos | no_impact_identified | Nenhum arquivo/serviço desses destinos muda; classe local nova evita aplicar regra a checklist compartilhado de troca | PASS |
+
+As regressões acima PASS. Plano de release e prova operacional pendentes; não se declara rollout com evidência local.
+
+## Fidelidade visual / privacidade
+
+Referência do chat é a topologia atual do cadastro com estados a corrigir; conteúdo pessoal/credencial não copiado. Mantidas seções, ordem, três colunas desktop, painel ao lado das senhas e empilhamento mobile, ações/header/footer. Estado inicial e atendido em `pending-*.png`/`satisfied-*.png`, com mesma fixture/larguras1448/390/320 da evidência Owner anterior; inspeção visual PASS, sem overflow. Fonte/check verde #117847 e pendente #b42318, campos #f1f4f8 com texto #526078 e borda #c1ccda. Valores permanecem legíveis.
+
+Senha sintética única gerada apenas em memória por execução; campos mascarados nas screenshots e limpos antes do submit automático. Nenhuma senha do usuário ou desta execução sintética persistida em fonte, relatório ou log. Teste aguarda atualização visual de classe/cor/check no ciclo de render, mantendo foco; snapshots intermediários de CSS antes do paint causaram falhas iniciais de harness, sem evidência de necessidade de blur. Watcher existente atende D-01, sem nova rotina de envio/estado de credencial.
+
+## Validação / ambientes
+
+112browser PASS (52novos/60regressão);17Node/tooling PASS (política, identidade/rota Owner, avisos e versão). Tipos/build web PASS, build TypeScript PASS. Checklist/disabled inspecionados em desktop/mobile. Lint/foundation/contexto/CI/publicação em execução. Sem QA remoto separado; navegador usa formulário e navegação reais com transporte sintético, sem identidade humana real ou e-mail. Isso não prova jornada humana autenticada em produção.
+
+## Desvios
+
+Nenhum desvio material identificado ou novo requisito de política. O nome de usuário usa disabled no lugar de readOnly para refletir bloqueio real e visual; Form/submit mantêm a origem canônica. Nenhuma alteração de valor, permissões ou persistência.
+
+## Git / publicação / fechamento
+
+Pendente. Publicação somente web, rollback/serviços/assets/SHA/CI e sincronização a registrar. Não executar validate integral local nem reabrir testes válidos depois da publicação.
 
 ---
 

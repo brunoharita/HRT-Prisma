@@ -1,3 +1,12 @@
+.prisma-user-form .prisma-user-password-checklist ul { padding-left: 0; list-style: none; }
+.prisma-user-form .prisma-user-password-checklist li { display: flex; align-items: baseline; gap: 8px; }
+.prisma-user-form .prisma-user-password-checklist li.is-pending { color: #b42318; }
+.prisma-user-form .prisma-user-password-checklist li.is-satisfied { color: #117847; }
+.prisma-user-rule-icon { flex: 0 0 14px; text-align: center; color: inherit; }
+.prisma-user-form .prisma-user-password-checklist li.is-satisfied .anticon-check { color: #117847; transition: none; }
+.prisma-user-rule-status { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.prisma-user-form :is(.ant-input-disabled, .ant-select-disabled) { color: #526078 !important; background: #f1f4f8 !important; border-color: #c1ccda !important; opacity: 1; cursor: not-allowed; }
+.prisma-user-form .ant-select-disabled :is(.ant-select-content, .ant-select-selection-item) { color: #526078; }
 @media (max-width: 600px) {
   .prisma-owner-onboarding .prisma-user-form-phone .ant-space-compact {
     display: grid;
