@@ -94,3 +94,5 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 - [ADR-085: Administração multiempresa conforme Horus](ADR-085-multiempresa-horus.md) — quatro perfis, planos/capacidade configuráveis e tenant preservado; acordo V3M0, rollout no AoT.
 
 - [ADR-086: Username único e contato compartilhável](ADR-086-username-contact-identity.md) — accepted; Supabase Auth preservado, contato separado da identidade, rollout no AoT username-identity-v306.
+
+- [ADR-087: Responsável e suspensão do grupo](ADR-087-owner-lifecycle.md) — accepted; ciclo transacional e estados independentes, rollout no AoT owner-lifecycle-v307.

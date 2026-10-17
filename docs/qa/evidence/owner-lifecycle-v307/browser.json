@@ -1,0 +1,197 @@
+{
+  "checks": [
+    {
+      "name": "1448 preserves separated accordion cards",
+      "pass": true
+    },
+    {
+      "name": "1448 shows identity and only inactive-company status",
+      "pass": true
+    },
+    {
+      "name": "1448 explicit inactivation impact confirmation",
+      "pass": true
+    },
+    {
+      "name": "1448 reason required before RPC",
+      "pass": true
+    },
+    {
+      "name": "1448 confirmation fits viewport",
+      "pass": true
+    },
+    {
+      "name": "1448 displays suspended operation and preserved company",
+      "pass": true
+    },
+    {
+      "name": "1448 explains independent restrictions",
+      "pass": true
+    },
+    {
+      "name": "1448 replacement never automatically chooses person",
+      "pass": true
+    },
+    {
+      "name": "1448 candidate mandatory before RPC",
+      "pass": true
+    },
+    {
+      "name": "1448 replacement sends exact revision/owner/selected candidate and reason",
+      "pass": true
+    },
+    {
+      "name": "1448 sorting remains available",
+      "pass": true
+    },
+    {
+      "name": "1448 independently inactive group stays inactive",
+      "pass": true
+    },
+    {
+      "name": "1448 pending first access explains automatic activation",
+      "pass": true
+    },
+    {
+      "name": "1448 viewport contained",
+      "pass": true
+    },
+    {
+      "name": "1448 no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "390 preserves separated accordion cards",
+      "pass": true
+    },
+    {
+      "name": "390 shows identity and only inactive-company status",
+      "pass": true
+    },
+    {
+      "name": "390 explicit inactivation impact confirmation",
+      "pass": true
+    },
+    {
+      "name": "390 reason required before RPC",
+      "pass": true
+    },
+    {
+      "name": "390 confirmation fits viewport",
+      "pass": true
+    },
+    {
+      "name": "390 displays suspended operation and preserved company",
+      "pass": true
+    },
+    {
+      "name": "390 explains independent restrictions",
+      "pass": true
+    },
+    {
+      "name": "390 replacement never automatically chooses person",
+      "pass": true
+    },
+    {
+      "name": "390 candidate mandatory before RPC",
+      "pass": true
+    },
+    {
+      "name": "390 replacement sends exact revision/owner/selected candidate and reason",
+      "pass": true
+    },
+    {
+      "name": "390 sorting remains available",
+      "pass": true
+    },
+    {
+      "name": "390 independently inactive group stays inactive",
+      "pass": true
+    },
+    {
+      "name": "390 pending first access explains automatic activation",
+      "pass": true
+    },
+    {
+      "name": "390 viewport contained",
+      "pass": true
+    },
+    {
+      "name": "390 no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "320 preserves separated accordion cards",
+      "pass": true
+    },
+    {
+      "name": "320 shows identity and only inactive-company status",
+      "pass": true
+    },
+    {
+      "name": "320 explicit inactivation impact confirmation",
+      "pass": true
+    },
+    {
+      "name": "320 reason required before RPC",
+      "pass": true
+    },
+    {
+      "name": "320 confirmation fits viewport",
+      "pass": true
+    },
+    {
+      "name": "320 displays suspended operation and preserved company",
+      "pass": true
+    },
+    {
+      "name": "320 explains independent restrictions",
+      "pass": true
+    },
+    {
+      "name": "320 replacement never automatically chooses person",
+      "pass": true
+    },
+    {
+      "name": "320 candidate mandatory before RPC",
+      "pass": true
+    },
+    {
+      "name": "320 replacement sends exact revision/owner/selected candidate and reason",
+      "pass": true
+    },
+    {
+      "name": "320 sorting remains available",
+      "pass": true
+    },
+    {
+      "name": "320 independently inactive group stays inactive",
+      "pass": true
+    },
+    {
+      "name": "320 pending first access explains automatic activation",
+      "pass": true
+    },
+    {
+      "name": "320 viewport contained",
+      "pass": true
+    },
+    {
+      "name": "320 no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "Recruiter never gets Owner controls",
+      "pass": true
+    },
+    {
+      "name": "stale revision preserves explicit form input",
+      "pass": true
+    },
+    {
+      "name": "stale conflict offers visible safe refresh",
+      "pass": true
+    }
+  ],
+  "limits": "Real OrganizationsPage/OwnerLifecycleControls and RPC service; synthetic backend; SQL tests prove atomicity and authority."
+}

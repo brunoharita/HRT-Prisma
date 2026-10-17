@@ -55,3 +55,9 @@
 
 .prisma-organization-sort > select:focus-visible { outline: 2px solid #155eef; outline-offset: 2px; }
 @media (pointer: coarse) { .prisma-organization-sort > select { min-height: 44px; } }
+
+.prisma-owner-actions { margin: 12px 0; }
+
+.prisma-owner-modal .ant-modal-title { padding-right: 26px; overflow-wrap: anywhere; }
+.prisma-owner-modal .ant-space-item { max-width: 100%; }
+.prisma-owner-modal .ant-btn { white-space: normal; height: auto; min-height: 38px; max-width: 100%; }

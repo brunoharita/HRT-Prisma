@@ -3,11 +3,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.88.0
+version: 2.89.0
 last_verified: 2026-10-17
 ---
 
 # Estado atual do Prisma
+
+## Ciclo do Owner —3.0.7 em validação/publicação autorizada
+
+Acordo owner-lifecycle-v3071.0.0, ADR-087. Owner ativo ativa grupo/única primeira empresa em preparação; pendente aguarda primeiro acesso real. Super pode substituir por usuário ativo do mesmo grupo ou inativar sem substituto, com motivo/impacto. Ausência de responsável suspende operação inclusive sessões antigas, preserva empresas/vínculos/histórico/saldos; reativação remove só essa causa, mantendo suspensões administrativas/bloqueios de segurança. Autoridade/concorrência/audit no banco; Edge primeiro acesso transacional e preflight administrativo. organization-administration1.2.0, owner-lifecycle1.0.0; nenhuma migração de identidade ou redefinição de senha. Estado operacional final e evidências no AoT owner-lifecycle-v307; esta seção não comprova publicação antes do closeout.
 
 ## Username único e contato compartilhável —3.0.6 publicada
 

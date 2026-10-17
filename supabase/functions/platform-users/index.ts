@@ -487,41 +487,8 @@ async function completeFirstAccess(
   serviceClient: ReturnType<typeof createServiceClient>,
   authUserId: string,
 ) {
-  const [currentUser] = await selectRows<PlatformUserRow>(
-    serviceClient
-      .from("platform_users")
-      .select("*")
-      .eq("auth_user_id", authUserId),
-  );
-  if (!currentUser) throw new HttpError(404, "Operador não encontrado.");
-
-  const nextStatus: PlatformUserStatus = currentUser.status === "pending_first_access" ? "active" : currentUser.status;
-  const { error } = await serviceClient
-    .from("platform_users")
-    .update({
-      must_change_password: false,
-      status: nextStatus,
-      first_access_completed_at: new Date().toISOString(),
-    })
-    .eq("id", currentUser.id);
-  if (error) throw new HttpError(400, "Não foi possível concluir o primeiro acesso.");
-
-  await recordAuditEvent(serviceClient, {
-    actorAuthUserId: currentUser.auth_user_id,
-    targetPlatformUserId: currentUser.id,
-    targetAuthUserId: currentUser.auth_user_id,
-    groupId: currentUser.group_id,
-    organizationId: null,
-    action: "first_access_completed",
-    previousValues: {
-      must_change_password: currentUser.must_change_password,
-      status: currentUser.status,
-    },
-    newValues: {
-      must_change_password: false,
-      status: nextStatus,
-    },
-  });
+  const { error } = await serviceClient.rpc("complete_first_access_v307", { p_auth_user: authUserId });
+  if (error) throw new HttpError(error.code === "42501" ? 403 : 400, "Não foi possível concluir o primeiro acesso. Confirme se a conta está habilitada.");
 }
 
 async function savePlatformRecord(
@@ -666,6 +633,10 @@ async function loadActorContext(
       .eq("auth_user_id", authUserId),
   );
   if (!actor) throw new HttpError(403, "Operador não encontrado.");
+  if (actor.access_profile !== "super_admin") {
+    const {data: available, error} = await serviceClient.rpc("operator_administration_available_v307", {p_auth_user: authUserId});
+    if (error || available !== true) throw new HttpError(403, "Administração indisponível. Confirme se o usuário e o Owner do grupo estão ativos.");
+  }
 
   let accessibleOrganizations: OrganizationRow[] = [];
   if (actor.access_profile === "super_admin") {

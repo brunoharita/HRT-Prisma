@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 526
-source_manifest_sha256: 56fa7b1ff90f0158181b57c38fc4b29fda125db411c974103ca60adea6a6be4f
+documentation_source_count: 529
+source_manifest_sha256: 111e8393df962c1d5287305ec39545d5bd3b522ddcb14840b938dee4aac18bf7
 -->
 
 # Tudo sobre o Prisma
@@ -2644,11 +2644,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.88.0
+version: 2.89.0
 last_verified: 2026-10-17
 ---
 
 # Estado atual do Prisma
+
+## Ciclo do Owner —3.0.7 em validação/publicação autorizada
+
+Acordo owner-lifecycle-v3071.0.0, ADR-087. Owner ativo ativa grupo/única primeira empresa em preparação; pendente aguarda primeiro acesso real. Super pode substituir por usuário ativo do mesmo grupo ou inativar sem substituto, com motivo/impacto. Ausência de responsável suspende operação inclusive sessões antigas, preserva empresas/vínculos/histórico/saldos; reativação remove só essa causa, mantendo suspensões administrativas/bloqueios de segurança. Autoridade/concorrência/audit no banco; Edge primeiro acesso transacional e preflight administrativo. organization-administration1.2.0, owner-lifecycle1.0.0; nenhuma migração de identidade ou redefinição de senha. Estado operacional final e evidências no AoT owner-lifecycle-v307; esta seção não comprova publicação antes do closeout.
 
 ## Username único e contato compartilhável —3.0.6 publicada
 
@@ -5105,6 +5109,8 @@ Implementação deve ser separada em movimentos menores: contratos e versões, s
 
 # Catálogo de contratos
 
+`owner-lifecycle-1.0.0` (3.0.7): RPC autenticada group_owner_lifecycle_v307 com Super ativo, grupo/revisão/Owner esperado, candidatos ativos same-group e motivo5–500. Substituição/inativação/reativação transacionais com auditoria; configured_status privado separado do status efetivo usado pelos gates existentes. Reconciliação idempotente após cadastro/primeiro acesso e trigger deferred de segurança. complete_first_access_v307 e operator_administration_available_v307 são service-only; Edge vincula conta ao JWT verificado e falha fechado. organization-administration1.2.0 projeta Owner designado incluindo inativo, configuredStatus/ownerSuspended/reason; contratos anteriores continuam consulta, mas não podem editar grupo suspenso e apagar causa. Nenhuma alteração dos quatro campos canônicos no cadastro inicial, do Auth UUID, senhas, business algorithms ou capabilidades públicas emitidas. Acordo1.0.0/AoT owner-lifecycle-v307 e ADR-087.
+
 `owner-onboarding-1.0.0` (produto3.0.1, owner Users/security): contexto exclusivo Cadastrar Owner de grupo novo, resolvido por `owner_onboarding_context_v301` e persistido por `create_group_owner_v301`, ambos service-only via Edge com sessão verificada. Grupo em preparação com única primeira empresa e Super ativo; quatro campos exatos, username derivado sem alternativas silenciosas. Revalidação sob lock e audit transacional delegam à persistência genérica inalterada; contrato ausente/desconhecido falha fechado. Sem mutação de usuários existentes, mudança de Owner/faturamento ou transformação da origem de navegação em autoridade. Consumidores platform-users/UserFormPage; acordo1.0.0 e AoT owner-onboarding-v301 determinam evidência/ambiente.
 
 `manual-profile-1.0.0` e `employee-status-1.0.0` (v2.7.0): revisão estruturada sem PDF/IA, rascunho parcial e publicação humana pelo Delta; prefill vigente/privados separados, proveniência por campo/autor/data, histórico e omissões preservadas. Boolean administrativo por Pessoa/empresa, default false, alterações autorizadas/auditadas sem consequências automáticas de contratação/sucessão. Owners: `document-review-contract.md`, `profile-document-lifecycle.md`, `docs/product/person-center.md`; acordo/AoT manual-profile-v270. Contratos anteriores são estendidos, sem reescrever versões históricas; rollout só conforme evidência operacional do AoT.
@@ -5178,7 +5184,7 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `model-selection` | AI/operations | 2.0.0 | extraction provider | implementado localmente | `deterministic-local-2.0.0`, sem LLM | local | bloquear processamento |
 | `confidence-method` | AI/QA | 1.0.0 | search, matching | implementado | `explainConfidence` | local | não exibir confiança |
 | `tenant-authorization` | security/data | 2.0.0;1.0.0 histórico | Supabase Data API/web/Edge | implementação V3M0, rollout no AoT | quatro perfis, Admin legado alias, grupo/empresa/estado vivos e negativos | local; rollout no AoT | negar acesso |
-| `organization-administration` | product/security/data | 1.1.0;1.0.0 compatível | Grupos e empresas | implementação V3M0, rollout no AoT | RPC versionada, revisão/locks, limites, Owner/default/auditoria; createdAt/updatedAt aditivos para ordenação | local; rollout no AoT | negar operação e pedir atualização |
+| `organization-administration` | product/security/data | 1.2.0;1.1/1.0 compatíveis com guarda de suspensão | Grupos e empresas | implementação V3M0, rollout no AoT | RPC versionada, revisão/locks, limites, Owner/default/auditoria; createdAt/updatedAt aditivos para ordenação | local; rollout no AoT | negar operação e pedir atualização |
 | `platform-user-management` | security/data/Edge | 2.0.0 | platform-users | implementação V3M0, rollout no AoT | save_platform_user_v3 service-only atômico e Auth compensado na criação | local; rollout no AoT | preservar dados e negar mutação |
 | `web-domain-read` | product-engineering | 1.1.0 | Home, Pessoas, perfil | ativo em QA | `PrismaDataRepository`, incluindo saúde das fontes centrais | local/QA | bloquear consulta |
 | `platform-user-access` | security/product | 2.0.0 | App Shell, Usuários, Edge Functions | implementado localmente | migration `20260824113000_m2_users_people`, `platform-users` function, UI `UsersPage` | local | bloquear operação |
@@ -10477,6 +10483,25 @@ Fontes oficiais verificadas: [Auth password](https://supabase.com/docs/guides/au
 
 ---
 
+## Source: `docs/decisions/ADR-087-owner-lifecycle.md`
+
+# ADR-087: Responsável e suspensão do grupo
+
+- Status: accepted por Bruno17/10/2026; implementação e rollout no AoT owner-lifecycle-v307.
+- Acordo owner-lifecycle-v3071.0.0; owner-lifecycle1.0.0 e organization-administration1.2.0.
+
+Reutilizar status efetivo de organization_groups nos gates existentes mantém RLS/RPC/Storage consistentes para sessões antigas. Guardar separadamente situação administrativa desejada, responsável designado e motivo da suspensão em organization_group_settings permite retirar somente o bloqueio por ausência de Owner. Empresas mantêm seus status individuais; grupo administrativamente inativo não volta por troca/retomada do responsável. Reescrever todos os consumidores de status como um overlay de frontend seria mais arriscado e não seria autoridade suficiente.
+
+Reconciliação idempotente ocorre após gravações atômicas de cadastro/primeiro acesso e ações de Owner; salvaguarda transacional cobre transições legadas. Substituição é uma transação com lock do grupo/revisão e Owner esperado; candidato ativo é escolhido pelo humano no mesmo grupo. Credenciais e identidade não são transferidas, username não é renomeado e autoria histórica permanece. Memberships existentes dos demais usuários permanecem; novo Owner recebe escopo de todas as empresas por mecanismo já existente.
+
+Ativação inicial é determinística apenas para grupo/única primeira empresa em preparação e Owner ativo já designado. Regularizar cadastros iniciais prontos na migração executa a regra aprovada com auditoria sistêmica, sem inventar pessoa/ativação de conta. Sem backfill de inativos. Primeiro acesso pendente aguarda conclusão; suspensão de Owner pendente não autoriza ignorar sua ativação ao reativá-lo.
+
+Interface reutiliza modais/serviço e revalidação de sessão já existentes; backend nega operação imediatamente por estado vivo, UI reconsulta em foco/retorno e30s visível. Não promete apagar dados que já foram vistos ou invalidar capabilities públicas previamente emitidas, que mantêm seus contratos.
+
+Rollback da web anterior preserva backend novo e metadados de suspensão; clientes antigos não podem editar situação de grupo suspenso sem atualizar contrato. Não retirar gates ou restaurar schema antigo depois de transações do ciclo. Corrigir adiante preservando motivos/status/autoria. Migração inicial/auditoria e evidências determinam estado operacional, não este ADR.
+
+---
+
 ## Source: `docs/decisions/README.md`
 
 # Architectural Decision Records
@@ -10575,6 +10600,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 - [ADR-085: Administração multiempresa conforme Horus](ADR-085-multiempresa-horus.md) — quatro perfis, planos/capacidade configuráveis e tenant preservado; acordo V3M0, rollout no AoT.
 
 - [ADR-086: Username único e contato compartilhável](ADR-086-username-contact-identity.md) — accepted; Supabase Auth preservado, contato separado da identidade, rollout no AoT username-identity-v306.
+
+- [ADR-087: Responsável e suspensão do grupo](ADR-087-owner-lifecycle.md) — accepted; ciclo transacional e estados independentes, rollout no AoT owner-lifecycle-v307.
 
 ---
 
@@ -12143,9 +12170,9 @@ Correção aprovada para3.0.1: **Cadastrar Owner** de grupo novo abre `/organiza
 
 Somente quatro perfis: Super Admin vê todos os grupos, empresas e usuários; Owner governa seu grupo e todas suas empresas; Recruiter administra as empresas explicitamente vinculadas no mesmo grupo; Usuário comum usa somente suas funcionalidades na empresa padrão, sem seletor de troca. Múltiplos vínculos comuns são possíveis; o servidor escolhe padrão ativo, com fallback determinístico quando indisponível. Admin legado aparece como Recruiter, sem apagar autoria/histórico.
 
-Administração -> Grupos e empresas mostra identificação, situação, Owner, plano, capacidade, principal e empresas autorizadas. Recruiter não vê empresas sem vínculo. Super cadastra grupo com primeira empresa em preparação; cadastro/ativação humana do Owner reutiliza Usuários. Ativar a empresa principal e depois o grupo exige Owner ativo. Não se inventa responsável. Super/Owner/Recruiter podem criar novas empresas no próprio escopo/grupo, dentro do plano e com Owner válido. Criação pelo Recruiter concede vínculo na nova empresa; Owner mantém todas. Criação pelo Super usa o Owner existente como administrador responsável.
+Administração -> Grupos e empresas mostra identificação, situação, Owner, plano, capacidade, principal e empresas autorizadas. Recruiter não vê empresas sem vínculo. Super cadastra grupo com primeira empresa em preparação; cadastro/ativação humana do Owner reutiliza Usuários. Desde3.0.7, o Owner ativo ativa automaticamente o grupo e sua única primeira empresa em preparação; primeiro acesso pendente aguarda conclusão. Ativação administrativa posterior continua exigindo Owner e principal ativos. Não se inventa responsável. Super/Owner/Recruiter podem criar novas empresas no próprio escopo/grupo, dentro do plano e com Owner válido. Criação pelo Recruiter concede vínculo na nova empresa; Owner mantém todas. Criação pelo Super usa o Owner existente como administrador responsável.
 
-Acessos permite vincular usuário ativo já existente do grupo, remover somente o vínculo local e definir empresa padrão. Novo usuário, credencial, ativação por e-mail, papel global e status continuam em Usuários. Recruiter administra apenas Recruiters/comuns e não amplia escopo próprio. Para editar cadastro global de usuário compartilhado, precisa autoridade sobre todo o escopo dele; caso contrário usa Acessos para o vínculo local. Próprio vínculo, último vínculo e Owner vigente têm proteção. Um Owner ativo ou com ativação pendente por grupo; transferência de responsabilidade exige movimento próprio.
+Acessos permite vincular usuário ativo já existente do grupo, remover somente o vínculo local e definir empresa padrão. Novo usuário, credencial, ativação por e-mail, papel global e status continuam em Usuários. Recruiter administra apenas Recruiters/comuns e não amplia escopo próprio. Para editar cadastro global de usuário compartilhado, precisa autoridade sobre todo o escopo dele; caso contrário usa Acessos para o vínculo local. Próprio vínculo, último vínculo e Owner vigente têm proteção. Um Owner ativo ou com ativação pendente por grupo; transferência interna de responsabilidade usa as ações de Owner descritas abaixo.
 
 Plano pertence ao grupo e não concede acesso a dados. Essential/Essential Plus1empresa; Professional1incluída, capacidade configurável até5; Enterprise quantidade explícita, limitada tecnicamente a100000 na configuração, sem escala validada. Novos grupos Professional/1; empresas existentes preservadas e capacidade inicial compatível. A capacidade inicial é provisória e não comprova contratação/pagamento. Somente Super altera plano/capacidade. Valores de assinatura e segmentação futura de recursos indefinidos; alteração de configuração não cobra nem confirma pagamento. Todos os recursos atuais seguem seus gates de autoridade. Tokens mantêm franquias, lotes, pedidos, tarifas e reservas por empresa; não se cria carteira de grupo nem saldo por cadastro em preparação.
 
@@ -12172,6 +12199,14 @@ Bruno definiu mínimo8em17/10/2026, substituindo somente o mínimo12anterior. De
 ## Identidade de acesso2.0.0 —3.0.6
 
 Username global único e normalizado, contato de e-mail repetível entre usuários/grupos. Cada usuário continua com senha, Auth UUID, sessão, papel e escopo independentes. Entrar/recuperar por username; ativação e reset identificam a conta na mensagem ao contato, inclusive quando a caixa é compartilhada. Quem controla essa caixa pode recuperar essas contas, consequência aceita na proposta. Identidades existentes não são fundidas/recriadas nem têm senha redefinida. Endereços técnicos são detalhes de backend e não contatos. Contrato/acordo/AoT username-identity-v306; rollout no AoT.
+
+## Ciclo do Owner —3.0.7
+
+Super Admin pode substituir o Owner por um Recruiter/comum já ativo do mesmo grupo, escolhido explicitamente. A transação inativa o anterior (preservando bloqueio de segurança preexistente), promove o novo a Owner e concede todas as empresas do grupo. Identidade, username, senha e autoria permanecem de cada usuário. Sem transferência entre grupos ou seleção automática.
+
+Inativar sem substituto exige confirmação do impacto e motivo. Owner perde acesso; a operação e administração dos Recruiters/comuns ficam suspensas, inclusive em sessões antigas. Empresas conservam seus status/vínculos/saldos/histórico; Super mantém acesso. Situação administrativa desejada e suspensão por ausência de Owner são registradas separadamente. Reativar Owner ou substituí-lo por um ativo remove somente essa causa; suspensão manual do grupo e empresas inativas permanecem. Conta bloqueada por segurança não é desbloqueada, mas outro responsável pode ser escolhido. Owner cujo primeiro acesso estava pendente volta pendente.
+
+A ativação inicial exige grupo/única primeira empresa em preparação e Owner designado ativo; não ativa inativos nem inventa responsável. A migração regulariza somente cadastros iniciais já nessa condição, com auditoria sistêmica. Cada ação exige Super ativo, revisão/Owner esperados, lock e auditoria atômica. Edição genérica não contorna as transições. A interface revalida sessão ao retornar/focar e a cada30s visível; servidor nega imediatamente por estado vivo. Acordo/AoT owner-lifecycle-v307 e ADR-087 determinam limites e rollout.
 
 ---
 
@@ -16580,6 +16615,44 @@ Q: nenhuma pendência material. Screenshots anteriores são contraexemplos, não
 ## Execução congelada
 
 Implementar integralmente este contrato v1.0.0 aprovado, sem nova aprovação administrativa. Registrar cada D/P no AoT com implementação, teste, evidência e limites. Não declarar PASS com prova necessária ausente. Publicar somente destinos exigidos pelo diff comprometido.
+
+---
+
+## Source: `docs/qa/agreement-owner-lifecycle-v307.md`
+
+# Ciclo do Owner — acordo e execução1.0.0
+
+Bruno aprovou no chat17/10/2026 a ativação automática de grupo/primeira empresa, substituição e inativação do Owner com as automações propostas, validação, main e publicação. Baseline db45bec2757ac540921c053414a63a9f78f22508/runtime3.0.6. Entrega3.0.7, owner-lifecycle1.0.0 e organization-administration1.2.0. Supersede D-04 e a exclusão de transferência interna de Owner do F-01 do acordo V3M0 somente neste escopo; transferência entre grupos/controladores continua excluída.
+
+- D-01: primeira empresa e grupo em preparação tornam-se ativos automaticamente quando o Owner designado estiver ativo, na transação que concluir cadastro/ativação. Owner com primeiro acesso pendente não ativa a operação; primeiro acesso concluído faz a reconciliação. A mesma regra regulariza na publicação cadastros iniciais já prontos: grupo/única primeira empresa em preparação, principal válida e Owner ativo explicitamente existente. Nenhum inativo é ativado por essa regularização.
+- D-02: Super Admin ativo pode substituir o Owner escolhendo explicitamente um usuário já ativo do mesmo grupo (Recruiter/comum). Em uma transação, Owner anterior fica inativo, novo assume Owner/todas as empresas, com identidade/senha/username/autoria preservados. Grupo/empresas continuam em suas situações, salvo regularização inicial ou remoção do bloqueio por ausência de responsável. Sem escolher pessoa automaticamente, compartilhar credencial ou criar reset.
+- D-03: Super Admin ativo pode inativar Owner sem substituto em ação específica com motivo e confirmação que exponha a suspensão da operação do grupo. Bloquear Owner e operação de Recruiters/comuns inclusive com JWT/sessão anteriores; Super mantém administração. Dados, empresas, seus status individuais, vínculos, saldos e histórico permanecem. Nenhum encerramento/exclusão de negócio automático.
+- D-04: registrar suspensão por ausência de Owner separadamente da situação administrativa do grupo. Restabelecer Owner ativo remove somente esse bloqueio; suspensão administrativa e empresas inativas continuam valendo. Reativação do Owner inativado pelo fluxo é explícita do Super; se primeiro acesso ainda pendente, restaurar pendência e aguardar conclusão, sem ativação fictícia. Conta bloqueada por segurança não é desbloqueada por essa ação.
+- D-05: autoridade no servidor, lock/revisão/Owner esperado, um Owner ativo/pendente por grupo, negativos cross-group/autoelevação/concorrência e auditoria obrigatória atômica. Edição genérica não contorna o fluxo dedicado. Sessão antiga é negada nas operações imediatamente pelo estado vivo; interface revalida no foco/retorno e em até30s enquanto visível. Primeiro acesso não reativa conta inativa/bloqueada.
+- D-UX-01: controles na administração de Grupos e empresas, exclusivos Super, com nome/username/situação do Owner, indicação de suspensão e motivo. Modal de substituição exige seleção humana, motivo e confirmação; modal de inativação explicita impacto; reativação informa preservação dos demais bloqueios. Preservar accordion, busca, ordenação, ações, densidade e transformação mobile da página atual. Sem nova referência normativa; screenshots anteriores são baseline de composição.
+- D-06: publicar apenas migração, Edge platform-users e web derivados do diff, manter JWT/identidade2.0.0/senha8/serviços adjacentes; contexto, CI, smoke, rollback compatível e sincronização fazem parte da entrega. Migração pode regularizar somente a condição D-01 com auditoria sistêmica, sem inventar autor humano.
+- P-01: proibir Recruiter/comum/Owner de substituir/inativar/reativar responsável ou ampliar próprio escopo; negar Owner esperado/revisão obsoletos, grupo/candidato divergentes, candidato inativo/pendente/bloqueado e escolha automática de pessoa.
+- P-02: não reativar indiscriminadamente empresas/grupos, remover outros motivos de bloqueio, apagar histórico/vínculos/saldos, alterar credenciais, usar metadata editável como autoridade ou testar mutações/contas/mensagens reais em produção.
+- F-01: SSO/MFA/provedor Auth, planos/tarifas, mudança entre grupos/controladores, dados compartilhados, reprocessamento de IA, cancelamento de portais/links já emitidos, exclusão de contas/empresas e redesign.
+- A-01: reutilizar RPCs, memberships, audit e componentes AntD existentes; metadados privados de responsável/situação administrativa, reconciliação idempotente e salvaguarda transacional. Nenhuma dependência nova. Escolhas internas preservam resultados D/P, sem nova aprovação de detalhes mecânicos.
+- CA-01: SQL real local cobre cadastro manual/pending/primeiro acesso, regularização inicial, suspensão e retomada seletiva, troca atômica, memberships/histórico, falha de auditoria/rollback, gates com sessão antiga, grants e concorrência.
+- CA-02: handlers reais com transporte sintético provam primeiro acesso da própria conta, pendência/inativo/bloqueado, integração RPC, Owner canônico/escopos e identidade2.0.0 preservados; tipos/build/Node/Deno afetados.
+- CA-UX-01: browser com ações reais e transporte sintético em1448/390/320 cobre visibilidade por perfil, confirmação/seleção/motivo, estados/erros/revisão/navegação, suspensão manual preservada e composição/responsividade; sessão revalidada tem prova própria.
+- CA-03: fontes/migração/gates remotos conferidos sem teste com conta real, versão/SHA/rotas/assets/serviços/rollback e CI main/branch, resultados da regularização inicial separados de testes.
+
+## Mapa de impacto e encerramento
+
+| Capacidade | Relação | Baseline e validação proporcional |
+| --- | --- | --- |
+| Grupo/primeira empresa e ciclo de Owner | direct |3.0.6; SQL real e browser de ações/estados/revisão |
+| Primeiro acesso/cadastro de Owner | direct | Edge9; Deno real, SQL e browser locks/identidade/senha8 |
+| RLS/RPC/Storage/operação com sessão antiga | critical_transversal | g.status/u.status já são gates vivos; regressão multiempresa e negativos por Owner/Recruiter/comum, sem reescrever algoritmos de negócio |
+| Situações administrativas, memberships, histórico, Tokens | critical_transversal | fotografia local antes/depois, auditoria atômica e retomada seletiva; nenhum saldo movido |
+| Shell/estado de sessão | plausible_indirect | revalidação existente reutilizada em foco/30s, limites de falha/cleanup e route guards |
+| Login/contato compartilhado/ativação por e-mail | plausible_indirect | identidade2.0.0 e transporte inalterados; regressão Deno dirigida, sem envio real |
+| IA/matching/portais/jobs/outros serviços | no_impact_identified | gatilhos de acesso preservados; não cancelar capabilities emitidas nem reprocessar dados; smoke seletivo/serviços |
+
+Risco D/E, ADR-087. Validação mínima acima, sem validate integral local. Conclusão exige D/P/CA aplicáveis PASS, documentação/contexto, CI e publicação/sincronização. Limites de Auth nativo/entrega humana permanecem explícitos; testes sintéticos não são operação humana comprovada. Execução incorpora integralmente este acordo; sem Q material pendente.
 
 ---
 
@@ -22900,6 +22973,66 @@ Plano desde baseline a085c6eb9ca1ac276569a8b5cdce547038daa062: publicar somente 
 O deploy reconstruiu o web uma única vez. O primeiro HEAD durante a troca retornou404 e encerrou o comando com22; após estabilização,23HTTP200,16checks de preservação/rollback/assets e login real público1448/390/320 PASS, v2.4.1 visível, sem erro de runtime/overflow. Nenhum segundo rebuild. Os205arquivos anteriores permanecem byte a byte no container, e entradas anteriores continuam HTTP200. Rollback prisma-web:rollback-before-9a09fd12c790 corresponde à imagem anterior sha256:2a593110add306ee2969b8b42dedf143cf5136328d99a05f396a3d211409eb21.
 
 Fechamento documental/contexto/evidências em commit próprio, sem reconstruir a imagem funcional validada. Sincronização do SHA funcional local/main/origin/VPS registrada em production/synchronization.json; a documentação posterior não muda o SHA de runtime. O smoke público confirma distribuição e login; a regressão das telas internas utiliza componentes reais com fixtures, sem sessão produtiva autenticada. Nenhuma IA paga, envio real, decisão humana fictícia ou alteração de dados de negócio.
+
+---
+
+## Source: `docs/qa/aot-owner-lifecycle-v307.md`
+
+# AoT — Ciclo do Owner /3.0.7
+
+Contrato integral `docs/qa/agreement-owner-lifecycle-v307.md`1.0.0; decisão explícita Bruno17/10/2026. Baseline db45bec/runtime3.0.6, branch codex/owner-lifecycle-v307. ADR-087. Evidências em `docs/qa/evidence/owner-lifecycle-v307/`.
+
+## Matriz de acordos
+
+| ID | Implementação | Teste/evidência | Status | Ambiente/limitação |
+| --- | --- | --- | --- | --- |
+| D-01 | reconciliação transacional, cadastro/primeiro acesso e regularização inicial | postgres.json: manual/pending/completion/backfill/inativos/audit rollback | PASS | PostgreSQL17 isolado real; rollout pendente |
+| D-02 | RPC exclusiva Super, candidato/revisão/Owner esperado, troca atômica e escopo Owner | postgres.json: negativos, memberships/identidade/autoria preservadas; browser seleção explícita | PASS | Contas sintéticas, sem alterar credencial |
+| D-03 | ação com motivo/impacto, estado vivo suspende negócio e administração; Super preservado | SQL gates reais/handler/preflight/browser modal e suspensão | PASS | Sessão antiga simulada por mesmo JWT sub; sem sessão real de produção |
+| D-04 | situação desejada/motivo separados, reativação preserva suspensão manual/empresa/bloqueado | SQL retomada/primaryinactive/pending/securityblocked; browser | PASS | Nenhum status empresarial sobrescrito por retomada |
+| D-05 | locks/revisão/Owner esperado/audit, guard genérico/primeiro acesso, UI foco/30s | SQL concorrência/falhas/audit/grants; Deno conta própria/inativo/bloqueado; Node revalidação/cleanup | PASS | Servidor autoridade; revalidação UI é aviso, sem revogar bytes já vistos |
+| D-UX-01 | ações no accordion, Owner nome/username/status, modais e recovery de conflito | browser.json48checks1448/390/320 e screenshots inspecionados | PASS | Telas/serviço reais, backend sintético |
+| D-06 | migração/Edge platform-users/web, contexto/CI/publicação/sync | checks locais dirigidos; operação remota ainda pendente | PARTIAL | Fechar somente após rollout/smoke/CI |
+
+## Proibições verificadas
+
+| ID | Prova negativa/preservação | Status |
+| --- | --- | --- |
+| P-01 | SQL nega outros perfis, cross-group, Owner/revisão obsoletos, candidato inativo/pending/blocked/Super/owner; browser não escolhe automaticamente | PASS |
+| P-02 | snapshots Auth/usuários/memberships, empresas/suspensão manual/bloqueado preservados; auditoria transacional e sem mutação de dados reais para testar | PASS |
+| F-01 | sem IA, planos, Auth provider, links públicos, exclusão, cross-controller ou redesign | PASS |
+
+## Mapa de impacto e preservação
+
+Mesmo mapa inicial do acordo; detalhada a dependência administrativa (preflight service-only + guard SQL), para impedir cadastro/reset por Recruiter em grupo sem Owner ativo. Sem nova regra externa ao bloqueio D-03.
+
+| Área/capacidade | Relação | Baseline | Regressão/evidência | Status |
+| --- | --- | --- | --- | --- |
+| Grupo/primeira empresa/ciclo de Owner | direct |3.0.6/Edge9 |248SQL incluindo regressão V3M0/Owner/identidade;48browser +147regressão Owner/senha/login | PASS |
+| Cadastro/primeiro acesso/administração | direct | owner-onboarding1.0.0/identity2.0.0/senha8 |4Deno handlers reais; SQLaudit/guards; Nodecontratos | PASS |
+| RLS/RPC/Storage/sessão antiga | critical_transversal | gates status vivo já ativos | algoritmos/gates byte-idênticos; statusgroup/user/default/follow-up/matching/reserve negativos | PASS |
+| Situações/memberships/histórico/Tokens | critical_transversal | fotografia SQL antes/depois | snapshot exato onde protegido, dupla conexão/audit failure; sem saldo novo/movido | PASS |
+| Shell/revalidação | plausible_indirect | auth getClaims + repositório | Node foco/intervalo/hidden/dedup/cleanup e guards; tipos web e revisão de respostas obsoletas | PASS |
+| Login/contato compartilhado/e-mail | plausible_indirect |identity2.0.0 | Deno multiusuário legado/sessão/contato e Ownercontext; nenhum envio externo | PASS |
+| IA/matching/portais/jobs/outros serviços | no_impact_identified | algoritmos/contratos preservados | sem processamento novo; gates anteriores reutilizados, serviços remotos a conferir | PARTIAL |
+
+Novidade comprovada: ativação e ciclo determinístico com autoridade/auditoria. Preservação: situações independentes, identidades/credenciais/escopos/dados e caminhos existentes. Sem prova de sessão Auth hospedada real ou recebimento humano de e-mail; não há Auth QA separado confirmado. QA usa PG descartável e transportes sintéticos. A migração de prontidão autorizada é operação real, separada de testes.
+
+## Fidelidade visual
+
+Sem referência normativa nova; screenshots anteriores são baseline de composição. Mesma página mantém cabeçalho, busca/ordenação, disclosure de um grupo, metadados e tabela/blocos mobile. Novas ações junto ao Owner; modais usam AntD/tokens atuais. Evidências deactivate/replace/suspended em1448/390/320. Inspeção detectou botão longo fora do modal320: corrigida quebra de texto e título reservado ao fechar; nova captura e assertion de limites PASS. Teste funcional não foi usado sozinho para afirmar fidelidade. Sem mudança de topologia fora do escopo.
+
+## Validação final
+
+248checks PostgreSQL17 PASS;4Deno PASS (handlers reais com transportes sintéticos), deno check PASS;35Node dirigidos PASS após build. Browser48checks do ciclo e147de regressão Owner/senha/login PASS. Build web/tipos/checks/contexto/CI finais serão consolidados ao publicar. Não foi executado validate integral local. Falhas do harness: opção virtual do AntD selecionada por teclado; busca já abre o grupo, removido clique que o recolhia; nenhuma dessas falhas exigiu alteração do produto.
+
+## Git / QA / ambiente
+
+Publicação seletiva autorizada, ainda pendente. Somente migration owner_lifecycle, Edge platform-users (JWTtrue) e prisma-web. Backend1.2/Owner deve permanecer no rollback: web anterior compatível para consultas, mutação de grupo suspenso requer cliente novo. Não retirar schema/gates nem apagar auditoria para reverter; corrigir adiante. Imagem anterior/serviços/baseline e regularização reais serão registrados no fechamento.
+
+## Desvios e conclusão
+
+Nenhum desvio funcional identificado; o requisito de preservar bloqueio de segurança prevalece também na conta anterior durante substituição. Acordo/P/F integralmente incorporados. Nenhuma decisão material adicional nem ampliação opcional. Entrega ainda PARTIAL até CI/publicação/smoke/sincronização.
 
 ---
 
@@ -32758,6 +32891,14 @@ password-policy1.1.0 (3.0.5): mínimo8por decisão explícita de Bruno17/10/2026
 ## operator-identity2.0.0
 
 Contato de e-mail deixa de ser único; username global e Auth UUID continuam exclusivos. Autorização permanece por Auth UUID e memberships, nunca pelo contato/alias/metadata. Login resolve Auth por UUID e confere ID da sessão; recuperação pública apenas username e resposta neutra. generateLink recovery oficial por Auth identity, envio ao contato autorizado da conta, username na mensagem, redirect fixo e claim/limite/recibo privado sem token. Getter de configuração de envio exclusivo service_role; cliente não obtém segredo ou lookup de endereço técnico. Contas legadas operam sem backfill; mudança de contato converte endereço Auth via API idempotente. E-mail compartilhado permite recuperação das contas a quem controla a caixa. RLS/perfis/planos e mínimo8 permanecem; versões/JWT/rollout e limitações humanas no AoT username-identity-v306.
+
+## Owner — suspensão e substituição3.0.7
+
+Super ativo é a única autoridade para substituir/inativar/reativar Owner. Revisão e responsável esperado são obrigatórios; o grupo é travado antes das contas, candidato é revalidado ativo e no mesmo grupo, sem cruzar memberships. Owner antigo inativo mantém vínculos/autoria e perde os gates vivos; bloqueado por segurança permanece bloqueado. Motivo e auditoria são atômicos, falha aborta tudo.
+
+Ausência de Owner efetivamente ativo torna status do grupo inativo quando sua situação administrativa era ativa; empresas preservam situações individuais. Os gates existentes de RLS/Storage/RPC, default, acompanhamento, matching e novas reservas continuam consultando status vivo. Administração de grupos/cadastro de usuários também nega Recruiter nessa suspensão; Edge faz preflight service-only antes de Auth/envio e persistência repete guarda sob lock. Super continua com acesso. Completar primeiro acesso usa RPC service-only vinculada pelo Edge à sessão, negando inativo/bloqueado e auditando junto à reconciliação. Sessões abertas revalidam UI em foco/visibilidade/30s, sem tornar o navegador autoridade. Respostas antigas de sessão não substituem uma revalidação mais recente.
+
+Privados: configured_status, Owner designado, causa/motivo e pendência de ativação inicial não recebem grants de tabela. Reconciliação de cadastros iniciais já prontos tem ator sistêmico, sem alterar conta ou decisão humana. Reativação remove só a causa Owner, preservando suspensão manual e inatividade das empresas. Backend novo deve ser mantido em rollback de web; não restaurar guards antigos nem metadados anteriores. Acordo/AoT owner-lifecycle-v307, ADR-087.
 
 ---
 

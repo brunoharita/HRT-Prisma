@@ -1,5 +1,5 @@
 import { supabase } from "./client";
-import { ORGANIZATION_ADMIN_CONTRACT, organizationPlans, type OrganizationAdminWorkspace, type ManagedCompanyUser } from "../../domain/organizationAdministration";
+import { ORGANIZATION_ADMIN_CONTRACT, OWNER_LIFECYCLE_CONTRACT, organizationPlans, type ManagedGroup, type OwnerCandidate, type OwnerLifecycleAction, type OrganizationAdminWorkspace, type ManagedCompanyUser } from "../../domain/organizationAdministration";
 export type OrganizationAdminAction = "workspace" | "create_group" | "configure_group" | "create_company" | "configure_company" | "list_links" | "save_link";
 export const organizationAdministrationService = {
   async run(action: OrganizationAdminAction, groupId: string | null = null, organizationId: string | null = null, input: Record<string, unknown> = {}): Promise<Record<string, unknown>> {
@@ -11,8 +11,20 @@ export const organizationAdministrationService = {
   },
   async workspace(): Promise<OrganizationAdminWorkspace> {
     const data = await this.run("workspace");
-    if (!Array.isArray(data.groups) || typeof data.isSuper !== "boolean" || data.groups.some(g => !g.id || !organizationPlans.includes(g.plan) || !Number.isSafeInteger(g.companyCount) || !Array.isArray(g.companies) || !Number.isSafeInteger(g.revision) || g.companies.some((c: { groupId: string }) => c.groupId !== g.id))) throw Error("Dados de empresas incompatíveis. Atualize a consulta.");
+    if (!Array.isArray(data.groups) || typeof data.isSuper !== "boolean" || data.groups.some(g => !g.id || !["draft", "active", "inactive"].includes(g.configuredStatus) || typeof g.ownerSuspended !== "boolean" || (g.owner && typeof g.owner.id !== "string") || !organizationPlans.includes(g.plan) || !Number.isSafeInteger(g.companyCount) || !Array.isArray(g.companies) || !Number.isSafeInteger(g.revision) || g.companies.some((c: { groupId: string }) => c.groupId !== g.id))) throw Error("Dados de empresas incompatíveis. Atualize a consulta.");
     return data as unknown as OrganizationAdminWorkspace;
+  },
+  async ownerAction(action: OwnerLifecycleAction | "candidates", group: ManagedGroup, reason?: string, targetId?: string): Promise<Record<string, unknown>> {
+    const { data, error } = await supabase.rpc("group_owner_lifecycle_v307" as never, { p_action: action, p_group: group.id, p_revision: group.revision, p_current_owner: group.owner?.id ?? null, p_target_owner: targetId ?? null, p_reason: reason ?? null, p_contract: OWNER_LIFECYCLE_CONTRACT } as never);
+    if (error) throw Error(error.code === "40001" ? "O grupo ou Owner foi alterado. Atualize a consulta antes de tentar novamente." : error.message);
+    const result = data as unknown as Record<string, unknown>;
+    if (result?.contract !== OWNER_LIFECYCLE_CONTRACT || (action !== "candidates" && result.ok !== true)) throw Error("Gestão de Owner incompatível. Atualize a página.");
+    return result;
+  },
+  async ownerCandidates(group: ManagedGroup): Promise<OwnerCandidate[]> {
+    const data = await this.ownerAction("candidates", group);
+    if (!Array.isArray(data.candidates) || data.candidates.some(c => !c.id || !c.name || !c.username || !["member", "recruiter", "admin"].includes(c.profile))) throw Error("Candidatos incompatíveis. Atualize a consulta.");
+    return data.candidates as OwnerCandidate[];
   },
   async links(groupId: string, organizationId: string, revision: number): Promise<ManagedCompanyUser[]> {
     const data = await this.run("list_links", groupId, organizationId, { revision });

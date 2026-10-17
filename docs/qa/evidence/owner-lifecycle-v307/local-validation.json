@@ -1,0 +1,48 @@
+{
+  "postgres": {
+    "checks": 248,
+    "pass": true,
+    "command": "node tests/tooling/multiempresa.postgres.mjs --owner-lifecycle"
+  },
+  "browser": {
+    "checks": 48,
+    "pass": true,
+    "command": "node tests/tooling/ownerLifecycle.browser.mjs"
+  },
+  "ownerRegression": {
+    "checks": 147,
+    "pass": true,
+    "flags": [
+      "--password-feedback",
+      "--password-minimum",
+      "--username-identity"
+    ]
+  },
+  "node": {
+    "tests": 35,
+    "pass": true,
+    "scope": [
+      "OwnerLifecycle",
+      "organizationAdministration",
+      "organizationSorting",
+      "ownerOnboarding",
+      "platformUsersContract",
+      "platformUsersEdgeFunctions",
+      "productRelease",
+      "webProtectedRoutes",
+      "ownerOnboardingRoutes"
+    ]
+  },
+  "deno": {
+    "tests": 4,
+    "pass": true,
+    "typecheck": true
+  },
+  "web": {
+    "types": true,
+    "build": true
+  },
+  "lint": true,
+  "foundation": true,
+  "limits": "Isolated PostgreSQL17 and real handlers/components with synthetic transports. No hosted Auth QA or real-person authenticated production session. No test account, message or business data mutation in production."
+}

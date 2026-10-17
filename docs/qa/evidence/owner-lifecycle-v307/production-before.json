@@ -1,0 +1,55 @@
+{
+  "gates": {
+    "private.m83_sources": "b8100f5bf8d619fd5b301977934fd53d",
+    "private.has_org_role": "10d09452c6d844fdbaffcf7e6f8d81f0",
+    "private.prisma_token_reserve": "94c1e0f7bb577ba12f8017c1d913a331",
+    "public.commit_matching_snapshot": "106823541fd832a22e4e1925c7713e0f",
+    "private.prisma_actor_has_org_role": "60b17e11f5b6e3c1d120ecad6351bbec",
+    "public.claim_stable_matching_score": "bead9525ca2c04eb5ad2e3bdb5124a5e",
+    "private.authorize_position_follow_up": "7decdee4fd0492ba15b7d6f01e8e5dbc",
+    "public.complete_stable_matching_score": "a4ee35796e9fb02f5ceeadfe56c5b7bb",
+    "public.get_prisma_default_organization": "0bf383f16afa774be1c87a4f04e45f4e",
+    "public.load_matching_trajectory_review": "ac7545822ec843e44aad45f075ed77de",
+    "public.save_matching_trajectory_review": "510590b88cbac56c9584f38a76bb4f89",
+    "public.claim_matching_legacy_review_refresh": "e9a881fd458ef142c13216c0acedba31"
+  },
+  "counts": {
+    "auth": 8,
+    "audit": 15,
+    "users": 8,
+    "groups": 3,
+    "companies": 4,
+    "memberships": 10
+  },
+  "states": [
+    {
+      "status": "active",
+      "companies": [
+        "active",
+        "active"
+      ],
+      "eligibleInitial": false
+    },
+    {
+      "status": "draft",
+      "companies": [
+        "draft"
+      ],
+      "eligibleInitial": false
+    },
+    {
+      "status": "draft",
+      "companies": [
+        "draft"
+      ],
+      "eligibleInitial": true
+    }
+  ],
+  "project": "postgres",
+  "fingerprints": {
+    "users": "57fb07873c3b83f0156f7ec9826ca0a5",
+    "authIds": "fd0308d5ce07827d976b256acd7e9a97",
+    "memberships": "0f2dc0c7a9f47b7acfe3b20ffcb2b505"
+  },
+  "baselineCompatible": true
+}

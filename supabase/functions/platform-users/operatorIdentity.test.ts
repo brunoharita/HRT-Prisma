@@ -32,6 +32,7 @@ Deno.test("operator identity: independent accounts, legacy compatibility, contac
   globalThis.fetch = (async (input: Request | URL | string, init?: RequestInit) => {
     const url = new URL(String(input)), method = init?.method ?? "GET", body = typeof init?.body === "string" ? JSON.parse(init.body) : {};
     calls.push({path: url.pathname, query: url.searchParams, method, body});
+    if (url.pathname === "/rest/v1/rpc/operator_administration_available_v307") return Response.json(true);
     if (url.pathname === "/auth/v1/user" && method === "GET") {
       const bearer = new Headers(init?.headers).get("Authorization") ?? "";
       return Response.json({id: bearer.includes("self-a") ? id(4) : id(1), aud: "authenticated", role: "authenticated"});
@@ -57,6 +58,11 @@ Deno.test("operator identity: independent accounts, legacy compatibility, contac
     if (url.pathname === "/auth/v1/token") {
       const user = [...auth.values()].find(u => u.email === body.email && u.password === body.password);
       return user ? Response.json({access_token: crypto.randomUUID(), refresh_token: crypto.randomUUID(), user: {id: scenario === "wrong-session" ? id(999) : user.id}}) : Response.json({}, {status: 400});
+    }
+    if (url.pathname === "/rest/v1/rpc/complete_first_access_v307") {
+      const target = rows.find(r => r.auth_user_id === body.p_auth_user);
+      if (!target || !["active", "pending_first_access"].includes(target.status)) return Response.json({code: "42501"}, {status: 403});
+      Object.assign(target, {status: "active", must_change_password: false});return Response.json(null);
     }
     if (url.pathname === "/rest/v1/rpc/save_platform_user_v3") {
       if (scenario === "save-failure") return Response.json({code: "42501", message: "Permissão revogada"}, {status: 403});
@@ -142,6 +148,11 @@ Deno.test("operator identity: independent accounts, legacy compatibility, contac
     check((await sign("synthetic.user.4", secretA)).status === 200 && (await sign("synthetic.user.6", secretB)).status === 200, "both logins survive contact edit");
     rows[1].must_change_password = true; rows[2].must_change_password = true;
     check((await invoke("platform-users", {action: "complete_first_access", userId: rows[2].id}, "self-a")).status === 200 && !rows[1].must_change_password && rows[2].must_change_password, "completion bound to session A ignores supplied B");
+    for (const status of ["inactive", "blocked"]) {
+      rows[1].status = status;rows[1].must_change_password = true;
+      check((await invoke("platform-users", {action: "complete_first_access"}, "self-a")).status === 403 && rows[1].status === status && rows[1].must_change_password, "inactive/blocked first access cannot restore authority");
+    }
+    rows[1].status = "active";
     scenario = "save-failure"; const count = auth.size;
     check((await invoke("platform-users", {action: "create", input: input("new.denied")})).status === 403 && auth.size === count, "failed new user save compensates only new identity");
     scenario = "provider-failure"; const count2 = auth.size;

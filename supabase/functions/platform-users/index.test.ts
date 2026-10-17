@@ -10,11 +10,12 @@ Deno.test("four roles: real Edge handler validates scope before Auth and saves a
   for (const key of ["SUPABASE_URL", "SUPABASE_ANON_KEY", "SUPABASE_SERVICE_ROLE_KEY", "SUPABASE_SECRET_KEYS", "SUPABASE_PUBLISHABLE_KEYS"]) Deno.env.delete(key);
   Deno.env.set("SUPABASE_URL", "https://synthetic.invalid");Deno.env.set("SUPABASE_ANON_KEY", "synthetic-public");Deno.env.set("SUPABASE_SERVICE_ROLE_KEY", "synthetic-server");
   try {
-    for (const scenario of ["common", "cross-group", "outside-company", "member", "recruiter", "legacy-admin", "rpc-failure"] as const) {
+    for (const scenario of ["common", "owner-suspended", "cross-group", "outside-company", "member", "recruiter", "legacy-admin", "rpc-failure"] as const) {
       const calls: { path: string; method: string; body: Record<string, unknown> }[] = [];
       globalThis.fetch = (async (input: string | URL | Request, init?: RequestInit) => {
         const url = new URL(String(input)), method = init?.method ?? "GET", body = typeof init?.body === "string" ? JSON.parse(init.body) : {};
         calls.push({ path: url.pathname, method, body });
+        if (url.pathname === "/rest/v1/rpc/operator_administration_available_v307") return Response.json(scenario !== "owner-suspended");
         if (url.pathname === "/auth/v1/user") return Response.json({ id: id(3), email: "fixture@example.invalid", aud: "authenticated", role: "authenticated" });
         if (url.pathname === "/rest/v1/platform_users") {
           if (url.searchParams.has("auth_user_id")) return Response.json([{ id: id(30), auth_user_id: id(3), full_name: "Operador sintético", username: "synthetic.actor", email: "actor@example.invalid", access_profile: scenario === "common" ? "member" : "recruiter", group_id: id(100), status: "active" }]);
@@ -56,6 +57,7 @@ Deno.test("Owner onboarding: canonical context, four tamper negatives, authority
  try{for(const scenario of ['context','create','username','profile','group','companies','actor','contract','collision','stale','bad-response','commit-revoked']){
   const calls:{path:string;method:string;body:Record<string,unknown>}[]=[];
   globalThis.fetch=async(input,init)=>{const url=new URL(String(input)),method=init?.method??'GET',body=typeof init?.body==='string'?JSON.parse(init.body):{};calls.push({path:url.pathname,method,body});
+   if(url.pathname==='/rest/v1/rpc/operator_administration_available_v307')return Response.json(true);
    if(url.pathname==='/auth/v1/user')return Response.json({id:id(3),aud:'authenticated',role:'authenticated'});
    if(url.pathname==='/rest/v1/platform_users')return Response.json(url.searchParams.has('auth_user_id')?[{id:id(30),auth_user_id:id(3),access_profile:scenario==='actor'?'recruiter':'super_admin',group_id:scenario==='actor'?id(100):null,status:'active'}]:[]);
    if(url.pathname==='/rest/v1/organizations')return Response.json([{id:id(110),name:'Primeira empresa',group_id:id(100)}]);
@@ -94,6 +96,7 @@ Deno.test("manual password minimum8: boundaries, complexity, confirmation, atomi
   const calls:{path:string;method:string}[]=[];
   globalThis.fetch=(async(input:string|URL|Request,init?:RequestInit)=>{
    const url=new URL(String(input)),method=init?.method??'GET';calls.push({path:url.pathname,method});
+   if(url.pathname==='/rest/v1/rpc/operator_administration_available_v307')return Response.json(true);
    if(url.pathname==='/auth/v1/user')return Response.json({id:id(3),aud:'authenticated',role:'authenticated'});
    if(url.pathname==='/rest/v1/platform_users')return Response.json(url.searchParams.has('auth_user_id')?[{id:id(30),auth_user_id:id(3),access_profile:'recruiter',group_id:id(100),status:'active'}]:[]);
    if(url.pathname==='/rest/v1/organization_memberships')return Response.json([{organization_id:id(110),user_id:id(3),role:'recruiter'}]);

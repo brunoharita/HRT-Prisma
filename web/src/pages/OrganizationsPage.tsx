@@ -1,3 +1,4 @@
+import { OwnerLifecycleControls } from "./OwnerLifecycleControls";
 import { useEffect, useRef, useState } from "react";
 import { ApartmentOutlined, ArrowDownOutlined, ArrowUpOutlined, DownOutlined, PlusOutlined } from "@ant-design/icons";
 import { Alert, Button, Drawer, Empty, Form, Input, InputNumber, Modal, Select, Space, Table, Tag, Typography } from "antd";
@@ -40,7 +41,7 @@ export function OrganizationsPage({ profile, onNavigate, onChanged }: { profile:
   useEffect(() => { void load();return () => { scope.current++; }; }, []);
   function open(next: Editor) {
     setError(null);setDirty(false);markSaved();setEditor(next);form.resetFields();
-    form.setFieldsValue(next.kind === "group" ? { name: next.group?.name, status: next.group?.status, plan: next.group?.plan, companyLimit: next.group?.companyLimit } : next.kind === "company" ? { name: next.company?.name, status: next.company?.status } : {});
+    form.setFieldsValue(next.kind === "group" ? { name: next.group?.name, status: next.group?.configuredStatus ?? next.group?.status, plan: next.group?.plan, companyLimit: next.group?.companyLimit } : next.kind === "company" ? { name: next.company?.name, status: next.company?.status } : {});
   }
   async function closeEditor() {
     if (busy || !await confirmPrismaNavigation()) return;
@@ -86,8 +87,10 @@ export function OrganizationsPage({ profile, onNavigate, onChanged }: { profile:
       </summary>
       <div className="prisma-organization-body">
       <div className="prisma-organization-actions">{canManageGroup ? <Button disabled={busy} onClick={() => open({ kind: "group", group })}>Administrar grupo</Button> : null}<Button disabled={busy || group.status !== "active" || group.owner?.status !== "active" || group.companyCount >= group.companyLimit} icon={<PlusOutlined />} onClick={() => open({ kind: "new-company", group })}>Nova empresa</Button></div>
-      <div className="prisma-organization-metadata"><span>Owner: <strong>{group.owner?.name ?? "Não definido"}</strong>{group.owner && group.owner.status !== "active" ? " · ativação pendente" : ""}</span><span>Plano: <strong>{planLabels[group.plan]}</strong></span><span>Empresas cadastradas: <strong>{group.companyCount} de {group.companyLimit}</strong> · {group.activeCount} ativas</span></div>
-      {group.status === "draft" ? <div className="prisma-organization-next"><div><strong>{!group.owner ? "Próximo passo: cadastrar Owner." : group.owner.status !== "active" ? "Próximo passo: ativar o Owner." : "Grupo em preparação"}</strong><p>Cadastre e ative o Owner, ative a primeira empresa e depois o grupo.</p></div>{isSuper && !group.owner ? <Button type="primary" onClick={() => onNavigate(ownerOnboardingPath(group.id))}>Cadastrar Owner</Button> : null}</div> : null}
+      <div className="prisma-organization-metadata"><span>Owner: <strong>{group.owner?.name ?? "Não definido"}</strong>{group.owner?.username ? ` (${group.owner.username})` : ""}{group.owner && group.owner.status !== "active" ? group.owner.status === "inactive" ? " · inativo" : group.owner.status === "blocked" ? " · bloqueado" : " · primeiro acesso pendente" : ""}</span><span>Plano: <strong>{planLabels[group.plan]}</strong></span><span>Empresas cadastradas: <strong>{group.companyCount} de {group.companyLimit}</strong> · {group.activeCount} ativas</span></div>
+      {group.status === "draft" ? <div className="prisma-organization-next"><div><strong>{!group.owner ? "Próximo passo: cadastrar Owner." : group.owner.status !== "active" ? "Próximo passo: ativar o Owner." : "Grupo em preparação"}</strong><p>Com o Owner ativo, o grupo e a primeira empresa em preparação serão ativados automaticamente. Se houver primeiro acesso pendente, a ativação aguardará sua conclusão.</p></div>{isSuper && !group.owner ? <Button type="primary" onClick={() => onNavigate(ownerOnboardingPath(group.id))}>Cadastrar Owner</Button> : null}</div> : null}
+      {group.ownerSuspended ? <Alert type="warning" showIcon title={group.status === "draft" ? "Aguardando Owner ativo" : "Operação suspensa por ausência de Owner ativo"} description={group.ownerSuspensionReason ?? "Restabeleça um Owner ativo para liberar a operação, respeitando as demais restrições do grupo e das empresas."} /> : null}
+      {isSuper && group.owner?.id ? <OwnerLifecycleControls group={group} onChanged={async () => {setNotice("Alteração do Owner registrada.");await load();await onChanged();}} /> : null}
       {group.companyCount >= group.companyLimit ? <p className="prisma-organization-capacity">Limite configurado atingido. Consulte o responsável pelo plano para incluir outra empresa.</p> : null}
       <Table<ManagedCompany> className="prisma-organization-companies" rowKey="id" size="small" pagination={false} dataSource={sortOrganizations(group.companies, sort, direction)} columns={[
         { title: "Empresa", dataIndex: "name", width: "34%", render: (name, c) => <div><Space wrap><strong>{name}</strong>{c.id === group.primaryOrganizationId ? <Tag>Principal</Tag> : null}</Space>{sortDate(c)}</div> },

@@ -1,9 +1,10 @@
+import { operatorAccessDisabled, startSessionRevalidation } from "../shared/sessionRevalidation";
 import { PositionFollowUpPage } from "../pages/PositionFollowUpPage";
 import { SelectionProcessesPage } from "../pages/SelectionProcessesPage";
 import { ProcessAssessmentPage } from "../pages/ProcessAssessmentPage";
 import { TokensPrismaPage } from "../pages/TokensPrismaPage";
 import { PositionAssessmentPortal } from "../pages/PositionAssessmentPortal";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useLoadingFeedback, useLoadingTask } from "../ui/PrismaLoadingFeedback";
 import {
   ApartmentOutlined,
@@ -197,15 +198,19 @@ export function PrismaApplication() {
   const viewScope = `${state.claims?.session_id ?? "no-session"}:${state.claims?.sub ?? "anonymous"}:${state.currentOperator?.profile ?? "none"}:${state.activeOrganizationId ?? "none"}:${resolveActiveMembership(state.memberships, state.activeOrganizationId)?.role ?? "none"}`;
   const { pathname, navigate, goBack, canGoBack, goingBack } = usePrismaNavigation(viewScope);
 
-  async function refreshAuthState() {
-    try { return await authActivity.run(refreshAuthStateData); }
+  const authRefreshVersion = useRef(0);
+  async function refreshAuthState(background = false): Promise<void> {
+    const request = ++authRefreshVersion.current;
+    try { await (background ? refreshAuthStateData(request) : authActivity.run(() => refreshAuthStateData(request))); }
     catch {
+      if (request !== authRefreshVersion.current) return;
       clearStoredActiveOrganizationId();
       setState({ ...initialState, initialized: true, errorMessage: "Não foi possível confirmar seu acesso. Entre novamente." });
     }
   }
-  async function refreshAuthStateData() {
+  async function refreshAuthStateData(request: number) {
     const { data, error } = await supabase.auth.getClaims();
+    if (request !== authRefreshVersion.current) return;
     if (error) {
       clearStoredActiveOrganizationId();
       setState({ ...initialState, initialized: true, errorMessage: "Não foi possível confirmar seu acesso. Entre novamente." });
@@ -224,6 +229,7 @@ export function PrismaApplication() {
         prismaRepository.loadCurrentOperator(claims.sub),
         prismaRepository.loadMemberships(claims.sub),
       ]);
+      if (request !== authRefreshVersion.current) return;
       const activeOrganizationId = resolvePreferredOrganizationId(memberships, readStoredActiveOrganizationId());
       if (activeOrganizationId) persistActiveOrganizationId(activeOrganizationId);
       else clearStoredActiveOrganizationId();
@@ -237,13 +243,14 @@ export function PrismaApplication() {
         errorMessage: null,
         infoMessage: !currentOperator
           ? "Sessão válida, mas nenhum operador do Prisma foi encontrado."
-          : currentOperator.status !== "active" && !currentOperator.mustChangePassword
+          : operatorAccessDisabled(currentOperator)
             ? "Este usuário não possui operação ativa na plataforma."
             : memberships.length === 0 && !currentOperator.mustChangePassword
               ? "Sessão válida, mas nenhuma empresa ativa foi encontrada para o operador."
               : null,
       }));
     } catch {
+      if (request !== authRefreshVersion.current) return;
       clearStoredActiveOrganizationId();
       setState((previous) => ({
         ...previous,
@@ -263,9 +270,17 @@ export function PrismaApplication() {
     });
     void refreshAuthState();
     return () => {
+      authRefreshVersion.current++;
       subscription.unsubscribe();
     };
   }, []);
+
+  const refreshCallback = useRef(refreshAuthState);
+  refreshCallback.current = refreshAuthState;
+  useEffect(() => {
+    if (!state.claims?.sub) return;
+    return startSessionRevalidation(() => refreshCallback.current(true));
+  }, [state.claims?.sub, state.claims?.session_id]);
 
   const route = findRoute(pathname);
   const activeMembership = resolveActiveMembership(state.memberships, state.activeOrganizationId);
@@ -317,6 +332,7 @@ export function PrismaApplication() {
 
   const handleSignOut = async () => {
     if (!await confirmPrismaNavigation()) return;
+    authRefreshVersion.current++;
     const { error } = await signOutActivity.run(() => supabase.auth.signOut());
     if (error) {
       setState((current) => ({ ...current, errorMessage: "Não foi possível encerrar a sessão com segurança." }));
@@ -717,12 +733,10 @@ function findRoute(pathname: string): AppRoute {
 }
 
 function resolveRedirect(route: AppRoute, state: AppState, access: ReturnType<typeof evaluateRouteAccess>): string | null {
+  if (state.claims && operatorAccessDisabled(state.currentOperator)) return route.path === "/access-denied" ? null : "/access-denied";
   if (route.path === "/sign-in" && state.claims && state.currentOperator?.mustChangePassword) return "/change-password";
   if (route.path === "/sign-in" && state.claims) return "/";
   if (state.claims && state.currentOperator?.mustChangePassword && route.path !== "/change-password") return "/change-password";
-  if (state.claims && state.currentOperator && state.currentOperator.status !== "active" && !state.currentOperator.mustChangePassword) {
-    return route.path === "/access-denied" ? null : "/access-denied";
-  }
   if (!access.allowed && access.redirectTo && access.redirectTo !== route.path) return access.redirectTo;
   return null;
 }
