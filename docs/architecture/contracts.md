@@ -144,4 +144,3 @@ Boundary externo `m51c-assessment-item-generator-2.0.0`, requisição `m51c-asse
 ## Tokens Prisma2.6.2
 
 Gestão `prisma-tokens-2.0.0` e conta `policy_version=prisma-token-policy-2.0.0`: calendário mensal Brasília, pacotes `validity_days=30` e prioridade franquia→demais FEFO. Campos legacy de meses permanecem no storage como histórico, sem uso pela API2.0.0. Quote `prisma-token-quote-1.0.0` e limites dos quatro consumidores preservados. Overview inclui lotes nomeados com aquisição/validade/disponível, movimentos com quantidade/operação/fontes/contexto quando rastreáveis e `planning` apenas para gestor. Planejamento `prisma-token-planning-1.0.0`: relógio/janelas/fuso/renovação/início observável e série30dias completa autorizada; simulação apenas consultiva e sem IA. Contrato/agreement integral e aceites em `docs/qa/tokens-v262.md`; ADR-083 revisado. Ausência de histórico/contexto não vira dado inventado.
-
