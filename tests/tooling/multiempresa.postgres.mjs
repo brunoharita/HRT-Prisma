@@ -58,6 +58,10 @@ try {
  ('${id(6)}','Recruiter B','recruiter.synthetic.b','recb@example.invalid','recruiter','${id(200)}'),
  ('${id(7)}','Comum A2','common.synthetic.a2','common2@example.invalid','member','${id(100)}');
  insert into public.organization_memberships(organization_id,user_id,role) values('${id(110)}','${id(3)}','admin'),('${id(110)}','${id(4)}','member'),('${id(111)}','${id(7)}','member'),('${id(210)}','${id(6)}','recruiter');`);
+ // Reproduce pre-existing Super residues without weakening the migration's validator.
+ run(`alter table public.organization_memberships disable trigger organization_memberships_validate_scope;
+ insert into public.organization_memberships(organization_id,user_id,role) values('${id(110)}','${id(1)}','admin'),('${id(210)}','${id(1)}','recruiter');
+ alter table public.organization_memberships enable trigger organization_memberships_validate_scope;`);
  // Install the real follow-up gate and signature-compatible delegation fixtures for the
  // other service RPCs. These prove the injected boundary, not matching/wallet algorithms.
  const followUp=readFileSync("supabase/migrations/20261008120000_position_follow_up.sql","utf8").match(/create (?:or replace )?function private\.authorize_position_follow_up[\s\S]*?\$\$;/)?.[0];assert.ok(followUp);
@@ -84,6 +88,8 @@ try {
  check("common synthesis reservation preserved",run(`select public.test_reserve('${id(110)}','profile_synthesis','${id(998)}','${id(4)}')`)===id(4));
  fail("common cannot reserve administrator function",`select public.test_reserve('${id(110)}','matching','${id(998)}','${id(4)}')`,'42501');
  check("legacy Admin migrated without changing memberships",run(`select access_profile||'|'||(select role from public.organization_memberships where user_id='${id(3)}') from public.platform_users where auth_user_id='${id(3)}'`)==="recruiter|recruiter");
+ check("legacy Super memberships preserved without default or new authority",run(`select count(*)=2 and bool_and(not is_default) and count(*) filter(where role='admin')=1 from public.organization_memberships where user_id='${id(1)}'`)==='t');
+ fail("new Super memberships remain forbidden",`insert into public.organization_memberships(organization_id,user_id,role) values('${id(111)}','${id(1)}','recruiter')`,'42501');
  check("legacy alias transition is audited as system metadata",run("select count(*) from public.platform_user_audit_events where action='access_profile_canonicalized_v3' and actor_auth_user_id is null")==="1");
  check("existing capacity and companies preserved",ws(1).groups.find(g=>g.id===id(100)).companyLimit===2);
  check("Super sees both groups",ws(1).groups.length===2);

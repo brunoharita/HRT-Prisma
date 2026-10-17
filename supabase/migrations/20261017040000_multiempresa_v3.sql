@@ -3,7 +3,10 @@ alter table public.organization_groups add column if not exists status text not 
 alter table public.organizations add column if not exists status text not null default 'active' check(status in ('draft','active','inactive'));
 alter table public.organization_memberships add column if not exists is_default boolean not null default false;
 drop index if exists public.organization_memberships_member_one_org_idx;
-with first_membership as(select id,row_number() over(partition by user_id order by created_at,id) as n from public.organization_memberships)
+-- Legacy Super memberships are historical residues, never the source of global authority.
+-- Do not touch them: the existing validator correctly refuses newly assigning them.
+with first_membership as(select m.id,row_number() over(partition by m.user_id order by m.created_at,m.id) as n from public.organization_memberships m
+ join public.platform_users u on u.auth_user_id=m.user_id where u.access_profile<>'super_admin')
 update public.organization_memberships m set is_default=true from first_membership f where f.id=m.id and f.n=1
 and not exists(select 1 from public.organization_memberships x where x.user_id=m.user_id and x.is_default);
 create unique index if not exists organization_memberships_one_default on public.organization_memberships(user_id) where is_default;
@@ -49,7 +52,8 @@ insert into public.platform_user_audit_events(target_platform_user_id,target_aut
  select id,auth_user_id,group_id,'access_profile_canonicalized_v3',jsonb_build_object('profile','admin'),jsonb_build_object('profile','recruiter','method','v3m0_role_alias','authorizationContract','tenant-authorization-2.0.0')
  from public.platform_users where access_profile='admin';
 update public.platform_users set access_profile='recruiter' where access_profile='admin';
-update public.organization_memberships set role='recruiter' where role='admin';
+update public.organization_memberships m set role='recruiter' from public.platform_users u
+ where u.auth_user_id=m.user_id and u.access_profile='recruiter' and m.role='admin';
 
 create or replace function private.prisma_actor_has_org_role(p_actor uuid,target_organization_id uuid,allowed_roles public.membership_role[]) returns boolean
 language sql stable security definer set search_path='' as $$

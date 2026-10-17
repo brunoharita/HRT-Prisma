@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 512
-source_manifest_sha256: 5dc5526be1664ce6c68dc566855941c40cd8ec48c81e73e05f95eb9793a02098
+source_manifest_sha256: 1429961d4db70d7b7c172c853f8f5da49a38104d355b41900943dcadb7f51d2c
 -->
 
 # Tudo sobre o Prisma
@@ -24883,7 +24883,7 @@ Acordo `docs/qa/agreement-v3m0-multiempresa.md`1.0.0 e execução correspondente
 
 | ID | Implementação | Teste/evidência | Estado local |
 | --- | --- | --- | --- |
-| D-01 | Quatro opções; alias Admin -> Recruiter, transição auditada como metadata de sistema; helpers/consumidores adaptados | SQL101, Node66 incluindo perfis/rotas; Deno3 com sete cenários do handler de Usuários | PASS |
+| D-01 | Quatro opções; alias Admin -> Recruiter, transição auditada como metadata de sistema; helpers/consumidores adaptados | SQL103, Node66 incluindo perfis/rotas; Deno3 com sete cenários do handler de Usuários | PASS |
 | D-02 | OrganizationsPage, RPC versionada; grupo/primeira empresa em preparação, criação por Recruiter/Owner/Super | SQL criação/onboarding, limite e dois concorrentes reais; browser114 em1448/390/320 | PASS |
 | D-03 | Configuração privada por grupo; capacidade inclui empresas inativas/em preparação; atual2empresas preservado com limite2; sem preço/checkout/gate novo | SQL limites/capacidade/ausência de reciclagem/sem saldo de Tokens por preparação; validação de limites Node | PASS |
 | D-04 | Owner único ativo/pendente, designação explícita; principal/situação/revisão; Super preserva consulta global de inativos | SQL Owner duplicado/remoção/ativação inválida/versão/situação e visibilidade; browser metadados | PASS |
@@ -24899,7 +24899,7 @@ Acordo `docs/qa/agreement-v3m0-multiempresa.md`1.0.0 e execução correspondente
 
 ## Mapa de impacto e preservação final
 
-Mantém o mapa do acordo, anterior à implementação, com a revisão abaixo por dependências descobertas. Direct: administração/Usuários/shell e guards de autoridade Knowledge/Processos/matching/reservas; critical_transversal: roles/RLS/tenant/PII; plausible_indirect: Banco/erasure e jornadas de talentos. Regressão:66Node em11arquivos;38tooling de quotes/processos/navegação/release;3Deno (sete cenários do handler, histórico Knowledge e quatro modos negados antes de provedor/escrita),101SQL e114browser. Tipos root/web, build web, lint/foundation/contexto conforme local-validation.json. Não se executou validate integral local; CI geral continua obrigatório.
+Mantém o mapa do acordo, anterior à implementação, com a revisão abaixo por dependências descobertas. Direct: administração/Usuários/shell e guards de autoridade Knowledge/Processos/matching/reservas; critical_transversal: roles/RLS/tenant/PII; plausible_indirect: Banco/erasure e jornadas de talentos. Regressão:66Node em11arquivos;38tooling de quotes/processos/navegação/release;3Deno (sete cenários do handler, histórico Knowledge e quatro modos negados antes de provedor/escrita),103SQL e114browser. Tipos root/web, build web, lint/foundation/contexto conforme local-validation.json. Não se executou validate integral local; CI geral continua obrigatório.
 
 Revisão do mapa durante a implementação: consultas diretas por service-role em Knowledge e nove funções SQL não passavam pela RLS. A situação da empresa passou a ser verificada nesses limites existentes. São oito guards de entrada (follow-up e matching) e um antes de nova reserva, depois do replay existente. Algoritmos, ACLs e liquidações não mudam. A migração exige nomes/argumentos e quantidade esperados e aborta diante de drift; não substitui código desconhecido. Evidência de preservação dos corpos remotos será registrada no rollout.
 
@@ -24916,6 +24916,8 @@ Sem desvio dos quatro perfis/escopos aprovados. Não é clone literal de módulo
 Ocorrências locais: launcher PostgreSQL no Windows reteve handles de stdout; corrigido para stdio ignorado apenas em pg_ctl e encerrado exclusivamente o cluster descartável da tarefa. Ambiguidade de alias SQL detectada/corrigida antes do rollout; fixture de falha de auditoria corrigida para NOT VALID sobre histórico anterior; teste de descarte passou após aguardar o desmontar do modal. Não eram regressões produtivas. Avisos AntD de API depreciada/contexto/form e warnings prévios de chunk/import dinâmico não geraram exceção; nenhuma refatoração adjacente.
 
 CI inicial39004033908 recusou três testes: dois avisos da nova tela sem ação contextual e duas asserções históricas de autoridade (settings e exclusão) ainda restritas ao Admin. Adicionadas recuperação no próprio aviso e asserções Recruiter; testes dirigidos9Node/5tooling e recuperação browser passaram. Nenhuma mudança remota ocorreu antes da correção.
+
+Primeira aplicação remota recusada por dois vínculos Super legados incompatíveis com o validador anterior. Reversão transacional comprovada: configurações/colunas novas ausentes e zero entrada no ledger. A migração preserva esses vínculos sem default/conversão, mantém novos vínculos Super proibidos e deriva autoridade global do perfil ativo. Fixture de legado adicionada;103SQL PASS. Nenhuma limpeza de dados ou desativação de trigger ocorre na migração.
 
 ## Publicação, rollback e sincronização
 

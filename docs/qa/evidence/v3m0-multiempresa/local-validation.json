@@ -2,7 +2,7 @@
   "baseline": "7456e22a1c9a3772b2be126182e9456d931f7786",
   "release": "2.9.0",
   "postgres": {
-    "checks": 101,
+    "checks": 103,
     "failed": 0,
     "report": "postgres.json",
     "engine": "PostgreSQL 17, isolated localhost:5846",

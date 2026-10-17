@@ -90,6 +90,14 @@
       "pass": true
     },
     {
+      "name": "legacy Super memberships preserved without default or new authority",
+      "pass": true
+    },
+    {
+      "name": "new Super memberships remain forbidden",
+      "pass": true
+    },
+    {
       "name": "legacy alias transition is audited as system metadata",
       "pass": true
     },
