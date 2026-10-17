@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 522
-source_manifest_sha256: 2a32631f9282bbeff971823a7807407a8ed05f9ba017d8ff385a7323a3f40489
+source_manifest_sha256: 4fb7f3463ababc2c4f241f64b83afd15e3ddf0ccb05745b607be63875db2b49a
 -->
 
 # Tudo sobre o Prisma
@@ -2650,9 +2650,9 @@ last_verified: 2026-10-17
 
 # Estado atual do Prisma
 
-## Mínimo de senha8 —3.0.5 validada, publicação em andamento
+## Mínimo de senha8 —3.0.5 publicada
 
-Bruno definiu8caracteres em17/10/2026. Web/cadastro/Owner/troca, Edge platform-users e config.toml alinhados localmente; demais requisitos preservados.138browser/21Node/3Deno (29cenários)/tipos/build PASS; testes e publicação no AoT password-minimum-v305. Bruno confirmou Auth hospedado6 no chat e reiterou requisito Prisma8. Piso hospedado compatível, preservado; API nativa continua6, enquanto formulários/Edge do Prisma exigem8. Acordo1.0.1 resolve o pré-requisito operacional, sem alteração do Auth nem teste com contas reais. Publicação seletiva Edge/web em andamento; config.toml/fixtures não comprovam Auth hospedado.
+Bruno definiu8caracteres em17/10/2026. Web/cadastro/Owner/troca, Edge platform-users e config.toml alinhados localmente; demais requisitos preservados.138browser/21Node/3Deno (29cenários)/tipos/build PASS; testes e publicação no AoT password-minimum-v305. Bruno confirmou Auth hospedado6 no chat e reiterou requisito Prisma8. Piso hospedado compatível, preservado; API nativa continua6, enquanto formulários/Edge do Prisma exigem8. Acordo1.0.1 resolve o pré-requisito operacional, sem alteração do Auth nem teste com contas reais. Publicado runtime3c11f5e139516bd34edafaef294b6409a8f50d7e em main/VPS: platform-users8 ACTIVE/JWTtrue/fonte conferida e web3.0.5,22checks públicos PASS e anônimo Edge401. Cinco serviços adjacentes/rollback preservados. CI branch39055765363 PASS, main39055861395 PASS. config.toml/fixtures não comprovam Auth hospedado; jornada autenticada humana não testada.
 
 ## Feedback de senha e campos bloqueados —3.0.4 publicada
 
@@ -5178,7 +5178,7 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `platform-user-management` | security/data/Edge | 2.0.0 | platform-users | implementação V3M0, rollout no AoT | save_platform_user_v3 service-only atômico e Auth compensado na criação | local; rollout no AoT | preservar dados e negar mutação |
 | `web-domain-read` | product-engineering | 1.1.0 | Home, Pessoas, perfil | ativo em QA | `PrismaDataRepository`, incluindo saúde das fontes centrais | local/QA | bloquear consulta |
 | `platform-user-access` | security/product | 2.0.0 | App Shell, Usuários, Edge Functions | implementado localmente | migration `20260824113000_m2_users_people`, `platform-users` function, UI `UsersPage` | local | bloquear operação |
-| `password-policy` | security/product | 1.1.0 | cadastro/Owner/troca/Auth | implementado e validado; publicação em andamento, Auth hospedado6 informado pelo usuário | mínimo8, complexidade/confirmação preservadas, web/Edge/config alinhados; AoT password-minimum-v305 | local/rollout | Prisma nega envio abaixo8; Auth nativo mantém6 informado, sem alteração hospedada |
+| `password-policy` | security/product | 1.1.0 | cadastro/Owner/troca/Auth | publicado3.0.5: web/Edge8; Auth hospedado6 informado pelo usuário | mínimo8, complexidade/confirmação preservadas, web/Edge/config alinhados; AoT password-minimum-v305 | produção | Prisma nega envio abaixo8; Auth nativo mantém6 informado, sem alteração hospedada |
 | `username-auth-boundary` | security/operations | 1.0.0 | sign-in, password recovery | implementado localmente | `operator-sign-in`, `operator-password-reset` | local | falha neutra |
 | `person-ingestion` | application/data | 12.0.0 | intake, Pessoas, documentos, perfil | resiliência operacional ativa no Prisma-QA | ingestão, revisão por Perfil/documento, publicação, restauração, vínculo, mesclagem, arquivamento e exclusão | local/QA | bloquear somente sem fonte recuperável ou autoridade |
 | `person-definitive-deletion` | product/application/data/security | 1.0.0 | Central da Pessoa, Meus dados, Storage, Perfil, matching e M5.1 | ativo no Prisma-QA | saga única, lock `deleting`, ledger mínimo, purga e verificador de resíduos | local/QA | preservar dados e negar operação |
@@ -23022,7 +23022,7 @@ Contrato `docs/qa/agreement-password-minimum-v305.md`1.0.1, decisão de Bruno17/
 | D-02 | Cadastro/Owner/troca compartilham mínimo8e rótulos; Auth hospedado6 informado por Bruno, compatível e preservado | PASS |
 | P-01 | Nenhuma conta/credencial real alterada; JWT7=true baseline; somente comprimento muda | PASS |
 | F-01 | Sem migration/RLS/provedor/regras novas/redesign; diff dirigido | PASS |
-| CA-03 | Publicação seletiva pendente; Auth6 informado pelo usuário permite8 | PARTIAL |
+| CA-03 | Runtime3c11f5e publicado, Edge8/JWTtrue/fonte igual,22smokes públicos/401anônimo/rollback/5serviços preservados; Auth6 conforme Bruno | PASS |
 
 ## Mapa de impacto e preservação
 
@@ -23038,7 +23038,7 @@ Mesmo mapa do acordo. Dependência operacional identificada antes de implementar
 
 ## Validação e fidelidade
 
-21Node/tooling PASS: política/config/Edge alinhados localmente, fronteiras/complexidade/confirmação, identidade/rotas/avisos/versão.3Deno PASS/29cenários com fetch sintético; nenhum serviço externo/conta/e-mail. Tipos/build web e build TypeScript PASS. 138browser PASS (112anteriores adaptados ao limiar8,26casos novos de fronteira/submit/troca/genérico). Lint/foundation/contexto/ledger/diff PASS; CI funcional e21abd8 PASS (39046362811); nova revisão documental será conferida pela CI. Screenshots mascaradas, mesma topologia/dados sintéticos/larguras1448/390/320 do movimento anterior; só rótulo/limite mudou. Senhas únicas geradas em memória, sem valor em fonte/log/artefato. Sem jornada autenticada humana em produção.
+21Node/tooling PASS: política/config/Edge alinhados localmente, fronteiras/complexidade/confirmação, identidade/rotas/avisos/versão.3Deno PASS/29cenários com fetch sintético; nenhum serviço externo/conta/e-mail. Tipos/build web e build TypeScript PASS. 138browser PASS (112anteriores adaptados ao limiar8,26casos novos de fronteira/submit/troca/genérico). Lint/foundation/contexto/ledger/diff PASS; CI funcional e21abd8 PASS (39046362811); revisão3c11f5e CI branch39055765363 PASS; main39055861395 PASS. Screenshots mascaradas, mesma topologia/dados sintéticos/larguras1448/390/320 do movimento anterior; só rótulo/limite mudou. Senhas únicas geradas em memória, sem valor em fonte/log/artefato. Sem jornada autenticada humana em produção.
 
 Falha inicial de harness: no320px o texto do aviso de senha inválida (cadastro/troca) ficou sem área visível; assert alterado para presença da resposta e ausência de submit, com requisito vermelho visível sendo a prova de feedback do mínimo. Isso não declara PASS para legibilidade desses avisos nem altera seu layout fora do escopo. Outros casos/ações de recuperação anteriores permanecem na regressão.
 
@@ -23046,11 +23046,11 @@ Falha inicial de harness: no320px o texto do aviso de senha inválida (cadastro/
 
 Bruno confirmou no chat17/10/2026 mínimo6 já configurado no Auth e reiterou que o requisito Prisma deve ser8. Acordo1.0.1 supersede o requisito anterior de Auth hospedado exatamente8. Esse piso6 aceita8 e permanece preservado. Não foi possível ler diretamente o Auth: ferramentas de interface falharam ao inicializar e conector não expõe essa configuração. A origem do valor6 é a confirmação humana; não config.toml, fixture ou inferência. Troca/primeiro acesso continuam com validação web8 antes da API nativa, cujo piso continua6. Cadastro/Owner também validam8 na Edge. Nenhuma credencial de gerenciamento foi obtida de sessões do navegador.
 
-Baseline Edge platform-users7, verify_jwt=true, fonte obtida do conector no projeto Prisma saudável. Plano publica apenas essa Edge e web, sem migrations/outros serviços ou alteração de Auth.138browser/21Node/3Deno já válidos; esta revisão é documental e não repete testes funcionais sem novo diff. Publicação/smoke/sincronização pendentes.
+Baseline Edge platform-users7, verify_jwt=true, fonte obtida do conector no projeto Prisma saudável. Plano publica apenas essa Edge e web, sem migrations/outros serviços ou alteração de Auth.138browser/21Node/3Deno já válidos; esta revisão é documental e não repete testes funcionais sem novo diff. Publicado runtime3c11f5e139516bd34edafaef294b6409a8f50d7e em main/VPS. Edge platform-users8 ACTIVE, verify_jwt=true e fonte normalizada igual ao Git.22checks públicos PASS:4rotas,assets novos/anteriores,versão/SHA,navegação anônima Owner protegida e ausência de exceções. Chamada Edge sem JWT respondeu401. Web running/restarts0; cinco serviços adjacentes idênticos, imagem anterior retida em prisma-web:rollback-before-3c11f5e13951. Probe imediato do script retornou404 durante recriação; conferência independente após estabilização passou, sem repetir build. Evidências production.json/public-smoke.json/anonymous-edge.json/containers-before.txt/containers-after.txt; registro final sincronizado por commit documental, sem novo build/deploy.
 
 ## Conclusão
 
-Implementação validada; conclusão aguarda somente publicação seletiva, smoke e sincronização. Jornada autenticada humana em produção não testada; testes de senha usam transportes sintéticos sem contas/e-mails reais.
+D-01/D-02/P-01 e CA-01/02/03 PASS no escopo do acordo1.0.1; mínimo8 publicado, demais requisitos preservados. Desvios do acordo vigente: nenhum. Piso nativo Auth6 informado por Bruno permanece explícito; não equivale a imposição8 no endpoint nativo. CI funcional branch/main PASS. Registro pós-publicação em commit documental, sem novo deploy funcional; SHA final de sincronização e CI do registro conferidos no encerramento. Jornada autenticada humana em produção não testada; testes de senha usam transportes sintéticos sem contas/e-mails reais.
 
 ---
 

@@ -1,0 +1,36 @@
+{
+  "release": "3.0.5",
+  "runtimeSha": "3c11f5e139516bd34edafaef294b6409a8f50d7e",
+  "project": "ioldpnqqvobprjiontre",
+  "edge": {
+    "name": "platform-users",
+    "version": 8,
+    "verify_jwt": true,
+    "status": "ACTIVE",
+    "normalizedSourceMatchesGit": true,
+    "anonymousStatus": 401
+  },
+  "web": {
+    "publicSmokeChecks": 22,
+    "pass": true,
+    "container": "181d23c7d8e005c10edbe74bef8fc3ef61f5cce0fa565d41797a9544353c2502",
+    "state": "running",
+    "restarts": 0,
+    "adjacentServicesPreserved": 5,
+    "rollbackTag": "prisma-web:rollback-before-3c11f5e13951",
+    "initialDeployProbe": "404 immediately after recreate; independent stabilized routes/assets/browser/SHA passed; no rebuild"
+  },
+  "authHostedMinimum": {
+    "value": 6,
+    "source": "Bruno confirmation in chat 2026-10-17",
+    "directlyVerified": false,
+    "changed": false
+  },
+  "ci": {
+    "branch": 39055765363,
+    "branchConclusion": "success",
+    "main": 39055861395,
+    "mainConclusion": "success"
+  },
+  "limits": "Synthetic local password tests; no real account, credential or email created/changed in production; native Auth API minimum6 unchanged; no authenticated human production journey"
+}
