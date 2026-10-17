@@ -1,0 +1,15 @@
+{
+  "version": "3.0.7",
+  "git": "be1b049d9335d82ce5195f9e3f7399764d0d5a96",
+  "runtimeGit": "e7ea4df7992ee298ebca580ab85d452399b3b183",
+  "tag": "restore-v3.0.7-before-v3.1.0",
+  "sourceZipSha256": "8bfa2cd2561a19f51006979221972bcbebd21f2ce0fe8370e3f00e6280a5433b",
+  "vpsBackup": "/opt/prisma-backups/pre-v3.1.0-20261017",
+  "dockerImage": "sha256:d336b3925596261b220d81382faa3cf30a02c0b0b6971437be52d03424c3682a",
+  "dockerTag": "prisma-web:restore-v3.0.7-before-v3.1.0",
+  "imageArchiveSha256": "f5c10cd48155083c94a5bc073ef9206f563c19a25a89b5c6cd8d6b06c6f2a1c2",
+  "vpsSourceArchiveSha256": "38a0609db7c4d7148f8aadb1fc89026b479915a070f0b89b46fc69da7fd36673",
+  "referenceSha256": "ef92674fc6d9d3d9f9a98f2ee029433d5ef80810ac4e3f55e2b6601e2f0a983d",
+  "trackedWorkingTreeClean": true,
+  "untrackedPreserved": true
+}
