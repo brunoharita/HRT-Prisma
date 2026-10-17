@@ -28,6 +28,8 @@ interface OrganizationRow {
   group_id: string;
 }
 
+type ManagedUserRow = Omit<PlatformUserRow, "phone_e164" | "credential_mode" | "must_change_password">;
+
 interface OrganizationMembershipRow {
   organization_id: string;
   user_id: string;
@@ -190,14 +192,14 @@ async function listVisibleUsers(
 ) {
   let usersQuery = serviceClient
     .from("platform_users")
-    .select("id, auth_user_id, full_name, username, email, access_profile, group_id, status")
+    .select("id, auth_user_id, full_name, username, email, phone_country_iso2, phone_country_label, phone_country_code, phone_national_number, access_profile, group_id, status")
     .order("full_name", { ascending: true });
 
   if (actorContext.actor.access_profile !== "super_admin" && actorContext.actor.group_id) {
     usersQuery = usersQuery.eq("group_id", actorContext.actor.group_id);
   }
 
-  const users = await selectRows<PlatformUserRow>(usersQuery);
+  const users = await selectRows<ManagedUserRow>(usersQuery);
   if (users.length === 0) return [];
 
   const memberships = await selectRows<OrganizationMembershipRow>(
@@ -271,7 +273,7 @@ async function readVisibleTargetUser(
 ) {
   if (!userId) throw new HttpError(400, "Usuário alvo não informado.");
 
-  const [user] = await selectRows<PlatformUserRow>(
+  const [user] = await selectRows<ManagedUserRow>(
     serviceClient
       .from("platform_users")
       .select(
@@ -359,53 +361,14 @@ async function createPlatformUser(
     : normalized.status;
   const mustChangePassword = normalized.credentialMode === "activation_link";
 
-  const { data: insertedRows, error: insertError } = await serviceClient
-    .from("platform_users")
-    .insert({
-      auth_user_id: authUserId,
-      full_name: normalized.fullName,
-      username: normalized.username,
-      email: normalized.email,
-      phone_e164: normalized.phone.e164,
-      phone_country_iso2: normalized.phone.countryIso2,
-      phone_country_label: normalized.phone.countryLabel,
-      phone_country_code: normalized.phone.callingCode,
-      phone_national_number: normalized.phone.nationalNumber,
-      access_profile: normalized.profile,
-      group_id: normalized.groupId,
-      status: platformStatus,
-      credential_mode: normalized.credentialMode,
-      must_change_password: mustChangePassword,
-    })
-    .select("id");
-  if (insertError || !insertedRows?.[0]) throw new HttpError(400, "Não foi possível persistir o operador do Prisma.");
-
-  await rewriteOrganizationMemberships(
-    serviceClient,
-    authUserId,
-    normalized.profile,
-    normalized.groupId,
-    normalized.organizationIds,
-  );
-  await recordAuditEvent(serviceClient, {
-    actorAuthUserId: actorContext.actor.auth_user_id,
-    targetPlatformUserId: insertedRows[0].id,
-    targetAuthUserId: authUserId,
-    groupId: normalized.groupId,
-    organizationId: normalized.organizationIds[0] ?? null,
-    action: "user_created",
-    previousValues: {},
-    newValues: {
-      full_name: normalized.fullName,
-      username: normalized.username,
-      email: normalized.email,
-      access_profile: normalized.profile,
-      group_id: normalized.groupId,
-      status: platformStatus,
-      organization_ids: normalized.organizationIds,
-      credential_mode: normalized.credentialMode,
-    },
-  });
+  try {
+    await savePlatformRecord(serviceClient, actorContext, authUserId, normalized, platformStatus, mustChangePassword);
+  } catch (error) {
+    // This identity was created by this request and has no committed domain record or access.
+    const { error: cleanupError } = await serviceClient.auth.admin.deleteUser(authUserId);
+    if (cleanupError) throw new HttpError(500, "O cadastro não foi concluído e a ativação precisa de conciliação pelo suporte.");
+    throw error;
+  }
 }
 
 async function updatePlatformUser(
@@ -460,56 +423,7 @@ async function updatePlatformUser(
     if (authUpdateError) throw new HttpError(400, "Não foi possível atualizar o nome do usuário no Supabase Auth.");
   }
 
-  const { error: updateError } = await serviceClient
-    .from("platform_users")
-    .update({
-      full_name: normalized.fullName,
-      username: normalized.username,
-      email: normalized.email,
-      phone_e164: normalized.phone.e164,
-      phone_country_iso2: normalized.phone.countryIso2,
-      phone_country_label: normalized.phone.countryLabel,
-      phone_country_code: normalized.phone.callingCode,
-      phone_national_number: normalized.phone.nationalNumber,
-      access_profile: normalized.profile,
-      group_id: normalized.groupId,
-      status: normalized.status,
-    })
-    .eq("id", existing.id);
-  if (updateError) throw new HttpError(400, "Não foi possível atualizar o usuário do Prisma.");
-
-  await rewriteOrganizationMemberships(
-    serviceClient,
-    existing.auth_user_id,
-    normalized.profile,
-    normalized.groupId,
-    normalized.organizationIds,
-  );
-  await recordAuditEvent(serviceClient, {
-    actorAuthUserId: actorContext.actor.auth_user_id,
-    targetPlatformUserId: existing.id,
-    targetAuthUserId: existing.auth_user_id,
-    groupId: normalized.groupId,
-    organizationId: normalized.organizationIds[0] ?? null,
-    action: "user_updated",
-    previousValues: {
-      full_name: existing.full_name,
-      username: existing.username,
-      email: existing.email,
-      access_profile: existing.access_profile,
-      group_id: existing.group_id,
-      status: existing.status,
-    },
-    newValues: {
-      full_name: normalized.fullName,
-      username: normalized.username,
-      email: normalized.email,
-      access_profile: normalized.profile,
-      group_id: normalized.groupId,
-      status: normalized.status,
-      organization_ids: normalized.organizationIds,
-    },
-  });
+  await savePlatformRecord(serviceClient, actorContext, existing.auth_user_id, normalized, normalized.status, existing.must_change_password);
 }
 
 async function requestAdminPasswordReset(
@@ -592,53 +506,20 @@ async function completeFirstAccess(
   });
 }
 
-async function rewriteOrganizationMemberships(
-  serviceClient: ReturnType<typeof createServiceClient>,
-  authUserId: string,
-  profile: MembershipRole,
-  groupId: string | null,
-  organizationIds: string[],
+async function savePlatformRecord(
+  serviceClient: ReturnType<typeof createServiceClient>, actorContext: ActorContext, authUserId: string,
+  normalized: Awaited<ReturnType<typeof normalizeAndValidateInput>>, status: PlatformUserStatus, mustChangePassword: boolean,
 ) {
-  const { error: deleteError } = await serviceClient
-    .from("organization_memberships")
-    .delete()
-    .eq("user_id", authUserId);
-  if (deleteError) throw new HttpError(400, "Não foi possível reescrever o escopo de empresas do usuário.");
-
-  if (profile === "super_admin") return;
-  if (profile === "owner") {
-    if (!groupId) throw new HttpError(400, "Owner precisa de um grupo válido.");
-    const ownerOrganizations = await selectRows<OrganizationRow>(
-      serviceClient
-        .from("organizations")
-        .select("id, name, group_id")
-        .eq("group_id", groupId),
-    );
-    if (ownerOrganizations.length === 0) throw new HttpError(400, "O grupo informado não possui empresas para derivar o escopo.");
-    const { error: insertOwnerError } = await serviceClient
-      .from("organization_memberships")
-      .insert(
-        ownerOrganizations.map((organization) => ({
-          organization_id: organization.id,
-          user_id: authUserId,
-          role: "owner" as const,
-        })),
-      );
-    if (insertOwnerError) throw new HttpError(400, "Não foi possível derivar as empresas do Owner.");
-    return;
-  }
-  if (organizationIds.length === 0) throw new HttpError(400, "Nenhuma empresa válida foi informada para o perfil selecionado.");
-
-  const { error: insertError } = await serviceClient
-    .from("organization_memberships")
-    .insert(
-      organizationIds.map((organizationId) => ({
-        organization_id: organizationId,
-        user_id: authUserId,
-        role: profile,
-      })),
-    );
-  if (insertError) throw new HttpError(400, "Não foi possível gravar as empresas permitidas do usuário.");
+  const { error } = await serviceClient.rpc("save_platform_user_v3", {
+    p_actor: actorContext.actor.auth_user_id, p_auth_user: authUserId, p_organizations: normalized.organizationIds,
+    p_data: { fullName: normalized.fullName, username: normalized.username, email: normalized.email,
+      profile: normalized.profile, groupId: normalized.groupId, status, credentialMode: normalized.credentialMode,
+      mustChangePassword, phoneE164: normalized.phone.e164, phoneCountryIso2: normalized.phone.countryIso2,
+      phoneCountryLabel: normalized.phone.countryLabel, phoneCountryCode: normalized.phone.callingCode,
+      phoneNationalNumber: normalized.phone.nationalNumber },
+  });
+  if (error) throw new HttpError(error.code === "42501" ? 403 : 400,
+    error.code === "23505" ? "Já existe um cadastro ou Owner ativo incompatível. Atualize a consulta." : error.message);
 }
 
 async function normalizeAndValidateInput(
@@ -651,7 +532,7 @@ async function normalizeAndValidateInput(
   const fullName = String(input.fullName ?? "").trim();
   const username = normalizeUsername(input.username);
   const email = String(input.email ?? "").trim().toLowerCase();
-  const profile = input.profile;
+  const profile = input.profile === "admin" ? "recruiter" : input.profile;
   const groupId = input.groupId;
   const credentialMode = input.credentialMode;
   const status: PlatformUserStatus = input.status === "inactive" ? "inactive" : "active";
@@ -678,6 +559,12 @@ async function normalizeAndValidateInput(
       serviceClient.from("organizations").select("id, name, group_id").eq("group_id", groupId),
     )
     : [];
+  if (profile === "owner" && groupId) {
+    const [otherOwner] = await selectRows<Pick<PlatformUserRow, "id">>(serviceClient.from("platform_users").select("id")
+      .eq("group_id", groupId).eq("access_profile", "owner").in("status", ["active", "pending_first_access"])
+      .neq("id", currentUserId ?? "00000000-0000-0000-0000-000000000000").limit(1));
+    if (otherOwner) throw new HttpError(409, "Este grupo já possui Owner ativo ou com ativação pendente.");
+  }
   const organizationMap = new Map(organizations.map((organization) => [organization.id, organization]));
   const organizationIds = normalizeOrganizationIds(profile, input.organizationIds, organizations);
   for (const organizationId of organizationIds) {
@@ -740,8 +627,8 @@ function normalizeOrganizationIds(
   if ((profile === "admin" || profile === "recruiter") && deduplicated.length < 1) {
     throw new HttpError(400, "Selecione pelo menos uma empresa.");
   }
-  if (profile === "member" && deduplicated.length !== 1) {
-    throw new HttpError(400, "Member deve receber exatamente uma empresa.");
+  if (profile === "member" && deduplicated.length < 1) {
+    throw new HttpError(400, "Usuário comum precisa de pelo menos uma empresa.");
   }
   return deduplicated;
 }
@@ -787,7 +674,7 @@ async function loadActorContext(
 
 function assertCanManageUsers(actor: PlatformUserRow) {
   if (actor.status !== "active") throw new HttpError(403, "O operador atual não está ativo.");
-  if (!["super_admin", "owner", "admin"].includes(actor.access_profile)) {
+  if (!["super_admin", "owner", "admin", "recruiter"].includes(actor.access_profile)) {
     throw new HttpError(403, "Este perfil não administra usuários.");
   }
 }
@@ -999,7 +886,7 @@ function accessProfileRank(profile: MembershipRole) {
   if (profile === "super_admin") return 5;
   if (profile === "owner") return 4;
   if (profile === "admin") return 3;
-  if (profile === "recruiter") return 2;
+  if (profile === "recruiter") return 3;
   return 1;
 }
 

@@ -1,0 +1,8 @@
+.prisma-organization-group .ant-card-head-wrapper { flex-wrap: wrap; gap: 12px; padding-block: 12px; }
+.prisma-organization-group .ant-card-head-title { flex: 1 1 240px; min-width: 0; white-space: normal; overflow-wrap: anywhere; }
+.prisma-organization-group .ant-card-head-title .ant-space { max-width: 100%; }
+.prisma-organization-group .ant-card-extra { max-width: 100%; margin-inline-start: 0; }
+@media (max-width: 767px) {
+  .prisma-organization-group .ant-card-head-title { flex-basis: 100%; }
+  .prisma-organization-group .ant-card-extra { width: 100%; }
+}

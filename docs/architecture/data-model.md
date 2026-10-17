@@ -20,7 +20,7 @@ O modelo existe em TypeScript e em migrations PostgreSQL/Supabase. Foundation, M
 
 | Agregado | Tabelas | Regra |
 | --- | --- | --- |
-| Tenant e acesso | `organization_groups`, `organizations`, `organization_memberships`, `platform_users` | Grupo delimita autoridade; empresa delimita dados; usuário opera o sistema |
+| Tenant e acesso | `organization_groups`, `organizations`, `organization_memberships`, `platform_users`; configuração privada `organization_group_settings` | Grupo delimita autoridade/plano/capacidade/principal; empresa delimita dados; membership guarda padrão; situação/versionamento/auditoria V3M0 |
 | Organização | `organization_units`, `job_roles`, `positions`, `vacancies`, `vacancy_versions`, `vacancy_requirements`, `vacancy_requirement_relations`, `vacancy_events`, `vacancy_advisor_research_runs` | Função, posição, Vaga versionada, requisito e relação local são distintos; pesquisa externa possui ledger próprio sem pergunta ou PII |
 | Pessoa | `people`, `person_private_data` | PII privada separada da identidade profissional |
 | Documento | `documents`, `document_processing_attempts`, `document_page_extractions`, `extraction_drafts`, `document_operations` | Fonte versionada, layout visual, evidência por campo, tentativa e idempotência |

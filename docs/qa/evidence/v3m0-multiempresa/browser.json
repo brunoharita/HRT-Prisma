@@ -1,0 +1,460 @@
+{
+  "checks": [
+    {
+      "name": "1448 super_admin visible groups scoped",
+      "pass": true
+    },
+    {
+      "name": "1448 super_admin company list scoped",
+      "pass": true
+    },
+    {
+      "name": "1448 super_admin only Super creates groups",
+      "pass": true
+    },
+    {
+      "name": "1448 super_admin group governance scoped",
+      "pass": true
+    },
+    {
+      "name": "1448 super_admin no implicit mutations",
+      "pass": true
+    },
+    {
+      "name": "1448 super_admin explicit creation scoped and versioned",
+      "pass": true
+    },
+    {
+      "name": "1448 super_admin shared state refreshed",
+      "pass": true
+    },
+    {
+      "name": "1448 super_admin capacity full disables creation",
+      "pass": true
+    },
+    {
+      "name": "1448 super_admin membership action explicit",
+      "pass": true
+    },
+    {
+      "name": "1448 super_admin viewport contained",
+      "pass": true
+    },
+    {
+      "name": "1448 super_admin no runtime exception",
+      "pass": true
+    },
+    {
+      "name": "1448 owner visible groups scoped",
+      "pass": true
+    },
+    {
+      "name": "1448 owner company list scoped",
+      "pass": true
+    },
+    {
+      "name": "1448 owner only Super creates groups",
+      "pass": true
+    },
+    {
+      "name": "1448 owner group governance scoped",
+      "pass": true
+    },
+    {
+      "name": "1448 owner no implicit mutations",
+      "pass": true
+    },
+    {
+      "name": "1448 owner explicit creation scoped and versioned",
+      "pass": true
+    },
+    {
+      "name": "1448 owner shared state refreshed",
+      "pass": true
+    },
+    {
+      "name": "1448 owner capacity full disables creation",
+      "pass": true
+    },
+    {
+      "name": "1448 owner membership action explicit",
+      "pass": true
+    },
+    {
+      "name": "1448 owner viewport contained",
+      "pass": true
+    },
+    {
+      "name": "1448 owner no runtime exception",
+      "pass": true
+    },
+    {
+      "name": "1448 recruiter visible groups scoped",
+      "pass": true
+    },
+    {
+      "name": "1448 recruiter company list scoped",
+      "pass": true
+    },
+    {
+      "name": "1448 recruiter only Super creates groups",
+      "pass": true
+    },
+    {
+      "name": "1448 recruiter group governance scoped",
+      "pass": true
+    },
+    {
+      "name": "1448 recruiter no implicit mutations",
+      "pass": true
+    },
+    {
+      "name": "1448 recruiter explicit creation scoped and versioned",
+      "pass": true
+    },
+    {
+      "name": "1448 recruiter shared state refreshed",
+      "pass": true
+    },
+    {
+      "name": "1448 recruiter capacity full disables creation",
+      "pass": true
+    },
+    {
+      "name": "1448 recruiter membership action explicit",
+      "pass": true
+    },
+    {
+      "name": "1448 recruiter viewport contained",
+      "pass": true
+    },
+    {
+      "name": "1448 recruiter no runtime exception",
+      "pass": true
+    },
+    {
+      "name": "1448 member common has no company selector",
+      "pass": true
+    },
+    {
+      "name": "1448 member common has no administration",
+      "pass": true
+    },
+    {
+      "name": "1448 member viewport contained",
+      "pass": true
+    },
+    {
+      "name": "1448 member no runtime exception",
+      "pass": true
+    },
+    {
+      "name": "390 super_admin visible groups scoped",
+      "pass": true
+    },
+    {
+      "name": "390 super_admin company list scoped",
+      "pass": true
+    },
+    {
+      "name": "390 super_admin only Super creates groups",
+      "pass": true
+    },
+    {
+      "name": "390 super_admin group governance scoped",
+      "pass": true
+    },
+    {
+      "name": "390 super_admin no implicit mutations",
+      "pass": true
+    },
+    {
+      "name": "390 super_admin explicit creation scoped and versioned",
+      "pass": true
+    },
+    {
+      "name": "390 super_admin shared state refreshed",
+      "pass": true
+    },
+    {
+      "name": "390 super_admin capacity full disables creation",
+      "pass": true
+    },
+    {
+      "name": "390 super_admin membership action explicit",
+      "pass": true
+    },
+    {
+      "name": "390 super_admin viewport contained",
+      "pass": true
+    },
+    {
+      "name": "390 super_admin no runtime exception",
+      "pass": true
+    },
+    {
+      "name": "390 owner visible groups scoped",
+      "pass": true
+    },
+    {
+      "name": "390 owner company list scoped",
+      "pass": true
+    },
+    {
+      "name": "390 owner only Super creates groups",
+      "pass": true
+    },
+    {
+      "name": "390 owner group governance scoped",
+      "pass": true
+    },
+    {
+      "name": "390 owner no implicit mutations",
+      "pass": true
+    },
+    {
+      "name": "390 owner explicit creation scoped and versioned",
+      "pass": true
+    },
+    {
+      "name": "390 owner shared state refreshed",
+      "pass": true
+    },
+    {
+      "name": "390 owner capacity full disables creation",
+      "pass": true
+    },
+    {
+      "name": "390 owner membership action explicit",
+      "pass": true
+    },
+    {
+      "name": "390 owner viewport contained",
+      "pass": true
+    },
+    {
+      "name": "390 owner no runtime exception",
+      "pass": true
+    },
+    {
+      "name": "390 recruiter visible groups scoped",
+      "pass": true
+    },
+    {
+      "name": "390 recruiter company list scoped",
+      "pass": true
+    },
+    {
+      "name": "390 recruiter only Super creates groups",
+      "pass": true
+    },
+    {
+      "name": "390 recruiter group governance scoped",
+      "pass": true
+    },
+    {
+      "name": "390 recruiter no implicit mutations",
+      "pass": true
+    },
+    {
+      "name": "390 recruiter explicit creation scoped and versioned",
+      "pass": true
+    },
+    {
+      "name": "390 recruiter shared state refreshed",
+      "pass": true
+    },
+    {
+      "name": "390 recruiter capacity full disables creation",
+      "pass": true
+    },
+    {
+      "name": "390 recruiter membership action explicit",
+      "pass": true
+    },
+    {
+      "name": "390 recruiter viewport contained",
+      "pass": true
+    },
+    {
+      "name": "390 recruiter no runtime exception",
+      "pass": true
+    },
+    {
+      "name": "390 member common has no company selector",
+      "pass": true
+    },
+    {
+      "name": "390 member common has no administration",
+      "pass": true
+    },
+    {
+      "name": "390 member viewport contained",
+      "pass": true
+    },
+    {
+      "name": "390 member no runtime exception",
+      "pass": true
+    },
+    {
+      "name": "320 super_admin visible groups scoped",
+      "pass": true
+    },
+    {
+      "name": "320 super_admin company list scoped",
+      "pass": true
+    },
+    {
+      "name": "320 super_admin only Super creates groups",
+      "pass": true
+    },
+    {
+      "name": "320 super_admin group governance scoped",
+      "pass": true
+    },
+    {
+      "name": "320 super_admin no implicit mutations",
+      "pass": true
+    },
+    {
+      "name": "320 super_admin explicit creation scoped and versioned",
+      "pass": true
+    },
+    {
+      "name": "320 super_admin shared state refreshed",
+      "pass": true
+    },
+    {
+      "name": "320 super_admin capacity full disables creation",
+      "pass": true
+    },
+    {
+      "name": "320 super_admin membership action explicit",
+      "pass": true
+    },
+    {
+      "name": "320 super_admin viewport contained",
+      "pass": true
+    },
+    {
+      "name": "320 super_admin no runtime exception",
+      "pass": true
+    },
+    {
+      "name": "320 owner visible groups scoped",
+      "pass": true
+    },
+    {
+      "name": "320 owner company list scoped",
+      "pass": true
+    },
+    {
+      "name": "320 owner only Super creates groups",
+      "pass": true
+    },
+    {
+      "name": "320 owner group governance scoped",
+      "pass": true
+    },
+    {
+      "name": "320 owner no implicit mutations",
+      "pass": true
+    },
+    {
+      "name": "320 owner explicit creation scoped and versioned",
+      "pass": true
+    },
+    {
+      "name": "320 owner shared state refreshed",
+      "pass": true
+    },
+    {
+      "name": "320 owner capacity full disables creation",
+      "pass": true
+    },
+    {
+      "name": "320 owner membership action explicit",
+      "pass": true
+    },
+    {
+      "name": "320 owner viewport contained",
+      "pass": true
+    },
+    {
+      "name": "320 owner no runtime exception",
+      "pass": true
+    },
+    {
+      "name": "320 recruiter visible groups scoped",
+      "pass": true
+    },
+    {
+      "name": "320 recruiter company list scoped",
+      "pass": true
+    },
+    {
+      "name": "320 recruiter only Super creates groups",
+      "pass": true
+    },
+    {
+      "name": "320 recruiter group governance scoped",
+      "pass": true
+    },
+    {
+      "name": "320 recruiter no implicit mutations",
+      "pass": true
+    },
+    {
+      "name": "320 recruiter explicit creation scoped and versioned",
+      "pass": true
+    },
+    {
+      "name": "320 recruiter shared state refreshed",
+      "pass": true
+    },
+    {
+      "name": "320 recruiter capacity full disables creation",
+      "pass": true
+    },
+    {
+      "name": "320 recruiter membership action explicit",
+      "pass": true
+    },
+    {
+      "name": "320 recruiter viewport contained",
+      "pass": true
+    },
+    {
+      "name": "320 recruiter no runtime exception",
+      "pass": true
+    },
+    {
+      "name": "320 member common has no company selector",
+      "pass": true
+    },
+    {
+      "name": "320 member common has no administration",
+      "pass": true
+    },
+    {
+      "name": "320 member viewport contained",
+      "pass": true
+    },
+    {
+      "name": "320 member no runtime exception",
+      "pass": true
+    },
+    {
+      "name": "failed mutation preserves editor",
+      "pass": true
+    },
+    {
+      "name": "cancelled departure retains unsaved changes",
+      "pass": true
+    },
+    {
+      "name": "explicit discard closes editor",
+      "pass": true
+    }
+  ]
+}

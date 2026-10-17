@@ -160,7 +160,8 @@ export function UserFormPage({ mode, userId, onNavigate }: UserFormPageProps) {
   }, [form, mode, userId]);
 
   const visibleProfileOptions = useMemo(() => {
-    const options: PlatformAccessProfile[] = ["owner", "admin", "recruiter", "member"];
+    const options: PlatformAccessProfile[] = currentOperator?.profile === "recruiter"
+      ? ["recruiter", "member"] : ["owner", "recruiter", "member"];
     return currentOperator?.profile === "super_admin"
       ? (["super_admin", ...options] as PlatformAccessProfile[])
       : options;
@@ -180,11 +181,6 @@ export function UserFormPage({ mode, userId, onNavigate }: UserFormPageProps) {
       form.setFieldValue("groupId", null);
       form.setFieldValue("organizationIds", []);
       return;
-    }
-
-    if (profile === "member") {
-      const currentOrganizations = (form.getFieldValue("organizationIds") ?? []) as string[];
-      form.setFieldValue("organizationIds", currentOrganizations.slice(0, 1));
     }
 
     if (profile === "owner" && selectedGroup) {
@@ -401,7 +397,7 @@ export function UserFormPage({ mode, userId, onNavigate }: UserFormPageProps) {
                       const selected = Array.isArray(value) ? value : [];
                       if (profile === "super_admin") return;
                       if (profile === "owner" && selectedGroup && selected.length === selectedGroup.organizations.length) return;
-                      if (profile === "member" && selected.length === 1) return;
+                      if (profile === "member" && selected.length >= 1) return;
                       if ((profile === "admin" || profile === "recruiter") && selected.length >= 1) return;
                       throw new Error("A seleção de empresas não atende ao perfil escolhido.");
                     },
@@ -527,7 +523,6 @@ function normalizeOrganizationScope(
 ): string[] {
   if (profile === "super_admin") return [];
   if (profile === "owner") return selectedGroup?.organizations.map((organization) => organization.id) ?? [];
-  if (profile === "member") return organizationIds.slice(0, 1);
   return organizationIds;
 }
 
@@ -535,7 +530,7 @@ function describeOrganizationPlaceholder(profile: PlatformAccessProfile, selecte
   if (profile === "super_admin") return "Autoridade global";
   if (!selectedGroup) return "Selecione um grupo primeiro";
   if (profile === "owner") return "Todas as empresas do grupo serão atribuídas";
-  if (profile === "member") return "Selecione exatamente uma empresa";
+  if (profile === "member") return "Selecione empresas; a empresa padrão define o acesso diário";
   return "Selecione uma ou mais empresas";
 }
 

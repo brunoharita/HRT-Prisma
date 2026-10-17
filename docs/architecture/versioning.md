@@ -1,5 +1,7 @@
 # Versionamento
 
+V3M0 autorizado17/10/2026, inclusive parâmetros delegados, usa entrega **2.9.0**; o identificador da discussão não promove3.0.0. `tenant-authorization`2.0.0 explicita Recruiter como administrador e Admin como alias histórico; `organization-administration`1.0.0 versiona grupos/empresas/planos/vínculos/default/revisão; `platform-user-management`2.0.0 usa persistência transacional via save_platform_user_v3, exclusivamente service_role. Enum e auditorias antigos preservados; Global exclusivo Super, contratos de talentos/IA/Tokens intactos. Acordo e execução V3M0, ADR-085; ativação só comprovada pelo AoT.
+
 Entrega2.8.1 autorizada por Bruno em16/10/2026: curadoria de contribuições globais com Aprovar na Base Global/Manter somente local e justificativa opcional. Rejeitar indisponível para novas decisões, mantendo histórico, autoridade/auditoria e origem local. Contrato knowledge-global-decision-2.0.0 (delta ADR-069); migration seletiva e web, sem outros serviços. Registry acrescenta a entrega1 ao movimento8;2.8.0 e demais entregas preservadas. Publicação comprovada no AoT `docs/qa/aot-knowledge-decisions-v281.md`.
 
 Patch **2.7.3**,15/10/2026: correção de rolagem/recorte e largura do editor manual, restaurando D-UX-01 aprovado em2.7.0. Sem contrato persistido novo. Somente web e documentação; preservar revisão PDF e fluxo de rascunho/comparação. Evidência em `docs/qa/manual-editor-scroll-v273.md`.

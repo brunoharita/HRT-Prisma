@@ -1,6 +1,10 @@
 ---
 prisma_context_id: current-state
 owner: engineering-operations
+
+## V3M0 — administração multiempresa2.9.0 em validação local
+
+Bruno17/10/2026 definiu Super Admin global, Owner do grupo, Recruiter administrador somente das empresas vinculadas no mesmo grupo e Usuário comum na empresa padrão sem seletor; autorizou implementar e delegou parâmetros restantes. Reuso funcional Horus Accounts/Empresas, mantendo organization_id e Tokens por empresa. Admin legado converge para Recruiter sem apagar histórico; grupo/empresa em preparação/ativa/inativa, principal, Owner único ativo/pendente, vínculos locais, planos/capacidade privada e auditoria transacional. Essential/Plus1, Professional até5, Enterprise capacidade explícita; preço de assinatura e segmentação futura ainda indefinidos, sem cobrança/IA automática. Capacidade inicial preserva empresas existentes e não comprova contratação. Acordo/execução V3M0 versão1.0.0, ADR-085 e owner docs/product/multiempresa.md. tenant-authorization2.0.0, organization-administration1.0.0 e platform-user-management2.0.0; rollout só mediante AoT docs/qa/aot-v3m0-multiempresa.md.
 status: current
 version: 2.81.0
 last_verified: 2026-10-16

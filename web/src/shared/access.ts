@@ -17,6 +17,7 @@ export interface OrganizationMembership {
 
 export interface AuthorizationSnapshot {
   isAuthenticated: boolean;
+  operatorProfile?: MembershipRole | null;
   memberships: readonly OrganizationMembership[];
   activeOrganizationId: string | null;
 }
@@ -35,11 +36,11 @@ export interface AccessOutcome {
 }
 
 export function isMembershipRole(value: string): value is MembershipRole {
-  return MEMBERSHIP_ROLES.some((role: MembershipRole) => role === value);
+  return value === "admin" || MEMBERSHIP_ROLES.some((role: MembershipRole) => role === value);
 }
 
 export function normalizeMembershipRole(value: string): MembershipRole | null {
-  return isMembershipRole(value) ? value : null;
+  return value === "admin" ? "recruiter" : isMembershipRole(value) ? value : null;
 }
 
 export function resolveActiveMembership(
@@ -98,7 +99,8 @@ export function evaluateRouteAccess(
   }
 
   if (rule.allowedRoles && rule.allowedRoles.length > 0) {
-    if (!activeMembership || !rule.allowedRoles.includes(activeMembership.role)) {
+    const role = activeMembership?.role ?? (requiresMembership ? null : snapshot.operatorProfile);
+    if (!role || !rule.allowedRoles.includes(role)) {
       return {
         allowed: false,
         redirectTo: "/unauthorized",

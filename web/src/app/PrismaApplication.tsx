@@ -41,6 +41,7 @@ import { ProfileVersionsPage } from "../pages/ProfileVersionsPage";
 import { PersonMergePage } from "../pages/PersonMergePage";
 import { ResumeImportPage } from "../pages/ResumeImportPage";
 import { UserFormPage } from "../pages/UserFormPage";
+import { OrganizationsPage } from "../pages/OrganizationsPage";
 import { UsersPage } from "../pages/UsersPage";
 import { KnowledgePage } from "../pages/KnowledgePage";
 import { SettingsPage } from "../pages/SettingsPage";
@@ -149,25 +150,25 @@ const routes: AppRoute[] = [
     path: "/item-bank",
     label: "Banco de questões",
     icon: <DatabaseOutlined />,
-    rule: { requiresAuth: true, requiresMembership: true, allowedRoles: ["super_admin", "owner", "admin"] },
+    rule: { requiresAuth: true, requiresMembership: true, allowedRoles: ["super_admin", "owner", "admin", "recruiter"] },
   },
   {
     path: "/users",
     label: "Usuários",
     icon: <UserOutlined />,
-    rule: { requiresAuth: true, requiresMembership: false, allowedRoles: ["super_admin", "owner", "admin"] },
+    rule: { requiresAuth: true, requiresMembership: false, allowedRoles: ["super_admin", "owner", "admin", "recruiter"] },
   },
   {
     path: "/organizations",
-    label: "Organizações",
+    label: "Grupos e empresas",
     icon: <BankOutlined />,
-    rule: { requiresAuth: true, requiresMembership: false, allowedRoles: ["super_admin", "owner"] },
+    rule: { requiresAuth: true, requiresMembership: false, allowedRoles: ["super_admin", "owner", "admin", "recruiter"] },
   },
   {
     path: "/knowledge",
     label: "Conhecimento",
     icon: <BookOutlined />,
-    rule: { requiresAuth: true, requiresMembership: false, allowedRoles: ["super_admin", "owner", "admin"] },
+    rule: { requiresAuth: true, requiresMembership: false, allowedRoles: ["super_admin", "owner", "admin", "recruiter"] },
   },
   { path: "/change-password", rule: { requiresAuth: true, requiresMembership: false } },
   { path: "/sign-in", rule: { requiresAuth: false, requiresMembership: false } },
@@ -269,6 +270,7 @@ export function PrismaApplication() {
   const activeMembership = resolveActiveMembership(state.memberships, state.activeOrganizationId);
   const access = evaluateRouteAccess({
     isAuthenticated: Boolean(state.claims),
+    operatorProfile: state.currentOperator?.profile ?? null,
     memberships: state.memberships,
     activeOrganizationId: state.activeOrganizationId,
   }, route.rule);
@@ -325,6 +327,7 @@ export function PrismaApplication() {
   };
 
   const handleOrganizationChange = async (organizationId: string) => {
+    if (state.currentOperator?.profile === "member") return;
     if (organizationId === state.activeOrganizationId || !await confirmPrismaNavigation()) return;
     if (!canActivateOrganization(state.memberships, organizationId)) {
       clearStoredActiveOrganizationId();
@@ -402,7 +405,7 @@ function renderRouteContent(
   onNavigate: (path: string) => void,
   onPasswordCompleted: () => Promise<void>,
 ) {
-  if (["/not-found", "/organizations"].includes(route.path)) {
+  if (["/not-found"].includes(route.path)) {
     return <PrismaPage><PrismaPageHeader title={route.path === "/not-found" ? "Página não encontrada" : "Área em preparação"} /><PrismaState kind="unavailable" description={route.path === "/not-found" ? "Este endereço não está disponível. Volte ao início para continuar." : "Esta área ainda não está disponível. As funcionalidades atuais continuam acessíveis pelo menu."} action={{ label: "Voltar ao início", onClick: () => onNavigate("/") }} /></PrismaPage>;
   }
   if (route.path === "/tokens" && activeMembership) return <TokensPrismaPage organizationId={activeMembership.organizationId} />;
@@ -492,6 +495,7 @@ function renderRouteContent(
     return <VacanciesPage activeMembership={activeMembership} onNavigate={onNavigate} />;
   }
   if(route.path==="/selection-processes"&&activeMembership)return <SelectionProcessesPage activeMembership={activeMembership} onNavigate={onNavigate} {...(route.selectionProcessId?{selectedId:route.selectionProcessId}:{})} {...(route.vacancyId?{vacancyId:route.vacancyId}:{})}/>;
+  if (route.path === "/organizations" && currentOperator) return <OrganizationsPage profile={currentOperator.profile} onNavigate={onNavigate} onChanged={onPasswordCompleted} />;
   if (route.path === "/organizations") {
     return <PlaceholderPage title="Organizações" description="Gestão estrutural de grupos e empresas permanece fora deste movimento." />;
   }
@@ -701,10 +705,10 @@ function findRoute(pathname: string): AppRoute {
   if (matchingDetail?.[1]) return { path: "/matching", verificationNeedId: matchingDetail[1], verificationMode: "detail", rule: reviewerRule };
   const verificationInvite = /^\/verifications\/new\/([^/]+)$/.exec(normalized);
   if (verificationInvite?.[1]) return { path: "/verifications", verificationPreparedAssessmentId: verificationInvite[1], rule: reviewerRule };
-  if (normalized === "/users/new") return { path: "/users/new", rule: { requiresAuth: true, requiresMembership: false, allowedRoles: ["super_admin", "owner", "admin"] } };
+  if (normalized === "/users/new") return { path: "/users/new", rule: { requiresAuth: true, requiresMembership: false, allowedRoles: ["super_admin", "owner", "admin", "recruiter"] } };
   const userMatch = /^\/users\/([^/]+)$/.exec(normalized);
   if (userMatch?.[1]) {
-    return { path: "/users", userId: userMatch[1], rule: { requiresAuth: true, requiresMembership: false, allowedRoles: ["super_admin", "owner", "admin"] } };
+    return { path: "/users", userId: userMatch[1], rule: { requiresAuth: true, requiresMembership: false, allowedRoles: ["super_admin", "owner", "admin", "recruiter"] } };
   }
   return { path: "/not-found", rule: { requiresAuth: true, requiresMembership: false } };
 }

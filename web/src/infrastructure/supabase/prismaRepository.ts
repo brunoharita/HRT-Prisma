@@ -26,6 +26,7 @@ import {
   type EducationStatus,
 } from "../../../../src/domain/educationClassification";
 import type { PlatformOperator } from "../../domain/platformUsersData";
+import { canonicalAccessProfile } from "../../shared/platformUsers";
 import { normalizeMembershipRole, type MembershipRole, type OrganizationMembership } from "../../shared/access";
 import { supabase } from "./client";
 import type { Json } from "./database.types";
@@ -61,7 +62,7 @@ export const prismaRepository: PrismaDataRepository = {
       username: data.username,
       email: data.email,
       status: data.status,
-      profile: data.access_profile,
+      profile: canonicalAccessProfile(data.access_profile),
       groupId: data.group_id,
       groupName,
       mustChangePassword: data.must_change_password,
@@ -104,6 +105,14 @@ export const prismaRepository: PrismaDataRepository = {
     throwIfError(error, "Não foi possível consultar as memberships da sessão.");
 
     const memberships = membershipRows ?? [];
+    // Common users enter their server-selected default company, never a browser-selected tenant.
+    if (currentOperator.profile === "member") {
+      const { data: defaultId, error: defaultError } = await supabase.rpc("get_prisma_default_organization" as never);
+      throwIfError(defaultError, "Não foi possível confirmar a empresa padrão.");
+      for (let index = memberships.length - 1; index >= 0; index--) {
+        if (memberships[index]?.organization_id !== defaultId) memberships.splice(index, 1);
+      }
+    }
     const organizationIds = memberships.map((row) => row.organization_id);
     if (organizationIds.length === 0) return [];
 

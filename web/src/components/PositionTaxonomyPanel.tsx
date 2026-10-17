@@ -61,7 +61,7 @@ export function PositionTaxonomyPanel({ draft, membership, onChange, onEdit }: P
   }, [membership.organizationId, draft.title, selected, decision, complementKey, Boolean(onChange), retry]);
   const snapshot = draft.taxonomy?.originalTitle === draft.title && draft.taxonomy.organizationId === membership.organizationId ? draft.taxonomy : null;
   const ready = Boolean(snapshot && !loading && !error);
-  const canCreate = ["super_admin", "owner", "admin"].includes(membership.role);
+  const canCreate = ["super_admin", "owner", "admin", "recruiter"].includes(membership.role);
   function correctAssociation() { setWhy(false); if (onChange) setCorrect(true); else onEdit?.(); }
   function choose(candidate: TaxonomyCandidate) {
     onChange?.((value) => ({ ...value, referenceConceptId: candidate.id, taxonomyDecision: "human", taxonomy: null })); setCorrect(false);

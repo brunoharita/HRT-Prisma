@@ -1,5 +1,11 @@
 # Modelo de autorização
 
+## V3M0 — tenant-authorization2.0.0
+
+Bruno17/10/2026 definiu quatro perfis e autorizou execução com parâmetros delegados. Admin legado converge para Recruiter; alias/enum/histórico preservados. Grupo não compartilha dados. `organization_administration`1.0.0 exige versão, ator ativo, escopo vivo, revisão e locks; gravação administrativa/auditoria atômicas. `save_platform_user_v3` exclusivo service_role revalida ator/escopo e persiste usuário/memberships/auditoria juntos; Edge verifica a sessão e compensa somente identidade recém-criada que falhou. Nenhum privilégio por metadata editável.
+
+Plano/capacidade não concedem autoridade; tabela privada de configuração sem grants de cliente e com RLS. Principal/Owner/limite/versão verificados no servidor. Um Owner ativo ou pendente por grupo, sem troca por edição genérica; comum admite múltiplos vínculos do grupo, empresa padrão resolvida no servidor e sem seletor. Vínculo local não apaga nem revela empresas alheias ao escopo do Recruiter. Super mantém autoridade global inclusive consulta das empresas inativas; demais perfis não operam empresa/grupo inativo. Portais emitidos e liquidação mantêm contratos próprios. Acordo/ADR-085 e AoT V3M0 registram provas e rollout; referências anteriores abaixo são históricas quando divergirem deste delta.
+
 ## Acompanhamento Pessoa–Posição v2.2.0
 
 Papéis existentes de Posições: super_admin ativo autorizado ou owner/admin/recruiter da organização, confirmados no servidor por auth.uid(), platform_users e organization_memberships. Member não recebe acesso. Responsável deve ser operador ativo autorizado da organização; atribuição não concede papel. As três tabelas têm organização, FKs compostas, RLS e nenhum grant direto a anon/authenticated/service_role. Somente RPCs SECURITY DEFINER com search_path vazio e checagem viva. Payload aceita campos da ação, nunca score. Revisões/versões obsoletas são recusadas; histórico obrigatório atômico. Só idade derivada sai do servidor, sem nascimento/contato/currículo integral. Notas não são publicadas no Perfil/Knowledge. Negativos e evidência de ambiente no AoT2.2.0.
@@ -16,9 +22,8 @@ Publicação de perfil usa somente `publish_profile_review` para clientes autent
 | --- | --- | --- |
 | Super Admin | plataforma inteira | controla todos os grupos e empresas; único com autoridade global |
 | Owner | um grupo | controla todas as empresas do grupo e administra usuários/configurações do próprio grupo |
-| Admin | uma ou mais empresas de um único grupo | administra somente seu subconjunto explícito de empresas |
-| Recruiter | uma ou mais empresas de um único grupo | opera Talent Intelligence no próprio escopo sem administrar usuários |
-| Member | uma empresa | atua operacionalmente na empresa atribuída, sem administrar papéis ou escopos |
+| Recruiter | uma ou mais empresas de um único grupo | administrador das empresas explicitamente vinculadas; administra Recruiters/comuns no escopo e cria empresas dentro do plano |
+| Usuário comum (`member`) | vínculos no mesmo grupo, operação pela empresa padrão | somente funcionalidades comuns, sem gestão de papéis/escopos ou seletor de empresa |
 
 ## Enforcement
 
@@ -38,7 +43,7 @@ Publicação de perfil usa somente `publish_profile_review` para clientes autent
 - Aceites adaptativos usam `apply_profile_review_adaptive_suggestions`, que exige sessão revisora, tenant, review aberto, lock e payload metadata-only. Eventos, casos e padrões têm RLS; DML direto permanece revogado e padrão só é promovido pela aprovação integral.
 - Vagas, versões, requisitos, relações locais e avaliações M5.4 são legíveis apenas por Super Admin, Owner, Admin e Recruiter no escopo confirmado. `save_vacancy_definition` valida tenant e papel em `security definer` com `search_path` vazio; `member`, `anon`, referências cross-tenant e DML direto das tabelas versionadas falham fechados.
 - A pesquisa Web contextual de Vagas exige sessão ativa, Super Admin ou membership Owner, Admin ou Recruiter na organização informada e `allow_external_knowledge_enrichment = true`. O ledger possui RLS para os mesmos papéis; `anon`, Member, cross-tenant e DML direto falham fechados.
-- A exclusão definitiva de outra Pessoa exige Super Admin, Owner ou Admin no escopo resolvido no backend. Recruiter e Member são negados. A própria Pessoa usa capability separada da conta de operador e de assessment, vinculada a tenant, Pessoa, finalidade e versão, armazenada por hash, curta, revogável e de uso único. `anon` e `authenticated` não recebem DML direto no ledger, plano de Storage ou capabilities; autoatendimento e finalização pertencem ao boundary `service_role` da Edge Function.
+- A exclusão definitiva de outra Pessoa exige Super Admin, Owner ou Recruiter no escopo resolvido no backend (V3M0). Usuário comum é negado. A própria Pessoa usa capability separada da conta de operador e de assessment, vinculada a tenant, Pessoa, finalidade e versão, armazenada por hash, curta, revogável e de uso único. `anon` e `authenticated` não recebem DML direto no ledger, plano de Storage ou capabilities; autoatendimento e finalização pertencem ao boundary `service_role` da Edge Function.
 
 ## Evidência conectada em QA
 

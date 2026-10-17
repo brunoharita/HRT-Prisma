@@ -18,6 +18,7 @@ Deno.test('Knowledge history covers research, description, occupation and vacanc
    const output_text=JSON.stringify(answer);return Response.json({usage:{input_tokens:100,output_tokens:40},output_text,output:[{type:'message',content:[{type:'output_text',text:output_text}]},{type:'web_search_call',action:{sources:[{url}]}}]});
   }
   if(target.includes('/auth/v1/user'))return Response.json({id:actor,email:'fixture@example.invalid',aud:'authenticated',role:'authenticated'});
+  if(target.includes('/rpc/can_operate_prisma_organization'))return Response.json(true);
   if(target.includes('/rpc/record_ai_history_v1')){history.push(raw);return Response.json(raw.p_action==='open_request'?{request:{id:run}}:{acquired:true});}
   if(target.includes('/rpc/complete_occupation_resolution_agent'))return Response.json([{id:run,status:'ambiguous',selected_external_id:null,safe:false,reason:'Não confirmado'}]);
   if(method==='HEAD')return new Response(null,{status:200,headers:{'content-range':'0-0/0'}});
@@ -32,5 +33,19 @@ Deno.test('Knowledge history covers research, description, occupation and vacanc
  };
  const response=await handler(new Request('https://fixture.invalid/knowledge-agent',{method:'POST',headers:{Authorization:'Bearer fixture','Content-Type':'application/json'},body:JSON.stringify(body)}));const output=await response.json();assert(response.status===200,`${body.mode??'research'}:${response.status}:${JSON.stringify(output)}`);
  assert(provider===1,'one provider call');assert(history.map(c=>c.p_action).join(',')==='open_request,begin_attempt,complete_attempt,complete_request','full request lifecycle');assert(history[2]?.p_data.inputTokens===100,'actual input tokens');assert(!JSON.stringify(history).includes('JavaScript'),'no term or prompt in history');assert(history[0]?.p_data.scope===(body.mode?'organization':'platform'),'scope separated');
+ }}finally{globalThis.fetch=originalFetch;}
+});
+
+Deno.test('inactive or revoked company authority stops all four Knowledge modes before provider, history or mutation',async()=>{
+ const bodies=[{mode:'concept_description',organizationId:org},{mode:'occupation_resolution',organizationId:org},{mode:'vacancy_advisor',organizationId:org},{inboxId:run}];
+ try{for(const body of bodies){let gates=0;
+ globalThis.fetch=async(input,init)=>{const target=String(input);
+  if(target.includes('/auth/v1/user'))return Response.json({id:actor,aud:'authenticated',role:'authenticated'});
+  if(target.includes('/knowledge_inbox'))return Response.json([{id:run,scope:'organization',organization_id:org}]);
+  if(target.includes('/rpc/can_operate_prisma_organization')){gates++;assert(new Headers(init?.headers).get('Authorization')==='Bearer fixture','gate uses actual user session');return Response.json(false);}
+  throw Error('Unexpected access after revoked authority: '+target);
+ };
+ const response=await handler(new Request('https://fixture.invalid/knowledge-agent',{method:'POST',headers:{Authorization:'Bearer fixture','Content-Type':'application/json'},body:JSON.stringify(body)}));
+ assert(response.status===403,'revoked scope must be denied');assert(gates===1,'one authoritative operational gate');
  }}finally{globalThis.fetch=originalFetch;}
 });

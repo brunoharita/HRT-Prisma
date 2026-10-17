@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 507
-source_manifest_sha256: d18546897978625daf4904819b51704e4cb878140efa26be1ce765ba8635c382
+documentation_source_count: 512
+source_manifest_sha256: 7c2804a5eb1dbbf5928414501d856bc663a74da33ea99cefcc0f29bc5a9050cf
 -->
 
 # Tudo sobre o Prisma
@@ -2642,6 +2642,10 @@ pnpm run check:prisma-context
 ---
 prisma_context_id: current-state
 owner: engineering-operations
+
+## V3M0 — administração multiempresa2.9.0 em validação local
+
+Bruno17/10/2026 definiu Super Admin global, Owner do grupo, Recruiter administrador somente das empresas vinculadas no mesmo grupo e Usuário comum na empresa padrão sem seletor; autorizou implementar e delegou parâmetros restantes. Reuso funcional Horus Accounts/Empresas, mantendo organization_id e Tokens por empresa. Admin legado converge para Recruiter sem apagar histórico; grupo/empresa em preparação/ativa/inativa, principal, Owner único ativo/pendente, vínculos locais, planos/capacidade privada e auditoria transacional. Essential/Plus1, Professional até5, Enterprise capacidade explícita; preço de assinatura e segmentação futura ainda indefinidos, sem cobrança/IA automática. Capacidade inicial preserva empresas existentes e não comprova contratação. Acordo/execução V3M0 versão1.0.0, ADR-085 e owner docs/product/multiempresa.md. tenant-authorization2.0.0, organization-administration1.0.0 e platform-user-management2.0.0; rollout só mediante AoT docs/qa/aot-v3m0-multiempresa.md.
 status: current
 version: 2.81.0
 last_verified: 2026-10-16
@@ -3586,7 +3590,7 @@ Transformar bases de currículos em conhecimento profissional estruturado e perm
 
 ## Usuários do piloto
 
-Super Admin possui autoridade global da plataforma. Owner administra todas as empresas do próprio grupo. Admin administra um subconjunto explícito de empresas do grupo. Recruiter opera Talent Intelligence no próprio escopo sem administrar usuários. Member atua operacionalmente em uma única empresa sem gerenciar papéis ou permissões.
+V3M0: Super Admin possui autoridade global, inclusive empresas inativas. Owner administra todas as empresas do próprio grupo. Recruiter é administrador das empresas explicitamente vinculadas no mesmo grupo, gere Recruiters/comuns no próprio escopo e pode criar empresas dentro da capacidade do plano. Usuário comum (`member`) acessa suas funcionalidades na empresa padrão, sem seletor; múltiplos vínculos do mesmo grupo são permitidos. `admin` é somente alias legado de Recruiter. Plano/capacidade/empresa principal são governados por grupo, sem compartilhar dados ou Tokens. Fonte: `docs/product/multiempresa.md`, ADR-085 e acordo V3M0; rollout e limites no AoT.
 
 ## Escopo atual e futuro
 
@@ -5144,7 +5148,9 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `prompt-selection` | AI | 1.0.0 | extraction provider | implementado sem LLM | `no-llm-prompt-1.0.0` | local | bloquear processamento |
 | `model-selection` | AI/operations | 2.0.0 | extraction provider | implementado localmente | `deterministic-local-2.0.0`, sem LLM | local | bloquear processamento |
 | `confidence-method` | AI/QA | 1.0.0 | search, matching | implementado | `explainConfidence` | local | não exibir confiança |
-| `tenant-authorization` | security/data | 1.0.0 | Supabase Data API/web | ativo em QA | RLS migration e testes conectados | QA | negar acesso |
+| `tenant-authorization` | security/data | 2.0.0;1.0.0 histórico | Supabase Data API/web/Edge | implementação V3M0, rollout no AoT | quatro perfis, Admin legado alias, grupo/empresa/estado vivos e negativos | local; rollout no AoT | negar acesso |
+| `organization-administration` | product/security/data | 1.0.0 | Grupos e empresas | implementação V3M0, rollout no AoT | RPC versionada, revisão/locks, limites, Owner/default/auditoria | local; rollout no AoT | negar operação e pedir atualização |
+| `platform-user-management` | security/data/Edge | 2.0.0 | platform-users | implementação V3M0, rollout no AoT | save_platform_user_v3 service-only atômico e Auth compensado na criação | local; rollout no AoT | preservar dados e negar mutação |
 | `web-domain-read` | product-engineering | 1.1.0 | Home, Pessoas, perfil | ativo em QA | `PrismaDataRepository`, incluindo saúde das fontes centrais | local/QA | bloquear consulta |
 | `platform-user-access` | security/product | 2.0.0 | App Shell, Usuários, Edge Functions | implementado localmente | migration `20260824113000_m2_users_people`, `platform-users` function, UI `UsersPage` | local | bloquear operação |
 | `username-auth-boundary` | security/operations | 1.0.0 | sign-in, password recovery | implementado localmente | `operator-sign-in`, `operator-password-reset` | local | falha neutra |
@@ -5239,7 +5245,7 @@ O modelo existe em TypeScript e em migrations PostgreSQL/Supabase. Foundation, M
 
 | Agregado | Tabelas | Regra |
 | --- | --- | --- |
-| Tenant e acesso | `organization_groups`, `organizations`, `organization_memberships`, `platform_users` | Grupo delimita autoridade; empresa delimita dados; usuário opera o sistema |
+| Tenant e acesso | `organization_groups`, `organizations`, `organization_memberships`, `platform_users`; configuração privada `organization_group_settings` | Grupo delimita autoridade/plano/capacidade/principal; empresa delimita dados; membership guarda padrão; situação/versionamento/auditoria V3M0 |
 | Organização | `organization_units`, `job_roles`, `positions`, `vacancies`, `vacancy_versions`, `vacancy_requirements`, `vacancy_requirement_relations`, `vacancy_events`, `vacancy_advisor_research_runs` | Função, posição, Vaga versionada, requisito e relação local são distintos; pesquisa externa possui ledger próprio sem pergunta ou PII |
 | Pessoa | `people`, `person_private_data` | PII privada separada da identidade profissional |
 | Documento | `documents`, `document_processing_attempts`, `document_page_extractions`, `extraction_drafts`, `document_operations` | Fonte versionada, layout visual, evidência por campo, tentativa e idempotência |
@@ -5855,6 +5861,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+V3M0 autorizado17/10/2026, inclusive parâmetros delegados, usa entrega **2.9.0**; o identificador da discussão não promove3.0.0. `tenant-authorization`2.0.0 explicita Recruiter como administrador e Admin como alias histórico; `organization-administration`1.0.0 versiona grupos/empresas/planos/vínculos/default/revisão; `platform-user-management`2.0.0 usa persistência transacional via save_platform_user_v3, exclusivamente service_role. Enum e auditorias antigos preservados; Global exclusivo Super, contratos de talentos/IA/Tokens intactos. Acordo e execução V3M0, ADR-085; ativação só comprovada pelo AoT.
 
 Entrega2.8.1 autorizada por Bruno em16/10/2026: curadoria de contribuições globais com Aprovar na Base Global/Manter somente local e justificativa opcional. Rejeitar indisponível para novas decisões, mantendo histórico, autoridade/auditoria e origem local. Contrato knowledge-global-decision-2.0.0 (delta ADR-069); migration seletiva e web, sem outros serviços. Registry acrescenta a entrega1 ao movimento8;2.8.0 e demais entregas preservadas. Publicação comprovada no AoT `docs/qa/aot-knowledge-decisions-v281.md`.
 
@@ -10395,6 +10403,28 @@ Pedido de Bruno autoriza observação adicional das regiões de enunciado/altern
 
 ---
 
+## Source: `docs/decisions/ADR-085-multiempresa-horus.md`
+
+# ADR-085 — Administração multiempresa conforme Horus
+
+Status: accepted. Data17/10/2026. Fonte: Bruno neste chat V3M0 autorizou implementar e delegou parâmetros. Contrato `docs/qa/agreement-v3m0-multiempresa.md`1.0.0.
+
+Reusar Grupo -> Empresa, identidade Supabase e memberships Prisma. A Account do Horus inspira governança/empresa principal/plano; não muda `organization_id` como fronteira operacional. Quatro perfis: Super Admin global, Owner do grupo, Recruiter administrador de empresas explicitamente vinculadas no grupo e Usuário comum na empresa padrão sem seletor. `admin` permanece alias histórico compatível de Recruiter, sem quinta opção. Não há atuação entre grupos nem compartilhamento implícito.
+
+Parametrização provisória: Essential/Plus1; Professional capacidade contratada1..5; Enterprise capacidade explícita1..100000, limite técnico de entrada, sem promessa de escala validada. Novos grupos Professional1 em preparação; existentes preservam quantidade atual e recebem capacidade equivalente. Um Owner ativo/pendente por grupo; designação humana, nenhum responsável escolhido. Preço de assinatura indefinido; recursos atuais e Tokens por empresa preservados. Mudança definitiva de preços, funcionalidades, faturamento ou créditos por grupo exige decisão futura.
+
+Alternativas: substituir identidade/serviço de autorização ou banco por tenant adicionaria custo e risco sem lacuna demonstrada; reutilizar helper/RLS e RPCs transacionais atende. Perfil único/grupo único permanece adequado às quatro autoridades aprovadas; papéis diferentes por empresa e grupos múltiplos foram substituídos pela decisão explícita de Bruno. Não importar semântica de tarefas/PTI/Inteligência comercial do Horus.
+
+Novas mutações são versionadas, auditadas e serializadas por grupo. Cadastro do operador, memberships e auditoria são atômicos em save_platform_user_v3; Auth é um boundary externo existente, com compensação da identidade recém-criada quando persistência falha. Atualização de metadados Auth não é transação distribuída; nenhum dado de talentos é transferido. Links locais preservam vínculos ocultos e não expõem lista de empresas de outro operador.
+
+Compatibilidade: migrations históricas/enum/auditorias ficam intactos; registros Admin atuais convergem para Recruiter. Helpers de papel aceitam Recruiter nos antigos gates Admin; Global continua exclusivo Super. Remoção de Owner vigente e mudança de controlador não entram por um formulário genérico. Inativar preserva dados e afeta novas operações autenticadas dos usuários empresariais; Super mantém autoridade global, inclusive consulta de inativos; assessment já emitido e liquidação de reservas continuam nos contratos existentes. Capacidade conta empresas cadastradas, inclusive inativas/em preparação; inativar não recicla slot nem franquia. Redução de capacidade incompatível é recusada, sem suspensão arbitrária de empresas existentes.
+
+Rollback: imagem web anterior disponível, Edge anterior preservada e restauração por versão; migração aditiva fica no banco. Não rebaixar usuários/restaurar dados automaticamente; qualquer correção de segurança por migration forward. Consumidor antigo pode ler enum histórico; versão desconhecida nas RPCs novas é recusada. Testes/impacto/limites no AoT V3M0; sem alegação de paridade literal de planos/serviços específicos do Horus.
+
+Fronteiras existentes com service-role também verificam a autoridade/situação atual, pois RLS não protege consultas desse papel. As oito funções SQL de Processos/matching recebem apenas um guard inicial; reserva recebe o guard após o replay e antes da nova operação. A migração preserva definições/ACLs anteriores, valida assinaturas e quantidade esperadas e aborta diante de drift. Knowledge consulta a autoridade com o JWT real do usuário antes de provedor, histórico ou mutação. Evidência distingue teste de guard de validação completa dos algoritmos preservados.
+
+---
+
 ## Source: `docs/decisions/README.md`
 
 # Architectural Decision Records
@@ -10489,6 +10519,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 - [ADR-073: Interpretação derivada da trajetória](ADR-073-semantic-trajectory-score.md) — accepted no escopo M8.3; rollout e limites no AoT.
 
 - [ADR-084: Análise fundamentada da atividade de uma avaliação](ADR-084-assessment-activity-analysis.md) — implementação local autorizada; tarifa inicial6193 aprovada; publicada em2.5.2, acordo assessment-activity-v252 v1.1.0/AoT.
+
+- [ADR-085: Administração multiempresa conforme Horus](ADR-085-multiempresa-horus.md) — quatro perfis, planos/capacidade configuráveis e tenant preservado; acordo V3M0, rollout no AoT.
 
 ---
 
@@ -12022,6 +12054,26 @@ Métricas de qualidade: cobertura de blueprint, distribuição de dificuldade, t
 ## Banco de questões 2.5.0
 
 A experiência M5.1C foi reorganizada em Questões e Para revisar, com detalhe completo, comparação, cobertura e administração secundárias. Revisão comum dispensa justificativa genérica, mantendo motivo nas exceções, rejeição e ajustes, auditorias separadas e autoridade existente. Geração reaproveita o backend do banco e o ledger comercial existente; política produtiva desativada permanece indisponível. Owner atual da experiência: `docs/product/question-bank.md`; acordo e evidências em `docs/qa/aot-question-bank-v250.md`. O contrato histórico de alternativas permanece distinto do contrato da avaliação por processo.
+
+---
+
+## Source: `docs/product/multiempresa.md`
+
+# Administração multiempresa
+
+V3M0, entrega2.9.0. Acordo1.0.0 `docs/qa/agreement-v3m0-multiempresa.md`, ADR-085. Autorização de Bruno17/10/2026, parâmetros restantes delegados e revisáveis. Estado de publicação e evidência ficam no AoT, não são presumidos por este documento.
+
+Somente quatro perfis: Super Admin vê todos os grupos, empresas e usuários; Owner governa seu grupo e todas suas empresas; Recruiter administra as empresas explicitamente vinculadas no mesmo grupo; Usuário comum usa somente suas funcionalidades na empresa padrão, sem seletor de troca. Múltiplos vínculos comuns são possíveis; o servidor escolhe padrão ativo, com fallback determinístico quando indisponível. Admin legado aparece como Recruiter, sem apagar autoria/histórico.
+
+Administração -> Grupos e empresas mostra identificação, situação, Owner, plano, capacidade, principal e empresas autorizadas. Recruiter não vê empresas sem vínculo. Super cadastra grupo com primeira empresa em preparação; cadastro/ativação humana do Owner reutiliza Usuários. Ativar a empresa principal e depois o grupo exige Owner ativo. Não se inventa responsável. Super/Owner/Recruiter podem criar novas empresas no próprio escopo/grupo, dentro do plano e com Owner válido. Criação pelo Recruiter concede vínculo na nova empresa; Owner mantém todas. Criação pelo Super usa o Owner existente como administrador responsável.
+
+Acessos permite vincular usuário ativo já existente do grupo, remover somente o vínculo local e definir empresa padrão. Novo usuário, credencial, ativação por e-mail, papel global e status continuam em Usuários. Recruiter administra apenas Recruiters/comuns e não amplia escopo próprio. Para editar cadastro global de usuário compartilhado, precisa autoridade sobre todo o escopo dele; caso contrário usa Acessos para o vínculo local. Próprio vínculo, último vínculo e Owner vigente têm proteção. Um Owner ativo ou com ativação pendente por grupo; transferência de responsabilidade exige movimento próprio.
+
+Plano pertence ao grupo e não concede acesso a dados. Essential/Essential Plus1empresa; Professional1incluída, capacidade configurável até5; Enterprise quantidade explícita, limitada tecnicamente a100000 na configuração, sem escala validada. Novos grupos Professional/1; empresas existentes preservadas e capacidade inicial compatível. A capacidade inicial é provisória e não comprova contratação/pagamento. Somente Super altera plano/capacidade. Valores de assinatura e segmentação futura de recursos indefinidos; alteração de configuração não cobra nem confirma pagamento. Todos os recursos atuais seguem seus gates de autoridade. Tokens mantêm franquias, lotes, pedidos, tarifas e reservas por empresa; não se cria carteira de grupo nem saldo por cadastro em preparação.
+
+Em preparação: cadastro sem operação de negócio para usuários empresariais; Ativa: operação autorizada; Inativa: novas operações bloqueadas para Owner/Recruiter/comum; Super mantém consulta global e autoridade administrativa, dados/vínculos/saldos preservados. Administração mantém as empresas inativas visíveis no escopo autorizado. Principal não pode ser inativada com grupo ativo. Empresas em preparação/inativas continuam ocupando capacidade: inativar não libera slot nem reduz contratação. Redução da capacidade abaixo do cadastro existente é recusada, sem suspensão automática; não é ainda o downgrade comercial ampliado planejado no Horus. Portais já emitidos e entregas pendentes seguem seus contratos próprios. Arquivamento/exclusão definitiva empresarial não existem neste fluxo.
+
+Grupo não mescla Pessoas, documentos, Perfis, Posições, Processos, Knowledge ou saldos. Cadastro profissional, condição de funcionário, decisões e resultados continuam por empresa. Nenhuma IA é chamada pela administração. Consolidação é administrativa, sem rankings ou contagem fictícia de pessoas únicas. A tela é baseada funcionalmente em Accounts/Empresas do Horus, com componentes visuais Prisma e comparação responsiva em1448/390/320.
 
 ---
 
@@ -17965,6 +18017,64 @@ Referência de produto: `docs/product/ux-foundation.md`, `prisma-ux-foundation-1
 ## PENDÊNCIAS
 
 Nenhuma decisão de produto pendente no escopo autorizado. O item 3.3 anterior que recomendava manter Vagas está expressamente supersedido por D-3.3: **Posições**.
+
+---
+
+## Source: `docs/qa/agreement-v3m0-multiempresa.md`
+
+# Acordo V3M0 — administração multiempresa
+
+Versão 1.0.0, agreed, Bruno17/10/2026. Fonte: decisões deste chat sobre paridade funcional com Horus, quatro perfis e autorização final «faça tudo e determine esses parâmetros sozinho». A autonomia inclui os parâmetros abaixo; não exige ratificação de detalhes mecânicos. V3M0 identifica o movimento, não autoriza3.0.0; entrega escolhida2.9.0.
+
+## DEVE
+
+- D-01 — Somente Super Admin, Owner, Recruiter e Usuário comum na interface. Admin legado converge para Recruiter; histórico preservado. Super vê todos; Owner governa seu grupo e todas as empresas dele; Recruiter administra somente vínculos explícitos em empresas do mesmo grupo.
+- D-02 — Administração de grupos/empresas inspirada nas telas Accounts/Empresas do Horus: listagem, busca, identificação, situação, Owner, empresa principal, plano e capacidade. Cadastro de grupo pelo Super; criação de empresa por Super/Owner/Recruiter ativo, no próprio grupo, com Owner válido e capacidade contratada. Criador autorizado recebe vínculo administrativo na empresa criada; criação pelo Super usa o Owner como administrador inicial.
+- D-03 — Plano da conta/grupo e autoridade independentes. Essential/Essential Plus1empresa; Professional1incluída, capacidade contratada configurável até5; Enterprise capacidade explicitamente configurada. Configuração exclusiva Super. Capacidade conta todas as empresas cadastradas, inclusive inativas/em preparação; inativar não libera slot. Default de novos grupos Professional/1; grupos existentes preservam empresas e recebem capacidade pelo menos igual à quantidade atual, sem concessão fictícia/pagamento. Preços de assinatura provisoriamente não definidos, sem cobrança/checkout; todos os recursos atuais preservados, sem gates comerciais inventados. Tokens continuam por empresa e com contratos atuais.
+- D-04 — Um Owner ativo por grupo. Novos grupos começam em preparação; Super cadastra a primeira empresa e designa/ativa Owner pelo fluxo de Usuários existente. Ativação exige Owner ativo e empresa principal do próprio grupo. Sem escolher pessoas ou transferir dados automaticamente. Alteração de nome/situação/configuração auditada; operações rejeitam versão/revisão obsoleta. Inativação não apaga dados, vínculos ou saldos; empresas inativas ficam fora da operação, mas visíveis na administração autorizada.
+- D-05 — Recruiter administra Recruiters e usuários comuns no próprio escopo; concessão/revogação por empresa não amplia outras empresas. Usuário existente do mesmo grupo pode ser vinculado explicitamente sem criar nova identidade. Conta e histórico são preservados; escopo de terceiros fora da autoridade não é exposto. Ativação de nova identidade e recuperação reutilizam Supabase Auth/Edge existentes.
+- D-06 — Usuário comum opera na empresa padrão sem seletor. Múltiplos vínculos comuns permitidos no grupo; preferência padrão única, validada no servidor. Sem acesso a administração, currículos privados, Posições ou Processos. Contexto da empresa separado em navegação/estado e respostas atrasadas descartadas.
+- D-07 — Tenant/RLS/grants/servidor são autoridade. Grupo não compartilha dados entre empresas. Limite verificado com lock, sem ultrapassagem concorrente; auditoria obrigatória na mesma transação das novas mutações. Documentação, contratos, Context Pack, CI, publicação seletiva, smoke e sincronização fazem parte da entrega.
+
+## PROIBIDO
+
+- P-01 — Vínculo cross-group, autoelevação, Recruiter alterar Owner/Super ou conceder empresas fora do escopo; permissões por metadata editável; retorno de dados empresariais alheios.
+- P-02 — Apagar histórico/dados/saldos, mesclar Pessoas, inferir decisões humanas, publicar Perfil/Knowledge global, chamar IA/cobrar/confirmar pagamentos automaticamente. Compartilhar carteira ou migrar faturamento para grupo.
+- P-03 — Reproduzir bugs/limitações técnicas do Horus como regra de produto, reescrever migrations históricas ou forçar3.0.0.
+
+## FORA DE ESCOPO
+
+- F-01 — Precificação definitiva e segmentação nova das funções por plano; transferência de Owner/grupo com mudança de controlador; compartilhamento de Pessoas/Knowledge, consolidados de negócio, escrita multiempresa, checkout e cobrança de assinatura. São extensões, não requisitos aprovados deste movimento. Gestão existente de Tokens preservada.
+
+## AUTONOMIA
+
+- A-01 — Bruno delegou parâmetros não fechados. Configuração e limites provisórios acima escolhidos com preservação dos contratos e sem custo externo; UI usa AntD/Prisma e a estrutura funcional Horus, sem nova dependência. Estado de preparação resolve onboarding sem inventar Owner. Funções operacionais existentes permanecem disponíveis conforme autoridade.
+
+## Aceite
+
+- CA-01 — D-01/05/06: testes de perfis, apresentação sem Admin, operações positivas e negativas por ator, grupos distintos, empresa padrão comum e manutenção dos vínculos externos ao escopo.
+- CA-02 — D-02/03/04: SQL real descartável cobre cadastro, limites/concorrência, versão, Owner/situação inválidos, empresa principal, configurações e auditoria atômica; browser em1448/390/320 cobre estados, mutações explícitas, erros e navegação.
+- CA-03 — D-07/P-*: regressão dos helpers/consumidores diretamente afetados, contratos de domínio preservados, nenhum dado real usado em testes; tipos/build/lint/foundation/contexto e CI. Rollout condicionado a todos D/P comprovados; registrar limites de baseline.
+
+## Mapa de impacto anterior à implementação
+
+Baseline7456e22/main2.8.1; único Supabase Prisma17ACTIVE_HEALTHY conferido somente leitura:1grupo,2empresas,1Owner ativo, sem conflito de Owner. Código local e contratos, não teste conectado por papel. Cópia Horus consultada somente leitura.
+
+| Capacidade | Relação | Preservação e prova mínima |
+| --- | --- | --- |
+| Grupos/empresas/planos/Usuários | direct | Novas RPCs transacionais, escopo, concorrência, estados e browser funcional |
+| Roles/RLS/tenant/PII | critical_transversal | Negativos dois grupos/três empresas, grants/helper real, status/revogação e Admin legado |
+| Shell/contexto/empresa padrão | direct | Sem seletor comum; troca autorizada e invalidação de escopo, visão mobile |
+| Knowledge/Banco/Tokens/exclusão de Pessoa | plausible_indirect | Recruiter assume Admin; conferir cada fronteira de autoridade, Global permanece Super, regras comerciais preservadas |
+| Pessoas/Posições/Processos/importação | plausible_indirect | Helpers compartilhados; regressão dirigida de contratos e cenário local com org ativa/inativa, sem dados reais |
+| Parser/Synthesis/matching/portais em curso | no_impact_identified | Algoritmos e serviços não mudam; autorização de nova operação usa helper atualizado, liquidação/portal já iniciado preservados |
+| Deploy | direct | Diff define migration/Edge/web; CI e rollback, sem reconstruir outros serviços |
+
+Mínimo suficiente: provas acima; não executar validate integral local sem autorização específica. Fechar após D/P PASS, evidência, docs/contexto e entrega autorizada. Sem mockup normativo fornecido; referência Horus funcional, layout adaptado aos componentes Prisma com conferência responsiva.
+
+## Pendências
+
+Nenhum Q material bloqueante: parâmetros foram delegados. Decisões comerciais futuras não bloqueiam a administração dentro dos limites explícitos.
 
 ---
 
@@ -24763,6 +24873,54 @@ Padrões aprovados formalizados e base compartilhada implementada para orientar 
 
 ---
 
+## Source: `docs/qa/aot-v3m0-multiempresa.md`
+
+# AoT — V3M0 administração multiempresa2.9.0
+
+Acordo `docs/qa/agreement-v3m0-multiempresa.md`1.0.0 e execução correspondente. Fonte: decisões de Bruno neste chat17/10/2026, quatro perfis, Horus como referência principal e mandato final de execução com parâmetros delegados. Baseline7456e22/main2.8.1. Classe D com decisão durável de autoridade registrada no ADR-085. Não há versão3.0.0 implícita.
+
+## Acordos, implementação, testes e evidência
+
+| ID | Implementação | Teste/evidência | Estado local |
+| --- | --- | --- | --- |
+| D-01 | Quatro opções; alias Admin -> Recruiter, transição auditada como metadata de sistema; helpers/consumidores adaptados | SQL101, Node57 incluindo perfis/rotas; Deno3 com sete cenários do handler de Usuários | PASS |
+| D-02 | OrganizationsPage, RPC versionada; grupo/primeira empresa em preparação, criação por Recruiter/Owner/Super | SQL criação/onboarding, limite e dois concorrentes reais; browser114 em1448/390/320 | PASS |
+| D-03 | Configuração privada por grupo; capacidade inclui empresas inativas/em preparação; atual2empresas preservado com limite2; sem preço/checkout/gate novo | SQL limites/capacidade/ausência de reciclagem/sem saldo de Tokens por preparação; validação de limites Node | PASS |
+| D-04 | Owner único ativo/pendente, designação explícita; principal/situação/revisão; Super preserva consulta global de inativos | SQL Owner duplicado/remoção/ativação inválida/versão/situação e visibilidade; browser metadados | PASS |
+| D-05 | Cadastro+membership+audit atômicos em RPC service-only; Edge verifica sessão e compensa somente Auth recém-criado se persistência falha; links locais preservam vínculos externos | SQL persistência/negativos/falha de auditoria e ausência de resíduos; Deno handler real com fetch sintético e sem rede | PASS |
+| D-06 | Default resolvido no servidor, comum sem seletor; guards de edição e contexto do shell preservados | SQL múltiplos vínculos/default/PII negada; browser quatro perfis, falha preserva edição, cancelamento e descarte explícito | PASS |
+| D-07 | Isolamento/RLS/grants/contrato/locks; documentação e CI/publicação por destinos | Provas locais PASS; publicação e sincronização abaixo | PARTIAL |
+
+| Proibição | Evidência negativa | Estado local |
+| --- | --- | --- |
+| P-01 | Grupo/empresa cruzados, comum, ausência de identidade, autoalteração, contrato ausente/desconhecido, escopo stale/revogado e endpoint service-only negados. Gate Knowledge real permite Recruiter local e recusa Global/cross-tenant | PASS |
+| P-02 | Algoritmos/decisões/ledger de Tokens preservados; guards de autoridade em Processos/matching/reserva e Knowledge. SQL preserva memberships e replay de reserva; corpo anterior das nove funções preservado exceto guard; contratos/métodos e quotes congelados | PASS |
+| P-03 | Migrations históricas intactas; sem3.0.0; reused Auth/RLS/AntD/Horus, sem nova dependência | PASS |
+
+## Mapa de impacto e preservação final
+
+Mantém o mapa do acordo, anterior à implementação, com a revisão abaixo por dependências descobertas. Direct: administração/Usuários/shell e guards de autoridade Knowledge/Processos/matching/reservas; critical_transversal: roles/RLS/tenant/PII; plausible_indirect: Banco/erasure e jornadas de talentos. Regressão:57Node em10arquivos;33tooling de quotes/processos/navegação/release;3Deno (sete cenários do handler, histórico Knowledge e quatro modos negados antes de provedor/escrita),101SQL e114browser. Tipos root/web, build web, lint/foundation/contexto conforme local-validation.json. Não se executou validate integral local; CI geral continua obrigatório.
+
+Revisão do mapa durante a implementação: consultas diretas por service-role em Knowledge e nove funções SQL não passavam pela RLS. A situação da empresa passou a ser verificada nesses limites existentes. São oito guards de entrada (follow-up e matching) e um antes de nova reserva, depois do replay existente. Algoritmos, ACLs e liquidações não mudam. A migração exige nomes/argumentos e quantidade esperados e aborta diante de drift; não substitui código desconhecido. Evidência de preservação dos corpos remotos será registrada no rollout.
+
+Baseline operacional conferido somente leitura: Supabase Prisma ioldpnqqvobprjiontre,17.6ACTIVE_HEALTHY,1grupo/2empresas/1Owner ativo; sem conflitos de Owner. Remoto único produtivo, sem QA remoto separado. Duas Edge Functions instaladas tinham entradas byte-equivalentes ao baseline normalizado: platform-users v5 e knowledge-agent v22, ambasJWT=true. Helpers remotos de papel/validação/erasure correspondem ao contrato local anterior. Não foram lidos currículos ou dados pessoais de talentos.
+
+SQL usa PostgreSQL17 isolado localhost5846, schemas/tabelas/helpers/policies e gate follow-up extraídos das fontes reais pertinentes; Auth.uid substituído por fixture de sessão. Sete funções matching e a reserva usam delegação sintética com os mesmos argumentos de autoridade: comprovam guard, preservação do corpo, negação e replay, não algoritmos de negócio completos. Não é reset integral do Supabase nem teste empírico de login. Banco descartável encerrado pelo roteiro. Browser usa componentes reais e transporte sintético sem rede externa,12estados por perfil/viewport, nove capturas mais recuperação. Inspecionadas desktop1448 e mobile320, título/ações sem corte após correção necessária. Tabela móvel mantém rolagem horizontal interna; sem overflow de página.
+
+O mapa foi precisado na capacidade: inativar não libera slot, evitando reciclagem de cadastro/franquia e respeitando a separação Horus entre situação e contratação. Configuração inicial é provisória, não evidência de compra. Principal e Owner preservados; migração registra parâmetros/aliases como sistema, sem inventar autoria humana. F-01 preservado: preços definitivos, redistribuição comercial de funcionalidades, transferência de controlador/Owner, compartilhamento, consolidação de negócio e cobrança fora do movimento.
+
+## Desvios e limites
+
+Sem desvio dos quatro perfis/escopos aprovados. Não é clone literal de módulos de tarefas/PTI/IA comercial do Horus. Downgrade comercial ampliado não foi importado; capacidade incompatível é recusada, não suspende arbitrariamente empresas. Sem escala Enterprise validada, SLA ou promessa de contratação. Auth externo e domínio não formam transação distribuída: criação tem compensação, atualização de metadados Auth conserva o fluxo existente. Nenhuma chamada paga/decisão/Perfil publicado para validar. Jornada autenticada humana de produção permanece NOT TESTED até evidência específica; SQL e browser sintético não a substituem.
+
+Ocorrências locais: launcher PostgreSQL no Windows reteve handles de stdout; corrigido para stdio ignorado apenas em pg_ctl e encerrado exclusivamente o cluster descartável da tarefa. Ambiguidade de alias SQL detectada/corrigida antes do rollout; fixture de falha de auditoria corrigida para NOT VALID sobre histórico anterior; teste de descarte passou após aguardar o desmontar do modal. Não eram regressões produtivas. Avisos AntD de API depreciada/contexto/form e warnings prévios de chunk/import dinâmico não geraram exceção; nenhuma refatoração adjacente.
+
+## Publicação, rollback e sincronização
+
+Pendente. Somente migration nova, platform-users, knowledge-agent e web. Banco antes de consumidores; CI obrigatório. Preservar rollback da imagem web e versões anteriores Edge. Correção DB por migration forward, sem rebaixar usuários ou reescrever histórico automaticamente. Outros serviços VPS preservados por IDs/imagens/restarts observados. Conclusão geral PARTIAL enquanto esta seção não estiver comprovada.
+
+---
+
 ## Source: `docs/qa/aot-vacancy-people-alert-order.md`
 
 # AoT — consulta e ordenação de Pessoas por Posição
@@ -29005,6 +29163,18 @@ Preservar `.tmp.driveupload/` e qualquer material não relacionado. Não modific
 
 ---
 
+## Source: `docs/qa/execution-v3m0-multiempresa.md`
+
+# Execução V3M0
+
+Implementar integralmente `docs/qa/agreement-v3m0-multiempresa.md` versão1.0.0, lida por completo: D-01..07/P-01..03/F-01/A-01/CA-01..03/mapa. Fonte: Bruno17/10/2026 autorizou execução e delegou parâmetros. Sem3.0.0 implícita; entrega2.9.0.
+
+Reutilizar organization_groups/organizations/organization_memberships/platform_users, Supabase Auth, Edge platform-users, helpers/RLS e AntD/App Shell. Migração aditiva compatível, sem reescrever histórico. Não criar fornecedor de identidade, banco por empresa, cobrança automática ou carteira por grupo. Codificar as escolhas provisórias do acordo como configurações auditáveis; manter recursos atuais e preços de Tokens.
+
+Local -> SQL descartável/negativos/browser/contratos afetados -> tipos/build/lint/contextos -> CI -> migration seletiva -> Edge afetadas -> web -> smoke e sincronização. Não usar produção para mutações de teste. Se encontrar conflito de Owner/dados/contrato, parar somente a operação afetada, sem escolher pessoas nem remover registros. AoT usa template e distingue comportamento novo, preservação e limites.
+
+---
+
 ## Source: `docs/qa/execution-visual-option4-v211.md`
 
 # Execução — Comunicação visual v2.1.1
@@ -31858,6 +32028,12 @@ Implementar todos D/P/F/A/CA acima; não reinterpretar regra nem composição. P
 
 # Modelo de autorização
 
+## V3M0 — tenant-authorization2.0.0
+
+Bruno17/10/2026 definiu quatro perfis e autorizou execução com parâmetros delegados. Admin legado converge para Recruiter; alias/enum/histórico preservados. Grupo não compartilha dados. `organization_administration`1.0.0 exige versão, ator ativo, escopo vivo, revisão e locks; gravação administrativa/auditoria atômicas. `save_platform_user_v3` exclusivo service_role revalida ator/escopo e persiste usuário/memberships/auditoria juntos; Edge verifica a sessão e compensa somente identidade recém-criada que falhou. Nenhum privilégio por metadata editável.
+
+Plano/capacidade não concedem autoridade; tabela privada de configuração sem grants de cliente e com RLS. Principal/Owner/limite/versão verificados no servidor. Um Owner ativo ou pendente por grupo, sem troca por edição genérica; comum admite múltiplos vínculos do grupo, empresa padrão resolvida no servidor e sem seletor. Vínculo local não apaga nem revela empresas alheias ao escopo do Recruiter. Super mantém autoridade global inclusive consulta das empresas inativas; demais perfis não operam empresa/grupo inativo. Portais emitidos e liquidação mantêm contratos próprios. Acordo/ADR-085 e AoT V3M0 registram provas e rollout; referências anteriores abaixo são históricas quando divergirem deste delta.
+
 ## Acompanhamento Pessoa–Posição v2.2.0
 
 Papéis existentes de Posições: super_admin ativo autorizado ou owner/admin/recruiter da organização, confirmados no servidor por auth.uid(), platform_users e organization_memberships. Member não recebe acesso. Responsável deve ser operador ativo autorizado da organização; atribuição não concede papel. As três tabelas têm organização, FKs compostas, RLS e nenhum grant direto a anon/authenticated/service_role. Somente RPCs SECURITY DEFINER com search_path vazio e checagem viva. Payload aceita campos da ação, nunca score. Revisões/versões obsoletas são recusadas; histórico obrigatório atômico. Só idade derivada sai do servidor, sem nascimento/contato/currículo integral. Notas não são publicadas no Perfil/Knowledge. Negativos e evidência de ambiente no AoT2.2.0.
@@ -31874,9 +32050,8 @@ Publicação de perfil usa somente `publish_profile_review` para clientes autent
 | --- | --- | --- |
 | Super Admin | plataforma inteira | controla todos os grupos e empresas; único com autoridade global |
 | Owner | um grupo | controla todas as empresas do grupo e administra usuários/configurações do próprio grupo |
-| Admin | uma ou mais empresas de um único grupo | administra somente seu subconjunto explícito de empresas |
-| Recruiter | uma ou mais empresas de um único grupo | opera Talent Intelligence no próprio escopo sem administrar usuários |
-| Member | uma empresa | atua operacionalmente na empresa atribuída, sem administrar papéis ou escopos |
+| Recruiter | uma ou mais empresas de um único grupo | administrador das empresas explicitamente vinculadas; administra Recruiters/comuns no escopo e cria empresas dentro do plano |
+| Usuário comum (`member`) | vínculos no mesmo grupo, operação pela empresa padrão | somente funcionalidades comuns, sem gestão de papéis/escopos ou seletor de empresa |
 
 ## Enforcement
 
@@ -31896,7 +32071,7 @@ Publicação de perfil usa somente `publish_profile_review` para clientes autent
 - Aceites adaptativos usam `apply_profile_review_adaptive_suggestions`, que exige sessão revisora, tenant, review aberto, lock e payload metadata-only. Eventos, casos e padrões têm RLS; DML direto permanece revogado e padrão só é promovido pela aprovação integral.
 - Vagas, versões, requisitos, relações locais e avaliações M5.4 são legíveis apenas por Super Admin, Owner, Admin e Recruiter no escopo confirmado. `save_vacancy_definition` valida tenant e papel em `security definer` com `search_path` vazio; `member`, `anon`, referências cross-tenant e DML direto das tabelas versionadas falham fechados.
 - A pesquisa Web contextual de Vagas exige sessão ativa, Super Admin ou membership Owner, Admin ou Recruiter na organização informada e `allow_external_knowledge_enrichment = true`. O ledger possui RLS para os mesmos papéis; `anon`, Member, cross-tenant e DML direto falham fechados.
-- A exclusão definitiva de outra Pessoa exige Super Admin, Owner ou Admin no escopo resolvido no backend. Recruiter e Member são negados. A própria Pessoa usa capability separada da conta de operador e de assessment, vinculada a tenant, Pessoa, finalidade e versão, armazenada por hash, curta, revogável e de uso único. `anon` e `authenticated` não recebem DML direto no ledger, plano de Storage ou capabilities; autoatendimento e finalização pertencem ao boundary `service_role` da Edge Function.
+- A exclusão definitiva de outra Pessoa exige Super Admin, Owner ou Recruiter no escopo resolvido no backend (V3M0). Usuário comum é negado. A própria Pessoa usa capability separada da conta de operador e de assessment, vinculada a tenant, Pessoa, finalidade e versão, armazenada por hash, curta, revogável e de uso único. `anon` e `authenticated` não recebem DML direto no ledger, plano de Storage ou capabilities; autoatendimento e finalização pertencem ao boundary `service_role` da Edge Function.
 
 ## Evidência conectada em QA
 

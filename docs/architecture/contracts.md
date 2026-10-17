@@ -70,7 +70,9 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `prompt-selection` | AI | 1.0.0 | extraction provider | implementado sem LLM | `no-llm-prompt-1.0.0` | local | bloquear processamento |
 | `model-selection` | AI/operations | 2.0.0 | extraction provider | implementado localmente | `deterministic-local-2.0.0`, sem LLM | local | bloquear processamento |
 | `confidence-method` | AI/QA | 1.0.0 | search, matching | implementado | `explainConfidence` | local | não exibir confiança |
-| `tenant-authorization` | security/data | 1.0.0 | Supabase Data API/web | ativo em QA | RLS migration e testes conectados | QA | negar acesso |
+| `tenant-authorization` | security/data | 2.0.0;1.0.0 histórico | Supabase Data API/web/Edge | implementação V3M0, rollout no AoT | quatro perfis, Admin legado alias, grupo/empresa/estado vivos e negativos | local; rollout no AoT | negar acesso |
+| `organization-administration` | product/security/data | 1.0.0 | Grupos e empresas | implementação V3M0, rollout no AoT | RPC versionada, revisão/locks, limites, Owner/default/auditoria | local; rollout no AoT | negar operação e pedir atualização |
+| `platform-user-management` | security/data/Edge | 2.0.0 | platform-users | implementação V3M0, rollout no AoT | save_platform_user_v3 service-only atômico e Auth compensado na criação | local; rollout no AoT | preservar dados e negar mutação |
 | `web-domain-read` | product-engineering | 1.1.0 | Home, Pessoas, perfil | ativo em QA | `PrismaDataRepository`, incluindo saúde das fontes centrais | local/QA | bloquear consulta |
 | `platform-user-access` | security/product | 2.0.0 | App Shell, Usuários, Edge Functions | implementado localmente | migration `20260824113000_m2_users_people`, `platform-users` function, UI `UsersPage` | local | bloquear operação |
 | `username-auth-boundary` | security/operations | 1.0.0 | sign-in, password recovery | implementado localmente | `operator-sign-in`, `operator-password-reset` | local | falha neutra |

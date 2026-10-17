@@ -139,7 +139,7 @@ function SidebarContent({
       </nav>
 
       <div className="prisma-sidebar-utilities">
-        {memberships.length > 0 ? (
+        {memberships.length > 0 && activeMembership?.role !== "member" ? (
           collapsed ? (
             <Dropdown
               menu={{
@@ -175,7 +175,7 @@ function SidebarContent({
           )
         ) : null}
 
-        {collapsed && activeMembership ? <small className="prisma-collapsed-company">{activeMembership.organizationName}</small> : null}
+        {(collapsed || activeMembership?.role === "member") && activeMembership ? <small className="prisma-collapsed-company">{activeMembership.organizationName}</small> : null}
         <div className="prisma-sidebar-divider" />
 
         <Dropdown

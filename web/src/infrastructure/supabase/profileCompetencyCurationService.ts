@@ -5,7 +5,7 @@ import { CURATION_WORKFLOW_VERSION, type CompetencyCurationAdapter } from "../..
 import type { MembershipRole } from "../../shared/access";
 
 export function profileCompetencyCurationService(organizationId: string, personId: string, role: MembershipRole): CompetencyCurationAdapter | undefined {
-  if (!["super_admin", "owner", "admin"].includes(role)) return undefined;
+  if (!["super_admin", "owner", "admin", "recruiter"].includes(role)) return undefined;
   return {
     canUseGlobal: role === "super_admin",
     async loadSubgroups() {

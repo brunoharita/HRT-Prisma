@@ -158,7 +158,7 @@ export function PersonWorkspacePage({ activeMembership, personId, onNavigate, re
   const [moveDocument, setMoveDocument] = useState<PersonDocumentTimelineItem | null>(null);
   const [peopleOptions, setPeopleOptions] = useState<PersonWorkspaceSummary[]>([]);
   useLoadingFeedback({ "Carregando Pessoa…": loading, "Processando Pessoa…": busy });
-  const canDeletePerson = ["super_admin", "owner", "admin"].includes(activeMembership.role);
+  const canDeletePerson = ["super_admin", "owner", "admin", "recruiter"].includes(activeMembership.role);
 
   async function refresh(documentId = selectedDocumentId) {
     return operationActivity.run(async () => {

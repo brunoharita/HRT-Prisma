@@ -5,12 +5,12 @@ export type NavigationGroup = typeof navigationGroups[number];
 
 export function navigationGroup(path: string): NavigationGroup {
   if (path === "/knowledge" || path === "/item-bank") return "Curadoria";
-  if (["/users", "/tokens", "/platform-tokens"].includes(path)) return "Administração";
+  if (["/users", "/tokens", "/platform-tokens", "/organizations"].includes(path)) return "Administração";
   return "Operação";
 }
 
 export function isDeliveredNavigation(path: string): boolean {
-  return !["/matching", "/organizations"].includes(path);
+  return !["/matching"].includes(path);
 }
 
 /** Presentation only. Historical data, source terms and persisted identifiers remain untouched. */

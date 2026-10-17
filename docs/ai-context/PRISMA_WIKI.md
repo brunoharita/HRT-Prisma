@@ -64,7 +64,7 @@ Transformar bases de currículos em conhecimento profissional estruturado e perm
 
 ## Usuários do piloto
 
-Super Admin possui autoridade global da plataforma. Owner administra todas as empresas do próprio grupo. Admin administra um subconjunto explícito de empresas do grupo. Recruiter opera Talent Intelligence no próprio escopo sem administrar usuários. Member atua operacionalmente em uma única empresa sem gerenciar papéis ou permissões.
+V3M0: Super Admin possui autoridade global, inclusive empresas inativas. Owner administra todas as empresas do próprio grupo. Recruiter é administrador das empresas explicitamente vinculadas no mesmo grupo, gere Recruiters/comuns no próprio escopo e pode criar empresas dentro da capacidade do plano. Usuário comum (`member`) acessa suas funcionalidades na empresa padrão, sem seletor; múltiplos vínculos do mesmo grupo são permitidos. `admin` é somente alias legado de Recruiter. Plano/capacidade/empresa principal são governados por grupo, sem compartilhar dados ou Tokens. Fonte: `docs/product/multiempresa.md`, ADR-085 e acordo V3M0; rollout e limites no AoT.
 
 ## Escopo atual e futuro
 

@@ -1,7 +1,6 @@
 export const PLATFORM_ACCESS_PROFILES = [
   "super_admin",
   "owner",
-  "admin",
   "recruiter",
   "member",
 ] as const;
@@ -15,7 +14,8 @@ export const PLATFORM_USER_STATUSES = [
 
 export const CREDENTIAL_DELIVERY_MODES = ["manual_password", "activation_link"] as const;
 
-export type PlatformAccessProfile = (typeof PLATFORM_ACCESS_PROFILES)[number];
+/** admin is accepted only to read historical clients/data; it is not a selectable profile. */
+export type PlatformAccessProfile = (typeof PLATFORM_ACCESS_PROFILES)[number] | "admin";
 export type PlatformUserStatus = (typeof PLATFORM_USER_STATUSES)[number];
 export type CredentialDeliveryMode = (typeof CREDENTIAL_DELIVERY_MODES)[number];
 
@@ -78,7 +78,11 @@ export const COUNTRY_PHONE_OPTIONS: readonly CountryPhoneOption[] = [
 ];
 
 export function isPlatformAccessProfile(value: string): value is PlatformAccessProfile {
-  return PLATFORM_ACCESS_PROFILES.some((item) => item === value);
+  return value === "admin" || PLATFORM_ACCESS_PROFILES.some((item) => item === value);
+}
+
+export function canonicalAccessProfile(value: PlatformAccessProfile): PlatformAccessProfile {
+  return value === "admin" ? "recruiter" : value;
 }
 
 export function isPlatformUserStatus(value: string): value is PlatformUserStatus {
@@ -88,9 +92,8 @@ export function isPlatformUserStatus(value: string): value is PlatformUserStatus
 export function describePlatformAccessProfile(profile: PlatformAccessProfile): string {
   if (profile === "super_admin") return "Super Admin";
   if (profile === "owner") return "Owner";
-  if (profile === "admin") return "Admin";
-  if (profile === "recruiter") return "Recruiter";
-  return "Member";
+  if (profile === "admin" || profile === "recruiter") return "Recruiter";
+  return "Usuário comum";
 }
 
 export function describePlatformUserStatus(status: PlatformUserStatus): string {
@@ -111,7 +114,7 @@ export function accessProfileRank(profile: PlatformAccessProfile): number {
   if (profile === "super_admin") return 5;
   if (profile === "owner") return 4;
   if (profile === "admin") return 3;
-  if (profile === "recruiter") return 2;
+  if (profile === "recruiter") return 3;
   return 1;
 }
 

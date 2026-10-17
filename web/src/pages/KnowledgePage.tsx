@@ -75,7 +75,7 @@ export function KnowledgePage({ profile, activeMembership, initialTab="overview"
   ], []);
 
   if (error && !dashboard) return <PrismaPage><Alert className="prisma-content-standard" message={error} type="error" showIcon action={<Button onClick={() => void load()}>Tentar novamente</Button>} /></PrismaPage>;
-  const areaTab = { key: "professional-areas", label: "Áreas profissionais", children: <ProfessionalAreas organizationId={organizationId} global={isGlobal} canEdit={isGlobal || activeMembership?.role === "owner" || activeMembership?.role === "admin"} /> };
+  const areaTab = { key: "professional-areas", label: "Áreas profissionais", children: <ProfessionalAreas organizationId={organizationId} global={isGlobal} canEdit={isGlobal || activeMembership?.role === "owner" || (activeMembership?.role === "admin" || activeMembership?.role === "recruiter")} /> };
   const tabs = isGlobal ? [
     { key: "overview", label: "Visão Geral", children: overviewPanel() },
     areaTab,

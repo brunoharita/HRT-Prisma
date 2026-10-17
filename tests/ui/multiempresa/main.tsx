@@ -1,0 +1,16 @@
+import { createRoot } from "react-dom/client";
+import { ConfigProvider } from "antd";
+import ptBR from "antd/locale/pt_BR";
+import { ApartmentOutlined } from "@ant-design/icons";
+import { OrganizationsPage } from "../../../web/src/pages/OrganizationsPage";
+import { PrismaAppShell } from "../../../web/src/ui/PrismaAppShell";
+import { PrismaViewStateProvider } from "../../../web/src/ui/PrismaNavigation";
+import { PrismaLoadingFeedback } from "../../../web/src/ui/PrismaLoadingFeedback";
+import { prismaTheme } from "../../../web/src/ui/theme";
+import type { PlatformAccessProfile } from "../../../web/src/shared/platformUsers";
+import "../../../web/src/styles.css";
+import "../../../web/src/ui/foundation.css";
+const profile=(new URLSearchParams(location.search).get("profile")??"super_admin") as PlatformAccessProfile;
+const membership={organizationId:"company-a",organizationName:"Empresa Horizonte",groupId:"group-a",groupName:"Grupo Horizonte",role:profile};
+const navigation=[{path:"/organizations",label:"Grupos e empresas",icon:<ApartmentOutlined/>}];
+createRoot(document.getElementById("app")!).render(<ConfigProvider theme={prismaTheme} locale={ptBR}><PrismaViewStateProvider scope={profile}><PrismaAppShell navigationItems={profile==="member"?[]:navigation} selectedPath="/organizations" memberships={[membership]} activeMembership={membership} profileName="Operador sintético" profileSubtitle={profile} onNavigate={path=>{(window as unknown as {__navigation:string}).__navigation=path;}} onOrganizationChange={()=>undefined} onSignOut={()=>undefined}>{profile==="member"?<p>Área do usuário comum</p>:<OrganizationsPage profile={profile} onNavigate={path=>{(window as unknown as {__navigation:string}).__navigation=path;}} onChanged={async()=>{(window as unknown as {__refreshed:number}).__refreshed=((window as unknown as {__refreshed:number}).__refreshed??0)+1;}}/>}<PrismaLoadingFeedback/></PrismaAppShell></PrismaViewStateProvider></ConfigProvider>);

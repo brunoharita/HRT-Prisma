@@ -1,0 +1,19 @@
+{
+  "baseline": "7456e22a1c9a3772b2be126182e9456d931f7786",
+  "release": "2.9.0",
+  "postgres": { "checks": 101, "failed": 0, "report": "postgres.json", "engine": "PostgreSQL 17, isolated localhost:5846", "limits": "Real source tables/policies/helpers/follow-up; Auth session fixture; matching/reservation delegation fixtures test boundaries, not full business algorithms" },
+  "browser": { "checks": 114, "failed": 0, "report": "browser.json", "viewports": [1448,390,320], "roles": ["super_admin","owner","recruiter","member"], "screenshots": 9, "limits": "Real components with synthetic service; no production human login" },
+  "nodeTests": { "passed": 57, "failed": 0, "files": ["platformUsersContract","platformUsersEdgeFunctions","organizationAdministration","webProtectedRoutes","uxFoundation","productRelease","knowledgeFoundation","manualProfile","positionFollowUp","selectionOutcome"] },
+  "toolingTests": { "passed": 33, "failed": 0, "files": ["prismaTokensService","selectionProcessContract","selectionProcessRoutes","positionFollowUpRoutes","releaseDispatcher"] },
+  "denoTests": { "passed": 3, "failed": 0, "files": ["supabase/functions/platform-users/index.test.ts","supabase/functions/knowledge-agent/history.test.ts"], "limits": "Real handlers, synthetic fetch without real provider or email; seven user-management scenarios and all four Knowledge modes" },
+  "denoCheck": "PASS both changed Edge entries",
+  "rootBuild": "PASS",
+  "typecheckWeb": "PASS",
+  "buildWeb": "PASS",
+  "lint": "PASS",
+  "foundation": "PASS",
+  "context": "PASS",
+  "ledger": "PASS local registry; remote new alias recorded after rollout",
+  "fullLocalValidate": "NOT RUN per scoped validation policy; mandatory remote CI retained",
+  "personalDataOrPaidProviderUsed": false
+}

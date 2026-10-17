@@ -85,7 +85,11 @@ Deno.serve(async (request) => {
     }
     requireEnabledConfiguration();
     const serviceClient = createServiceClient();
-    const authUser = await requireAuthUser(createUserClient(request));
+    const userClient = createUserClient(request);
+    const authUser = await requireAuthUser(userClient);
+    if (["vacancy_advisor", "occupation_resolution", "concept_description"].includes(String(payload?.mode ?? "")) && typeof payload?.organizationId === "string") {
+      await requireOperationalOrganization(userClient, payload.organizationId);
+    }
     if (payload?.mode === "vacancy_advisor") {
       return await handleVacancyAdvisor(serviceClient, authUser.id, payload, startedAt);
     }
@@ -99,6 +103,10 @@ Deno.serve(async (request) => {
     const contributionProposalId = typeof payload?.contributionProposalId === "string" ? payload.contributionProposalId : null;
     if (!inboxId) throw new HttpError(400, "Inbox não informada.");
     const inbox = await readInbox(serviceClient, inboxId);
+    if (inbox.scope === "organization") {
+      if (!inbox.organization_id) throw new HttpError(403, "Empresa não confirmada.");
+      await requireOperationalOrganization(userClient, inbox.organization_id);
+    }
     await requireResearchAuthority(serviceClient, authUser.id, inbox);
     if (contributionProposalId) await requireGlobalContribution(serviceClient, contributionProposalId, inbox.id, authUser.id);
     enforceCooldown(inbox);
@@ -554,6 +562,11 @@ async function readApprovedWebSources(serviceClient: ReturnType<typeof createSer
   return sources;
 }
 
+async function requireOperationalOrganization(userClient: ReturnType<typeof createUserClient>, organizationId: string) {
+  const { data, error } = await userClient.rpc("can_operate_prisma_organization", { p_organization_id: organizationId });
+  if (error || data !== true) throw new HttpError(403, "Empresa ou vínculo indisponível para esta operação.");
+}
+
 async function requireResearchAuthority(serviceClient: ReturnType<typeof createServiceClient>, authUserId: string, inbox: InboxRow) {
   const [actor] = await selectRows<{ access_profile: string; status: string }>(serviceClient.from("platform_users")
     .select("access_profile, status").eq("auth_user_id", authUserId));
@@ -562,11 +575,11 @@ async function requireResearchAuthority(serviceClient: ReturnType<typeof createS
     if (actor.access_profile !== "super_admin") throw new HttpError(403, "Pesquisa global exige Super Admin.");
     return;
   }
-  if (!inbox.organization_id || !["super_admin", "owner", "admin"].includes(actor.access_profile)) throw new HttpError(403, "Pesquisa organizacional não autorizada.");
+  if (!inbox.organization_id || !["super_admin", "owner", "admin", "recruiter"].includes(actor.access_profile)) throw new HttpError(403, "Pesquisa organizacional não autorizada.");
   if (actor.access_profile === "super_admin") return;
   if (actor.access_profile !== "super_admin") {
     const memberships = await selectRows<{ id: string }>(serviceClient.from("organization_memberships")
-      .select("id").eq("organization_id", inbox.organization_id).eq("user_id", authUserId).in("role", ["owner", "admin"]));
+      .select("id").eq("organization_id", inbox.organization_id).eq("user_id", authUserId).in("role", ["owner", "admin", "recruiter"]));
     if (!memberships[0]) throw new HttpError(403, "Escopo organizacional não autorizado.");
   }
   const [settings] = await selectRows<{ allow_external_knowledge_enrichment: boolean }>(serviceClient.from("organization_knowledge_settings")
@@ -600,7 +613,7 @@ async function requireDescriptionSuggestionAuthority(serviceClient: ReturnType<t
   if (!actor || actor.status !== "active") throw new HttpError(403, "Operador inativo ou inexistente.");
   if (actor.access_profile !== "super_admin") {
     const [membership] = await selectRows<{ id: string }>(serviceClient.from("organization_memberships")
-      .select("id").eq("organization_id", organizationId).eq("user_id", authUserId).in("role", ["owner", "admin"]));
+      .select("id").eq("organization_id", organizationId).eq("user_id", authUserId).in("role", ["owner", "admin", "recruiter"]));
     if (!membership) throw new HttpError(403, "Sugestão de descrição não autorizada.");
   }
   const [settings] = await selectRows<{ allow_external_knowledge_enrichment: boolean }>(serviceClient.from("organization_knowledge_settings")
