@@ -1,0 +1,10 @@
+{
+  "run": 39078882746,
+  "sha": "c2b51bf3a97eb4f3b97e9af7b90a48751caea124",
+  "conclusion": "failure",
+  "failedAssertions": [
+    "productRelease expected v3.1.0 instead of authorized v3.1.1",
+    "resumeInterruptionUx source assertion expected three arguments instead of explicit confirmed quote"
+  ],
+  "resolution": "Update version/history assertion and require the confirmed quote on document recovery; runtime unchanged."
+}
