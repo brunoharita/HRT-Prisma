@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 529
-source_manifest_sha256: 111e8393df962c1d5287305ec39545d5bd3b522ddcb14840b938dee4aac18bf7
+source_manifest_sha256: 2cbd696ae9d4ceecef7681a716acadb6b22f449ae208ba39ba4da5c6c097c503
 -->
 
 # Tudo sobre o Prisma
@@ -2650,9 +2650,9 @@ last_verified: 2026-10-17
 
 # Estado atual do Prisma
 
-## Ciclo do Owner —3.0.7 em validação/publicação autorizada
+## Ciclo do Owner —3.0.7 publicada
 
-Acordo owner-lifecycle-v3071.0.0, ADR-087. Owner ativo ativa grupo/única primeira empresa em preparação; pendente aguarda primeiro acesso real. Super pode substituir por usuário ativo do mesmo grupo ou inativar sem substituto, com motivo/impacto. Ausência de responsável suspende operação inclusive sessões antigas, preserva empresas/vínculos/histórico/saldos; reativação remove só essa causa, mantendo suspensões administrativas/bloqueios de segurança. Autoridade/concorrência/audit no banco; Edge primeiro acesso transacional e preflight administrativo. organization-administration1.2.0, owner-lifecycle1.0.0; nenhuma migração de identidade ou redefinição de senha. Estado operacional final e evidências no AoT owner-lifecycle-v307; esta seção não comprova publicação antes do closeout.
+Acordo owner-lifecycle-v3071.0.0, ADR-087. Owner ativo ativa grupo/única primeira empresa em preparação; pendente aguarda primeiro acesso real. Super pode substituir por usuário ativo do mesmo grupo ou inativar sem substituto, com motivo/impacto. Ausência de responsável suspende operação inclusive sessões antigas, preserva empresas/vínculos/histórico/saldos; reativação remove só essa causa, mantendo suspensões administrativas/bloqueios de segurança. Autoridade/concorrência/audit no banco; Edge primeiro acesso transacional e preflight administrativo. organization-administration1.2.0, owner-lifecycle1.0.0; nenhuma migração de identidade ou redefinição de senha. 248SQL/195browser/35Node/4Deno/tipos/build/checks PASS; CI branch39066762269/main39066890324 PASS. Runtime e7ea4df7992ee298ebca580ab85d452399b3b183 publicado em main/VPS; migração remota20261017202907, platform-users10 ACTIVE/JWTtrue/fontes conferidas.22smokes públicos+3negativos PASS, cinco serviços adjacentes/rollback preservados. Um cadastro inicial pronto regularizado com ator sistêmico, sem alterar8usuários/8Auth/10vínculos (fingerprints iguais). Documentação e ledger sincronizados separadamente sem rebuild; limites e prova no AoT owner-lifecycle-v307. Sem teste de inativação/substituição com contas humanas reais.
 
 ## Username único e contato compartilhável —3.0.6 publicada
 
@@ -22986,13 +22986,13 @@ Contrato integral `docs/qa/agreement-owner-lifecycle-v307.md`1.0.0; decisão exp
 
 | ID | Implementação | Teste/evidência | Status | Ambiente/limitação |
 | --- | --- | --- | --- | --- |
-| D-01 | reconciliação transacional, cadastro/primeiro acesso e regularização inicial | postgres.json: manual/pending/completion/backfill/inativos/audit rollback | PASS | PostgreSQL17 isolado real; rollout pendente |
+| D-01 | reconciliação transacional, cadastro/primeiro acesso e regularização inicial | postgres.json: manual/pending/completion/backfill/inativos/audit rollback | PASS | PostgreSQL17 isolado real; produção conferida em production.json |
 | D-02 | RPC exclusiva Super, candidato/revisão/Owner esperado, troca atômica e escopo Owner | postgres.json: negativos, memberships/identidade/autoria preservadas; browser seleção explícita | PASS | Contas sintéticas, sem alterar credencial |
 | D-03 | ação com motivo/impacto, estado vivo suspende negócio e administração; Super preservado | SQL gates reais/handler/preflight/browser modal e suspensão | PASS | Sessão antiga simulada por mesmo JWT sub; sem sessão real de produção |
 | D-04 | situação desejada/motivo separados, reativação preserva suspensão manual/empresa/bloqueado | SQL retomada/primaryinactive/pending/securityblocked; browser | PASS | Nenhum status empresarial sobrescrito por retomada |
 | D-05 | locks/revisão/Owner esperado/audit, guard genérico/primeiro acesso, UI foco/30s | SQL concorrência/falhas/audit/grants; Deno conta própria/inativo/bloqueado; Node revalidação/cleanup | PASS | Servidor autoridade; revalidação UI é aviso, sem revogar bytes já vistos |
 | D-UX-01 | ações no accordion, Owner nome/username/status, modais e recovery de conflito | browser.json48checks1448/390/320 e screenshots inspecionados | PASS | Telas/serviço reais, backend sintético |
-| D-06 | migração/Edge platform-users/web, contexto/CI/publicação/sync | checks locais dirigidos; operação remota ainda pendente | PARTIAL | Fechar somente após rollout/smoke/CI |
+| D-06 | migração/Edge platform-users/web, contexto/CI/publicação/sync | production.json/public-smoke/operational-checks; CI branch/main PASS | PASS | Runtime e7ea4df/Edge10/migração20261017202907 |
 
 ## Proibições verificadas
 
@@ -23014,7 +23014,7 @@ Mesmo mapa inicial do acordo; detalhada a dependência administrativa (preflight
 | Situações/memberships/histórico/Tokens | critical_transversal | fotografia SQL antes/depois | snapshot exato onde protegido, dupla conexão/audit failure; sem saldo novo/movido | PASS |
 | Shell/revalidação | plausible_indirect | auth getClaims + repositório | Node foco/intervalo/hidden/dedup/cleanup e guards; tipos web e revisão de respostas obsoletas | PASS |
 | Login/contato compartilhado/e-mail | plausible_indirect |identity2.0.0 | Deno multiusuário legado/sessão/contato e Ownercontext; nenhum envio externo | PASS |
-| IA/matching/portais/jobs/outros serviços | no_impact_identified | algoritmos/contratos preservados | sem processamento novo; gates anteriores reutilizados, serviços remotos a conferir | PARTIAL |
+| IA/matching/portais/jobs/outros serviços | no_impact_identified | algoritmos/contratos preservados | sem processamento novo; gates anteriores byte-idênticos, cinco serviços remotos idênticos | PASS |
 
 Novidade comprovada: ativação e ciclo determinístico com autoridade/auditoria. Preservação: situações independentes, identidades/credenciais/escopos/dados e caminhos existentes. Sem prova de sessão Auth hospedada real ou recebimento humano de e-mail; não há Auth QA separado confirmado. QA usa PG descartável e transportes sintéticos. A migração de prontidão autorizada é operação real, separada de testes.
 
@@ -23024,15 +23024,21 @@ Sem referência normativa nova; screenshots anteriores são baseline de composi�
 
 ## Validação final
 
-248checks PostgreSQL17 PASS;4Deno PASS (handlers reais com transportes sintéticos), deno check PASS;35Node dirigidos PASS após build. Browser48checks do ciclo e147de regressão Owner/senha/login PASS. Build web/tipos/checks/contexto/CI finais serão consolidados ao publicar. Não foi executado validate integral local. Falhas do harness: opção virtual do AntD selecionada por teclado; busca já abre o grupo, removido clique que o recolhia; nenhuma dessas falhas exigiu alteração do produto.
+248checks PostgreSQL17 PASS;4Deno PASS (handlers reais com transportes sintéticos), deno check PASS;35Node dirigidos PASS após build. Browser48checks do ciclo e147de regressão Owner/senha/login PASS. Tipos/build web/lint/foundation/contexto/ledger/diff PASS. CI branch39066762269 e main39066890324 PASS. Não foi executado validate integral local. Falhas do harness: opção virtual do AntD selecionada por teclado; busca já abre o grupo, removido clique que o recolhia; nenhuma dessas falhas exigiu alteração do produto.
 
 ## Git / QA / ambiente
 
-Publicação seletiva autorizada, ainda pendente. Somente migration owner_lifecycle, Edge platform-users (JWTtrue) e prisma-web. Backend1.2/Owner deve permanecer no rollback: web anterior compatível para consultas, mutação de grupo suspenso requer cliente novo. Não retirar schema/gates nem apagar auditoria para reverter; corrigir adiante. Imagem anterior/serviços/baseline e regularização reais serão registrados no fechamento.
+Publicado runtime e7ea4df7992ee298ebca580ab85d452399b3b183 em main/VPS, versão3.0.7. Migração remota20261017202907 aplicada do SHA validado; cinco corpos novos de funções iguais à fonte testada, grants/config/trigger/RLS conferidos. Edge platform-users10 ACTIVE/JWTtrue, dois arquivos exatamente iguais à fonte commitada, helper identity inalterado. Somente migration owner_lifecycle, Edge platform-users (JWTtrue) e prisma-web. Backend1.2/Owner deve permanecer no rollback: web anterior compatível para consultas, mutação de grupo suspenso requer cliente novo. Não retirar schema/gates nem apagar auditoria para reverter; corrigir adiante. Imagem rollback prisma-web:rollback-before-e7ea4df7992e aponta para sha256:d2510cbeb494263ddb40aa67be5a4597a4d4608aec5c29b97548927508a13718. Cinco containers/imagens/restarts adjacentes idênticos; web substituído, running/restarts0. Probe imediato do script retornou404 durante estabilização; verificação independente depois passou22checks de rotas/assets atuais e anteriores/SHA/versão/browser, sem rebuild adicional. Três chamadas anônimas a ações protegidas retornaram401. Tela pública inspecionada com3.0.7.
+
+Produção:8usuários/8Auth/10vínculos, fingerprints integralmente iguais; três grupos/quatro empresas preservados em quantidade. Uma única condição inicial elegível passou de grupo+empresa draft para active; um evento owner_initial_activation_v307 com ator sistêmico, auditorias15→16. Grupo sem Owner permanece draft. Gates de negócio/default/follow-up/matching/reserva têm os mesmos hashes anteriores. Não foram criadas contas, enviadas mensagens ou feitas inativações/substituições de teste com pessoas reais.
+
+Advisors:38tabelas RLS sem policies e4funções anon permanecem os mesmos; sem remoção de bloqueio. Única adição é a RPC autenticada intencional group_owner_lifecycle_v307 no aviso [SECURITY DEFINER autenticado](https://supabase.com/docs/guides/database/database-linter?lint=0029_authenticated_security_definer_function_executable),135→136. Ela exige Super ativo no corpo e foi coberta por negativos de papel/grupo/revisão/audit/grants. Sem grant anon/service-role nessa RPC. Proteção hosted contra senhas vazadas permanece aviso preexistente, fora do escopo; política Prisma8 preservada.
+
+Registro pós-publicação/contexto/ledger é um commit documental posterior, sem nova publicação de runtime. Sem limpar worktrees/rascunhos alheios; aviso legado de permissões na manutenção Git não impediu commit/fast-forward.
 
 ## Desvios e conclusão
 
-Nenhum desvio funcional identificado; o requisito de preservar bloqueio de segurança prevalece também na conta anterior durante substituição. Acordo/P/F integralmente incorporados. Nenhuma decisão material adicional nem ampliação opcional. Entrega ainda PARTIAL até CI/publicação/smoke/sincronização.
+Nenhum desvio funcional identificado; o requisito de preservar bloqueio de segurança prevalece também na conta anterior durante substituição. Acordo/P/F integralmente incorporados. Nenhuma decisão material adicional nem ampliação opcional. Entrega funcional PASS, publicada e sincronizada no SHA validado; fechamento documental separado preserva runtime. Sem pendência funcional deste escopo.
 
 ---
 

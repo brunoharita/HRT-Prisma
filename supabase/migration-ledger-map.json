@@ -1629,6 +1629,11 @@
       "name": "username_contact_identity",
       "localVersion": "20261017190000",
       "remoteVersion": "20261017185531"
+    },
+    {
+      "name": "owner_lifecycle",
+      "localVersion": "20261017210000",
+      "remoteVersion": "20261017202907"
     }
   ],
   "localOnly": [
@@ -1669,11 +1674,11 @@
   ],
   "lastIncrementalVerification": {
     "date": "2026-10-17",
-    "movement": "groups-sorting-v303",
+    "movement": "owner-lifecycle-v307",
     "names": [
-      "group_company_sorting"
+      "owner_lifecycle"
     ],
-    "evidence": "docs/qa/evidence/groups-sorting-v303/production.json",
+    "evidence": "docs/qa/evidence/owner-lifecycle-v307/production.json",
     "historicalSnapshotVerifiedAtUnchanged": true
   }
 }

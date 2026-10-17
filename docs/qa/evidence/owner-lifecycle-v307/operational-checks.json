@@ -1,0 +1,28 @@
+{
+  "checks": [
+    {
+      "name": "anonymous create_owner denied",
+      "status": 401,
+      "pass": true
+    },
+    {
+      "name": "anonymous complete_first_access denied",
+      "status": 401,
+      "pass": true
+    },
+    {
+      "name": "anonymous list denied",
+      "status": 401,
+      "pass": true
+    },
+    {
+      "name": "five adjacent containers/image/restarts identical",
+      "pass": true
+    },
+    {
+      "name": "only web replaced, zero restarts",
+      "pass": true
+    }
+  ],
+  "limits": "Anonymous gateway requests only; no real account or authenticated mutation. Existing containers preserved."
+}

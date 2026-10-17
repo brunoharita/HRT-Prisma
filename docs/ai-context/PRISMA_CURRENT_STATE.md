@@ -9,9 +9,9 @@ last_verified: 2026-10-17
 
 # Estado atual do Prisma
 
-## Ciclo do Owner —3.0.7 em validação/publicação autorizada
+## Ciclo do Owner —3.0.7 publicada
 
-Acordo owner-lifecycle-v3071.0.0, ADR-087. Owner ativo ativa grupo/única primeira empresa em preparação; pendente aguarda primeiro acesso real. Super pode substituir por usuário ativo do mesmo grupo ou inativar sem substituto, com motivo/impacto. Ausência de responsável suspende operação inclusive sessões antigas, preserva empresas/vínculos/histórico/saldos; reativação remove só essa causa, mantendo suspensões administrativas/bloqueios de segurança. Autoridade/concorrência/audit no banco; Edge primeiro acesso transacional e preflight administrativo. organization-administration1.2.0, owner-lifecycle1.0.0; nenhuma migração de identidade ou redefinição de senha. Estado operacional final e evidências no AoT owner-lifecycle-v307; esta seção não comprova publicação antes do closeout.
+Acordo owner-lifecycle-v3071.0.0, ADR-087. Owner ativo ativa grupo/única primeira empresa em preparação; pendente aguarda primeiro acesso real. Super pode substituir por usuário ativo do mesmo grupo ou inativar sem substituto, com motivo/impacto. Ausência de responsável suspende operação inclusive sessões antigas, preserva empresas/vínculos/histórico/saldos; reativação remove só essa causa, mantendo suspensões administrativas/bloqueios de segurança. Autoridade/concorrência/audit no banco; Edge primeiro acesso transacional e preflight administrativo. organization-administration1.2.0, owner-lifecycle1.0.0; nenhuma migração de identidade ou redefinição de senha. 248SQL/195browser/35Node/4Deno/tipos/build/checks PASS; CI branch39066762269/main39066890324 PASS. Runtime e7ea4df7992ee298ebca580ab85d452399b3b183 publicado em main/VPS; migração remota20261017202907, platform-users10 ACTIVE/JWTtrue/fontes conferidas.22smokes públicos+3negativos PASS, cinco serviços adjacentes/rollback preservados. Um cadastro inicial pronto regularizado com ator sistêmico, sem alterar8usuários/8Auth/10vínculos (fingerprints iguais). Documentação e ledger sincronizados separadamente sem rebuild; limites e prova no AoT owner-lifecycle-v307. Sem teste de inativação/substituição com contas humanas reais.
 
 ## Username único e contato compartilhável —3.0.6 publicada
 

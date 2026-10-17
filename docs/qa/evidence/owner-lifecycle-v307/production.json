@@ -1,0 +1,280 @@
+{
+  "release": "e7ea4df7992ee298ebca580ab85d452399b3b183",
+  "version": "3.0.7",
+  "project": "ioldpnqqvobprjiontre",
+  "migration": "20261017202907",
+  "checks": {
+    "preservedFingerprints": true,
+    "preservedGates": true,
+    "functionsExact": true,
+    "safeDefinerConfig": true,
+    "grants": true,
+    "privateRls": true,
+    "contract": true,
+    "userGuard": true,
+    "trigger": true,
+    "oneReadyInitialActivated": true
+  },
+  "before": {
+    "gates": {
+      "private.m83_sources": "b8100f5bf8d619fd5b301977934fd53d",
+      "private.has_org_role": "10d09452c6d844fdbaffcf7e6f8d81f0",
+      "private.prisma_token_reserve": "94c1e0f7bb577ba12f8017c1d913a331",
+      "public.commit_matching_snapshot": "106823541fd832a22e4e1925c7713e0f",
+      "private.prisma_actor_has_org_role": "60b17e11f5b6e3c1d120ecad6351bbec",
+      "public.claim_stable_matching_score": "bead9525ca2c04eb5ad2e3bdb5124a5e",
+      "private.authorize_position_follow_up": "7decdee4fd0492ba15b7d6f01e8e5dbc",
+      "public.complete_stable_matching_score": "a4ee35796e9fb02f5ceeadfe56c5b7bb",
+      "public.get_prisma_default_organization": "0bf383f16afa774be1c87a4f04e45f4e",
+      "public.load_matching_trajectory_review": "ac7545822ec843e44aad45f075ed77de",
+      "public.save_matching_trajectory_review": "510590b88cbac56c9584f38a76bb4f89",
+      "public.claim_matching_legacy_review_refresh": "e9a881fd458ef142c13216c0acedba31"
+    },
+    "counts": {
+      "auth": 8,
+      "audit": 15,
+      "users": 8,
+      "groups": 3,
+      "companies": 4,
+      "memberships": 10
+    },
+    "states": [
+      {
+        "status": "active",
+        "companies": [
+          "active",
+          "active"
+        ],
+        "eligibleInitial": false
+      },
+      {
+        "status": "draft",
+        "companies": [
+          "draft"
+        ],
+        "eligibleInitial": false
+      },
+      {
+        "status": "draft",
+        "companies": [
+          "draft"
+        ],
+        "eligibleInitial": true
+      }
+    ],
+    "project": "postgres",
+    "fingerprints": {
+      "users": "57fb07873c3b83f0156f7ec9826ca0a5",
+      "authIds": "fd0308d5ce07827d976b256acd7e9a97",
+      "memberships": "0f2dc0c7a9f47b7acfe3b20ffcb2b505"
+    },
+    "baselineCompatible": true
+  },
+  "after": {
+    "rpcs": {
+      "private.reconcile_group_owner": {
+        "anon": false,
+        "config": [
+          "search_path=\"\""
+        ],
+        "definer": true,
+        "service": false,
+        "authenticated": false,
+        "sourceExact": true
+      },
+      "public.complete_first_access_v307": {
+        "anon": false,
+        "config": [
+          "search_path=\"\""
+        ],
+        "definer": true,
+        "service": true,
+        "authenticated": false,
+        "sourceExact": true
+      },
+      "public.group_owner_lifecycle_v307": {
+        "anon": false,
+        "config": [
+          "search_path=\"\""
+        ],
+        "definer": true,
+        "service": false,
+        "authenticated": true,
+        "sourceExact": true
+      },
+      "private.owner_lifecycle_state_trigger": {
+        "anon": false,
+        "config": [
+          "search_path=\"\""
+        ],
+        "definer": true,
+        "service": false,
+        "authenticated": false,
+        "sourceExact": true
+      },
+      "public.operator_administration_available_v307": {
+        "anon": false,
+        "config": [
+          "search_path=\"\""
+        ],
+        "definer": true,
+        "service": true,
+        "authenticated": false,
+        "sourceExact": true
+      }
+    },
+    "gates": {
+      "private.m83_sources": "b8100f5bf8d619fd5b301977934fd53d",
+      "private.has_org_role": "10d09452c6d844fdbaffcf7e6f8d81f0",
+      "private.prisma_token_reserve": "94c1e0f7bb577ba12f8017c1d913a331",
+      "public.commit_matching_snapshot": "106823541fd832a22e4e1925c7713e0f",
+      "private.prisma_actor_has_org_role": "60b17e11f5b6e3c1d120ecad6351bbec",
+      "public.claim_stable_matching_score": "bead9525ca2c04eb5ad2e3bdb5124a5e",
+      "private.authorize_position_follow_up": "7decdee4fd0492ba15b7d6f01e8e5dbc",
+      "public.complete_stable_matching_score": "a4ee35796e9fb02f5ceeadfe56c5b7bb",
+      "public.get_prisma_default_organization": "0bf383f16afa774be1c87a4f04e45f4e",
+      "public.load_matching_trajectory_review": "ac7545822ec843e44aad45f075ed77de",
+      "public.save_matching_trajectory_review": "510590b88cbac56c9584f38a76bb4f89",
+      "public.claim_matching_legacy_review_refresh": "e9a881fd458ef142c13216c0acedba31"
+    },
+    "counts": {
+      "auth": 8,
+      "audit": 16,
+      "users": 8,
+      "groups": 3,
+      "companies": 4,
+      "memberships": 10
+    },
+    "states": [
+      {
+        "status": "active",
+        "companies": [
+          "active",
+          "active"
+        ],
+        "ownerSuspended": false,
+        "configuredStatus": "active"
+      },
+      {
+        "status": "draft",
+        "companies": [
+          "draft"
+        ],
+        "ownerSuspended": false,
+        "configuredStatus": "draft"
+      },
+      {
+        "status": "active",
+        "companies": [
+          "active"
+        ],
+        "ownerSuspended": false,
+        "configuredStatus": "active"
+      }
+    ],
+    "trigger": true,
+    "newAudit": [
+      {
+        "action": "owner_initial_activation_v307",
+        "systemActor": true,
+        "initialActivation": true
+      }
+    ],
+    "migration": "20261017202907",
+    "userGuard": true,
+    "privateRls": true,
+    "fingerprints": {
+      "users": "57fb07873c3b83f0156f7ec9826ca0a5",
+      "authIds": "fd0308d5ce07827d976b256acd7e9a97",
+      "memberships": "0f2dc0c7a9f47b7acfe3b20ffcb2b505"
+    },
+    "adminContract": true
+  },
+  "edge": {
+    "version": 10,
+    "status": "ACTIVE",
+    "verifyJwt": true,
+    "files": [
+      {
+        "name": "platform-users/index.ts",
+        "exact": true
+      },
+      {
+        "name": "platform-users/operatorIdentity.ts",
+        "exact": true
+      }
+    ]
+  },
+  "advisors": {
+    "before": [
+      {
+        "name": "rls_enabled_no_policy",
+        "count": 38
+      },
+      {
+        "name": "anon_security_definer_function_executable",
+        "count": 4
+      },
+      {
+        "name": "authenticated_security_definer_function_executable",
+        "count": 135
+      },
+      {
+        "name": "auth_leaked_password_protection",
+        "count": 1
+      }
+    ],
+    "after": [
+      {
+        "name": "rls_enabled_no_policy",
+        "count": 38
+      },
+      {
+        "name": "anon_security_definer_function_executable",
+        "count": 4
+      },
+      {
+        "name": "authenticated_security_definer_function_executable",
+        "count": 136
+      },
+      {
+        "name": "auth_leaked_password_protection",
+        "count": 1
+      }
+    ],
+    "added": [
+      {
+        "key": "authenticated_security_definer_function_executable:{\"name\":\"group_owner_lifecycle_v307\",\"schema\":\"public\",\"language\":\"plpgsql\",\"arguments\":\"p_action text, p_group uuid, p_revision integer, p_current_owner uuid, p_target_owner uuid, p_reason text, p_contract text\",\"security_definer\":true}",
+        "lint": "authenticated_security_definer_function_executable",
+        "level": "WARN",
+        "name": "group_owner_lifecycle_v307",
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0029_authenticated_security_definer_function_executable"
+      }
+    ],
+    "removed": [],
+    "expectedOnly": true
+  },
+  "web": {
+    "runtimeSha": "e7ea4df7992ee298ebca580ab85d452399b3b183",
+    "version": "3.0.7",
+    "publicSmokeChecks": 22,
+    "adjacentServicesPreserved": 5,
+    "rollbackImage": "sha256:d2510cbeb494263ddb40aa67be5a4597a4d4608aec5c29b97548927508a13718",
+    "immediateProbe": "transient 404 after recreation; independent stabilization probes passed without rebuild",
+    "negativeEdgeActions": {
+      "create_owner": 401,
+      "complete_first_access": 401,
+      "list": 401
+    }
+  },
+  "ci": {
+    "branch": {
+      "id": 39066762269,
+      "conclusion": "success"
+    },
+    "main": {
+      "id": 39066890324,
+      "conclusion": "success"
+    }
+  }
+}
