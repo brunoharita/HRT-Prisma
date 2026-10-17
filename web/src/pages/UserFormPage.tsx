@@ -39,10 +39,13 @@ import {
 import { useUnsavedChanges } from "../ui/PrismaNavigation";
 import { PrismaCard } from "../ui/PrismaCard";
 import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
+import type { OwnerOnboardingContext } from "../domain/ownerOnboarding";
+import "./UserFormPage.css";
 
 interface UserFormPageProps {
   mode: "create" | "edit";
   userId?: string;
+  ownerGroupId?: string;
   onNavigate: (path: string) => void;
 }
 
@@ -76,7 +79,7 @@ const defaultValues: UserFormValues = {
   passwordConfirmation: "",
 };
 
-export function UserFormPage({ mode, userId, onNavigate }: UserFormPageProps) {
+export function UserFormPage({ mode, userId, ownerGroupId, onNavigate }: UserFormPageProps) {
   const [form] = Form.useForm<UserFormValues>();
   const [dirty, setDirty] = useState(false);
   const markSaved = useUnsavedChanges(dirty);
@@ -92,6 +95,9 @@ export function UserFormPage({ mode, userId, onNavigate }: UserFormPageProps) {
   const [groupId, setGroupId] = useState<string | null>(defaultValues.groupId);
   const [credentialMode, setCredentialMode] = useState<CredentialDeliveryMode>(defaultValues.credentialMode);
   const [status, setStatus] = useState<"active" | "inactive">(defaultValues.status);
+  const [ownerContext, setOwnerContext] = useState<OwnerOnboardingContext | null>(null);
+  const ownerOnboarding = mode === "create" && ownerGroupId !== undefined;
+  const returnPath = ownerOnboarding ? "/organizations" : "/users";
   useLoadingFeedback({ "Carregando cadastro de Usuário…": loading, "Salvando cadastro de Usuário…": submitting, "Solicitando recuperação de acesso…": resettingPassword });
   const watchedPassword = Form.useWatch("password", form) ?? "";
   const watchedPasswordConfirmation = Form.useWatch("passwordConfirmation", form) ?? "";
@@ -102,6 +108,7 @@ export function UserFormPage({ mode, userId, onNavigate }: UserFormPageProps) {
     setLoading(true);
     setError(null);
     setInfo(null);
+    setOwnerContext(null);
 
     void platformUsersService.loadBootstrapData({
       search: "",
@@ -138,6 +145,13 @@ export function UserFormPage({ mode, userId, onNavigate }: UserFormPageProps) {
           setGroupId(user.groupId);
           setCredentialMode("activation_link");
           setStatus(user.status === "inactive" ? "inactive" : "active");
+        } else if (ownerGroupId !== undefined) {
+          const context = await platformUsersService.loadOwnerContext(ownerGroupId);
+          if (!current) return;
+          setOwnerContext(context);
+          setGroups([{ id: context.group.id, name: context.group.name, organizations: [{ id: context.company.id, name: context.company.name, groupId: context.group.id, groupName: context.group.name }] }]);
+          form.setFieldsValue({ ...defaultValues, username: context.username, profile: "owner", groupId: context.group.id, organizationIds: [context.company.id] });
+          setProfile("owner");setGroupId(context.group.id);setCredentialMode(defaultValues.credentialMode);setStatus(defaultValues.status);setLoadedUser(null);
         } else {
           form.setFieldsValue(defaultValues);
           setProfile(defaultValues.profile);
@@ -147,8 +161,8 @@ export function UserFormPage({ mode, userId, onNavigate }: UserFormPageProps) {
           setLoadedUser(null);
         }
       })
-      .catch(() => {
-        if (current) setError("Não foi possível carregar o contexto de gestão de usuários.");
+      .catch((reason) => {
+        if (current) setError(ownerGroupId !== undefined && reason instanceof Error ? reason.message : "Não foi possível carregar o contexto de gestão de usuários.");
       })
       .finally(() => {
         if (current) setLoading(false);
@@ -157,7 +171,7 @@ export function UserFormPage({ mode, userId, onNavigate }: UserFormPageProps) {
     return () => {
       current = false;
     };
-  }, [form, mode, userId]);
+  }, [form, mode, userId, ownerGroupId]);
 
   const visibleProfileOptions = useMemo(() => {
     const options: PlatformAccessProfile[] = currentOperator?.profile === "recruiter"
@@ -192,6 +206,7 @@ export function UserFormPage({ mode, userId, onNavigate }: UserFormPageProps) {
   }, [form, profile, selectedGroup]);
 
   const handleSubmit = async (values: UserFormValues) => {
+    if (ownerOnboarding && !ownerContext) return;
     setSubmitting(true);
     setError(null);
     setInfo(null);
@@ -209,14 +224,14 @@ export function UserFormPage({ mode, userId, onNavigate }: UserFormPageProps) {
       return;
     }
 
-    const organizationIds = normalizeOrganizationScope(values.profile, values.organizationIds, selectedGroup);
+    const organizationIds = ownerContext ? [ownerContext.company.id] : normalizeOrganizationScope(values.profile, values.organizationIds, selectedGroup);
     const payload: PlatformUserUpsertInput = {
       fullName: values.fullName.trim(),
-      username: normalizeUsername(values.username),
+      username: ownerContext?.username ?? normalizeUsername(values.username),
       email: values.email.trim(),
       status: values.status,
-      profile: values.profile,
-      groupId: values.profile === "super_admin" ? null : values.groupId,
+      profile: ownerContext ? "owner" : values.profile,
+      groupId: ownerContext?.group.id ?? (values.profile === "super_admin" ? null : values.groupId),
       organizationIds,
       phoneCountryIso2: normalizedPhone.value.countryIso2,
       phoneNationalNumber: normalizedPhone.value.nationalNumber,
@@ -229,14 +244,15 @@ export function UserFormPage({ mode, userId, onNavigate }: UserFormPageProps) {
 
     try {
       if (mode === "create") {
-        await platformUsersService.createUser(payload);
+        if (ownerContext) await platformUsersService.createOwner(ownerContext.group.id, payload);
+        else await platformUsersService.createUser(payload);
         setInfo("Usuário criado com sucesso.");
       } else if (userId) {
         await platformUsersService.updateUser(userId, payload);
         setInfo("Usuário atualizado com sucesso.");
       }
       setDirty(false); markSaved();
-      onNavigate("/users");
+      onNavigate(returnPath);
     } catch (submissionError) {
       setError(submissionError instanceof Error ? submissionError.message : "A gravação do usuário falhou.");
     } finally {
@@ -262,11 +278,12 @@ export function UserFormPage({ mode, userId, onNavigate }: UserFormPageProps) {
   if (loading) {
     return <PrismaPage><PrismaCard><Skeleton active paragraph={{ rows: 14 }} /></PrismaCard></PrismaPage>;
   }
+  if (ownerOnboarding && !ownerContext) return <PrismaPage><PrismaPageHeader title="Cadastrar Owner" /><Alert type="error" showIcon title={error ?? "O contexto do Owner não pôde ser confirmado."} action={<Button onClick={() => onNavigate(returnPath)}>Voltar a Grupos e empresas</Button>} /></PrismaPage>;
 
   return (
     <PrismaPage>
       <PrismaPageHeader icon={<PrismaPageIcon />}
-        title={mode === "create" ? "Novo usuário" : "Editar usuário"}
+        title={ownerOnboarding ? "Cadastrar Owner" : mode === "create" ? "Novo usuário" : "Editar usuário"}
         description="Cadastre um operador do Prisma. Usuário e Pessoa são registros distintos."
         breadcrumbs={(
           <Breadcrumb
@@ -279,7 +296,7 @@ export function UserFormPage({ mode, userId, onNavigate }: UserFormPageProps) {
         )}
         actions={(
           <>
-            <Button onClick={() => onNavigate("/users")}>Cancelar</Button>
+            <Button onClick={() => onNavigate(returnPath)}>Cancelar</Button>
             <Button loading={submitting} onClick={() => form.submit()} type="primary">
               {mode === "create" ? "Criar usuário" : "Salvar alterações"}
             </Button>
@@ -288,7 +305,7 @@ export function UserFormPage({ mode, userId, onNavigate }: UserFormPageProps) {
       />
       {error ? <Alert className="prisma-shell-alert" message={error} showIcon type="error" action={<Button onClick={(event) => focusNoticeFields(event.currentTarget)}>Ver campos do formulário</Button>} /> : null}
       {info ? <Alert className="prisma-shell-alert" message={info} showIcon type="success" /> : null}
-      <Form<UserFormValues> onValuesChange={() => setDirty(true)} form={form} initialValues={defaultValues} layout="vertical" onFinish={(values) => void handleSubmit(values)} requiredMark={false}>
+      <Form<UserFormValues> className={ownerOnboarding ? "prisma-owner-onboarding" : undefined} onValuesChange={() => setDirty(true)} form={form} initialValues={defaultValues} layout="vertical" onFinish={(values) => void handleSubmit(values)} requiredMark={false}>
         <PrismaCard className="prisma-user-form-card">
           <section className="prisma-user-form-section">
             <h2>Dados básicos</h2>
@@ -313,7 +330,7 @@ export function UserFormPage({ mode, userId, onNavigate }: UserFormPageProps) {
                   },
                 ]}
               >
-                <Input placeholder="joao.silva" />
+                <Input placeholder="joao.silva" readOnly={ownerOnboarding} />
               </Form.Item>
               <Form.Item label="E-mail *" name="email" rules={[{ required: true, type: "email", message: "Informe um e-mail válido." }]}>
                 <Input prefix={<MailOutlined />} placeholder="joao.silva@empresa.com" />
@@ -359,6 +376,7 @@ export function UserFormPage({ mode, userId, onNavigate }: UserFormPageProps) {
             <div className="prisma-user-form-grid prisma-user-form-grid-access">
               <Form.Item label="Perfil de acesso *" name="profile" rules={[{ required: true, message: "Selecione o perfil." }]}>
                 <Select
+                  disabled={ownerOnboarding}
                   onChange={(value: PlatformAccessProfile) => {
                     setProfile(value);
                     form.setFieldValue("profile", value);
@@ -377,7 +395,7 @@ export function UserFormPage({ mode, userId, onNavigate }: UserFormPageProps) {
               >
                 <Select
                   allowClear={profile !== "super_admin"}
-                  disabled={profile === "super_admin"}
+                  disabled={ownerOnboarding || profile === "super_admin"}
                   onChange={(value: string | null) => {
                     setGroupId(value);
                     form.setFieldValue("groupId", value);
@@ -405,7 +423,7 @@ export function UserFormPage({ mode, userId, onNavigate }: UserFormPageProps) {
                 ]}
               >
                 <Select
-                  disabled={!selectedGroup || profile === "super_admin" || profile === "owner"}
+                  disabled={ownerOnboarding || !selectedGroup || profile === "super_admin" || profile === "owner"}
                   mode="multiple"
                   options={availableOrganizations.map((organization) => ({
                     label: organization.name,
@@ -507,7 +525,7 @@ export function UserFormPage({ mode, userId, onNavigate }: UserFormPageProps) {
         </PrismaCard>
       </Form>
       <div className="prisma-user-form-footer-actions">
-        <Button onClick={() => onNavigate("/users")}>Cancelar</Button>
+        <Button onClick={() => onNavigate(returnPath)}>Cancelar</Button>
         <Button loading={submitting} onClick={() => form.submit()} type="primary">
           {mode === "create" ? "Criar usuário" : "Salvar alterações"}
         </Button>

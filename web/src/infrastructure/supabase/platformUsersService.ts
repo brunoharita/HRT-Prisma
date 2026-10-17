@@ -6,6 +6,7 @@ import type {
   PlatformUserUpsertInput,
 } from "../../domain/platformUsersData";
 import { supabase } from "./client";
+import { OWNER_ONBOARDING_CONTRACT, decodeOwnerOnboarding, type OwnerOnboardingContext } from "../../domain/ownerOnboarding";
 
 interface SignInResult {
   access_token: string;
@@ -13,6 +14,12 @@ interface SignInResult {
 }
 
 export const platformUsersService = {
+  async loadOwnerContext(groupId: string): Promise<OwnerOnboardingContext> {
+    return decodeOwnerOnboarding(await invokeFunction("platform-users", { action: "owner_context", groupId, contract: OWNER_ONBOARDING_CONTRACT }), groupId);
+  },
+  async createOwner(groupId: string, input: PlatformUserUpsertInput): Promise<void> {
+    await invokeFunction("platform-users", { action: "create_owner", groupId, contract: OWNER_ONBOARDING_CONTRACT, input });
+  },
   async signInWithUsername(username: string, password: string): Promise<void> {
     const result = await invokeFunction<SignInResult>("operator-sign-in", { username, password });
     const { error } = await supabase.auth.setSession({

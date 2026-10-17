@@ -1,0 +1,7 @@
+import {useState} from 'react';import {createRoot} from 'react-dom/client';import {ConfigProvider} from 'antd';import ptBR from 'antd/locale/pt_BR';
+import {OrganizationsPage} from '../../../web/src/pages/OrganizationsPage';import {UserFormPage} from '../../../web/src/pages/UserFormPage';
+import {PrismaViewStateProvider} from '../../../web/src/ui/PrismaNavigation';import {PrismaLoadingFeedback} from '../../../web/src/ui/PrismaLoadingFeedback';import {prismaTheme} from '../../../web/src/ui/theme';
+import '../../../web/src/styles.css';import '../../../web/src/ui/foundation.css';
+function Fixture(){const [path,setPath]=useState(location.pathname);const navigate=(next:string)=>{(window as any).__navigation=next;history.pushState(null,'',next+location.search);setPath(next);};
+ const owner=/^\/organizations\/([^/]+)\/owner\/new$/.exec(path);return <ConfigProvider theme={prismaTheme} locale={ptBR}><PrismaViewStateProvider scope="synthetic-super"><div style={{padding:24}}>{owner?<UserFormPage key={path} mode="create" ownerGroupId={owner[1]} onNavigate={navigate}/>:path==='/users/new'?<UserFormPage key={path} mode="create" onNavigate={navigate}/>:path==='/users/edit-user'?<UserFormPage key={path} mode="edit" userId="edit-user" onNavigate={navigate}/>:<OrganizationsPage profile="super_admin" onNavigate={navigate} onChanged={async()=>{}}/>}<PrismaLoadingFeedback/></div></PrismaViewStateProvider></ConfigProvider>;}
+createRoot(document.getElementById('app')!).render(<Fixture/>);

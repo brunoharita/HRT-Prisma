@@ -61,6 +61,10 @@ interface ActorContext {
   accessibleOrganizations: OrganizationRow[];
   accessibleOrganizationIds: Set<string>;
 }
+interface OwnerOnboardingContext {
+  contract: "owner-onboarding-1.0.0"; username: string; profile: "owner";
+  group: { id: string; name: string }; company: { id: string; name: string };
+}
 
 const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -78,6 +82,20 @@ Deno.serve(async (request) => {
     const authUser = await requireAuthUser(userClient);
     const payload = await request.json();
     const action = String(payload?.action ?? "");
+
+    if (action === "owner_context" || action === "create_owner") {
+      const actorContext = await loadActorContext(serviceClient, authUser.id);
+      const context = await readOwnerContext(serviceClient, actorContext, String(payload?.groupId ?? ""), payload?.contract);
+      if (action === "owner_context") return jsonResponse(200, { ...context });
+      const input = payload?.input as UpsertInput;
+      if (!input || input.username !== context.username || input.profile !== "owner" || input.groupId !== context.group.id
+        || !Array.isArray(input.organizationIds) || input.organizationIds.length !== 1 || input.organizationIds[0] !== context.company.id) {
+        throw new HttpError(403, "Os quatro campos protegidos do cadastro de Owner foram alterados. Reabra Cadastrar Owner no grupo.");
+      }
+      const origin = request.headers.get("origin") ?? new URL(request.url).origin;
+      await createPlatformUser(serviceClient, actorContext, input, origin, context);
+      return jsonResponse(200, { ok: true });
+    }
 
     if (action === "list") {
       const actorContext = await loadActorContext(serviceClient, authUser.id);
@@ -331,6 +349,7 @@ async function createPlatformUser(
   actorContext: ActorContext,
   input: UpsertInput,
   origin: string,
+  ownerContext?: OwnerOnboardingContext,
 ) {
   const normalized = await normalizeAndValidateInput(serviceClient, actorContext, input);
   if (normalized.credentialMode === "activation_link" && normalized.status !== "active") {
@@ -362,7 +381,7 @@ async function createPlatformUser(
   const mustChangePassword = normalized.credentialMode === "activation_link";
 
   try {
-    await savePlatformRecord(serviceClient, actorContext, authUserId, normalized, platformStatus, mustChangePassword);
+    await savePlatformRecord(serviceClient, actorContext, authUserId, normalized, platformStatus, mustChangePassword, ownerContext);
   } catch (error) {
     // This identity was created by this request and has no committed domain record or access.
     const { error: cleanupError } = await serviceClient.auth.admin.deleteUser(authUserId);
@@ -509,17 +528,31 @@ async function completeFirstAccess(
 async function savePlatformRecord(
   serviceClient: ReturnType<typeof createServiceClient>, actorContext: ActorContext, authUserId: string,
   normalized: Awaited<ReturnType<typeof normalizeAndValidateInput>>, status: PlatformUserStatus, mustChangePassword: boolean,
+  ownerContext?: OwnerOnboardingContext,
 ) {
-  const { error } = await serviceClient.rpc("save_platform_user_v3", {
-    p_actor: actorContext.actor.auth_user_id, p_auth_user: authUserId, p_organizations: normalized.organizationIds,
-    p_data: { fullName: normalized.fullName, username: normalized.username, email: normalized.email,
+  const data = { fullName: normalized.fullName, username: normalized.username, email: normalized.email,
       profile: normalized.profile, groupId: normalized.groupId, status, credentialMode: normalized.credentialMode,
       mustChangePassword, phoneE164: normalized.phone.e164, phoneCountryIso2: normalized.phone.countryIso2,
       phoneCountryLabel: normalized.phone.countryLabel, phoneCountryCode: normalized.phone.callingCode,
-      phoneNationalNumber: normalized.phone.nationalNumber },
-  });
-  if (error) throw new HttpError(error.code === "42501" ? 403 : 400,
+      phoneNationalNumber: normalized.phone.nationalNumber };
+  const { error } = ownerContext
+    ? await serviceClient.rpc("create_group_owner_v301", { p_actor: actorContext.actor.auth_user_id, p_auth_user: authUserId,
+      p_group: ownerContext.group.id, p_company: ownerContext.company.id, p_contract: ownerContext.contract, p_data: data })
+    : await serviceClient.rpc("save_platform_user_v3", {
+      p_actor: actorContext.actor.auth_user_id, p_auth_user: authUserId, p_organizations: normalized.organizationIds, p_data: data });
+  if (error) throw new HttpError(error.code === "42501" ? 403 : error.code === "23505" ? 409 : 400,
     error.code === "23505" ? "Já existe um cadastro ou Owner ativo incompatível. Atualize a consulta." : error.message);
+}
+
+async function readOwnerContext(serviceClient: ReturnType<typeof createServiceClient>, actorContext: ActorContext, groupId: string, contract: unknown): Promise<OwnerOnboardingContext> {
+  if (actorContext.actor.access_profile !== "super_admin") throw new HttpError(403, "Somente Super Admin cadastra o Owner de um novo grupo.");
+  if (!groupId || contract !== "owner-onboarding-1.0.0") throw new HttpError(400, "Contexto ou contrato de cadastro de Owner incompatível.");
+  const { data, error } = await serviceClient.rpc("owner_onboarding_context_v301", { p_actor: actorContext.actor.auth_user_id, p_group: groupId, p_contract: contract });
+  if (error) throw new HttpError(error.code === "42501" ? 403 : error.code === "23505" ? 409 : 400, error.message);
+  const context = data as OwnerOnboardingContext | null;
+  if (!context || context.contract !== contract || context.profile !== "owner" || context.group?.id !== groupId
+    || !context.username || !context.company?.id || !context.group.name || !context.company.name) throw new HttpError(400, "O contexto do Owner não pôde ser confirmado.");
+  return context;
 }
 
 async function normalizeAndValidateInput(

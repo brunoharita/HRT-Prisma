@@ -1,0 +1,245 @@
+{
+  "checks": [
+    {
+      "name": "1448 real button carries group route",
+      "pass": true
+    },
+    {
+      "name": "1448 canonical username survives reload",
+      "pass": true
+    },
+    {
+      "name": "1448 username read only",
+      "pass": true
+    },
+    {
+      "name": "1448 Perfil de acesso * blocked",
+      "pass": true
+    },
+    {
+      "name": "1448 Escopo do grupo * blocked",
+      "pass": true
+    },
+    {
+      "name": "1448 Empresas permitidas * blocked",
+      "pass": true
+    },
+    {
+      "name": "1448 selected Owner",
+      "pass": true
+    },
+    {
+      "name": "1448 selected HRT Solutions",
+      "pass": true
+    },
+    {
+      "name": "1448 selected Empresa inicial",
+      "pass": true
+    },
+    {
+      "name": "1448 personal Nome completo * editable",
+      "pass": true
+    },
+    {
+      "name": "1448 personal E-mail * editable",
+      "pass": true
+    },
+    {
+      "name": "1448 phone editable",
+      "pass": true
+    },
+    {
+      "name": "1448 viewport contained",
+      "pass": true
+    },
+    {
+      "name": "1448 submits dedicated action and four canonical fields",
+      "pass": true
+    },
+    {
+      "name": "1448 returns to groups after save",
+      "pass": true
+    },
+    {
+      "name": "1448 no runtime exception",
+      "pass": true
+    },
+    {
+      "name": "390 real button carries group route",
+      "pass": true
+    },
+    {
+      "name": "390 canonical username survives reload",
+      "pass": true
+    },
+    {
+      "name": "390 username read only",
+      "pass": true
+    },
+    {
+      "name": "390 Perfil de acesso * blocked",
+      "pass": true
+    },
+    {
+      "name": "390 Escopo do grupo * blocked",
+      "pass": true
+    },
+    {
+      "name": "390 Empresas permitidas * blocked",
+      "pass": true
+    },
+    {
+      "name": "390 selected Owner",
+      "pass": true
+    },
+    {
+      "name": "390 selected HRT Solutions",
+      "pass": true
+    },
+    {
+      "name": "390 selected Empresa inicial",
+      "pass": true
+    },
+    {
+      "name": "390 personal Nome completo * editable",
+      "pass": true
+    },
+    {
+      "name": "390 personal E-mail * editable",
+      "pass": true
+    },
+    {
+      "name": "390 phone editable",
+      "pass": true
+    },
+    {
+      "name": "390 viewport contained",
+      "pass": true
+    },
+    {
+      "name": "390 submits dedicated action and four canonical fields",
+      "pass": true
+    },
+    {
+      "name": "390 returns to groups after save",
+      "pass": true
+    },
+    {
+      "name": "390 no runtime exception",
+      "pass": true
+    },
+    {
+      "name": "320 real button carries group route",
+      "pass": true
+    },
+    {
+      "name": "320 canonical username survives reload",
+      "pass": true
+    },
+    {
+      "name": "320 username read only",
+      "pass": true
+    },
+    {
+      "name": "320 Perfil de acesso * blocked",
+      "pass": true
+    },
+    {
+      "name": "320 Escopo do grupo * blocked",
+      "pass": true
+    },
+    {
+      "name": "320 Empresas permitidas * blocked",
+      "pass": true
+    },
+    {
+      "name": "320 selected Owner",
+      "pass": true
+    },
+    {
+      "name": "320 selected HRT Solutions",
+      "pass": true
+    },
+    {
+      "name": "320 selected Empresa inicial",
+      "pass": true
+    },
+    {
+      "name": "320 personal Nome completo * editable",
+      "pass": true
+    },
+    {
+      "name": "320 personal E-mail * editable",
+      "pass": true
+    },
+    {
+      "name": "320 phone editable",
+      "pass": true
+    },
+    {
+      "name": "320 viewport contained",
+      "pass": true
+    },
+    {
+      "name": "320 submits dedicated action and four canonical fields",
+      "pass": true
+    },
+    {
+      "name": "320 returns to groups after save",
+      "pass": true
+    },
+    {
+      "name": "320 no runtime exception",
+      "pass": true
+    },
+    {
+      "name": "/users/new generic username editable",
+      "pass": true
+    },
+    {
+      "name": "/users/new generic profile editable",
+      "pass": true
+    },
+    {
+      "name": "/users/new generic group editable",
+      "pass": true
+    },
+    {
+      "name": "/users/edit-user generic username editable",
+      "pass": true
+    },
+    {
+      "name": "/users/edit-user generic profile editable",
+      "pass": true
+    },
+    {
+      "name": "/users/edit-user generic group editable",
+      "pass": true
+    },
+    {
+      "name": "invalid context never opens generic editable form",
+      "pass": true
+    },
+    {
+      "name": "invalid context has recovery route",
+      "pass": true
+    },
+    {
+      "name": "cancel returns to origin group administration",
+      "pass": true
+    },
+    {
+      "name": "failed create preserves personal draft",
+      "pass": true
+    },
+    {
+      "name": "failed create preserves locked canonical identity",
+      "pass": true
+    },
+    {
+      "name": "failed create exposes recovery action",
+      "pass": true
+    }
+  ],
+  "limits": "Real form/navigation components, synthetic transports and server routing; no real identities or email"
+}

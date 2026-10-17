@@ -98,6 +98,7 @@ interface AppRoute {
   documentId?: string;
   reviewId?: string;
   userId?: string;
+  ownerGroupId?: string;
   verificationNeedId?: string;
   verificationMode?: "detail" | "prepare";
   verificationPreparedAssessmentId?: string;
@@ -463,7 +464,7 @@ function renderRouteContent(
     return <UserFormPage mode="edit" onNavigate={onNavigate} userId={route.userId} />;
   }
   if (route.path === "/users/new") {
-    return <UserFormPage mode="create" onNavigate={onNavigate} />;
+    return <UserFormPage mode="create" onNavigate={onNavigate} {...(route.ownerGroupId ? { ownerGroupId: route.ownerGroupId } : {})} />;
   }
   if (route.path === "/users") {
     return <UsersPage onNavigate={onNavigate} />;
@@ -631,6 +632,8 @@ function getNavigationItems(
 
 function findRoute(pathname: string): AppRoute {
   const normalized = normalizePath(pathname);
+  const ownerOnboarding = /^\/organizations\/([^/]+)\/owner\/new$/.exec(normalized);
+  if (ownerOnboarding?.[1]) return { path: "/users/new", ownerGroupId: ownerOnboarding[1], rule: { requiresAuth: true, requiresMembership: false, allowedRoles: ["super_admin"] } };
   const participantMatch = /^\/verify\/([A-Za-z0-9_-]{40,200})$/.exec(normalized);
   if (participantMatch?.[1]) return { path: "/verify", participantToken: participantMatch[1], rule: { requiresAuth: false, requiresMembership: false } };
   const selfDataMatch = /^\/my-data\/([A-Za-z0-9_-]{40,200})$/.exec(normalized);

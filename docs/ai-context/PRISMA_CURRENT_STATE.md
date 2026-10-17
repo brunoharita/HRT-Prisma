@@ -3,11 +3,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.82.0
+version: 2.83.0
 last_verified: 2026-10-17
 ---
 
 # Estado atual do Prisma
+
+## Cadastrar Owner — 3.0.1 em validação
+
+Correção autorizada por Bruno em17/10/2026 com versão explícita3.0.1. Botão contextual transporta grupo; servidor resolve username (nome do grupo minúsculo sem espaços + .owner), Owner, grupo e primeira empresa. Quatro campos bloqueados, dados pessoais/credenciais editáveis. Contrato owner-onboarding-1.0.0, RPCs novas service-only, revalidação sob lock e audit transacional; cadastro genérico e persistência anterior preservados. Sem renomear pessoas, resolver conflitos por sufixos ou ativar grupo automaticamente. Acordo1.0.0 e AoT owner-onboarding-v301 registram validação/publicação; documentação não prova rollout.
 
 ## V3M0 — administração multiempresa 2.9.0 publicada
 

@@ -1,0 +1,6 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';import ts from 'typescript';
+const source=readFileSync('web/src/app/PrismaApplication.tsx','utf8'),ast=ts.createSourceFile('app.tsx',source,ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX);
+const functions=ast.statements.filter(n=>ts.isFunctionDeclaration(n)&&['findRoute','normalizePath'].includes(n.name?.text)).map(n=>n.getText(ast)).join('\n');
+const findRoute=new Function('routes',ts.transpileModule(functions,{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText+';return findRoute;')([]);
+test('actual contextual route survives reload and only Super can open it',()=>{const route=findRoute('/organizations/group-a/owner/new');assert.equal(route.path,'/users/new');assert.equal(route.ownerGroupId,'group-a');assert.deepEqual(route.rule.allowedRoles,['super_admin']);assert.equal(route.rule.requiresAuth,true);});
+test('generic create/edit paths retain their original authority and have no forced context',()=>{const create=findRoute('/users/new'),edit=findRoute('/users/user-a');assert.equal(create.ownerGroupId,undefined);assert.ok(create.rule.allowedRoles.includes('recruiter'));assert.equal(edit.userId,'user-a');assert.equal(edit.ownerGroupId,undefined);});

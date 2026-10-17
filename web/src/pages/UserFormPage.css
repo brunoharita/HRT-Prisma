@@ -1,0 +1,11 @@
+@media (max-width: 600px) {
+  .prisma-owner-onboarding .prisma-user-form-phone .ant-space-compact {
+    display: grid;
+    gap: 8px;
+  }
+  .prisma-owner-onboarding .prisma-user-form-phone .prisma-country-select,
+  .prisma-owner-onboarding .prisma-user-form-phone .ant-input-affix-wrapper {
+    min-width: 0;
+    width: 100%;
+  }
+}

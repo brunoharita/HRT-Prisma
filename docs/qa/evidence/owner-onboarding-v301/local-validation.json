@@ -1,0 +1,18 @@
+{
+  "baseline": "82dee4bc25a8b2b4981e69058cf2c34ad6c8dc6c",
+  "release": "3.0.1",
+  "postgres": {"checks":129,"failed":0,"report":"postgres.json","engine":"isolated PostgreSQL17 localhost:5846","scope":"103 previous multi-company assertions plus 26 contextual Owner checks; real relevant tables/helpers/SQL, synthetic Auth session; matching fixtures only prove unchanged boundaries"},
+  "browser": {"checks":60,"failed":0,"report":"browser.json","viewports":[1448,390,320],"screenshots":3,"limits":"real form/navigation components, synthetic transport/server and no real identity/email"},
+  "node": {"passed":25,"failed":0,"files":["ownerOnboarding","productRelease","platformUsersContract","platformUsersEdgeFunctions","organizationAdministration","webProtectedRoutes"]},
+  "tooling": {"passed":7,"failed":0,"files":["actionableNotices","operationalFocus","ownerOnboardingRoutes"]},
+  "deno": {"passed":2,"failed":0,"scenarios":19,"scope":"seven generic plus twelve contextual real-handler fetch fixtures, including four protected fields and Auth compensation"},
+  "rootBuild":"PASS",
+  "webTypecheck":"PASS",
+  "webBuild":"PASS",
+  "lint":"PASS",
+  "foundation":"PASS",
+  "context":"PASS",
+  "ledger":"PASS; new remote alias recorded after rollout",
+  "fullLocalValidate":"NOT RUN per scoped-validation policy; mandatory CI retained",
+  "paidCallsOrRealIdentityCreated":false
+}

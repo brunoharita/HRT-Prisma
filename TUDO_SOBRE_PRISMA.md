@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 512
-source_manifest_sha256: 6f9c110acaa54851ade11dc19a8b5e4a8e22b1877be26c5b31486c16c6b6ffaf
+documentation_source_count: 514
+source_manifest_sha256: 9db7024f177c49fc50a68530c1c47fd941f44e0eb5f6a1ecf95303790591e8f5
 -->
 
 # Tudo sobre o Prisma
@@ -2644,11 +2644,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.82.0
+version: 2.83.0
 last_verified: 2026-10-17
 ---
 
 # Estado atual do Prisma
+
+## Cadastrar Owner — 3.0.1 em validação
+
+Correção autorizada por Bruno em17/10/2026 com versão explícita3.0.1. Botão contextual transporta grupo; servidor resolve username (nome do grupo minúsculo sem espaços + .owner), Owner, grupo e primeira empresa. Quatro campos bloqueados, dados pessoais/credenciais editáveis. Contrato owner-onboarding-1.0.0, RPCs novas service-only, revalidação sob lock e audit transacional; cadastro genérico e persistência anterior preservados. Sem renomear pessoas, resolver conflitos por sufixos ou ativar grupo automaticamente. Acordo1.0.0 e AoT owner-onboarding-v301 registram validação/publicação; documentação não prova rollout.
 
 ## V3M0 — administração multiempresa 2.9.0 publicada
 
@@ -5081,6 +5085,8 @@ Implementação deve ser separada em movimentos menores: contratos e versões, s
 
 # Catálogo de contratos
 
+`owner-onboarding-1.0.0` (produto3.0.1, owner Users/security): contexto exclusivo Cadastrar Owner de grupo novo, resolvido por `owner_onboarding_context_v301` e persistido por `create_group_owner_v301`, ambos service-only via Edge com sessão verificada. Grupo em preparação com única primeira empresa e Super ativo; quatro campos exatos, username derivado sem alternativas silenciosas. Revalidação sob lock e audit transacional delegam à persistência genérica inalterada; contrato ausente/desconhecido falha fechado. Sem mutação de usuários existentes, mudança de Owner/faturamento ou transformação da origem de navegação em autoridade. Consumidores platform-users/UserFormPage; acordo1.0.0 e AoT owner-onboarding-v301 determinam evidência/ambiente.
+
 `manual-profile-1.0.0` e `employee-status-1.0.0` (v2.7.0): revisão estruturada sem PDF/IA, rascunho parcial e publicação humana pelo Delta; prefill vigente/privados separados, proveniência por campo/autor/data, histórico e omissões preservadas. Boolean administrativo por Pessoa/empresa, default false, alterações autorizadas/auditadas sem consequências automáticas de contratação/sucessão. Owners: `document-review-contract.md`, `profile-document-lifecycle.md`, `docs/product/person-center.md`; acordo/AoT manual-profile-v270. Contratos anteriores são estendidos, sem reescrever versões históricas; rollout só conforme evidência operacional do AoT.
 
 `company-question-reuse-1.0.0` (v2.5.1): integração privada após aprovação humana, incluindo recuperação de decisões persistidas. Conteúdo produzido pela empresa permanece exclusivo da organização; servidor nega geração/publicação global e mantém as globais institucionais existentes. Projeção transacional/idempotente, evidência original, auditoria backend sem nova decisão humana, sem IA/convite/cobrança. Contratos de prova/portal e item1.0.0 preservados; proveniência mantém versão original da questão. Owner `docs/product/question-bank.md`, acordo1.0.0 e AoT2.5.1.
@@ -5864,6 +5870,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+Decisão explícita de Bruno em17/10/2026: correção Cadastrar Owner publicada como **3.0.1**, substituindo a escolha anterior2.9.0 para esta nova entrega. Registry acrescenta geração3/movimento0/primeira entrega1 sem fabricar uma publicação3.0.0 ou renumerar2.9.0. Novo contrato contextual owner-onboarding-1.0.0; contratos genéricos, esquema de usuários, versões anteriores e regras comerciais permanecem. Acordo/AoT owner-onboarding-v301.
 
 V3M0 autorizado17/10/2026, inclusive parâmetros delegados, usa entrega **2.9.0**; o identificador da discussão não promove3.0.0. `tenant-authorization`2.0.0 explicita Recruiter como administrador e Admin como alias histórico; `organization-administration`1.0.0 versiona grupos/empresas/planos/vínculos/default/revisão; `platform-user-management`2.0.0 usa persistência transacional via save_platform_user_v3, exclusivamente service_role. Enum e auditorias antigos preservados; Global exclusivo Super, contratos de talentos/IA/Tokens intactos. Acordo e execução V3M0, ADR-085; ativação só comprovada pelo AoT.
 
@@ -12066,6 +12074,8 @@ A experiência M5.1C foi reorganizada em Questões e Para revisar, com detalhe c
 
 V3M0, entrega2.9.0. Acordo1.0.0 `docs/qa/agreement-v3m0-multiempresa.md`, ADR-085. Autorização de Bruno17/10/2026, parâmetros restantes delegados e revisáveis. Estado de publicação e evidência ficam no AoT, não são presumidos por este documento.
 
+Correção aprovada para3.0.1: **Cadastrar Owner** de grupo novo abre `/organizations/:groupId/owner/new` com contexto confirmado no servidor. Nome de usuário é o nome do grupo em minúsculas sem espaços + `.owner`; perfil Owner, grupo de origem e única primeira empresa são preenchidos e bloqueados. Dados pessoais/status/credenciais continuam no formulário atual. Só Super ativo, grupo/empresa em preparação e sem Owner ativo/pendente. Colisão ou nome incompatível com as regras atuais bloqueiam explicitamente; não se inventa sufixo, transliteração ou truncamento. Alterações dos quatro campos são recusadas; persistência revalida sob lock e audita na mesma transação. Cancelamento/conclusão retornam a Grupos e empresas. Cadastro genérico/edição e Owners existentes não mudam. Contrato `owner-onboarding-1.0.0`; acordo/AoT owner-onboarding-v301 registram rollout e limites.
+
 Somente quatro perfis: Super Admin vê todos os grupos, empresas e usuários; Owner governa seu grupo e todas suas empresas; Recruiter administra as empresas explicitamente vinculadas no mesmo grupo; Usuário comum usa somente suas funcionalidades na empresa padrão, sem seletor de troca. Múltiplos vínculos comuns são possíveis; o servidor escolhe padrão ativo, com fallback determinístico quando indisponível. Admin legado aparece como Recruiter, sem apagar autoria/histórico.
 
 Administração -> Grupos e empresas mostra identificação, situação, Owner, plano, capacidade, principal e empresas autorizadas. Recruiter não vê empresas sem vínculo. Super cadastra grupo com primeira empresa em preparação; cadastro/ativação humana do Owner reutiliza Usuários. Ativar a empresa principal e depois o grupo exige Owner ativo. Não se inventa responsável. Super/Owner/Recruiter podem criar novas empresas no próprio escopo/grupo, dentro do plano e com Owner válido. Criação pelo Recruiter concede vínculo na nova empresa; Owner mantém todas. Criação pelo Super usa o Owner existente como administrador responsável.
@@ -16423,6 +16433,41 @@ Q: nenhuma pendência material. Screenshots anteriores são contraexemplos, não
 ## Execução congelada
 
 Implementar integralmente este contrato v1.0.0 aprovado, sem nova aprovação administrativa. Registrar cada D/P no AoT com implementação, teste, evidência e limites. Não declarar PASS com prova necessária ausente. Publicar somente destinos exigidos pelo diff comprometido.
+
+---
+
+## Source: `docs/qa/agreement-owner-onboarding-v301.md`
+
+# Acordo e execução — Cadastrar Owner 3.0.1
+
+Versão 1.0.0, aprovado por Bruno neste chat em 17/10/2026: implementar, validar e publicar em **3.0.1**. Complementa o acordo V3M0 1.0.0, especialmente D-04/05, e substitui sua escolha de versão somente nesta entrega; não renumera publicações históricas.
+
+- D-01: a origem Cadastrar Owner de grupo novo transporta o ID do grupo. O servidor resolve nome de usuário, perfil Owner, grupo exato e única primeira empresa. Os quatro campos aparecem preenchidos e bloqueados no formulário existente. Nome completo, e-mail, celular, status e credenciais mantêm o fluxo atual.
+- D-02: nome de usuário é o nome atual do grupo em minúsculas, sem espaços, seguido de `.owner`; HRT Solutions -> hrtsolutions.owner. Sem transliteração, truncamento ou sufixo alternativo silencioso. Conflito de username é informado. Restrições atuais de username permanecem: nome de grupo incompatível exige correção explícita no grupo.
+- D-03: somente Super Admin ativo pode iniciar esse onboarding, em grupo em preparação, sem Owner ativo/pendente, com exatamente sua primeira empresa em preparação. Alteração/tampering de qualquer dos quatro campos, contexto inválido/obsoleto ou contrato desconhecido são recusados antes de Auth; persistência revalida o contexto sob lock do grupo. Falha posterior compensa apenas a identidade recém-criada, conforme fluxo existente. Auditoria obrigatória na transação.
+- D-04: cadastro genérico/edição de usuários, quatro perfis, Owner abrangendo futuras empresas, isolamento, vínculos, dados e Tokens existentes são preservados. Cancelar/concluir o onboarding retorna a Grupos e empresas; não cria Pessoa nem ativa grupo automaticamente.
+- D-05: publicar 3.0.1 com documentação, contexto, CI, migration/Edge/web seletivos, smoke e sincronização; sem testes que criem identidades reais ou enviem e-mails em produção.
+- P-01: não aceitar campos protegidos alterados, usar rota/metadata como autoridade, inventar outro username, reutilizar identidade alheia ou mudar cadastros existentes automaticamente.
+- P-02: não alterar planos, cobrança, decisões, dados de talentos, histórico de migrations ou contadores de versões já publicadas.
+- F-01: transferência/substituição de Owner, renomeação automática de Owners existentes, alteração global das regras de username e outras melhorias de onboarding.
+- A-01: reutilizar formulário, Supabase Auth/Edge e persistência transacional atuais; contexto dedicado e seleção de detalhes técnicos delegados à engenharia. Nada de novo fornecedor/dependência.
+- CA-01: navegação pelo botão real, reload da rota contextual, quatro valores/locks, campos pessoais editáveis, criação/erro/retorno; cadastro genérico editável; desktop/mobile com mesma composição da imagem fornecida (conteúdo pessoal da imagem é ilustrativo e não entra nas fixtures).
+- CA-02: negativos Edge reais com fetch sintético para cada campo, ator/contrato/colisão/escopo; SQL PG17 descartável cobre contexto, grants, revalidação, concorrência/Owner único, auditoria e persistência genérica preservada.
+- CA-03: tipos/build/lint/contexto e testes dirigidos/CI; publicação e smoke somente nos destinos do diff, com evidência e limites no AoT.
+
+## Mapa de impacto e fechamento
+
+Baseline 82dee4bc25a8b2b4981e69058cf2c34ad6c8dc6c; runtime anterior e969c60/2.9.0, migration multiempresa_v3 e Edge platform-users v6 conforme entrega anterior, a revalidar antes do rollout.
+
+| Capacidade | Relação | Prova/preservação |
+| --- | --- | --- |
+| Botão/rota/Cadastrar Owner/formulário | direct | Browser desktop/mobile, reload, quatro locks e retorno; mesma topologia/ordem da referência |
+| Auth/autoridade/grupo/primeira empresa/audit | critical_transversal | Edge/SQL negativos, contexto antes de Auth e sob lock antes de persistir; compensação existente |
+| Cadastro genérico/edição/default/Owner futuro | plausible_indirect | Testes dos usuários anteriores e SQL multiempresa; fixture genérica editável |
+| Release/contratos/documentação | direct | Versão3.0.1, contexto/ledger/CI e publicação seletiva |
+| Knowledge/matching/Parser/Tokens/PII/portais | no_impact_identified | Nenhuma lógica/serviço dessas capacidades alterada; helpers e save_platform_user_v3 existentes reutilizados sem redefinição; diff e destinos conferidos |
+
+Mínimo suficiente: provas CA-01..03 e regressão dirigida acima; não executar validate integral local. Encerrar com D/P PASS, evidência, publicação e sincronização. Sem Q bloqueante. Execução incorpora integralmente este contrato 1.0.0, a autorização do chat e o acordo V3M0 de base lido por completo; AoT registra resultado, não raciocínio privado.
 
 ---
 
@@ -22498,6 +22543,63 @@ Plano desde baseline a085c6eb9ca1ac276569a8b5cdce547038daa062: publicar somente 
 O deploy reconstruiu o web uma única vez. O primeiro HEAD durante a troca retornou404 e encerrou o comando com22; após estabilização,23HTTP200,16checks de preservação/rollback/assets e login real público1448/390/320 PASS, v2.4.1 visível, sem erro de runtime/overflow. Nenhum segundo rebuild. Os205arquivos anteriores permanecem byte a byte no container, e entradas anteriores continuam HTTP200. Rollback prisma-web:rollback-before-9a09fd12c790 corresponde à imagem anterior sha256:2a593110add306ee2969b8b42dedf143cf5136328d99a05f396a3d211409eb21.
 
 Fechamento documental/contexto/evidências em commit próprio, sem reconstruir a imagem funcional validada. Sincronização do SHA funcional local/main/origin/VPS registrada em production/synchronization.json; a documentação posterior não muda o SHA de runtime. O smoke público confirma distribuição e login; a regressão das telas internas utiliza componentes reais com fixtures, sem sessão produtiva autenticada. Nenhuma IA paga, envio real, decisão humana fictícia ou alteração de dados de negócio.
+
+---
+
+## Source: `docs/qa/aot-owner-onboarding-v301.md`
+
+# AoT — Cadastrar Owner 3.0.1
+
+Contrato `docs/qa/agreement-owner-onboarding-v301.md`1.0.0, aprovado neste chat17/10/2026. Baseline82dee4b, classeD; complemento do acordo V3M0, sem reabertura de planos ou papéis. Versão3.0.1 explícita do Product Owner, histórico2.9.0 preservado.
+
+## Matriz de Acordos
+
+| ID | Acordo / implementação | Teste / evidência | Status | Ambiente / limitação |
+| --- | --- | --- | --- | --- |
+| D-01 | Botão e rota contextual, UserFormPage reutilizado, quatro campos preenchidos/bloqueados e pessoa editável | browser.json60; rotas reais extraídas no teste; imagens1448/390/320 | PASS | Componentes reais, transporte/ator sintéticos |
+| D-02 | Username derivado no SQL, sem alternativa silenciosa | SQL129/Edge: HRT Solutions, conflito, caracteres não suportados e comprimento; UI mostra canonical | PASS | Nenhum Owner existente renomeado |
+| D-03 | Contexto service-only, ativo Super, preparação, primeira empresa, contrato; revalidação sob lock, audit e compensação | SQL129 inclui26 novos checks; duas conexões Owner concorrentes, rollback por auditoria; Deno2/19cenários (7 genéricos+12 contextuais) | PASS | PG17 isolado, handler real com fetch sintético |
+| D-04 | Fluxo genérico/edição preservados, retorno a grupos, nenhuma ativação implícita | Node25/tooling7 e regressões multiempresa103 incluídas nos129; browser genérico/editável/erro/retorno | PASS | Não substitui jornada humana autenticada |
+| D-05 | Contexto/CI e publicação seletiva | Checks locais abaixo; rollout pendente | PARTIAL | Sem mutação de teste em produção |
+
+## Proibições verificadas
+
+| ID | Guardrail / negativo | Evidência | Status |
+| --- | --- | --- | --- |
+| P-01 | Quatro adulterações, ator/contrato/contexto inválido, colisão, replay e cliente direto negados; identidade existente não substituída | postgres.json, Deno e erro UI sem formulário genérico | PASS |
+| P-02 | Sem preço, cobrança, dados de talentos ou migration histórica alterados; Registry preserva histórico | Diff/Node e matriz de destinos; save_platform_user_v3 inalterada | PASS |
+
+## Mapa de Impacto e Preservação
+
+Mapa do acordo mantido. Direct: botão/rota/contexto/formulário, documentação e release. Critical_transversal: Auth/ator/grupo/audit. Plausible_indirect: cadastro genérico/edição/persistência e Owner futuro; SQL de regressão foi executado junto das novas provas. No_impact_identified: matching/Knowledge/Parser/Tokens/portais, sem lógica/helper/serviço alterado. Baseline Git82dee4b; remoto Prisma ioldpnqqvobprjiontre17.6ACTIVE_HEALTHY, platform-users6/JWT=true. save_platform_user_v3 capturada para comparar no pós-rollout. Dados agregados somente leitura antes: usuários7/vínculos9/Pessoas12/Perfis18/movimentosTokens9.
+
+Novidade: quatro campos obrigatórios do contexto. Preservação: dados pessoais editáveis, credenciais existentes e cadastro genérico; SQL e Deno preservam guards/compensação e autoridade existente. Dependência descoberta: seletor de país ocupava o celular em320px; CSS exclusivamente `.prisma-owner-onboarding` passa país/celular a duas linhas no mobile, sem alterar cadastro genérico/desktop. Necessário para preencher o novo fluxo na menor viewport. Nenhuma nova dependência.
+
+## Fora de escopo preservado
+
+F-01 PASS: nenhuma transferência de Owner, renomeação de existente, regra global de username ou melhoria de outro fluxo.
+
+## Evidência de fidelidade visual
+
+Imagem anexada é referência do estado atual/contraexemplo dos quatro campos abertos; conteúdo pessoal é ilustrativo e não foi copiado para fixtures. Topologia existente preservada: cabeçalho/ações, dados básicos em três colunas no desktop, acesso/permissões em três colunas, senha/segurança abaixo, ações finais; mobile conserva ordem em coluna. Render owner-1448/390/320.png; desktop e320 inspecionados. Diferenças previstas: título contextual, campos protegidos e dados sintéticos. Ajuste mobile do celular necessário acima; sem overflow. Sem alegação de identidade pixel a pixel ou comparação de dados reais.
+
+## Desvios e mudanças autorizadas
+
+Nenhum desvio das regras aprovadas. Restrições de username já existentes continuam e são explicitadas, sem inventar transliteração/truncamento. A referência não é um mockup de nova composição. Limites: servidor local é PostgreSQL17 com subset real e Auth.uid de fixture; não é reset integral Supabase. Browser usa transporte sintético; não comprova login humano produtivo. Nenhuma IA/e-mail/identidade real utilizada para testar. Não há QA remoto separado neste fluxo conhecido.
+
+## Validação final
+
+129SQL PASS;60browser PASS em1448/390/320, incluindo quatro locks, reload, criação, contexto inválido, cadastro genérico/edição, erro conservando rascunho e retorno.25Node/7tooling PASS.2Deno/19cenários PASS, incluindo compensação de Auth recém-criado na falha de persistência. Rootbuild, tipos web e build web PASS. Lint/foundation/contexto/ledger PASS; CI e rollout serão registrados no fechamento. Não executado validate integral local.
+
+Ocorrências locais: Deno exigiu objeto estrutural para resposta JSON, corrigido com spread; fixture de browser importava tipos web sem extensão NodeNext e foi isolada com tipo local. Ambos resolvidos e testes dirigidos refeitos. Browser revelou celular sem largura em320px, corrigido apenas no contexto; nova execução60PASS. Warnings AntD/chunk anteriores não são exceções de runtime e não geraram refatoração adjacente.
+
+## Git / QA / ambiente
+
+Worktree de tarefa reutilizado, branch codex/owner-onboarding-v301; checkout canônico e arquivos alheios preservados. Destinos esperados: migration nova, platform-users e web. Rollback web/Edge anteriores preservados; correção SQL forward, RPCs legadas não redefinidas.
+
+## Conclusão
+
+Local PASS; entrega geral PARTIAL até publicação/smoke/CI/sincronização.
 
 ---
 
@@ -32095,6 +32197,8 @@ Em 2026-08-27, uma transação revertida confirmou a mutação M5 para Admin. Co
 Em 2026-08-28, transações revertidas no Prisma-QA confirmaram negação sem JWT, aceite adaptativo atômico, replay idempotente, incremento de lock e promoção de padrão somente depois de `approve_profile_review`. Nenhum evento ou padrão de teste permaneceu no banco.
 
 ## Fail-closed
+
+No Cadastrar Owner contextual3.0.1, os quatro campos bloqueados também são validados antes de provisionar Auth. As RPCs novas são service-only; Edge extrai o ator da sessão verificada e consulta grupo/primeira empresa/username no banco. A persistência revalida contexto sob o mesmo lock de grupo, recusa identidade já cadastrada e audita atomicamente antes de concluir. Rotas/IDs enviados pelo cliente são seletores não confiáveis, nunca prova de autoridade. Falha posterior compensa exclusivamente a identidade criada por aquela solicitação. Nenhuma alteração dos dados de Owners anteriores ou exceção às permissões genéricas. Contrato owner-onboarding-1.0.0.
 
 A ponte temporária Paddle (`paddle-hosted-transport-1.0.0`, ADR-058) valida a sessão via Supabase Auth e consulta operador ativo, organização e membership via REST/RLS com o token do usuário. Só Super Admin/Owner/Admin/Recruiter no escopo podem encaminhar documentos. Origem/versão/tenant ausentes ou desconhecidos falham fechados; a flag de rollout não concede autoridade. Não há chave privilegiada, novo grant ou migration. O gateway escuta socket Unix privado e os workers/túneis ficam em loopback. O corpo não é registrado ou persistido pelo gateway.
 

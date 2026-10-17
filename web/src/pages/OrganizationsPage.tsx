@@ -9,6 +9,7 @@ import { PrismaCard } from "../ui/PrismaCard";
 import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
 import { confirmPrismaNavigation, useUnsavedChanges } from "../ui/PrismaNavigation";
 import "./OrganizationsPage.css";
+import { ownerOnboardingPath } from "../domain/ownerOnboarding";
 type Editor = { kind: "group" | "company" | "new-company" | "new-group"; group?: ManagedGroup; company?: ManagedCompany };
 export function OrganizationsPage({ profile, onNavigate, onChanged }: { profile: PlatformAccessProfile; onNavigate: (path: string) => void; onChanged: () => Promise<void> }) {
   const [workspace, setWorkspace] = useState<OrganizationAdminWorkspace | null>(null);
@@ -69,7 +70,7 @@ export function OrganizationsPage({ profile, onNavigate, onChanged }: { profile:
     {!loading && groups.length === 0 ? <Empty description="Nenhuma empresa disponível neste escopo." /> : null}
     {groups.map(group => <PrismaCard className="prisma-organization-group" key={group.id} title={<Space wrap><span>{group.name}</span><Tag>{group.status === "active" ? "Ativo" : group.status === "inactive" ? "Inativo" : "Em preparação"}</Tag></Space>} extra={<Space wrap>{canManageGroup ? <Button disabled={busy} onClick={() => open({ kind: "group", group })}>Administrar grupo</Button> : null}<Button disabled={busy || group.status !== "active" || group.owner?.status !== "active" || group.companyCount >= group.companyLimit} icon={<PlusOutlined />} onClick={() => open({ kind: "new-company", group })}>Nova empresa</Button></Space>}>
       <Space wrap size="large"><Typography.Text>Owner: <strong>{group.owner?.name ?? "Não definido"}</strong>{group.owner && group.owner.status !== "active" ? " · ativação pendente" : ""}</Typography.Text><Typography.Text>Plano: <strong>{planLabels[group.plan]}</strong></Typography.Text><Typography.Text>Empresas cadastradas: <strong>{group.companyCount} de {group.companyLimit}</strong> · {group.activeCount} ativas</Typography.Text></Space>
-      {group.status === "draft" ? <Alert style={{ marginTop: 16 }} type="info" title="Grupo em preparação" description="Cadastre e ative o Owner em Usuários, ative a primeira empresa e depois o grupo." action={isSuper ? <Button onClick={() => onNavigate("/users/new")}>Cadastrar Owner</Button> : undefined} /> : null}
+      {group.status === "draft" ? <Alert style={{ marginTop: 16 }} type="info" title="Grupo em preparação" description="Cadastre e ative o Owner, ative a primeira empresa e depois o grupo." action={isSuper && !group.owner ? <Button onClick={() => onNavigate(ownerOnboardingPath(group.id))}>Cadastrar Owner</Button> : undefined} /> : null}
       {group.companyCount >= group.companyLimit ? <Typography.Paragraph type="secondary">Limite configurado atingido. Consulte o responsável pelo plano para incluir outra empresa.</Typography.Paragraph> : null}
       <Table<ManagedCompany> rowKey="id" size="small" pagination={false} scroll={{ x: 660 }} dataSource={group.companies} columns={[
         { title: "Empresa", dataIndex: "name", render: (name, c) => <Space wrap><strong>{name}</strong>{c.id === group.primaryOrganizationId ? <Tag>Principal</Tag> : null}</Space> },
