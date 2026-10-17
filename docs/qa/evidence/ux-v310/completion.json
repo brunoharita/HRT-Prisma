@@ -1,0 +1,28 @@
+{
+  "version": "3.1.0",
+  "runtime": "61f91bd25ca27496b5868674d89476526844d559",
+  "branchCi": 39076225630,
+  "mainCi": 39076317504,
+  "publicSmokeChecks": 27,
+  "rollbackVersion": "3.0.7",
+  "rollbackGitTag": "restore-v3.0.7-before-v3.1.0",
+  "rollbackImage": "sha256:d336b3925596261b220d81382faa3cf30a02c0b0b6971437be52d03424c3682a",
+  "protectedServices": [
+    "prisma-parser-ia",
+    "prisma-paddle-gateway",
+    "hrt-mail-forwarder",
+    "prisma-profile-synthesis",
+    "traefik-traefik-1"
+  ],
+  "configurationPreserved": true,
+  "backend": "unchanged",
+  "limitations": [
+    "local synthetic QA",
+    "anonymous production smoke",
+    "no authenticated real-person journey",
+    "session-only searches/queue; received server records persist",
+    "external API/CSV connectors remain future as approved"
+  ],
+  "publicationScriptProbe": "transient404; independent smoke PASS, no rebuild for the404",
+  "documentationOnlyCloseout": true
+}

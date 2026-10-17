@@ -1,10 +1,10 @@
 {
-  "sha": "1a5630e854e1e925678dd625b5a20aa9aac6c857",
+  "sha": "61f91bd25ca27496b5868674d89476526844d559",
   "services": [
     {
       "name": "prisma-web",
-      "id": "e82f2eb40517f64b75d124b23d0804ebcceafdb91ba7faadd992ce7ee9febb4b",
-      "image": "sha256:6fb2f331ac54244b5a9c78748d2b227af3fddc56e03e0e47d1e91f9b011ef158",
+      "id": "35a281a590a05af4ffe83bb9e6bd9c17713d529371dd727a7c868d117375b235",
+      "image": "sha256:8c6a92a79eb1382d85e0ed66a9e331e6414ac96c4b77af90d9592a4daf9f2a9f",
       "restarts": 0,
       "state": "running",
       "health": null

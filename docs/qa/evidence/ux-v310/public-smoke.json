@@ -1,5 +1,5 @@
 {
-  "runtimeSha": "1a5630e854e1e925678dd625b5a20aa9aac6c857",
+  "runtimeSha": "61f91bd25ca27496b5868674d89476526844d559",
   "checks": [
     {
       "name": "/: HTTP200",
@@ -34,7 +34,7 @@
       "pass": true
     },
     {
-      "name": "/assets/index-CAbOVGUk.js: HTTP200",
+      "name": "/assets/index-BR1OOKpN.js: HTTP200",
       "pass": true
     },
     {
@@ -78,6 +78,10 @@
       "pass": true
     },
     {
+      "name": "/assets/index-CAbOVGUk.js: HTTP200",
+      "pass": true
+    },
+    {
       "name": "anonymous protected route shows sign-in 1448",
       "pass": true
     },
@@ -107,7 +111,7 @@
     }
   ],
   "assets": [
-    "/assets/index-CAbOVGUk.js",
+    "/assets/index-BR1OOKpN.js",
     "/assets/rolldown-runtime-C0FnF6B9.js",
     "/assets/antd-vendor-BaKnhCyQ.js",
     "/assets/supabase-vendor-DoXvCMLf.js",
@@ -122,7 +126,9 @@
     "/assets/supabase-vendor-DoXvCMLf.js",
     "/assets/react-vendor-BdxMnOeJ.js",
     "/assets/antd-vendor-B5BXDqMa.css",
-    "/assets/index-DjqeYYSZ.css"
+    "/assets/index-DjqeYYSZ.css",
+    "/assets/index-CAbOVGUk.js",
+    "/assets/index-C6oIwUH8.css"
   ],
   "errors": [],
   "limits": "Anonymous fresh production browser. No Auth account, email, paid AI, real-person mutation or authenticated human workflow was used."
