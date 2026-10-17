@@ -1,0 +1,26 @@
+{
+  "baseline": "9a456e4d4a097022fe1292654c488273c6357458",
+  "browser": 138,
+  "nodeTooling": 21,
+  "denoTests": 3,
+  "denoScenarios": 29,
+  "checks": {
+    "typecheck:web": "PASS",
+    "build:web": "PASS",
+    "build": "PASS",
+    "git diff --check": "PASS",
+    "lint": "PASS",
+    "check:foundation": "PASS",
+    "generate:prisma-context": "PASS",
+    "check:prisma-context": "PASS",
+    "check:supabase-ledger": "PASS"
+  },
+  "authHostedMinimum": "UNVERIFIED; user confirmation requested because interface tools fail and management Auth endpoint has no configured credential",
+  "publication": "BLOCKED; production3.0.4 retained",
+  "limits": "Real forms/Edge handler with synthetic Auth, no real credential/account/email; valid browser cases retained when resuming last320px failure. Long invalid-password alert title visibility at320 not proved; rejection, visible requirement feedback and absent Auth mutation verified.",
+  "edgeBaseline": {
+    "version": 7,
+    "verify_jwt": true,
+    "sourceMatchesBaseline": true
+  }
+}

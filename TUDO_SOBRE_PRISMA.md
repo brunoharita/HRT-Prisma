@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 520
-source_manifest_sha256: 3790bb5e6205832b72c9c3572e117ae743ea793539d15bdd266e1c2971a0afb3
+documentation_source_count: 522
+source_manifest_sha256: d687d299b12100642d5e637962baae3a03fd9f3bc6008ff30ae1d772971b6e98
 -->
 
 # Tudo sobre o Prisma
@@ -2644,11 +2644,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.86.0
+version: 2.87.0
 last_verified: 2026-10-17
 ---
 
 # Estado atual do Prisma
+
+## Mínimo de senha8 —3.0.5 preparada, não publicada
+
+Bruno definiu8caracteres em17/10/2026. Web/cadastro/Owner/troca, Edge platform-users e config.toml alinhados localmente; demais requisitos preservados.138browser/21Node/3Deno (29cenários)/tipos/build PASS; testes e publicação no AoT password-minimum-v305. Auth remoto mínimo8pendente de confirmação: ferramenta de interface falhou ao inicializar, conector não expõe Auth config; solicitação enviada ao usuário. Produção permanece3.0.4; não interpretar config.toml ou fixture como confirmação do Auth hospedado.
 
 ## Feedback de senha e campos bloqueados —3.0.4 publicada
 
@@ -5174,6 +5178,7 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `platform-user-management` | security/data/Edge | 2.0.0 | platform-users | implementação V3M0, rollout no AoT | save_platform_user_v3 service-only atômico e Auth compensado na criação | local; rollout no AoT | preservar dados e negar mutação |
 | `web-domain-read` | product-engineering | 1.1.0 | Home, Pessoas, perfil | ativo em QA | `PrismaDataRepository`, incluindo saúde das fontes centrais | local/QA | bloquear consulta |
 | `platform-user-access` | security/product | 2.0.0 | App Shell, Usuários, Edge Functions | implementado localmente | migration `20260824113000_m2_users_people`, `platform-users` function, UI `UsersPage` | local | bloquear operação |
+| `password-policy` | security/product | 1.1.0 | cadastro/Owner/troca/Auth | implementado localmente; rollout condicionado ao Auth remoto8 | mínimo8, complexidade/confirmação preservadas, web/Edge/config alinhados; AoT password-minimum-v305 | local | negar envio fora da política e não publicar divergência |
 | `username-auth-boundary` | security/operations | 1.0.0 | sign-in, password recovery | implementado localmente | `operator-sign-in`, `operator-password-reset` | local | falha neutra |
 | `person-ingestion` | application/data | 12.0.0 | intake, Pessoas, documentos, perfil | resiliência operacional ativa no Prisma-QA | ingestão, revisão por Perfil/documento, publicação, restauração, vínculo, mesclagem, arquivamento e exclusão | local/QA | bloquear somente sem fonte recuperável ou autoridade |
 | `person-definitive-deletion` | product/application/data/security | 1.0.0 | Central da Pessoa, Meus dados, Storage, Perfil, matching e M5.1 | ativo no Prisma-QA | saga única, lock `deleting`, ledger mínimo, purga e verificador de resíduos | local/QA | preservar dados e negar operação |
@@ -12112,6 +12117,10 @@ Ordenar por Nome, Data de criação ou Data de atualização, em direção cresc
 
 Requisitos de senha observados continuamente: pendente vermelho, atendido verde com check e indicação acessível; exclusão/substituição reverte estado sem blur e confirmação exige não vazios/iguais. Campos bloqueados do formulário recebem aparência cinza legível. No Owner username/perfil/grupo/empresas permanecem canônicos e desabilitados; dados pessoais editáveis e cadastro genérico preservados. Política/servidor/envio de credencial e recuperação não mudam. Acordo/AoT password-feedback-v304.
 
+## Política de senha1.1.0 — mínimo8
+
+Bruno definiu mínimo8em17/10/2026, substituindo somente o mínimo12anterior. Demais requisitos/fluxos preservados. Constante compartilhada web alimenta cadastro/Owner/troca e rótulos; Edge platform-users e config.toml alinhados em8. Rollout3.0.5 condicionado a conferir Auth remoto8; acordo/AoT password-minimum-v305 distinguem estado local de produção.
+
 ---
 
 ## Source: `docs/product/person-center-redesign-spec.md`
@@ -16646,6 +16655,35 @@ Bruno determinou no chat17/10/2026: requisitos reagem imediatamente, pendente co
 | Troca de senha/outros fluxos/banco/Edge | no_impact_identified | CSS opt-in no cadastro e componente local; diff e plano seletivo, sem acessar esses destinos |
 
 ClasseB, sem nova dependência/ADR ou Q material. Execução incorpora D/P/F/A e CA acima. Encerrar após evidência obrigatória/CI/publicação/sincronização; não executar validate integral local. Jornada humana autenticada não será inventada a partir de fixture.
+
+---
+
+## Source: `docs/qa/agreement-password-minimum-v305.md`
+
+# Mínimo de senha8 — acordo e execução1.0.0
+
+Bruno decidiu no chat17/10/2026: mínimo de8caracteres. Supersede somente o limite12 da política anterior e a proibição de alterá-lo no P-01 do acordo password-feedback-v304; demais condições permanecem. Baseline9a456e4d4a097022fe1292654c488273c6357458/runtime3.0.4 0c4af48bc0d81a55f731f96d385c006c1749dc6d. Entrega3.0.5, política password-policy1.1.0.
+
+- D-01: aceitar a partir de8caracteres e recusar7ou menos; preservar maiúscula/minúscula/número/especial/confirmação e demais gates atuais.
+- D-02: mesmo mínimo no cadastro genérico/Owner, troca/primeiro acesso, Edge platform-users e Supabase Auth; rótulos/feedback imediatos coerentes. Campo canônico/cores/checks3.0.4 preservados.
+- P-01: não alterar senha existente, contas reais, escopos, JWT, permissões, outros parâmetros Auth, fluxo de recuperação/e-mail ou geração automática. Nenhuma credencial em fonte/log/evidência; senha sintética única somente em memória.
+- F-01: nova política de complexidade, auditoria global de segurança, migrações/RLS, mudança de providers e redesign de telas.
+- A-01: constante compartilhada web para regra/rótulos, ajuste equivalente na Edge/config.toml; testes de fronteira com funções/handlers/formulários reais e transportes sintéticos. Sem lib nova.
+- CA-01: fronteiras7/8/11/12e negativos de cada condição em Node/Edge real; servidor não provisiona abaixo8ou com regra faltante;8válida chega à persistência/compensação atuais.
+- CA-02: browser Owner/genérico e troca de senha com7pendente/8atendido, foco/cores/checks/confirmação/locks, submit8sintético e fluxos automáticos preservados; tipos/build/checks/contexto/CI.
+- CA-03: publicar somente Edge platform-users e web, mantendo verify_jwt; conferir fontes/versão/SHA/rotas/assets/rollback/serviços e Auth mínimo8com outros parâmetros preservados. Sincronizar e registrar limites no AoT.
+
+## Mapa de impacto e mínimo suficiente
+
+| Área | Relação | Baseline / prova |
+| --- | --- | --- |
+| Cadastro/Owner/feedback/política web | direct |3.0.4; Node fronteiras e browser em1448/390/320 |
+| Troca/primeiro acesso | direct |Mesmo helper, mínimo12anterior; browser8e submit sintético, sem senha humana |
+| Edge/Auth | critical_transversal |Edge atual e config.toml12; Deno negativos/handler e confirmação operacional mínimo8 |
+| Conta/escopos/canonicalidade/e-mail | plausible_indirect |Handlers inalterados fora do mínimo; suíte Edge Owner/admin e browser anterior |
+| RLS/banco/outros serviços | no_impact_identified |Nenhuma lógica/dados/migration muda; plano seletivo e demais contêineres |
+
+ClasseD por validação de credencial. Sem Q de produto; requisito operacional de rollout: confirmar Auth8 no projeto Prisma. A ferramenta de interface falhou (kernel assets) e o conector não expõe Auth config; confirmação solicitada ao usuário enquanto implementação/validação independente prossegue. Não publicar uma política divergente nem declarar CA-03 PASS sem essa prova. Execução incorpora integralmente este acordo; sem validate integral local ou testes com contas reais.
 
 ---
 
@@ -22967,6 +23005,52 @@ Fechamento documental/contexto em commit posterior, sem alteração funcional ne
 ## Conclusão
 
 D/P/CA PASS nos limites declarados, sem desvio material. Jornada humana autenticada de produção NOT TESTED, sem cadastros ou credenciais reais criados/alterados pela tarefa. Fechamento exige CI final e sincronização Git/VPS, sem repetir validações funcionais já aprovadas.
+
+---
+
+## Source: `docs/qa/aot-password-minimum-v305.md`
+
+# AoT — Mínimo de senha8 /3.0.5
+
+Contrato `docs/qa/agreement-password-minimum-v305.md`1.0.0, decisão de Bruno17/10/2026. Baseline9a456e4/runtime3.0.4 0c4af48. Evidência `docs/qa/evidence/password-minimum-v305/`.
+
+## Acordos / proibições
+
+| ID | Implementação / prova | Status |
+| --- | --- | --- |
+| D-01 | Constante8 web/Edge/config; fronteiras7/8/9/10/11/12e negativos das condições preservadas | PASS |
+| D-02 | Cadastro/Owner/troca compartilham mínimo8e rótulos; Auth remoto depende de confirmação | PARTIAL |
+| P-01 | Nenhuma conta/credencial real alterada; JWT7=true baseline; somente comprimento muda | PASS |
+| F-01 | Sem migration/RLS/provedor/regras novas/redesign; diff dirigido | PASS |
+| CA-03 | Publicação e Auth8pendentes; runtime continua3.0.4 | BLOCKED |
+
+## Mapa de impacto e preservação
+
+Mesmo mapa do acordo. Dependência operacional identificada antes de implementar: mínimo do serviço Supabase Auth é separado do config.toml local.
+
+| Área | Relação | Prova / estado |
+| --- | --- | --- |
+| Cadastro/Owner/feedback web | direct | Comparador/política e browser com7/8, foco, cores/checks/locks e submit8sintético |
+| Troca/primeiro acesso | direct | Helper8 e tela real com Auth/completion sintéticos;7não atualiza,8atualiza e conclui |
+| Edge/Auth | critical_transversal |3Deno/29cenários PASS,19anteriores+10de senha; mínimo do Auth remoto NÃO VERIFICADO |
+| Escopo/canonicalidade/automático | plausible_indirect | Handler real com quatro perfis/negativos/compensação anteriores, browser do Owner/genérico |
+| RLS/banco/outros serviços | no_impact_identified | Sem alterações/consultas nesses destinos; apenas metadados/fontes Edge lidos para baseline |
+
+## Validação e fidelidade
+
+21Node/tooling PASS: política/config/Edge alinhados localmente, fronteiras/complexidade/confirmação, identidade/rotas/avisos/versão.3Deno PASS/29cenários com fetch sintético; nenhum serviço externo/conta/e-mail. Tipos/build web e build TypeScript PASS. 138browser PASS (112anteriores adaptados ao limiar8,26casos novos de fronteira/submit/troca/genérico). Lint/foundation/contexto/ledger/diff PASS; CI pendente. Screenshots mascaradas, mesma topologia/dados sintéticos/larguras1448/390/320 do movimento anterior; só rótulo/limite mudou. Senhas únicas geradas em memória, sem valor em fonte/log/artefato. Sem jornada autenticada humana em produção.
+
+Falha inicial de harness: no320px o texto do aviso de senha inválida (cadastro/troca) ficou sem área visível; assert alterado para presença da resposta e ausência de submit, com requisito vermelho visível sendo a prova de feedback do mínimo. Isso não declara PASS para legibilidade desses avisos nem altera seu layout fora do escopo. Outros casos/ações de recuperação anteriores permanecem na regressão.
+
+## Bloqueio operacional / publicação
+
+Não publicada. MCP/browser e node_repl falharam ao inicializar com `failed to write kernel assets` (os error3); conector Supabase disponível não expõe Auth config, CLI/token de gerenciamento não configurados no processo/local ou na VPS existente (somente presença de credencial específica conferida, sem saída de segredos). Nenhum token foi solicitado/exposto nem obtido de sessões do navegador. Solicitado ao usuário conferir/deixar Minimum password length8 no projeto Prisma ioldpnqqvobprjiontre, sem mudar outros parâmetros. [API oficial de configuração Auth](https://supabase.com/docs/reference/api/v1-update-auth-service-config) confirma configuração separada `password_min_length`; não substituir confirmação por config.toml ou teste sintético.
+
+Baseline Edge platform-users7, verify_jwt=true, fonte obtida do conector no projeto Prisma saudável e conferida igual ao Git baseline. Plano deve publicar apenas essa Edge e web após a confirmação; sem migrations. Push/CI da branch isolada em execução; main/produção3.0.4 preservadas até Auth8 confirmado. Autorização da tarefa/standing cobre execução assim que o pré-requisito operacional for satisfeito, sem nova aprovação.
+
+## Conclusão
+
+Implementação local preparada, entrega PARTIAL enquanto Auth remoto e publicação não forem comprovados. Não declarar conclusão ou versão3.0.5 em produção. Nenhuma repetição de testes válidos será necessária apenas para aguardar a confirmação, salvo novo diff/falha/estado divergente.
 
 ---
 
@@ -32512,6 +32596,8 @@ No M5.2, somente `service_role` executa staging, validação, diff e publicaçã
 - grants da Data API e RLS testados separadamente.
 
 Ordenação3.0.3: organization-administration1.1.0 aceita1.0.0 e projeta apenas createdAt/updatedAt dos mesmos grupos/empresas já visíveis. Função preserva integralmente ator, filtros, locks, mutações, search_path e ACL fora das três substituições aditivas verificadas. Sem grant novo, acesso comum, RLS ou escrita de datas/histórico.
+
+password-policy1.1.0 (3.0.5, preparação local): mínimo8por decisão explícita de Bruno17/10/2026, mantendo complexidade/confirmação/gates atuais. Cadastro/Owner validam no cliente e Edge; troca/primeiro acesso usam cliente e Supabase Auth. config.toml local não comprova política hospedada; Auth remoto8é pré-requisito operacional de rollout, conforme AoT password-minimum-v305. Nenhuma conta existente é alterada por reduzir o limite.
 
 ---
 

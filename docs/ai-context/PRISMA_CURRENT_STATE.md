@@ -3,11 +3,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.86.0
+version: 2.87.0
 last_verified: 2026-10-17
 ---
 
 # Estado atual do Prisma
+
+## Mínimo de senha8 —3.0.5 preparada, não publicada
+
+Bruno definiu8caracteres em17/10/2026. Web/cadastro/Owner/troca, Edge platform-users e config.toml alinhados localmente; demais requisitos preservados.138browser/21Node/3Deno (29cenários)/tipos/build PASS; testes e publicação no AoT password-minimum-v305. Auth remoto mínimo8pendente de confirmação: ferramenta de interface falhou ao inicializar, conector não expõe Auth config; solicitação enviada ao usuário. Produção permanece3.0.4; não interpretar config.toml ou fixture como confirmação do Auth hospedado.
 
 ## Feedback de senha e campos bloqueados —3.0.4 publicada
 

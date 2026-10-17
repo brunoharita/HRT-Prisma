@@ -1,3 +1,5 @@
+export const PASSWORD_MIN_LENGTH = 8;
+
 export const PLATFORM_ACCESS_PROFILES = [
   "super_admin",
   "owner",
@@ -146,7 +148,7 @@ export function buildPasswordRequirementState(
 ): PasswordRequirementState {
   const normalizedUsername = normalizeUsername(username);
   return {
-    minLength: password.length >= 12,
+    minLength: password.length >= PASSWORD_MIN_LENGTH,
     uppercase: /[A-Z]/.test(password),
     lowercase: /[a-z]/.test(password),
     number: /\d/.test(password),

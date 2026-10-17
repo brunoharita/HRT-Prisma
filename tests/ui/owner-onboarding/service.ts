@@ -5,6 +5,7 @@ const group={id:groupId,name:'HRT Solutions',organizations:[company]};
 const operator={id:'actor',authUserId:'actor',fullName:'Operador sintético',username:'fixture.super',email:'fixture@example.invalid',status:'active',profile:'super_admin',groupId:null,groupName:null,mustChangePassword:false};
 const scenario=()=>new URLSearchParams(location.search).get('fail');
 export const platformUsersService={
+ completeFirstAccess:async()=>{(window as any).__firstAccessCompleted=true;},
  loadBootstrapData:async()=>({currentOperator:operator,groups:[group],users:[]}),
  loadOwnerContext:async(id:string)=>{if(scenario()==='context'||id!==groupId)throw Error('Contexto indisponível. Volte ao grupo.');return {contract:'owner-onboarding-1.0.0',username:'hrtsolutions.owner',profile:'owner',group:{id:groupId,name:group.name},company:{id:companyId,name:company.name}};},
  loadUser:async()=>({id:'edit-user',authUserId:'edit-auth',fullName:'Usuário sintético',username:'fixture.member',email:'fixture@example.invalid',phoneCountryIso2:'BR',phoneNationalNumber:'11999999999',profile:'member',status:'active',groupId,groupName:group.name,allowedOrganizations:[company]}),

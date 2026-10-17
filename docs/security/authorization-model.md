@@ -79,3 +79,5 @@ No M5.2, somente `service_role` executa staging, validação, diff e publicaçã
 - grants da Data API e RLS testados separadamente.
 
 Ordenação3.0.3: organization-administration1.1.0 aceita1.0.0 e projeta apenas createdAt/updatedAt dos mesmos grupos/empresas já visíveis. Função preserva integralmente ator, filtros, locks, mutações, search_path e ACL fora das três substituições aditivas verificadas. Sem grant novo, acesso comum, RLS ou escrita de datas/histórico.
+
+password-policy1.1.0 (3.0.5, preparação local): mínimo8por decisão explícita de Bruno17/10/2026, mantendo complexidade/confirmação/gates atuais. Cadastro/Owner validam no cliente e Edge; troca/primeiro acesso usam cliente e Supabase Auth. config.toml local não comprova política hospedada; Auth remoto8é pré-requisito operacional de rollout, conforme AoT password-minimum-v305. Nenhuma conta existente é alterada por reduzir o limite.

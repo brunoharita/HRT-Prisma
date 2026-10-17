@@ -28,6 +28,7 @@ import type { PlatformOperator } from "../domain/platformUsersData";
 import { platformUsersService } from "../infrastructure/supabase/platformUsersService";
 import {
   buildPasswordRequirementState,
+  PASSWORD_MIN_LENGTH,
   COUNTRY_PHONE_OPTIONS,
   describePlatformAccessProfile,
   getCountryPhoneOption,
@@ -482,7 +483,7 @@ export function UserFormPage({ mode, userId, ownerGroupId, onNavigate }: UserFor
                   <div className="prisma-user-password-checklist">
                     <h3>Requisitos mínimos</h3>
                     <ul>
-                      <PasswordRuleItem satisfied={passwordState.minLength} text="Mínimo de 12 caracteres" />
+                      <PasswordRuleItem satisfied={passwordState.minLength} text={`Mínimo de ${PASSWORD_MIN_LENGTH} caracteres`} />
                       <PasswordRuleItem satisfied={passwordState.uppercase} text="Letra maiúscula" />
                       <PasswordRuleItem satisfied={passwordState.lowercase} text="Letra minúscula" />
                       <PasswordRuleItem satisfied={passwordState.number} text="Número" />

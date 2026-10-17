@@ -1,5 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2.112.3";
 
+const PASSWORD_MIN_LENGTH = 8;
+
 type MembershipRole = "super_admin" | "owner" | "admin" | "recruiter" | "member";
 type PlatformUserStatus = "pending_first_access" | "active" | "inactive" | "blocked";
 type CredentialMode = "manual_password" | "activation_link";
@@ -873,7 +875,7 @@ function validateUsername(username: string) {
 }
 
 function validatePassword(password: string, username: string) {
-  if (password.length < 12) throw new HttpError(400, "A senha deve ter pelo menos 12 caracteres.");
+  if (password.length < PASSWORD_MIN_LENGTH) throw new HttpError(400, `A senha deve ter pelo menos ${PASSWORD_MIN_LENGTH} caracteres.`);
   if (!/[A-Z]/.test(password)) throw new HttpError(400, "A senha precisa conter letra maiúscula.");
   if (!/[a-z]/.test(password)) throw new HttpError(400, "A senha precisa conter letra minúscula.");
   if (!/\d/.test(password)) throw new HttpError(400, "A senha precisa conter número.");

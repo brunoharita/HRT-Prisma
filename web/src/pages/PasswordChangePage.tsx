@@ -8,6 +8,7 @@ import { supabase } from "../infrastructure/supabase/client";
 import { platformUsersService } from "../infrastructure/supabase/platformUsersService";
 import {
   buildPasswordRequirementState,
+  PASSWORD_MIN_LENGTH,
   isPasswordPolicySatisfied,
 } from "../shared/platformUsers";
 import { PrismaCard } from "../ui/PrismaCard";
@@ -83,7 +84,7 @@ export function PasswordChangePage({ currentOperator, onNavigate, onPasswordComp
           <div className="prisma-user-password-checklist is-standalone">
             <h3>Requisitos mínimos</h3>
             <ul>
-              <PasswordRuleItem satisfied={rules.minLength} text="Mínimo de 12 caracteres" />
+              <PasswordRuleItem satisfied={rules.minLength} text={`Mínimo de ${PASSWORD_MIN_LENGTH} caracteres`} />
               <PasswordRuleItem satisfied={rules.uppercase} text="Letra maiúscula" />
               <PasswordRuleItem satisfied={rules.lowercase} text="Letra minúscula" />
               <PasswordRuleItem satisfied={rules.number} text="Número" />

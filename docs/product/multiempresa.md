@@ -27,3 +27,7 @@ Ordenar por Nome, Data de criação ou Data de atualização, em direção cresc
 ## Feedback do cadastro de usuário/Owner —3.0.4
 
 Requisitos de senha observados continuamente: pendente vermelho, atendido verde com check e indicação acessível; exclusão/substituição reverte estado sem blur e confirmação exige não vazios/iguais. Campos bloqueados do formulário recebem aparência cinza legível. No Owner username/perfil/grupo/empresas permanecem canônicos e desabilitados; dados pessoais editáveis e cadastro genérico preservados. Política/servidor/envio de credencial e recuperação não mudam. Acordo/AoT password-feedback-v304.
+
+## Política de senha1.1.0 — mínimo8
+
+Bruno definiu mínimo8em17/10/2026, substituindo somente o mínimo12anterior. Demais requisitos/fluxos preservados. Constante compartilhada web alimenta cadastro/Owner/troca e rótulos; Edge platform-users e config.toml alinhados em8. Rollout3.0.5 condicionado a conferir Auth remoto8; acordo/AoT password-minimum-v305 distinguem estado local de produção.

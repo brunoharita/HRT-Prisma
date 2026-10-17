@@ -70,3 +70,33 @@ Deno.test("Owner onboarding: canonical context, four tamper negatives, authority
   assert(calls.filter(c=>c.method==='DELETE').length===(scenario==='commit-revoked'?1:0),scenario+': compensation only newly-created identity');
  }}finally{globalThis.fetch=originalFetch;}
 });
+
+Deno.test("manual password minimum8: boundaries, complexity, confirmation, atomic save and compensation", async () => {
+ const originalFetch=globalThis.fetch;
+ Deno.env.set("SUPABASE_URL","https://synthetic.invalid");Deno.env.set("SUPABASE_ANON_KEY","synthetic-public");Deno.env.set("SUPABASE_SERVICE_ROLE_KEY","synthetic-server");
+ const char=(start:number,size:number)=>String.fromCharCode(start+crypto.getRandomValues(new Uint32Array(1))[0]%size);
+ const make=(length:number)=>char(97,26)+char(65,26)+char(48,10)+String.fromCharCode(33)+Array.from({length:length-4},()=>char(97,26)).join('');
+ try{for(const scenario of ['short7','valid8','valid11','valid12','no-upper','no-lower','no-number','no-symbol','mismatch','rpc-failure'] as const){
+  let password=make(scenario==='short7'?7:scenario==='valid11'?11:scenario==='valid12'?12:8);
+  if(scenario==='no-upper')password=password.toLowerCase();if(scenario==='no-lower')password=password.toUpperCase();if(scenario==='no-number')password=password.replace(/\d/g,()=>char(97,26));if(scenario==='no-symbol')password=password.replace(/[^A-Za-z0-9]/g,()=>char(97,26));
+  const calls:{path:string;method:string}[]=[];
+  globalThis.fetch=(async(input:string|URL|Request,init?:RequestInit)=>{
+   const url=new URL(String(input)),method=init?.method??'GET';calls.push({path:url.pathname,method});
+   if(url.pathname==='/auth/v1/user')return Response.json({id:id(3),aud:'authenticated',role:'authenticated'});
+   if(url.pathname==='/rest/v1/platform_users')return Response.json(url.searchParams.has('auth_user_id')?[{id:id(30),auth_user_id:id(3),access_profile:'recruiter',group_id:id(100),status:'active'}]:[]);
+   if(url.pathname==='/rest/v1/organization_memberships')return Response.json([{organization_id:id(110),user_id:id(3),role:'recruiter'}]);
+   if(url.pathname==='/rest/v1/organizations')return Response.json([{id:id(110),name:'Empresa sintética',group_id:id(100)}]);
+   if(url.pathname==='/auth/v1/admin/users'&&method==='POST')return Response.json({id:id(9),email:'synthetic@example.invalid'});
+   if(url.pathname==='/rest/v1/rpc/save_platform_user_v3')return scenario==='rpc-failure'?Response.json({code:'42501',message:'Autoridade revogada.'},{status:403}):Response.json(id(90));
+   if(url.pathname===`/auth/v1/admin/users/${id(9)}`&&method==='DELETE')return Response.json({});
+   throw Error('Unexpected password-policy request '+url.pathname);
+  }) as typeof fetch;
+  const input={fullName:'Usuário sintético',username:'synthetic.member',email:'synthetic@example.invalid',profile:'member',groupId:id(100),organizationIds:[id(110)],phoneCountryIso2:'BR',phoneNationalNumber:'11999999999',status:'active',credentialMode:'manual_password',password,passwordConfirmation:scenario==='mismatch'?password.slice(0,-1):password};
+  const response=await handler(new Request('https://synthetic.invalid/platform-users',{method:'POST',headers:{Authorization:'Bearer synthetic','Content-Type':'application/json'},body:JSON.stringify({action:'create',input})}));
+  const allowed=['valid8','valid11','valid12','rpc-failure'].includes(scenario);
+  assert(response.status===(!allowed?400:scenario==='rpc-failure'?403:200),scenario+': expected HTTP outcome');
+  assert(calls.filter(c=>c.path==='/auth/v1/admin/users'&&c.method==='POST').length===(allowed?1:0),scenario+': invalid credential denied before Auth');
+  assert(calls.filter(c=>c.path==='/rest/v1/rpc/save_platform_user_v3').length===(allowed?1:0),scenario+': atomic persistence unchanged');
+  assert(calls.filter(c=>c.method==='DELETE').length===(scenario==='rpc-failure'?1:0),scenario+': compensation unchanged');
+ }}finally{globalThis.fetch=originalFetch;}
+});
