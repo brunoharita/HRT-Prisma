@@ -3,11 +3,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.83.0
+version: 2.84.0
 last_verified: 2026-10-17
 ---
 
 # Estado atual do Prisma
+
+## Grupos recolhíveis — 3.0.2
+
+Proposta2 aprovada por Bruno e implementada: grupos separados, resumo persistente com plano/capacidade/situação, um aberto por vez, teclado, busca que revela resultado e atualização preservando expansão. Empresas em blocos no celular; ações, limites, perfis, vínculos e Cadastrar Owner contextual preservados. Nenhuma migration, Edge ou contrato de domínio alterado; somente web. Validação e publicação registradas no AoT `docs/qa/aot-groups-accordion-v302.md`.
 
 ## Cadastrar Owner — 3.0.1 publicada
 

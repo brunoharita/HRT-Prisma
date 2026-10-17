@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ApartmentOutlined, PlusOutlined } from "@ant-design/icons";
+import { ApartmentOutlined, DownOutlined, PlusOutlined } from "@ant-design/icons";
 import { Alert, Button, Drawer, Empty, Form, Input, InputNumber, Modal, Select, Space, Table, Tag, Typography } from "antd";
 import { organizationAdministrationService as service } from "../infrastructure/supabase/organizationAdministrationService";
 import { companyStatusLabels, organizationPlans, planCompanyLimitValid, planLabels, type ManagedCompany, type ManagedCompanyUser, type ManagedGroup, type OrganizationAdminWorkspace, type OrganizationPlan } from "../domain/organizationAdministration";
@@ -14,6 +14,7 @@ type Editor = { kind: "group" | "company" | "new-company" | "new-group"; group?:
 export function OrganizationsPage({ profile, onNavigate, onChanged }: { profile: PlatformAccessProfile; onNavigate: (path: string) => void; onChanged: () => Promise<void> }) {
   const [workspace, setWorkspace] = useState<OrganizationAdminWorkspace | null>(null);
   const [search, setSearch] = useState("");
+  const [expandedGroup, setExpandedGroup] = useState<string | null | undefined>(undefined);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -62,23 +63,33 @@ export function OrganizationsPage({ profile, onNavigate, onChanged }: { profile:
   const canManageGroup = isSuper || profile === "owner";
   const query = search.trim().toLocaleLowerCase("pt-BR");
   const groups = workspace?.groups.filter(g => !query || g.name.toLocaleLowerCase("pt-BR").includes(query) || g.companies.some(c => c.name.toLocaleLowerCase("pt-BR").includes(query))) ?? [];
+  const expanded = expandedGroup === null ? null : groups.find(g => g.id === expandedGroup)?.id ?? groups[0]?.id;
   return <PrismaPage>
     <PrismaPageHeader icon={<ApartmentOutlined />} title="Grupos e empresas" description="Administre empresas e acessos dentro da sua responsabilidade." actions={<Space wrap><Button disabled={loading || busy} onClick={() => void load()}>Atualizar</Button><Button onClick={() => onNavigate("/users")}>Usuários</Button>{isSuper ? <Button type="primary" icon={<PlusOutlined />} onClick={() => open({ kind: "new-group" })}>Novo grupo</Button> : null}</Space>} />
     {error ? <Alert type="error" showIcon title={error} action={<Button disabled={loading || busy} onClick={() => void load()}>Atualizar consulta</Button>} /> : null}
     {notice ? <Alert type="success" showIcon title={notice} closable onClose={() => setNotice(null)} /> : null}
-    <PrismaCard><Input.Search aria-label="Buscar grupos e empresas" placeholder="Buscar grupo ou empresa" value={search} onChange={e => setSearch(e.target.value)} allowClear /></PrismaCard>
+    <PrismaCard><Input.Search aria-label="Buscar grupos e empresas" placeholder="Buscar grupo ou empresa" value={search} onChange={e => { setSearch(e.target.value);setExpandedGroup(undefined); }} allowClear /></PrismaCard>
     {!loading && groups.length === 0 ? <Empty description="Nenhuma empresa disponível neste escopo." /> : null}
-    {groups.map(group => <PrismaCard className="prisma-organization-group" key={group.id} title={<Space wrap><span>{group.name}</span><Tag>{group.status === "active" ? "Ativo" : group.status === "inactive" ? "Inativo" : "Em preparação"}</Tag></Space>} extra={<Space wrap>{canManageGroup ? <Button disabled={busy} onClick={() => open({ kind: "group", group })}>Administrar grupo</Button> : null}<Button disabled={busy || group.status !== "active" || group.owner?.status !== "active" || group.companyCount >= group.companyLimit} icon={<PlusOutlined />} onClick={() => open({ kind: "new-company", group })}>Nova empresa</Button></Space>}>
-      <Space wrap size="large"><Typography.Text>Owner: <strong>{group.owner?.name ?? "Não definido"}</strong>{group.owner && group.owner.status !== "active" ? " · ativação pendente" : ""}</Typography.Text><Typography.Text>Plano: <strong>{planLabels[group.plan]}</strong></Typography.Text><Typography.Text>Empresas cadastradas: <strong>{group.companyCount} de {group.companyLimit}</strong> · {group.activeCount} ativas</Typography.Text></Space>
-      {group.status === "draft" ? <Alert style={{ marginTop: 16 }} type="info" title="Grupo em preparação" description="Cadastre e ative o Owner, ative a primeira empresa e depois o grupo." action={isSuper && !group.owner ? <Button onClick={() => onNavigate(ownerOnboardingPath(group.id))}>Cadastrar Owner</Button> : undefined} /> : null}
-      {group.companyCount >= group.companyLimit ? <Typography.Paragraph type="secondary">Limite configurado atingido. Consulte o responsável pelo plano para incluir outra empresa.</Typography.Paragraph> : null}
-      <Table<ManagedCompany> rowKey="id" size="small" pagination={false} scroll={{ x: 660 }} dataSource={group.companies} columns={[
-        { title: "Empresa", dataIndex: "name", render: (name, c) => <Space wrap><strong>{name}</strong>{c.id === group.primaryOrganizationId ? <Tag>Principal</Tag> : null}</Space> },
-        { title: "Situação", dataIndex: "status", render: (status: ManagedCompany["status"]) => <Tag color={status === "active" ? "green" : "default"}>{companyStatusLabels[status]}</Tag> },
-        { title: "Usuários ativos", dataIndex: "users" },
-        { title: "Ações", render: (_, company) => <Space wrap><Button disabled={busy} onClick={() => open({ kind: "company", group, company })}>Editar</Button><Button disabled={busy} onClick={() => void openLinks(group, company)}>Acessos</Button></Space> },
+    <div className="prisma-organization-groups">
+    {groups.map(group => <details className="prisma-organization-group" key={group.id} open={expanded === group.id}>
+      <summary aria-expanded={expanded === group.id} onClick={event => { event.preventDefault();setExpandedGroup(expanded === group.id ? null : group.id); }}>
+        <span className="prisma-organization-summary-label"><DownOutlined className="prisma-organization-chevron" aria-hidden="true" /><span className="prisma-organization-summary-main"><strong>{group.name}</strong><span>{planLabels[group.plan]} · {group.companyCount}/{group.companyLimit} empresas · {group.activeCount} ativas</span></span></span>
+        <Tag color={group.status === "active" ? "green" : "default"}>{group.status === "active" ? "Ativo" : group.status === "inactive" ? "Inativo" : "Em preparação"}</Tag>
+      </summary>
+      <div className="prisma-organization-body">
+      <div className="prisma-organization-actions">{canManageGroup ? <Button disabled={busy} onClick={() => open({ kind: "group", group })}>Administrar grupo</Button> : null}<Button disabled={busy || group.status !== "active" || group.owner?.status !== "active" || group.companyCount >= group.companyLimit} icon={<PlusOutlined />} onClick={() => open({ kind: "new-company", group })}>Nova empresa</Button></div>
+      <div className="prisma-organization-metadata"><span>Owner: <strong>{group.owner?.name ?? "Não definido"}</strong>{group.owner && group.owner.status !== "active" ? " · ativação pendente" : ""}</span><span>Plano: <strong>{planLabels[group.plan]}</strong></span><span>Empresas cadastradas: <strong>{group.companyCount} de {group.companyLimit}</strong> · {group.activeCount} ativas</span></div>
+      {group.status === "draft" ? <div className="prisma-organization-next"><div><strong>{!group.owner ? "Próximo passo: cadastrar Owner." : group.owner.status !== "active" ? "Próximo passo: ativar o Owner." : "Grupo em preparação"}</strong><p>Cadastre e ative o Owner, ative a primeira empresa e depois o grupo.</p></div>{isSuper && !group.owner ? <Button type="primary" onClick={() => onNavigate(ownerOnboardingPath(group.id))}>Cadastrar Owner</Button> : null}</div> : null}
+      {group.companyCount >= group.companyLimit ? <p className="prisma-organization-capacity">Limite configurado atingido. Consulte o responsável pelo plano para incluir outra empresa.</p> : null}
+      <Table<ManagedCompany> className="prisma-organization-companies" rowKey="id" size="small" pagination={false} dataSource={group.companies} columns={[
+        { title: "Empresa", dataIndex: "name", width: "34%", render: (name, c) => <Space wrap><strong>{name}</strong>{c.id === group.primaryOrganizationId ? <Tag>Principal</Tag> : null}</Space> },
+        { title: "Situação", dataIndex: "status", width: "21%", render: (status: ManagedCompany["status"]) => <Tag color={status === "active" ? "green" : "default"}>{companyStatusLabels[status]}</Tag> },
+        { title: "Usuários ativos", dataIndex: "users", width: "17%", render: count => <><span className="prisma-organization-mobile-label">Usuários ativos: </span>{count}</> },
+        { title: "Ações", width: "28%", render: (_, company) => <Space wrap><Button disabled={busy} onClick={() => open({ kind: "company", group, company })}>Editar</Button><Button disabled={busy} onClick={() => void openLinks(group, company)}>Acessos</Button></Space> },
       ]} />
-    </PrismaCard>)}
+      </div>
+    </details>)}
+    </div>
     <Typography.Paragraph type="secondary">As empresas mantêm dados e Tokens próprios. O plano não concede acesso a outras empresas. Valores de assinatura e distribuição adicional de recursos estão em definição.</Typography.Paragraph>
     <Modal open={editor !== null} title={editor?.kind === "new-group" ? "Novo grupo" : editor?.kind === "new-company" ? "Nova empresa" : editor?.kind === "group" ? "Administrar grupo" : "Editar empresa"} destroyOnHidden onCancel={() => void closeEditor()} footer={null} closable={!busy} maskClosable={!busy}>
       {error ? <Alert type="error" title={error} action={<Button disabled={busy} onClick={() => form.submit()}>Tentar salvar novamente</Button>} /> : null}

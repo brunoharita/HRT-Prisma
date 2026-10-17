@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import {createRequire} from "node:module";
 import {mkdir,writeFile,readFile} from "node:fs/promises";
 import {createServer} from "vite";
-const dir="docs/qa/evidence/v3m0-multiempresa",checks=[];await mkdir(dir,{recursive:true});
+const dir=process.env.PRISMA_BROWSER_EVIDENCE_DIR??"docs/qa/evidence/v3m0-multiempresa",checks=[];await mkdir(dir,{recursive:true});
 const recoveryOnly=process.argv.includes("--recovery-only");
 if(recoveryOnly){const previous=JSON.parse(await readFile(dir+"/browser.json","utf8"));checks.push(...previous.checks.filter(c=>!["failed mutation preserves editor","cancelled departure retains unsaved changes","explicit discard closes editor"].includes(c.name)));}
 const check=(name,pass)=>{checks.push({name,pass:Boolean(pass)});assert.ok(pass,name);};
@@ -10,6 +10,34 @@ const server=await createServer({configFile:"tests/ui/visual-foundation.vite.con
 const {chromium}=createRequire(import.meta.url)(process.env.PRISMA_PLAYWRIGHT_PATH??"playwright");
 const browser=await chromium.launch({headless:true,channel:"msedge"});
 try{
+ if(process.argv.includes("--accordion"))for(const width of [1448,1024,390,320]){
+  const p=await browser.newPage({viewport:{width,height:1200},reducedMotion:"reduce"}),errors=[];p.on("pageerror",e=>errors.push(e.message));
+  await p.goto("http://127.0.0.1:5847/multiempresa.html?profile=super_admin&visual=1");
+  const cards=p.locator(".prisma-organization-group"),summaries=cards.locator("summary");await cards.first().waitFor();
+  check(width+" first open and all summaries visible",await cards.count()===3&&await p.locator("details[open]").count()===1&&await summaries.nth(2).isVisible());
+  await p.screenshot({path:`${dir}/accordion-${width}.png`,fullPage:true});
+  if(width===1448||width===390){
+   await p.locator(".prisma-organization-groups").screenshot({path:`${dir}/delivered-groups-${width}.png`});
+   const reference=await browser.newPage({viewport:{width,height:1200}});await reference.setContent(await readFile(dir+"/reference.html","utf8"));
+   await reference.locator("#pgux-panel-2").evaluate(e=>e.hidden=false);
+   const bounds=await p.locator(".prisma-organization-groups").boundingBox();
+   await reference.addStyleTag({content:`#pgux-panel-2 .pgux-product{padding:0;width:${bounds.width}px;max-width:100%;color-scheme:light;} body{margin:0}`});
+   await reference.locator("#pgux-panel-2 .pgux-accordions").screenshot({path:`${dir}/reference-groups-${width}.png`});await reference.close();
+  }
+  await summaries.nth(1).click();check(width+" exclusive disclosure",await p.locator("details[open]").count()===1&&await cards.nth(1).getAttribute("open")!==null);
+  await p.screenshot({path:`${dir}/draft-${width}.png`,fullPage:true});
+  await p.getByRole("button",{name:"Atualizar",exact:true}).click();check(width+" refresh preserves open group",await cards.nth(1).getAttribute("open")!==null);
+  await p.getByRole("button",{name:"Cadastrar Owner",exact:true}).click();check(width+" contextual Owner route",await p.evaluate(()=>window.__navigation==="/organizations/group-b/owner/new"));
+  await summaries.nth(1).focus();await p.keyboard.press("Enter");check(width+" keyboard collapses all",await p.locator("details[open]").count()===0);
+  await p.keyboard.press("Space");check(width+" keyboard opens",await p.locator("details[open]").count()===1);
+  const search=p.getByRole("searchbox");await search.fill("VCI - Bauru");check(width+" company search reveals group",await cards.count()===1&&await cards.first().getAttribute("open")!==null&&await p.getByText("VCI - Bauru",{exact:true}).isVisible());
+  await search.fill("sem resultado");await p.getByText("Nenhuma empresa disponível neste escopo.").waitFor();check(width+" empty result",await cards.count()===0);
+  await search.fill("");check(width+" search clears to first group",await cards.count()===3&&await cards.first().getAttribute("open")!==null);
+  check(width+" disclosure and search do not mutate",await p.evaluate(()=>window.__calls.length===0));
+  check(width+" no horizontal overflow",await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1&&[...document.querySelectorAll("details[open] .ant-table-content")].every(e=>e.scrollWidth<=e.clientWidth+1)));
+  if(width<580)check(width+" mobile stacked companies",await cards.first().locator("tbody tr").first().evaluate(e=>getComputedStyle(e).display)==="grid");
+  check(width+" no runtime exception",errors.length===0);await p.close();
+ }
  for(const width of recoveryOnly?[]:[1448,390,320])for(const profile of ["super_admin","owner","recruiter","member"]){
   const p=await browser.newPage({viewport:{width,height:1000},reducedMotion:"reduce"}),errors=[];p.on("pageerror",e=>errors.push(e.message));
   await p.route("**/*",r=>r.request().url().startsWith("http://127.0.0.1:5847/")?r.continue():r.abort());
@@ -21,7 +49,7 @@ try{
    check(tag+" visible groups scoped",await p.getByText("Grupo Independente",{exact:true}).count()===(profile==="super_admin"?1:0));
    check(tag+" company list scoped",await p.getByText("Empresa Aurora",{exact:true}).count()===(profile==="recruiter"?0:1));
    check(tag+" only Super creates groups",await p.getByRole("button",{name:/Novo grupo$/}).count()===(profile==="super_admin"?1:0));
-   check(tag+" group governance scoped",await p.getByRole("button",{name:"Administrar grupo",exact:true}).count()===(profile==="recruiter"?0:profile==="super_admin"?2:1));
+   check(tag+" group governance scoped",await p.getByRole("button",{name:"Administrar grupo",exact:true}).count()===(profile==="recruiter"?0:1));
    check(tag+" no implicit mutations",await p.evaluate(()=>window.__calls.length===0));
    await p.getByRole("button",{name:/Nova empresa$/}).first().click();await p.getByLabel("Nome da empresa",{exact:true}).fill("Empresa criada explicitamente");
    await p.getByRole("button",{name:"Salvar",exact:true}).click();await p.getByText("Empresa criada explicitamente",{exact:true}).waitFor();

@@ -1,8 +1,42 @@
-.prisma-organization-group .ant-card-head-wrapper { flex-wrap: wrap; gap: 12px; padding-block: 12px; }
-.prisma-organization-group .ant-card-head-title { flex: 1 1 240px; min-width: 0; white-space: normal; overflow-wrap: anywhere; }
-.prisma-organization-group .ant-card-head-title .ant-space { max-width: 100%; }
-.prisma-organization-group .ant-card-extra { max-width: 100%; margin-inline-start: 0; }
-@media (max-width: 767px) {
-  .prisma-organization-group .ant-card-head-title { flex-basis: 100%; }
-  .prisma-organization-group .ant-card-extra { width: 100%; }
+.prisma-organization-groups { display: grid; gap: 13px; }
+.prisma-organization-group { min-width: 0; background: var(--prisma-surface, #fff); border: 1.5px solid #cbd5e1; border-radius: 10px; overflow: hidden; color: var(--prisma-text); }
+.prisma-organization-group > summary { display: flex; justify-content: space-between; align-items: center; gap: 14px; padding: 16px; cursor: pointer; list-style: none; }
+.prisma-organization-group > summary::-webkit-details-marker { display: none; }
+.prisma-organization-group > summary:focus-visible { outline: 3px solid #155eef; outline-offset: -3px; border-radius: 8px; }
+.prisma-organization-summary-label { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.prisma-organization-summary-main { display: grid; gap: 5px; overflow-wrap: anywhere; }
+.prisma-organization-summary-main > strong { font-size: 17px; line-height: 1.4; }
+.prisma-organization-summary-main > span { font-size: 12px; color: #52637a; }
+.prisma-organization-group > summary > .ant-tag { flex-shrink: 0; margin: 0; }
+.prisma-organization-chevron { flex-shrink: 0; transform: rotate(-90deg); }
+.prisma-organization-group[open] > summary { background: #f4f6fa; border-bottom: 1px solid #cbd5e1; }
+.prisma-organization-group[open] .prisma-organization-chevron { transform: rotate(0); }
+.prisma-organization-body { padding: 16px; }
+.prisma-organization-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.prisma-organization-metadata { color: #26364e; display: flex; flex-wrap: wrap; gap: 8px 22px; margin-bottom: 14px; font-size: 13px; }
+.prisma-organization-next { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 12px 14px; margin-bottom: 12px; background: #f5f7fa; border-left: 3px solid #94a3b8; border-radius: 6px; }
+.prisma-organization-next > div { flex: 1 1 220px; min-width: 0; }
+.prisma-organization-next p { margin: 4px 0 0; font-size: 12px; color: #52637a; }
+.prisma-organization-capacity { margin: 0 0 14px; font-size: 12px; color: #52637a; }
+.prisma-organization-companies .ant-table-cell { overflow-wrap: anywhere; }
+.prisma-organization-companies .ant-table-tbody > tr:nth-child(even) > td { background: #f8fafc; }
+.prisma-organization-companies .ant-table-tbody > tr > td { border-bottom-color: #d9e1eb; }
+.prisma-organization-mobile-label { display: none; }
+@media (max-width: 580px) {
+  .prisma-organization-group > summary { padding: 13px; flex-wrap: wrap; }
+  .prisma-organization-group > summary > .ant-tag { margin-left: 25px; }
+  .prisma-organization-summary-label { gap: 9px; }
+  .prisma-organization-body { padding: 12px; }
+  .prisma-organization-companies .ant-table-content { overflow: visible !important; }
+  .prisma-organization-companies table { display: block; width: 100% !important; min-width: 0 !important; }
+  .prisma-organization-companies colgroup, .prisma-organization-companies .ant-table-thead { display: none; }
+  .prisma-organization-companies .ant-table-tbody { display: grid; gap: 10px; }
+  .prisma-organization-companies .ant-table-tbody > tr:not(.ant-table-measure-row) { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; padding: 12px 0; border-bottom: 1px solid #cbd5e1; }
+  .prisma-organization-companies .ant-table-tbody > tr > td { padding: 0 !important; border: 0; background: transparent !important; }
+  .prisma-organization-companies .ant-table-tbody > tr > td:first-child, .prisma-organization-companies .ant-table-tbody > tr > td:last-child { grid-column: 1 / -1; }
+  .prisma-organization-companies .ant-table-tbody > tr > td:nth-child(3) { text-align: right; font-size: 12px; }
+  .prisma-organization-mobile-label { display: inline; }
+}
+@media (pointer: coarse) {
+  .prisma-organization-group :is(button, summary) { min-height: 44px; }
 }

@@ -1,0 +1,193 @@
+<div id="prisma-group-ux">
+  <div class="nav nav-pills" role="tablist" aria-label="Comparar propostas">
+    <button class="nav-link active" id="pgux-tab-1" role="tab" aria-controls="pgux-panel-1" aria-selected="true" type="button">1 · Cartões delimitados</button>
+    <button class="nav-link" id="pgux-tab-2" role="tab" aria-controls="pgux-panel-2" aria-selected="false" type="button">2 · Grupos recolhíveis</button>
+    <button class="nav-link" id="pgux-tab-3" role="tab" aria-controls="pgux-panel-3" aria-selected="false" type="button">3 · Lista e detalhe</button>
+  </div>
+  <section id="pgux-panel-1" role="tabpanel" aria-labelledby="pgux-tab-1"><div class="pgux-product" data-design="cards"></div></section>
+  <section id="pgux-panel-2" role="tabpanel" aria-labelledby="pgux-tab-2" hidden><div class="pgux-product" data-design="accordion"></div></section>
+  <section id="pgux-panel-3" role="tabpanel" aria-labelledby="pgux-tab-3" hidden><div class="pgux-product" data-design="split"></div></section>
+</div>
+<style>
+#prisma-group-ux {
+  --pgux-bg: light-dark(#f5f7fb,#101725);
+  --pgux-surface: light-dark(#ffffff,#192334);
+  --pgux-head: light-dark(#edf1f7,#253247);
+  --pgux-text: light-dark(#10203a,#e7edf6);
+  --pgux-secondary: light-dark(#53637d,#b6c4d8);
+  --pgux-border: light-dark(#b9c5d5,#53657e);
+  --pgux-line: light-dark(#dce3ed,#36475f);
+  --pgux-row: light-dark(#f6f8fb,#1f2b3e);
+  --pgux-blue: light-dark(#155eef,#8ab4ff);
+  --pgux-button: light-dark(#155eef,#155eef);
+  --pgux-on-button: light-dark(#ffffff,#ffffff);
+  --pgux-selected: light-dark(#edf4ff,#263b5b);
+  --pgux-active-bg: light-dark(#e9f6ed,#243e31);
+  --pgux-active-text: light-dark(#12643c,#a9dfba);
+  --pgux-gap:24px;
+}
+#prisma-group-ux [hidden] { display:none !important; }
+#prisma-group-ux .pgux-product {
+  margin-top:18px; padding:26px; min-width:0;
+  background:var(--pgux-bg); color:var(--pgux-text); border-radius:14px;
+  font:14px/1.5 "Aptos","Segoe UI",sans-serif; color-scheme:light dark;
+}
+#prisma-group-ux .pgux-product * { box-sizing:border-box; }
+#prisma-group-ux .pgux-product button,
+#prisma-group-ux .pgux-product input,
+#prisma-group-ux .pgux-product select { font:inherit; }
+#prisma-group-ux .pgux-product button { cursor:pointer; }
+#prisma-group-ux .pgux-product button:disabled { cursor:default; color:var(--pgux-secondary); background:var(--pgux-row); }
+#prisma-group-ux .pgux-back { display:inline-flex; align-items:center; gap:7px; border:0; padding:0; color:var(--pgux-text); background:transparent; margin-bottom:18px; }
+#prisma-group-ux .pgux-top { display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:16px; margin-bottom:22px; }
+#prisma-group-ux .pgux-heading { display:flex; align-items:center; gap:13px; min-width:0; }
+#prisma-group-ux .pgux-icon { display:grid; place-items:center; width:48px; height:48px; border-radius:14px; background:var(--pgux-head); flex-shrink:0; }
+#prisma-group-ux .pgux-product h1 { margin:0; font-size:26px; line-height:1.2; font-weight:700; letter-spacing:-.02em; }
+#prisma-group-ux .pgux-subtitle { margin:5px 0 0; color:var(--pgux-secondary); }
+#prisma-group-ux .pgux-actions { display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+#prisma-group-ux .pgux-button { border:1px solid var(--pgux-border); border-radius:7px; padding:6px 11px; background:var(--pgux-surface); color:var(--pgux-text); white-space:nowrap; }
+#prisma-group-ux .pgux-primary { background:var(--pgux-button); border-color:var(--pgux-button); color:var(--pgux-on-button); }
+#prisma-group-ux .pgux-link { border:0; background:transparent; color:var(--pgux-blue); padding:5px 0; }
+#prisma-group-ux .pgux-button:hover:not(:disabled) { border-color:var(--pgux-blue); }
+#prisma-group-ux .pgux-search { display:flex; align-items:center; gap:10px; background:var(--pgux-surface); border:1px solid var(--pgux-border); border-radius:8px; padding:9px 12px; margin-bottom:22px; }
+#prisma-group-ux .pgux-search input { background:transparent; border:0; width:100%; min-width:0; color:var(--pgux-text); outline-offset:4px; }
+#prisma-group-ux .pgux-search input::placeholder { color:var(--pgux-secondary); }
+#prisma-group-ux .pgux-groups { display:grid; gap:var(--pgux-gap); }
+#prisma-group-ux .pgux-group { overflow:hidden; border:1.5px solid var(--pgux-border); background:var(--pgux-surface); border-radius:12px; min-width:0; }
+#prisma-group-ux .pgux-group-head { display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; align-items:center; padding:15px 17px; background:var(--pgux-head); border-bottom:1px solid var(--pgux-border); }
+#prisma-group-ux .pgux-group-title { display:flex; align-items:center; flex-wrap:wrap; gap:8px; min-width:0; }
+#prisma-group-ux .pgux-group-title h2 { margin:0; font-size:18px; font-weight:700; overflow-wrap:anywhere; }
+#prisma-group-ux .pgux-status { display:inline-flex; align-items:center; gap:4px; background:var(--pgux-row); color:var(--pgux-text); border:1px solid var(--pgux-line); border-radius:5px; padding:1px 6px; font-size:12px; font-weight:500; }
+#prisma-group-ux .pgux-status-active { background:var(--pgux-active-bg); color:var(--pgux-active-text); border-color:transparent; }
+#prisma-group-ux .pgux-group-body { padding:15px 17px 12px; }
+#prisma-group-ux .pgux-meta { display:flex; flex-wrap:wrap; gap:7px 23px; color:var(--pgux-secondary); margin-bottom:12px; }
+#prisma-group-ux .pgux-meta strong { color:var(--pgux-text); font-weight:600; }
+#prisma-group-ux .pgux-cap { font-size:12px; color:var(--pgux-secondary); white-space:nowrap; }
+#prisma-group-ux .pgux-next { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; border-left:3px solid var(--pgux-border); background:var(--pgux-row); padding:9px 12px; margin-bottom:13px; }
+#prisma-group-ux .pgux-next span { color:var(--pgux-text); }
+#prisma-group-ux .pgux-table { width:100%; border-collapse:collapse; table-layout:fixed; }
+#prisma-group-ux .pgux-table th { text-align:left; font-weight:600; color:var(--pgux-secondary); padding:8px 9px; border-bottom:1px solid var(--pgux-border); }
+#prisma-group-ux .pgux-table td { padding:10px 9px; vertical-align:middle; border-bottom:1px solid var(--pgux-line); overflow-wrap:anywhere; }
+#prisma-group-ux .pgux-table tbody tr:nth-child(2n) { background:var(--pgux-row); }
+#prisma-group-ux .pgux-table tbody tr:last-child td { border-bottom:0; }
+#prisma-group-ux .pgux-table th:first-child { width:34%; }
+#prisma-group-ux .pgux-table th:nth-child(2) { width:21%; }
+#prisma-group-ux .pgux-table th:nth-child(3) { width:17%; }
+#prisma-group-ux .pgux-table th:last-child { width:28%; }
+#prisma-group-ux .pgux-company-name { font-weight:600; margin-inline-end:7px; }
+#prisma-group-ux .pgux-principal { font-size:11px; color:var(--pgux-secondary); white-space:nowrap; }
+#prisma-group-ux .pgux-table .pgux-button { padding:4px 9px; }
+#prisma-group-ux .pgux-foot { margin:18px 0 0; color:var(--pgux-secondary); font-size:12px; }
+#prisma-group-ux .pgux-empty { padding:24px 0; color:var(--pgux-secondary); }
+#prisma-group-ux .pgux-accordions { display:grid; gap:13px; }
+#prisma-group-ux .pgux-accordion { background:var(--pgux-surface); border:1.5px solid var(--pgux-border); border-radius:10px; overflow:hidden; }
+#prisma-group-ux .pgux-accordion summary { display:flex; gap:14px; justify-content:space-between; align-items:center; padding:16px; cursor:pointer; list-style:none; }
+#prisma-group-ux .pgux-accordion summary::-webkit-details-marker { display:none; }
+#prisma-group-ux .pgux-summary-label { display:flex; align-items:center; gap:12px; min-width:0; }
+#prisma-group-ux .pgux-summary-main { display:grid; gap:5px; }
+#prisma-group-ux .pgux-summary-name { font-weight:700; font-size:17px; }
+#prisma-group-ux .pgux-summary-info { font-size:12px; color:var(--pgux-secondary); }
+#prisma-group-ux .pgux-chevron { flex-shrink:0; transform:rotate(-90deg); }
+#prisma-group-ux .pgux-accordion[open] .pgux-chevron { transform:rotate(0); }
+#prisma-group-ux .pgux-accordion[open] summary { background:var(--pgux-head); border-bottom:1px solid var(--pgux-border); }
+#prisma-group-ux .pgux-detail-actions { display:flex; justify-content:flex-end; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
+#prisma-group-ux .pgux-split { display:grid; grid-template-columns:235px minmax(0,1fr); gap:20px; align-items:start; }
+#prisma-group-ux .pgux-list { display:grid; gap:10px; }
+#prisma-group-ux .pgux-group-choice { display:grid; gap:6px; width:100%; text-align:left; padding:16px; border:1px solid var(--pgux-border); border-radius:9px; color:var(--pgux-text); background:var(--pgux-surface); }
+#prisma-group-ux .pgux-group-choice strong { font-weight:700; }
+#prisma-group-ux .pgux-group-choice[aria-pressed="true"] { border:2px solid var(--pgux-blue); background:var(--pgux-selected); padding:15px; }
+#prisma-group-ux .pgux-detail { background:var(--pgux-surface); border:1.5px solid var(--pgux-border); border-radius:12px; overflow:hidden; min-width:0; }
+#prisma-group-ux .pgux-detail .pgux-group-head { display:grid; justify-content:stretch; gap:12px; }
+#prisma-group-ux .pgux-detail .pgux-meta { margin:0; }
+#prisma-group-ux .pgux-mobile-picker { display:none; }
+#prisma-group-ux .pgux-sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+@media (max-width:760px) {
+  #prisma-group-ux .pgux-product { padding:18px 14px; }
+  #prisma-group-ux .pgux-split { grid-template-columns:1fr; gap:14px; }
+  #prisma-group-ux .pgux-list { display:none; }
+  #prisma-group-ux .pgux-mobile-picker { display:grid; gap:6px; }
+  #prisma-group-ux .pgux-mobile-picker select { color:var(--pgux-text); background:var(--pgux-surface); border:1px solid var(--pgux-border); border-radius:7px; padding:10px; width:100%; }
+  #prisma-group-ux .pgux-detail .pgux-group-head { display:flex; }
+}
+@media (max-width:580px) {
+  #prisma-group-ux .pgux-product h1 { font-size:23px; }
+  #prisma-group-ux .pgux-top { gap:16px; }
+  #prisma-group-ux .pgux-heading { align-items:flex-start; }
+  #prisma-group-ux .pgux-icon { width:38px; height:38px; border-radius:10px; }
+  #prisma-group-ux .pgux-group-head { padding:13px; }
+  #prisma-group-ux .pgux-group-body { padding:12px; }
+  #prisma-group-ux .pgux-table thead { display:none; }
+  #prisma-group-ux .pgux-table tbody { display:grid; gap:10px; }
+  #prisma-group-ux .pgux-table tr { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:8px; padding:12px 0; border-bottom:1px solid var(--pgux-border); }
+  #prisma-group-ux .pgux-table td { padding:0; border:0; }
+  #prisma-group-ux .pgux-table td:first-child { grid-column:1 / -1; }
+  #prisma-group-ux .pgux-table td:nth-child(3) { text-align:right; color:var(--pgux-secondary); }
+  #prisma-group-ux .pgux-table td:nth-child(3)::after { content:" usuários"; }
+  #prisma-group-ux .pgux-table td:last-child { grid-column:1 / -1; }
+  #prisma-group-ux .pgux-summary-label { gap:9px; }
+  #prisma-group-ux .pgux-accordion summary { padding:13px; flex-wrap:wrap; }
+  #prisma-group-ux .pgux-accordion summary > .pgux-status { margin-left:25px; }
+  #prisma-group-ux .pgux-next { align-items:flex-start; }
+}
+@media (pointer:coarse) {
+  #prisma-group-ux .pgux-product button, #prisma-group-ux .pgux-product summary { min-height:44px; }
+  #prisma-group-ux .pgux-product input, #prisma-group-ux .pgux-product select { font-size:16px; }
+}
+</style>
+<script>
+(function(){
+  const root=document.getElementById('prisma-group-ux');
+  const groups=[
+    {id:'principal',name:'Grupo principal',active:true,owner:'[QA M2-C] owner',count:2,limit:2,activeCount:2,companies:[{name:'Prisma',principal:true,active:true,users:5},{name:'Prisma QA Beta',active:true,users:2}]},
+    {id:'hrt',name:'HRT Solutions',active:false,owner:'Não definido',count:1,limit:1,activeCount:0,companies:[{name:'HRT Solutions',principal:true,active:false,users:0}]},
+    {id:'vci',name:'VCI Brasil',active:false,owner:'Não definido',count:1,limit:1,activeCount:0,companies:[{name:'VCI - Bauru',principal:true,active:false,users:0}]}
+  ];
+  const state={gap:24,selected:'principal'};
+  function status(active,company){return '<span class="pgux-status '+(active?'pgux-status-active':'')+'">'+(active?(company?'Ativa':'Ativo'):'Em preparação')+'</span>';}
+  function button(text,action,disabled){return '<button class="pgux-button" type="button" '+(disabled?'disabled data-tooltip="Limite configurado atingido"':'data-preview="'+action+'"')+'>'+text+'</button>';}
+  function actions(g){return '<div class="pgux-actions">'+button('Administrar grupo',g.name+' · Administrar grupo')+button('+ Nova empresa','',true)+'</div>';}
+  function metadata(g){return '<div class="pgux-meta"><span>Owner: <strong>'+g.owner+'</strong></span><span>Plano: <strong>Profissional</strong></span><span><strong>'+g.count+' de '+g.limit+'</strong> empresas · '+g.activeCount+' ativas <span class="pgux-cap">· Limite atingido</span></span></div>';}
+  function onboarding(g){return g.active?'':'<div class="pgux-next"><span>Próximo passo: cadastrar Owner.</span><button class="pgux-button pgux-primary" type="button" data-preview="'+g.name+' · Cadastrar Owner">Cadastrar Owner</button></div>';}
+  function companies(g){return '<table class="pgux-table" aria-label="Empresas de '+g.name+'"><thead><tr><th scope="col">Empresa</th><th scope="col">Situação</th><th scope="col">Usuários ativos</th><th scope="col">Ações</th></tr></thead><tbody>'+g.companies.map(c=>'<tr><td><span class="pgux-company-name">'+c.name+'</span>'+(c.principal?'<span class="pgux-principal">Principal</span>':'')+'</td><td>'+status(c.active,true)+'</td><td>'+c.users+'</td><td><div class="pgux-actions">'+button('Editar',c.name+' · Editar')+button('Acessos',c.name+' · Acessos')+'</div></td></tr>').join('')+'</tbody></table>';}
+  function body(g){return '<div class="pgux-group-body">'+metadata(g)+onboarding(g)+companies(g)+'</div>';}
+  function card(g){return '<article class="pgux-group" data-group="'+g.id+'"><header class="pgux-group-head"><div class="pgux-group-title"><h2>'+g.name+'</h2>'+status(g.active,false)+'</div>'+actions(g)+'</header>'+body(g)+'</article>';}
+  function accordion(g,i){return '<details class="pgux-accordion" data-group="'+g.id+'" '+(i===0?'open':'')+'><summary><span class="pgux-summary-label"><i class="pgux-chevron" data-lucide="chevron-down" aria-hidden="true"></i><span class="pgux-summary-main"><span class="pgux-summary-name">'+g.name+'</span><span class="pgux-summary-info">Profissional · '+g.count+'/'+g.limit+' empresas · '+g.activeCount+' ativas</span></span></span>'+status(g.active,false)+'</summary><div class="pgux-group-body"><div class="pgux-detail-actions">'+actions(g)+'</div>'+metadata(g)+onboarding(g)+companies(g)+'</div></details>';}
+  function choices(){return groups.map(g=>'<button class="pgux-group-choice" type="button" data-select="'+g.id+'" aria-pressed="'+(state.selected===g.id)+'"><strong>'+g.name+'</strong><span>'+status(g.active,false)+'</span><span class="pgux-summary-info">'+g.count+' empresa'+(g.count===1?'':'s')+' · '+g.activeCount+' ativas</span></button>').join('');}
+  function detail(g){return '<header class="pgux-group-head"><div class="pgux-group-title"><h2>'+g.name+'</h2>'+status(g.active,false)+'</div>'+actions(g)+'</header>'+body(g);}
+  root.querySelectorAll('.pgux-product').forEach(function(product){
+    const design=product.dataset.design;
+    product.innerHTML='<button class="pgux-back" type="button" data-preview="Voltar"><i data-lucide="arrow-left" aria-hidden="true"></i>Voltar</button><header class="pgux-top"><div class="pgux-heading"><span class="pgux-icon"><i data-lucide="network" aria-hidden="true"></i></span><div><h1>Grupos e empresas</h1><p class="pgux-subtitle">Administre empresas e acessos dentro da sua responsabilidade.</p></div></div><div class="pgux-actions">'+button('Atualizar','Atualizar')+button('Usuários','Usuários')+'<button class="pgux-button pgux-primary" type="button" data-preview="Novo grupo">+ Novo grupo</button></div></header><label class="pgux-search"><span class="pgux-sr-only">Buscar grupo ou empresa</span><input placeholder="Buscar grupo ou empresa" aria-label="Buscar grupo ou empresa"><i data-lucide="search" aria-hidden="true"></i></label><div class="pgux-content"></div><div class="pgux-empty" role="status" hidden>Nenhum grupo ou empresa encontrado.</div><p class="pgux-foot">As empresas mantêm dados e Tokens próprios. O plano não concede acesso a outras empresas.</p>';
+    const content=product.querySelector('.pgux-content');
+    if(design==='cards') content.innerHTML='<div class="pgux-groups">'+groups.map(card).join('')+'</div>';
+    if(design==='accordion') content.innerHTML='<div class="pgux-accordions">'+groups.map(accordion).join('')+'</div>';
+    if(design==='split') content.innerHTML='<div class="pgux-split"><nav class="pgux-list" aria-label="Selecionar grupo">'+choices()+'</nav><label class="pgux-mobile-picker">Grupo<select aria-label="Selecionar grupo">'+groups.map(g=>'<option value="'+g.id+'">'+g.name+'</option>').join('')+'</select></label><article class="pgux-detail" aria-live="polite">'+detail(groups[0])+'</article></div>';
+    product.querySelector('input').addEventListener('input',function(event){
+      const query=event.target.value.trim().toLocaleLowerCase('pt-BR');
+      const visible=groups.filter(g=>(g.name+' '+g.companies.map(c=>c.name).join(' ')).toLocaleLowerCase('pt-BR').includes(query)).map(g=>g.id);
+      product.querySelector('.pgux-empty').hidden=visible.length>0;
+      if(design==='split'){
+        product.querySelectorAll('[data-select]').forEach(n=>{n.hidden=!visible.includes(n.dataset.select);});
+        product.querySelectorAll('option').forEach(n=>{n.hidden=!visible.includes(n.value);});
+        if(visible.length&&!visible.includes(state.selected))selectGroup(visible[0]);
+        product.querySelector('.pgux-detail').hidden=visible.length===0;
+      } else product.querySelectorAll('[data-group]').forEach(n=>{n.hidden=!visible.includes(n.dataset.group);});
+    });
+    function selectGroup(id){
+      state.selected=id;
+      product.querySelectorAll('[data-select]').forEach(n=>n.setAttribute('aria-pressed',String(n.dataset.select===id)));
+      product.querySelector('select').value=id;
+      product.querySelector('.pgux-detail').innerHTML=detail(groups.find(g=>g.id===id));
+      if(globalThis.lucide)lucide.createIcons({attrs:{width:16,height:16}});
+    }
+    product.addEventListener('click',function(event){
+      const selected=event.target.closest('[data-select]');if(selected){selectGroup(selected.dataset.select);return;}
+    });
+    if(design==='split')product.querySelector('select').addEventListener('change',e=>selectGroup(e.target.value));
+    if(design==='accordion')product.querySelectorAll('details').forEach(n=>n.addEventListener('toggle',()=>{if(n.open)product.querySelectorAll('details').forEach(other=>{if(other!==n)other.open=false;});}));
+  });
+  if(globalThis.Tweak){
+    const tweak=new Tweak({container:root,onChange:function(){root.style.setProperty('--pgux-gap',state.gap+'px');}});
+    tweak.addSlider(state,'gap',{label:'Separação entre cartões',min:16,max:36,step:4,unit:'px'});
+  }
+})();
+</script>

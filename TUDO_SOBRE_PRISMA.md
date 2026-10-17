@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 514
-source_manifest_sha256: 40e9e44ebeb1447d22799886e6380c4cc7626ad9427987a50612e2d8bd16fa01
+documentation_source_count: 516
+source_manifest_sha256: a5ac27e9e1891d096e429d23546de765f7636a6a0e4e81401ec42a5c585cb4b8
 -->
 
 # Tudo sobre o Prisma
@@ -2644,11 +2644,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.83.0
+version: 2.84.0
 last_verified: 2026-10-17
 ---
 
 # Estado atual do Prisma
+
+## Grupos recolhíveis — 3.0.2
+
+Proposta2 aprovada por Bruno e implementada: grupos separados, resumo persistente com plano/capacidade/situação, um aberto por vez, teclado, busca que revela resultado e atualização preservando expansão. Empresas em blocos no celular; ações, limites, perfis, vínculos e Cadastrar Owner contextual preservados. Nenhuma migration, Edge ou contrato de domínio alterado; somente web. Validação e publicação registradas no AoT `docs/qa/aot-groups-accordion-v302.md`.
 
 ## Cadastrar Owner — 3.0.1 publicada
 
@@ -12088,6 +12092,10 @@ Em preparação: cadastro sem operação de negócio para usuários empresariais
 
 Grupo não mescla Pessoas, documentos, Perfis, Posições, Processos, Knowledge ou saldos. Cadastro profissional, condição de funcionário, decisões e resultados continuam por empresa. Nenhuma IA é chamada pela administração. Consolidação é administrativa, sem rankings ou contagem fictícia de pessoas únicas. A tela é baseada funcionalmente em Accounts/Empresas do Horus, com componentes visuais Prisma e comparação responsiva em1448/390/320.
 
+## Apresentação de grupos — 3.0.2
+
+Proposta2 aprovada: grupos recolhíveis, resumos separados por borda e espaço, plano/capacidade/ativas/situação sempre visíveis; primeiro aberto e no máximo um por vez, permitindo recolher todos. Busca por grupo ou empresa revela primeiro resultado; atualização mantém seleção. Detalhes mantêm ações, Owner, limites explicados, preparação e empresas. Em até580px as empresas se apresentam em blocos com todas as ações. Disclosure acessível por teclado, sem gravação. Nenhuma regra de acesso, contrato, plano ou serviço foi alterada. Acordo e evidência: `docs/qa/agreement-groups-accordion-v302.md` e `docs/qa/aot-groups-accordion-v302.md`.
+
 ---
 
 ## Source: `docs/product/person-center-redesign-spec.md`
@@ -13883,6 +13891,36 @@ Estabelecer, para todo movimento material do Prisma, um mapa prévio de impacto,
 Execution Prompt: `docs/qa/execution-gov-01-impact-mapping-regression-preservation.md`.
 ADR: `docs/decisions/ADR-072-impact-mapping-regression-preservation.md`.
 AoT: `docs/qa/aot-gov-01-impact-mapping-regression-preservation.md`.
+
+---
+
+## Source: `docs/qa/agreement-groups-accordion-v302.md`
+
+# Grupos recolhíveis — acordo e execução 1.0.0
+
+Proposta 2 aprovada por Bruno no chat em 17/10/2026, com autorização de implementação. Referência normativa: painel 2 de `C:/Users/Bruno/.codex/visualizations/2026/10/17/01a147ba-ca8a-7571-865b-c51585226df0/propostas-grupos-empresas.html`; nomes, pessoas e contagens são exemplos. Cópia imutável no movimento: `docs/qa/evidence/groups-accordion-v302/reference.html`, SHA256 `2ed202bcf248b45153d9ea44f36f267036f2e591559b62c418b88a376773e9f7`. Baseline Git43e70d360980e446dca577bcbbd20aa6602b54ff, runtime3.0.1/aa580ac515083df5098280e86dc5f3146308df41. Entrega3.0.2.
+
+- D-UX-01: grupos separados por espaço e borda, resumo com nome, plano, capacidade, empresas ativas e situação; primeiro grupo aberto inicialmente, no máximo um aberto, permitindo recolher todos. Teclado e foco visíveis.
+- D-UX-02: detalhes com ações no topo direito, metadados, orientação compacta de preparação e tabela de empresas. Preservar Owner pendente, limites e suas explicações, Principal, Editar, Acessos e Cadastrar Owner contextual.
+- D-UX-03: manter cabeçalho e busca por grupo/empresa; busca revela o primeiro resultado, sem mutação; atualização preserva o grupo aberto. Em até580px empresas viram blocos com nome, situação, usuários e ações, sem perda de conteúdo ou overflow.
+- P-01: nenhuma mudança em autoridade, perfis, escopos, planos, capacidade, cobrança, dados, backend, contratos persistidos ou cadastro Owner3.0.1. Abrir, buscar e recolher não gravam dados.
+- F-01: outras páginas, novas funcionalidades de administração, dependências, migrations/Edge e redesign global.
+- A-UX-01: reutilizar HTML acessível, componentes AntD e tokens existentes; detalhes de espaçamento, cores neutras e labels acessíveis delegados. Preservar sistema visual Prisma; sem fornecedor ou biblioteca nova.
+- CA-01: browser determinístico desktop1448/1024 e mobile390/320, abertura exclusiva/recolhimento/teclado/busca/refresh/sem overflow; comparação visual com os mesmos dados/viewport da referência.
+- CA-02: regressão dos quatro perfis, criação explícita, limites, modal/rascunho/erro, vínculos, rota Owner contextual e ausência de mutações por disclosure. Tipos/build e testes dirigidos; CI obrigatória.
+- CA-03: documentação/contexto, versão3.0.2, publicação apenas web e smoke público de rotas/assets/SHA, rollback e sincronização; sem criar dados reais em produção.
+
+## Mapa de impacto e fechamento
+
+| Capacidade | Relação | Baseline / prova proporcional |
+| --- | --- | --- |
+| Listagem, busca, disclosure e apresentação responsiva | direct | Cards atuais baseline acima; browser, medidas e screenshots pareadas |
+| Editor e vínculos, atualização e CTA Owner | plausible_indirect | Handlers mantidos; regressão sintética com serviço determinístico e rota contextual |
+| Autorização / tenant | critical_transversal | Mesmos serviços, filtros e condições de ações; quatro perfis no browser, diff sem backend; não revalidar RLS inalterada |
+| Versão / release | direct | Registro/teste, tipos/build/contexto/CI e plano seletivo web |
+| Knowledge, talentos, Tokens, Auth persistida, banco/Edge | no_impact_identified | CSS local e disclosure não mudam handlers nem serviços; conferir diff e destinos, sem acessar/publicar esses ambientes |
+
+Execução incorpora integralmente D/P/F/A e CA acima, sem Q material pendente. Não executar suíte integral local. Fechar quando critérios obrigatórios PASS, publicação/smoke/sincronização e AoT com limites; produção autenticada com dados humanos não será simulada como prova real.
 
 ---
 
@@ -19141,6 +19179,53 @@ Branch de implementação: `codex/gov-01-impact-mapping`. SHA validado: HEAD do 
 ## Conclusão
 
 `PASS` para o escopo documental GOV-01. A prova não declara smoke de produto nem rollout de runtime; esses itens são fora de escopo e permanecem não aplicáveis.
+
+---
+
+## Source: `docs/qa/aot-groups-accordion-v302.md`
+
+# AoT — Grupos recolhíveis 3.0.2
+
+Contrato: `docs/qa/agreement-groups-accordion-v302.md`, versão1.0.0, aprovado no chat17/10/2026. Baseline43e70d3/runtime3.0.1 aa580ac. Evidências em `docs/qa/evidence/groups-accordion-v302/`.
+
+## Matriz de acordos
+
+| ID | Implementação | Teste / evidência | Status |
+| --- | --- | --- | --- |
+| D-UX-01 | details/summary controlados, um grupo aberto; borda/gap/header e resumo | Browser teclado/exclusividade/estados; screenshots1448/1024/390/320 | PASS |
+| D-UX-02 | Ações/metadata/limite, faixa de preparação e tabela; mesmos handlers | Browser criação, capacidade, vínculos, rascunho/erro e CTA Owner | PASS |
+| D-UX-03 | Busca abre primeiro resultado; seleção por ID; CSS local empilha empresas | Browser busca/empty/refresh/overflow e mobile grid | PASS |
+
+## Proibições e fora de escopo
+
+| ID | Prova | Status |
+| --- | --- | --- |
+| P-01 | Serviços/guards/handlers inalterados; quatro perfis e zero chamadas por disclosure; diff sem backend | PASS |
+| F-01 | Apenas página, CSS próprio, registro de versão, fixture/testes e docs | PASS |
+
+## Mapa de impacto e preservação
+
+Sem novas dependências ou reclassificações em relação ao acordo.
+
+| Capacidade | Relação | Baseline / regressão / evidência | Status |
+| --- | --- | --- | --- |
+| Disclosure/busca/responsividade | direct | Cards3.0.1; browser/screenshot em quatro larguras | PASS |
+| Editor/vínculos/Owner/refresh | plausible_indirect | Mesmos callbacks; serviço sintético com criação/vínculos explícitos, erro e confirmação de saída | PASS |
+| Escopo e autoridade | critical_transversal | Super/Owner/Recruiter/comum no fixture; mesmas consultas e condições, sem backend | PASS |
+| Versão/release/contexto | direct | Teste3.0.2, tipos/build/contexto, CI e publicação seletiva | NOT TESTED |
+| Knowledge/talentos/Tokens/Auth/banco/Edge | no_impact_identified | Sem mudanças nessas lógicas; CSS isolado por classe; conferir plano sem destinos adicionais | PASS |
+
+## Fidelidade visual
+
+Referência preservada em `reference.html` com hash no acordo. Comparação com nomes/contagens iguais, primeiro grupo aberto, mesma largura1448/390 e recorte dos grupos com a mesma largura útil: `reference-groups-*.png` versus `delivered-groups-*.png`. Tela completa `accordion-*.png` e preparação `draft-*.png`. Preservados topologia, hierarquia, espaçamento entre grupos, resumo em duas linhas, status lateral, ações no topo direito, metadados e tabela/blocos mobile. AntD/tokens/tipografia e navegação Prisma mantidos conforme A-UX-01. Explicação integral do limite e sequência de ativação mantidas por D-UX-02, com pequeno acréscimo de altura. Referência sem host de visualização não carrega os ícones do host; entrega usa ícones existentes. Inspeção visual final dos pares desktop/mobile e preparação aprovada pela engenharia conforme A-UX-01.
+
+## Desvios e decisões
+
+Nenhum desvio material identificado; nenhuma mudança adicional de produto. Erros iniciais do harness: referência oculta dependia do host de tabs e contagem de botões passou a considerar apenas o grupo expandido; corrigidos no teste, sem contornar comportamento do produto.
+
+## Validação / publicação
+
+164 checks browser PASS (50 do novo disclosure/responsividade e114 de regressão),23 Node/tooling PASS. Tipos e build web PASS; diff revisado sem mudança nos handlers ou serviços. Lint/foundation/contexto/CI/publicação ainda em execução. Não se aplica QA remoto separado para este movimento web. Browser local usa serviço determinístico, sem LLM/banco e sem dados reais; não prova jornada autenticada humana em produção. Smoke produtivo público e CI pendentes; PASS das linhas funcionais refere-se ao browser local. Linha release só encerra com publicação registrada abaixo. Avisos AntD legados e tamanho de bundle não alterados por este escopo.
 
 ---
 
