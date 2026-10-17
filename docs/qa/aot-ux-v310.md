@@ -14,7 +14,7 @@ Contrato integral `agreement-ux-v310.md`1.0.0, prompt `execution-ux-v310.md`. De
 | D-05 | simulador com tarifa vigente e saldo real | testes puros + browser | PASS | tokens-regression48checks; simulador não reserva/debita/inicia IA |
 | D-06 | fila serial10PDFs, identidade/revisão existentes, recuperação/pausa/escopo | serial/cancelamento negativos, browser | PASS | browser serial/duplicidade/identidade/revisão/pausa/troca de empresa |
 | D-07 | tokens atuais/layouts aprovados, mobile e disclosure | capturas1448/390, limites320 e comparação visual | PASS | capturas desktop/mobile inspecionadas; largura320 sem overflow |
-| D-08 | registro3.1.0/documentação/contexto/release | tipos/build/testes/CI/main/runtime | PARTIAL | local PASS; CI/publicação ainda pendentes |
+| D-08 | registro3.1.0/documentação/contexto/release | tipos/build/testes/CI/main/runtime | PASS | branch39075647513/main39075768011; runtime1a5630e/26smokes; docs sincronizadas após registro |
 
 ## Proibições e preservação
 
@@ -23,6 +23,20 @@ P-01/02/03 e P-UX-01 PASS: diff integral limitado ao frontend e aos testes/docum
 ## Mapa de impacto e preservação
 
 O mapa integral do acordo continua aplicável. Novos arquivos são utilitários/componentes frontend e fixtures. A fila usa o NavigationViewStore existente por sessão/usuário/papel/empresa; nenhum storage persistente de currículos introduzido. A troca de escopo impede despachar o arquivo seguinte; requisição autorizada já despachada pode terminar no contexto original e continua protegida pelo servidor. Nenhuma migration, Edge ou serviço de IA é necessário por causa desta orquestração. A descoberta encontrou a consulta existente de processos/stages, reutilizada pela Home com status active e destinos por processo; não foram criadas contagens estimadas nem leitura operacional para membro. Dados de até50processos recentes são exibidos por processo, sem afirmar um agregado completo. Fontes de autorização das rotas foram conferidas: membro não recebe atalho/consulta de Posições. Essa dependência atualiza o mapa Home/processos (direct de apresentação; serviço existente inalterado).
+
+| Capacidade protegida | Relação final | Evidência/prova de preservação | Status |
+| --- | --- | --- | --- |
+| Pessoas/filtros/seleção/colunas/dados profissionais | direct | browser da lista, navegação e visão mobile; data/cargo/área/empresa preservados, agrupamento padrão evita largura excessiva | PASS |
+| Início/pendências/processos/recentes | direct | fatos derivados, erros distintos de zero, Owner/Super/Recruiter/comum; nenhuma escolha ou decisão inventada | PASS |
+| Perfil/fontes/oito análises/seis seções/dirty/history | direct | person-preservation180checks/15cenários e negativos de leitura/geração | PASS |
+| Comparação/Score/evidências | direct | assinaturas de diferenças e resumo, fonte e estados; algoritmos intocados | PASS |
+| Carteira/tarifas/reservas/histórico | direct |48checks da carteira; quantidades/tarifas inválidas/ausentes e sem mutação | PASS |
+| PDFs/lote/identificação/revisão/recuperação | direct | serial/pausa/contexto e conferência humana; mais8checks de identidade/loading/aviso e5browser de erro | PASS |
+| Auth/tenant/autoridade/publicação/custo | critical_transversal | serviços/gates existentes inalterados, negativos de membro/empresa/late result e acesso público encaminhado ao login | PASS |
+| Shell/estilos/estado de navegação | plausible_indirect |18estados responsivos, seis caminhos, volta à fila e fontes; preferências e fila limpas por escopo | PASS |
+| IA/banco/Edge/Owner/portais/Knowledge | no_impact_identified | mapa e diff de consumo, sem algoritmo/contrato/serviço alterado; dispatcher skip e cinco containers preservados | PASS |
+
+Novidade: apresentação/coordenação determinística das seis etapas. Preservação: autoridade humana, proveniência, contratos, regras comerciais, identidade, ciclo Owner e dados. Os testes não calibram matching/IA nem provam uso autenticado de pessoas reais. Não existe comparação de fingerprints do banco nesta entrega somente web; não se afirma ausência de atividade concorrente dos usuários.
 
 ## Fidelidade visual
 
@@ -36,8 +50,12 @@ Lint do workspace encontrou whitespace em `output/pa-concurrency-baseline.sql`, 
 
 ## Git / QA / produção
 
-CI inicial39075366926 reprovou três pontos antes da promoção: teste textual de identificação não previa a atualização da fila, inventário de loading não previa o wrapper e novo erro do lote precisava de ação explícita. Testes passaram a verificar a delegação real e a atualização somente após sucesso; aviso ganhou Conferir arquivos e serviço. Browser320 desse erro passou5checks, sem IA nem mutação. O scanner local também viu duas cópias não rastreadas de ProcessAssessmentPage; teste do snapshot exclui essas cópias sem removê-las. Segundo CI/publicação/smoke ainda pendentes. Ambiente de QA é browser/transporte sintético local, sem backend QA separado. Produção continua3.0.7 até os gates. Não alegar jornada autenticada com pessoa real a partir desta evidência.
+CI inicial39075366926 reprovou três pontos antes da promoção: teste textual de identificação não previa a atualização da fila, inventário de loading não previa o wrapper e novo erro do lote precisava de ação explícita. Testes passaram a verificar a delegação real e a atualização somente após sucesso; aviso ganhou Conferir arquivos e serviço. Browser320 desse erro passou5checks, sem IA nem mutação. O scanner local também viu duas cópias não rastreadas de ProcessAssessmentPage; teste do snapshot exclui essas cópias sem removê-las. Segundo CI branch39075647513 e main39075768011 PASS, incluindo a suíte obrigatória completa do workflow, ledger, script e audit. Publicado runtime1a5630e854e1e925678dd625b5a20aa9aac6c857,3.1.0, apenas prisma-web, imagem6fb2f331ac54/container e82f2eb40517, running/restarts0. O script recebeu404 transitório no probe imediato; verificação independente confirmou26checks HTTP/browser/versão/SHA/assets novos e antigos sem reconstruir. Produção/API/serviços atuais são a evidência, não o exit do primeiro curl. Cinco serviços adjacentes mantêm ID/imagem/reinícios/saúde e .env.production é idêntico ao backup restrito. Tag/image de restauração3.0.7 e arquivos comprimidos íntegros preservados; nenhum backend/banco foi publicado. Recibos production.json/public-smoke.json/runtime-before.json/public-before.json/ci-runtime.json. O fechamento documental é commit posterior, sincroniza local/GitHub/VPS sem rebuild. Ambiente de QA é browser/transporte sintético local, sem backend QA separado. Produção3.1.0 confirmada;3.0.7 permanece recuperável. Não alegar jornada autenticada com pessoa real a partir desta evidência.
+
+## Ajuste de preservação do retorno ao lote
+
+Conferência final encontrou um handler de retorno herdado que abria o envio individual dentro de um item do lote. D-06 exige preservar a associação arquivo/intake e o contexto da fila: o botão agora usa o retorno ao lote quando esse contexto existe, mantendo o fallback individual legado somente fora dele. Nenhuma regra de identificação/publicação ou serviço foi alterada. Validação específica e CI da correção serão registrados no fechamento.
 
 ## Desvios e conclusão
 
-D-00..D-07/P/F localmente comprovados. Conclusão da entrega depende de D-08 (CI/main/publicação/smoke/sincronização). Limite F-01 preservado: preparação de integração e API futura não equivalem a um conector operacional.
+D-00..D-08 e P/F PASS. Nenhum desvio funcional identificado. Entrega validada, integrada em main e publicada3.1.0; fechamento documental sincronizado sem nova publicação de runtime. Limite F-01 preservado: preparação de integração e API futura não equivalem a um conector operacional.

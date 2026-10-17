@@ -1,5 +1,11 @@
 # Deployment
 
+## UX3.1.0 —17/10/2026
+
+Publicado runtime1a5630e854e1e925678dd625b5a20aa9aac6c857 após CI branch39075647513 e main39075768011 PASS. Dispatcher só web: prisma-web imagem6fb2f331ac54, container e82f2eb40517, running/restarts0. Banco/Edge/Parser/Synthesis/gateway/mail/Traefik preservados; cinco serviços adjacentes mantêm IDs/imagens/restarts/saúde, configuração idêntica ao backup.404 imediato na troca estabilizou:26checks independentes de HTTP/assets novos e antigos/SHA/3.1.0/login/mobile/negação via login PASS, sem novo build. Não houve jornada autenticada com pessoa real, uso pago ou publicação de Perfil para smoke.
+
+Recuperação anterior garantida pela tag Git `restore-v3.0.7-before-v3.1.0`, imagem Docker homônima e backup restrito `/opt/prisma-backups/pre-v3.1.0-20261017`, gzip/CRC/hashes verificados. O rollback web comum também foi preservado antes de1a5630e. [Runbook](restore-pre-v310.md) mantém banco, documentos, auditoria e atividades posteriores. [AoT](../qa/aot-ux-v310.md) registra escopo/evidência/limites e correção do CI inicial. Fechamento documental posterior atualiza Git/VPS sem rebuild dos serviços.
+
 ## Acompanhamento Pessoa–Posição v2.2.0 — 2026-10-08
 
 Publicado no SHA funcional `87a18653f136750cd777978352e4d6d5de9bdfab`, integrado em main/origin/VPS após CI branch37822940856 e main37823360589 success. Plano seletivo: somente migration nova e prisma-web. Migration local `20261008120000_position_follow_up.sql` aplicada como `20261008181745_position_follow_up` no único Supabase `ioldpnqqvobprjiontre`; corpos das três funções iguais, RLS/grants conferidos e tabelas novas vazias antes do frontend. Sem db push, reparação histórica ou decisões fictícias em produção.

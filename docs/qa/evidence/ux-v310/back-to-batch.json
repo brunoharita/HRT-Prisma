@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "checks": [
+    "legacy identity back returns to current batch",
+    "original row preserved",
+    "no nested single-file uploader",
+    "reopen reuses original reading and intake",
+    "no runtime errors"
+  ],
+  "viewport": 390
+}

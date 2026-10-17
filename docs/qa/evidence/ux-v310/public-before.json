@@ -1,0 +1,13 @@
+{
+  "url": "https://prisma.hrtsolutions.com.br",
+  "indexSha256": "8a9a002b0e5a4f00b9a79d1aba9f267e1b6897cc1ef641310cbee89122fe6afa",
+  "assets": [
+    "/assets/index-CZv7J20J.js",
+    "/assets/rolldown-runtime-C0FnF6B9.js",
+    "/assets/antd-vendor-BaKnhCyQ.js",
+    "/assets/supabase-vendor-DoXvCMLf.js",
+    "/assets/react-vendor-BdxMnOeJ.js",
+    "/assets/antd-vendor-B5BXDqMa.css",
+    "/assets/index-DjqeYYSZ.css"
+  ]
+}
