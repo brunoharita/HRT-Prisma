@@ -77,3 +77,5 @@ No M5.2, somente `service_role` executa staging, validação, diff e publicaçã
 - membership stale ou removida;
 - função privada não executável por anon/public;
 - grants da Data API e RLS testados separadamente.
+
+Ordenação3.0.3: organization-administration1.1.0 aceita1.0.0 e projeta apenas createdAt/updatedAt dos mesmos grupos/empresas já visíveis. Função preserva integralmente ator, filtros, locks, mutações, search_path e ACL fora das três substituições aditivas verificadas. Sem grant novo, acesso comum, RLS ou escrita de datas/histórico.

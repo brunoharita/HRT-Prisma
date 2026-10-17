@@ -19,3 +19,7 @@ Grupo não mescla Pessoas, documentos, Perfis, Posições, Processos, Knowledge 
 ## Apresentação de grupos — 3.0.2
 
 Proposta2 aprovada: grupos recolhíveis, resumos separados por borda e espaço, plano/capacidade/ativas/situação sempre visíveis; primeiro aberto e no máximo um por vez, permitindo recolher todos. Busca por grupo ou empresa revela primeiro resultado; atualização mantém seleção. Detalhes mantêm ações, Owner, limites explicados, preparação e empresas. Em até580px as empresas se apresentam em blocos com todas as ações. Disclosure acessível por teclado, sem gravação. Nenhuma regra de acesso, contrato, plano ou serviço foi alterada. Acordo e evidência: `docs/qa/agreement-groups-accordion-v302.md` e `docs/qa/aot-groups-accordion-v302.md`.
+
+## Ordenação —3.0.3
+
+Ordenar por Nome, Data de criação ou Data de atualização, em direção crescente ou decrescente; padrão Nome A–Z, com collation pt-BR e números naturais. Empresas herdam critério/direção, usando seus próprios nomes/datas e mantendo o selo Principal. A data escolhida é exibida para referência; ausentes/inválidas ficam indisponíveis e por último em ambas as direções. Empates por nome/ID. Busca, refresh e grupo aberto são preservados. O updated_at é do próprio registro, sem agregar mudanças de empresas ao grupo. Consulta organization-administration1.1.0 adiciona createdAt/updatedAt existentes, mantendo aceitação1.0.0, filtros, grants e mutações anteriores. Acordo/AoT groups-sorting-v303.

@@ -3,8 +3,9 @@ import { execFileSync, spawn } from "node:child_process";
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { resolve } from "node:path";
 const bin=process.env.PRISMA_PG_BIN??"C:/Program Files/PostgreSQL/17/bin/",port=process.env.PRISMA_TEST_PG_PORT??"5846";
-const ownerOnboarding=process.argv.includes('--owner-onboarding');
-const work=resolve(`tmp/v3m0-pg-${Date.now()}`),evidence=ownerOnboarding?"docs/qa/evidence/owner-onboarding-v301":"docs/qa/evidence/v3m0-multiempresa",checks=[];
+const sorting=process.argv.includes('--sorting');
+const ownerOnboarding=process.argv.includes('--owner-onboarding')||sorting;
+const work=resolve(`tmp/v3m0-pg-${Date.now()}`),evidence=sorting?"docs/qa/evidence/groups-sorting-v303":ownerOnboarding?"docs/qa/evidence/owner-onboarding-v301":"docs/qa/evidence/v3m0-multiempresa",checks=[];
 mkdirSync(work,{recursive:true});mkdirSync(evidence,{recursive:true});
 const cmd=(name,args,input)=>(execFileSync(bin+name+".exe",args,{input,encoding:"utf8",stdio:name==="pg_ctl"?"ignore":["pipe","pipe","pipe"],env:{...process.env,PGCLIENTENCODING:"UTF8"}})??"").trim();
 const args=["-X","-qAt","-v","ON_ERROR_STOP=1","-v","VERBOSITY=verbose","-h","127.0.0.1","-p",port,"-U","prisma_test","-d","postgres","-f","-"];
@@ -80,6 +81,34 @@ try {
  const boundaryBefore=run("select jsonb_object_agg(n.nspname||'.'||p.proname,p.prosrc) from pg_proc p join pg_namespace n on n.oid=p.pronamespace where p.proname in ('authorize_position_follow_up','m83_sources','prisma_token_reserve',"+boundaries.map(n=>`'${n}'`).join(',')+")");
  run("begin;\n"+migration+"\ncommit;");
  if(ownerOnboarding)run('begin;'+readFileSync('supabase/migrations/20261017122000_owner_onboarding_v301.sql','utf8')+'commit;');
+ if(sorting){
+  const before=run("select pg_get_functiondef('public.organization_administration(text,uuid,uuid,jsonb,text)'::regprocedure)");
+  const acl=run("select proacl::text from pg_proc where oid='public.organization_administration(text,uuid,uuid,jsonb,text)'::regprocedure");
+  run('create trigger organization_groups_touch_updated_at before update on public.organization_groups for each row execute function private.touch_updated_at();create trigger organizations_touch_updated_at before update on public.organizations for each row execute function private.touch_updated_at();');
+  run('begin;'+readFileSync('supabase/migrations/20261017143000_group_company_sorting.sql','utf8')+'commit;');
+  const after=run("select pg_get_functiondef('public.organization_administration(text,uuid,uuid,jsonb,text)'::regprocedure)");
+  const expected=before.replace("p_contract is distinct from 'organization-administration-1.0.0'","(p_contract is null or p_contract not in ('organization-administration-1.0.0','organization-administration-1.1.0'))").replace("'id',visible_group.id,'name',visible_group.name,'status',visible_group.status","'id',visible_group.id,'name',visible_group.name,'createdAt',visible_group.created_at,'updatedAt',visible_group.updated_at,'status',visible_group.status").replace("'id',x.id,'name',x.name,'status',x.status,'groupId',x.group_id","'id',x.id,'name',x.name,'createdAt',x.created_at,'updatedAt',x.updated_at,'status',x.status,'groupId',x.group_id");
+  check('sorting SQL exactly three additive replacements',after===expected);
+  check('sorting SQL preserves ACL',acl===run("select proacl::text from pg_proc where oid='public.organization_administration(text,uuid,uuid,jsonb,text)'::regprocedure"));
+  const current=user=>JSON.parse(run(as(user,call('workspace').replace('organization-administration-1.0.0','organization-administration-1.1.0'))).split('\n').at(-1));
+  for(const user of [1,2,3]){
+   const data=current(user),legacy=ws(user);
+   check('new and legacy contracts preserve exact scope '+user,JSON.stringify(data.groups)===JSON.stringify(legacy.groups));
+   for(const group of data.groups){
+    check('group dates from stored row '+user+' '+group.id,run(`select created_at='${group.createdAt}'::timestamptz and updated_at='${group.updatedAt}'::timestamptz from public.organization_groups where id='${group.id}'`)==='t');
+    for(const company of group.companies)check('company dates from stored row '+user+' '+company.id,run(`select created_at='${company.createdAt}'::timestamptz and updated_at='${company.updatedAt}'::timestamptz from public.organizations where id='${company.id}'`)==='t');
+   }
+  }
+  fail('new contract rejects common user',as(4,call('workspace').replace('organization-administration-1.0.0','organization-administration-1.1.0')),'42501');
+  for(const contract of ['unknown',''])fail('sorting rejects unknown contract '+contract,as(1,call('workspace').replace('organization-administration-1.0.0',contract)),'22023');
+  fail('sorting rejects anonymous',as(null,call('workspace')),'42501');
+  fail('sorting preserves private actor boundary',as(1,'select private.organization_admin_actor(null,null)'),'permission denied');
+  const original=current(1).groups.find(g=>g.id===id(100));
+  run(`update public.organization_groups set name=name where id='${id(100)}';update public.organizations set name=name where id='${id(110)}'`);
+  const changed=current(1).groups.find(g=>g.id===id(100));
+  check('update dates advance without changing creation',Date.parse(changed.updatedAt)>Date.parse(original.updatedAt)&&changed.createdAt===original.createdAt&&Date.parse(changed.companies.find(c=>c.id===id(110)).updatedAt)>Date.parse(original.companies.find(c=>c.id===id(110)).updatedAt));
+  fail('sorting migration refuses unexpected replay baseline',readFileSync('supabase/migrations/20261017143000_group_company_sorting.sql','utf8'),'Unexpected organization_administration baseline');
+ }
  const boundaryAfter=JSON.parse(run("select jsonb_object_agg(n.nspname||'.'||p.proname,p.prosrc) from pg_proc p join pg_namespace n on n.oid=p.pronamespace where p.proname in ('authorize_position_follow_up','m83_sources','prisma_token_reserve',"+boundaries.map(n=>`'${n}'`).join(',')+")"));
  for(const [name,body] of Object.entries(JSON.parse(boundaryBefore))){const restored=boundaryAfter[name].replace(/begin\n -- V3M0_ORGANIZATION_STATE_GUARD\n[^\n]*\n/,'begin').replace(/-- V3M0_TOKEN_STATE_GUARD\n[^\n]*\n /,'');check(`existing function body preserved except guard: ${name}`,restored===body);}
  run("create function public.test_follow_up(uuid) returns uuid language sql security definer set search_path='' as $$select private.authorize_position_follow_up($1)$$;create function public.test_reserve(uuid,text,uuid,uuid) returns uuid language sql security definer set search_path='' as $$select private.prisma_token_reserve($1,$2,$3,$4,1)$$;");

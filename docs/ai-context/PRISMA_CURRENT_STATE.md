@@ -3,11 +3,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.84.0
+version: 2.85.0
 last_verified: 2026-10-17
 ---
 
 # Estado atual do Prisma
+
+## Ordenação de grupos e empresas —3.0.3
+
+Nome, criação e atualização, em crescente/decrescente, herdados pelas empresas com nomes/datas próprios. Datas existentes projetadas pelo contrato organization-administration1.1.0 compatível1.0.0; nenhuma alteração de acesso, mutações ou histórico. Busca e disclosure preservados; datas indisponíveis explicitadas/por último. Mínimo de validação e estado operacional no AoT `docs/qa/aot-groups-sorting-v303.md`.
 
 ## Grupos recolhíveis — 3.0.2 publicada
 

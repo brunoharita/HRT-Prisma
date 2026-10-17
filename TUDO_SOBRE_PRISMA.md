@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 516
-source_manifest_sha256: f3b4fa1344ebb6e4ea43d09909c37263afff7dce1fe0562bf06826172396e284
+documentation_source_count: 518
+source_manifest_sha256: 77387756b0dfe907947fea440a5bada9eb139847203079376fd7641c561a9924
 -->
 
 # Tudo sobre o Prisma
@@ -2644,11 +2644,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.84.0
+version: 2.85.0
 last_verified: 2026-10-17
 ---
 
 # Estado atual do Prisma
+
+## Ordenação de grupos e empresas —3.0.3
+
+Nome, criação e atualização, em crescente/decrescente, herdados pelas empresas com nomes/datas próprios. Datas existentes projetadas pelo contrato organization-administration1.1.0 compatível1.0.0; nenhuma alteração de acesso, mutações ou histórico. Busca e disclosure preservados; datas indisponíveis explicitadas/por último. Mínimo de validação e estado operacional no AoT `docs/qa/aot-groups-sorting-v303.md`.
 
 ## Grupos recolhíveis — 3.0.2 publicada
 
@@ -5162,7 +5166,7 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `model-selection` | AI/operations | 2.0.0 | extraction provider | implementado localmente | `deterministic-local-2.0.0`, sem LLM | local | bloquear processamento |
 | `confidence-method` | AI/QA | 1.0.0 | search, matching | implementado | `explainConfidence` | local | não exibir confiança |
 | `tenant-authorization` | security/data | 2.0.0;1.0.0 histórico | Supabase Data API/web/Edge | implementação V3M0, rollout no AoT | quatro perfis, Admin legado alias, grupo/empresa/estado vivos e negativos | local; rollout no AoT | negar acesso |
-| `organization-administration` | product/security/data | 1.0.0 | Grupos e empresas | implementação V3M0, rollout no AoT | RPC versionada, revisão/locks, limites, Owner/default/auditoria | local; rollout no AoT | negar operação e pedir atualização |
+| `organization-administration` | product/security/data | 1.1.0;1.0.0 compatível | Grupos e empresas | implementação V3M0, rollout no AoT | RPC versionada, revisão/locks, limites, Owner/default/auditoria; createdAt/updatedAt aditivos para ordenação | local; rollout no AoT | negar operação e pedir atualização |
 | `platform-user-management` | security/data/Edge | 2.0.0 | platform-users | implementação V3M0, rollout no AoT | save_platform_user_v3 service-only atômico e Auth compensado na criação | local; rollout no AoT | preservar dados e negar mutação |
 | `web-domain-read` | product-engineering | 1.1.0 | Home, Pessoas, perfil | ativo em QA | `PrismaDataRepository`, incluindo saúde das fontes centrais | local/QA | bloquear consulta |
 | `platform-user-access` | security/product | 2.0.0 | App Shell, Usuários, Edge Functions | implementado localmente | migration `20260824113000_m2_users_people`, `platform-users` function, UI `UsersPage` | local | bloquear operação |
@@ -12096,6 +12100,10 @@ Grupo não mescla Pessoas, documentos, Perfis, Posições, Processos, Knowledge 
 
 Proposta2 aprovada: grupos recolhíveis, resumos separados por borda e espaço, plano/capacidade/ativas/situação sempre visíveis; primeiro aberto e no máximo um por vez, permitindo recolher todos. Busca por grupo ou empresa revela primeiro resultado; atualização mantém seleção. Detalhes mantêm ações, Owner, limites explicados, preparação e empresas. Em até580px as empresas se apresentam em blocos com todas as ações. Disclosure acessível por teclado, sem gravação. Nenhuma regra de acesso, contrato, plano ou serviço foi alterada. Acordo e evidência: `docs/qa/agreement-groups-accordion-v302.md` e `docs/qa/aot-groups-accordion-v302.md`.
 
+## Ordenação —3.0.3
+
+Ordenar por Nome, Data de criação ou Data de atualização, em direção crescente ou decrescente; padrão Nome A–Z, com collation pt-BR e números naturais. Empresas herdam critério/direção, usando seus próprios nomes/datas e mantendo o selo Principal. A data escolhida é exibida para referência; ausentes/inválidas ficam indisponíveis e por último em ambas as direções. Empates por nome/ID. Busca, refresh e grupo aberto são preservados. O updated_at é do próprio registro, sem agregar mudanças de empresas ao grupo. Consulta organization-administration1.1.0 adiciona createdAt/updatedAt existentes, mantendo aceitação1.0.0, filtros, grants e mutações anteriores. Acordo/AoT groups-sorting-v303.
+
 ---
 
 ## Source: `docs/product/person-center-redesign-spec.md`
@@ -13921,6 +13929,38 @@ Proposta 2 aprovada por Bruno no chat em 17/10/2026, com autorização de implem
 | Knowledge, talentos, Tokens, Auth persistida, banco/Edge | no_impact_identified | CSS local e disclosure não mudam handlers nem serviços; conferir diff e destinos, sem acessar/publicar esses ambientes |
 
 Execução incorpora integralmente D/P/F/A e CA acima, sem Q material pendente. Não executar suíte integral local. Fechar quando critérios obrigatórios PASS, publicação/smoke/sincronização e AoT com limites; produção autenticada com dados humanos não será simulada como prova real.
+
+---
+
+## Source: `docs/qa/agreement-groups-sorting-v303.md`
+
+# Ordenação de grupos e empresas — acordo e execução1.0.0
+
+Bruno determinou no chat17/10/2026: ordenar por nomes dos grupos, criação e atualização, herdando a ordenação nas empresas do grupo. Implementação autorizada como continuidade da página aprovada. Baseline660375176946c8f52921817239f59fe340c16acc/runtime3.0.2 fe551500502ab478e7c439594488a4e935cbfdd4. Entrega3.0.3.
+
+- D-01: seletor Ordenar por com Nome, Data de criação e Data de atualização, e controle de direção crescente/decrescente; padrão Nome A–Z. Aplicar o mesmo critério/direção aos grupos e às empresas de cada grupo, usando o nome/datas próprios de cada registro; Principal continua identificado, sem prioridade artificial. Empates determinísticos por nome/ID.
+- D-02: usar created_at/updated_at já persistidos, sem inventar/retroagir datas ou usar posição da lista/revisão como data; indisponíveis ficam por último em ambas as direções e explicitamente indisponíveis quando apresentados. Critério de data mostra a data de referência no resumo/empresa para compreensão. Atualização é do registro, sem propagar automaticamente data de uma empresa ao grupo.
+- D-UX-01: preservar arquitetura de grupos recolhíveis da proposta2 e imagem do pedido (referência de composição existente, conteúdo ilustrativo); controles junto à busca, reflow no celular. Busca e refresh mantêm ordenação; grupo aberto preservado por ID quando disponível; escolher ordenação não grava dados.
+- P-01: não ampliar autoridade, escopos, campos sensíveis, acesso comum, grants ou RLS; consulta mantém exatamente os mesmos filtros. Mutação, locks/revisões, limites, Owner3.0.1, vínculos e auditoria permanecem intactos.
+- P-02: não reescrever migrations/histórico nem exigir atualização imediata de abas3.0.2: contrato1.1.0 aditivo com aceitação explícita1.0.0; sem novo fornecedor/dependência.
+- F-01: busca global, paginação nova, filtros de período, mudanças de cadastro/perfis/planos, ordenação em outras páginas, agregação de datas e correção retroativa de histórico.
+- A-01: detalhes acessíveis de controle, formatação pt-BR, ordenação local sobre escopo já autorizado, método de extensão compatível da consulta e fixtures delegados à engenharia. Reutilizar AntD, Intl e timestamps existentes.
+- CA-01: testes dos três critérios/duas direções, acentos, empates, datas ausentes/inválidas, herança e imutabilidade; browser desktop/mobile com teclado/busca/refresh/mesmo grupo aberto e nenhum overflow/gravação implícita.
+- CA-02: PostgreSQL17 local com a função real, datas reais/updated_at e quatro perfis, contrato anterior/novo/desconhecido, grants e corpo da função preservado fora de3substituições explícitas; regressão da administração existente. Conferência antes/depois de produção sem alterar cadastros reais para testes.
+- CA-03: tipos/build/checks/contexto/CI e publicação somente migration nova e web, smoke/rollback/sincronização; sem Edge ou outros serviços. AoT documenta evidência/limites.
+
+## Mapa de impacto / mínimo suficiente
+
+| Área | Relação | Baseline e prova |
+| --- | --- | --- |
+| Página/busca/disclosure/ordenação | direct |3.0.2; testes comparador e browser três critérios/direções em1448/390/320 |
+| Consulta administrativa/datas/contrato | direct |1.0.0, timestamps existentes; migração aditiva1.1.0 e SQL real |
+| Autorização/escopo | critical_transversal | Ator/filters/ACL/search_path atuais; negativos SQL e perfis/browser |
+| Mutação/Owner/vínculos/planos | plausible_indirect | Mesmo corpo SQL fora de três substituições; suíte SQL administração/Owner e browser existente |
+| Histórico/dados/updated_at | plausible_indirect | Triggers existentes preservados; nenhuma escrita de dados pela migration; leitura metadata antes/depois |
+| Knowledge/talentos/Tokens/Edge/serviços | no_impact_identified | Projeção administrativa e sort local; handlers e serviços alheios inalterados, plano seletivo |
+
+Sem Q material pendente. Execução incorpora integralmente D/P/F/A e CA acima. ClasseD pelo SQL privilegiado, sem nova arquitetura/ADR. Encerrar com provas obrigatórias, publicação autorizada, smoke e CI; sem validate integral local nem jornada humana fictícia de produção.
 
 ---
 
@@ -19237,6 +19277,54 @@ Fechamento de docs/evidência/contexto em commit posterior, sem alteração func
 ## Conclusão
 
 D/P e critérios locais/publicação PASS; nenhuma divergência material ou escopo adicional. Entrega nova e preservação comprovadas nos limites descritos. Jornada humana autenticada em produção NOT TESTED; smoke público e serviço sintético não a substituem. Fechamento exige CI final e sincronização Git/VPS sem reconstruir runtime.
+
+---
+
+## Source: `docs/qa/aot-groups-sorting-v303.md`
+
+# AoT — Ordenação de grupos e empresas3.0.3
+
+Contrato `docs/qa/agreement-groups-sorting-v303.md`1.0.0, aprovado no chat17/10/2026. Baseline6603751/runtime3.0.2 fe55150. Evidências `docs/qa/evidence/groups-sorting-v303/`.
+
+## Matriz de acordos e proibições
+
+| ID | Implementação / prova | Status |
+| --- | --- | --- |
+| D-01 | Comparador pt-BR/números/empates/duas direções; mesma função para grupos e empresas;27Node/tooling, browser | PASS |
+| D-02 | createdAt/updatedAt do banco; comparação real SQL por registro e triggers existentes; null/inválidos por último, data exposta no critério | PASS |
+| D-UX-01 | Toolbar junto à busca, reflow mobile; mesmos details/ações; browser busca/refresh/teclado/seleção/overflow | PASS |
+| P-01 | Função real igual fora de3substituições, ACL igual;151SQL com negativos e regressão Owner/administração | PASS |
+| P-02 | Aceitação1.0.0/1.1.0 e desconhecido recusado; nova migration apenas, sem reescrever histórico | PASS |
+| F-01 | Diff sem novos fluxos, dependências, datas agregadas ou outras páginas | PASS |
+
+## Mapa de impacto e preservação
+
+Mesmo mapa do acordo; nenhum destino adicional descoberto.
+
+| Área | Relação | Baseline / evidência | Status |
+| --- | --- | --- | --- |
+| Ordenação/disclosure/busca | direct |3.0.2; comparador e browser com todos critérios/direções | PASS |
+| Consulta/datas/contrato | direct |1.0.0, triggers existentes;151SQL local em PG17, legacy e novo contrato | PASS |
+| Autorização/escopo | critical_transversal | Mesmos filtros/ator/ACL; quatro perfis e negativos SQL/browser | PASS |
+| Mutação/Owner/vínculos/planos | plausible_indirect |151SQL incluem129 anteriores, rollout não altera corpos de mutação | PASS |
+| Histórico/dados/updated_at | plausible_indirect | Projeção sem escrita; datas SQL equivalentes e avanço em update local; sem backfill | PASS |
+| Knowledge/talentos/Tokens/Edge/serviços | no_impact_identified | Nenhum consumidor/lógica desses fluxos muda, planos/serviços conferidos | PASS |
+
+## Fidelidade visual
+
+Imagem do pedido é referência da composição3.0.2; conteúdo ilustrativo. Grupos recolhíveis, resumo/ações/metadados e empresas mantidos. Único acréscimo: controles ao lado da busca, quebrando para nova linha no mobile; data só no critério correspondente. Screenshots1448/390/320 da mesma fixture ilustrativa anterior comprovam composição e reflow, comparação com evidência3.0.2 de mesma largura/dados/estado inicial. A-01 permite controle nativo acessível com tokens Prisma: dropdown AntD apresentou posicionamento fora do viewport no fixture, sem resultado funcional utilizável; escolha HTML select elimina essa dependência de overlay e valida teclado. Nenhuma lib nova ou mudança em Select de outros fluxos. Inspeção final dos renders1448/390/320 PASS; toolbar legível e nenhuma rolagem horizontal.
+
+## Desvios / mudanças de autoridade
+
+Nenhum desvio de produto identificado. Datas pertencem ao próprio registro, sem herdar datas das empresas ao grupo, conforme acordo. Falhas de harness: opção virtual aria não clicável; posicionamento de overlay no fixture levou ao controle nativo. Teste antigo de Acessos selecionava a primeira linha, agora reordenada; corrigido para selecionar a empresa pelo nome e confirmar o mesmo ID. Erro de tipos da fixture (índice potencialmente ausente) corrigido com null, sem mudar regra de produto. Migração rejeita baseline inesperado em vez de substituir silenciosamente função divergente.
+
+## Validação / ambientes
+
+151SQL PASS em PG17 descartável local, incluindo compatibilidade/grants/corpo/escopo e regressão Owner.27Node/tooling PASS. 189browser PASS (75 novos,114 regressão), tipos/build/lint/foundation/contexto PASS. CI/publicação pendentes; resultados funcionais são locais. Serviço browser é determinístico e sintético; não prova jornada humana em produção. Produção será verificada sem alterar cadastros reais e sem publicar Edge/outros serviços. Sem QA remoto independente disponível; evidência integrada local cobre o boundary.
+
+## Publicação / fechamento
+
+Pendente. Publicar somente migration20261017143000 e web após CI. Rollback web anterior permanece compatível com1.0.0; SQL forward aditivo, sem alterações de dados. Conferir função/ACL/datas/contagens e advisors antes/depois, versão/SHA/assets públicos, demais contêineres e sincronização. Nenhum D funcional sem prova; fechamento depende da evidência operacional abaixo.
 
 ---
 
@@ -32320,6 +32408,8 @@ No M5.2, somente `service_role` executa staging, validação, diff e publicaçã
 - membership stale ou removida;
 - função privada não executável por anon/public;
 - grants da Data API e RLS testados separadamente.
+
+Ordenação3.0.3: organization-administration1.1.0 aceita1.0.0 e projeta apenas createdAt/updatedAt dos mesmos grupos/empresas já visíveis. Função preserva integralmente ator, filtros, locks, mutações, search_path e ACL fora das três substituições aditivas verificadas. Sem grant novo, acesso comum, RLS ou escrita de datas/histórico.
 
 ---
 

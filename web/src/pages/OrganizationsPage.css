@@ -40,3 +40,18 @@
 @media (pointer: coarse) {
   .prisma-organization-group :is(button, summary) { min-height: 44px; }
 }
+
+.prisma-organization-toolbar-fields { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 20px; }
+.prisma-organization-toolbar-fields > .ant-input-search { flex: 1 1 280px; min-width: 0; }
+.prisma-organization-sort { display: flex; align-items: center; gap: 8px; max-width: 100%; }
+.prisma-organization-sort > label { color: #26364e; white-space: nowrap; font-size: 13px; }
+.prisma-organization-sort > select { width: 180px; min-width: 0; min-height: 38px; padding: 6px 10px; border: 1px solid #8291a5; border-radius: 8px; background: #fff; color: #10203a; font: inherit; }
+.prisma-organization-sort-date { display: block; font-size: 12px; font-weight: 400; color: #52637a; margin-top: 3px; }
+@media (max-width: 580px) {
+  .prisma-organization-sort { width: 100%; flex-wrap: wrap; }
+  .prisma-organization-sort > label { width: 100%; }
+  .prisma-organization-sort > select { flex: 1; }
+}
+
+.prisma-organization-sort > select:focus-visible { outline: 2px solid #155eef; outline-offset: 2px; }
+@media (pointer: coarse) { .prisma-organization-sort > select { min-height: 44px; } }

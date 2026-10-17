@@ -5,11 +5,39 @@ import {createServer} from "vite";
 const dir=process.env.PRISMA_BROWSER_EVIDENCE_DIR??"docs/qa/evidence/v3m0-multiempresa",checks=[];await mkdir(dir,{recursive:true});
 const recoveryOnly=process.argv.includes("--recovery-only");
 if(recoveryOnly){const previous=JSON.parse(await readFile(dir+"/browser.json","utf8"));checks.push(...previous.checks.filter(c=>!["failed mutation preserves editor","cancelled departure retains unsaved changes","explicit discard closes editor"].includes(c.name)));}
+if(process.argv.includes("--regression-only")){const previous=JSON.parse(await readFile(dir+"/browser.json","utf8"));checks.push(...previous.checks.slice(0,previous.checks.findIndex(c=>/^\d+ super_admin /.test(c.name))));}
 const check=(name,pass)=>{checks.push({name,pass:Boolean(pass)});assert.ok(pass,name);};
 const server=await createServer({configFile:"tests/ui/visual-foundation.vite.config.mts",cacheDir:"tmp/vite-v3m0",server:{port:5847},plugins:[{name:"multiempresa-fixture",enforce:"pre",transform(_code,id){if(id.replaceAll("\\","/").endsWith("/infrastructure/supabase/organizationAdministrationService.ts"))return 'export {organizationAdministrationService} from "../../../../tests/ui/multiempresa/service";';}}]});await server.listen();
 const {chromium}=createRequire(import.meta.url)(process.env.PRISMA_PLAYWRIGHT_PATH??"playwright");
 const browser=await chromium.launch({headless:true,channel:"msedge"});
 try{
+ if(process.argv.includes("--sorting"))for(const width of [1448,390,320]){
+  const p=await browser.newPage({viewport:{width,height:1200},reducedMotion:"reduce"}),errors=[];p.on("pageerror",e=>errors.push(e.message));
+  await p.goto("http://127.0.0.1:5847/multiempresa.html?profile=super_admin&visual=1&sorting=1");await p.locator("details[open]").waitFor();
+  const expected={Nome:["Grupo principal","HRT Solutions","VCI Brasil"],"Data de criação":["Grupo principal","VCI Brasil","HRT Solutions"],"Data de atualização":["HRT Solutions","VCI Brasil","Grupo principal"]};
+  const companies={Nome:["Prisma","Prisma QA Beta"],"Data de criação":["Prisma QA Beta","Prisma"],"Data de atualização":["Prisma","Prisma QA Beta"]};
+  for(const criterion of Object.keys(expected)){
+   await p.getByRole("combobox",{name:"Ordenar por",exact:true}).selectOption({label:criterion});
+
+   for(const direction of ["asc","desc"]){
+    const current=await p.getByRole("button",{name:"Ordem crescente",exact:true}).count()?"asc":"desc";
+    if(current!==direction)await p.getByRole("button",{name:current==="asc"?"Ordem crescente":"Ordem decrescente",exact:true}).click();
+    const names=await p.locator("summary strong").allTextContents();check(width+" "+criterion+" "+direction+" groups",JSON.stringify(names)===JSON.stringify(direction==="asc"?expected[criterion]:[...expected[criterion]].reverse()));
+    const namesInGroup=await p.locator("details[open] tbody td:first-child strong").allTextContents();check(width+" "+criterion+" "+direction+" inherited companies",JSON.stringify(namesInGroup)===JSON.stringify(direction==="asc"?companies[criterion]:[...companies[criterion]].reverse()));
+    check(width+" "+criterion+" "+direction+" same open group",await p.locator("details[open] summary strong").textContent()==="Grupo principal");
+   }
+  }
+  await p.getByRole("button",{name:"Atualizar",exact:true}).click();check(width+" refresh retains date ordering",JSON.stringify(await p.locator("summary strong").allTextContents())===JSON.stringify([...expected["Data de atualização"]].reverse()));
+  await p.getByRole("searchbox").fill("Prisma QA Beta");check(width+" search retains sort and direction",await p.getByRole("button",{name:"Ordem decrescente"}).count()===1&&await p.locator(".prisma-organization-sort-date").first().textContent().then(t=>t.startsWith("Atualização:")));
+  await p.getByRole("searchbox").fill("");
+  check(width+" no implicit mutation from sorting",await p.evaluate(()=>window.__calls.length===0));
+  check(width+" sorting controls and records contained",await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1&&[...document.querySelectorAll("details[open] .ant-table-content")].every(e=>e.scrollWidth<=e.clientWidth+1)));
+  check(width+" sorting no runtime exception",errors.length===0);
+  await p.screenshot({path:`${dir}/sorting-${width}.png`,fullPage:true});
+  const selector=p.getByRole("combobox",{name:"Ordenar por",exact:true});await selector.focus();await selector.press("ArrowUp");check(width+" keyboard changes sorting",await selector.inputValue()==="createdAt");
+  await p.locator("summary").filter({hasText:"HRT Solutions"}).click();await p.getByRole("button",{name:"Cadastrar Owner",exact:true}).click();check(width+" Owner contextual route preserved",await p.evaluate(()=>window.__navigation==="/organizations/group-b/owner/new"));
+  await p.close();
+ }
  if(process.argv.includes("--accordion"))for(const width of [1448,1024,390,320]){
   const p=await browser.newPage({viewport:{width,height:1200},reducedMotion:"reduce"}),errors=[];p.on("pageerror",e=>errors.push(e.message));
   await p.goto("http://127.0.0.1:5847/multiempresa.html?profile=super_admin&visual=1");
@@ -56,7 +84,7 @@ try{
    const calls=await p.evaluate(()=>window.__calls);check(tag+" explicit creation scoped and versioned",calls.length===1&&calls[0].groupId==="group-a"&&calls[0].input.revision===1&&calls[0].action==="create_company");
    check(tag+" shared state refreshed",await p.evaluate(()=>window.__refreshed===1));
    check(tag+" capacity full disables creation",!(await p.getByRole("button",{name:/Nova empresa$/}).first().isEnabled()));
-   await p.getByRole("button",{name:"Acessos",exact:true}).first().click();await p.getByText("Usuário comum sintético",{exact:true}).waitFor();
+   await p.locator("details[open] tbody tr").filter({hasText:"Empresa Horizonte"}).getByRole("button",{name:"Acessos",exact:true}).click();await p.getByText("Usuário comum sintético",{exact:true}).waitFor();
    await p.getByRole("button",{name:"Vincular",exact:true}).click();await p.getByRole("button",{name:"Confirmar",exact:true}).click();await p.getByText("Alteração registrada.",{exact:true}).waitFor();
    check(tag+" membership action explicit",await p.evaluate(()=>window.__calls.some(c=>c.action==="save_link"&&c.organizationId==="company-a"&&c.input.userId==="user-b"&&c.input.linked===true)));
    await p.getByRole("button",{name:"Atualizar",exact:true}).click();

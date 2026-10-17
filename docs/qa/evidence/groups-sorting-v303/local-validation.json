@@ -1,0 +1,20 @@
+{
+  "baseline": "660375176946c8f52921817239f59fe340c16acc",
+  "postgres": 151,
+  "browser": 189,
+  "newBrowser": 75,
+  "regressionBrowser": 114,
+  "nodeTooling": 27,
+  "checks": {
+    "typecheck:web": "PASS",
+    "build": "PASS",
+    "build:web": "PASS",
+    "lint": "PASS",
+    "check:foundation": "PASS",
+    "generate:prisma-context": "PASS",
+    "check:prisma-context": "PASS",
+    "check:supabase-ledger": "PASS",
+    "git diff --check": "PASS"
+  },
+  "limits": "PG17 disposable local; deterministic UI fixture; no real production journey; full CI remains mandatory. No blanket pnpm validate local."
+}

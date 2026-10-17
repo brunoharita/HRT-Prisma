@@ -6,6 +6,11 @@ if(params.has("visual"))groups.splice(0,groups.length,...[
  {id:"group-a",name:"Grupo principal",status:"active",plan:"professional",companyLimit:2,activeCount:2,companyCount:2,primaryOrganizationId:"company-a",revision:1,termsStatus:"provisional",owner:{name:"[QA M2-C] owner",status:"active"},companies:[{id:"company-a",name:"Prisma",status:"active",groupId:"group-a",users:5},{id:"company-b",name:"Prisma QA Beta",status:"active",groupId:"group-a",users:2}]},
  ...[{id:"group-b",name:"HRT Solutions",company:"HRT Solutions"},{id:"group-c",name:"VCI Brasil",company:"VCI - Bauru"}].map(g=>({id:g.id,name:g.name,status:"draft" as const,plan:"professional" as const,companyLimit:1,activeCount:0,companyCount:1,primaryOrganizationId:g.id+"-company",revision:1,termsStatus:"provisional" as const,owner:null,companies:[{id:g.id+"-company",name:g.company,status:"draft" as const,groupId:g.id,users:0}]}))
 ] satisfies ManagedGroup[]);
+if(params.has("sorting"))groups.forEach((group,index)=>{
+ group.createdAt=["2026-01-10T12:00:00Z","2026-03-10T12:00:00Z","2026-02-10T12:00:00Z"][index]??null;
+ group.updatedAt=["2026-03-10T12:00:00Z","2026-01-10T12:00:00Z","2026-02-10T12:00:00Z"][index]??null;
+ group.companies.forEach((company,i)=>{company.createdAt=i?"2026-01-10T12:00:00Z":"2026-02-10T12:00:00Z";company.updatedAt=i?"2026-03-10T12:00:00Z":"2026-02-10T12:00:00Z";});
+});
 const users:ManagedCompanyUser[]=[{id:"user-a",name:"Recruiter sintético",profile:"recruiter",linked:true,isDefault:true,canEdit:true},{id:"user-b",name:"Usuário comum sintético",profile:"member",linked:false,isDefault:false,canEdit:true}];
 const host=window as unknown as {__calls:unknown[]};host.__calls=[];
 export const organizationAdministrationService={

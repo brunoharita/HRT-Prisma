@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ApartmentOutlined, DownOutlined, PlusOutlined } from "@ant-design/icons";
+import { ApartmentOutlined, ArrowDownOutlined, ArrowUpOutlined, DownOutlined, PlusOutlined } from "@ant-design/icons";
 import { Alert, Button, Drawer, Empty, Form, Input, InputNumber, Modal, Select, Space, Table, Tag, Typography } from "antd";
 import { organizationAdministrationService as service } from "../infrastructure/supabase/organizationAdministrationService";
 import { companyStatusLabels, organizationPlans, planCompanyLimitValid, planLabels, type ManagedCompany, type ManagedCompanyUser, type ManagedGroup, type OrganizationAdminWorkspace, type OrganizationPlan } from "../domain/organizationAdministration";
@@ -9,12 +9,15 @@ import { PrismaCard } from "../ui/PrismaCard";
 import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
 import { confirmPrismaNavigation, useUnsavedChanges } from "../ui/PrismaNavigation";
 import "./OrganizationsPage.css";
+import { organizationTimestamp, sortOrganizations, type OrganizationSort, type OrganizationSortDirection } from "../domain/organizationSorting";
 import { ownerOnboardingPath } from "../domain/ownerOnboarding";
 type Editor = { kind: "group" | "company" | "new-company" | "new-group"; group?: ManagedGroup; company?: ManagedCompany };
 export function OrganizationsPage({ profile, onNavigate, onChanged }: { profile: PlatformAccessProfile; onNavigate: (path: string) => void; onChanged: () => Promise<void> }) {
   const [workspace, setWorkspace] = useState<OrganizationAdminWorkspace | null>(null);
   const [search, setSearch] = useState("");
   const [expandedGroup, setExpandedGroup] = useState<string | null | undefined>(undefined);
+  const [sort, setSort] = useState<OrganizationSort>("name");
+  const [direction, setDirection] = useState<OrganizationSortDirection>("asc");
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -62,18 +65,23 @@ export function OrganizationsPage({ profile, onNavigate, onChanged }: { profile:
   const isSuper = workspace?.isSuper ?? profile === "super_admin";
   const canManageGroup = isSuper || profile === "owner";
   const query = search.trim().toLocaleLowerCase("pt-BR");
-  const groups = workspace?.groups.filter(g => !query || g.name.toLocaleLowerCase("pt-BR").includes(query) || g.companies.some(c => c.name.toLocaleLowerCase("pt-BR").includes(query))) ?? [];
-  const expanded = expandedGroup === null ? null : groups.find(g => g.id === expandedGroup)?.id ?? groups[0]?.id;
+  const groups = sortOrganizations(workspace?.groups.filter(g => !query || g.name.toLocaleLowerCase("pt-BR").includes(query) || g.companies.some(c => c.name.toLocaleLowerCase("pt-BR").includes(query))) ?? [], sort, direction);
+  const expanded = expandedGroup === null ? null : groups.find(g => g.id === expandedGroup)?.id ?? workspace?.groups.find(g => groups.some(visible => visible.id === g.id))?.id;
+  function sortDate(record: ManagedGroup | ManagedCompany) {
+    if (sort === "name") return null;
+    const timestamp = organizationTimestamp(record[sort]);
+    return <span className="prisma-organization-sort-date">{sort === "createdAt" ? "Criação" : "Atualização"}: {timestamp === null ? "Data não disponível" : new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(timestamp)}</span>;
+  }
   return <PrismaPage>
     <PrismaPageHeader icon={<ApartmentOutlined />} title="Grupos e empresas" description="Administre empresas e acessos dentro da sua responsabilidade." actions={<Space wrap><Button disabled={loading || busy} onClick={() => void load()}>Atualizar</Button><Button onClick={() => onNavigate("/users")}>Usuários</Button>{isSuper ? <Button type="primary" icon={<PlusOutlined />} onClick={() => open({ kind: "new-group" })}>Novo grupo</Button> : null}</Space>} />
     {error ? <Alert type="error" showIcon title={error} action={<Button disabled={loading || busy} onClick={() => void load()}>Atualizar consulta</Button>} /> : null}
     {notice ? <Alert type="success" showIcon title={notice} closable onClose={() => setNotice(null)} /> : null}
-    <PrismaCard><Input.Search aria-label="Buscar grupos e empresas" placeholder="Buscar grupo ou empresa" value={search} onChange={e => { setSearch(e.target.value);setExpandedGroup(undefined); }} allowClear /></PrismaCard>
+    <PrismaCard className="prisma-organization-toolbar"><div className="prisma-organization-toolbar-fields"><Input.Search aria-label="Buscar grupos e empresas" placeholder="Buscar grupo ou empresa" value={search} onChange={e => { setSearch(e.target.value);setExpandedGroup(undefined); }} allowClear /><div className="prisma-organization-sort"><label htmlFor="organization-sort">Ordenar por</label><select id="organization-sort" aria-label="Ordenar por" value={sort} onChange={event => setSort(event.target.value as OrganizationSort)}><option value="name">Nome</option><option value="createdAt">Data de criação</option><option value="updatedAt">Data de atualização</option></select><Button aria-label={direction === "asc" ? "Ordem crescente" : "Ordem decrescente"} title={sort === "name" ? direction === "asc" ? "A–Z" : "Z–A" : direction === "asc" ? "Mais antigas primeiro" : "Mais recentes primeiro"} icon={direction === "asc" ? <ArrowUpOutlined /> : <ArrowDownOutlined />} onClick={() => setDirection(direction === "asc" ? "desc" : "asc")} /></div></div></PrismaCard>
     {!loading && groups.length === 0 ? <Empty description="Nenhuma empresa disponível neste escopo." /> : null}
     <div className="prisma-organization-groups">
     {groups.map(group => <details className="prisma-organization-group" key={group.id} open={expanded === group.id}>
       <summary aria-expanded={expanded === group.id} onClick={event => { event.preventDefault();setExpandedGroup(expanded === group.id ? null : group.id); }}>
-        <span className="prisma-organization-summary-label"><DownOutlined className="prisma-organization-chevron" aria-hidden="true" /><span className="prisma-organization-summary-main"><strong>{group.name}</strong><span>{planLabels[group.plan]} · {group.companyCount}/{group.companyLimit} empresas · {group.activeCount} ativas</span></span></span>
+        <span className="prisma-organization-summary-label"><DownOutlined className="prisma-organization-chevron" aria-hidden="true" /><span className="prisma-organization-summary-main"><strong>{group.name}</strong><span>{planLabels[group.plan]} · {group.companyCount}/{group.companyLimit} empresas · {group.activeCount} ativas</span>{sortDate(group)}</span></span>
         <Tag color={group.status === "active" ? "green" : "default"}>{group.status === "active" ? "Ativo" : group.status === "inactive" ? "Inativo" : "Em preparação"}</Tag>
       </summary>
       <div className="prisma-organization-body">
@@ -81,8 +89,8 @@ export function OrganizationsPage({ profile, onNavigate, onChanged }: { profile:
       <div className="prisma-organization-metadata"><span>Owner: <strong>{group.owner?.name ?? "Não definido"}</strong>{group.owner && group.owner.status !== "active" ? " · ativação pendente" : ""}</span><span>Plano: <strong>{planLabels[group.plan]}</strong></span><span>Empresas cadastradas: <strong>{group.companyCount} de {group.companyLimit}</strong> · {group.activeCount} ativas</span></div>
       {group.status === "draft" ? <div className="prisma-organization-next"><div><strong>{!group.owner ? "Próximo passo: cadastrar Owner." : group.owner.status !== "active" ? "Próximo passo: ativar o Owner." : "Grupo em preparação"}</strong><p>Cadastre e ative o Owner, ative a primeira empresa e depois o grupo.</p></div>{isSuper && !group.owner ? <Button type="primary" onClick={() => onNavigate(ownerOnboardingPath(group.id))}>Cadastrar Owner</Button> : null}</div> : null}
       {group.companyCount >= group.companyLimit ? <p className="prisma-organization-capacity">Limite configurado atingido. Consulte o responsável pelo plano para incluir outra empresa.</p> : null}
-      <Table<ManagedCompany> className="prisma-organization-companies" rowKey="id" size="small" pagination={false} dataSource={group.companies} columns={[
-        { title: "Empresa", dataIndex: "name", width: "34%", render: (name, c) => <Space wrap><strong>{name}</strong>{c.id === group.primaryOrganizationId ? <Tag>Principal</Tag> : null}</Space> },
+      <Table<ManagedCompany> className="prisma-organization-companies" rowKey="id" size="small" pagination={false} dataSource={sortOrganizations(group.companies, sort, direction)} columns={[
+        { title: "Empresa", dataIndex: "name", width: "34%", render: (name, c) => <div><Space wrap><strong>{name}</strong>{c.id === group.primaryOrganizationId ? <Tag>Principal</Tag> : null}</Space>{sortDate(c)}</div> },
         { title: "Situação", dataIndex: "status", width: "21%", render: (status: ManagedCompany["status"]) => <Tag color={status === "active" ? "green" : "default"}>{companyStatusLabels[status]}</Tag> },
         { title: "Usuários ativos", dataIndex: "users", width: "17%", render: count => <><span className="prisma-organization-mobile-label">Usuários ativos: </span>{count}</> },
         { title: "Ações", width: "28%", render: (_, company) => <Space wrap><Button disabled={busy} onClick={() => open({ kind: "company", group, company })}>Editar</Button><Button disabled={busy} onClick={() => void openLinks(group, company)}>Acessos</Button></Space> },
