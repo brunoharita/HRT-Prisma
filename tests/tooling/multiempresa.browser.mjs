@@ -37,6 +37,7 @@ try{
   check(tag+" viewport contained",await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));check(tag+" no runtime exception",errors.length===0);await p.close();
  }
  const p=await browser.newPage();await p.goto("http://127.0.0.1:5847/multiempresa.html?profile=recruiter&fail=1");await p.getByRole("button",{name:/Nova empresa$/}).click();await p.getByLabel("Nome da empresa",{exact:true}).fill("Rascunho preservado");await p.getByRole("button",{name:"Salvar",exact:true}).click();await p.getByText("Falha sintética. Os dados confirmados foram preservados.",{exact:true}).last().waitFor();
+ await p.getByRole("button",{name:"Tentar salvar novamente",exact:true}).click();await p.getByRole("button",{name:"Tentar salvar novamente",exact:true}).waitFor({state:"visible"});
  check("failed mutation preserves editor",await p.getByLabel("Nome da empresa",{exact:true}).inputValue()==="Rascunho preservado");
  await p.getByRole("button",{name:"Cancelar",exact:true}).click();await p.getByRole("button",{name:"Continuar editando",exact:true}).click();
  check("cancelled departure retains unsaved changes",await p.getByLabel("Nome da empresa",{exact:true}).inputValue()==="Rascunho preservado");

@@ -124,7 +124,7 @@ test("M5.5 administrative UX offers one categorized confirmation in a critical a
   const center = await readFile("web/src/pages/PersonWorkspacePage.tsx", "utf8");
   assert.match(center, /Excluir Pessoa definitivamente/);
   assert.match(center, /canDeletePerson/);
-  assert.match(center, /\["super_admin", "owner", "admin"\]/);
+  assert.match(center, /\["super_admin", "owner", "admin", "recruiter"\]/);
   assert.match(center, /Será excluído/);
   assert.match(center, /Continuará disponível/);
   assert.match(center, /Auditoria mínima da exclusão/);

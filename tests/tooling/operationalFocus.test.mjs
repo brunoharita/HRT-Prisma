@@ -11,7 +11,7 @@ test('legacy settings binds delivered Knowledge authority and keeps structure re
  const route=findRoute('/settings');assert.equal(route.path,'/settings');assert.equal(route.rule,rule);
  for(const role of ['member','recruiter','owner','admin','super_admin']){
   const result=evaluateRouteAccess({isAuthenticated:true,activeOrganizationId:'a',memberships:[{organizationId:'a',organizationName:'A',groupId:null,groupName:null,role}]},route.rule);
-  assert.equal(result.allowed,['owner','admin','super_admin'].includes(role));
+  assert.equal(result.allowed,['owner','admin','recruiter','super_admin'].includes(role));
  }
  assert.equal(evaluateRouteAccess({isAuthenticated:false,activeOrganizationId:null,memberships:[]},route.rule).allowed,false);
  assert.match(source,/route.path === "\/settings"[\s\S]*?return <SettingsPage/);

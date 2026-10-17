@@ -80,7 +80,7 @@ export function OrganizationsPage({ profile, onNavigate, onChanged }: { profile:
     </PrismaCard>)}
     <Typography.Paragraph type="secondary">As empresas mantêm dados e Tokens próprios. O plano não concede acesso a outras empresas. Valores de assinatura e distribuição adicional de recursos estão em definição.</Typography.Paragraph>
     <Modal open={editor !== null} title={editor?.kind === "new-group" ? "Novo grupo" : editor?.kind === "new-company" ? "Nova empresa" : editor?.kind === "group" ? "Administrar grupo" : "Editar empresa"} destroyOnHidden onCancel={() => void closeEditor()} footer={null} closable={!busy} maskClosable={!busy}>
-      {error ? <Alert type="error" title={error} /> : null}
+      {error ? <Alert type="error" title={error} action={<Button disabled={busy} onClick={() => form.submit()}>Tentar salvar novamente</Button>} /> : null}
       <Form form={form} layout="vertical" onValuesChange={() => setDirty(true)} onFinish={input => editor && void mutate(editor.kind === "new-group" ? "create_group" : editor.kind === "new-company" ? "create_company" : editor.kind === "group" ? "configure_group" : "configure_company", editor.group, editor.company, input)}>
         <Form.Item name="name" label={editor?.kind === "group" || editor?.kind === "new-group" ? "Nome do grupo" : "Nome da empresa"} rules={[{ required: true, whitespace: true, min: 2, max: 120, message: "Informe de 2 a 120 caracteres." }]}><Input autoComplete="off" /></Form.Item>
         {editor?.kind === "new-group" ? <Form.Item name="companyName" label="Primeira empresa" rules={[{ required: true, whitespace: true, min: 2, max: 120 }]}><Input /></Form.Item> : null}
@@ -90,7 +90,7 @@ export function OrganizationsPage({ profile, onNavigate, onChanged }: { profile:
       </Form>
     </Modal>
     <Drawer open={links !== null} title={links ? `Acessos · ${links.company.name}` : "Acessos"} width={620} onClose={() => !busy && setLinks(null)} destroyOnHidden>
-      {error ? <Alert type="error" title={error} /> : null}
+      {error ? <Alert type="error" title={error} action={<Button disabled={busy} onClick={() => links && void openLinks(links.group, links.company)}>Atualizar vínculos</Button>} /> : null}
       <Typography.Paragraph>Somente usuários ativos deste grupo. Alterações valem para esta empresa. Para novos usuários ou mudança de perfil, use o cadastro de Usuários.</Typography.Paragraph>
       <Button onClick={() => onNavigate("/users/new")}>Cadastrar usuário</Button>
       <Table<ManagedCompanyUser> rowKey="id" size="small" scroll={{ x: 510 }} dataSource={links?.users ?? []} columns={[
