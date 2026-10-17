@@ -26,7 +26,7 @@ Sem novas dependências ou reclassificações em relação ao acordo.
 | Disclosure/busca/responsividade | direct | Cards3.0.1; browser/screenshot em quatro larguras | PASS |
 | Editor/vínculos/Owner/refresh | plausible_indirect | Mesmos callbacks; serviço sintético com criação/vínculos explícitos, erro e confirmação de saída | PASS |
 | Escopo e autoridade | critical_transversal | Super/Owner/Recruiter/comum no fixture; mesmas consultas e condições, sem backend | PASS |
-| Versão/release/contexto | direct | Teste3.0.2, tipos/build/contexto, CI e publicação seletiva | NOT TESTED |
+| Versão/release/contexto | direct | Teste3.0.2, tipos/build/contexto, CI e publicação seletiva | PASS |
 | Knowledge/talentos/Tokens/Auth/banco/Edge | no_impact_identified | Sem mudanças nessas lógicas; CSS isolado por classe; conferir plano sem destinos adicionais | PASS |
 
 ## Fidelidade visual
@@ -39,4 +39,15 @@ Nenhum desvio material identificado; nenhuma mudança adicional de produto. Erro
 
 ## Validação / publicação
 
-164 checks browser PASS (50 do novo disclosure/responsividade e114 de regressão),23 Node/tooling PASS. Tipos e build web PASS; diff revisado sem mudança nos handlers ou serviços. Lint/foundation/contexto/CI/publicação ainda em execução. Não se aplica QA remoto separado para este movimento web. Browser local usa serviço determinístico, sem LLM/banco e sem dados reais; não prova jornada autenticada humana em produção. Smoke produtivo público e CI pendentes; PASS das linhas funcionais refere-se ao browser local. Linha release só encerra com publicação registrada abaixo. Avisos AntD legados e tamanho de bundle não alterados por este escopo.
+164 checks browser PASS (50 do novo disclosure/responsividade e114 de regressão),23 Node/tooling PASS. Tipos e build web PASS; diff revisado sem mudança nos handlers ou serviços. Lint/foundation/contexto PASS. CI da branch39040834004 SUCCESS. Plano confirmou somente web; pnpm test genérico substituído localmente pelos23 testes pertinentes, mantendo CI integral obrigatória. Não se aplica QA remoto separado para este movimento web. Browser local usa serviço determinístico, sem LLM/banco e sem dados reais; não prova jornada autenticada humana em produção. 22smokes públicos PASS; linhas funcionais referem-se ao browser local. Publicação registrada abaixo. Avisos AntD legados e tamanho de bundle não alterados por este escopo.
+
+
+## Git / produção / sincronização
+
+Runtime3.0.2 `fe551500502ab478e7c439594488a4e935cbfdd4`, integrado em main e publicado somente prisma-web. Produção e identidade do remoto conferidas antes do deploy. Banco, Edge e outros serviços não acessados/publicados. Contêiner web f2dd1e335e18, imagem b55f976a66d6, restarts0. Rollback `prisma-web:rollback-before-fe551500502a`, imagem anterior0234fee91436; demais cinco contêineres/imagens/restarts iguais ao baseline, comparação automática PASS. HEAD imediato após recriação retornou404 transitório;22 verificações independentes confirmaram rotas/versão/SHA, sete assets atuais e sete anteriores, navegador anônimo protegido e ausência de exceção, sem rebuild. `production.json`, `public-smoke.json`, `containers-before.txt` e `containers-after.txt`.
+
+Fechamento de docs/evidência/contexto em commit posterior, sem alteração funcional nem novo build/deploy. CI de main e do fechamento conferidas no encerramento; status final informado no chat e disponível nos checks do commit. Resíduos antigos de manutenção Git de worktrees com permissão negada preservados; não impediram commit/FF e não foram limpos. Trabalho alheio/untracked do checkout canônico preservado.
+
+## Conclusão
+
+D/P e critérios locais/publicação PASS; nenhuma divergência material ou escopo adicional. Entrega nova e preservação comprovadas nos limites descritos. Jornada humana autenticada em produção NOT TESTED; smoke público e serviço sintético não a substituem. Fechamento exige CI final e sincronização Git/VPS sem reconstruir runtime.

@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 516
-source_manifest_sha256: a5ac27e9e1891d096e429d23546de765f7636a6a0e4e81401ec42a5c585cb4b8
+source_manifest_sha256: f3b4fa1344ebb6e4ea43d09909c37263afff7dce1fe0562bf06826172396e284
 -->
 
 # Tudo sobre o Prisma
@@ -2650,9 +2650,9 @@ last_verified: 2026-10-17
 
 # Estado atual do Prisma
 
-## Grupos recolhíveis — 3.0.2
+## Grupos recolhíveis — 3.0.2 publicada
 
-Proposta2 aprovada por Bruno e implementada: grupos separados, resumo persistente com plano/capacidade/situação, um aberto por vez, teclado, busca que revela resultado e atualização preservando expansão. Empresas em blocos no celular; ações, limites, perfis, vínculos e Cadastrar Owner contextual preservados. Nenhuma migration, Edge ou contrato de domínio alterado; somente web. Validação e publicação registradas no AoT `docs/qa/aot-groups-accordion-v302.md`.
+Proposta2 aprovada por Bruno e implementada: grupos separados, resumo persistente com plano/capacidade/situação, um aberto por vez, teclado, busca que revela resultado e atualização preservando expansão. Empresas em blocos no celular; ações, limites, perfis, vínculos e Cadastrar Owner contextual preservados. Nenhuma migration, Edge ou contrato de domínio alterado; somente web. Runtime fe551500502ab478e7c439594488a4e935cbfdd4 publicado somente web;164checks browser/23Node dirigidos/tipos/build/contexto e CI de branch PASS;22smokes públicos PASS, rollback e demais serviços preservados. Sem jornada humana autenticada de produção; dados reais não alterados. Validação e publicação registradas no AoT `docs/qa/aot-groups-accordion-v302.md`.
 
 ## Cadastrar Owner — 3.0.1 publicada
 
@@ -19212,7 +19212,7 @@ Sem novas dependências ou reclassificações em relação ao acordo.
 | Disclosure/busca/responsividade | direct | Cards3.0.1; browser/screenshot em quatro larguras | PASS |
 | Editor/vínculos/Owner/refresh | plausible_indirect | Mesmos callbacks; serviço sintético com criação/vínculos explícitos, erro e confirmação de saída | PASS |
 | Escopo e autoridade | critical_transversal | Super/Owner/Recruiter/comum no fixture; mesmas consultas e condições, sem backend | PASS |
-| Versão/release/contexto | direct | Teste3.0.2, tipos/build/contexto, CI e publicação seletiva | NOT TESTED |
+| Versão/release/contexto | direct | Teste3.0.2, tipos/build/contexto, CI e publicação seletiva | PASS |
 | Knowledge/talentos/Tokens/Auth/banco/Edge | no_impact_identified | Sem mudanças nessas lógicas; CSS isolado por classe; conferir plano sem destinos adicionais | PASS |
 
 ## Fidelidade visual
@@ -19225,7 +19225,18 @@ Nenhum desvio material identificado; nenhuma mudança adicional de produto. Erro
 
 ## Validação / publicação
 
-164 checks browser PASS (50 do novo disclosure/responsividade e114 de regressão),23 Node/tooling PASS. Tipos e build web PASS; diff revisado sem mudança nos handlers ou serviços. Lint/foundation/contexto/CI/publicação ainda em execução. Não se aplica QA remoto separado para este movimento web. Browser local usa serviço determinístico, sem LLM/banco e sem dados reais; não prova jornada autenticada humana em produção. Smoke produtivo público e CI pendentes; PASS das linhas funcionais refere-se ao browser local. Linha release só encerra com publicação registrada abaixo. Avisos AntD legados e tamanho de bundle não alterados por este escopo.
+164 checks browser PASS (50 do novo disclosure/responsividade e114 de regressão),23 Node/tooling PASS. Tipos e build web PASS; diff revisado sem mudança nos handlers ou serviços. Lint/foundation/contexto PASS. CI da branch39040834004 SUCCESS. Plano confirmou somente web; pnpm test genérico substituído localmente pelos23 testes pertinentes, mantendo CI integral obrigatória. Não se aplica QA remoto separado para este movimento web. Browser local usa serviço determinístico, sem LLM/banco e sem dados reais; não prova jornada autenticada humana em produção. 22smokes públicos PASS; linhas funcionais referem-se ao browser local. Publicação registrada abaixo. Avisos AntD legados e tamanho de bundle não alterados por este escopo.
+
+
+## Git / produção / sincronização
+
+Runtime3.0.2 `fe551500502ab478e7c439594488a4e935cbfdd4`, integrado em main e publicado somente prisma-web. Produção e identidade do remoto conferidas antes do deploy. Banco, Edge e outros serviços não acessados/publicados. Contêiner web f2dd1e335e18, imagem b55f976a66d6, restarts0. Rollback `prisma-web:rollback-before-fe551500502a`, imagem anterior0234fee91436; demais cinco contêineres/imagens/restarts iguais ao baseline, comparação automática PASS. HEAD imediato após recriação retornou404 transitório;22 verificações independentes confirmaram rotas/versão/SHA, sete assets atuais e sete anteriores, navegador anônimo protegido e ausência de exceção, sem rebuild. `production.json`, `public-smoke.json`, `containers-before.txt` e `containers-after.txt`.
+
+Fechamento de docs/evidência/contexto em commit posterior, sem alteração funcional nem novo build/deploy. CI de main e do fechamento conferidas no encerramento; status final informado no chat e disponível nos checks do commit. Resíduos antigos de manutenção Git de worktrees com permissão negada preservados; não impediram commit/FF e não foram limpos. Trabalho alheio/untracked do checkout canônico preservado.
+
+## Conclusão
+
+D/P e critérios locais/publicação PASS; nenhuma divergência material ou escopo adicional. Entrega nova e preservação comprovadas nos limites descritos. Jornada humana autenticada em produção NOT TESTED; smoke público e serviço sintético não a substituem. Fechamento exige CI final e sincronização Git/VPS sem reconstruir runtime.
 
 ---
 

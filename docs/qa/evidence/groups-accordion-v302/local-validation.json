@@ -1,0 +1,33 @@
+{
+  "baseline": "43e70d360980e446dca577bcbbd20aa6602b54ff",
+  "source": "fe551500502ab478e7c439594488a4e935cbfdd4",
+  "browser": {
+    "checks": 164,
+    "newChecks": 50,
+    "regressionChecks": 114,
+    "viewports": [
+      1448,
+      1024,
+      390,
+      320
+    ],
+    "profiles": [
+      "super_admin",
+      "owner",
+      "recruiter",
+      "member"
+    ]
+  },
+  "targetedNodeTooling": 23,
+  "checks": {
+    "typecheck:web": "PASS",
+    "build:web": "PASS",
+    "build": "PASS",
+    "lint": "PASS",
+    "check:foundation": "PASS",
+    "generate:prisma-context": "PASS",
+    "check:prisma-context": "PASS",
+    "git diff --check": "PASS"
+  },
+  "limits": "Local deterministic service; no authenticated human production journey; no database/Edge changes. Dispatcher is routing aid; generic pnpm test replaced locally by 23 relevant tests, full CI remains mandatory."
+}

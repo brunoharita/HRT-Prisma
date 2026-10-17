@@ -1,0 +1,21 @@
+{
+  "runtimeSha": "fe551500502ab478e7c439594488a4e935cbfdd4",
+  "version": "3.0.2",
+  "branchCI": {
+    "id": 39040834004,
+    "status": "SUCCESS"
+  },
+  "selectiveDeployment": "prisma-web only",
+  "otherContainersImagesRestarts": "UNCHANGED",
+  "webContainer": "f2dd1e335e18",
+  "webImage": "sha256:b55f976a66d6d52d35f6be111a29d5330990a1ea02c01dabfedffc7bbef31114",
+  "rollback": "prisma-web:rollback-before-fe551500502a",
+  "rollbackImage": "sha256:0234fee91436f2f3ac8a7a9fb96c0e355d7bf37ad37a9e8a5e5aa7cce1518523",
+  "publicSmokeChecks": 22,
+  "deploymentNote": "First immediate HEAD returned transient404 after container recreation; independent routes/assets/browser/SHA checks passed without rebuilding.",
+  "limits": "No production data mutations, no real account, no authenticated human production journey; local deterministic browser covers the new page.",
+  "mainCI": {
+    "id": 39040955946,
+    "status": "SUCCESS"
+  }
+}
