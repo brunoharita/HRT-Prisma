@@ -1,0 +1,53 @@
+{
+  "checks": [
+    {
+      "name": "previous tab asset preserved /assets/index-KxIjr8vd.js",
+      "pass": true
+    },
+    {
+      "name": "previous tab asset preserved /assets/rolldown-runtime-C0FnF6B9.js",
+      "pass": true
+    },
+    {
+      "name": "previous tab asset preserved /assets/antd-vendor-CjXMNByx.js",
+      "pass": true
+    },
+    {
+      "name": "previous tab asset preserved /assets/supabase-vendor-DoXvCMLf.js",
+      "pass": true
+    },
+    {
+      "name": "previous tab asset preserved /assets/react-vendor-BdxMnOeJ.js",
+      "pass": true
+    },
+    {
+      "name": "previous tab asset preserved /assets/antd-vendor-B5BXDqMa.css",
+      "pass": true
+    },
+    {
+      "name": "previous tab asset preserved /assets/index-Cj1OG7py.css",
+      "pass": true
+    },
+    {
+      "name": "platform-users rejects anonymous invocation",
+      "pass": true
+    },
+    {
+      "name": "knowledge-agent rejects anonymous invocation",
+      "pass": true
+    },
+    {
+      "name": "anonymous protected route redirects to login",
+      "pass": true
+    },
+    {
+      "name": "new administration not exposed anonymously",
+      "pass": true
+    },
+    {
+      "name": "no browser runtime exception",
+      "pass": true
+    }
+  ],
+  "limits": "Fresh anonymous browser; does not prove real authenticated human journey"
+}

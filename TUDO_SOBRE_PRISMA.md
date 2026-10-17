@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 512
-source_manifest_sha256: 1429961d4db70d7b7c172c853f8f5da49a38104d355b41900943dcadb7f51d2c
+source_manifest_sha256: 6f9c110acaa54851ade11dc19a8b5e4a8e22b1877be26c5b31486c16c6b6ffaf
 -->
 
 # Tudo sobre o Prisma
@@ -2643,15 +2643,18 @@ pnpm run check:prisma-context
 prisma_context_id: current-state
 owner: engineering-operations
 
-## V3M0 — administração multiempresa2.9.0 em validação local
-
-Bruno17/10/2026 definiu Super Admin global, Owner do grupo, Recruiter administrador somente das empresas vinculadas no mesmo grupo e Usuário comum na empresa padrão sem seletor; autorizou implementar e delegou parâmetros restantes. Reuso funcional Horus Accounts/Empresas, mantendo organization_id e Tokens por empresa. Admin legado converge para Recruiter sem apagar histórico; grupo/empresa em preparação/ativa/inativa, principal, Owner único ativo/pendente, vínculos locais, planos/capacidade privada e auditoria transacional. Essential/Plus1, Professional até5, Enterprise capacidade explícita; preço de assinatura e segmentação futura ainda indefinidos, sem cobrança/IA automática. Capacidade inicial preserva empresas existentes e não comprova contratação. Acordo/execução V3M0 versão1.0.0, ADR-085 e owner docs/product/multiempresa.md. tenant-authorization2.0.0, organization-administration1.0.0 e platform-user-management2.0.0; rollout só mediante AoT docs/qa/aot-v3m0-multiempresa.md.
 status: current
-version: 2.81.0
-last_verified: 2026-10-16
+version: 2.82.0
+last_verified: 2026-10-17
 ---
 
 # Estado atual do Prisma
+
+## V3M0 — administração multiempresa 2.9.0 publicada
+
+Entrega autorizada por Bruno em 17/10/2026 e publicada no runtime `e969c6011be85c371d5758eec33cfe6497c2443b`. Super Admin global, Owner do grupo, Recruiter administrador somente das empresas vinculadas no mesmo grupo e Usuário comum na empresa padrão sem seletor. Reuso funcional Horus Accounts/Empresas, mantendo organization_id e Tokens por empresa. Admin atual converge para Recruiter com auditoria; dois vínculos Super legados permanecem sem nova autoridade. Grupo/empresa em preparação/ativa/inativa, principal, Owner único ativo/pendente, vínculos locais e auditoria transacional. Essential/Plus:1; Professional:até5; Enterprise:capacidade explícita. Parâmetros delegados/provisórios, preços e segmentação futura indefinidos, sem cobrança automática; capacidade inicial preserva as duas empresas existentes e não comprova contratação.
+
+Migration local20261017040000/ledger remoto20261017045918; platform-users v6 e knowledge-agent v23, JWT mantido e fontes conferidas. Guards das nove funções SQL preservam corpos anteriores exceto proteção de autoridade e mantêm ACLs; replay/liquidação de reservas preservados. 103SQL locais,114browser,66Node,38tooling e3Deno PASS; CI branch39004488416/main39004590893 SUCCESS. Verificação SQL produtiva somente leitura dos quatro perfis, grants e contagens; quatro rotas e sete assets200, versão/SHA no bundle e12smokes públicos PASS. Sem QA remoto separado e sem jornada autenticada humana de produção; testes locais/sintéticos não a substituem. Rollback web e demais serviços preservados. Acordo/execução1.0.0, ADR-085, docs/product/multiempresa.md e AoT `docs/qa/aot-v3m0-multiempresa.md`; contratos tenant-authorization2.0.0, organization-administration1.0.0 e platform-user-management2.0.0.
 
 ## Decisões de Conhecimento —2.8.1
 
@@ -24889,7 +24892,7 @@ Acordo `docs/qa/agreement-v3m0-multiempresa.md`1.0.0 e execução correspondente
 | D-04 | Owner único ativo/pendente, designação explícita; principal/situação/revisão; Super preserva consulta global de inativos | SQL Owner duplicado/remoção/ativação inválida/versão/situação e visibilidade; browser metadados | PASS |
 | D-05 | Cadastro+membership+audit atômicos em RPC service-only; Edge verifica sessão e compensa somente Auth recém-criado se persistência falha; links locais preservam vínculos externos | SQL persistência/negativos/falha de auditoria e ausência de resíduos; Deno handler real com fetch sintético e sem rede | PASS |
 | D-06 | Default resolvido no servidor, comum sem seletor; guards de edição e contexto do shell preservados | SQL múltiplos vínculos/default/PII negada; browser quatro perfis, falha preserva edição, cancelamento e descarte explícito | PASS |
-| D-07 | Isolamento/RLS/grants/contrato/locks; documentação e CI/publicação por destinos | Provas locais PASS; publicação e sincronização abaixo | PARTIAL |
+| D-07 | Isolamento/RLS/grants/contrato/locks; documentação e CI/publicação por destinos | Provas locais, SQL produtivo somente leitura, CI e publicação abaixo | PASS |
 
 | Proibição | Evidência negativa | Estado local |
 | --- | --- | --- |
@@ -24921,7 +24924,13 @@ Primeira aplicação remota recusada por dois vínculos Super legados incompatí
 
 ## Publicação, rollback e sincronização
 
-Pendente. Somente migration nova, platform-users, knowledge-agent e web. Banco antes de consumidores; CI obrigatório. Preservar rollback da imagem web e versões anteriores Edge. Correção DB por migration forward, sem rebaixar usuários ou reescrever histórico automaticamente. Outros serviços VPS preservados por IDs/imagens/restarts observados. Conclusão geral PARTIAL enquanto esta seção não estiver comprovada.
+Publicado em 17/10/2026 no runtime e969c6011be85c371d5758eec33cfe6497c2443b, produto2.9.0. CI branch39004488416/main39004590893 SUCCESS, incluindo suíte geral, ledger e audit de dependências. Dispatcher derivou somente migration nova, platform-users, knowledge-agent e web; parser, gateway, synthesis e e-mail fora dos destinos. Integração FF feita no checkout canônico porque main já estava aberto nele; não se ignorou a proteção de worktrees.
+
+Migration local20261017040000/ledger remoto20261017045918 aplicada antes dos consumidores. platform-users v6 e knowledge-agent v23 ACTIVE/JWT=true; download das fontes coincide com o commit. Nove funções SQL mantêm corpos anteriores byte a byte após retirar somente o guard e mantêm ACL/security-definer/search_path. Confirmação remota:1grupo/2empresas/Professional limite2 provisório;3conversões Admin auditadas;2vínculos Super históricos preservados. SQL em transação read-only com SET ROLE authenticated e claims dos quatro perfis confirmou escopo administrativo, default comum, PII negada, grants privados e service-only. Não foram usados tokens de sessão de pessoas. Contagens de Pessoas12/Perfis18/vínculos9 e contas/lotes/quotes/reservas/movimentos/pedidos de Tokens2/2/27/5/9/0 inalteradas.
+
+Somente prisma-web foi recriado. SHA do bundle coincide, versão2.9.0 e sete assets200; rotas /,/sign-in,/organizations,/users200. Doze smokes públicos incluem sete assets da versão anterior, recusa anônima nas duas Edge e redirecionamento do navegador anônimo protegido para login sem exceção. O curl imediatamente após recriação recebeu404 transitório; as verificações independentes confirmaram recuperação, sem rebuild adicional. Parser/gateway/e-mail/synthesis/Traefik mantêm IDs/imagens/restarts0. Rollback prisma-web:rollback-before-e969c6011be8 aponta para a imagem anterior ed3738cb9fec. Edge anteriores5/22 preservadas como baseline; correção DB futura por migration forward, sem rebaixar usuários/restaurar dados automaticamente.
+
+Evidências em production.json, public-smoke.json e production-login.png. Fonte Git/VPS sincronizada com o fechamento documental posterior, sem novo build de runtime. Avisos de permissão do Git ao tentar manutenção de worktrees antigos são resíduos preexistentes, não foram removidos. Arquivos não rastreados do checkout canônico foram preservados. Conclusão funcional PASS nos critérios aprovados; jornada autenticada humana permanece NOT TESTED conforme limite já declarado.
 
 ---
 

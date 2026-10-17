@@ -1609,6 +1609,11 @@
       "name": "knowledge_global_decisions_v2",
       "localVersion": "20261016153000",
       "remoteVersion": "20261016152614"
+    },
+    {
+      "name": "multiempresa_v3",
+      "localVersion": "20261017040000",
+      "remoteVersion": "20261017045918"
     }
   ],
   "localOnly": [
@@ -1648,12 +1653,12 @@
     }
   ],
   "lastIncrementalVerification": {
-    "date": "2026-10-16",
-    "movement": "knowledge-decisions-v281",
+    "date": "2026-10-17",
+    "movement": "v3m0-multiempresa",
     "names": [
-      "knowledge_global_decisions_v2"
+      "multiempresa_v3"
     ],
-    "evidence": "docs/qa/evidence/knowledge-decisions-v281/database.json",
+    "evidence": "docs/qa/evidence/v3m0-multiempresa/production.json",
     "historicalSnapshotVerifiedAtUnchanged": true
   }
 }

@@ -1,0 +1,242 @@
+{
+  "release": "2.9.0",
+  "runtimeSha": "e969c6011be85c371d5758eec33cfe6497c2443b",
+  "verifiedAt": "2026-10-17 05:02:41 UTC",
+  "project": "ioldpnqqvobprjiontre",
+  "migration": {
+    "name": "multiempresa_v3",
+    "localVersion": "20261017040000",
+    "remoteVersion": "20261017045918",
+    "status": "APPLIED",
+    "firstAttempt": "Rolled back atomically due to pre-existing Super membership rows; no partial schema or ledger entry; fixed and tested before successful retry"
+  },
+  "ci": {
+    "branch": "https://github.com/brunoharita/HRT-Prisma/actions/runs/39004488416",
+    "main": "https://github.com/brunoharita/HRT-Prisma/actions/runs/39004590893",
+    "conclusion": "success"
+  },
+  "edge": [
+    {
+      "slug": "platform-users",
+      "version": 6,
+      "jwt": true,
+      "sourceMatches": true
+    },
+    {
+      "slug": "knowledge-agent",
+      "version": 23,
+      "jwt": true,
+      "sourceMatches": true
+    }
+  ],
+  "authorityFunctionPreservation": [
+    {
+      "function": "public.commit_matching_snapshot",
+      "guardPresent": true,
+      "bodyPreserved": true,
+      "aclPreserved": true
+    },
+    {
+      "function": "public.save_matching_trajectory_review",
+      "guardPresent": true,
+      "bodyPreserved": true,
+      "aclPreserved": true
+    },
+    {
+      "function": "public.complete_stable_matching_score",
+      "guardPresent": true,
+      "bodyPreserved": true,
+      "aclPreserved": true
+    },
+    {
+      "function": "public.claim_matching_legacy_review_refresh",
+      "guardPresent": true,
+      "bodyPreserved": true,
+      "aclPreserved": true
+    },
+    {
+      "function": "private.m83_sources",
+      "guardPresent": true,
+      "bodyPreserved": true,
+      "aclPreserved": true
+    },
+    {
+      "function": "private.authorize_position_follow_up",
+      "guardPresent": true,
+      "bodyPreserved": true,
+      "aclPreserved": true
+    },
+    {
+      "function": "public.load_matching_trajectory_review",
+      "guardPresent": true,
+      "bodyPreserved": true,
+      "aclPreserved": true
+    },
+    {
+      "function": "public.claim_stable_matching_score",
+      "guardPresent": true,
+      "bodyPreserved": true,
+      "aclPreserved": true
+    },
+    {
+      "function": "private.prisma_token_reserve",
+      "guardPresent": true,
+      "bodyPreserved": true,
+      "aclPreserved": true
+    }
+  ],
+  "sqlReadOnly": {
+    "fourActiveRoles": "PASS via transaction-local claims and SET ROLE authenticated",
+    "commonAdministrationDenied": true,
+    "commonDefaultConfirmed": true,
+    "commonPrivatePersonDataDenied": true,
+    "anonRpcDenied": true,
+    "clientPersistenceDenied": true,
+    "privateConfigurationDenied": true,
+    "limits": "Single live group; cross-group negatives proven with isolated local PG fixture; no human login session used"
+  },
+  "administrativeState": {
+    "groups": 1,
+    "companies": 2,
+    "provisionalPlan": "professional",
+    "companyLimit": 2,
+    "canonicalizedUsers": 3,
+    "preservedSuperLegacyMemberships": 2
+  },
+  "businessBefore": {
+    "people": 12,
+    "profiles": 18,
+    "memberships": 9,
+    "token_accounts": 2,
+    "token_lots": 2,
+    "token_quotes": 27,
+    "token_reservations": 5,
+    "token_movements": 9,
+    "token_orders": 0
+  },
+  "businessAfter": {
+    "people": 12,
+    "profiles": 18,
+    "memberships": 9,
+    "token_accounts": 2,
+    "token_lots": 2,
+    "token_quotes": 27,
+    "token_reservations": 5,
+    "token_movements": 9,
+    "token_orders": 0
+  },
+  "web": {
+    "routes": [
+      {
+        "route": "/",
+        "status": 200
+      },
+      {
+        "route": "/sign-in",
+        "status": 200
+      },
+      {
+        "route": "/organizations",
+        "status": 200
+      },
+      {
+        "route": "/users",
+        "status": 200
+      }
+    ],
+    "assets": [
+      {
+        "asset": "/assets/index-BmRTkk4q.js",
+        "status": 200,
+        "releasePresent": true,
+        "shaPresent": true
+      },
+      {
+        "asset": "/assets/rolldown-runtime-C0FnF6B9.js",
+        "status": 200,
+        "releasePresent": false,
+        "shaPresent": false
+      },
+      {
+        "asset": "/assets/antd-vendor-CjXMNByx.js",
+        "status": 200,
+        "releasePresent": false,
+        "shaPresent": false
+      },
+      {
+        "asset": "/assets/supabase-vendor-DoXvCMLf.js",
+        "status": 200,
+        "releasePresent": false,
+        "shaPresent": false
+      },
+      {
+        "asset": "/assets/react-vendor-BdxMnOeJ.js",
+        "status": 200,
+        "releasePresent": false,
+        "shaPresent": false
+      },
+      {
+        "asset": "/assets/antd-vendor-B5BXDqMa.css",
+        "status": 200,
+        "releasePresent": false,
+        "shaPresent": false
+      },
+      {
+        "asset": "/assets/index-BmxgsHSw.css",
+        "status": 200,
+        "releasePresent": false,
+        "shaPresent": false
+      }
+    ],
+    "publicSmoke": "public-smoke.json",
+    "runtimeContainer": "3c0352525926",
+    "image": "sha256:df551231090c819da8d6a3c1a06e4fb190640b6f2e093671977df7479ea7731d",
+    "restartCount": 0,
+    "rollbackTag": "prisma-web:rollback-before-e969c6011be8",
+    "rollbackImage": "sha256:ed3738cb9fecbc1f9011e02983683b1c4025155c6dddc612c626639533aac41a",
+    "initialImmediateHead": "404 transient, recovered independently; no repeated build"
+  },
+  "preservedServices": [
+    {
+      "name": "prisma-parser-ia",
+      "id": "e8bc778c8c00",
+      "containerAndImageUnchanged": true,
+      "restartCountBefore": 0,
+      "restartCountAfter": 0
+    },
+    {
+      "name": "prisma-paddle-gateway",
+      "id": "8fb76416f61c",
+      "containerAndImageUnchanged": true,
+      "restartCountBefore": 0,
+      "restartCountAfter": 0
+    },
+    {
+      "name": "hrt-mail-forwarder",
+      "id": "b257a83cbb37",
+      "containerAndImageUnchanged": true,
+      "restartCountBefore": 0,
+      "restartCountAfter": 0
+    },
+    {
+      "name": "prisma-profile-synthesis",
+      "id": "db6c5c0ef238",
+      "containerAndImageUnchanged": true,
+      "restartCountBefore": 0,
+      "restartCountAfter": 0
+    },
+    {
+      "name": "traefik-traefik-1",
+      "id": "5e25fdc6d2e6",
+      "containerAndImageUnchanged": true,
+      "restartCountBefore": 0,
+      "restartCountAfter": 0
+    }
+  ],
+  "limitations": [
+    "No separate remote QA environment",
+    "No authenticated real-person browser journey; SQL impersonation and synthetic browser are bounded evidence",
+    "No paid AI, test decisions, emails or profile publication",
+    "Final evidence/context commit changes source documentation without runtime rebuild"
+  ]
+}

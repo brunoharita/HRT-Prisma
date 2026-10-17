@@ -2,15 +2,18 @@
 prisma_context_id: current-state
 owner: engineering-operations
 
-## V3M0 — administração multiempresa2.9.0 em validação local
-
-Bruno17/10/2026 definiu Super Admin global, Owner do grupo, Recruiter administrador somente das empresas vinculadas no mesmo grupo e Usuário comum na empresa padrão sem seletor; autorizou implementar e delegou parâmetros restantes. Reuso funcional Horus Accounts/Empresas, mantendo organization_id e Tokens por empresa. Admin legado converge para Recruiter sem apagar histórico; grupo/empresa em preparação/ativa/inativa, principal, Owner único ativo/pendente, vínculos locais, planos/capacidade privada e auditoria transacional. Essential/Plus1, Professional até5, Enterprise capacidade explícita; preço de assinatura e segmentação futura ainda indefinidos, sem cobrança/IA automática. Capacidade inicial preserva empresas existentes e não comprova contratação. Acordo/execução V3M0 versão1.0.0, ADR-085 e owner docs/product/multiempresa.md. tenant-authorization2.0.0, organization-administration1.0.0 e platform-user-management2.0.0; rollout só mediante AoT docs/qa/aot-v3m0-multiempresa.md.
 status: current
-version: 2.81.0
-last_verified: 2026-10-16
+version: 2.82.0
+last_verified: 2026-10-17
 ---
 
 # Estado atual do Prisma
+
+## V3M0 — administração multiempresa 2.9.0 publicada
+
+Entrega autorizada por Bruno em 17/10/2026 e publicada no runtime `e969c6011be85c371d5758eec33cfe6497c2443b`. Super Admin global, Owner do grupo, Recruiter administrador somente das empresas vinculadas no mesmo grupo e Usuário comum na empresa padrão sem seletor. Reuso funcional Horus Accounts/Empresas, mantendo organization_id e Tokens por empresa. Admin atual converge para Recruiter com auditoria; dois vínculos Super legados permanecem sem nova autoridade. Grupo/empresa em preparação/ativa/inativa, principal, Owner único ativo/pendente, vínculos locais e auditoria transacional. Essential/Plus:1; Professional:até5; Enterprise:capacidade explícita. Parâmetros delegados/provisórios, preços e segmentação futura indefinidos, sem cobrança automática; capacidade inicial preserva as duas empresas existentes e não comprova contratação.
+
+Migration local20261017040000/ledger remoto20261017045918; platform-users v6 e knowledge-agent v23, JWT mantido e fontes conferidas. Guards das nove funções SQL preservam corpos anteriores exceto proteção de autoridade e mantêm ACLs; replay/liquidação de reservas preservados. 103SQL locais,114browser,66Node,38tooling e3Deno PASS; CI branch39004488416/main39004590893 SUCCESS. Verificação SQL produtiva somente leitura dos quatro perfis, grants e contagens; quatro rotas e sete assets200, versão/SHA no bundle e12smokes públicos PASS. Sem QA remoto separado e sem jornada autenticada humana de produção; testes locais/sintéticos não a substituem. Rollback web e demais serviços preservados. Acordo/execução1.0.0, ADR-085, docs/product/multiempresa.md e AoT `docs/qa/aot-v3m0-multiempresa.md`; contratos tenant-authorization2.0.0, organization-administration1.0.0 e platform-user-management2.0.0.
 
 ## Decisões de Conhecimento —2.8.1
 
