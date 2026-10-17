@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "checks": [
+    "limit preserved",
+    "explicit recovery action",
+    "no overflow320",
+    "no AI or intake",
+    "no runtime errors"
+  ],
+  "errors": []
+}

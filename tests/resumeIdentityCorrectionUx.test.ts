@@ -10,7 +10,7 @@ test("identity correction reuses server identification and replaces matches only
   assert.match(handler, /Promise<boolean>/);
   assert.match(handler, /if \(!hasMinimumResumeIdentity\(nextIdentity\)\).*return false;/);
   assert.match(handler, /await personIngestionService\.identifyResumeIntake\(activeMembership\.organizationId, intake\.intakeId, intake\.storagePath, nextIdentity\)/);
-  assert.match(handler, /setIdentity\(nextIdentity\); setIntake\(nextIntake\);\s+return true;/);
+  assert.match(handler, /setIdentity\(nextIdentity\); setIntake\(nextIntake\);\s+if\(processed\)onPrepared\?\.\(\{processed,identity:nextIdentity,intake:nextIntake\}\);\s+return true;/);
   assert.match(handler, /catch \(caught\).*return false;/);
   assert.doesNotMatch(handler, /resolveResumeIntake|create_new_person|publish/);
 });

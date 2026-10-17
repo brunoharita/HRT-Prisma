@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 534
-source_manifest_sha256: 03eb0d689bf493dd3af399118293c0831ce5dbe9cac4b594b0e7506d624fcdf5
+source_manifest_sha256: cf32d76b188e5f4839ebc357da7ed1f2db9d1bd0a49aa5fd2f6f253c6a5e6246
 -->
 
 # Tudo sobre o Prisma
@@ -25803,11 +25803,11 @@ Referência normativa: seis propostas HTML/capturas preservadas e hash em baseli
 
 49casos Node únicos PASS (44dirigidos +5do registro3.1.0;12novos utilitários incluídos). Tipos/build raiz e web PASS. Browser das seis superfícies:72checks no ciclo amplo e48na repetição afetada de Pessoas/Tokens+interações; critérios de direitos, fontes e lote continuam PASS. Preservação Pessoa180checks/15cenários e Tokens48checks PASS. Os relatórios de Pessoa consolidam a última prova de cada cenário/viewport; seletor de modal hidden, navegação AntD e montagem do transporte foram corrigidos no harness, sem remover proteção ou alterar produto por falha de fixture. A captura inicial de Tokens estava sem a folha CSS da página no harness; a dependência foi incluída e a imagem correspondente refeita.
 
-Lint do workspace encontrou whitespace em `output/pa-concurrency-baseline.sql`, arquivo não rastreado anterior e fora do escopo. Não foi alterado/apagado. Lint/contexto finais usam fotografia exata dos arquivos rastreados da entrega, evitando incorporar rascunhos ao Context Pack. PNPM recusou reinstalar a junction de dependências do snapshot; não foi forçado purge/CI. Os quatro scripts Node equivalentes foram executados diretamente: lint1897arquivos, foundation e geração/check do contexto PASS, sem alterar dependências. Snapshot final atualizado novamente quando as evidências foram consolidadas. Não foi autorizado nem executado validate integral local.
+Lint do workspace encontrou whitespace em `output/pa-concurrency-baseline.sql`, arquivo não rastreado anterior e fora do escopo. Não foi alterado/apagado. Lint/contexto finais usam fotografia exata dos arquivos rastreados da entrega, evitando incorporar rascunhos ao Context Pack. PNPM recusou reinstalar a junction de dependências do snapshot; não foi forçado purge/CI. Os quatro scripts Node equivalentes foram executados diretamente: lint1906arquivos, foundation e geração/check do contexto PASS, sem alterar dependências. Snapshot final atualizado novamente quando as evidências foram consolidadas. Não foi autorizado nem executado validate integral local.
 
 ## Git / QA / produção
 
-Pendente CI/publicação/smoke. Ambiente de QA é browser/transporte sintético local, sem backend QA separado. Produção continua3.0.7 até os gates. Não alegar jornada autenticada com pessoa real a partir desta evidência.
+CI inicial39075366926 reprovou três pontos antes da promoção: teste textual de identificação não previa a atualização da fila, inventário de loading não previa o wrapper e novo erro do lote precisava de ação explícita. Testes passaram a verificar a delegação real e a atualização somente após sucesso; aviso ganhou Conferir arquivos e serviço. Browser320 desse erro passou5checks, sem IA nem mutação. O scanner local também viu duas cópias não rastreadas de ProcessAssessmentPage; teste do snapshot exclui essas cópias sem removê-las. Segundo CI/publicação/smoke ainda pendentes. Ambiente de QA é browser/transporte sintético local, sem backend QA separado. Produção continua3.0.7 até os gates. Não alegar jornada autenticada com pessoa real a partir desta evidência.
 
 ## Desvios e conclusão
 

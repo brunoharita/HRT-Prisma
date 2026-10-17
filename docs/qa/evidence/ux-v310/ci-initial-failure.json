@@ -1,0 +1,20 @@
+{
+  "run": 39075366926,
+  "published": false,
+  "mainPromoted": false,
+  "failures": [
+    {
+      "test": "resumeIdentityCorrectionUx",
+      "correction": "Keep server success ordering and explicitly cover notifying the session queue."
+    },
+    {
+      "test": "loadingFeedbackCoverage",
+      "correction": "Verify actual feedback in both delegated batch and single-item components; wrapper owns no async operation."
+    },
+    {
+      "test": "actionableNotices",
+      "correction": "Add real recovery action to the new batch error; negative browser320 confirmed no side effects."
+    }
+  ],
+  "untrackedCopyInterference": "Local scanner additionally found prior ProcessAssessmentPage (1).tsx, excluded by exact tracked snapshot; no unrelated file edited."
+}

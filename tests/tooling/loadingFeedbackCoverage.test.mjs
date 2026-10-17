@@ -17,6 +17,14 @@ test("every page declares loading feedback; synchronous assisted description has
     assert.match(await readFile("web/src/pages/KnowledgePage.tsx","utf8"),/useLoadingFeedback\(/,"delegated page owns visible loading");
     audited.push(name);continue;
    }
+   if(name==="ResumeImportPage"){
+    assert.doesNotMatch(body,/\bawait\b|\.then\(/,"batch wrapper owns no independent operation");
+    assert.match(body,/return <ResumeImportBatchPage/);
+    assert.match(await readFile("web/src/pages/ResumeImportBatchPage.tsx","utf8"),/useLoadingFeedback\(/,"batch owns actual visible loading");
+    const single=tree.statements.find(s=>ts.isFunctionDeclaration(s)&&s.name?.text==="SingleResumeImportPage");
+    assert.match(single.body.getText(tree),/useLoadingFeedback\(/,"individual identity and review operations remain visible");
+    audited.push(name);continue;
+   }
    if(name==="AssessmentItemBankPage"){
     assert.doesNotMatch(body,/\bawait\b|\.then\(/,"scoped wrapper owns no independent operation");
     assert.match(body,/return <QuestionBankWorkspace key=\{activeMembership.organizationId\}/);
