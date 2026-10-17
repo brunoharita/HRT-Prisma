@@ -87,8 +87,20 @@ test('M5.7 recovers the same failed intake from original PDF and blocks mismatch
     };
     const invalidPages = pages.map(page => ({ ...page, text: page.text + '\n\0', layoutLines: [...page.layoutLines, { ...page.layoutLines[0], text: '\0', y: 0.9 }] }));
     globalThis.fetch = async (url, options) => { assert.equal(url, '/parser-ia-local/parse'); assert.equal(JSON.parse(options.body).sourceSha256, checksum);assert.match(JSON.parse(options.body).tokenQuoteId,/^[a-f0-9-]{36}$/); aiCalls++; return new Response(JSON.stringify({ pages: invalidPages, result, cached: true }), { status: 200 }); };
-    await getTokenQuote('org','parser_ia',1,true);
-    await service.resumeFailedAiIntake('org', 'person', 'doc');
+    await assert.rejects(service.resumeFailedAiIntake('org', 'person', 'doc'), /previsão de consumo/);
+    assert.equal(aiCalls, 0); assert.deepEqual(mutations, []);
+    const confirmed = await getTokenQuote('org','parser_ia',1,true);
+    for (const invalid of [{...confirmed, organizationId:'foreign'}, {...confirmed, functionName:'profile_synthesis'}, {...confirmed, quantity:2}, {...confirmed, expiresAt:'2000-01-01T00:00:00Z'}]) {
+      await assert.rejects(service.resumeFailedAiIntake('org','person','doc',invalid), /previsão de consumo/);
+    }
+    assert.equal(aiCalls, 0); assert.deepEqual(mutations, []);
+    // A different preview in the shared cache must not replace the one confirmed on screen.
+    const replacement = await getTokenQuote('org','parser_ia',1,true);
+    assert.notEqual(confirmed.id, replacement.id);
+    const fetchWithConfirmedQuote = globalThis.fetch;
+    globalThis.fetch = (url, options) => { assert.equal(JSON.parse(options.body).tokenQuoteId, confirmed.id); return fetchWithConfirmedQuote(url, options); };
+    await service.resumeFailedAiIntake('org', 'person', 'doc', confirmed);
+    globalThis.fetch = fetchWithConfirmedQuote;
     assert.deepEqual(mutations, ['persist_person_extraction', 'complete_resume_intake']);
     assert.equal(aiCalls, 1);
     persistFailure = true;await getTokenQuote('org','parser_ia',1,true);

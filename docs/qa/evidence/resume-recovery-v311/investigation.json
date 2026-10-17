@@ -1,0 +1,21 @@
+{
+  "environment": "production, confirmed Prisma project ioldpnqqvobprjiontre",
+  "access": "read-only, minimized metadata; no PDF downloaded or AI invoked",
+  "original": {
+    "createdAt": "2026-09-12T23:59:45.468645+00:00",
+    "status": "failed",
+    "reviewState": "not_ready",
+    "attemptNumber": 1,
+    "attemptState": "failed_structuring",
+    "failureCode": "resume_intake_processing_failed",
+    "structuringVersion": "not_completed",
+    "diagnostic": "Generic validation/state message only; no precise rejected field or raw database error retained.",
+    "originalObjectExists": true
+  },
+  "laterDocument": {"samePerson": true, "sameOrganization": true, "samePdfChecksum": true, "status": "approved", "reviewState": "approved"},
+  "documentBaselineHash": "5c5f70959584ae9f3e543f252cda4b68",
+  "historicalEvidence": "docs/qa/aot-m57-parser-ia.md: list evidence paths and LinkedIn URL contract normalization; authenticated persistence/review and subsequent human approval were documented.",
+  "currentCode": "parserIa.test.ts covers canonical list roots and LinkedIn HTTPS/Unicode normalization; importEvidencePersistence.test.ts and parserIaRecovery.test.mjs exercise current persistence contract and sanitized diagnostic.",
+  "conclusion": "This is an old failed attempt, preserved independently from a later approved document of the same PDF. Historic list-path and LinkedIn incompatibilities are corrected in current code. The precise cause of this individual original attempt cannot be reconstructed from its generic record. The current retry blocker is independently proven: missing quote loading/refresh in DocumentDetailPage.",
+  "limitation": "No new production retry, publication or paid AI; local synthetic evidence does not claim successful real-person recovery."
+}

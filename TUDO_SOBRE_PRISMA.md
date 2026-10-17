@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 534
-source_manifest_sha256: 954a998d2ecf13a20a65ecd1467fd9fc03b5080f5f00137a4d464c11900e852e
+documentation_source_count: 537
+source_manifest_sha256: 9fec14c6a44dfd3c7234fa2a231d5baaba7017821e69862d6714ae00306a9fc3
 -->
 
 # Tudo sobre o Prisma
@@ -2644,11 +2644,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.90.0
+version: 2.91.0
 last_verified: 2026-10-17
 ---
 
 # Estado atual do Prisma
+
+## Retomada de importação —3.1.1 em validação
+
+A tela de documento mostra custo/saldo e atualização da previsão antes da retomada com IA. Os dois botões aguardam previsão vigente e saldo suficiente; confirmação vincula a versão exibida, revalida no clique e bloqueia duplicidade. Falha permite atualizar e retomar conscientemente. Pipeline privado e publicação humana preservados. Investigação somente leitura confirmou tentativa histórica12/09 com diagnóstico genérico e documento posterior do mesmo PDF aprovado; correções antigas de listas/LinkedIn estão no código, sem evidência para atribuir a causa específica daquela tentativa. Nenhuma escrita de dados reais ou IA paga. Acordo/execução/AoT resume-recovery-v3111.0.0;51testes Node e55checks browser dirigidos PASS, publicação pendente.
 
 ## Evolução de UX —3.1.0 publicada
 
@@ -4545,6 +4549,13 @@ Proteção contra cliente desatualizado (2026-09-17): a migration `2026091715450
 Prova autenticada concluída na etapa de importação até revisão: seleção do PDF, interpretação com cache local, identificação pelo cadastro existente expressamente autorizado, persistência e abertura da revisão. Supabase confirmou quatro páginas, 4.710 caracteres, nove experiências, duas formações, três competências e 115 descritores de evidência; contratos de resumo e formação válidos. A revisão continuou acessível após recarregar. Comparação sinalizou confirmação humana da situação acadêmica ausente; não houve publicação ou confirmação automática. Ledger privado inalterado, sem nova chamada OpenAI nesta prova.
 
 Aceite local confirmado pelo PO após a publicação do Perfil. Consulta ao Supabase verificou documento/revisão approved e um Perfil publicado a partir da fonte validada. Modelo, prompt, contrato, orçamento e política de acesso permanecem iguais; nenhuma migração necessária. O histórico de pendências acima distingue os testes anteriores da aceitação final.
+
+
+## Retomada por documento — 3.1.1
+
+A página de documento consulta a previsão de Tokens ao oferecer Retomar importação com IA. Custo e saldo ficam em Próximos passos, com Atualizar consumo. Os dois botões de retomada aguardam consulta válida/saldo, reagem à expiração e compartilham lock imediato. A previsão exibida é passada explicitamente ao serviço e ao Parser; chamadores anteriores mantêm a assinatura opcional e o fluxo existente. Confirmar revalida o contexto, e toda tentativa concluída renova a consulta. Consultar consumo não inicia IA ou publicação. Regras do backend, documento/intake/Pessoa/tenant/SHA, evidências e revisão humana permanecem iguais.
+
+Investigação da tentativa original12/09/2026: registro antigo guarda somente falha genérica, fonte original existe e documento posterior aprovado possui o mesmo checksum. As correções históricas de caminhos de listas e URL LinkedIn estão presentes e cobertas por regressão; não há diagnóstico detalhado para afirmar qual rejeição ocorreu naquela tentativa individual. Nenhum documento/Perfil real foi reprocessado ou alterado para o teste. Evidências e limites em `docs/qa/aot-resume-recovery-v311.md`.
 
 ---
 
@@ -17982,6 +17993,49 @@ Não há pendência de produto conhecida para a topologia e fluxo acima. As cond
 
 ---
 
+## Source: `docs/qa/agreement-resume-recovery-v311.md`
+
+# Acordo — retomada de importação 3.1.1
+
+Versão 1.0.0, agreed, 17/10/2026. Autoridade: Bruno autorizou corrigir a retomada, investigar a falha original, validar, integrar em main e publicar nova versão. Registra a decisão aprovada, sem nova escolha material pendente.
+
+## DEVE / aceite
+
+- D-01: a página do documento consulta e mostra o consumo de Tokens antes da retomada com IA, com atualização acessível. CA-01: navegador com consulta inicial, atualização e falha recuperável.
+- D-02: retomada usa a previsão exibida e válida para empresa/função/quantidade; carregamento, expiração, erro e saldo insuficiente impedem chamada IA; clique duplicado não inicia duas operações. CA-02: testes negativos e navegador, recuperação após falha/expiração.
+- D-03: recuperar o mesmo PDF/intake/documento preservando SHA, tenant, Pessoa, evidências, histórico e publicação humana. CA-03: regressão do serviço real com dependências sintéticas, sem LLM/banco produtivo.
+- D-04: investigar a falha original por leitura mínima e registrar causa comprovada e limites. CA-04: registro sanitizado da tentativa original e comparação com histórico/código vigente; não inventar diagnóstico ausente.
+- D-05: publicar 3.1.1 e sincronizar main/GitHub/VPS com CI, smoke e rollback. CA-05: recibos, versão/SHA/assets e serviços preservados.
+
+## PROIBIDO
+
+- P-01: suprimir a previsão ou cobrança, ampliar autoridade ou ignorar divergência da fonte.
+- P-02: publicar Perfil automaticamente, apagar histórico, reprocessar o documento real como teste ou expor conteúdo pessoal/segredos em evidências.
+
+## FORA DE ESCOPO
+
+- F-01: regras comerciais, modelo/prompt IA, nova importação histórica, alteração de schema/RLS/Auth e redesign das demais telas.
+
+## AUTONOMIA
+
+- A-01: reaproveitar hook de previsão vigente, controles Ant Design/tokens Prisma, testes sintéticos e patch 3.1.1; preservar composição da tela. Screenshot é evidência do defeito, não nova proposta de arquitetura visual.
+
+## Mapa de impacto e preservação inicial
+
+Baseline: main/local/origin 42dd34ce110c7529e2b1cc668c5912080b9c8daa; runtime 3.1.0/61f91bd. Tracked limpo; rascunhos não rastreados preservados. Classe C, regressões D na fronteira de persistência privada reutilizada.
+
+| Capacidade | Relação | Baseline / regressão mínima |
+| --- | --- | --- |
+| Retomada na página de documento | direct | Falha por quote ausente; navegador desktop/mobile, erros, expiração, saldo, duplo clique |
+| Cliente Parser IA / serviço intake | direct | Previsão e SHA obrigatórios; teste real com transporte/Storage simulados, mesmo intake, persistência e negativos |
+| Tokens e importação comum | plausible_indirect | Assinatura opcional preserva chamadas existentes; testes de quotes e Parser existente |
+| Perfil vigente / tenant / publicação humana | critical_transversal | Documento v2 aprovado separado de v1 falho; negativos de tenant/fonte e nenhuma escrita real na investigação |
+| Matching, Auth, planos, Knowledge | no_impact_identified | Sem mudança de contrato, writer ou cálculo; revisão do diff e release seletivo |
+
+Fechamento: D/P comprovados, checks proporcionais, contexto/documentação, CI, publicação web seletiva e sincronização. Suíte integral não é necessária; dispatcher roteia testes dirigidos para esta fronteira.
+
+---
+
 ## Source: `docs/qa/agreement-review-format-preflight.md`
 
 # Validação antecipada de formatos na revisão
@@ -24811,6 +24865,51 @@ Implementação local e provas concluídas. O fechamento externo publica o mesmo
 
 ---
 
+## Source: `docs/qa/aot-resume-recovery-v311.md`
+
+# AoT — retomada de importação 3.1.1
+
+Contrato: `agreement-resume-recovery-v311.md` 1.0.0; execução `execution-resume-recovery-v311.md` 1.0.0. Baseline 42dd34c/main, runtime3.1.0/61f91bd.
+
+## Matriz de acordos
+
+| ID | Implementação / evidência | Status |
+| --- | --- | --- |
+| D-01 | ResumeImportConsumption consulta a previsão real pelo hook existente; mostra custo/saldo e atualização. Browser55 checks em1448/390/320. | PASS |
+| D-02 | Ambos botões bloqueados sem previsão vigente/saldo; confirm() revalida no clique e passa a versão exibida até tokenQuoteId. Lock imediato contra duplicidade, refresh após tentativa. Browser e teste real Parser/quotes com negativos. | PASS |
+| D-03 | Guardas de tenant/Pessoa/intake/caminho/SHA e persistExtraction/complete existentes preservadas. Teste real com PDF/transporte sintéticos e validação de rascunho/evidências. | PASS |
+| D-04 | investigation.json: tentativa histórica12/09, diagnóstico genérico, mesmo PDF em documento posterior aprovado. Histórico e código atual confirmam correções anteriores de listas/LinkedIn, sem atribuir causa exata ausente. | PASS |
+| D-05 | Checks finais, CI, publicação e sincronização em andamento. | NOT TESTED |
+
+## Proibições
+
+| ID | Prova | Status |
+| --- | --- | --- |
+| P-01 | Sem alteração de cobrança, grants/RLS ou backend; negativos de quote/fonte/versão e falhas de persistência. | PASS |
+| P-02 | Nenhuma mutação produtiva, dados reais ou segredos em fixtures/evidências; teste local persiste/conclui sem publicar. | PASS |
+
+## Mapa de impacto e preservação final
+
+Mapa inicial integral no acordo. Sem novas dependências. Retomada de documento direct; Parser cliente/intake direct; quote/importação comum plausible_indirect; tenant/Perfil/publicação humana critical_transversal; matching/Auth/planos/Knowledge no_impact_identified por ausência de writer/contrato/cálculo compartilhado modificado.
+
+Novidade: previsão exibida, validade/saldo, atualização e operação vinculada à versão confirmada. Preservação: fonte/escopo, contrato/evidências e erros sanitizados. Assinatura opcional mantém os chamadores antigos, cobertos no teste de retomada legado. Fonte/stored PDF e documento aprovado conferidos por leitura; hash final a conferir.
+
+Validação mínima:51 testes Node dirigidos Parser/evidências/erros/transporte/quotes;55 checks browser1448/390/320, tipos/build web, contexto, diff e CI. Nenhum teste integral local ou escrita real de Pessoa necessária. Não existe QA remoto separado usado neste movimento; fronteiras verificadas com mocks locais e dados sintéticos, sem consumo de IA real.
+
+## Fidelidade visual
+
+Screenshot do relato é evidência de defeito. Composição cabeçalho, situação/próximos passos e histórico preservada; previsão/atualização adicionadas em Próximos passos. Capturas `browser/ready-1448.png`, `ready-390.png`, `ready-320.png`; celular sem overflow. Não há mockup normativo novo.
+
+## Fora de escopo e desvios
+
+F-01 preservado: sem mudança de schema/RLS/Auth/modelo/prompt/regra comercial. Nenhum desvio do acordo. A falha antiga não guarda causa específica; limite do diagnóstico explícito, não marcado como corrigido por este movimento.
+
+## Validação final / Git / produção
+
+Em andamento. Não declarar publicação concluída antes dos recibos e smoke.
+
+---
+
 ## Source: `docs/qa/aot-resume-two-digit-years.md`
 
 # AoT — anos de dois ou quatro dígitos
@@ -30071,6 +30170,18 @@ Contrato: `docs/qa/agreement-release-efficiency.md` 1.0.0.
 ## Limite operacional do Supabase
 
 O conector confirmou um único projeto remoto de produção. A auditoria encontrou aliases de timestamp, migrations remotas desdobradas, arquivos locais sem registro e fingerprints divergentes. Esta execução não usa `migration repair`, não reaplica SQL e não altera `supabase_migrations.schema_migrations`. Migrations futuras são publicadas individualmente pelo mecanismo autorizado e verificadas antes de atualizar o mapa.
+
+---
+
+## Source: `docs/qa/execution-resume-recovery-v311.md`
+
+# Execução — retomada 3.1.1
+
+Contrato integral congelado: `docs/qa/agreement-resume-recovery-v311.md` versão 1.0.0. Implementar todos D-01 a D-05, preservar P-01/P-02 e F-01, exercer somente A-01. Sem Q material pendente.
+
+Reusar useTokenQuote; mostrar previsão e atualização junto à recuperação do documento. Vincular a previsão exibida à chamada, validar novamente no clique e impedir duplicidade. Expiração deve aparecer sem exigir recarga. Após tentativa, atualizar consumo para permitir nova tentativa consciente. Persistência/checagem de fonte existentes permanecem autoritativas.
+
+Investigar somente metadados necessários no projeto confirmado ioldpnqqvobprjiontre; confrontar histórico, sem currículo em logs. Manter diagnóstico incerto explícito. Regressão dirigida de Parser/quotes/persistência, navegador com backend sintético, tipos/build/contexto, diff/CI, publicação seletiva com SHA explícito e rollback. Registrar AoT separando novidade, preservação, prova local e produção.
 
 ---
 

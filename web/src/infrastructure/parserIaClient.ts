@@ -1,4 +1,5 @@
 import type { ProcessedDocumentInput } from "../domain/personIngestion";
+import type { TokenQuote } from "../domain/prismaTokens";
 import {takeTokenQuote} from "./supabase/prismaTokensService";
 import { PARSER_IA_VERSION, preparedParserIa, structureParserIa } from "../domain/parserIa";
 import { supabase } from "./supabase/client";
@@ -74,14 +75,14 @@ export function parserIaErrorMessage(code?: string): string {
     : "Não foi possível concluir a interpretação por IA. Nenhum campo foi preenchido por essa tentativa. Tente novamente.";
 }
 
-export async function prepareParserIa(input: ProcessedDocumentInput, organizationId: string): Promise<ProcessedDocumentInput> {
+export async function prepareParserIa(input: ProcessedDocumentInput, organizationId: string, confirmedQuote?: TokenQuote): Promise<ProcessedDocumentInput> {
   if (!parserIaEnabled()) return input;
   const controller = new AbortController();
   const timer = window.setTimeout(() => controller.abort(), 135000);
   try {
     const mode = parserIaMode();
     if (mode === "disabled") return input;
-    const quote = await takeTokenQuote(organizationId,"parser_ia",1).catch(()=>{throw Error("PARSER_USER_ERROR:Atualize a previsão de consumo antes de iniciar a IA.");});
+    const quote = await takeTokenQuote(organizationId,"parser_ia",1,confirmedQuote).catch(()=>{throw Error("PARSER_USER_ERROR:Atualize a previsão de consumo antes de iniciar a IA.");});
     const bytes = new Uint8Array(await input.file.arrayBuffer());
     let binary = "";
     for (let offset = 0; offset < bytes.length; offset += 8192) binary += String.fromCharCode(...bytes.subarray(offset, offset + 8192));

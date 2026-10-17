@@ -1,0 +1,19 @@
+{
+  "baseline": "42dd34ce110c7529e2b1cc668c5912080b9c8daa",
+  "targetVersion": "3.1.1",
+  "rootBuild": "PASS",
+  "webTypecheck": "PASS",
+  "webBuild": "PASS",
+  "lint": "PASS (1922 tracked-snapshot files)",
+  "context": "PASS (5 canonical sources, 2 generated artifacts)",
+  "nodeCases": 51,
+  "nodeCommand": "node --test dist/tests/parserIa.test.js dist/tests/importEvidencePersistence.test.js dist/tests/reviewOperationErrors.test.js tests/tooling/parserIaRecovery.test.mjs tests/tooling/parserIaHosted.test.mjs tests/tooling/prismaTokensService.test.mjs",
+  "browserChecks": 55,
+  "browserViewports": [
+    1448,
+    390,
+    320
+  ],
+  "fullLocalSuite": "NOT RUN; targeted affected regression sufficient",
+  "limitations": "Synthetic dependencies; no real user, database mutation or paid AI."
+}

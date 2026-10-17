@@ -1,0 +1,10 @@
+import { createRoot } from "react-dom/client";
+import { ConfigProvider } from "antd";
+import ptBR from "antd/locale/pt_BR";
+import { DocumentDetailPage } from "../../../web/src/pages/DocumentDetailPage";
+import { prismaTheme } from "../../../web/src/ui/theme";
+import "./fixture";
+import "antd/dist/reset.css";
+import "../../../web/src/styles.css";
+import "../../../web/src/ui/foundation.css";
+createRoot(document.getElementById("app")!).render(<ConfigProvider locale={ptBR} theme={prismaTheme}><main style={{padding:16}}><DocumentDetailPage activeMembership={{organizationId:"org-fixture",organizationName:"Empresa sintética",role:"recruiter"}} personId="person-fixture" documentId="document-fixture" onNavigate={()=>{}}/></main></ConfigProvider>);

@@ -1,0 +1,225 @@
+{
+  "checks": [
+    {
+      "name": "1448: both actions wait for preview",
+      "pass": true
+    },
+    {
+      "name": "1448: preview is visible before action",
+      "pass": true
+    },
+    {
+      "name": "1448: no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "1448: refresh does not start or persist",
+      "pass": true
+    },
+    {
+      "name": "1448: duplicate clicks share one recovery",
+      "pass": true
+    },
+    {
+      "name": "1448: same intake completes without publication",
+      "pass": true
+    },
+    {
+      "name": "1448: expiry disables both without reload",
+      "pass": true
+    },
+    {
+      "name": "1448: expired quote recovers on refresh",
+      "pass": true
+    },
+    {
+      "name": "1448: insufficient blocks both actions",
+      "pass": true
+    },
+    {
+      "name": "1448: insufficient never calls AI",
+      "pass": true
+    },
+    {
+      "name": "1448: insufficient recovers without reloading page",
+      "pass": true
+    },
+    {
+      "name": "1448: error blocks both actions",
+      "pass": true
+    },
+    {
+      "name": "1448: error never calls AI",
+      "pass": true
+    },
+    {
+      "name": "1448: error recovers without reloading page",
+      "pass": true
+    },
+    {
+      "name": "1448: failed retry refreshes consumption without persisting",
+      "pass": true
+    },
+    {
+      "name": "1448: new deliberate retry is possible",
+      "pass": true
+    },
+    {
+      "name": "1448: approved has no recovery or quote",
+      "pass": true
+    },
+    {
+      "name": "1448: contract has no recovery or quote",
+      "pass": true
+    },
+    {
+      "name": "390: both actions wait for preview",
+      "pass": true
+    },
+    {
+      "name": "390: preview is visible before action",
+      "pass": true
+    },
+    {
+      "name": "390: no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "390: refresh does not start or persist",
+      "pass": true
+    },
+    {
+      "name": "390: duplicate clicks share one recovery",
+      "pass": true
+    },
+    {
+      "name": "390: same intake completes without publication",
+      "pass": true
+    },
+    {
+      "name": "390: expiry disables both without reload",
+      "pass": true
+    },
+    {
+      "name": "390: expired quote recovers on refresh",
+      "pass": true
+    },
+    {
+      "name": "390: insufficient blocks both actions",
+      "pass": true
+    },
+    {
+      "name": "390: insufficient never calls AI",
+      "pass": true
+    },
+    {
+      "name": "390: insufficient recovers without reloading page",
+      "pass": true
+    },
+    {
+      "name": "390: error blocks both actions",
+      "pass": true
+    },
+    {
+      "name": "390: error never calls AI",
+      "pass": true
+    },
+    {
+      "name": "390: error recovers without reloading page",
+      "pass": true
+    },
+    {
+      "name": "390: failed retry refreshes consumption without persisting",
+      "pass": true
+    },
+    {
+      "name": "390: new deliberate retry is possible",
+      "pass": true
+    },
+    {
+      "name": "390: approved has no recovery or quote",
+      "pass": true
+    },
+    {
+      "name": "390: contract has no recovery or quote",
+      "pass": true
+    },
+    {
+      "name": "320: both actions wait for preview",
+      "pass": true
+    },
+    {
+      "name": "320: preview is visible before action",
+      "pass": true
+    },
+    {
+      "name": "320: no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "320: refresh does not start or persist",
+      "pass": true
+    },
+    {
+      "name": "320: duplicate clicks share one recovery",
+      "pass": true
+    },
+    {
+      "name": "320: same intake completes without publication",
+      "pass": true
+    },
+    {
+      "name": "320: expiry disables both without reload",
+      "pass": true
+    },
+    {
+      "name": "320: expired quote recovers on refresh",
+      "pass": true
+    },
+    {
+      "name": "320: insufficient blocks both actions",
+      "pass": true
+    },
+    {
+      "name": "320: insufficient never calls AI",
+      "pass": true
+    },
+    {
+      "name": "320: insufficient recovers without reloading page",
+      "pass": true
+    },
+    {
+      "name": "320: error blocks both actions",
+      "pass": true
+    },
+    {
+      "name": "320: error never calls AI",
+      "pass": true
+    },
+    {
+      "name": "320: error recovers without reloading page",
+      "pass": true
+    },
+    {
+      "name": "320: failed retry refreshes consumption without persisting",
+      "pass": true
+    },
+    {
+      "name": "320: new deliberate retry is possible",
+      "pass": true
+    },
+    {
+      "name": "320: approved has no recovery or quote",
+      "pass": true
+    },
+    {
+      "name": "320: contract has no recovery or quote",
+      "pass": true
+    },
+    {
+      "name": "no browser runtime errors",
+      "pass": true
+    }
+  ],
+  "errors": []
+}

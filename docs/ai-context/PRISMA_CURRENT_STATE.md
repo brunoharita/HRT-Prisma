@@ -3,11 +3,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.90.0
+version: 2.91.0
 last_verified: 2026-10-17
 ---
 
 # Estado atual do Prisma
+
+## Retomada de importação —3.1.1 em validação
+
+A tela de documento mostra custo/saldo e atualização da previsão antes da retomada com IA. Os dois botões aguardam previsão vigente e saldo suficiente; confirmação vincula a versão exibida, revalida no clique e bloqueia duplicidade. Falha permite atualizar e retomar conscientemente. Pipeline privado e publicação humana preservados. Investigação somente leitura confirmou tentativa histórica12/09 com diagnóstico genérico e documento posterior do mesmo PDF aprovado; correções antigas de listas/LinkedIn estão no código, sem evidência para atribuir a causa específica daquela tentativa. Nenhuma escrita de dados reais ou IA paga. Acordo/execução/AoT resume-recovery-v3111.0.0;51testes Node e55checks browser dirigidos PASS, publicação pendente.
 
 ## Evolução de UX —3.1.0 publicada
 

@@ -1,4 +1,5 @@
 import { loadPersonCandidacies } from "./personRelationshipService";
+import type { TokenQuote } from "../../domain/prismaTokens";
 import { directorySearch } from "../../domain/peopleDirectory";
 import type { Json } from "./database.types";
 import { supabase } from "./client";
@@ -500,7 +501,7 @@ export const personIngestionService = {
     );
   },
 
-  async resumeFailedAiIntake(organizationId: string, personId: string, documentId: string): Promise<void> {
+  async resumeFailedAiIntake(organizationId: string, personId: string, documentId: string, confirmedQuote?: TokenQuote): Promise<void> {
     if (!parserIaEnabled()) throw new Error("Ative a importação local com IA para retomar este documento.");
     const { data: document, error: documentError } = await supabase.from("documents")
       .select("id, document_version, storage_path, filename, checksum_sha256, review_state, status, extraction_version")
@@ -520,7 +521,7 @@ export const personIngestionService = {
       nativeOnlyForParserIa: true,
     });
     if (native.sha256 !== document.checksum_sha256) throw new Error("O PDF recuperado não corresponde ao arquivo original. A retomada foi interrompida.");
-    const input = await prepareParserIa(native, organizationId);
+    const input = await prepareParserIa(native, organizationId, confirmedQuote);
     await processResolvedIntake(organizationId, input, {
       kind: "resolved", intakeId: intake.id, personId, documentId, documentVersion: document.document_version,
       resolutionType: intake.resolution_type as "created_new_person" | "linked_existing_person", reused: true,
