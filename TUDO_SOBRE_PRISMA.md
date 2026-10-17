@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 526
-source_manifest_sha256: 84c3cc3b43d74ec9b545662a12a6fdbb5d8a455ae2e5f11aedf869a77c35d6d6
+source_manifest_sha256: f1d3ce02e844f2808d52ef400f6ae8ae6f1fc566d30a03eb39e2bdd70e2a26ce
 -->
 
 # Tudo sobre o Prisma
@@ -2652,7 +2652,7 @@ last_verified: 2026-10-17
 
 ## Username único e contato compartilhável —3.0.6 validada localmente
 
-Bruno autorizou implementação/main/publicação17/10/2026. operator-identity2.0.0 permite e-mail de contato repetido, preservando username global e Auth UUID exclusivos. Novas contas recebem alias técnico; login resolve Auth por ID, ativação/recuperação usam link nativo enviado ao contato da conta por Resend existente. Recuperação exige username, retorno neutro,60s/3por hora/recibos privados. Sem backfill/reset em massa; legado preservado, edição futura de contato converte alias idempotente.150SQL/162browser/17Node/4Deno/deno check/tipos/build/lint/foundation PASS; CI/publicação pendentes. Acordo/AoT username-identity-v306, ADR-086 e operations/operator-access-email distinguem fixtures de Auth/entrega humana, não testados com contas reais. Backend identidade2.0.0 deve ser preservado em rollback após novas contas; web anterior compatível.
+Bruno autorizou implementação/main/publicação17/10/2026. operator-identity2.0.0 permite e-mail de contato repetido, preservando username global e Auth UUID exclusivos. Novas contas recebem alias técnico; login resolve Auth por ID, ativação/recuperação usam link nativo enviado ao contato da conta por Resend existente. Recuperação exige username, retorno neutro,60s/3por hora/recibos privados. Sem backfill/reset em massa; legado preservado, edição futura de contato converte alias idempotente.150SQL/162browser/19Node/4Deno/deno check/tipos/build/lint/foundation PASS; CI/publicação pendentes. Acordo/AoT username-identity-v306, ADR-086 e operations/operator-access-email distinguem fixtures de Auth/entrega humana, não testados com contas reais. Backend identidade2.0.0 deve ser preservado em rollback após novas contas; web anterior compatível.
 
 ## Mínimo de senha8 —3.0.5 publicada
 
@@ -2660,7 +2660,7 @@ Bruno definiu8caracteres em17/10/2026. Web/cadastro/Owner/troca, Edge platform-u
 
 ## Feedback de senha e campos bloqueados —3.0.4 publicada
 
-Cadastro de usuário/Owner com requisitos pendentes vermelhos, atendidos verdes com check e estado acessível, atualizados durante digitação/substituição/exclusão sem blur. Observação/política existentes mantidas; quatro campos Owner desabilitados com aparência cinza legível e valores canônicos preservados.112browser/17Node dirigidos PASS, sem alterar política, backend ou trocar credenciais reais; runtime0c4af48bc0d81a55f731f96d385c006c1749dc6d publicado somente web, CI branch e22smokes públicos PASS, demais serviços/rollback preservados. Sem jornada humana autenticada de produção; publicação e limites no AoT `docs/qa/aot-password-feedback-v304.md`.
+Cadastro de usuário/Owner com requisitos pendentes vermelhos, atendidos verdes com check e estado acessível, atualizados durante digitação/substituição/exclusão sem blur. Observação/política existentes mantidas; quatro campos Owner desabilitados com aparência cinza legível e valores canônicos preservados.112browser/19Node dirigidos PASS, sem alterar política, backend ou trocar credenciais reais; runtime0c4af48bc0d81a55f731f96d385c006c1749dc6d publicado somente web, CI branch e22smokes públicos PASS, demais serviços/rollback preservados. Sem jornada humana autenticada de produção; publicação e limites no AoT `docs/qa/aot-password-feedback-v304.md`.
 
 ## Ordenação de grupos e empresas —3.0.3 publicada
 
@@ -25378,7 +25378,7 @@ Mesmo mapa inicial do acordo, sem expansão. Banco de metadados de entrega usa v
 
 ## Validação, fidelidade e limites
 
-150checks PostgreSQL17 isolado PASS: harness real de multiempresa/Owner e testes novos de identidade.162checks browser PASS em1448/390/320, incluindo147de regressão/recuperação e cadastro com contato existente.17Node PASS após build atual;4Deno PASS (29cenários anteriores e bateria nova de identidade); deno check das três Edges/helper PASS; tipos web/build web/build TypeScript/lint/foundation PASS. CI/contexto/publicação pendentes.
+150checks PostgreSQL17 isolado PASS: harness real de multiempresa/Owner e testes novos de identidade.162checks browser PASS em1448/390/320, incluindo147de regressão/recuperação e cadastro com contato existente.19Node PASS após build atual;4Deno PASS (29cenários anteriores e bateria nova de identidade); deno check das três Edges/helper PASS; tipos web/build web/build TypeScript/lint/foundation PASS. CI/contexto/publicação pendentes.
 
 Senha sintética única somente em memória, campos mascarados. Screenshots de contato compartilhado e recuperação inspecionados: composição/locks/requisitos8 preservados; login sem redesign. Sem nova referência normativa; imagens anteriores são baseline da estrutura, não amostras de conta real. Mensagem de e-mail é HTML/texto simples acessível, sem tracking aplicado pelo código.
 
@@ -25395,6 +25395,8 @@ Rollback de web usa imagem anterior e é compatível com a API nova. Após exist
 Nenhum desvio identificado do acordo1.0.1. Implementação validada localmente; CA-04/D-05 e operação/sincronização ainda não comprovados. Entrega não declarada concluída até publicação seletiva e CI/smoke finais.
 
 Revisão de segurança local: conversão de alias legada é monotônica e idempotente; a falha de save não muda contato/ID/senha e não restaura endereço Auth antigo que poderia sobrepor edição concorrente. Acordo1.0.1 explicita esta escolha interna dentro de A-01, sem mudança do resultado aprovado. Teste negativo de login após falha acrescido; demais provas válidas não repetidas.
+
+CI inicial39059880043 detectou contrato de teste antigo ainda exigindo recuperação por e-mail. platformUsersEdgeFunctions foi alinhado à decisão D-03/P-01 com negativos contra lookup por contato e reset direto por e-mail;2testes dirigidos PASS,19Node no total. Nenhum comportamento funcional mudou; CI será repetida no SHA final.
 
 ---
 

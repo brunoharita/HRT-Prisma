@@ -12,11 +12,12 @@ test("platform-users function preserves owner memberships and returns phone fiel
   assert.doesNotMatch(source, /async function rewriteOrganizationMemberships/);
 });
 
-test("operator-password-reset avoids mixed OR filters for identifier lookup", async () => {
+test("operator-password-reset resolves username only and never selects by shared contact", async () => {
   const source = await readFile("supabase/functions/operator-password-reset/index.ts", "utf8");
 
-  assert.match(source, /normalized\.includes\("@"\)/);
-  assert.match(source, /\.ilike\("email", normalized\)/);
-  assert.match(source, /\.eq\("username", normalized\.toLowerCase\(\)\)/);
+  assert.match(source, /\.eq\("username", normalized\)/);
+  assert.match(source, /sendOperatorAccessEmail\(serviceClient, target\.auth_user_id/);
+  assert.doesNotMatch(source, /\.ilike\("email"/);
+  assert.doesNotMatch(source, /resetPasswordForEmail/);
   assert.doesNotMatch(source, /\.or\(/);
 });

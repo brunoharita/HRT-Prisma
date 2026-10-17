@@ -35,7 +35,7 @@ Mesmo mapa inicial do acordo, sem expansão. Banco de metadados de entrega usa v
 
 ## Validação, fidelidade e limites
 
-150checks PostgreSQL17 isolado PASS: harness real de multiempresa/Owner e testes novos de identidade.162checks browser PASS em1448/390/320, incluindo147de regressão/recuperação e cadastro com contato existente.17Node PASS após build atual;4Deno PASS (29cenários anteriores e bateria nova de identidade); deno check das três Edges/helper PASS; tipos web/build web/build TypeScript/lint/foundation PASS. CI/contexto/publicação pendentes.
+150checks PostgreSQL17 isolado PASS: harness real de multiempresa/Owner e testes novos de identidade.162checks browser PASS em1448/390/320, incluindo147de regressão/recuperação e cadastro com contato existente.19Node PASS após build atual;4Deno PASS (29cenários anteriores e bateria nova de identidade); deno check das três Edges/helper PASS; tipos web/build web/build TypeScript/lint/foundation PASS. CI/contexto/publicação pendentes.
 
 Senha sintética única somente em memória, campos mascarados. Screenshots de contato compartilhado e recuperação inspecionados: composição/locks/requisitos8 preservados; login sem redesign. Sem nova referência normativa; imagens anteriores são baseline da estrutura, não amostras de conta real. Mensagem de e-mail é HTML/texto simples acessível, sem tracking aplicado pelo código.
 
@@ -52,3 +52,5 @@ Rollback de web usa imagem anterior e é compatível com a API nova. Após exist
 Nenhum desvio identificado do acordo1.0.1. Implementação validada localmente; CA-04/D-05 e operação/sincronização ainda não comprovados. Entrega não declarada concluída até publicação seletiva e CI/smoke finais.
 
 Revisão de segurança local: conversão de alias legada é monotônica e idempotente; a falha de save não muda contato/ID/senha e não restaura endereço Auth antigo que poderia sobrepor edição concorrente. Acordo1.0.1 explicita esta escolha interna dentro de A-01, sem mudança do resultado aprovado. Teste negativo de login após falha acrescido; demais provas válidas não repetidas.
+
+CI inicial39059880043 detectou contrato de teste antigo ainda exigindo recuperação por e-mail. platformUsersEdgeFunctions foi alinhado à decisão D-03/P-01 com negativos contra lookup por contato e reset direto por e-mail;2testes dirigidos PASS,19Node no total. Nenhum comportamento funcional mudou; CI será repetida no SHA final.
