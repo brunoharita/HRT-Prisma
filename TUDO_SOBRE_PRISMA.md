@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 522
-source_manifest_sha256: 4fb7f3463ababc2c4f241f64b83afd15e3ddf0ccb05745b607be63875db2b49a
+documentation_source_count: 526
+source_manifest_sha256: 84c3cc3b43d74ec9b545662a12a6fdbb5d8a455ae2e5f11aedf869a77c35d6d6
 -->
 
 # Tudo sobre o Prisma
@@ -2644,11 +2644,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.87.0
+version: 2.88.0
 last_verified: 2026-10-17
 ---
 
 # Estado atual do Prisma
+
+## Username único e contato compartilhável —3.0.6 validada localmente
+
+Bruno autorizou implementação/main/publicação17/10/2026. operator-identity2.0.0 permite e-mail de contato repetido, preservando username global e Auth UUID exclusivos. Novas contas recebem alias técnico; login resolve Auth por ID, ativação/recuperação usam link nativo enviado ao contato da conta por Resend existente. Recuperação exige username, retorno neutro,60s/3por hora/recibos privados. Sem backfill/reset em massa; legado preservado, edição futura de contato converte alias idempotente.150SQL/162browser/17Node/4Deno/deno check/tipos/build/lint/foundation PASS; CI/publicação pendentes. Acordo/AoT username-identity-v306, ADR-086 e operations/operator-access-email distinguem fixtures de Auth/entrega humana, não testados com contas reais. Backend identidade2.0.0 deve ser preservado em rollback após novas contas; web anterior compatível.
 
 ## Mínimo de senha8 —3.0.5 publicada
 
@@ -5179,6 +5183,7 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `web-domain-read` | product-engineering | 1.1.0 | Home, Pessoas, perfil | ativo em QA | `PrismaDataRepository`, incluindo saúde das fontes centrais | local/QA | bloquear consulta |
 | `platform-user-access` | security/product | 2.0.0 | App Shell, Usuários, Edge Functions | implementado localmente | migration `20260824113000_m2_users_people`, `platform-users` function, UI `UsersPage` | local | bloquear operação |
 | `password-policy` | security/product | 1.1.0 | cadastro/Owner/troca/Auth | publicado3.0.5: web/Edge8; Auth hospedado6 informado pelo usuário | mínimo8, complexidade/confirmação preservadas, web/Edge/config alinhados; AoT password-minimum-v305 | produção | Prisma nega envio abaixo8; Auth nativo mantém6 informado, sem alteração hospedada |
+| `operator-identity` | security/product | 2.0.0 | Usuários/login/ativação/recuperação | validado localmente; rollout no AoT username-identity-v306 | username/Auth UUID exclusivos, contato repetível; alias por conta/compatibilidade legada, token nativo dirigido por username | local | negar identidade/sessão divergente, nunca escolher primeira conta por contato |
 | `username-auth-boundary` | security/operations | 1.0.0 | sign-in, password recovery | implementado localmente | `operator-sign-in`, `operator-password-reset` | local | falha neutra |
 | `person-ingestion` | application/data | 12.0.0 | intake, Pessoas, documentos, perfil | resiliência operacional ativa no Prisma-QA | ingestão, revisão por Perfil/documento, publicação, restauração, vínculo, mesclagem, arquivamento e exclusão | local/QA | bloquear somente sem fonte recuperável ou autoridade |
 | `person-definitive-deletion` | product/application/data/security | 1.0.0 | Central da Pessoa, Meus dados, Storage, Perfil, matching e M5.1 | ativo no Prisma-QA | saga única, lock `deleting`, ledger mínimo, purga e verificador de resíduos | local/QA | preservar dados e negar operação |
@@ -10453,6 +10458,25 @@ Fronteiras existentes com service-role também verificam a autoridade/situação
 
 ---
 
+## Source: `docs/decisions/ADR-086-username-contact-identity.md`
+
+# ADR-086: Username único e contato compartilhável
+
+- Status: accepted por autorização de Bruno no chat17/10/2026; rollout no AoT username-identity-v306.
+- Contrato: operator-identity2.0.0 / acordo username-identity-v3061.0.1.
+
+Username já era único; o vínculo entre contato e credencial Auth impedia contas distintas com o mesmo contato. Manter Supabase Auth e separar contato de endereço técnico exclusivo por identidade permite preservar hashing, sessões, tokens, IDs e RLS. Login resolve Auth por ID no servidor e verifica o usuário da sessão. E-mail nunca agrega autoridade ou memberships.
+
+Reutilizar generateLink/recovery oficial e envio HTTPS pelo Resend existente, com configuração criptografada já instalada, evita depender de alterar o Auth hospedado ou introduzir armazenamento próprio de senhas. Getter de configuração de envio é dependência operacional explícita; filas/dispatcher de avaliação não são usados nem alterados. O backend registra solicitação/limite/recibo sem token e não declara aceitação pelo provedor como entrega na caixa.
+
+Remover somente o índice de e-mail seria insuficiente, pois login, convite e reset ainda usariam a mesma identidade. Autenticação própria ou troca de fornecedor ampliariam risco/custo sem necessidade. Endereços com '+tag' dependeriam do comportamento de cada provedor de destino e não são usados.
+
+Compatibilidade: contas antigas continuam com Auth UUID/senha e endereço Auth atual. Novas usam UUID aleatório em domínio técnico .invalid, sem envio a esse endereço. Ao editar contato legado, converter Auth via API preservando ID/senha e compensar erro de persistência; não executar backfill ou reset em massa. Não reutilizar username como ID técnico, pois pode mudar. Recuperação pública somente por username; quem controla uma caixa compartilhada controla a recuperação de suas contas, consequência aceita pelo PO.
+
+Fontes oficiais verificadas: [Auth password](https://supabase.com/docs/guides/auth/passwords), [generateLink](https://supabase.com/docs/reference/javascript/auth-admin-generatelink). Reaproveitamento não prova operação/entrega; SQL, handlers/browser sintéticos e publicação têm evidências separadas.
+
+---
+
 ## Source: `docs/decisions/README.md`
 
 # Architectural Decision Records
@@ -10549,6 +10573,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 - [ADR-084: Análise fundamentada da atividade de uma avaliação](ADR-084-assessment-activity-analysis.md) — implementação local autorizada; tarifa inicial6193 aprovada; publicada em2.5.2, acordo assessment-activity-v252 v1.1.0/AoT.
 
 - [ADR-085: Administração multiempresa conforme Horus](ADR-085-multiempresa-horus.md) — quatro perfis, planos/capacidade configuráveis e tenant preservado; acordo V3M0, rollout no AoT.
+
+- [ADR-086: Username único e contato compartilhável](ADR-086-username-contact-identity.md) — accepted; Supabase Auth preservado, contato separado da identidade, rollout no AoT username-identity-v306.
 
 ---
 
@@ -10970,6 +10996,26 @@ Cross-tenant denial anômalo, pico de exportação, falhas de Auth, custo por te
 ## Retenção
 
 Retenção de logs e auditoria ainda depende de política legal e operacional. Logs precisam permitir diagnóstico sem conservar conteúdo pessoal integral.
+
+---
+
+## Source: `docs/operations/operator-access-email.md`
+
+# E-mails de acesso por username
+
+operator-identity2.0.0 /3.0.6, acordo username-identity-v306 e ADR-086. Publicação e evidência no AoT correspondente.
+
+Contato `platform_users.email` repetível; cada conta mantém Auth UUID próprio. Novas contas recebem endereço técnico aleatório em `users.prisma.invalid`, nunca destinatário de envio. Usuário entra e recupera pelo username. Login consulta Auth por UUID no backend e compara ID da sessão. Contas legadas continuam operando; ao editar contato, o endereço Auth legado vira técnico sem trocar UUID/senha, mantendo contato/ID/senha se a persistência falhar e conservando o alias convertido.
+
+`operator_access_email_configuration` reutiliza somente a credencial criptografada do provedor Resend já instalado; ambos getters são exclusivos service_role. Não consome nem modifica fila, templates, dispatcher, tarifas ou destinatários de avaliações. Remetente existente: Prisma / suporte@hrtsolutions.com.br. Sem segredo novo, bootstrap novo, SMTP/Auth hook ou fornecedor/plano adicional. A operação depende dessa configuração de envio: uma futura rotação deve contemplar ambos consumidores.
+
+Claim transacional por usuário limita60s entre pedidos e3por hora, inclusive falhas. Registro privado guarda IDs/purpose/horário/recibo/state, sem contato, texto, senha ou token. Token nativo é gerado após commit do cadastro e enviado apenas ao contato retornado pelo claim. Redirect fixo HTTPS para o Prisma, não controlado por Origin. Destino/identidade do link são conferidos. Provedor recebe uma chamada com timeout15s e idempotency key por request. Aceito significa aceitação pelo provider, não entrega/abertura. Timeout/recibo ausente são unknown; não há retry automático que invente novo token/chave. Nova solicitação explícita após cooldown produz novo link e consome limite.
+
+Falha de envio após cadastro preserva conta pendente e informa o operador para abrir Usuários e solicitar redefinição; essa ação reenvia ativação para pending_first_access. Recuperação pública exige username e responde de modo neutro em inexistência/bloqueio/limite/falha. Admin recebe erro operacional categorizado, sem corpo do provider. Quem possui a caixa de contato compartilhada pode recuperar suas contas, condição aprovada pelo PO.
+
+Não criar usuários reais nem enviar mensagens de teste em produção. Testes SQL/handlers/browser são locais/sintéticos; recebimento humano deve ser registrado separadamente quando ocorrer em operação autorizada. Contas manuais não geram mensagem. Publicação não altera senhas ou identidades existentes em massa.
+
+Rollback seguro: web anterior é compatível; preservar migração e handlers de identidade2.0.0 se houver alias técnico/contato repetido. Reverter ao lookup por contato poderia autenticar a conta errada; não fazê-lo. Problemas backend exigem correção compatível, sem apagar contas/dados. Segredos/provedor existentes não são reconfigurados no deploy.
 
 ---
 
@@ -12120,6 +12166,10 @@ Requisitos de senha observados continuamente: pendente vermelho, atendido verde 
 ## Política de senha1.1.0 — mínimo8
 
 Bruno definiu mínimo8em17/10/2026, substituindo somente o mínimo12anterior. Demais requisitos/fluxos preservados. Constante compartilhada web alimenta cadastro/Owner/troca e rótulos; Edge platform-users e config.toml alinhados em8. Auth hospedado permanece6, conforme confirmação de Bruno no chat; é compatível com8. Prisma exige8 em seus formulários e Edge. A API nativa do Auth mantém6; config.toml local8 não comprova configuração hospedada. Acordo/AoT password-minimum-v305 registram a publicação.
+
+## Identidade de acesso2.0.0 —3.0.6
+
+Username global único e normalizado, contato de e-mail repetível entre usuários/grupos. Cada usuário continua com senha, Auth UUID, sessão, papel e escopo independentes. Entrar/recuperar por username; ativação e reset identificam a conta na mensagem ao contato, inclusive quando a caixa é compartilhada. Quem controla essa caixa pode recuperar essas contas, consequência aceita na proposta. Identidades existentes não são fundidas/recriadas nem têm senha redefinida. Endereços técnicos são detalhes de backend e não contatos. Contrato/acordo/AoT username-identity-v306; rollout no AoT.
 
 ---
 
@@ -18150,6 +18200,43 @@ A captura fornecida é baseline normativo da tela a preservar, não um novo dese
 | Banco, Edge, Parser/Synthesis, Knowledge/IA | no_impact_identified | Nenhum arquivo funcional nesses destinos; ajuda é conteúdo local | Plano seletivo e IDs/imagens/reinícios preservados |
 
 Sem Q material; proposta explicitamente autorizada. Não reabre decisões de matching.
+
+---
+
+## Source: `docs/qa/agreement-username-identity-v306.md`
+
+# Username e e-mail compartilhado — acordo e execução 1.0.1
+
+Bruno aprovou no chat de 17/10/2026 a proposta de username único com e-mail de contato repetível e autorizou implementação, integração em main e nova versão. Baseline 6f128509f1aca4134bda2e51765cb0ea6b10fc26 / runtime 3.0.5. Entrega 3.0.6, contrato operator-identity 2.0.0. Supersede somente a unicidade do e-mail e seu uso como identidade de produto nos contratos anteriores; IDs internos continuam sendo UUIDs.
+
+- D-01: username global normalizado e único; aceitar o mesmo e-mail de contato em dois ou mais usuários distintos, inclusive grupos diferentes; não compartilhar identidade Auth, senha, sessão, papel ou escopo por e-mail.
+- D-02: manter Supabase Auth. Novas contas recebem endereço técnico aleatório estável e exclusivo, separado do contato; login resolve username e identidade Auth por ID no servidor, conferindo o ID da sessão emitida. Endereço técnico nunca é destino de mensagem.
+- D-03: ativação e recuperação usam links nativos de uso único do Auth enviados ao contato da conta solicitada. Recuperação pública exige username e retorna resposta neutra; não escolhe conta por e-mail compartilhado. Mensagem identifica username e finalidade. Remetente/provedor existentes, destino e redirect controlados pelo servidor; limite por conta, recibo operacional e ausência de tokens em logs/artefatos.
+- D-04: preservar usuários existentes, IDs, senhas, vínculos, permissões e histórico, sem reset ou migração Auth em massa. Identidades legadas são resolvidas pelo Auth ID; alteração futura de contato converte endereço Auth legado para técnico via API oficial, de modo idempotente; falha de persistência preserva contato, ID e senha, mantendo o alias interno convertido e sem restaurar endereço Auth antigo. E-mail de contato não concede autoridade. Caixa compartilhada permite recuperar todas as contas a ela associadas, consequência apresentada na proposta aprovada.
+- D-05: publicar migração, três Edge Functions afetadas e web, preservando JWT/configurações Auth/serviços adjacentes e ativos anteriores; sincronizar main/GitHub/VPS e comprovar CI, smoke e rollback.
+- P-01: jamais resolver login/recuperação por primeira ocorrência de e-mail ou reutilizar Auth ID por e-mail; sessões/tokens de A não podem alterar B.
+- P-02: não usar senha própria/armazenamento de senha, mudar RLS/perfis/planos, enviar mensagens a contas reais como teste, expor segredos/tokens ou remover histórico. Não criar fornecedor/destino/plano pago novo.
+- F-01: SSO/MFA, troca de provedor Auth, fusão de contas, seleção de contas por e-mail, redefinição em massa, auditoria global ou redesign.
+- A-01: adaptar primitivas oficiais generateLink/createUser/getUserById, transporte HTTPS existente, utilitário compartilhado de Edge e migração versionada; nenhuma dependência nova. Configuração de envio pode reutilizar a credencial protegida já instalada sem ler/expor seu valor em ferramentas ou alterar a fila de avaliações.
+- CA-01: SQL local aceita contato duplicado e rejeita username/identidade duplicados; prova grants/RLS, limites concorrentes e preservação de IDs/escopos/histórico.
+- CA-02: handlers reais com transportes sintéticos provam cadastro manual/ativação, login A/B com mesmo contato e senhas independentes, recuperação/primeiro acesso de A sem atingir B, negativos de identidade, status, escopo, complexidade, entrega/timeout e compensação.
+- CA-03: browser no fluxo real com transporte sintético prova contato duplicado, Owner canônico, mínimo8/feedback/locks e mensagem de recuperação por username em desktop/mobile; tipos/build/targeted tests/contexto/CI PASS. Nenhuma credencial em fonte/evidência.
+- CA-04: migração e fontes Edge conferidas no Prisma correto; web versão/SHA/rotas/assets e bloqueios anônimos, rollback retido, cinco serviços adjacentes preservados; evidência real de entrega humana permanece distinta de testes sintéticos.
+
+## Mapa de impacto e validação mínima
+
+| Área/capacidade | Relação | Baseline / prova proporcional |
+| --- | --- | --- |
+| Cadastro/edição de usuário e Owner | direct | 3.0.5; handlers, SQL e browser, locks/compensação/escopo |
+| Login, ativação, recuperação, primeiro acesso | critical_transversal | três Edges atuais; testes de pares A/B, status, ID, senha e retorno neutro; sessão nativa preservada |
+| Contato/índices/auditoria operacional | direct | índice e-mail único anterior; migration local com grants/negativos/concorrência e metadados antes/depois |
+| Credencial/provedor de envio existente | plausible_indirect | configuração criptografada existente; somente getter protegido reutilizado, nenhuma fila/segredo alterado; teste sem destinatário real |
+| Autorização/memberships/histórico | critical_transversal | Auth UUID mantém autoridade; regressão multiempresa e ausência de mutação em massa |
+| Matching/IA/Tokens/Pessoas/outros serviços | no_impact_identified | não consomem contato como identidade; IDs e políticas permanecem; smoke seletivo/contêineres |
+
+Risco D/E: boundary de identidade e compatibilidade documentado em ADR-086. Sem Q material pendente. Execução incorpora integralmente D/P/F/A/CA acima. Conclusão exige todos os D/P aplicáveis PASS, documentação/contexto, CI e publicação seletiva; testes humanos de e-mail não serão inventados nem substituídos por fixture. Sem suíte integral local.
+
+Revisão1.0.1 esclarece a autonomia de compatibilidade de D-04: conversão interna monotônica elimina rollback de endereço roteável em corrida entre edições. Não altera o resultado aprovado (contato/ID/senha preservados em falha), autoridade, escopo, destino ou necessidade de coordenação humana. Não há migração Auth em massa.
 
 ---
 
@@ -25249,6 +25336,65 @@ D-01 a D-04 e P-01 PASS, sem desvio de contrato. CI branch37614002658 e main3761
 Smoke imediato do deploy retornou HTTP404 durante a recriação, fazendo dispatcher sair1/SSH22. Estabilização e smoke independente PASS sem reconstrução adicional. Evidências release-plan.json, release.json, production-smoke.json, infrastructure.json e imagens/browser-results.json neste diretório. Não confundir HTML200 com interação autenticada: esta continua NOT TESTED em produção, enquanto componente real/fluxos sintéticos e publicação dos marcadores de ajuda foram verificados.
 
 Context Pack gerado/conferido em espelho dos rastreados mais documentos próprios, sem incorporar arquivos locais alheios. Referências históricas do CurrentState preservadas integralmente ao baseline anterior, conferidas na revisão final antes do push. Servidores de teste desta tarefa encerrados. Fechamento documental sincroniza Git por fast-forward sem reconstruir o runtime validado; arquivos locais alheios permanecem fora dos commits.
+
+---
+
+## Source: `docs/qa/aot-username-identity-v306.md`
+
+# AoT — Username único e contato compartilhável / 3.0.6
+
+Acordo `docs/qa/agreement-username-identity-v306.md`1.0.1 integralmente incorporado; decisão de Bruno17/10/2026. Baseline6f12850/runtime3.0.5. ADR-086 / operator-identity2.0.0. Evidências em `docs/qa/evidence/username-identity-v306/`.
+
+## Matriz de acordos
+
+| ID | Implementação e prova | Status | Ambiente/limite |
+| --- | --- | --- | --- |
+| D-01 | Índice de contato não único, username/Auth UUID únicos; SQL dois contatos iguais em grupos diferentes, cadastro manual/Owner/browser | PASS | PG17 local isolado e handlers sintéticos |
+| D-02 | Alias técnico exclusivo, login resolve Auth UUID e confere sessão; pares A/B e credenciais cruzadas rejeitadas, identidade/sessão divergentes negadas | PASS | SDK real/transportes sintéticos; Auth externo não usado para testes |
+| D-03 | generateLink recovery oficial, envio ao contato com username, redirect fixo; claim/60s/3por hora/concorrência, recibos e falhas; público somente username/neutro | PASS | Não equivale a recebimento humano ou teste criptográfico do serviço Auth |
+| D-04 | Nenhum backfill/reset; migração preserva todos os campos/IDs/Auth/memberships; login legado, edição/conversão e compensação testados, conclusão de A ignora B | PASS | Preservação remota a conferir na publicação sem mutação de contas reais |
+| D-05 | Migração/três Edges/web, CI e smoke/sincronização | NOT TESTED | Publicação pendente |
+
+## Proibições
+
+| ID | Prova | Status |
+| --- | --- | --- |
+| P-01 | Handler não consulta primeiro e-mail, nunca reutiliza Auth por contato; cruzamento de senha/ID/sessão/token-alvo negado; username e Auth UUID mantêm constraints | PASS |
+| P-02 | Só primitives oficiais; sem senha/token em recibos/artefatos, nenhum envio/conta real de teste; nenhuma alteração de RLS/perfil/plano/Auth hospedado | PASS |
+| F-01 | Sem SSO/MFA/provedor novo/fusão/seleção por e-mail/redesign/reset em massa | PASS |
+
+## Mapa de impacto e preservação
+
+Mesmo mapa inicial do acordo, sem expansão. Banco de metadados de entrega usa vínculo Auth e organization_id quando disponível, RLS e grants exclusivos de funções service_role. Reutiliza getter de credencial de envio já criptografada: dependência transversal registrada; nenhuma consulta do segredo em ferramentas, fila/dispatcher/avaliação intactos.
+
+| Área | Relação | Regressão/evidência | Status |
+| --- | --- | --- | --- |
+| Cadastro/Owner/edição | direct | Handlers atuais e novos,150checks SQL,162browser; locks, escopo e compensação | PASS |
+| Login/ativação/recuperação/primeiro acesso | critical_transversal |4Deno; contas A/B, legado, estado, retorno neutro, direcionamento/redirect, entrega/timeout/compensação; SignIn real extraído no harness | PASS |
+| Contato/índices/recibos | direct | SQL/grants/RLS/limites e duas conexões concorrentes, sem PII/tokens em tabela operacional | PASS |
+| Configuração de envio | plausible_indirect | Projeto Prisma saudável, configuração instalada=1; getter somente service_role e mock de transporte. Provedor/entrega humana não testados nesta fase | PARTIAL |
+| Autorização/memberships/histórico | critical_transversal | Regressão multiempresa/Owner em150SQL e4Deno; ID continua autoridade, migração não toca Auth/roles/RLS existentes | PASS |
+| Matching/IA/Tokens/Pessoas/outros serviços | no_impact_identified | IDs/joins/políticas preservados; sem modificações nesses módulos. Serviços remotos a conferir | PARTIAL |
+
+## Validação, fidelidade e limites
+
+150checks PostgreSQL17 isolado PASS: harness real de multiempresa/Owner e testes novos de identidade.162checks browser PASS em1448/390/320, incluindo147de regressão/recuperação e cadastro com contato existente.17Node PASS após build atual;4Deno PASS (29cenários anteriores e bateria nova de identidade); deno check das três Edges/helper PASS; tipos web/build web/build TypeScript/lint/foundation PASS. CI/contexto/publicação pendentes.
+
+Senha sintética única somente em memória, campos mascarados. Screenshots de contato compartilhado e recuperação inspecionados: composição/locks/requisitos8 preservados; login sem redesign. Sem nova referência normativa; imagens anteriores são baseline da estrutura, não amostras de conta real. Mensagem de e-mail é HTML/texto simples acessível, sem tracking aplicado pelo código.
+
+Falhas de harness corrigidas: stub antigo de invite substituído por createUser/generateLink; import dinâmico de Deno requer allow-read restrito à pasta; tipo do cliente Supabase genérico corrigido e deno check passou. Importar o shell inteiro no fixture de login encontrou export ausente em stub alheio; harness extrai somente SignInPage real, sem alterar aquele produto. A execução inicial Node em dist anterior não foi usada como evidência;17testes foram repetidos após build correto. Aviso inválido320px com legibilidade não comprovada é a limitação já registrada na3.0.5, sem mudança de layout neste movimento.
+
+## Segurança e recuperação operacional
+
+O projeto compartilhado Prisma é produção, não ambiente para criar contas/enviar testes. Validação QA usa PostgreSQL descartável e handlers/telas reais com transportes sintéticos; não há ambiente Auth hospedado de QA separado confirmado. Token/expiração/uso único são fornecidos pelo Auth nativo; testes provam escolha do usuário correto, não uma certificação criptográfica nem entrega humana. A configuração hospedada de senha continua6 conforme Bruno informou; Prisma exige8, sem mudança desta política.
+
+Rollback de web usa imagem anterior e é compatível com a API nova. Após existir conta técnica ou contato duplicado, não restaurar handlers antigos de login/recuperação nem recriar índice único: corrigir adiante preservando identidade2.0.0. Fontes antigas/versões constam do Git e baseline remoto; sem apagar usuário, alias, histórico ou e-mail duplicado para facilitar rollback. Não alterar configurações hospedadas Auth ou segredos no rollout.
+
+## Desvios e conclusão
+
+Nenhum desvio identificado do acordo1.0.1. Implementação validada localmente; CA-04/D-05 e operação/sincronização ainda não comprovados. Entrega não declarada concluída até publicação seletiva e CI/smoke finais.
+
+Revisão de segurança local: conversão de alias legada é monotônica e idempotente; a falha de save não muda contato/ID/senha e não restaura endereço Auth antigo que poderia sobrepor edição concorrente. Acordo1.0.1 explicita esta escolha interna dentro de A-01, sem mudança do resultado aprovado. Teste negativo de login após falha acrescido; demais provas válidas não repetidas.
 
 ---
 
@@ -32598,6 +32744,10 @@ No M5.2, somente `service_role` executa staging, validação, diff e publicaçã
 Ordenação3.0.3: organization-administration1.1.0 aceita1.0.0 e projeta apenas createdAt/updatedAt dos mesmos grupos/empresas já visíveis. Função preserva integralmente ator, filtros, locks, mutações, search_path e ACL fora das três substituições aditivas verificadas. Sem grant novo, acesso comum, RLS ou escrita de datas/histórico.
 
 password-policy1.1.0 (3.0.5): mínimo8por decisão explícita de Bruno17/10/2026, mantendo complexidade/confirmação/gates atuais. Cadastro/Owner validam no cliente e Edge; troca/primeiro acesso usam cliente e Supabase Auth. config.toml local não comprova política hospedada; Bruno confirmou Auth hospedado6, compatível com8 e preservado. A API nativa mantém seu piso6 existente; troca/primeiro acesso exigem8 no cliente antes da chamada direta ao Auth. Cadastro/Owner também exigem8 na Edge. Esta entrega não endurece a API nativa hospedada; ver acordo1.0.1/AoT password-minimum-v305. Nenhuma conta existente é alterada por reduzir o limite.
+
+## operator-identity2.0.0
+
+Contato de e-mail deixa de ser único; username global e Auth UUID continuam exclusivos. Autorização permanece por Auth UUID e memberships, nunca pelo contato/alias/metadata. Login resolve Auth por UUID e confere ID da sessão; recuperação pública apenas username e resposta neutra. generateLink recovery oficial por Auth identity, envio ao contato autorizado da conta, username na mensagem, redirect fixo e claim/limite/recibo privado sem token. Getter de configuração de envio exclusivo service_role; cliente não obtém segredo ou lookup de endereço técnico. Contas legadas operam sem backfill; mudança de contato converte endereço Auth via API idempotente. E-mail compartilhado permite recuperação das contas a quem controla a caixa. RLS/perfis/planos e mínimo8 permanecem; versões/JWT/rollout e limitações humanas no AoT username-identity-v306.
 
 ---
 

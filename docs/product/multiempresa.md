@@ -31,3 +31,7 @@ Requisitos de senha observados continuamente: pendente vermelho, atendido verde 
 ## Política de senha1.1.0 — mínimo8
 
 Bruno definiu mínimo8em17/10/2026, substituindo somente o mínimo12anterior. Demais requisitos/fluxos preservados. Constante compartilhada web alimenta cadastro/Owner/troca e rótulos; Edge platform-users e config.toml alinhados em8. Auth hospedado permanece6, conforme confirmação de Bruno no chat; é compatível com8. Prisma exige8 em seus formulários e Edge. A API nativa do Auth mantém6; config.toml local8 não comprova configuração hospedada. Acordo/AoT password-minimum-v305 registram a publicação.
+
+## Identidade de acesso2.0.0 —3.0.6
+
+Username global único e normalizado, contato de e-mail repetível entre usuários/grupos. Cada usuário continua com senha, Auth UUID, sessão, papel e escopo independentes. Entrar/recuperar por username; ativação e reset identificam a conta na mensagem ao contato, inclusive quando a caixa é compartilhada. Quem controla essa caixa pode recuperar essas contas, consequência aceita na proposta. Identidades existentes não são fundidas/recriadas nem têm senha redefinida. Endereços técnicos são detalhes de backend e não contatos. Contrato/acordo/AoT username-identity-v306; rollout no AoT.

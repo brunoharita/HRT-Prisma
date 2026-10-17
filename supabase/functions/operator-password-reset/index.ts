@@ -1,4 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2.112.3";
+import { sendOperatorAccessEmail } from "../platform-users/operatorIdentity.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -12,29 +13,21 @@ Deno.serve(async (request) => {
 
   try {
     const { identifier } = await request.json();
-    const normalized = String(identifier ?? "").trim();
-    if (!normalized) return neutralSuccess();
+    const normalized = String(identifier ?? "").trim().toLowerCase();
+    if (!/^[a-z0-9._-]{3,32}$/.test(normalized)) return neutralSuccess();
 
     const serviceClient = createServiceClient();
-    const identifierQuery = normalized.includes("@")
-      ? serviceClient
+    const identifierQuery = serviceClient
         .from("platform_users")
-        .select("email, status")
-        .ilike("email", normalized)
-        .limit(1)
-      : serviceClient
-        .from("platform_users")
-        .select("email, status")
-        .eq("username", normalized.toLowerCase())
+        .select("auth_user_id, status")
+        .eq("username", normalized)
         .limit(1);
     const { data: users } = await identifierQuery;
     const target = users?.[0];
     if (!target || target.status === "inactive" || target.status === "blocked") return neutralSuccess();
 
-    const publishableClient = createPublishableClient();
-    await publishableClient.auth.resetPasswordForEmail(target.email, {
-      redirectTo: `${request.headers.get("origin") ?? new URL(request.url).origin}/change-password`,
-    });
+    await sendOperatorAccessEmail(serviceClient, target.auth_user_id,
+      target.status === "pending_first_access" ? "activation" : "recovery");
     return neutralSuccess();
   } catch {
     return neutralSuccess();
@@ -47,22 +40,6 @@ function createServiceClient() {
     readSecretKey(),
     { auth: { autoRefreshToken: false, persistSession: false, detectSessionInUrl: false } },
   );
-}
-
-function createPublishableClient() {
-  return createClient(
-    Deno.env.get("SUPABASE_URL")!,
-    readPublishableKey(),
-    { auth: { autoRefreshToken: false, persistSession: false, detectSessionInUrl: false } },
-  );
-}
-
-function readPublishableKey() {
-  const modern = Deno.env.get("SUPABASE_PUBLISHABLE_KEYS");
-  if (modern) return JSON.parse(modern).default as string;
-  const legacy = Deno.env.get("SUPABASE_ANON_KEY");
-  if (!legacy) throw new Error("Publishable key ausente.");
-  return legacy;
 }
 
 function readSecretKey() {

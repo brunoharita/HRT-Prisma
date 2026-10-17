@@ -1,0 +1,15 @@
+# E-mails de acesso por username
+
+operator-identity2.0.0 /3.0.6, acordo username-identity-v306 e ADR-086. Publicação e evidência no AoT correspondente.
+
+Contato `platform_users.email` repetível; cada conta mantém Auth UUID próprio. Novas contas recebem endereço técnico aleatório em `users.prisma.invalid`, nunca destinatário de envio. Usuário entra e recupera pelo username. Login consulta Auth por UUID no backend e compara ID da sessão. Contas legadas continuam operando; ao editar contato, o endereço Auth legado vira técnico sem trocar UUID/senha, mantendo contato/ID/senha se a persistência falhar e conservando o alias convertido.
+
+`operator_access_email_configuration` reutiliza somente a credencial criptografada do provedor Resend já instalado; ambos getters são exclusivos service_role. Não consome nem modifica fila, templates, dispatcher, tarifas ou destinatários de avaliações. Remetente existente: Prisma / suporte@hrtsolutions.com.br. Sem segredo novo, bootstrap novo, SMTP/Auth hook ou fornecedor/plano adicional. A operação depende dessa configuração de envio: uma futura rotação deve contemplar ambos consumidores.
+
+Claim transacional por usuário limita60s entre pedidos e3por hora, inclusive falhas. Registro privado guarda IDs/purpose/horário/recibo/state, sem contato, texto, senha ou token. Token nativo é gerado após commit do cadastro e enviado apenas ao contato retornado pelo claim. Redirect fixo HTTPS para o Prisma, não controlado por Origin. Destino/identidade do link são conferidos. Provedor recebe uma chamada com timeout15s e idempotency key por request. Aceito significa aceitação pelo provider, não entrega/abertura. Timeout/recibo ausente são unknown; não há retry automático que invente novo token/chave. Nova solicitação explícita após cooldown produz novo link e consome limite.
+
+Falha de envio após cadastro preserva conta pendente e informa o operador para abrir Usuários e solicitar redefinição; essa ação reenvia ativação para pending_first_access. Recuperação pública exige username e responde de modo neutro em inexistência/bloqueio/limite/falha. Admin recebe erro operacional categorizado, sem corpo do provider. Quem possui a caixa de contato compartilhada pode recuperar suas contas, condição aprovada pelo PO.
+
+Não criar usuários reais nem enviar mensagens de teste em produção. Testes SQL/handlers/browser são locais/sintéticos; recebimento humano deve ser registrado separadamente quando ocorrer em operação autorizada. Contas manuais não geram mensagem. Publicação não altera senhas ou identidades existentes em massa.
+
+Rollback seguro: web anterior é compatível; preservar migração e handlers de identidade2.0.0 se houver alias técnico/contato repetido. Reverter ao lookup por contato poderia autenticar a conta errada; não fazê-lo. Problemas backend exigem correção compatível, sem apagar contas/dados. Segredos/provedor existentes não são reconfigurados no deploy.

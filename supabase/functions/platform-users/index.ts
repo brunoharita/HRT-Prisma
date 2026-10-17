@@ -1,4 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2.112.3";
+import { AccessEmailError, CONTACT_EMAIL, isTechnicalAuthEmail, readAuthIdentity, sendOperatorAccessEmail, technicalAuthEmail } from "./operatorIdentity.ts";
 
 const PASSWORD_MIN_LENGTH = 8;
 
@@ -145,6 +146,7 @@ Deno.serve(async (request) => {
 
     throw new HttpError(400, "Ação de usuários não suportada.");
   } catch (error) {
+    if (error instanceof AccessEmailError) return jsonResponse(error.status, { error: error.message });
     if (error instanceof HttpError) return jsonResponse(error.status, { error: error.message });
     const message = error instanceof Error ? error.message : "Falha inesperada na função de usuários.";
     return jsonResponse(500, { error: message });
@@ -350,7 +352,7 @@ async function createPlatformUser(
   serviceClient: ReturnType<typeof createServiceClient>,
   actorContext: ActorContext,
   input: UpsertInput,
-  origin: string,
+  _origin: string,
   ownerContext?: OwnerOnboardingContext,
 ) {
   const normalized = await normalizeAndValidateInput(serviceClient, actorContext, input);
@@ -358,24 +360,13 @@ async function createPlatformUser(
     throw new HttpError(400, "Ative o usuário antes de iniciar o primeiro acesso por e-mail.");
   }
 
-  let authUserId: string;
-  if (normalized.credentialMode === "manual_password") {
-    const { data, error } = await serviceClient.auth.admin.createUser({
-      email: normalized.email,
-      email_confirm: true,
-      password: normalized.password,
-      user_metadata: { full_name: normalized.fullName },
-    });
-    if (error || !data.user) throw new HttpError(400, "Não foi possível criar o usuário no Supabase Auth.");
-    authUserId = data.user.id;
-  } else {
-    const { data, error } = await serviceClient.auth.admin.inviteUserByEmail(normalized.email, {
-      redirectTo: `${origin}/change-password`,
-      data: { full_name: normalized.fullName },
-    });
-    if (error || !data.user) throw new HttpError(400, "Não foi possível iniciar o primeiro acesso por e-mail.");
-    authUserId = data.user.id;
-  }
+  const { data, error } = await serviceClient.auth.admin.createUser({
+    email: technicalAuthEmail(), email_confirm: true,
+    ...(normalized.credentialMode === "manual_password" ? { password: normalized.password } : {}),
+    user_metadata: { full_name: normalized.fullName },
+  });
+  if (error || !data.user) throw new HttpError(400, "Não foi possível criar o usuário no Supabase Auth.");
+  const authUserId = data.user.id;
 
   const platformStatus: PlatformUserStatus = normalized.credentialMode === "activation_link"
     ? "pending_first_access"
@@ -389,6 +380,11 @@ async function createPlatformUser(
     const { error: cleanupError } = await serviceClient.auth.admin.deleteUser(authUserId);
     if (cleanupError) throw new HttpError(500, "O cadastro não foi concluído e a ativação precisa de conciliação pelo suporte.");
     throw error;
+  }
+  // Send only after the account and scope commit. Never delete a committed user on mail failure.
+  if (normalized.credentialMode === "activation_link") {
+    try { await sendOperatorAccessEmail(serviceClient, authUserId, "activation", actorContext.actor.auth_user_id); }
+    catch { throw new HttpError(502, "Usuário cadastrado, mas o envio da ativação não foi confirmado. Abra o cadastro em Usuários e solicite a redefinição de senha."); }
   }
 }
 
@@ -431,8 +427,9 @@ async function updatePlatformUser(
   }
 
   if (normalized.email !== existing.email) {
+    const identity = await readAuthIdentity(serviceClient, existing.auth_user_id);
     const { error: authUpdateError } = await serviceClient.auth.admin.updateUserById(existing.auth_user_id, {
-      email: normalized.email,
+      email: isTechnicalAuthEmail(identity.email!) ? identity.email : technicalAuthEmail(existing.auth_user_id),
       email_confirm: true,
       user_metadata: { full_name: normalized.fullName },
     });
@@ -444,6 +441,9 @@ async function updatePlatformUser(
     if (authUpdateError) throw new HttpError(400, "Não foi possível atualizar o nome do usuário no Supabase Auth.");
   }
 
+  // Alias conversion is monotonic/idempotent, independent of the contact transaction.
+  // A failed save preserves contact/password/ID; never restore an old routable Auth address
+  // over another concurrent edit. All logins and deliveries already resolve by Auth UUID.
   await savePlatformRecord(serviceClient, actorContext, existing.auth_user_id, normalized, normalized.status, existing.must_change_password);
 }
 
@@ -451,7 +451,7 @@ async function requestAdminPasswordReset(
   serviceClient: ReturnType<typeof createServiceClient>,
   actorContext: ActorContext,
   targetUserId: string,
-  origin: string,
+  _origin: string,
 ) {
   const targetUser = await readVisibleTargetUser(serviceClient, actorContext, targetUserId);
   const [targetRow] = await selectRows<PlatformUserRow>(
@@ -462,11 +462,8 @@ async function requestAdminPasswordReset(
   );
   if (!targetRow) throw new HttpError(404, "Usuário não encontrado.");
 
-  const publishableClient = createPublishableClient();
-  const { error: resetError } = await publishableClient.auth.resetPasswordForEmail(targetUser.email, {
-    redirectTo: `${origin}/change-password`,
-  });
-  if (resetError) throw new HttpError(400, "Não foi possível iniciar a redefinição de senha.");
+  await sendOperatorAccessEmail(serviceClient, targetRow.auth_user_id,
+    targetRow.status === "pending_first_access" ? "activation" : "recovery", actorContext.actor.auth_user_id);
 
   const { error: updateError } = await serviceClient
     .from("platform_users")
@@ -574,7 +571,7 @@ async function normalizeAndValidateInput(
 
   if (!fullName) throw new HttpError(400, "Nome completo é obrigatório.");
   validateUsername(username);
-  if (!email || !email.includes("@")) throw new HttpError(400, "E-mail inválido.");
+  if (!CONTACT_EMAIL.test(email) || isTechnicalAuthEmail(email)) throw new HttpError(400, "E-mail inválido.");
   if (!["manual_password", "activation_link"].includes(credentialMode)) throw new HttpError(400, "Modo de credencial inválido.");
   if (!["super_admin", "owner", "admin", "recruiter", "member"].includes(profile)) throw new HttpError(400, "Perfil inválido.");
   if (profile === "super_admin" && actorContext.actor.access_profile !== "super_admin") {
@@ -620,16 +617,6 @@ async function normalizeAndValidateInput(
       .limit(1),
   );
   if (usernameConflict) throw new HttpError(409, "O username informado já está em uso.");
-
-  const [emailConflict] = await selectRows<Pick<PlatformUserRow, "id">>(
-    serviceClient
-      .from("platform_users")
-      .select("id")
-      .ilike("email", email)
-      .neq("id", currentUserId ?? "00000000-0000-0000-0000-000000000000")
-      .limit(1),
-  );
-  if (emailConflict) throw new HttpError(409, "O e-mail informado já está em uso.");
 
   const password = input.password;
   if (credentialMode === "manual_password") {

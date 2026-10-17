@@ -1,0 +1,38 @@
+{
+  "baseline": "6f128509f1aca4134bda2e51765cb0ea6b10fc26",
+  "release": "3.0.6",
+  "postgres": 150,
+  "browser": 162,
+  "node": 17,
+  "denoTests": 4,
+  "checks": {
+    "typecheck:web": "PASS",
+    "build:web": "PASS",
+    "build": "PASS",
+    "deno check affected Edges/helper": "PASS",
+    "lint": "PASS",
+    "check:foundation": "PASS"
+  },
+  "baselineEdges": {
+    "platform-users": {
+      "version": 8,
+      "verify_jwt": true,
+      "sourceMatchesGit": true
+    },
+    "operator-sign-in": {
+      "version": 5,
+      "verify_jwt": false,
+      "sourceMatchesGit": true
+    },
+    "operator-password-reset": {
+      "version": 5,
+      "verify_jwt": false,
+      "sourceMatchesGit": true
+    }
+  },
+  "remoteBaseline": {
+    "operators": 7,
+    "mailConfigurationInstalled": true
+  },
+  "limits": "Real SQL and handlers/screens with synthetic Auth/email transports. No real account, password or email mutation used as test; no hosted Auth QA environment confirmed; native token cryptography/delivery not simulated as real evidence. Existing320px alert-title legibility limitation retained."
+}

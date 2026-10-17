@@ -1,4 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2.112.3";
+import { readAuthIdentity } from "../platform-users/operatorIdentity.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -21,7 +22,7 @@ Deno.serve(async (request) => {
     const serviceClient = createServiceClient();
     const { data: users, error } = await serviceClient
       .from("platform_users")
-      .select("id, auth_user_id, email, status, must_change_password")
+      .select("id, auth_user_id, status, must_change_password")
       .eq("username", normalizedUsername)
       .limit(1);
     if (error) return neutralFailure();
@@ -30,6 +31,7 @@ Deno.serve(async (request) => {
       return neutralFailure();
     }
 
+    const identity = await readAuthIdentity(serviceClient, target.auth_user_id);
     const authResponse = await fetch(`${Deno.env.get("SUPABASE_URL")}/auth/v1/token?grant_type=password`, {
       method: "POST",
       headers: {
@@ -37,7 +39,7 @@ Deno.serve(async (request) => {
         apikey: readPublishableKey(),
       },
       body: JSON.stringify({
-        email: target.email,
+        email: identity.email,
         password: providedPassword,
       }),
     });
@@ -46,8 +48,9 @@ Deno.serve(async (request) => {
     const session = await authResponse.json() as {
       access_token?: string;
       refresh_token?: string;
+      user?: { id?: string };
     };
-    if (!session.access_token || !session.refresh_token) return neutralFailure();
+    if (!session.access_token || !session.refresh_token || session.user?.id !== target.auth_user_id) return neutralFailure();
 
     await serviceClient
       .from("platform_users")

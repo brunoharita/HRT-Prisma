@@ -3,9 +3,10 @@ import { execFileSync, spawn } from "node:child_process";
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { resolve } from "node:path";
 const bin=process.env.PRISMA_PG_BIN??"C:/Program Files/PostgreSQL/17/bin/",port=process.env.PRISMA_TEST_PG_PORT??"5846";
+const usernameIdentity=process.argv.includes('--username-identity');
 const sorting=process.argv.includes('--sorting');
-const ownerOnboarding=process.argv.includes('--owner-onboarding')||sorting;
-const work=resolve(`tmp/v3m0-pg-${Date.now()}`),evidence=sorting?"docs/qa/evidence/groups-sorting-v303":ownerOnboarding?"docs/qa/evidence/owner-onboarding-v301":"docs/qa/evidence/v3m0-multiempresa",checks=[];
+const ownerOnboarding=process.argv.includes('--owner-onboarding')||sorting||usernameIdentity;
+const work=resolve(`tmp/v3m0-pg-${Date.now()}`),evidence=usernameIdentity?"docs/qa/evidence/username-identity-v306":sorting?"docs/qa/evidence/groups-sorting-v303":ownerOnboarding?"docs/qa/evidence/owner-onboarding-v301":"docs/qa/evidence/v3m0-multiempresa",checks=[];
 mkdirSync(work,{recursive:true});mkdirSync(evidence,{recursive:true});
 const cmd=(name,args,input)=>(execFileSync(bin+name+".exe",args,{input,encoding:"utf8",stdio:name==="pg_ctl"?"ignore":["pipe","pipe","pipe"],env:{...process.env,PGCLIENTENCODING:"UTF8"}})??"").trim();
 const args=["-X","-qAt","-v","ON_ERROR_STOP=1","-v","VERBOSITY=verbose","-h","127.0.0.1","-p",port,"-U","prisma_test","-d","postgres","-f","-"];
@@ -260,6 +261,7 @@ try {
  check("concurrent slot allocation has one winner",results.filter(r=>r.code===0).length===1);
  check("concurrent slot allocation never exceeds cap",ws(5).groups[0].activeCount===2);
  check("all mutations audited",Number(run("select count(*) from public.platform_user_audit_events"))>=7);
+ if(usernameIdentity)await (await import('./usernameIdentity.postgres.mjs')).verifyUsernameIdentity({run,check,fail,id,as,bin,args});
 } finally {
  writeFileSync(evidence+"/postgres.json",JSON.stringify({engine:"PostgreSQL17 isolated local; real source table/helper/policy subset; Auth.uid fixture",checks},null,2));
  if(started)cmd("pg_ctl",["-D",work+"/data","-m","fast","-w","stop"]);

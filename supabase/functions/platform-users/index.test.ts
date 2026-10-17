@@ -22,7 +22,13 @@ Deno.test("four roles: real Edge handler validates scope before Auth and saves a
         }
         if (url.pathname === "/rest/v1/organization_memberships") return Response.json([{ organization_id: id(110), user_id: id(3), role: "recruiter" }]);
         if (url.pathname === "/rest/v1/organizations") return Response.json([{ id: id(110), name: "Empresa A", group_id: id(100) }, ...(url.searchParams.has("group_id") ? [{ id: id(111), name: "Empresa B", group_id: id(100) }] : [])]);
-        if (url.pathname === "/auth/v1/invite") return Response.json({ id: id(9), email: "new@example.invalid" });
+        if (url.pathname === "/auth/v1/admin/users" && method === "POST") return Response.json({ id: id(9), email: "new@example.invalid" });
+        if(url.pathname==='/rest/v1/rpc/operator_access_email_configuration')return Response.json('re_synthetic_runtime_configuration');
+        if(url.pathname==='/rest/v1/rpc/claim_operator_access_email')return Response.json({requestId:id(900),username:'new.synthetic',email:'new@example.invalid'});
+        if(url.pathname===`/auth/v1/admin/users/${id(9)}`&&method==='GET')return Response.json({id:id(9),email:'technical@example.invalid'});
+        if(url.pathname==='/auth/v1/admin/generate_link')return Response.json({id:id(9),email:'technical@example.invalid',action_link:'https://synthetic.invalid/auth/v1/verify?token=synthetic&type=recovery&redirect_to='+encodeURIComponent('https://prisma.hrtsolutions.com.br/change-password'),hashed_token:'synthetic',email_otp:'synthetic',verification_type:'recovery'});
+        if(url.hostname==='api.resend.com')return Response.json({id:'synthetic-receipt'});
+        if(url.pathname==='/rest/v1/rpc/finish_operator_access_email')return Response.json(null);
         if (url.pathname === "/rest/v1/rpc/save_platform_user_v3") return scenario === "rpc-failure" ? Response.json({ code: "42501", message: "Autoridade revogada durante a operação." }, { status: 403 }) : Response.json(id(90));
         if (url.pathname === `/auth/v1/admin/users/${id(9)}` && method === "DELETE") return Response.json({});
         throw Error(`Unexpected synthetic request: ${method} ${url.pathname}`);
@@ -32,7 +38,7 @@ Deno.test("four roles: real Edge handler validates scope before Auth and saves a
       const response = await handler(new Request("https://synthetic.invalid/platform-users", { method: "POST", headers: { Authorization: "Bearer synthetic", "Content-Type": "application/json" }, body: JSON.stringify({ action: "create", input, actor: id(1) }) }));
       const positive = ["member", "recruiter", "legacy-admin"].includes(scenario);
       assert(response.status === (positive ? 200 : 403), `${scenario}: HTTP ${response.status} ${await response.text()}`);
-      const authCalls = calls.filter(c => c.path === "/auth/v1/invite"), saved = calls.filter(c => c.path === "/rest/v1/rpc/save_platform_user_v3");
+      const authCalls = calls.filter(c => c.path === "/auth/v1/admin/users" && c.method === "POST"), saved = calls.filter(c => c.path === "/rest/v1/rpc/save_platform_user_v3");
       if (positive || scenario === "rpc-failure") {
         assert(authCalls.length === 1 && saved.length === 1, scenario + ": one identity and one atomic persistence");
         assert(saved[0].body.p_actor === id(3), scenario + ": actor comes from verified session");
@@ -55,7 +61,13 @@ Deno.test("Owner onboarding: canonical context, four tamper negatives, authority
    if(url.pathname==='/rest/v1/organizations')return Response.json([{id:id(110),name:'Primeira empresa',group_id:id(100)}]);
    if(url.pathname==='/rest/v1/organization_memberships')return Response.json([{organization_id:id(110),user_id:id(3),role:'recruiter'}]);
    if(url.pathname==='/rest/v1/rpc/owner_onboarding_context_v301')return scenario==='collision'||scenario==='stale'?Response.json({code:scenario==='collision'?'23505':'22023',message:scenario==='collision'?'Nome de usuário já está em uso.':'Contexto obsoleto.'},{status:400}):Response.json({...context,contract:scenario==='bad-response'?'unknown':context.contract});
-   if(url.pathname==='/auth/v1/invite')return Response.json({id:id(9),email:'fixture@example.invalid'});
+   if(url.pathname==='/auth/v1/admin/users'&&method==='POST')return Response.json({id:id(9),email:'fixture@example.invalid'});
+   if(url.pathname==='/rest/v1/rpc/operator_access_email_configuration')return Response.json('re_synthetic_runtime_configuration');
+   if(url.pathname==='/rest/v1/rpc/claim_operator_access_email')return Response.json({requestId:id(900),username:'hrtsolutions.owner',email:'fixture@example.invalid'});
+   if(url.pathname===`/auth/v1/admin/users/${id(9)}`&&method==='GET')return Response.json({id:id(9),email:'technical@example.invalid'});
+   if(url.pathname==='/auth/v1/admin/generate_link')return Response.json({id:id(9),email:'technical@example.invalid',action_link:'https://synthetic.invalid/auth/v1/verify?token=synthetic&type=recovery&redirect_to='+encodeURIComponent('https://prisma.hrtsolutions.com.br/change-password'),hashed_token:'synthetic',email_otp:'synthetic',verification_type:'recovery'});
+   if(url.hostname==='api.resend.com')return Response.json({id:'synthetic-receipt'});
+   if(url.pathname==='/rest/v1/rpc/finish_operator_access_email')return Response.json(null);
    if(url.pathname==='/rest/v1/rpc/create_group_owner_v301')return scenario==='commit-revoked'?Response.json({code:'42501',message:'Contexto alterado antes da persistência.'},{status:403}):Response.json(id(90));
    if(url.pathname===`/auth/v1/admin/users/${id(9)}`&&method==='DELETE')return Response.json({});
    throw Error('Unexpected Owner request '+url.pathname);
@@ -64,7 +76,7 @@ Deno.test("Owner onboarding: canonical context, four tamper negatives, authority
   const response=await handler(new Request('https://synthetic.invalid/platform-users',{method:'POST',headers:{Authorization:'Bearer synthetic','Content-Type':'application/json'},body:JSON.stringify({action:scenario==='context'?'owner_context':'create_owner',groupId:id(100),contract:scenario==='contract'?'unknown':context.contract,input,actor:id(1)})}));
   const expected=['context','create'].includes(scenario)?200:scenario==='collision'?409:['contract','stale','bad-response'].includes(scenario)?400:403;
   assert(response.status===expected,`${scenario}: ${response.status}: ${await response.text()}`);
-  const auth=calls.filter(c=>c.path==='/auth/v1/invite'),saved=calls.filter(c=>c.path==='/rest/v1/rpc/create_group_owner_v301');
+  const auth=calls.filter(c=>c.path==='/auth/v1/admin/users'&&c.method==='POST'),saved=calls.filter(c=>c.path==='/rest/v1/rpc/create_group_owner_v301');
   const provisioned=['create','commit-revoked'].includes(scenario);assert(auth.length===(provisioned?1:0)&&saved.length===(provisioned?1:0),scenario+': refused before Auth or one atomic persistence');
   if(provisioned){assert(saved[0].body.p_actor===id(3),'verified actor');assert(saved[0].body.p_group===id(100)&&saved[0].body.p_company===id(110),'bound original scope');}
   assert(calls.filter(c=>c.method==='DELETE').length===(scenario==='commit-revoked'?1:0),scenario+': compensation only newly-created identity');

@@ -304,7 +304,7 @@ export function PrismaApplication() {
       setState((current) => ({
         ...current,
         recoveringAccess: false,
-        infoMessage: "Se o identificador existir, um fluxo seguro de recuperação foi iniciado.",
+        infoMessage: "Se o nome de usuário existir e estiver habilitado, enviaremos um link ao e-mail cadastrado para essa conta.",
       }));
     } catch {
       setState((current) => ({
@@ -551,7 +551,7 @@ function AccessResult({
   );
 }
 
-function SignInPage({
+export function SignInPage({
   errorMessage,
   infoMessage,
   signingIn,
@@ -599,7 +599,7 @@ function SignInPage({
               block
               className="prisma-auth-recovery"
               loading={recoveringAccess}
-              onClick={() => void onRequestPasswordReset(form.getFieldValue("username") ?? "")}
+              onClick={() => { void form.validateFields(["username"]).then(values => onRequestPasswordReset(values.username)).catch(() => undefined); }}
               size="large"
               type="default"
             >

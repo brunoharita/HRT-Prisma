@@ -3,11 +3,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.87.0
+version: 2.88.0
 last_verified: 2026-10-17
 ---
 
 # Estado atual do Prisma
+
+## Username único e contato compartilhável —3.0.6 validada localmente
+
+Bruno autorizou implementação/main/publicação17/10/2026. operator-identity2.0.0 permite e-mail de contato repetido, preservando username global e Auth UUID exclusivos. Novas contas recebem alias técnico; login resolve Auth por ID, ativação/recuperação usam link nativo enviado ao contato da conta por Resend existente. Recuperação exige username, retorno neutro,60s/3por hora/recibos privados. Sem backfill/reset em massa; legado preservado, edição futura de contato converte alias idempotente.150SQL/162browser/17Node/4Deno/deno check/tipos/build/lint/foundation PASS; CI/publicação pendentes. Acordo/AoT username-identity-v306, ADR-086 e operations/operator-access-email distinguem fixtures de Auth/entrega humana, não testados com contas reais. Backend identidade2.0.0 deve ser preservado em rollback após novas contas; web anterior compatível.
 
 ## Mínimo de senha8 —3.0.5 publicada
 
