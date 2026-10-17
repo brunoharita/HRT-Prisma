@@ -1,0 +1,43 @@
+# AoT — evolução de UX 3.1.0
+
+Contrato integral `agreement-ux-v310.md`1.0.0, prompt `execution-ux-v310.md`. Decisão explícita Bruno17/10/2026: preservar estado, implementar seis etapas, main e publicação3.1.0. Baseline be1b049/runtimee7ea4df/3.0.7. Branch codex/ux-v310. Evidências: `evidence/ux-v310/`.
+
+## Matriz de acordos
+
+| ID | Implementação | Teste/evidência | Status | Ambiente/limitação |
+| --- | --- | --- | --- | --- |
+| D-00 | tag remota, ZIP íntegro, imagem/backup restritos e runbook | baseline.json, CRC ZIP, hashes/tag/imagem na VPS | PASS | recuperação da aplicação, sem descartar dados posteriores |
+| D-01 | discovery nav, filtros/chips, colunas, busca da sessão, seleção e registros mobile | browser real e regressão dirigida | PASS | browser/checks.json; agrupamento padrão sem rolagem horizontal desktop |
+| D-02 | Home factual/por perfil, tarefas e recentes de sessão | papéis, acesso e negativos browser | PASS | tarefas de revisão/entrevista/decisão reais; limites por perfil |
+| D-03 | síntese primeiro, quatro destaques, oito análises e seis seções | browser/render e regressão Pessoa | PASS | person-preservation.json180checks/15cenários |
+| D-04 | comparação por requisito/fontes/diferenças/resumo | utilitários negativos e browser real | PASS | comparação mantém algoritmo/estados/fontes e decisão humana |
+| D-05 | simulador com tarifa vigente e saldo real | testes puros + browser | PASS | tokens-regression48checks; simulador não reserva/debita/inicia IA |
+| D-06 | fila serial10PDFs, identidade/revisão existentes, recuperação/pausa/escopo | serial/cancelamento negativos, browser | PASS | browser serial/duplicidade/identidade/revisão/pausa/troca de empresa |
+| D-07 | tokens atuais/layouts aprovados, mobile e disclosure | capturas1448/390, limites320 e comparação visual | PASS | capturas desktop/mobile inspecionadas; largura320 sem overflow |
+| D-08 | registro3.1.0/documentação/contexto/release | tipos/build/testes/CI/main/runtime | PARTIAL | local PASS; CI/publicação ainda pendentes |
+
+## Proibições e preservação
+
+P-01/02/03 e P-UX-01 PASS: diff integral limitado ao frontend e aos testes/documentação. Negativos cobrem ausência/tarifa inválida/overflow numérico, estados desconhecidos, fila serial/cancelamento, papel comum e troca de contexto. Nenhuma mutation de publicação/compra/IA é chamada por busca/simulação/comparação. F-01/F-02 preservados: APIs de fornecedor futuras e algoritmos/Owner/identidade intactos. Algoritmos, serviços de persistência, Auth/RLS/banco/IA/ledger/Owner permanecem sem alteração; testes sintéticos bloqueiam rede externa. Não há envio real de e-mail, uso pago de IA, publicação de Perfil ou decisão humana em produção para testar.
+
+## Mapa de impacto e preservação
+
+O mapa integral do acordo continua aplicável. Novos arquivos são utilitários/componentes frontend e fixtures. A fila usa o NavigationViewStore existente por sessão/usuário/papel/empresa; nenhum storage persistente de currículos introduzido. A troca de escopo impede despachar o arquivo seguinte; requisição autorizada já despachada pode terminar no contexto original e continua protegida pelo servidor. Nenhuma migration, Edge ou serviço de IA é necessário por causa desta orquestração. A descoberta encontrou a consulta existente de processos/stages, reutilizada pela Home com status active e destinos por processo; não foram criadas contagens estimadas nem leitura operacional para membro. Dados de até50processos recentes são exibidos por processo, sem afirmar um agregado completo. Fontes de autorização das rotas foram conferidas: membro não recebe atalho/consulta de Posições. Essa dependência atualiza o mapa Home/processos (direct de apresentação; serviço existente inalterado).
+
+## Fidelidade visual
+
+Referência normativa: seis propostas HTML/capturas preservadas e hash em baseline.json. Estado equivalente com dados sintéticos,1448/390 e limite320. Conteúdo real dos componentes traz qualificações completas, oito análises integrais, limitações e estados existentes; é adaptação de conteúdo autorizada por A-UX-01, não substituição de composição. Ajustes por inspeção: separação vertical entre áreas e cartões, comparação compacta com explicação sob demanda, informação ausente neutra. Inspeção final também agrupou área abaixo do nome e empresa/período abaixo do cargo, mantendo cidade/data na largura desktop e as colunas individuais disponíveis. A referência indica conteúdo ilustrativo; informações mais ricas (qualificações/limitações/análises completas) são preservadas. Os tokens nativos da carteira e suas fontes/histórico continuam abaixo do simulador; não foram removidos para reproduzir dados fictícios. Sem divergência estrutural não autorizada identificada. Browser com1448/390/320: seis superfícies, um h1 e sem overflow; refinamento de Pessoas/Tokens repetiu só as capturas afetadas.
+
+## Validação e limites
+
+49casos Node únicos PASS (44dirigidos +5do registro3.1.0;12novos utilitários incluídos). Tipos/build raiz e web PASS. Browser das seis superfícies:72checks no ciclo amplo e48na repetição afetada de Pessoas/Tokens+interações; critérios de direitos, fontes e lote continuam PASS. Preservação Pessoa180checks/15cenários e Tokens48checks PASS. Os relatórios de Pessoa consolidam a última prova de cada cenário/viewport; seletor de modal hidden, navegação AntD e montagem do transporte foram corrigidos no harness, sem remover proteção ou alterar produto por falha de fixture. A captura inicial de Tokens estava sem a folha CSS da página no harness; a dependência foi incluída e a imagem correspondente refeita.
+
+Lint do workspace encontrou whitespace em `output/pa-concurrency-baseline.sql`, arquivo não rastreado anterior e fora do escopo. Não foi alterado/apagado. Lint/contexto finais usam fotografia exata dos arquivos rastreados da entrega, evitando incorporar rascunhos ao Context Pack. PNPM recusou reinstalar a junction de dependências do snapshot; não foi forçado purge/CI. Os quatro scripts Node equivalentes foram executados diretamente: lint1897arquivos, foundation e geração/check do contexto PASS, sem alterar dependências. Snapshot final atualizado novamente quando as evidências foram consolidadas. Não foi autorizado nem executado validate integral local.
+
+## Git / QA / produção
+
+Pendente CI/publicação/smoke. Ambiente de QA é browser/transporte sintético local, sem backend QA separado. Produção continua3.0.7 até os gates. Não alegar jornada autenticada com pessoa real a partir desta evidência.
+
+## Desvios e conclusão
+
+D-00..D-07/P/F localmente comprovados. Conclusão da entrega depende de D-08 (CI/main/publicação/smoke/sincronização). Limite F-01 preservado: preparação de integração e API futura não equivalem a um conector operacional.

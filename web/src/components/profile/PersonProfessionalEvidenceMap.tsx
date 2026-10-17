@@ -45,6 +45,7 @@ interface PersonProfessionalEvidenceMapProps {
   activeSurface?: Surface;
   onSurfaceChange?: (surface: Surface) => void;
   workspace?: PersonWorkspaceParts | undefined;
+  selectionContext?: ReactNode;
   synthesis?: ProfileSynthesisAdapter | undefined;
   onOpenSynthesisSource?: ((source: SynthesisSource) => void) | undefined;
   profile: PrismaProfileView;
@@ -68,7 +69,7 @@ const natureColors: Record<ProfessionalEvidenceNature, string> = {
   assessment_result: "default",
 };
 
-export function PersonProfessionalEvidenceMap({ profile, projection: incomingProjection, projectionError, onOpenSource, curation, onOpenVersions, synthesis, onOpenSynthesisSource, workspace, activeSurface, onSurfaceChange }: PersonProfessionalEvidenceMapProps) {
+export function PersonProfessionalEvidenceMap({ profile, projection: incomingProjection, projectionError, onOpenSource, curation, onOpenVersions, synthesis, onOpenSynthesisSource, workspace, activeSurface, onSurfaceChange, selectionContext }: PersonProfessionalEvidenceMapProps) {
   const [projection, setProjection] = useState(incomingProjection);
   const [originalOpen, setOriginalOpen] = useState(false);
   const [curationOpen, setCurationOpen] = useState(false);
@@ -98,6 +99,7 @@ export function PersonProfessionalEvidenceMap({ profile, projection: incomingPro
   const openReview = () => { setFocusPending(true); setSurface("competencies"); };
 
   return <div className={`prisma-m72-profile${surface === "summary" ? "" : " prisma-content-standard prisma-reading"}${curationOpen ? " prisma-m74-open" : ""}`}>
+    <label className="prisma-person-section-select">Seção do Perfil<Select aria-label="Seção do Perfil" value={surface} disabled={curationOpen} options={PERSON_SURFACES.map(([value,label])=>({value,label}))} onChange={(next:Surface)=>{setSurface(next);setSelectedConcept(null);setSelectedGroupKey(null);}}/></label>
     <nav aria-label="Áreas do Perfil profissional" className="prisma-m72-tabs">
       {PERSON_SURFACES.map(([key, label]) => <button disabled={curationOpen} aria-current={surface === key ? "page" : undefined} key={key} onClick={() => { setSurface(key); setSelectedConcept(null); setSelectedGroupKey(null); }} type="button">{label}</button>)}
     </nav>
@@ -105,15 +107,15 @@ export function PersonProfessionalEvidenceMap({ profile, projection: incomingPro
     {projectionError ? <Alert action={<Button onClick={() => window.location.reload()}>Tentar novamente</Button>} description="O Perfil publicado continua disponível abaixo." title={projectionError} showIcon type="warning" /> : null}
     {!projection && !projectionError && (surface !== "summary" || !synthesis) ? <PrismaCard><Empty description="Ainda não há evidências publicadas para organizar nesta visão." image={<FileSearchOutlined />} /></PrismaCard> : null}
     {surface === "summary" ? <div className={`prisma-person-reading-layout${workspace ? " has-operations" : ""}`}>
-      {workspace?.pending || (curation && summary && summary.pendingCount !== null && summary.pendingCount > 0) ? <div className="prisma-person-reading-pending"><section className="prisma-person-rail-pending"><h3>Ações pendentes <Tag color="gold">{(workspace?.pendingCount ?? 0) + (curation && summary?.pendingCount ? 1 : 0)}</Tag></h3>
-        {workspace?.pending}
-        {curation && summary && summary.pendingCount !== null && summary.pendingCount > 0 ? <article><strong>Competências sem classificação</strong><p>{summary.pendingCount} declarações ainda precisam ser associadas a uma competência. As declarações originais permanecem preservadas.</p><Button block onClick={openReview}>Revisar competências</Button></article> : null}
-      </section></div> : null}
       <div className="prisma-person-reading-main">
         {synthesis && onOpenSynthesisSource ? <ProfileSynthesisSurface canGenerate={Boolean(workspace?.header)} adapter={synthesis} publishedProfile={profile} originalSummary={profile.about?.summary} onOriginal={() => setOriginalOpen(true)} onProfile={() => setSurface("profile")} onOpenSource={onOpenSynthesisSource} /> : <SummarySurface facts={summary} profile={profile} projection={projection} canReview={Boolean(curation)} onReview={openReview} onEvidence={setSelectedEvidence} onOpenCompetencies={() => setSurface("competencies")} onOpenEvidence={() => setSurface("evidence")} onOpenProfile={() => setSurface("profile")} onOpenVersions={onOpenVersions} />}
         {summary ? <PrismaCard className="prisma-person-evidence-strip"><strong>Competências e evidências</strong><span><b>{summary.conceptCount}</b> conceitos associados</span><span><b>{summary.evidenceCount}</b> evidências vinculadas</span>{summary.pendingCount !== null ? <span><b>{summary.pendingCount}</b> declarações a revisar</span> : null}<div><Button type="link" onClick={() => setSurface("competencies")}>Consultar competências →</Button><Button type="link" onClick={() => setSurface("evidence")}>Explorar evidências →</Button></div></PrismaCard> : null}
       </div>
-      {workspace ? <aside className="prisma-person-reading-rail prisma-person-compact-access" aria-label="Acessos da Pessoa"><PrismaCard title="Consultar e gerenciar">{workspace.availabilityNotice}<Button block onClick={()=>setSurface("documents")}>Documentos e revisões</Button><Button block onClick={()=>setSurface("history")}>Histórico da Pessoa</Button>{workspace.quickActions}</PrismaCard></aside> : null}
+      {workspace?.pending || (curation && summary && summary.pendingCount !== null && summary.pendingCount > 0) ? <div className="prisma-person-reading-pending"><section className="prisma-person-rail-pending"><h3>Ações pendentes <Tag color="gold">{(workspace?.pendingCount ?? 0) + (curation && summary?.pendingCount ? 1 : 0)}</Tag></h3>
+        {workspace?.pending}
+        {curation && summary && summary.pendingCount !== null && summary.pendingCount > 0 ? <article><strong>Competências sem classificação</strong><p>{summary.pendingCount} declarações ainda precisam ser associadas a uma competência. As declarações originais permanecem preservadas.</p><Button block onClick={openReview}>Revisar competências</Button></article> : null}
+      </section></div> : null}
+      {workspace || selectionContext ? <aside className="prisma-person-reading-rail prisma-person-compact-access" aria-label="Acessos da Pessoa">{selectionContext}{workspace?<PrismaCard title="Consultar e gerenciar">{workspace.availabilityNotice}<Button block onClick={()=>setSurface("documents")}>Documentos e revisões</Button><Button block onClick={()=>setSurface("history")}>Histórico da Pessoa</Button>{workspace.quickActions}</PrismaCard>:null}</aside> : null}
     </div> : null}
     {surface === "documents" ? workspace?.documents ?? <PrismaCard><Empty description="Documentos e revisões disponíveis somente para operadores autorizados." image={Empty.PRESENTED_IMAGE_SIMPLE} /></PrismaCard> : null}
     {surface === "history" ? workspace?.history ?? <PrismaCard><Empty description="O histórico operacional exige acesso autorizado." image={Empty.PRESENTED_IMAGE_SIMPLE} /></PrismaCard> : null}

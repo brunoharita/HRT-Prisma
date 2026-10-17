@@ -1,0 +1,12 @@
+{
+  "initialDirectedTests": 44,
+  "subsequentReleaseAndNewUtilityTests": 17,
+  "newUtilityTestsInBothRuns": 12,
+  "uniqueDirectedCases": 49,
+  "pass": true,
+  "commands": [
+    "node --test dist/tests/uxEvolution.test.js dist/tests/curriculumFirstIntake.test.js dist/tests/m2PeopleIngestion.test.js dist/tests/documentPresentation.test.js dist/tests/personActionCenter.test.js dist/tests/personProfileSummary.test.js dist/tests/prismaTokens.test.js",
+    "node --test dist/tests/productRelease.test.js dist/tests/uxEvolution.test.js"
+  ],
+  "limits": "Tests are local and deterministic. No hosted Auth, real PII, paid AI or production mutations."
+}

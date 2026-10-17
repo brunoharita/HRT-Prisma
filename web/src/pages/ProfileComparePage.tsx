@@ -1,3 +1,4 @@
+import {PeopleDiscoveryNavigation} from "../components/PeopleDiscoveryNavigation";
 import { personRelationshipLabels } from "../domain/personRelationship";
 import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
 import { ProfileFilled as PrismaPageIcon } from "@ant-design/icons";
@@ -31,9 +32,10 @@ export function ProfileComparePage({ activeMembership, personIds, onNavigate }: 
   }, [activeMembership.organizationId, activeMembership.role, personIds[0], personIds[1]]);
   const profiles = useMemo(() => candidates.map(toView), [candidates]);
 
-  return <PrismaPage className="prisma-profile-compare-page">
+  return <PrismaPage className="prisma-profile-compare-page prisma-v310">
     <Button onClick={() => onNavigate("/profiles/search")} type="text">Ir aos resultados</Button>
     <PrismaPageHeader icon={<PrismaPageIcon />} title="Comparar perfis" description="Compare a mesma estrutura profissional lado a lado, sem notas, ranking ou decisão automática." actions={<Button icon={<CloseOutlined />} onClick={() => { setSelectedIds([]); onNavigate("/profiles/search"); }}>Limpar comparação</Button>} />
+    <PeopleDiscoveryNavigation contextualOnly active="search" activeMembership={activeMembership} onNavigate={onNavigate} personIds={personIds}/>
     {error ? <Alert showIcon title={error} type="error" action={<Button onClick={() => onNavigate("/profiles/search")}>Rever seleção de pessoas</Button>} /> : null}
     {loading ? <div className="prisma-profile-compare-grid"><PrismaCard><Skeleton active paragraph={{ rows: 14 }} /></PrismaCard><PrismaCard><Skeleton active paragraph={{ rows: 14 }} /></PrismaCard></div> : null}
     {!loading && profiles.length !== 2 ? <PrismaCard><Empty description="Selecione exatamente dois Perfis publicados para comparar." /></PrismaCard> : null}

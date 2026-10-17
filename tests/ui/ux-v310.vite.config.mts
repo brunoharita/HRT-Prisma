@@ -1,0 +1,13 @@
+import {defineConfig} from "vite";
+import react from "@vitejs/plugin-react";
+export default defineConfig({root:"tests/ui",cacheDir:"../../tmp/vite-ux-v310",publicDir:"../../web/public",plugins:[{name:"ux-v310-synthetic-transport",enforce:"pre",transform(code,id){const file=id.replaceAll("\\","/");const fixture='"../../../../tests/ui/ux-v310/fixture"';
+ if(file.endsWith("/infrastructure/supabase/personIngestionService.ts"))return `import {ingestion} from ${fixture};export const personIngestionService=ingestion;`;
+ if(file.endsWith("/infrastructure/supabase/profileSynthesisService.ts"))return 'export {adapter as unused} from "../../../../tests/ui/person-unified/fixture";import {adapter} from "../../../../tests/ui/person-unified/fixture";export const profileSynthesisService=()=>adapter;';
+ if(file.endsWith("/infrastructure/supabase/profileCompetencyCurationService.ts"))return 'import {curation} from "../../../../tests/ui/person-unified/fixture";export const profileCompetencyCurationService=(_o,_p,role)=>role==="member"?undefined:curation;';
+ if(file.endsWith("/infrastructure/supabase/selectionProcessService.ts"))return `import {selectionTransport} from ${fixture};export const selectionProcessService=selectionTransport;`;
+ if(file.endsWith("/infrastructure/supabase/vacancyService.ts"))return `import {vacancyTransport} from ${fixture};export const vacancyService=vacancyTransport;export const workspaceOrganizationId=()=>"org-fixture";`;
+ if(file.endsWith("/infrastructure/supabase/profileDiscoveryService.ts"))return `import {discovery} from ${fixture};export const profileDiscoveryService=discovery;`;
+ if(file.endsWith("/infrastructure/supabase/client.ts"))return 'export {supabase} from "../../../../tests/ui/tokens-prisma/fixture";';
+ if(file.endsWith("/infrastructure/parserIaClient.ts"))return 'export {parserEnabled as parserIaEnabled,prepare,prepare as prepareParserIa,readiness as checkParserIaReadiness} from "../../../tests/ui/ux-v310/fixture";';
+ if(file.endsWith("/domain/personIngestion.ts"))return code.replace('export async function validateAndProcessPdf(', 'async function originalValidateAndProcessPdf(')+'\nexport {mockPdf as validateAndProcessPdf} from "../../../tests/ui/ux-v310/fixture";';
+}},react()],server:{host:"127.0.0.1",port:5731,strictPort:true,fs:{allow:["../.."]}}});

@@ -1,3 +1,5 @@
+import {useRecentWork} from "../ui/useRecentWork";
+import {PeopleDiscoveryNavigation} from "../components/PeopleDiscoveryNavigation";
 import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
 import { TeamOutlined as PrismaPageIcon } from "@ant-design/icons";
 import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
@@ -28,6 +30,7 @@ const PAGE_SIZE = 8;
 const SEARCH_SESSION_KEY = "prisma.profile-search.1";
 
 export function ProfileSearchPage({ activeMembership, onNavigate }: ProfileSearchPageProps) {
+  useRecentWork({path:"/profiles/search",title:"Encontrar profissionais",detail:"Busca de Perfis publicados"});
   const [searched, setSearched] = useViewState("searched", false);
   const [query, setQuery] = useViewState<ProfileSearchQuery>("query", emptyProfileSearchQuery());
   const [results, setResults] = useState<ProfileSearchResult[] | null>(null);
@@ -65,9 +68,10 @@ export function ProfileSearchPage({ activeMembership, onNavigate }: ProfileSearc
     window.requestAnimationFrame(() => window.requestAnimationFrame(() => focusNoticeTarget(".prisma-search-result-card input[type=checkbox]:checked")));
   }
 
-  return <PrismaPage className="prisma-profile-search-page">
+  return <PrismaPage className="prisma-profile-search-page prisma-v310">
     <Button className="prisma-profile-search-back" onClick={() => onNavigate("/profiles")} type="text">Ir para Pessoas</Button>
     <PrismaPageHeader icon={<PrismaPageIcon />} title="Encontrar pessoas" description="Use os mesmos blocos do Perfil para encontrar as pessoas adequadas." />
+    <PeopleDiscoveryNavigation active="search" activeMembership={activeMembership} onNavigate={onNavigate}/>
     <PrismaCard
       className="prisma-profile-search-workspace"
       extra={activeFilterCount(query) ? <Tag color="blue">{activeFilterCount(query)} filtros ativos</Tag> : <Typography.Text type="secondary">Comece pelos critérios essenciais</Typography.Text>}

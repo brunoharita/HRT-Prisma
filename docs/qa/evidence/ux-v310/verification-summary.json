@@ -1,0 +1,39 @@
+{
+  "baselineVersion": "3.0.7",
+  "targetVersion": "3.1.0",
+  "rootBuild": true,
+  "webTypecheck": true,
+  "webBuild": true,
+  "uniqueNodeCases": 49,
+  "personCases": 15,
+  "personChecks": 180,
+  "tokensPreservationChecks": 48,
+  "broadBrowserCycle": {
+    "passed": 72,
+    "viewports": [
+      1448,
+      390,
+      320
+    ],
+    "limits": "Superseded People default columns and Tokens fixture stylesheet were corrected with targeted recapture."
+  },
+  "finalAffectedBrowserChecks": 48,
+  "outboundNetwork": 0,
+  "paidAiCalls": 0,
+  "realPersonMutations": 0,
+  "hostedAuthenticatedJourney": "NOT TESTED",
+  "rollbackArchiveGzipTest": true,
+  "vpsBackupDirectoryMode": "700",
+  "vpsPrivateConfigurationMode": "600",
+  "runtimeBuildWarnings": [
+    "Existing large chunks",
+    "Existing mixed static/dynamic Supabase client import"
+  ],
+  "trackedSnapshotChecks": [
+    "lint",
+    "foundation",
+    "generate-prisma-context",
+    "check-prisma-context"
+  ],
+  "untrackedWorkspaceResiduePreserved": true
+}

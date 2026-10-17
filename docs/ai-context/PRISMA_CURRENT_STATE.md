@@ -3,11 +3,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.89.0
+version: 2.90.0
 last_verified: 2026-10-17
 ---
 
 # Estado atual do Prisma
+
+## Evolução de UX —3.1.0 em validação local
+
+Bruno aprovou as seis propostas e main/publicação após preservar3.0.7. Tag remota restore-v3.0.7-before-v3.1.0, código e imagem/configuração restritos na VPS com hashes verificados. Descoberta/filtros/colunas/buscas da sessão, Início factual por perfil e recentes, síntese antes dos destaques, mobile com seis seções, comparação por requisito/fontes/diferenças/resumo determinístico, simulador pelas tarifas atuais e lote serial de até10PDFs. Pipeline/identificação/revisão/publicação humana, acesso/tenant/Score/IA/ledger preservados. API/conector externo continua futuro conforme referência; memória da fila e preferências é por sessão/usuário/papel/empresa, sem gravar currículos em cache persistente. Banco/Edge/serviços não alterados. Produção permanece3.0.7 até CI/publicação/smoke; limites e fechamento no AoT ux-v310 e escopo em product/ux-v310.
 
 ## Ciclo do Owner —3.0.7 publicada
 

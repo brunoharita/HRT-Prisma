@@ -29,11 +29,11 @@ export function ProfileSynthesisSurface(props: SurfaceProps) { return <Synthesis
 function PublishedSummary({ publishedProfile, originalSummary, onOriginal, onProfile }: Pick<SurfaceProps, "publishedProfile" | "originalSummary" | "onOriginal" | "onProfile">) {
   const sections = publishedSummarySections(publishedProfile);
   return <div className="prisma-synthesis-reading prisma-synthesis-published">
-    <ProfileHighlightCards profile={publishedProfile} onOriginal={onProfile ?? onOriginal} />
     <PrismaCard title="Resumo do perfil" extra={<Button onClick={onProfile ?? onOriginal}>Consultar Perfil completo</Button>}>
       <p className="prisma-synthesis-provenance">Informações publicadas no Perfil aprovado</p>
       {originalSummary ? <p className="prisma-synthesis-narrative">{originalSummary}</p> : <p>Ainda não há um resumo narrativo publicado. Os registros disponíveis aparecem abaixo.</p>}
     </PrismaCard>
+    <ProfileHighlightCards profile={publishedProfile} onOriginal={onProfile ?? onOriginal} />
     <div className="prisma-synthesis-axes">{PROFILE_SYNTHESIS_QUESTIONS.map(([id, label]) => <SummarySectionBoundary key={id} title={label}><PrismaCard title={label} className="prisma-synthesis-published-section">
       {sections[id].map((text, index) => <p key={index}>{text}</p>)}
       <p className="prisma-synthesis-missing">{sections[id].length ? "A análise desta seção ainda não está disponível. Os dados publicados foram preservados acima." : id === "clarifications" ? "Ainda não foi possível preparar perguntas específicas para aprofundar este Perfil." : "Não há informações publicadas suficientes para responder a esta seção neste momento."}</p>
@@ -176,13 +176,13 @@ function ProfileSynthesisBody({ adapter, onOriginal, onProfile, onOpenSource, or
       <header className="prisma-synthesis-heading">
         <div><h2>Resumo do perfil</h2><p className="prisma-synthesis-subtitle">Uma leitura da trajetória, das contribuições e dos contextos de atuação.</p><p className="prisma-synthesis-provenance">Destaques do Perfil vigente{showingPrevious ? ` · Análise anterior do Perfil v${profileVersion}` : ""}{effective.issues?.length ? " · Algumas informações indisponíveis" : ""}</p></div>
       </header>
-      <ProfileHighlightCards profile={publishedProfile} showSources={showSources} onOriginal={onProfile ?? onOriginal} />
       <SummarySectionBoundary key={(analysisId ?? "") + ":overview"} title="Síntese do perfil">
         <div className="prisma-synthesis-narrative"><div className="prisma-synthesis-narrative-heading"><h3><FileTextOutlined aria-hidden="true" /> Síntese profissional <small>Análise de IA</small></h3><Button ref={sourceToggle} icon={<FileSearchOutlined />} onClick={toggleSources} aria-pressed={showSources}>{showSources ? "Ocultar fontes" : "Mostrar fontes"}</Button></div>{statements(effective.overview)}
           {effective.issues?.some(x => x.section === "overview") ? <p className="prisma-synthesis-missing">{explainSynthesisSection(effective.issues.find(x => x.section === "overview")?.reason)}</p> : null}
           <footer className="prisma-synthesis-narrative-footer"><Button type="link" icon={<FileTextOutlined />} onClick={onOriginal}>Ver resumo original do currículo</Button><p className="prisma-synthesis-provenance">Base: Perfil publicado v{profileVersion} · {showingPrevious ? "Análise anterior" : "Análise gravada"}{generatedDate ? " em " + generatedDate : ""}</p></footer>
         </div>
       </SummarySectionBoundary>
+      <ProfileHighlightCards profile={publishedProfile} showSources={showSources} onOriginal={onProfile ?? onOriginal} />
       <header className="prisma-synthesis-analysis-heading"><h2>Análises profissionais</h2><p>Respostas completas, organizadas para consulta.</p></header>
       <div className="prisma-synthesis-axes">{effective.answers.map(a => {
         const title = PROFILE_SYNTHESIS_QUESTIONS.find(x => x[0] === a.questionId)![1];

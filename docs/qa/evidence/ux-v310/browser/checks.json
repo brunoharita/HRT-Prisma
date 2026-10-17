@@ -1,0 +1,198 @@
+{
+  "results": [
+    {
+      "name": "stage 1/1448: no overflow",
+      "pass": true
+    },
+    {
+      "name": "stage 1/1448: one main heading",
+      "pass": true
+    },
+    {
+      "name": "stage 1/390: no overflow",
+      "pass": true
+    },
+    {
+      "name": "stage 1/390: one main heading",
+      "pass": true
+    },
+    {
+      "name": "stage 1/320: no overflow",
+      "pass": true
+    },
+    {
+      "name": "stage 1/320: one main heading",
+      "pass": true
+    },
+    {
+      "name": "stage 5/1448: no overflow",
+      "pass": true
+    },
+    {
+      "name": "stage 5/1448: one main heading",
+      "pass": true
+    },
+    {
+      "name": "stage 5/390: no overflow",
+      "pass": true
+    },
+    {
+      "name": "stage 5/390: one main heading",
+      "pass": true
+    },
+    {
+      "name": "stage 5/320: no overflow",
+      "pass": true
+    },
+    {
+      "name": "stage 5/320: one main heading",
+      "pass": true
+    },
+    {
+      "name": "saved search restores filters in the current session",
+      "pass": true
+    },
+    {
+      "name": "column selection hides the selected column",
+      "pass": true
+    },
+    {
+      "name": "only two profiles can be selected",
+      "pass": true
+    },
+    {
+      "name": "comparison uses explicitly selected IDs",
+      "pass": true
+    },
+    {
+      "name": "Position is explicitly selected before contextual discovery",
+      "pass": true
+    },
+    {
+      "name": "six sections remain available on mobile",
+      "pass": true
+    },
+    {
+      "name": "eight complete analyses and four highlights",
+      "pass": true
+    },
+    {
+      "name": "synthesis precedes highlights",
+      "pass": true
+    },
+    {
+      "name": "mobile pending follows reading",
+      "pass": true
+    },
+    {
+      "name": "sources do not regenerate analysis",
+      "pass": true
+    },
+    {
+      "name": "difference filter compares actual evidence",
+      "pass": true
+    },
+    {
+      "name": "comparison source includes published field",
+      "pass": true
+    },
+    {
+      "name": "manager summary preserves evidence and human authority",
+      "pass": true
+    },
+    {
+      "name": "activity simulator uses current tariffs",
+      "pass": true
+    },
+    {
+      "name": "simulation does not execute AI or purchase",
+      "pass": true
+    },
+    {
+      "name": "batch is serial; failed PDF does not stop remaining files",
+      "pass": true
+    },
+    {
+      "name": "batch never creates a Person before identity confirmation",
+      "pass": true
+    },
+    {
+      "name": "duplicates require explicit human resolution",
+      "pass": true
+    },
+    {
+      "name": "confirmed identity opens the existing human review",
+      "pass": true
+    },
+    {
+      "name": "review does not publish a Profile",
+      "pass": true
+    },
+    {
+      "name": "recent activity is derived from a real visit",
+      "pass": true
+    },
+    {
+      "name": "queue survives internal navigation",
+      "pass": true
+    },
+    {
+      "name": "company switch isolates queue",
+      "pass": true
+    },
+    {
+      "name": "common user has no upload controls",
+      "pass": true
+    },
+    {
+      "name": "member Home hides administration and import",
+      "pass": true
+    },
+    {
+      "name": "member Home hides reviewer-only Position destinations",
+      "pass": true
+    },
+    {
+      "name": "member Home performs no private work reads",
+      "pass": true
+    },
+    {
+      "name": "failed People query never becomes a zero count",
+      "pass": true
+    },
+    {
+      "name": "Owner Home identifies its group",
+      "pass": true
+    },
+    {
+      "name": "Home shows real process stages",
+      "pass": true
+    },
+    {
+      "name": "Super Admin Home exposes group administration",
+      "pass": true
+    },
+    {
+      "name": "pause completes current file and preserves the next",
+      "pass": true
+    },
+    {
+      "name": "company change suppresses late intake and next file",
+      "pass": true
+    },
+    {
+      "name": "common user discovery hides Position workflow",
+      "pass": true
+    },
+    {
+      "name": "no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "no external network or paid provider",
+      "pass": true
+    }
+  ],
+  "errors": [],
+  "outbound": []
+}

@@ -1,3 +1,4 @@
+import {TokenActivitySimulator} from "../components/TokenActivitySimulator";
 import {useEffect,useRef,useState} from "react";
 import {Alert,Button,Collapse,Drawer,Empty,Input,Modal,Pagination,Progress,Select,Space,Table,Tabs,Tag} from "antd";
 import {PrismaCard} from "../ui/PrismaCard";
@@ -37,6 +38,7 @@ export function TokenWallet({overview,busy,onRequest,orders,adminActions}:{overv
  const sourceBody=(l:TokenLot)=><><div className="tokens-source-metrics"><span>{formatTokens(l.available)} de {formatTokens(l.total)} tokens</span><Progress showInfo={false} percent={Math.min(100,100*l.available/l.total)} size="small" strokeColor={l.source==="monthly"?"#2878ff":"#d49100"}/><span>{l.source==="monthly"?"Renova em "+day(overview.account.nextPeriod):"Vence em "+instant(l.expiresAt)}</span></div><div className="tokens-row tokens-muted"><span>{l.source==="monthly"?"Mês calendário de Brasília. Não acumula.":"Disponibilizado em "+instant(l.acquiredAt)}</span>{l.source==="additional"?<span>Validade: 30 dias</span>:null}</div><Button type="link" size="small" onClick={()=>selectSource(l.id)}>Ver movimentações desta origem</Button></>;
  return <>
   {!overview.account.active?<Alert showIcon type="warning" title="Novas operações de IA estão suspensas para esta empresa"/>:overview.available===0?<Alert type="warning" showIcon title="Sem saldo disponível para novas operações de IA" description="Consultas, ações manuais e rascunhos continuam disponíveis."/>:null}
+  <div className="prisma-token-planning-header"><PrismaCard className="prisma-token-available" title="Saldo disponível"><strong>{formatTokens(overview.available)}</strong><p>Tokens Prisma</p><p>Franquia mensal: {formatTokens(overview.account.monthlyTokens)}</p><p>Renovação: {day(overview.account.nextPeriod)}</p><p className="tokens-muted">O saldo considera créditos válidos, com as reservas já descontadas.</p></PrismaCard><TokenActivitySimulator overview={overview}/></div>
   <div className="tokens-wallet-layout"><div className="tokens-wallet-main">
    <PrismaCard className="tokens-sources" title={<div className="tokens-source-title"><span>Saldo por origem</span><span><strong>{formatTokens(overview.available)}</strong> disponíveis</span></div>}>
     <div className="tokens-sources-desktop">{sources.map((l,i)=><section className={"tokens-source"+(selectedLot===l.id?" is-selected":"")} key={l.id}>{sourceSummary(l,i)}{sourceBody(l)}</section>)}</div>

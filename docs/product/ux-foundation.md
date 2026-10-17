@@ -181,3 +181,8 @@ A apresentação compartilhada não consulta, recalcula nem escreve. Permissões
 ## Coesão de conteúdo entre abas — Conhecimento2.7.8
 
 A classe compartilhada opt-in prisma-content-standard aplica os tokens existentes a regiões de conteúdo e portais: leitura/valores16/24, rótulos/metadados14/20, seções20/28, pesos400/600. Tabelas usam corpo16, cabeçalho14/600 e padding12x16, alinhamento pelo topo. Controles conservam geometria/acessibilidade. Código/hash mantém família monoespaçada por significado. Novas abas de Conhecimento devem reutilizar essa região; critérios visuais percorrem todas as abas global/local e comparam papéis equivalentes, com conteúdo/vazio/erro e desktop/celular. Exceções exigem justificativa explícita; não criar tamanhos locais por conveniência. A escala compacta de Pessoas permanece restrita àquela tabela. Acordo/AoT docs/qa/aot-knowledge-ux-v278.md.
+
+
+## Evolução aprovada 3.1.0
+
+As seis composições aprovadas e seus comportamentos estão em [UX3.1.0](ux-v310.md) e no acordo1.0.0 `../qa/agreement-ux-v310.md`. Mantêm esta fundação, a separação de evidência/inferência/decisão, seis seções da Pessoa e divulgação progressiva. Fontes e leitura integral permanecem; simplificar a composição não autoriza omitir conteúdo. Referências e evidências são sintéticas; disponibilidade operacional é registrada no AoT e no Estado Atual.

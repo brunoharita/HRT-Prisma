@@ -1,3 +1,6 @@
+import {buildManagerComparisonSummary,requirementComparisonSignature} from "../domain/comparisonPresentation";
+import {useRecentWork} from "../ui/useRecentWork";
+import "../ui/uxEvolution.css";
 import { AddToPositionFollowUp } from "../components/AddToPositionFollowUp";
 import { usePositionFollowUpMemberships } from "../components/usePositionFollowUpMemberships";
 import { PositionOverview } from "../components/PositionOverview";
@@ -710,6 +713,7 @@ export function VacancyPeoplePage({ activeMembership, onNavigate, vacancyId }: C
 }
 
 export function VacancyComparePage({ activeMembership, onNavigate, personIds, vacancyId }: CommonProps & { personIds: [string, string]; vacancyId: string }) {
+  const [onlyDifferences,setOnlyDifferences]=useState(false),[summaryOpen,setSummaryOpen]=useState(false),[copied,setCopied]=useState(false),[copyError,setCopyError]=useState(false);
   const [attempt, setAttempt] = useState(0);
   const [vacancy, setVacancy] = useState<VacancyDetail | null>(null);
   const [matches, setMatches] = useState<VacancyCandidateMatch[]>([]);
@@ -731,10 +735,13 @@ export function VacancyComparePage({ activeMembership, onNavigate, personIds, va
   }, [activeMembership.organizationId, vacancyId, personIds[0], personIds[1], attempt]);
   const rows = vacancy?.requirements.map((requirement) => ({ key: requirement.stableId, label: requirement.label,
     left: matches[0]?.requirements.find((item) => item.requirement.stableId === requirement.stableId), right: matches[1]?.requirements.find((item) => item.requirement.stableId === requirement.stableId) })) ?? [];
+  const displayedRows=onlyDifferences?rows.filter(row=>requirementComparisonSignature(row.left)!==requirementComparisonSignature(row.right)):rows;
+  const managerSummary=vacancy?buildManagerComparisonSummary(vacancy.title,matches):"";
+  useRecentWork(vacancy?{path:`/vacancies/${vacancyId}/compare/${personIds.join("/")}`,title:vacancy.title,detail:"Comparação de evidências consultada"}:undefined);
   const fallbackNotice = semanticFallbackNotice(matches.flatMap(match => match.semanticFallback ? [match.semanticFallback] : []));
-  return <PrismaPage className="prisma-vacancy-compare-page">
+  return <PrismaPage className="prisma-vacancy-compare-page prisma-v310">
     <Button onClick={() => onNavigate(`/vacancies/${vacancyId}/people`)} type="text">Ir aos resultados</Button>
-    <PrismaPageHeader icon={<PrismaPageIcon />} title="Comparar pessoas" description={vacancy ? `Evidências para ${vacancy.title}. Interpretação versionada, sem decisão automática.` : "Aderência por requisito da Posição."} />
+    <PrismaPageHeader icon={<PrismaPageIcon />} title="Comparar evidências" description={vacancy ? `Evidências para ${vacancy.title}. Interpretação versionada, sem decisão automática.` : "Aderência por requisito da Posição."} actions={<Button type="primary" disabled={loading||!!error||matches.length!==2} onClick={()=>{setCopied(false);setCopyError(false);setSummaryOpen(true);}}>Resumo para o gestor</Button>} />
     {error ? <Alert showIcon title={error} type="error" action={<Button onClick={() => setAttempt((value) => value + 1)}>Atualizar comparação</Button>} /> : null}
     {!loading && fallbackNotice ? <Alert showIcon type="warning" title={fallbackNotice.title} description={fallbackNotice.description} action={fallbackNotice.canRefresh ? <Button onClick={() => setAttempt(value => value + 1)}>{fallbackNotice.actionLabel}</Button> : undefined} /> : null}
     {loading ? <PrismaCard><Skeleton active paragraph={{ rows: 14 }} /></PrismaCard> : null}
@@ -743,16 +750,22 @@ export function VacancyComparePage({ activeMembership, onNavigate, personIds, va
     {semanticComparisonPending(matches) ? <Alert showIcon type="warning" title="Comparação incompleta · sem prioridade segura" description="As notas provisórias e as análises pendentes não determinam quem deve ter prioridade. Consulte evidências e lacunas." action={<Button onClick={() => onNavigate(`/vacancies/${vacancyId}/people`)}>Consultar evidências nos resultados</Button>} /> : null}
     {matches.length === 2 ? <>
       {matches.some((match) => match.detailedStatus !== "ready") ? <Alert showIcon type="warning" title="Aderência detalhada ainda incompleta" description="A relação ocupacional continua comparável. Confira os requisitos da Posição para concluir obrigatórios e lacunas." action={<Button onClick={() => onNavigate(`/vacancies/${vacancyId}/edit`)}>Conferir requisitos</Button>} /> : null}
-      <div className="prisma-vacancy-compare-people">{matches.map((match) => <PrismaCard key={match.candidate.personId}><div className="prisma-match-person"><AvatarInitials name={match.candidate.fullName} /><div>
-        <Typography.Title level={3}>{match.candidate.fullName}</Typography.Title>
-        <Typography.Text>{match.candidate.profileData.professionalTitle || "Perfil profissional"}</Typography.Text><small>{match.candidate.location || "Localização não informada"}</small>
-        {!match.semanticAssessment || match.semanticAssessment.status === "complete" ? <><Space wrap><MatchRelationTags match={match} />{match.positionDecision === "confirmed" ? <Tag className="prisma-position-decision-tag" color="green">Relação com a Posição confirmada por você</Tag> : match.positionDecision === "dismissed" ? <Tag className="prisma-position-decision-tag">Relação com a Posição desconsiderada por você</Tag> : null}</Space><Typography.Paragraph>{match.areaRelation.explanation}</Typography.Paragraph><Typography.Paragraph>{match.functionAssessment.explanation}</Typography.Paragraph></> : null}
-        {match.semanticAssessment || match.stableResult ? <MatchingScoreSummary match={match} /> : null}
-      </div></div></PrismaCard>)}</div>
-      <PrismaCard className="prisma-comparison-table"><Table columns={comparisonColumns(matches)} dataSource={rows} pagination={false} scroll={{ x: 620 }} /></PrismaCard>
-      <div className="prisma-comparison-mobile">{rows.map((row) => <PrismaCard key={row.key} title={row.label}><div><strong>{matches[0]!.candidate.fullName}</strong>{row.left ? <MatchStatusTag status={row.left.status} /> : <Tag>Não avaliado</Tag>}<Typography.Paragraph>{row.left?.explanation}</Typography.Paragraph></div><div><strong>{matches[1]!.candidate.fullName}</strong>{row.right ? <MatchStatusTag status={row.right.status} /> : <Tag>Não avaliado</Tag>}<Typography.Paragraph>{row.right?.explanation}</Typography.Paragraph></div></PrismaCard>)}</div>
+      <div className="prisma-vacancy-compare-people">{matches.map(match=><PrismaCard key={match.candidate.personId} className="prisma-v310-comparison-person"><div className="prisma-v310-compare-identity"><AvatarInitials name={match.candidate.fullName}/><div><Button type="link" onClick={()=>onNavigate(`/profiles/${match.candidate.personId}/profile`)}>{match.candidate.fullName}</Button><p>{match.candidate.profileData.professionalTitle||"Perfil profissional"}</p></div></div>
+        <div className="prisma-v310-compare-metrics"><div><MatchingScoreSummary match={match}/></div><div><span>Requisitos com evidência direta</span><strong>{match.requirements.filter(r=>r.status==="met").length} <small>de {match.requirements.length} consultados</small></strong></div></div>
+        <details><summary>Entender o resultado</summary><MatchRelationTags match={match}/>{match.positionDecision==="confirmed"?<Tag color="green">Relação confirmada por você</Tag>:match.positionDecision==="dismissed"?<Tag>Relação desconsiderada por você</Tag>:null}<p>{match.areaRelation.explanation}</p><p>{match.functionAssessment.explanation}</p><p>Base: Perfil publicado v{match.candidate.profileVersion}. Informações ausentes não provam incapacidade.</p></details>
+      </PrismaCard>)}</div>
+      <div className="prisma-comparison-controls"><h2>Evidências por requisito</h2><Checkbox checked={onlyDifferences} onChange={e=>setOnlyDifferences(e.target.checked)}>Mostrar somente diferenças</Checkbox></div>
+      <PrismaCard className="prisma-comparison-table"><Table columns={comparisonColumns(matches,onNavigate)} dataSource={displayedRows} locale={{emptyText:"Nenhuma diferença nas evidências disponíveis para estes requisitos."}} pagination={false} scroll={{ x: 620 }} /></PrismaCard>
+      <div className="prisma-comparison-mobile">{displayedRows.map((row) => <PrismaCard key={row.key} title={row.label}><div><strong>{matches[0]!.candidate.fullName}</strong>{row.left ? <ComparisonStatusTag status={row.left.status} /> : <Tag>Não avaliado</Tag>}<RequirementComparisonEvidence value={row.left} personId={matches[0]!.candidate.personId} onNavigate={onNavigate}/></div><div><strong>{matches[1]!.candidate.fullName}</strong>{row.right ? <ComparisonStatusTag status={row.right.status} /> : <Tag>Não avaliado</Tag>}<RequirementComparisonEvidence value={row.right} personId={matches[1]!.candidate.personId} onNavigate={onNavigate}/></div></PrismaCard>)}</div>
       <Typography.Title level={2}>Destaques objetivos</Typography.Title><div className="prisma-vacancy-compare-people">{matches.map((match) => <PrismaCard className="prisma-match-highlight-card" key={match.candidate.personId} title={match.candidate.fullName}><ul>{match.requirements.filter((item) => item.status !== "no_evidence").slice(0, 5).map((item) => <li key={item.requirement.stableId}><CheckCircleOutlined /> {item.explanation}</li>)}</ul></PrismaCard>)}</div>
+      {!displayedRows.length&&onlyDifferences?<p>Nenhuma diferença nas evidências disponíveis para estes requisitos.</p>:null}
+      <p>Ausência de evidência não indica incapacidade. Scores não substituem a decisão humana.</p>
     </> : null}
+    <Modal rootClassName="prisma-content-standard prisma-reading" title="Resumo para o gestor" open={summaryOpen} onCancel={()=>setSummaryOpen(false)} width={900} footer={<Space wrap><Button onClick={()=>setSummaryOpen(false)}>Fechar</Button><Button type="primary" onClick={()=>{void navigator.clipboard.writeText(managerSummary).then(()=>{setCopied(true);setCopyError(false);}).catch(()=>setCopyError(true));}}>Copiar resumo</Button></Space>}>
+      <p>Base: Perfis e evidências consultados para esta Posição. Nenhuma informação é enviada a terceiros por esta ação.</p>
+      {copied?<Alert type="success" showIcon title="Resumo copiado."/>:null}{copyError?<Alert type="warning" showIcon title="Selecione e copie o texto abaixo."/>:null}
+      <Input.TextArea aria-label="Resumo factual para o gestor" readOnly value={managerSummary} autoSize={{minRows:10,maxRows:22}}/>
+    </Modal>
   </PrismaPage>;
 }
 
@@ -975,11 +988,19 @@ function vacancyColumns(onNavigate: (path: string) => void, onDelete: (item: Vac
   { title: "Ação", key: "action", align: "right", render: (_, item) => <Space wrap size="small"><Button icon={<EditOutlined />} onClick={() => onNavigate(`/vacancies/${item.id}/edit`)}>Editar</Button><Popconfirm cancelText="Cancelar" description="Esta necessidade sairá da lista. O histórico de definições e avaliações será preservado." okButtonProps={{ danger: true, loading: deletingId === item.id }} okText="Excluir posição" onConfirm={() => void onDelete(item)} title="Excluir esta Posição?"><Button aria-label={`Excluir ${item.title}`} danger icon={<DeleteOutlined />} loading={deletingId === item.id}>Excluir</Button></Popconfirm><Button onClick={() => onNavigate(`/vacancies/${item.id}/people`)}>{item.occupancy === "occupied" ? "Avaliar aderência" : "Encontrar pessoas"}</Button></Space> },
 ]; }
 
-function comparisonColumns(matches: VacancyCandidateMatch[]): ColumnsType<{ key: string; label: string; left: VacancyCandidateMatch["requirements"][number] | undefined; right: VacancyCandidateMatch["requirements"][number] | undefined }> { return [
-  { title: "Requisito da Posição", dataIndex: "label", key: "label", fixed: "left", width: 220 },
-  { title: matches[0]?.candidate.fullName ?? "Pessoa A", dataIndex: "left", key: "left", render: (value) => value ? <Space orientation="vertical" size={2}><MatchStatusTag status={value.status} /><small>{value.evidence[0]?.label ?? "Nenhuma evidência publicada"}</small></Space> : null },
-  { title: matches[1]?.candidate.fullName ?? "Pessoa B", dataIndex: "right", key: "right", render: (value) => value ? <Space orientation="vertical" size={2}><MatchStatusTag status={value.status} /><small>{value.evidence[0]?.label ?? "Nenhuma evidência publicada"}</small></Space> : null },
-]; }
+function ComparisonStatusTag({status}:{status:VacancyMatchStatus}){return status==="no_evidence"?<Tag>Sem evidência suficiente</Tag>:<MatchStatusTag status={status}/>;}
+function RequirementComparisonEvidence({value,personId,onNavigate}:{value:VacancyCandidateMatch["requirements"][number]|undefined;personId:string;onNavigate:(path:string)=>void}) {
+  const [open,setOpen]=useState(false);
+  if(!value)return <p>Requisito não avaliado nesta consulta.</p>;
+  return <><p>{value.explanation||"Informação não disponível."}</p>{value.evidence.length?<><p className="prisma-comparison-source">{value.evidence[0]!.label}</p><Button type="link" onClick={()=>setOpen(true)}>Consultar fontes ({value.evidence.length})</Button></>:<p className="prisma-comparison-source">Sem evidência publicada suficiente.</p>}
+    <Drawer rootClassName="prisma-content-standard prisma-reading" title={`Fontes · ${value.requirement.label}`} open={open} onClose={()=>setOpen(false)} size="large"><p>Informações do Perfil publicado usadas na comparação.</p>{value.evidence.map((e,i)=><PrismaCard key={i} title={e.source}><p>{e.label}</p>{e.canonicalLabel?<p>Conceito associado: {e.canonicalLabel}</p>:null}{e.fieldPath?<p>Campo: {e.fieldPath}</p>:null}{e.sourceVersion?<p>Versão: {e.sourceVersion}</p>:null}</PrismaCard>)}<Button onClick={()=>onNavigate(`/profiles/${personId}/profile`)}>Consultar Perfil completo</Button></Drawer>
+  </>;
+}
+function comparisonColumns(matches:VacancyCandidateMatch[],onNavigate:(path:string)=>void):ColumnsType<{key:string;label:string;left:VacancyCandidateMatch["requirements"][number]|undefined;right:VacancyCandidateMatch["requirements"][number]|undefined}>{return [
+  {title:"Requisito da Posição",dataIndex:"label",key:"label",width:220},
+  {title:matches[0]?.candidate.fullName??"Pessoa A",dataIndex:"left",key:"left",render:value=><><ComparisonStatusTag status={value?.status??"no_evidence"}/><RequirementComparisonEvidence value={value} personId={matches[0]!.candidate.personId} onNavigate={onNavigate}/></>},
+  {title:matches[1]?.candidate.fullName??"Pessoa B",dataIndex:"right",key:"right",render:value=><><ComparisonStatusTag status={value?.status??"no_evidence"}/><RequirementComparisonEvidence value={value} personId={matches[1]!.candidate.personId} onNavigate={onNavigate}/></>}
+];}
 
 const workArrangementOptions = [{ value: "onsite", label: "Presencial" }, { value: "hybrid", label: "Híbrido" }, { value: "remote", label: "Remoto" }, { value: "flexible", label: "Flexível" }];
 const experiencePolicyOptions = [{ value: "unspecified", label: "Não especificado" }, { value: "required", label: "Experiência anterior necessária" }, { value: "not_required", label: "Posição de entrada · experiência anterior não necessária" }];

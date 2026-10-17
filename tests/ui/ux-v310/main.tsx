@@ -1,0 +1,34 @@
+import {useState} from "react";
+import {createRoot} from "react-dom/client";
+import {ConfigProvider,Button} from "antd";
+import ptBR from "antd/locale/pt_BR";
+import {HomeFilled,TeamOutlined,ApartmentOutlined,DatabaseOutlined,IdcardOutlined} from "@ant-design/icons";
+import {HomePage} from "../../../web/src/pages/HomePage";
+import {PeoplePage} from "../../../web/src/pages/PeoplePage";
+import {PersonProfilePage} from "../../../web/src/pages/PersonProfilePage";
+import {VacancyComparePage} from "../../../web/src/pages/VacancyPages";
+import {ProfileSearchPage} from "../../../web/src/pages/ProfileSearchPage";
+import {TokenWallet} from "../../../web/src/pages/TokenWallet";
+import {ResumeImportPage} from "../../../web/src/pages/ResumeImportPage";
+import {PrismaAppShell} from "../../../web/src/ui/PrismaAppShell";
+import {PrismaPage,PrismaPageHeader} from "../../../web/src/ui/PrismaPage";
+import {PrismaViewStateProvider} from "../../../web/src/ui/PrismaNavigation";
+import {prismaTheme} from "../../../web/src/ui/theme";
+import {repository,overview,state} from "./fixture";
+import {vacancy,matches} from "../position-follow-up/fixture";
+import type {OrganizationMembership} from "../../../web/src/shared/access";
+import "antd/dist/reset.css";
+import "../../../web/src/pages/TokensPrismaPage.css";
+import "../../../web/src/styles.css";
+import "../../../web/src/ui/foundation.css";
+function Harness(){
+ const params=new URLSearchParams(location.search),[screen,setScreen]=useState(params.get("page")??"1"),[org,setOrg]=useState("org-fixture"),[role,setRole]=useState(params.get("role")??"recruiter"),[session,setSession]=useState(1);
+ const membership:OrganizationMembership={organizationId:org,organizationName:org==="org-fixture"?"Empresa Horizonte":"Outra empresa",groupId:"group-fixture",groupName:"Grupo Horizonte",role:role as OrganizationMembership["role"]};
+ const navigate=(path:string)=>{state.navigations.push(path);if(path==="/")setScreen("2");else if(path==="/profiles")setScreen("1");else if(path==="/profiles/search")setScreen("search");else if(path==="/profiles/import")setScreen("6");else if(path.startsWith("/profiles/")&&!path.includes("/review/"))setScreen("3");};
+ Object.assign(state,{screen:setScreen,organization:setOrg,role:setRole,logout:()=>setSession(s=>s+1)});
+ const props={activeMembership:membership,onNavigate:navigate};
+ const content=screen==="1"?<PeoplePage {...props} repository={repository as never}/>:screen==="2"?<HomePage {...props} repository={repository as never}/>:screen==="3"?<PersonProfilePage {...props} personId="person-fixture" repository={repository as never}/>:screen==="4"?<VacancyComparePage {...props} vacancyId={vacancy.id!} personIds={[matches[0]!.candidate.personId,matches[1]!.candidate.personId]}/>:screen==="5"?<PrismaPage className="prisma-tokens prisma-content-standard prisma-reading"><PrismaPageHeader icon={<DatabaseOutlined/>} title="Tokens Prisma" description="Planeje as atividades da Empresa Horizonte."/><TokenWallet overview={overview as never} busy={false} onRequest={()=>state.calls.push({name:"request-package"})}/></PrismaPage>:screen==="6"?<ResumeImportPage {...props}/>:<ProfileSearchPage {...props}/>;
+ const navigationItems=[{path:"/",label:"Início",icon:<HomeFilled/>},{path:"/profiles",label:"Pessoas",icon:<TeamOutlined/>},{path:"/vacancies",label:"Posições",icon:<ApartmentOutlined/>},{path:"/tokens",label:"Tokens Prisma",icon:<DatabaseOutlined/>},...(role==="member"?[]:[{path:"/companies",label:"Grupos e empresas",icon:<ApartmentOutlined/>},{path:"/users",label:"Usuários",icon:<IdcardOutlined/>}])];
+ return <ConfigProvider locale={ptBR} theme={prismaTheme}><PrismaViewStateProvider key={`${session}:${org}:${role}`} scope={`${session}:${org}:${role}`}><PrismaAppShell navigationItems={navigationItems} selectedPath={screen==="2"?"/":screen==="5"?"/tokens":screen==="4"?"/vacancies":"/profiles"} memberships={[membership]} activeMembership={membership} profileName="Clara Mendes" profileSubtitle={role} onNavigate={navigate} onOrganizationChange={setOrg} onSignOut={()=>setSession(s=>s+1)}><div key={screen}>{content}</div></PrismaAppShell></PrismaViewStateProvider></ConfigProvider>;
+}
+createRoot(document.getElementById("app")!).render(<Harness/>);

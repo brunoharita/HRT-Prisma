@@ -1,0 +1,77 @@
+[
+  {
+    "scenario": "reference",
+    "width": 390,
+    "checks": {
+      "singleIdentity": true,
+      "noHorizontalOverflow": true,
+      "noExternalCalls": true,
+      "sixIntegratedTabs": true,
+      "eightOpenAnalyses": true,
+      "fourHighlights": true,
+      "noIntermediateProfileButton": true,
+      "precisePendingDestination": true,
+      "responsiveHighlightColumns": true,
+      "readingRailRatio": true,
+      "narrowPendingAfterReading": true,
+      "allNarrativeParagraphs": true,
+      "qualificationsPreserved": true,
+      "sourcesDoNotGenerate": true,
+      "sourceLazy": true,
+      "analysisPreservedWithSource": true,
+      "originalSummary": true,
+      "completeProfileRecords": true,
+      "documentContextPreserved": false,
+      "operationalAuditAccessible": false,
+      "reviewFieldContext": true,
+      "tabChangesDoNotGenerate": true,
+      "noRuntimeError": true
+    },
+    "errors": []
+  },
+  {
+    "scenario": "no-profile",
+    "width": 390,
+    "checks": {
+      "singleIdentity": true,
+      "noHorizontalOverflow": true,
+      "noExternalCalls": true,
+      "honestEmptyState": true,
+      "noRuntimeError": true
+    },
+    "errors": []
+  },
+  {
+    "scenario": "archived",
+    "width": 1448,
+    "checks": {
+      "singleIdentity": true,
+      "noHorizontalOverflow": true,
+      "noExternalCalls": true,
+      "sixIntegratedTabs": true,
+      "eightOpenAnalyses": true,
+      "fourHighlights": true,
+      "noIntermediateProfileButton": true,
+      "archivedOperationsDisabled": true,
+      "noRuntimeError": true
+    },
+    "errors": []
+  },
+  {
+    "scenario": "dirty",
+    "width": 1448,
+    "checks": {
+      "singleIdentity": true,
+      "noHorizontalOverflow": true,
+      "noExternalCalls": true,
+      "sixIntegratedTabs": true,
+      "eightOpenAnalyses": true,
+      "fourHighlights": true,
+      "noIntermediateProfileButton": true,
+      "dirtyConfirmation": true,
+      "dirtyTextPreserved": true,
+      "noRuntimeError": true
+    },
+    "errors": []
+  }
+]

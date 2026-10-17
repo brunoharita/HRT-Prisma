@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 529
-source_manifest_sha256: 2cbd696ae9d4ceecef7681a716acadb6b22f449ae208ba39ba4da5c6c097c503
+documentation_source_count: 534
+source_manifest_sha256: 03eb0d689bf493dd3af399118293c0831ce5dbe9cac4b594b0e7506d624fcdf5
 -->
 
 # Tudo sobre o Prisma
@@ -2644,11 +2644,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.89.0
+version: 2.90.0
 last_verified: 2026-10-17
 ---
 
 # Estado atual do Prisma
+
+## Evolução de UX —3.1.0 em validação local
+
+Bruno aprovou as seis propostas e main/publicação após preservar3.0.7. Tag remota restore-v3.0.7-before-v3.1.0, código e imagem/configuração restritos na VPS com hashes verificados. Descoberta/filtros/colunas/buscas da sessão, Início factual por perfil e recentes, síntese antes dos destaques, mobile com seis seções, comparação por requisito/fontes/diferenças/resumo determinístico, simulador pelas tarifas atuais e lote serial de até10PDFs. Pipeline/identificação/revisão/publicação humana, acesso/tenant/Score/IA/ledger preservados. API/conector externo continua futuro conforme referência; memória da fila e preferências é por sessão/usuário/papel/empresa, sem gravar currículos em cache persistente. Banco/Edge/serviços não alterados. Produção permanece3.0.7 até CI/publicação/smoke; limites e fechamento no AoT ux-v310 e escopo em product/ux-v310.
 
 ## Ciclo do Owner —3.0.7 publicada
 
@@ -11594,6 +11598,20 @@ Use FONTE_GPT_PRISMA.md como contexto-base e leia apenas as fontes específicas 
 
 ---
 
+## Source: `docs/operations/restore-pre-v310.md`
+
+# Recuperar a aplicação anterior à UX 3.1.0
+
+Estado protegido:3.0.7. Recibo/hashes em `../qa/evidence/ux-v310/baseline.json`. Tag remota `restore-v3.0.7-before-v3.1.0` aponta para be1b049. O ZIP local em `tmp/ux-v310/prisma-v3.0.7-source.zip` passou verificação integral CRC. Backup VPS `/opt/prisma-backups/pre-v3.1.0-20261017`, diretório700/arquivos600, contém código, configuração privada e imagem comprimida. Não adicionar configuração/inspect bruto ao Git nem publicar seu conteúdo.
+
+O retorno de aplicação preserva PostgreSQL, documentos, auditoria, credenciais e atividades posteriores. Não é restauração de dados por snapshot e não desfaz decisões humanas. Este movimento prevê só web, mantendo compatibilidade com serviços3.0.7.
+
+Na VPS, conferir hash da imagem arquivada, existência do tag Docker e ID d336b3925596261b220d81382faa3cf30a02c0b0b6971437be52d03424c3682a. Se necessário, `docker image load` do arquivo gzip restaura a imagem. Retaggear `prisma-web:restore-v3.0.7-before-v3.1.0` como `prisma-web:1.6.4` e executar o compose existente `up -d --no-deps prisma-web`, sem build. Preservar assets versionados do container atual para abas abertas. Conferir HTTPS/login/assets e versão3.0.7/SHA e saúde, sem recriar outros serviços. Não substituir `.env.production` atual automaticamente; backup serve para recuperar configuração somente se ela estiver perdida/corrompida.
+
+Código: usar a tag para inspeção ou commit de reversão rastreável em main, preservando história; jamais reset/force-push do remoto. A publicação de reversão exige os mesmos checks afetados e smoke. Não executar este procedimento agora: é o ponto de retorno solicitado, não autorização para desfazer a versão futura sem nova decisão.
+
+---
+
 ## Source: `docs/operations/resume-import-e2e-comparison-2026-09-17.md`
 
 # Comparação completa da importação do currículo — 17/09/2026
@@ -13136,6 +13154,35 @@ A apresentação compartilhada não consulta, recalcula nem escreve. Permissões
 ## Coesão de conteúdo entre abas — Conhecimento2.7.8
 
 A classe compartilhada opt-in prisma-content-standard aplica os tokens existentes a regiões de conteúdo e portais: leitura/valores16/24, rótulos/metadados14/20, seções20/28, pesos400/600. Tabelas usam corpo16, cabeçalho14/600 e padding12x16, alinhamento pelo topo. Controles conservam geometria/acessibilidade. Código/hash mantém família monoespaçada por significado. Novas abas de Conhecimento devem reutilizar essa região; critérios visuais percorrem todas as abas global/local e comparam papéis equivalentes, com conteúdo/vazio/erro e desktop/celular. Exceções exigem justificativa explícita; não criar tamanhos locais por conveniência. A escala compacta de Pessoas permanece restrita àquela tabela. Acordo/AoT docs/qa/aot-knowledge-ux-v278.md.
+
+
+## Evolução aprovada 3.1.0
+
+As seis composições aprovadas e seus comportamentos estão em [UX3.1.0](ux-v310.md) e no acordo1.0.0 `../qa/agreement-ux-v310.md`. Mantêm esta fundação, a separação de evidência/inferência/decisão, seis seções da Pessoa e divulgação progressiva. Fontes e leitura integral permanecem; simplificar a composição não autoriza omitir conteúdo. Referências e evidências são sintéticas; disponibilidade operacional é registrada no AoT e no Estado Atual.
+
+---
+
+## Source: `docs/product/ux-v310.md`
+
+# Evolução de UX 3.1.0
+
+Decisão de Bruno17/10/2026 e contrato integral `../qa/agreement-ux-v310.md`1.0.0. As seis telas aprovadas estão preservadas em `proposta-ux-v310/`; são referências de composição com dados fictícios, nunca registros comerciais ou pessoas reais.
+
+Pessoas apresenta Sua base, Encontrar profissionais e Para uma Posição. A escolha da Posição é explícita e usa a lista autorizada. Área, situação e cargo ficam visíveis; outros critérios continuam acessíveis. Critérios aplicados podem ser retirados ou restaurados ao padrão de Pessoas ativas. Colunas e comparação de dois Perfis publicados respeitam os dados disponíveis. No celular, os registros usam blocos verticais. As buscas nomeadas e preferências ficam na memória da sessão/usuário/papel/empresa; não há cópia persistente de termos pessoais no navegador nem preferência compartilhada com outro usuário.
+
+O Início apresenta trabalho pendente obtido das consultas reais, continuar atividade e acessos visitados nesta sessão. Contagens gerais são secundárias e identificadas como pertencentes à empresa ativa. Super/Owner recebem acessos administrativos compatíveis; Recruiter mantém as empresas vinculadas; usuário comum recebe consultas, sem importação/gestão nem leitura privada operacional. Erro não é apresentado como zero. Falha opcional das pendências não bloqueia a navegação.
+
+Na Pessoa, a narrativa publicada ou síntese gravada aparece antes dos quatro destaques; as oito análises, fontes, limitações, versões e histórico permanecem. Nenhuma síntese é gerada apenas por navegação. Pendências/gestão ficam à direita em desktop amplo e depois da leitura em telas estreitas. As seis seções são preservadas com seletor identificado no celular. Atualizar Perfil é a ação principal; outras operações continuam no menu Mais ações. O contexto da Posição é escolhido sem presumir vínculo ou interesse.
+
+A comparação contextual reutiliza Score, estados e evidências existentes, organiza requisitos e fontes e oferece somente diferenças por conteúdo/status/proveniência. Mesmo status com evidências distintas permanece uma diferença. Ausência de evidência usa apresentação neutra. Resumo para o gestor reproduz fatos/limitações/versões e perguntas para aprofundar, sem IA adicional ou vencedor. Copiar o resumo não envia mensagem. A comparação geral permanece sem Score e permite escolher explicitamente uma Posição para consultar contexto.
+
+Tokens mantém origem, validade, pacotes, reservas, histórico restrito e planejamento por janela. O simulador acrescenta atividade/quantidade, consumo e saldo restante usando a tarifa vigente disponível. Valores ausentes/futuros/inválidos não viram custo zero; insuficiência é explícita. Simular não reserva nem debita e não inicia IA. Tarifas e saldo serão conferidos na operação real.
+
+A importação aceita até dez PDFs por lote,15MB cada, usando pipeline/armazenamento privado/idempotência existentes, leitura serial e ação explícita para iniciar. Cada arquivo mantém estado/erro/recuperação. Identificação, escolha de Pessoa/correspondência e publicação continuam humanas. PDF inválido não impede os outros; pausa conclui o arquivo atual; sair/trocar contexto impede despachar o próximo. Arquivos e conteúdo da fila ficam somente em memória na sessão autorizada. Navegação interna preserva a fila; recarregamento perde o estado local, mas intakes/documentos/revisões já persistidos continuam no servidor. Pessoas permite continuar o trabalho persistido. Encerrar lote só limpa a fila local, sem apagar registros.
+
+Integrações distingue PDFs já aceitos, preparação de origem/mapeamento e conexão de API futura. Não há conector de fornecedor, CSV/mapeamento executável, credencial ou sincronização ativada nesta versão, conforme o limite da referência aprovada.
+
+Aplicação anterior protegida pela tag `restore-v3.0.7-before-v3.1.0`, imagem/backup restrito e hashes; recuperação em `../operations/restore-pre-v310.md`. Publicação e limites de prova no `../qa/aot-ux-v310.md`.
 
 ---
 
@@ -18381,6 +18428,79 @@ Referência de produto: `docs/product/ux-foundation.md`, `prisma-ux-foundation-1
 ## PENDÊNCIAS
 
 Nenhuma decisão de produto pendente no escopo autorizado. O item 3.3 anterior que recomendava manter Vagas está expressamente supersedido por D-3.3: **Posições**.
+
+---
+
+## Source: `docs/qa/agreement-ux-v310.md`
+
+# Contrato de Acordos — evolução de UX 3.1.0
+
+Versão 1.0.0, `agreed`, Product Owner Bruno, 17/10/2026. Fonte: aprovação explícita das seis propostas nesta conversa, com preservação do estado atual antes de implementar em sequência, integrar em main e publicar 3.1.0. Não é pedido para rediscutir as propostas. Referência integral congelada: `docs/product/proposta-ux-v310/propostas.html` e suas doze capturas desktop/mobile; conteúdo ilustrativo não é dado de produção.
+
+## DEVE
+
+- D-00 — Preservar e verificar recuperação da aplicação 3.0.7 antes da implementação. Git, imagem web e configuração existentes; restaurar versão não apaga dados posteriores.
+- D-01 — Pessoas com caminhos visíveis Sua base / Encontrar profissionais / Para uma Posição, busca, filtros identificados e removíveis, restauração do padrão, buscas salvas, escolha de colunas e seleção de duas pessoas para comparação. Manter áreas/cargo/empresa/cidade/data e filtros existentes; celular com registros verticais.
+- D-02 — Início orientado ao trabalho: continuar atividade, pendências acionáveis e acessos recentes reais; métricas secundárias. Adaptar conteúdo a Super Admin, Owner, Recruiter e usuário comum sem expandir autoridade ou inventar pendências. Manter empresa/grupo identificáveis e recuperação de consultas.
+- D-03 — Resumo da Pessoa com síntese primeiro, quatro destaques depois e leitura completa preservada. Seis seções e fontes/histórico/documentos acessíveis. Pendências e gestão na lateral desktop e após a leitura mobile; seletor de seção identificado no celular. Nenhuma geração de IA ao apenas abrir a tela.
+- D-04 — Comparação contextual por requisito, duas pessoas, evidências/fontes/limitações, filtro somente diferenças e resumo factual para o gestor com perguntas de aprofundamento. Reutilizar cálculo e resultados existentes. Comparação geral permanece sem Score; escolher Posição explicitamente quando necessário. No celular, blocos por requisito.
+- D-05 — Tokens com saldo/franquia/renovação e simulador de atividade/quantidade, consumo estimado e saldo restante usando tarifas vigentes reais. Consumo por atividade, fontes e movimentações mantidos. Simular não reserva, debita, cobra ou chama IA; manter limites do acesso ao histórico.
+- D-06 — Importação de vários PDFs com acompanhamento e recuperação por arquivo, processamento serial explícito, identificação/duplicidades humanas, revisão do próximo e confirmação humana anterior à publicação. Falha individual não interrompe outros arquivos. Reusar pipeline, persistência privada, cache/idempotência/consentimento e revisão existentes. Seção Integrações conforme referência, distinguindo preparação e dependência de definição da origem das conexões ainda futuras.
+- D-07 — Seguir diretriz UX, Aptos/Segoe UI e tokens atuais, informação escura/azul ação, estados com texto/ícone, densidade legível, responsividade e acessibilidade. Preservar topologia, hierarquia, proporções relativas, agrupamentos e posição das ações das seis propostas.
+- D-08 — Validação proporcional, evidência visual/funcional, documentação/contexto, CI, integração em main, publicação 3.1.0, smoke e sincronização. Não apresentar mock como operação real.
+
+## PROIBIDO
+
+- P-01 — Não mudar Score/matching, interpretações IA, modelos/prompts, critérios de seleção, planos, tarifas, balanços, autoria, contrato de publicação ou decisões humanas. Ausência de informação não prova incapacidade.
+- P-02 — Não expandir acesso/tenant, expor PII em cache persistente/log público, gravar currículos em armazenamento público, executar chamadas pagas em teste ou publicar Perfil/decisão automaticamente.
+- P-03 — Não incluir rascunhos não rastreados alheios, limpar worktrees existentes, apagar história, force-push ou restaurar banco descartando dados posteriores. Nenhuma integração externa é ativada por um botão ilustrativo.
+- P-UX-01 — Não trocar a composição aprovada por outra, esconder leitura integral ou remover navegação/filtros/fontes para simplificar. Não copiar números fictícios para o produto.
+
+## FORA DE ESCOPO
+
+- F-01 — Conector/API de fornecedor específico, credenciais, sincronização externa e mapeamento de um formato externo ainda não escolhido: a própria proposta os identifica como futuros. Não contratar serviço, introduzir dependência ou migrar banco para isso.
+- F-02 — Novo algoritmo, nova síntese automática, ranking, decisão de contratação, alteração do ciclo Owner ou identidade/senha. Não reconstruir serviços sem impacto.
+
+## AUTONOMIA
+
+- A-01 — Reusar AntD/componentes/serviços/rotas e estado de navegação já autorizado. Limites operacionais do lote, detalhes acessíveis e implementações determinísticas ficam com engenharia; manter ações sensíveis explícitas.
+- A-UX-01 — Adaptar conteúdo ilustrativo aos dados disponíveis, rótulos existentes e componentes reais. Composição e hierarquia são normativas; pixel idêntico não é exigido.
+
+## PENDÊNCIAS
+
+Nenhuma para o escopo acima. F-01 é limite explícito das propostas aprovadas, não conexão autorizada pendente de implementação.
+
+## CRITÉRIOS DE ACEITE
+
+- CA-00 — Tag remota, arquivo de código íntegro, imagem recuperável e hashes/metadados em baseline.json; instrução de restauração sem apagar dados.
+- CA-01 — Encontrar os três caminhos, aplicar/remover/restaurar filtros, salvar/reabrir busca, ocultar/restaurar colunas, selecionar duas pessoas, estados vazio/erro/membro e layout 1448/390/320.
+- CA-02 — Pendência factual abre destino correto; erro não vira zero; papéis e empresa respeitados, acessos reais por sessão/escopo, nenhum dado sintético no produto.
+- CA-03 — Síntese precede destaques; oito análises disponíveis quando existentes, seis seções, fontes/limitações/sem Perfil preservados; mobile sem overflow e sem geração na navegação.
+- CA-04 — Duas pessoas e Posição identificadas, fontes consultáveis, diferenças por evidência (mesmo status não significa conteúdo igual), resumo sem escolher vencedor; pendências e geral sem Score preservados.
+- CA-05 — Tarifas ausentes/futuras/inválidas não geram estimativa inventada; quantidade válida calcula resultado e insuficiência; simulação sem chamada mutante. Histórico/fonte/validade intactos.
+- CA-06 — Lote serial com sucesso/falha/duplicidade/pendência, sem publicação automática, retomada em navegação da sessão, erro recuperável por arquivo, troca de usuário/empresa isola a fila; regressão de importação/revisão vigente.
+- CA-07 — Comparação visual nos mesmos viewports com dados equivalentes e diferenças de conteúdo justificadas; tokens atuais e navegação protegidos.
+- CA-08 — Checks dirigidos e CI PASS, runtime3.1.0/SHA/assets/rotas/rollback; origem/main/VPS sincronizados e limites de smoke explícitos.
+
+## MAPA DE IMPACTO E PRESERVAÇÃO
+
+Baseline código be1b049d9335d82ce5195f9e3f7399764d0d5a96, runtime e7ea4df/3.0.7, imagem d336b3925596. Estado rastreado limpo; arquivos não rastreados preservados. Risco integrado C; fronteiras de importação/dados sensíveis D preservadas por reuso e negativos dirigidos.
+
+| Área/capacidade | Relação | Dependência/baseline | Regressão proporcional |
+| --- | --- | --- | --- |
+| Pessoas/busca/filtros/colunas/comparação | direct | páginas e serviços atuais, amostras sintéticas | browser real dos componentes + utilitários/seleção/estados |
+| Home/pendências/acessos | direct | summary/listas existentes, nenhum painel inventado | papéis, erro, escopo, navegação e nenhuma mutação |
+| Perfil/síntese/fontes/seis seções | direct | síntese existente somente leitura | harness Pessoa e síntese/fontes atuais + visual |
+| Comparação contextual/gestor | direct | VacancyComparePage/matching existente | diferenças/fontes/pendência/negativos; algoritmo intocado |
+| Tokens/carteira/plano | direct | ledger2.0/tarifas vigentes | cálculo/ausência/zero/quantidade + browser histórico/origem |
+| Lote/PDF/identificação/revisão | direct | pipeline serial atual + intakes privados | fila determinística/serial/falha/idempotência/retomada e importação existente |
+| Auth/perfis/tenant/publicação/custos | critical_transversal | gates do servidor3.0.7, atual provedor de estado | isolamento por sessão/empresa, membro, troca durante async, não chamar IA/teste; smoke negação |
+| Shell/estado de navegação/estilos | plausible_indirect | design system e NavigationViewStore | rotas/voltar/dirty/responsivo/shell; estilos limitados às páginas |
+| IA/backends/banco/Owner/portais/Knowledge | no_impact_identified | contratos e algoritmos existentes reutilizados | revisão das chamadas e diff, provas de não mutação no harness; sem deploy por adjacência |
+
+## CONDIÇÃO DE FECHAMENTO
+
+Todos D/P aplicáveis comprovados, evidência/AoT/contexto, CI, publicação autorizada e sincronização. Testes adicionais somente para dúvida concreta/falha ou edição posterior relevante. Sem suíte integral local por padrão.
 
 ---
 
@@ -25647,6 +25767,54 @@ Padrões aprovados formalizados e base compartilhada implementada para orientar 
 
 ---
 
+## Source: `docs/qa/aot-ux-v310.md`
+
+# AoT — evolução de UX 3.1.0
+
+Contrato integral `agreement-ux-v310.md`1.0.0, prompt `execution-ux-v310.md`. Decisão explícita Bruno17/10/2026: preservar estado, implementar seis etapas, main e publicação3.1.0. Baseline be1b049/runtimee7ea4df/3.0.7. Branch codex/ux-v310. Evidências: `evidence/ux-v310/`.
+
+## Matriz de acordos
+
+| ID | Implementação | Teste/evidência | Status | Ambiente/limitação |
+| --- | --- | --- | --- | --- |
+| D-00 | tag remota, ZIP íntegro, imagem/backup restritos e runbook | baseline.json, CRC ZIP, hashes/tag/imagem na VPS | PASS | recuperação da aplicação, sem descartar dados posteriores |
+| D-01 | discovery nav, filtros/chips, colunas, busca da sessão, seleção e registros mobile | browser real e regressão dirigida | PASS | browser/checks.json; agrupamento padrão sem rolagem horizontal desktop |
+| D-02 | Home factual/por perfil, tarefas e recentes de sessão | papéis, acesso e negativos browser | PASS | tarefas de revisão/entrevista/decisão reais; limites por perfil |
+| D-03 | síntese primeiro, quatro destaques, oito análises e seis seções | browser/render e regressão Pessoa | PASS | person-preservation.json180checks/15cenários |
+| D-04 | comparação por requisito/fontes/diferenças/resumo | utilitários negativos e browser real | PASS | comparação mantém algoritmo/estados/fontes e decisão humana |
+| D-05 | simulador com tarifa vigente e saldo real | testes puros + browser | PASS | tokens-regression48checks; simulador não reserva/debita/inicia IA |
+| D-06 | fila serial10PDFs, identidade/revisão existentes, recuperação/pausa/escopo | serial/cancelamento negativos, browser | PASS | browser serial/duplicidade/identidade/revisão/pausa/troca de empresa |
+| D-07 | tokens atuais/layouts aprovados, mobile e disclosure | capturas1448/390, limites320 e comparação visual | PASS | capturas desktop/mobile inspecionadas; largura320 sem overflow |
+| D-08 | registro3.1.0/documentação/contexto/release | tipos/build/testes/CI/main/runtime | PARTIAL | local PASS; CI/publicação ainda pendentes |
+
+## Proibições e preservação
+
+P-01/02/03 e P-UX-01 PASS: diff integral limitado ao frontend e aos testes/documentação. Negativos cobrem ausência/tarifa inválida/overflow numérico, estados desconhecidos, fila serial/cancelamento, papel comum e troca de contexto. Nenhuma mutation de publicação/compra/IA é chamada por busca/simulação/comparação. F-01/F-02 preservados: APIs de fornecedor futuras e algoritmos/Owner/identidade intactos. Algoritmos, serviços de persistência, Auth/RLS/banco/IA/ledger/Owner permanecem sem alteração; testes sintéticos bloqueiam rede externa. Não há envio real de e-mail, uso pago de IA, publicação de Perfil ou decisão humana em produção para testar.
+
+## Mapa de impacto e preservação
+
+O mapa integral do acordo continua aplicável. Novos arquivos são utilitários/componentes frontend e fixtures. A fila usa o NavigationViewStore existente por sessão/usuário/papel/empresa; nenhum storage persistente de currículos introduzido. A troca de escopo impede despachar o arquivo seguinte; requisição autorizada já despachada pode terminar no contexto original e continua protegida pelo servidor. Nenhuma migration, Edge ou serviço de IA é necessário por causa desta orquestração. A descoberta encontrou a consulta existente de processos/stages, reutilizada pela Home com status active e destinos por processo; não foram criadas contagens estimadas nem leitura operacional para membro. Dados de até50processos recentes são exibidos por processo, sem afirmar um agregado completo. Fontes de autorização das rotas foram conferidas: membro não recebe atalho/consulta de Posições. Essa dependência atualiza o mapa Home/processos (direct de apresentação; serviço existente inalterado).
+
+## Fidelidade visual
+
+Referência normativa: seis propostas HTML/capturas preservadas e hash em baseline.json. Estado equivalente com dados sintéticos,1448/390 e limite320. Conteúdo real dos componentes traz qualificações completas, oito análises integrais, limitações e estados existentes; é adaptação de conteúdo autorizada por A-UX-01, não substituição de composição. Ajustes por inspeção: separação vertical entre áreas e cartões, comparação compacta com explicação sob demanda, informação ausente neutra. Inspeção final também agrupou área abaixo do nome e empresa/período abaixo do cargo, mantendo cidade/data na largura desktop e as colunas individuais disponíveis. A referência indica conteúdo ilustrativo; informações mais ricas (qualificações/limitações/análises completas) são preservadas. Os tokens nativos da carteira e suas fontes/histórico continuam abaixo do simulador; não foram removidos para reproduzir dados fictícios. Sem divergência estrutural não autorizada identificada. Browser com1448/390/320: seis superfícies, um h1 e sem overflow; refinamento de Pessoas/Tokens repetiu só as capturas afetadas.
+
+## Validação e limites
+
+49casos Node únicos PASS (44dirigidos +5do registro3.1.0;12novos utilitários incluídos). Tipos/build raiz e web PASS. Browser das seis superfícies:72checks no ciclo amplo e48na repetição afetada de Pessoas/Tokens+interações; critérios de direitos, fontes e lote continuam PASS. Preservação Pessoa180checks/15cenários e Tokens48checks PASS. Os relatórios de Pessoa consolidam a última prova de cada cenário/viewport; seletor de modal hidden, navegação AntD e montagem do transporte foram corrigidos no harness, sem remover proteção ou alterar produto por falha de fixture. A captura inicial de Tokens estava sem a folha CSS da página no harness; a dependência foi incluída e a imagem correspondente refeita.
+
+Lint do workspace encontrou whitespace em `output/pa-concurrency-baseline.sql`, arquivo não rastreado anterior e fora do escopo. Não foi alterado/apagado. Lint/contexto finais usam fotografia exata dos arquivos rastreados da entrega, evitando incorporar rascunhos ao Context Pack. PNPM recusou reinstalar a junction de dependências do snapshot; não foi forçado purge/CI. Os quatro scripts Node equivalentes foram executados diretamente: lint1897arquivos, foundation e geração/check do contexto PASS, sem alterar dependências. Snapshot final atualizado novamente quando as evidências foram consolidadas. Não foi autorizado nem executado validate integral local.
+
+## Git / QA / produção
+
+Pendente CI/publicação/smoke. Ambiente de QA é browser/transporte sintético local, sem backend QA separado. Produção continua3.0.7 até os gates. Não alegar jornada autenticada com pessoa real a partir desta evidência.
+
+## Desvios e conclusão
+
+D-00..D-07/P/F localmente comprovados. Conclusão da entrega depende de D-08 (CI/main/publicação/smoke/sincronização). Limite F-01 preservado: preparação de integração e API futura não equivalem a um conector operacional.
+
+---
+
 ## Source: `docs/qa/aot-v3m0-multiempresa.md`
 
 # AoT — V3M0 administração multiempresa2.9.0
@@ -29944,6 +30112,18 @@ Sequência: formalizar padrões aprovados → implementar base compartilhada →
 Entrega exige todos os D-* e P-* aplicáveis PASS com evidência proporcional e limites reais. Criar `docs/qa/aot-ux-foundation.md` usando o template do repositório. Testar especialmente navegação normal/cancelada, histórico, indisponibilidade, isolamento do estado temporário, nomes dos módulos, papéis e ausência versus zero. Validar build/typecheck, testes dirigidos e visual de lista/detalhe/formulário/área pública nas larguras aplicáveis. Não rodar `pnpm run validate` sem autorização específica; reutilizar checkers de Context Pack após atualizar owners.
 
 Preservar `.tmp.driveupload/` e qualquer material não relacionado. Não modificar regras de domínio, enviar mensagens, publicar perfis, gerar convites reais ou alterar produção. A aprovação anterior é suficiente para todas as etapas administrativas deste escopo.
+
+---
+
+## Source: `docs/qa/execution-ux-v310.md`
+
+# Execução — UX 3.1.0
+
+Executar integralmente `docs/qa/agreement-ux-v310.md` versão1.0.0, lido por completo, incluindo todos D-00..D-08, P-01..03/P-UX-01, F-01..02, A-01/A-UX-01, CA-00..08 e mapa de impacto. Referência normativa integral em `docs/product/proposta-ux-v310/propostas.html`, capturas desktop/mobile e hash baseline.json. A decisão explícita de Bruno aprova implementação sequencial, main e publicação3.1.0 após preservar3.0.7.
+
+Ordem: recuperação verificada → descoberta → Home → Perfil/mobile → comparação/gestor → planejamento Tokens → fila de importação/Integrações com limites explícitos → regressão dirigida/visual → documentação/contexto/CI → main/publicação/smoke/sincronização. Não reabrir critérios aprovados. Implementar somente componentes reais com dados autorizados e serviços existentes. Operações pagas ou publicações humanas não ocorrem em testes.
+
+Preencher `docs/qa/aot-ux-v310.md` ao longo do movimento. Nenhum PASS sem evidência; preservar baseline e registrar limitações. Banco/Edge/serviços só entram se dependência direta nova for demonstrada e mapa revisado antes, sem escolher outra solução material silenciosamente.
 
 ---
 

@@ -1,0 +1,20 @@
+[
+  {
+    "scenario": "member",
+    "width": 1448,
+    "checks": {
+      "singleIdentity": true,
+      "noHorizontalOverflow": true,
+      "noExternalCalls": true,
+      "sixIntegratedTabs": true,
+      "eightOpenAnalyses": true,
+      "fourHighlights": true,
+      "noIntermediateProfileButton": true,
+      "noOperationalReads": true,
+      "noOperationalControls": true,
+      "noPrivateContact": true,
+      "noRuntimeError": true
+    },
+    "errors": []
+  }
+]

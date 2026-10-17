@@ -618,11 +618,12 @@ function PersonCenterHeader({ canManual, isActiveEmployee, onManual, model, isCa
           </div>
         </div>
         <Space className="prisma-person-center-header__actions" wrap>
-          {canManual ? <Button disabled={operationalStatus !== "active"} icon={<EditOutlined />} onClick={onManual}>{model.currentProfile ? "Atualizar perfil manualmente" : "Preencher manualmente"}</Button> : null}
-          <Button disabled={operationalStatus !== "active"} icon={<ImportOutlined />} onClick={onImport} type={model.currentProfile ? "default" : "primary"}>Nova importação</Button>
-          <Button disabled={operationalStatus !== "active"} icon={<EditOutlined />} onClick={onCreateRevision} type={model.currentProfile ? "primary" : "default"}>Criar revisão</Button>
-          <Button icon={<HistoryOutlined />} onClick={onVersions}>Versões</Button>
+          <Button disabled={operationalStatus !== "active"} icon={<EditOutlined />} onClick={model.currentProfile?onCreateRevision:onImport} type="primary">{model.currentProfile?"Atualizar perfil":"Importar currículo"}</Button>
           <Dropdown menu={{ items: [
+            ...(canManual?[{key:"manual",disabled:operationalStatus!=="active",label:model.currentProfile?"Atualizar perfil manualmente":"Preencher manualmente",icon:<EditOutlined/>,onClick:onManual}]:[]),
+            {key:"import",disabled:operationalStatus!=="active",label:"Nova importação",icon:<ImportOutlined/>,onClick:onImport},
+            {key:"revision",disabled:operationalStatus!=="active",label:"Criar revisão",icon:<EditOutlined/>,onClick:onCreateRevision},
+            {key:"versions",label:"Versões do Perfil",icon:<HistoryOutlined/>,onClick:onVersions},
             { key: "merge", disabled: operationalStatus === "deleting", icon: <UserSwitchOutlined />, label: "Mesclar Pessoas", onClick: onMerge },
             { type: "divider" },
             { type: "divider" },

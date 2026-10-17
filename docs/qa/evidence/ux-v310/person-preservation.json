@@ -1,0 +1,307 @@
+{
+  "cases": [
+    {
+      "scenario": "reference",
+      "width": 390,
+      "checks": {
+        "singleIdentity": true,
+        "noHorizontalOverflow": true,
+        "noExternalCalls": true,
+        "sixIntegratedTabs": true,
+        "eightOpenAnalyses": true,
+        "fourHighlights": true,
+        "noIntermediateProfileButton": true,
+        "precisePendingDestination": true,
+        "responsiveHighlightColumns": true,
+        "readingRailRatio": true,
+        "narrowPendingAfterReading": true,
+        "allNarrativeParagraphs": true,
+        "qualificationsPreserved": true,
+        "sourcesDoNotGenerate": true,
+        "sourceLazy": true,
+        "analysisPreservedWithSource": true,
+        "originalSummary": true,
+        "completeProfileRecords": true,
+        "documentContextPreserved": true,
+        "operationalAuditAccessible": true,
+        "reviewFieldContext": true,
+        "tabChangesDoNotGenerate": true,
+        "noRuntimeError": true
+      },
+      "errors": [],
+      "evidence": "docs/qa/evidence/ux-v310/person-regression/browser-results.json"
+    },
+    {
+      "scenario": "no-profile",
+      "width": 390,
+      "checks": {
+        "singleIdentity": true,
+        "noHorizontalOverflow": true,
+        "noExternalCalls": true,
+        "honestEmptyState": true,
+        "noRuntimeError": true
+      },
+      "errors": [],
+      "evidence": "docs/qa/evidence/ux-v310/person-regression/browser-results.json"
+    },
+    {
+      "scenario": "archived",
+      "width": 1448,
+      "checks": {
+        "singleIdentity": true,
+        "noHorizontalOverflow": true,
+        "noExternalCalls": true,
+        "sixIntegratedTabs": true,
+        "eightOpenAnalyses": true,
+        "fourHighlights": true,
+        "noIntermediateProfileButton": true,
+        "archivedOperationsDisabled": true,
+        "noRuntimeError": true
+      },
+      "errors": [],
+      "evidence": "docs/qa/evidence/ux-v310/person-regression/browser-results.json"
+    },
+    {
+      "scenario": "dirty",
+      "width": 1448,
+      "checks": {
+        "singleIdentity": true,
+        "noHorizontalOverflow": true,
+        "noExternalCalls": true,
+        "sixIntegratedTabs": true,
+        "eightOpenAnalyses": true,
+        "fourHighlights": true,
+        "noIntermediateProfileButton": true,
+        "dirtyConfirmation": true,
+        "dirtyTextPreserved": true,
+        "noRuntimeError": true
+      },
+      "errors": [],
+      "evidence": "docs/qa/evidence/ux-v310/person-dirty-final/browser-results.json"
+    },
+    {
+      "scenario": "reference",
+      "width": 2048,
+      "checks": {
+        "singleIdentity": true,
+        "noHorizontalOverflow": true,
+        "noExternalCalls": true,
+        "sixIntegratedTabs": true,
+        "eightOpenAnalyses": true,
+        "fourHighlights": true,
+        "noIntermediateProfileButton": true,
+        "precisePendingDestination": true,
+        "responsiveHighlightColumns": true,
+        "readingRailRatio": true,
+        "narrowPendingAfterReading": true,
+        "allNarrativeParagraphs": true,
+        "qualificationsPreserved": true,
+        "sourcesDoNotGenerate": true,
+        "sourceLazy": true,
+        "analysisPreservedWithSource": true,
+        "originalSummary": true,
+        "completeProfileRecords": true,
+        "documentContextPreserved": true,
+        "operationalAuditAccessible": true,
+        "reviewFieldContext": true,
+        "tabChangesDoNotGenerate": true,
+        "noRuntimeError": true
+      },
+      "errors": [],
+      "evidence": "docs/qa/evidence/ux-v310/person-regression/browser-results.json"
+    },
+    {
+      "scenario": "reference",
+      "width": 1024,
+      "checks": {
+        "singleIdentity": true,
+        "noHorizontalOverflow": true,
+        "noExternalCalls": true,
+        "sixIntegratedTabs": true,
+        "eightOpenAnalyses": true,
+        "fourHighlights": true,
+        "noIntermediateProfileButton": true,
+        "precisePendingDestination": true,
+        "responsiveHighlightColumns": true,
+        "readingRailRatio": true,
+        "narrowPendingAfterReading": true,
+        "allNarrativeParagraphs": true,
+        "qualificationsPreserved": true,
+        "sourcesDoNotGenerate": true,
+        "sourceLazy": true,
+        "analysisPreservedWithSource": true,
+        "originalSummary": true,
+        "completeProfileRecords": true,
+        "documentContextPreserved": true,
+        "operationalAuditAccessible": true,
+        "reviewFieldContext": true,
+        "tabChangesDoNotGenerate": true,
+        "noRuntimeError": true
+      },
+      "errors": [],
+      "evidence": "docs/qa/evidence/ux-v310/person-regression/browser-results.json"
+    },
+    {
+      "scenario": "long",
+      "width": 390,
+      "checks": {
+        "singleIdentity": true,
+        "noHorizontalOverflow": true,
+        "noExternalCalls": true,
+        "sixIntegratedTabs": true,
+        "eightOpenAnalyses": true,
+        "fourHighlights": true,
+        "noIntermediateProfileButton": true,
+        "longTextComplete": true,
+        "noRuntimeError": true
+      },
+      "errors": [],
+      "evidence": "docs/qa/evidence/ux-v310/person-regression/browser-results.json"
+    },
+    {
+      "scenario": "member",
+      "width": 1448,
+      "checks": {
+        "singleIdentity": true,
+        "noHorizontalOverflow": true,
+        "noExternalCalls": true,
+        "sixIntegratedTabs": true,
+        "eightOpenAnalyses": true,
+        "fourHighlights": true,
+        "noIntermediateProfileButton": true,
+        "noOperationalReads": true,
+        "noOperationalControls": true,
+        "noPrivateContact": true,
+        "noRuntimeError": true
+      },
+      "errors": [],
+      "evidence": "docs/qa/evidence/ux-v310/person-final/browser-results.json"
+    },
+    {
+      "scenario": "recruiter",
+      "width": 1448,
+      "checks": {
+        "singleIdentity": true,
+        "noHorizontalOverflow": true,
+        "noExternalCalls": true,
+        "sixIntegratedTabs": true,
+        "eightOpenAnalyses": true,
+        "fourHighlights": true,
+        "noIntermediateProfileButton": true,
+        "curationAuthorityPreserved": true,
+        "noRuntimeError": true
+      },
+      "errors": [],
+      "evidence": "docs/qa/evidence/ux-v310/person-regression/browser-results.json"
+    },
+    {
+      "scenario": "clean",
+      "width": 1448,
+      "checks": {
+        "singleIdentity": true,
+        "noHorizontalOverflow": true,
+        "noExternalCalls": true,
+        "sixIntegratedTabs": true,
+        "eightOpenAnalyses": true,
+        "fourHighlights": true,
+        "noIntermediateProfileButton": true,
+        "noArtificialPending": true,
+        "noRuntimeError": true
+      },
+      "errors": [],
+      "evidence": "docs/qa/evidence/ux-v310/person-regression/browser-results.json"
+    },
+    {
+      "scenario": "operations-failure",
+      "width": 1448,
+      "checks": {
+        "singleIdentity": true,
+        "noHorizontalOverflow": true,
+        "noExternalCalls": true,
+        "sixIntegratedTabs": true,
+        "eightOpenAnalyses": true,
+        "fourHighlights": true,
+        "noIntermediateProfileButton": true,
+        "profileSurvivesOperationsFailure": true,
+        "railFailureExplicit": true,
+        "optionalFailureExplicit": true,
+        "historyFailureExplicit": true,
+        "noRuntimeError": true
+      },
+      "errors": [],
+      "evidence": "docs/qa/evidence/ux-v310/person-regression/browser-results.json"
+    },
+    {
+      "scenario": "analysis-failure",
+      "width": 1448,
+      "checks": {
+        "singleIdentity": true,
+        "noHorizontalOverflow": true,
+        "noExternalCalls": true,
+        "sixIntegratedTabs": true,
+        "eightOpenAnalyses": true,
+        "fourHighlights": true,
+        "noIntermediateProfileButton": true,
+        "publishedFallback": true,
+        "noRuntimeError": true
+      },
+      "errors": [],
+      "evidence": "docs/qa/evidence/ux-v310/person-regression/browser-results.json"
+    },
+    {
+      "scenario": "document-failure",
+      "width": 1448,
+      "checks": {
+        "singleIdentity": true,
+        "noHorizontalOverflow": true,
+        "noExternalCalls": true,
+        "sixIntegratedTabs": true,
+        "eightOpenAnalyses": true,
+        "fourHighlights": true,
+        "noIntermediateProfileButton": true,
+        "publishedProfileSurvivesDocumentFailure": true,
+        "noRuntimeError": true
+      },
+      "errors": [],
+      "evidence": "docs/qa/evidence/ux-v310/person-regression/browser-results.json"
+    },
+    {
+      "scenario": "not-requested",
+      "width": 1448,
+      "checks": {
+        "singleIdentity": true,
+        "noHorizontalOverflow": true,
+        "noExternalCalls": true,
+        "sixIntegratedTabs": true,
+        "eightOpenAnalyses": true,
+        "fourHighlights": true,
+        "noIntermediateProfileButton": true,
+        "noAutomaticGeneration": true,
+        "noRuntimeError": true
+      },
+      "errors": [],
+      "evidence": "docs/qa/evidence/ux-v310/person-regression/browser-results.json"
+    },
+    {
+      "scenario": "source-failure",
+      "width": 1448,
+      "checks": {
+        "singleIdentity": true,
+        "noHorizontalOverflow": true,
+        "noExternalCalls": true,
+        "sixIntegratedTabs": true,
+        "eightOpenAnalyses": true,
+        "fourHighlights": true,
+        "noIntermediateProfileButton": true,
+        "localizedSourceFailure": true,
+        "sanitizedFailure": true,
+        "noRuntimeError": true
+      },
+      "errors": [],
+      "evidence": "docs/qa/evidence/ux-v310/person-regression/browser-results.json"
+    }
+  ],
+  "checks": 180,
+  "passed": true,
+  "method": "Latest observed result per scenario/viewport, including only reruns needed after selector fixes; no runtime change for harness failures."
+}

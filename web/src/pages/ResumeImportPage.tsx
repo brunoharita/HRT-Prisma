@@ -1,9 +1,11 @@
+import {ResumeImportBatchPage} from "./ResumeImportBatchPage";
+import type {PreparedBatchResume} from "../domain/resumeBatch";
 import {TokenUsageHint} from "../ui/TokenUsageHint";
 import { useLoadingFeedback } from "../ui/PrismaLoadingFeedback";
 import { FileTextFilled as PrismaPageIcon } from "@ant-design/icons";
 import { focusNoticeFields, focusNoticeTarget } from "../ui/noticeActions";
 import { useUnsavedChanges, usePrismaScreenState } from "../ui/PrismaNavigation";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   CloudUploadOutlined, EyeOutlined, FilePdfOutlined,
   LockOutlined, PlusOutlined, SafetyCertificateOutlined, UserAddOutlined,
@@ -37,13 +39,17 @@ interface IdentityFormValue { fullName: string; email: string; phone: string; }
 type JourneyPhase = "upload" | "identity" | "processing" | "analysis";
 type ResolutionAttempt = { action: "create_new_person" | "link_existing_person"; personId: string | null };
 
-export function ResumeImportPage({ activeMembership, onNavigate }: ResumeImportPageProps) {
-  const [phase, setPhase, replacePhase] = usePrismaScreenState<JourneyPhase>("upload");
+export function ResumeImportPage(props:ResumeImportPageProps) {
+  return <ResumeImportBatchPage {...props} intakeKey={intakeKey} renderSingle={(item,onResolved,onReturn,onPrepared)=><SingleResumeImportPage key={item.id} {...props} seed={item.prepared} onResolved={onResolved} onReturn={onReturn} onPrepared={onPrepared}/>}/>;
+}
+
+function SingleResumeImportPage({ activeMembership, onNavigate,seed,onResolved,onReturn,onPrepared }: ResumeImportPageProps & {seed?:PreparedBatchResume|undefined;onResolved?:(result:ResumeIntakeResolutionResult,analysis:PersonIngestionWorkspace)=>void;onReturn?:()=>void;onPrepared?:(prepared:PreparedBatchResume)=>void;}) {
+  const [phase, setPhase, replacePhase] = usePrismaScreenState<JourneyPhase>(seed?(seed.intake.kind==="resolved"?"analysis":"identity"):"upload");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-  const [processed, setProcessed] = useState<ProcessedDocumentInput | null>(null);
-  const [identity, setIdentity] = useState<ResumeIdentity | null>(null);
-  const [intake, setIntake] = useState<ResumeIntakeIdentityResult | null>(null);
-  const [result, setResult] = useState<ResumeIntakeResolutionResult | null>(null);
+  const [processed, setProcessed] = useState<ProcessedDocumentInput | null>(seed?.processed??null);
+  const [identity, setIdentity] = useState<ResumeIdentity | null>(seed?.identity??null);
+  const [intake, setIntake] = useState<ResumeIntakeIdentityResult | null>(seed?.intake.kind==="identity"?seed.intake:null);
+  const [result, setResult] = useState<ResumeIntakeResolutionResult | null>(seed?.intake.kind==="resolved"?seed.intake:null);
   const [analysis, setAnalysis] = useState<PersonIngestionWorkspace | null>(null);
   const [progress, setProgress] = useState<PdfProcessingProgress | null>(null);
   const [processingProgress, setProcessingProgress] = useState<ResumeProcessingProgress | null>(null);
@@ -59,7 +65,13 @@ export function ResumeImportPage({ activeMembership, onNavigate }: ResumeImportP
 
   useUnsavedChanges(fileList.length > 0 && phase !== "analysis");
 
+  useEffect(()=>{let current=true;if(seed?.intake.kind!=="resolved")return;setBusy(true);
+    void personIngestionService.loadWorkspace(activeMembership.organizationId,seed.intake.personId,seed.intake.documentId).then(data=>{if(current){if(!data)throw Error("A importação não está disponível nesta empresa.");setAnalysis(data);onResolved?.(seed.intake as ResumeIntakeResolutionResult,data);}}).catch(cause=>{if(current)setError(cause instanceof Error?cause.message:"Não foi possível abrir a revisão. Volte ao lote e tente novamente.");}).finally(()=>{if(current)setBusy(false);});
+    return()=>{current=false;};
+  },[]);
+
   function restartImport() {
+    if(onReturn){onReturn();return;}
     replacePhase("upload", true);
     setFileList([]);
     setProcessed(null);
@@ -115,6 +127,7 @@ export function ResumeImportPage({ activeMembership, onNavigate }: ResumeImportP
     try {
       const nextIntake = await personIngestionService.identifyResumeIntake(activeMembership.organizationId, intake.intakeId, intake.storagePath, nextIdentity);
       setIdentity(nextIdentity); setIntake(nextIntake);
+      if(processed)onPrepared?.({processed,identity:nextIdentity,intake:nextIntake});
       return true;
     } catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível verificar a identificação."); return false; }
     finally { setBusy(false); }
@@ -137,7 +150,9 @@ export function ResumeImportPage({ activeMembership, onNavigate }: ResumeImportP
         setProcessingProgress,
       );
       setResult(resolved);
-      setAnalysis(await personIngestionService.loadWorkspace(activeMembership.organizationId, resolved.personId, resolved.documentId));
+      const nextAnalysis=await personIngestionService.loadWorkspace(activeMembership.organizationId,resolved.personId,resolved.documentId);
+      if(!nextAnalysis)throw Error("A importação não está disponível nesta empresa.");
+      setAnalysis(nextAnalysis);onResolved?.(resolved,nextAnalysis);
       setLastResolution(null);
       setPhase("analysis");
     } catch (caught) {
@@ -171,7 +186,9 @@ export function ResumeImportPage({ activeMembership, onNavigate }: ResumeImportP
     finally { setBusy(false); }
   }
 
-  return <PrismaPage className={`prisma-resume-journey prisma-resume-journey--${phase}`}>
+  return <PrismaPage className={`prisma-resume-journey prisma-resume-journey--${phase} prisma-v310`}>
+    {onReturn?<Button disabled={busy} onClick={onReturn}>Voltar ao lote</Button>:null}
+    {phase==="analysis"&&!analysis&&error?<Alert type="error" showIcon title={error} action={onReturn?<Button onClick={onReturn}>Reabrir pelo lote</Button>:undefined}/>:null}
     {phase === "upload" ? <UploadScreen organizationId={activeMembership.organizationId} busy={busy} error={error} fileList={fileList} onBack={() => onNavigate("/profiles")} onChange={setFileList} onImport={() => void handleImport()} progress={progress} readiness={readiness} onCheck={() => void refreshReadiness()} /> : null}
     {phase !== "upload" && !(phase === "processing" && error) && (processed?.parserIa?.status === "partial" || (processed && containsInvalidImportUnicode(processed.pages))) ? <Alert type={phase === "analysis" ? "warning" : "info"} showIcon message={phase === "analysis" ? "Há informações ou símbolos não identificados. Confira os campos na revisão antes de publicar." : "A leitura ficou parcial. A conferência dos campos ficará disponível após a identificação e o processamento."} action={phase === "analysis" ? <Button disabled={busy} onClick={() => void startReview()}>Conferir campos na revisão</Button> : undefined} /> : null}
     {phase === "identity" && intake ? <IdentityScreen busy={busy} error={error} identity={identity} intake={intake} onBack={() => setPhase("upload")} onCreate={handleCreateDespiteMatch} onIdentityReview={handleIdentityReview} onLink={(candidate) => void resolveIntake("link_existing_person", candidate.personId)} processed={processed} /> : null}
@@ -228,7 +245,7 @@ function IdentityScreen(props: { busy: boolean; error: string | null; identity: 
     if (await props.onIdentityReview(value)) setEditingIdentity(false);
   }
   return <>
-    <PrismaPageHeader icon={<PrismaPageIcon />} title="Identificação da pessoa" description="Encontramos possíveis correspondências para este currículo." actions={<FileCard file={props.processed?.file ?? null} />} />
+    <PrismaPageHeader icon={<PrismaPageIcon />} title="Identificação da pessoa" description={props.intake.candidates.length?"Confira as possíveis correspondências para este currículo.":"Confirme a identificação antes de continuar."} actions={<FileCard file={props.processed?.file ?? null} />} />
     <Button disabled={props.busy} onClick={props.onBack} type="text">Voltar para importação</Button>
     {props.error ? <Alert showIcon title={props.error} type="error" action={<Button disabled={props.busy} onClick={() => setEditingIdentity(true)}>Conferir identificação</Button>} /> : null}
     <Alert description="Informações profissionais não são usadas para decidir identidade." showIcon title={state.message} type="info" />
@@ -238,7 +255,7 @@ function IdentityScreen(props: { busy: boolean; error: string | null; identity: 
     {!editingIdentity ? <PrismaCard className="prisma-journey-matches" title="Possíveis correspondências">
       <Typography.Paragraph type="secondary">Selecione alguma Pessoa da sua organização com base no contato e no nome.</Typography.Paragraph>
       {props.intake.candidates.map((candidate) => <article className="prisma-journey-match" key={candidate.personId}><span className="prisma-match-avatar">{initials(candidate.fullName)}</span><div><strong>{candidate.fullName}</strong><small>{candidate.email ?? candidate.phone ?? "Contato privado disponível"}</small></div><Tag color={candidate.strong ? "green" : "gold"}>{candidate.reasons.map(describeReason).join(" · ")}</Tag><Button disabled={props.busy} loading={props.busy} onClick={() => props.onLink(candidate)} type="primary" ghost>Selecionar</Button></article>)}
-      <article className="prisma-journey-match prisma-journey-match--new"><span className="prisma-match-avatar"><UserAddOutlined /></span><div><strong>Criar nova pessoa</strong><small>Não encontramos a pessoa na nossa base</small></div><Button disabled={props.busy || !hasMinimumIdentity} icon={<PlusOutlined />} loading={props.busy} onClick={props.onCreate}>Criar nova</Button></article>
+      <article className="prisma-journey-match prisma-journey-match--new"><span className="prisma-match-avatar"><UserAddOutlined /></span><div><strong>Criar nova pessoa</strong><small>{props.intake.candidates.length?"Confirme somente se o currículo pertence a outra Pessoa.":"Confirme os dados para cadastrar uma nova Pessoa."}</small></div><Button disabled={props.busy || !hasMinimumIdentity} icon={<PlusOutlined />} loading={props.busy} onClick={props.onCreate}>Criar nova</Button></article>
       {props.intake.candidates.length ? <Button disabled={props.busy || !hasMinimumIdentity} icon={<UserAddOutlined />} onClick={props.onCreate} type="link">Nenhuma das opções acima é a pessoa</Button> : null}
     </PrismaCard> : null}
   </>;

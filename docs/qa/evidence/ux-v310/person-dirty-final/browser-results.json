@@ -1,0 +1,19 @@
+[
+  {
+    "scenario": "dirty",
+    "width": 1448,
+    "checks": {
+      "singleIdentity": true,
+      "noHorizontalOverflow": true,
+      "noExternalCalls": true,
+      "sixIntegratedTabs": true,
+      "eightOpenAnalyses": true,
+      "fourHighlights": true,
+      "noIntermediateProfileButton": true,
+      "dirtyConfirmation": true,
+      "dirtyTextPreserved": true,
+      "noRuntimeError": true
+    },
+    "errors": []
+  }
+]
