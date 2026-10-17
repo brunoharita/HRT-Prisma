@@ -9,9 +9,9 @@ last_verified: 2026-10-17
 
 # Estado atual do Prisma
 
-## Mínimo de senha8 —3.0.5 preparada, não publicada
+## Mínimo de senha8 —3.0.5 validada, publicação em andamento
 
-Bruno definiu8caracteres em17/10/2026. Web/cadastro/Owner/troca, Edge platform-users e config.toml alinhados localmente; demais requisitos preservados.138browser/21Node/3Deno (29cenários)/tipos/build PASS; testes e publicação no AoT password-minimum-v305. Auth remoto mínimo8pendente de confirmação: ferramenta de interface falhou ao inicializar, conector não expõe Auth config; solicitação enviada ao usuário. Produção permanece3.0.4; não interpretar config.toml ou fixture como confirmação do Auth hospedado.
+Bruno definiu8caracteres em17/10/2026. Web/cadastro/Owner/troca, Edge platform-users e config.toml alinhados localmente; demais requisitos preservados.138browser/21Node/3Deno (29cenários)/tipos/build PASS; testes e publicação no AoT password-minimum-v305. Bruno confirmou Auth hospedado6 no chat e reiterou requisito Prisma8. Piso hospedado compatível, preservado; API nativa continua6, enquanto formulários/Edge do Prisma exigem8. Acordo1.0.1 resolve o pré-requisito operacional, sem alteração do Auth nem teste com contas reais. Publicação seletiva Edge/web em andamento; config.toml/fixtures não comprovam Auth hospedado.
 
 ## Feedback de senha e campos bloqueados —3.0.4 publicada
 

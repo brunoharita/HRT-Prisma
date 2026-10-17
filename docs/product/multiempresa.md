@@ -30,4 +30,4 @@ Requisitos de senha observados continuamente: pendente vermelho, atendido verde 
 
 ## Política de senha1.1.0 — mínimo8
 
-Bruno definiu mínimo8em17/10/2026, substituindo somente o mínimo12anterior. Demais requisitos/fluxos preservados. Constante compartilhada web alimenta cadastro/Owner/troca e rótulos; Edge platform-users e config.toml alinhados em8. Rollout3.0.5 condicionado a conferir Auth remoto8; acordo/AoT password-minimum-v305 distinguem estado local de produção.
+Bruno definiu mínimo8em17/10/2026, substituindo somente o mínimo12anterior. Demais requisitos/fluxos preservados. Constante compartilhada web alimenta cadastro/Owner/troca e rótulos; Edge platform-users e config.toml alinhados em8. Auth hospedado permanece6, conforme confirmação de Bruno no chat; é compatível com8. Prisma exige8 em seus formulários e Edge. A API nativa do Auth mantém6; config.toml local8 não comprova configuração hospedada. Acordo/AoT password-minimum-v305 registram a publicação.
