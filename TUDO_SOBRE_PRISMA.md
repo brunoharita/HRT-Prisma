@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 518
-source_manifest_sha256: 77387756b0dfe907947fea440a5bada9eb139847203079376fd7641c561a9924
+source_manifest_sha256: c0afe08ce458a5878fa22398dbbcd443dd6bcd0d4ac275ebd7e481c7d983052e
 -->
 
 # Tudo sobre o Prisma
@@ -2650,9 +2650,9 @@ last_verified: 2026-10-17
 
 # Estado atual do Prisma
 
-## Ordenação de grupos e empresas —3.0.3
+## Ordenação de grupos e empresas —3.0.3 publicada
 
-Nome, criação e atualização, em crescente/decrescente, herdados pelas empresas com nomes/datas próprios. Datas existentes projetadas pelo contrato organization-administration1.1.0 compatível1.0.0; nenhuma alteração de acesso, mutações ou histórico. Busca e disclosure preservados; datas indisponíveis explicitadas/por último. Mínimo de validação e estado operacional no AoT `docs/qa/aot-groups-sorting-v303.md`.
+Nome, criação e atualização, em crescente/decrescente, herdados pelas empresas com nomes/datas próprios. Datas existentes projetadas pelo contrato organization-administration1.1.0 compatível1.0.0; nenhuma alteração de acesso, mutações ou histórico. Busca e disclosure preservados; datas indisponíveis explicitadas/por último. Runtime a67c32b2824585e5006102ad33c0dbc155aaafe1; migration local20261017143000/remota20261017144545, somente web e essa migration.151SQL/189browser/27Node dirigidos/tipos/build/checks/contexto e CI de branch PASS;22smokes públicos PASS. Função/ACL/datas/escopos compatíveis, contagens/fingerprints de grupos/empresas e advisors iguais antes/depois. Sem mutação de cadastros reais ou jornada humana autenticada; demais serviços preservados, rollback registrado. Mínimo de validação e estado operacional no AoT `docs/qa/aot-groups-sorting-v303.md`.
 
 ## Grupos recolhíveis — 3.0.2 publicada
 
@@ -19320,11 +19320,19 @@ Nenhum desvio de produto identificado. Datas pertencem ao próprio registro, sem
 
 ## Validação / ambientes
 
-151SQL PASS em PG17 descartável local, incluindo compatibilidade/grants/corpo/escopo e regressão Owner.27Node/tooling PASS. 189browser PASS (75 novos,114 regressão), tipos/build/lint/foundation/contexto PASS. CI/publicação pendentes; resultados funcionais são locais. Serviço browser é determinístico e sintético; não prova jornada humana em produção. Produção será verificada sem alterar cadastros reais e sem publicar Edge/outros serviços. Sem QA remoto independente disponível; evidência integrada local cobre o boundary.
+151SQL PASS em PG17 descartável local, incluindo compatibilidade/grants/corpo/escopo e regressão Owner.27Node/tooling PASS. 189browser PASS (75 novos,114 regressão), tipos/build/lint/foundation/contexto PASS. CI branch39042015547 SUCCESS; resultados funcionais browser são locais. Serviço browser é determinístico e sintético; não prova jornada humana em produção. Produção será verificada sem alterar cadastros reais e sem publicar Edge/outros serviços. Sem QA remoto independente disponível; evidência integrada local cobre o boundary.
 
 ## Publicação / fechamento
 
-Pendente. Publicar somente migration20261017143000 e web após CI. Rollback web anterior permanece compatível com1.0.0; SQL forward aditivo, sem alterações de dados. Conferir função/ACL/datas/contagens e advisors antes/depois, versão/SHA/assets públicos, demais contêineres e sincronização. Nenhum D funcional sem prova; fechamento depende da evidência operacional abaixo.
+Runtime3.0.3 a67c32b2824585e5006102ad33c0dbc155aaafe1 integrado em main, publicado somente web e migration nova20261017143000, alias remoto20261017144545. Função produtiva conferida igual fora de3substituições exatas; ACL/search_path preservados. Super/Owner/Recruiter com mesma projeção/escopo1.0.0 e datas iguais às linhas armazenadas; usuário comum recusado42501. Contagens7usuários/3grupos/4empresas/9vínculos e fingerprints integrais de grupos/empresas iguais antes/depois; sem alterar dados reais para testar. Advisories security antes/depois iguais, excluído observed_at;37informações RLS sem policy,4avisos função anon,135função autenticada e1senha vazada já existentes, nenhum novo. Critérios/remediação: [Supabase Database Linter](https://supabase.com/docs/guides/database/database-linter). Não declara segurança integral do projeto.
+
+22smokes públicos PASS: quatro rotas200, sete assets atuais/sete anteriores, versão/SHA, navegador anônimo protegido e ausência de exceções. HEAD imediatamente após recriação retornou404 transitório; verificações independentes confirmaram recuperação sem rebuild. Web4455244e9ae3/imagemfa91a97ff961/restarts0; demais5contêineres/imagens/restarts iguais ao baseline, comparados automaticamente. Rollback `prisma-web:rollback-before-a67c32b28245`/imagemb55f976a66d6; SQL forward compatível1.0.0 permite rollback do frontend sem reverter dados. Edge/parser/gateway/e-mail/synthesis/Traefik preservados. Evidências production.json/public-smoke.json/containers e screenshots.
+
+Fechamento de evidência/ledger/contexto em commit posterior, sem nova mudança funcional ou rebuild. CI main e fechamento conferidas no encerramento; status final no chat e nos checks dos commits. Resíduos antigos de manutenção Git de worktrees com permissão negada preservados, sem impedir commit/FF; trabalho alheio/untracked canônico preservado.
+
+## Conclusão
+
+D/P/CA PASS nos limites declarados, sem desvio material. Jornada humana autenticada de produção NOT TESTED; SQL readonly e fixture não a substituem. Entrega exige CI final e sincronização Git/VPS, sem repetir testes funcionais válidos.
 
 ---
 

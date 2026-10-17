@@ -1,0 +1,97 @@
+{
+  "runtimeSha": "a67c32b2824585e5006102ad33c0dbc155aaafe1",
+  "version": "3.0.3",
+  "localMigration": "20261017143000",
+  "remoteMigration": "20261017144545",
+  "source": "connector verified Prisma ioldpnqqvobprjiontre",
+  "functionChecks": {
+    "exactThreeAdditions": true,
+    "aclUnchanged": true
+  },
+  "profiles": [
+    {
+      "profile": "super_admin",
+      "group_count": 3,
+      "legacy_scope_equal": true,
+      "group_dates_equal": true,
+      "company_dates_equal": true
+    },
+    {
+      "profile": "owner",
+      "group_count": 1,
+      "legacy_scope_equal": true,
+      "group_dates_equal": true,
+      "company_dates_equal": true
+    },
+    {
+      "profile": "recruiter",
+      "group_count": 1,
+      "legacy_scope_equal": true,
+      "group_dates_equal": true,
+      "company_dates_equal": true
+    }
+  ],
+  "commonDenied42501": true,
+  "before": [
+    {
+      "counts": {
+        "users": 7,
+        "groups": 3,
+        "companies": 4,
+        "memberships": 9
+      },
+      "groups_fingerprint": "88c6ab720581fd7e5177cf5c9b9934c9",
+      "companies_fingerprint": "2675a12405a68ab824d550099bc93845"
+    }
+  ],
+  "after": [
+    {
+      "counts": {
+        "users": 7,
+        "groups": 3,
+        "companies": 4,
+        "memberships": 9
+      },
+      "groups_fingerprint": "88c6ab720581fd7e5177cf5c9b9934c9",
+      "companies_fingerprint": "2675a12405a68ab824d550099bc93845"
+    }
+  ],
+  "advisorsUnchanged": true,
+  "advisorsBaseline": [
+    {
+      "name": "rls_enabled_no_policy",
+      "count": 37,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy"
+    },
+    {
+      "name": "anon_security_definer_function_executable",
+      "count": 4,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0028_anon_security_definer_function_executable"
+    },
+    {
+      "name": "authenticated_security_definer_function_executable",
+      "count": 135,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0029_authenticated_security_definer_function_executable"
+    },
+    {
+      "name": "auth_leaked_password_protection",
+      "count": 1,
+      "remediation": "https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection"
+    }
+  ],
+  "webContainer": "4455244e9ae3",
+  "webImage": "sha256:fa91a97ff9616293d87739dd71b43fbb6b651524e87f9dfd669ce2d2f0dc4e67",
+  "rollback": "prisma-web:rollback-before-a67c32b28245",
+  "rollbackImage": "sha256:b55f976a66d6d52d35f6be111a29d5330990a1ea02c01dabfedffc7bbef31114",
+  "branchCI": {
+    "id": 39042015547,
+    "status": "SUCCESS"
+  },
+  "publicSmokeChecks": 22,
+  "limits": "Read-only live SQL checks; no real-user creation/decisions/emails; local browser synthetic. Initial immediate deployment HEAD404 recovered, independent22smokes, no rebuild.",
+  "mainCI": {
+    "id": 39042145417,
+    "status": "SUCCESS"
+  },
+  "otherContainersImagesRestarts": "UNCHANGED"
+}

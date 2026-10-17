@@ -1619,6 +1619,11 @@
       "name": "owner_onboarding_v301",
       "localVersion": "20261017122000",
       "remoteVersion": "20261017123255"
+    },
+    {
+      "name": "group_company_sorting",
+      "localVersion": "20261017143000",
+      "remoteVersion": "20261017144545"
     }
   ],
   "localOnly": [
@@ -1659,11 +1664,11 @@
   ],
   "lastIncrementalVerification": {
     "date": "2026-10-17",
-    "movement": "owner-onboarding-v301",
+    "movement": "groups-sorting-v303",
     "names": [
-      "owner_onboarding_v301"
+      "group_company_sorting"
     ],
-    "evidence": "docs/qa/evidence/owner-onboarding-v301/production.json",
+    "evidence": "docs/qa/evidence/groups-sorting-v303/production.json",
     "historicalSnapshotVerifiedAtUnchanged": true
   }
 }

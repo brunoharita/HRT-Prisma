@@ -1,0 +1,79 @@
+{
+  "version": "1.0.6",
+  "files": [
+    "FONTE_GPT_PRISMA.md",
+    "TUDO_SOBRE_PRISMA.md",
+    "docs/ai-context/PRISMA_CURRENT_STATE.md",
+    "docs/architecture/contracts.md",
+    "docs/product/multiempresa.md",
+    "docs/qa/agreement-groups-sorting-v303.md",
+    "docs/qa/aot-groups-sorting-v303.md",
+    "docs/qa/evidence/groups-sorting-v303/browser.json",
+    "docs/qa/evidence/groups-sorting-v303/local-validation.json",
+    "docs/qa/evidence/groups-sorting-v303/owner-1448.png",
+    "docs/qa/evidence/groups-sorting-v303/owner-320.png",
+    "docs/qa/evidence/groups-sorting-v303/owner-390.png",
+    "docs/qa/evidence/groups-sorting-v303/postgres.json",
+    "docs/qa/evidence/groups-sorting-v303/recruiter-1448.png",
+    "docs/qa/evidence/groups-sorting-v303/recruiter-320.png",
+    "docs/qa/evidence/groups-sorting-v303/recruiter-390.png",
+    "docs/qa/evidence/groups-sorting-v303/sorting-1448.png",
+    "docs/qa/evidence/groups-sorting-v303/sorting-320.png",
+    "docs/qa/evidence/groups-sorting-v303/sorting-390.png",
+    "docs/qa/evidence/groups-sorting-v303/super_admin-1448.png",
+    "docs/qa/evidence/groups-sorting-v303/super_admin-320.png",
+    "docs/qa/evidence/groups-sorting-v303/super_admin-390.png",
+    "docs/security/authorization-model.md",
+    "supabase/migrations/20261017143000_group_company_sorting.sql",
+    "tests/organizationSorting.test.ts",
+    "tests/productRelease.test.ts",
+    "tests/tooling/multiempresa.browser.mjs",
+    "tests/tooling/multiempresa.postgres.mjs",
+    "tests/ui/multiempresa/service.ts",
+    "web/src/config/releaseRegistry.ts",
+    "web/src/domain/organizationAdministration.ts",
+    "web/src/domain/organizationSorting.ts",
+    "web/src/pages/OrganizationsPage.css",
+    "web/src/pages/OrganizationsPage.tsx"
+  ],
+  "impact": {
+    "surfaces": [
+      "context-pack",
+      "database",
+      "documentation",
+      "generated-context",
+      "hosting",
+      "tests",
+      "web"
+    ],
+    "edgeFunctions": [],
+    "migrations": [
+      "supabase/migrations/20261017143000_group_company_sorting.sql"
+    ],
+    "modifiedMigrations": [],
+    "unknown": []
+  },
+  "validationCommands": [
+    "git diff --check",
+    "pnpm run generate:prisma-context",
+    "pnpm run check:prisma-context",
+    "pnpm run typecheck:web",
+    "pnpm run build:web",
+    "pnpm run test",
+    "pnpm run check:supabase-ledger"
+  ],
+  "deployments": {
+    "git": true,
+    "database": [
+      "supabase/migrations/20261017143000_group_company_sorting.sql"
+    ],
+    "edgeFunctions": [],
+    "web": true,
+    "parserIa": false,
+    "paddleGateway": false,
+    "profileSynthesis": false,
+    "mailForwarder": false
+  },
+  "blockedReasons": [],
+  "publishable": true
+}

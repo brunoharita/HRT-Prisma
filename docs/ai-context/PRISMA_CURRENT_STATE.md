@@ -9,9 +9,9 @@ last_verified: 2026-10-17
 
 # Estado atual do Prisma
 
-## Ordenação de grupos e empresas —3.0.3
+## Ordenação de grupos e empresas —3.0.3 publicada
 
-Nome, criação e atualização, em crescente/decrescente, herdados pelas empresas com nomes/datas próprios. Datas existentes projetadas pelo contrato organization-administration1.1.0 compatível1.0.0; nenhuma alteração de acesso, mutações ou histórico. Busca e disclosure preservados; datas indisponíveis explicitadas/por último. Mínimo de validação e estado operacional no AoT `docs/qa/aot-groups-sorting-v303.md`.
+Nome, criação e atualização, em crescente/decrescente, herdados pelas empresas com nomes/datas próprios. Datas existentes projetadas pelo contrato organization-administration1.1.0 compatível1.0.0; nenhuma alteração de acesso, mutações ou histórico. Busca e disclosure preservados; datas indisponíveis explicitadas/por último. Runtime a67c32b2824585e5006102ad33c0dbc155aaafe1; migration local20261017143000/remota20261017144545, somente web e essa migration.151SQL/189browser/27Node dirigidos/tipos/build/checks/contexto e CI de branch PASS;22smokes públicos PASS. Função/ACL/datas/escopos compatíveis, contagens/fingerprints de grupos/empresas e advisors iguais antes/depois. Sem mutação de cadastros reais ou jornada humana autenticada; demais serviços preservados, rollback registrado. Mínimo de validação e estado operacional no AoT `docs/qa/aot-groups-sorting-v303.md`.
 
 ## Grupos recolhíveis — 3.0.2 publicada
 
