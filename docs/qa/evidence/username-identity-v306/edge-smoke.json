@@ -1,0 +1,20 @@
+{
+  "checks": [
+    {
+      "function": "operator-sign-in",
+      "status": 401,
+      "pass": true
+    },
+    {
+      "function": "operator-password-reset",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "function": "platform-users",
+      "status": 401,
+      "pass": true
+    }
+  ],
+  "limits": "Invalid username/email or absent JWT only; no account lookup, credential test, message or mutation"
+}

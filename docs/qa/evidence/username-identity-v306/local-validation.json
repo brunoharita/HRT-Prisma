@@ -11,7 +11,11 @@
     "build": "PASS",
     "deno check affected Edges/helper": "PASS",
     "lint": "PASS",
-    "check:foundation": "PASS"
+    "check:foundation": "PASS",
+    "generate:prisma-context": "PASS",
+    "check:prisma-context": "PASS",
+    "check:supabase-ledger": "PASS",
+    "git diff --check": "PASS"
   },
   "baselineEdges": {
     "platform-users": {
@@ -39,5 +43,10 @@
     "id": 39059880043,
     "conclusion": "failure",
     "cause": "legacy source contract required email recovery; updated to approved username-only contract; targeted tests pass"
+  },
+  "publication": {
+    "version": "3.0.6",
+    "runtimeSha": "9b55d07ccca9fa322016d53c6a156d5409ab9731",
+    "status": "PUBLISHED; see production.json"
   }
 }

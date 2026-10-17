@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 526
-source_manifest_sha256: f1d3ce02e844f2808d52ef400f6ae8ae6f1fc566d30a03eb39e2bdd70e2a26ce
+source_manifest_sha256: 56fa7b1ff90f0158181b57c38fc4b29fda125db411c974103ca60adea6a6be4f
 -->
 
 # Tudo sobre o Prisma
@@ -2650,9 +2650,9 @@ last_verified: 2026-10-17
 
 # Estado atual do Prisma
 
-## Username único e contato compartilhável —3.0.6 validada localmente
+## Username único e contato compartilhável —3.0.6 publicada
 
-Bruno autorizou implementação/main/publicação17/10/2026. operator-identity2.0.0 permite e-mail de contato repetido, preservando username global e Auth UUID exclusivos. Novas contas recebem alias técnico; login resolve Auth por ID, ativação/recuperação usam link nativo enviado ao contato da conta por Resend existente. Recuperação exige username, retorno neutro,60s/3por hora/recibos privados. Sem backfill/reset em massa; legado preservado, edição futura de contato converte alias idempotente.150SQL/162browser/19Node/4Deno/deno check/tipos/build/lint/foundation PASS; CI/publicação pendentes. Acordo/AoT username-identity-v306, ADR-086 e operations/operator-access-email distinguem fixtures de Auth/entrega humana, não testados com contas reais. Backend identidade2.0.0 deve ser preservado em rollback após novas contas; web anterior compatível.
+Bruno autorizou implementação/main/publicação17/10/2026. operator-identity2.0.0 permite e-mail de contato repetido, preservando username global e Auth UUID exclusivos. Novas contas recebem alias técnico; login resolve Auth por ID, ativação/recuperação usam link nativo enviado ao contato da conta por Resend existente. Recuperação exige username, retorno neutro,60s/3por hora/recibos privados. Sem backfill/reset em massa; legado preservado, edição futura de contato converte alias idempotente.150SQL/162browser/19Node/4Deno/deno check/tipos/build/lint/foundation PASS; CI branch39060095893/main39060219492 PASS; publicado runtime9b55d07ccca9fa322016d53c6a156d5409ab9731, migração remota20261017185531, operator-sign-in6/password-reset6 e platform-users9 ACTIVE/fontes iguais/JWT preservado.22smokes públicos e3negativos Edge PASS;7operadores/7Auth/9vínculos/13auditorias inalterados, zero e-mails de teste,5serviços adjacentes/rollback preservados. Registro pós-publicação sincronizado separadamente sem rebuild. Acordo/AoT username-identity-v306, ADR-086 e operations/operator-access-email distinguem fixtures de Auth/entrega humana, não testados com contas reais. Backend identidade2.0.0 deve ser preservado em rollback após novas contas; web anterior compatível.
 
 ## Mínimo de senha8 —3.0.5 publicada
 
@@ -5183,7 +5183,7 @@ Cada contrato material possui nome, owner, versão, consumidores, status, compat
 | `web-domain-read` | product-engineering | 1.1.0 | Home, Pessoas, perfil | ativo em QA | `PrismaDataRepository`, incluindo saúde das fontes centrais | local/QA | bloquear consulta |
 | `platform-user-access` | security/product | 2.0.0 | App Shell, Usuários, Edge Functions | implementado localmente | migration `20260824113000_m2_users_people`, `platform-users` function, UI `UsersPage` | local | bloquear operação |
 | `password-policy` | security/product | 1.1.0 | cadastro/Owner/troca/Auth | publicado3.0.5: web/Edge8; Auth hospedado6 informado pelo usuário | mínimo8, complexidade/confirmação preservadas, web/Edge/config alinhados; AoT password-minimum-v305 | produção | Prisma nega envio abaixo8; Auth nativo mantém6 informado, sem alteração hospedada |
-| `operator-identity` | security/product | 2.0.0 | Usuários/login/ativação/recuperação | validado localmente; rollout no AoT username-identity-v306 | username/Auth UUID exclusivos, contato repetível; alias por conta/compatibilidade legada, token nativo dirigido por username | local | negar identidade/sessão divergente, nunca escolher primeira conta por contato |
+| `operator-identity` | security/product | 2.0.0 | Usuários/login/ativação/recuperação | publicado3.0.6; AoT username-identity-v306 | username/Auth UUID exclusivos, contato repetível; alias por conta/compatibilidade legada, token nativo dirigido por username | produção | negar identidade/sessão divergente, nunca escolher primeira conta por contato |
 | `username-auth-boundary` | security/operations | 1.0.0 | sign-in, password recovery | implementado localmente | `operator-sign-in`, `operator-password-reset` | local | falha neutra |
 | `person-ingestion` | application/data | 12.0.0 | intake, Pessoas, documentos, perfil | resiliência operacional ativa no Prisma-QA | ingestão, revisão por Perfil/documento, publicação, restauração, vínculo, mesclagem, arquivamento e exclusão | local/QA | bloquear somente sem fonte recuperável ou autoridade |
 | `person-definitive-deletion` | product/application/data/security | 1.0.0 | Central da Pessoa, Meus dados, Storage, Perfil, matching e M5.1 | ativo no Prisma-QA | saga única, lock `deleting`, ledger mínimo, purga e verificador de resíduos | local/QA | preservar dados e negar operação |
@@ -11016,6 +11016,8 @@ Falha de envio após cadastro preserva conta pendente e informa o operador para 
 Não criar usuários reais nem enviar mensagens de teste em produção. Testes SQL/handlers/browser são locais/sintéticos; recebimento humano deve ser registrado separadamente quando ocorrer em operação autorizada. Contas manuais não geram mensagem. Publicação não altera senhas ou identidades existentes em massa.
 
 Rollback seguro: web anterior é compatível; preservar migração e handlers de identidade2.0.0 se houver alias técnico/contato repetido. Reverter ao lookup por contato poderia autenticar a conta errada; não fazê-lo. Problemas backend exigem correção compatível, sem apagar contas/dados. Segredos/provedor existentes não são reconfigurados no deploy.
+
+Publicado em17/10/2026 no runtime9b55d07: migration remota20261017185531, operator-sign-in6/operator-password-reset6/platform-users9 ACTIVE com fontes conferidas e JWT preservado. Domínio verificado/envio habilitado/tracking desabilitado no conector; getter retorna configuração presente sem expor valor.22smokes públicos/3Edge negativos PASS; sem conta ou mensagem de teste real.7usuários/7Auth/9vínculos/13auditorias preservados. Recibos/fingerprints em production.json; CI branch39060095893/main39060219492 PASS.
 
 ---
 
@@ -25352,8 +25354,8 @@ Acordo `docs/qa/agreement-username-identity-v306.md`1.0.1 integralmente incorpor
 | D-01 | Índice de contato não único, username/Auth UUID únicos; SQL dois contatos iguais em grupos diferentes, cadastro manual/Owner/browser | PASS | PG17 local isolado e handlers sintéticos |
 | D-02 | Alias técnico exclusivo, login resolve Auth UUID e confere sessão; pares A/B e credenciais cruzadas rejeitadas, identidade/sessão divergentes negadas | PASS | SDK real/transportes sintéticos; Auth externo não usado para testes |
 | D-03 | generateLink recovery oficial, envio ao contato com username, redirect fixo; claim/60s/3por hora/concorrência, recibos e falhas; público somente username/neutro | PASS | Não equivale a recebimento humano ou teste criptográfico do serviço Auth |
-| D-04 | Nenhum backfill/reset; migração preserva todos os campos/IDs/Auth/memberships; login legado, edição/conversão e compensação testados, conclusão de A ignora B | PASS | Preservação remota a conferir na publicação sem mutação de contas reais |
-| D-05 | Migração/três Edges/web, CI e smoke/sincronização | NOT TESTED | Publicação pendente |
+| D-04 | Nenhum backfill/reset; migração preserva todos os campos/IDs/Auth/memberships; login legado, edição/conversão e compensação testados, conclusão de A ignora B | PASS | Produção preservou7operadores/7Auth/9vínculos/13auditorias, fingerprints de IDs/vínculos iguais, sem senha consultada |
+| D-05 | Runtime9b55d07, migração20261017185531, Edges6/6/9/fontes/JWT,22smokes públicos+3negativos, CI branch/main PASS e registro sincronizado | PASS | Produção; envio humano não testado |
 
 ## Proibições
 
@@ -25372,13 +25374,13 @@ Mesmo mapa inicial do acordo, sem expansão. Banco de metadados de entrega usa v
 | Cadastro/Owner/edição | direct | Handlers atuais e novos,150checks SQL,162browser; locks, escopo e compensação | PASS |
 | Login/ativação/recuperação/primeiro acesso | critical_transversal |4Deno; contas A/B, legado, estado, retorno neutro, direcionamento/redirect, entrega/timeout/compensação; SignIn real extraído no harness | PASS |
 | Contato/índices/recibos | direct | SQL/grants/RLS/limites e duas conexões concorrentes, sem PII/tokens em tabela operacional | PASS |
-| Configuração de envio | plausible_indirect | Projeto Prisma saudável, configuração instalada=1; getter somente service_role e mock de transporte. Provedor/entrega humana não testados nesta fase | PARTIAL |
+| Configuração de envio | plausible_indirect | Configuração instalada/getter pronto, domínio verificado/envio habilitado/tracking desabilitado. Mock de transporte; entrega humana não testada | PASS |
 | Autorização/memberships/histórico | critical_transversal | Regressão multiempresa/Owner em150SQL e4Deno; ID continua autoridade, migração não toca Auth/roles/RLS existentes | PASS |
-| Matching/IA/Tokens/Pessoas/outros serviços | no_impact_identified | IDs/joins/políticas preservados; sem modificações nesses módulos. Serviços remotos a conferir | PARTIAL |
+| Matching/IA/Tokens/Pessoas/outros serviços | no_impact_identified | IDs/joins/políticas preservados; sem modificações nesses módulos. Cinco serviços remotos idênticos após publicação | PASS |
 
 ## Validação, fidelidade e limites
 
-150checks PostgreSQL17 isolado PASS: harness real de multiempresa/Owner e testes novos de identidade.162checks browser PASS em1448/390/320, incluindo147de regressão/recuperação e cadastro com contato existente.19Node PASS após build atual;4Deno PASS (29cenários anteriores e bateria nova de identidade); deno check das três Edges/helper PASS; tipos web/build web/build TypeScript/lint/foundation PASS. CI/contexto/publicação pendentes.
+150checks PostgreSQL17 isolado PASS: harness real de multiempresa/Owner e testes novos de identidade.162checks browser PASS em1448/390/320, incluindo147de regressão/recuperação e cadastro com contato existente.19Node PASS após build atual;4Deno PASS (29cenários anteriores e bateria nova de identidade); deno check das três Edges/helper PASS; tipos web/build web/build TypeScript/lint/foundation PASS. Contexto/ledger/diff PASS; CI branch39060095893/main39060219492 PASS; publicação seletiva comprovada.
 
 Senha sintética única somente em memória, campos mascarados. Screenshots de contato compartilhado e recuperação inspecionados: composição/locks/requisitos8 preservados; login sem redesign. Sem nova referência normativa; imagens anteriores são baseline da estrutura, não amostras de conta real. Mensagem de e-mail é HTML/texto simples acessível, sem tracking aplicado pelo código.
 
@@ -25392,11 +25394,17 @@ Rollback de web usa imagem anterior e é compatível com a API nova. Após exist
 
 ## Desvios e conclusão
 
-Nenhum desvio identificado do acordo1.0.1. Implementação validada localmente; CA-04/D-05 e operação/sincronização ainda não comprovados. Entrega não declarada concluída até publicação seletiva e CI/smoke finais.
+Nenhum desvio identificado do acordo1.0.1. D-01a05/P-01a02/CA-01a04 PASS dentro dos limites documentados. Runtime publicado9b55d07ccca9fa322016d53c6a156d5409ab9731; migração remota20261017185531 e três fontes Edge/JWT conferidos. Web3.0.6 running/restarts0,22checks públicos e3negativos Edge PASS.7operadores,7Auth,9vínculos e13auditorias inalterados; nenhum pedido de e-mail gerado por teste. Cinco serviços adjacentes e imagem anterior preservados. Registro pós-publicação em commit documental/ledger, sem novo rebuild. CI/sincronização do registro conferidas no encerramento.
 
 Revisão de segurança local: conversão de alias legada é monotônica e idempotente; a falha de save não muda contato/ID/senha e não restaura endereço Auth antigo que poderia sobrepor edição concorrente. Acordo1.0.1 explicita esta escolha interna dentro de A-01, sem mudança do resultado aprovado. Teste negativo de login após falha acrescido; demais provas válidas não repetidas.
 
-CI inicial39059880043 detectou contrato de teste antigo ainda exigindo recuperação por e-mail. platformUsersEdgeFunctions foi alinhado à decisão D-03/P-01 com negativos contra lookup por contato e reset direto por e-mail;2testes dirigidos PASS,19Node no total. Nenhum comportamento funcional mudou; CI será repetida no SHA final.
+CI inicial39059880043 detectou contrato de teste antigo ainda exigindo recuperação por e-mail. platformUsersEdgeFunctions foi alinhado à decisão D-03/P-01 com negativos contra lookup por contato e reset direto por e-mail;2testes dirigidos PASS,19Node no total. Nenhum comportamento funcional mudou; CI repetida no SHA9b55d07 passou em branch/main.
+
+## Publicação e encerramento operacional
+
+Deploy web teve404 no probe imediato após recriação. A conferência independente de rotas/assets novos/anteriores, versão/SHA/browser e running0 passou após estabilização, sem repetir build. Rollback prisma-web:rollback-before-9b55d07ccca9 aponta para imagem anterior; preservar backend identidade2.0.0 conforme seção de rollback. Migração local20261017190000 mapeada à remota20261017185531; apenas esta migração aplicada pelo conector, sem db push histórico. Fontes dos três bundles incluem helper idêntico ao Git; verify_jwt continua false/false/true respectivamente.
+
+Evidência: production.json, edge-smoke.json, public-smoke.json, containers-before/after.txt, browser.json, postgres.json e screenshots. Configuração de envio foi verificada por booleano seguro no backend e metadados do Resend, sem consultar segredo em ferramentas. Aceitação/entrega real de e-mail e jornada autenticada humana continuam NOT TESTED, sem impedir a distinção das provas locais/rollout. Nenhum teste com conta, senha ou destinatário real foi executado em produção.
 
 ---
 

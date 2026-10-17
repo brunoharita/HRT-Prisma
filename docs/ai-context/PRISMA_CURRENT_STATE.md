@@ -9,9 +9,9 @@ last_verified: 2026-10-17
 
 # Estado atual do Prisma
 
-## Username único e contato compartilhável —3.0.6 validada localmente
+## Username único e contato compartilhável —3.0.6 publicada
 
-Bruno autorizou implementação/main/publicação17/10/2026. operator-identity2.0.0 permite e-mail de contato repetido, preservando username global e Auth UUID exclusivos. Novas contas recebem alias técnico; login resolve Auth por ID, ativação/recuperação usam link nativo enviado ao contato da conta por Resend existente. Recuperação exige username, retorno neutro,60s/3por hora/recibos privados. Sem backfill/reset em massa; legado preservado, edição futura de contato converte alias idempotente.150SQL/162browser/19Node/4Deno/deno check/tipos/build/lint/foundation PASS; CI/publicação pendentes. Acordo/AoT username-identity-v306, ADR-086 e operations/operator-access-email distinguem fixtures de Auth/entrega humana, não testados com contas reais. Backend identidade2.0.0 deve ser preservado em rollback após novas contas; web anterior compatível.
+Bruno autorizou implementação/main/publicação17/10/2026. operator-identity2.0.0 permite e-mail de contato repetido, preservando username global e Auth UUID exclusivos. Novas contas recebem alias técnico; login resolve Auth por ID, ativação/recuperação usam link nativo enviado ao contato da conta por Resend existente. Recuperação exige username, retorno neutro,60s/3por hora/recibos privados. Sem backfill/reset em massa; legado preservado, edição futura de contato converte alias idempotente.150SQL/162browser/19Node/4Deno/deno check/tipos/build/lint/foundation PASS; CI branch39060095893/main39060219492 PASS; publicado runtime9b55d07ccca9fa322016d53c6a156d5409ab9731, migração remota20261017185531, operator-sign-in6/password-reset6 e platform-users9 ACTIVE/fontes iguais/JWT preservado.22smokes públicos e3negativos Edge PASS;7operadores/7Auth/9vínculos/13auditorias inalterados, zero e-mails de teste,5serviços adjacentes/rollback preservados. Registro pós-publicação sincronizado separadamente sem rebuild. Acordo/AoT username-identity-v306, ADR-086 e operations/operator-access-email distinguem fixtures de Auth/entrega humana, não testados com contas reais. Backend identidade2.0.0 deve ser preservado em rollback após novas contas; web anterior compatível.
 
 ## Mínimo de senha8 —3.0.5 publicada
 

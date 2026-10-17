@@ -1624,6 +1624,11 @@
       "name": "group_company_sorting",
       "localVersion": "20261017143000",
       "remoteVersion": "20261017144545"
+    },
+    {
+      "name": "username_contact_identity",
+      "localVersion": "20261017190000",
+      "remoteVersion": "20261017185531"
     }
   ],
   "localOnly": [

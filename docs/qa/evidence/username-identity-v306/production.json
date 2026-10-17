@@ -1,0 +1,109 @@
+{
+  "release": "3.0.6",
+  "runtimeSha": "9b55d07ccca9fa322016d53c6a156d5409ab9731",
+  "project": "ioldpnqqvobprjiontre",
+  "migration": {
+    "name": "username_contact_identity",
+    "localVersion": "20261017190000",
+    "remoteVersion": "20261017185531",
+    "success": true
+  },
+  "edges": [
+    {
+      "name": "operator-sign-in",
+      "version": 6,
+      "status": "ACTIVE",
+      "verify_jwt": false,
+      "sourceMatches": true,
+      "files": [
+        "operator-sign-in/index.ts",
+        "platform-users/operatorIdentity.ts"
+      ]
+    },
+    {
+      "name": "operator-password-reset",
+      "version": 6,
+      "status": "ACTIVE",
+      "verify_jwt": false,
+      "sourceMatches": true,
+      "files": [
+        "operator-password-reset/index.ts",
+        "platform-users/operatorIdentity.ts"
+      ]
+    },
+    {
+      "name": "platform-users",
+      "version": 9,
+      "status": "ACTIVE",
+      "verify_jwt": true,
+      "sourceMatches": true,
+      "files": [
+        "platform-users/index.ts",
+        "platform-users/operatorIdentity.ts"
+      ]
+    }
+  ],
+  "database": {
+    "before": {
+      "operators": 7,
+      "operator_identity_fingerprint": "536cfc9f8075449a8fcf501d4a35fa90",
+      "auth_users": 7,
+      "auth_identity_fingerprint": "5000eb56d5ee619542978d038aabd745",
+      "memberships": 9,
+      "membership_fingerprint": "b395306ad04982c41ffed150b68196e7",
+      "audit_events": 13,
+      "mail_configuration_installed": 1
+    },
+    "after": {
+      "operators": 7,
+      "operator_identity_fingerprint": "536cfc9f8075449a8fcf501d4a35fa90",
+      "auth_users": 7,
+      "auth_identity_fingerprint": "5000eb56d5ee619542978d038aabd745",
+      "memberships": 9,
+      "membership_fingerprint": "b395306ad04982c41ffed150b68196e7",
+      "audit_events": 13,
+      "mail_configuration_installed": 1
+    },
+    "contract": {
+      "migration_version": "20261017185531",
+      "email_unique_removed": true,
+      "contact_index_nonunique": true,
+      "username_unique": true,
+      "auth_id_unique": true,
+      "receipt_rls": true,
+      "no_client_receipt_access": true,
+      "config_service_only": true,
+      "claim_service_only": true,
+      "sending_configuration_ready": true,
+      "access_email_requests": 0
+    },
+    "identitiesAndMembershipsUnchanged": true,
+    "limits": "No passwords read, no production accounts/messages used as tests"
+  },
+  "mailProvider": {
+    "domain": "hrtsolutions.com.br",
+    "status": "verified",
+    "sending": "enabled",
+    "openTracking": false,
+    "clickTracking": false,
+    "configurationPresent": true,
+    "realMessagesSentAsTest": 0
+  },
+  "web": {
+    "version": "3.0.6",
+    "publicSmokeChecks": 22,
+    "edgeNegativeSmokes": 3,
+    "rollbackTag": "prisma-web:rollback-before-9b55d07ccca9",
+    "state": "running",
+    "restarts": 0,
+    "initialDeployProbe": "404 immediately after recreate; independent stabilized smoke passed, no rebuild",
+    "adjacentServicesPreserved": 5
+  },
+  "ci": {
+    "branch": 39060095893,
+    "branchConclusion": "success",
+    "main": 39060219492,
+    "mainConclusion": "success"
+  },
+  "limits": "Local real SQL and handlers/screens with synthetic transports; no production account/credential/email mutation used as test; native hosted Auth cryptography and human delivery not tested. Hosted Auth minimum unchanged6 per user; Prisma minimum8."
+}
