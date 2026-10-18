@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 539
-source_manifest_sha256: 4aaf059d94db10a1699f8330b03a5d827c79cddb939bd1d9bc4dd7154f47065d
+documentation_source_count: 543
+source_manifest_sha256: ab5a3f0b3057cc59aa99eef5a8f8f793b9b92e7d027b89bdbae32c8f5b789e30
 -->
 
 # Tudo sobre o Prisma
@@ -2644,11 +2644,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.91.0
-last_verified: 2026-10-17
+version: 2.92.0
+last_verified: 2026-10-18
 ---
 
 # Estado atual do Prisma
+
+## Medição de IA por ação e requisição — 3.1.2 em validação
+
+Implementação local de correlação entre ai_requests/ai_usage_events e reservas/alocações de Tokens Prisma. Captura mínima de modelo retornado, IDs técnicos, cache, raciocínio e ferramentas; cálculo versionado com estados calculado/parcial/desconhecido, sem fingir conciliação financeira. Agrupamento por job/ação, reserva somada uma vez, custo interno com zero débito comercial. Consulta paginada na Gestão de Tokens exclusiva Super Admin ativo; histórico anterior sem backfill. Tarifas, prompts, modelos, autoridade humana e dados produtivos preservados. Testes locais de metadados, consumidores e SQL/negativos sem inferência real. Publicação pendente de checks finais/CI/rollout, comprovada somente no AoT `docs/qa/aot-ai-cost-metering-v312.md`.
 
 ## Coerência tipográfica entre telas — publicada sem mudar 3.1.1
 
@@ -3944,6 +3948,40 @@ Exemplos de reason codes: `blueprint_coverage_met`, `uncalibrated_items_used`, `
 Equivalência exige mesma Verification Definition, blueprint equivalente, distribuição comparável, dificuldade controlada, rubrica comum, cobertura semelhante e itens válidos.
 
 Não assumir que randomização significa justiça. Não usar tempo como proxy absoluto de competência. Não penalizar conexão ruim, tecnologia assistiva, necessidade de tempo adicional, pausa autorizada ou incidente técnico.
+
+---
+
+## Source: `docs/ai/consumption-cost-metering.md`
+
+# Consumo e custo por ação de IA
+
+Contrato `ai-action-cost-metering-1.0.0`, medição `ai-cost-measurement-1.0.0`, leitura `ai-action-cost-report-1.0.0`; entrega 3.1.2. Acordo/execução/AoT `ai-cost-metering-v312`. Extensão aditiva do ADR-080 e correlação com ADR-083, sem novo gateway, biblioteca ou serviço.
+
+## Autoridade e unidades
+
+Tokens Prisma são unidades comerciais. `private.prisma_token_reservations`, quotes e allocations continuam a autoridade do débito, da tarifa congelada e de sua origem. `ai_requests` identifica requisições lógicas e `ai_usage_events` conserva tentativas do provedor. `action_operation_id` agrupa leases de um mesmo job de síntese, normalização, diretório ou matching; demais ações usam a operação existente. `commercial_operation_id` captura a operação comercial autorizada no início: uma troca posterior do binding de síntese não altera a ligação de tentativas anteriores.
+
+O relatório soma reservas distintas, não o produto de reservas por tentativas. Reservado, debitado e liberado são separados. O detalhamento conserva franquia mensal, pacote adicional, bonificação e restituição. Funções internas/plataforma sem tarifa têm zero débito comercial, mas custo técnico; função tarifada sem vínculo mostra `unlinked`, nunca zero presumido. É uma consulta: não renova, reserva, debita, estorna, gera conteúdo ou publica Perfil.
+
+## Consumo observado e cálculo
+
+`src/infrastructure/aiHistory.ts` extrai somente versão, modelo solicitado/retornado, IDs técnicos, tier, cache lido/gravado, raciocínio e contagem de chamadas de ferramentas. Entrada e saída permanecem nas colunas originais. Não guarda prompt, argumentos de ferramenta, texto de saída, documento, contato ou segredo. A validação SQL limita chaves, tipos, tamanho e coerência das contagens.
+
+Tabela de preços `openai-standard-2026-10-18`, USD por milhão: Luna entrada0,20/cache0,02/saída1,20; Terra2,00/0,20/12,00. Entrada acima de272.000 usa2× na entrada e1,5× na saída para toda a requisição; cache-write1,25× da entrada normal. Raciocínio já integra output_tokens e não é contado novamente. Ferramentas web/web_search_preview dos modelos suportados usam US$0,01 por chamada; outras ferramentas e tiers sem tarifa validada mantêm custo total desconhecido, preservando componente conhecido quando disponível. Não altera modelos, prompts ou tetos financeiros existentes. Na geração contextual, o campo legado de orçamento e sua fórmula permanecem; o ledger novo é a fonte da medição detalhada.
+
+Fontes verificadas18/10/2026: [Luna](https://developers.openai.com/api/docs/models/gpt-5.6-luna), [Terra](https://developers.openai.com/api/docs/models/gpt-5.6-terra), [preços/ferramentas](https://developers.openai.com/api/docs/pricing), [API de custos](https://developers.openai.com/api/reference/resources/admin/subresources/organization/subresources/usage/methods/costs). Uma alteração de preço requer nova versão de cálculo; não reprecificar histórico silenciosamente.
+
+Estados: `calculated` significa cálculo com uso/modelo/tier/cache/ferramentas suportados informados, não fatura; `bounded` conserva intervalo quando faltam contagens de cache; `partial` identifica hipótese de modelo/tier não retornado ou componente sem preço; `unknown` preserva ausência/invalidade de dados. Intervalos/custos parciais nunca são apresentados como valor conciliado. Cache local é zero custo externo e tokens nulos, distinto de cache do provedor, que pode ser cobrado.
+
+Falha com usage preserva o consumo. Timeout, corpo ilegível/truncado ou ausência de usage são desconhecidos. O custo real de cobrança depende de conciliação com a conta do provedor; a API financeira retorna agregados, não comprovação individual por request. Campos observados com evidência já existentes são preservados. Esta entrega não acessa a conta financeira nem cria credencial, coletor de fatura ou rateio fictício.
+
+## Cobertura e limites
+
+Runtime: Parser, Synthesis, matching (duas leituras), Knowledge/research/descrição/resolução, normalização, diretório, geração contextual, análise de atividade e gerador legado quando habilitado. Os dois consumidores manuais de Avaliação usam a mesma calculadora; a finalização de atividade anexa metadata na transação de entrega/liquidação. Backend escreve; navegador não pode fornecer custos ou permissões.
+
+Históricos anteriores ficam intactos e explicitamente sem detalhes/vínculos quando ausentes; não importar automaticamente caches ou artefatos da auditoria. Classificadores administrativos/offline e benchmarks de desenvolvimento não são runtime e não serão disparados para completar métricas. Não se garante recuperação de consumo que o provedor não informou.
+
+Gestão de Tokens Prisma > Consumo e custo de IA: exclusivamente Super Admin ativo, filtros por empresa/função, 25 ações por página (RPC máximo50), detalhe por requisição com até50 tentativas por página/cursor. Totais da ação incluem todas as tentativas, mesmo quando o detalhe é paginado. A consulta não calcula lucro líquido nem atribui receita realizada à franquia gratuita.
 
 ---
 
@@ -5919,6 +5957,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+Pedido de Bruno18/10/2026 autoriza nova entrega **3.1.2**, medição de IA por ação/requisição e correlação com Tokens Prisma. `ai-action-cost-metering-1.0.0`, `ai-cost-measurement-1.0.0` e `ai-action-cost-report-1.0.0` são aditivos; contratos históricos e regras comerciais preservados. Publicação só é confirmada pelo AoT `ai-cost-metering-v312`.
 
 Decisão explícita de Bruno em17/10/2026: correção Cadastrar Owner publicada como **3.0.1**, substituindo a escolha anterior2.9.0 para esta nova entrega. Registry acrescenta geração3/movimento0/primeira entrega1 sem fabricar uma publicação3.0.0 ou renumerar2.9.0. Novo contrato contextual owner-onboarding-1.0.0; contratos genéricos, esquema de usuários, versões anteriores e regras comerciais permanecem. Acordo/AoT owner-onboarding-v301.
 
@@ -10294,6 +10334,8 @@ Reavaliar se o PO aprovar múltiplos processos, arraste por toque, automações,
 
 # ADR-080 — Histórico genérico de solicitações de IA
 
+Extensão aprovada18/10/2026: `ai-action-cost-metering-1.0.0` reutiliza estes mesmos ledgers para agrupar ações/jobs, capturar o vínculo comercial por requisição e medir cache, ferramentas, modelo retornado e custo com versão de preço. Consulta interna paginada exclusiva Super Admin ativo; nenhum novo fornecedor, prompt, modelo, preço ou débito. Cálculo completo/parcial/desconhecido permanece distinto de custo observado com evidência. Acordo e limites em `docs/qa/agreement-ai-cost-metering-v312.md`; sem backfill ou integração financeira automática. A declaração histórica de publicação abaixo refere-se à versão original; ativação desta extensão é comprovada apenas pelo AoT próprio.
+
 Status: **Aceito pelo PO e publicado em09/10/2026 na2.3.0**. Data: 09/10/2026. Movimento: Avaliação para Posição v2.3.0, Agreement v0.5.0 D-14. Resposta explícita “OK” do PO à recomendação: decisão aceita; consumidores runtime instrumentados, testados e implantados; recibos no AoT.
 
 ## Problema e autoridade
@@ -11448,6 +11490,12 @@ O `pg_dump` fornece snapshot consistente do banco, mas a cópia de arquivos ocor
 ## Source: `docs/operations/prisma-tokens.md`
 
 # Operação de Tokens Prisma
+
+## Medição por ação — 3.1.2
+
+Migração aditiva `20261018210000_ai_action_cost_metering.sql` antes dos consumidores; `aiHistory.ts` afeta quatro Edge Functions (position-assessment, matching-trajectory, knowledge-agent, assessment-item-generator), Parser e Synthesis. Web expõe a consulta somente na gestão Super Admin. Mesmas credenciais, preços, franquias, prompts e modelos. Nenhuma conta financeira nova é conectada. Ver `docs/ai/consumption-cost-metering.md` e AoT `ai-cost-metering-v312`.
+
+Rollback: restaurar os consumidores anteriores preservando as colunas, funções compatíveis e os registros novos; não remover histórico ou reaplicar migrations antigas. Writers v1 continuam aceitos e ficam explicitamente sem metadata completa. Smoke somente leitura/health, sem generate/research/parse/retry/drain ou nova chamada de IA. Testes: `node scripts/test-prisma-tokens-sql.mjs --ai-cost-metering --content-signals`, mocks e UI determinística; nenhum dado comercial produtivo fictício.
 
 2.4.0 / ADR-083. Migrations prisma_tokens e prisma_tokens_consumers antecedem Edge position-assessment, gateway, Parser e web. Synthesis reutiliza RPCs compatíveis sem nova imagem. Ledger técnico separado; nenhum prompt/modelo alterado. Não usar db push geral ou replay de migrations históricas.
 
@@ -13427,6 +13475,46 @@ Risco C, com fronteira D existente reutilizada para classificação. Direct: com
 CA-01/02: tela sintética mesma topologia e viewport desktop/celular; pendência com 2 evidências leva ao editor correto; salvar move para grupo sem apagar vínculos; negativos de alcance/role; erro conserva seleção. CA-03: inventário de avisos, prova dirigida de foco/destino/retry e revisão do diff; controles já presentes no próprio aviso contam como ação, informações puramente explicativas não implicam ação. CA-04: registry10/contextos/CI/rotas/assets/SHA e rollback sincronizados.
 
 Prompt congelado: implementar D/P/F/A e critérios acima sem reinterpretar a exigência de problema claro e botão contextual. Usar UI existente, sem nova dependência e sem testes mutacionais de produção.
+
+---
+
+## Source: `docs/qa/agreement-ai-cost-metering-v312.md`
+
+# Acordo — medição de IA por ação e requisição, v1.0.0
+
+Autoridade: pedido explícito de Bruno em 18/10/2026 para implementar, validar sem novas chamadas de IA, integrar em main e publicar nova versão. Entrega 3.1.2, complementar ao movimento 3.1. Baseline e120387846bc6ed317cd401e59f1b9c0d09d0e07; risco D. Reutilizar ADR-080, ADR-083 e os ledgers existentes, sem novo fornecedor/dependência.
+
+## DEVE
+
+- D-01: registrar consumo por tentativa e consolidar por ação lógica, incluindo funções internas, múltiplas leituras e tentativas que falham; ausência de usage permanece desconhecida.
+- D-02: preservar metadados mínimos do provedor (modelo retornado, IDs técnicos, tier, entrada/saída, cache e raciocínio), calcular custo com preço versionado e contabilizar ferramentas suportadas. Distinguir cálculo completo, parcial/desconhecido e custo observado com evidência; não chamar estimativa de fatura.
+- D-03: vincular a ação às reservas comerciais por empresa/função/operação, somando cada reserva apenas uma vez e detalhando franquia/pacote/bonificação/restituição. Funções internas sem tarifa têm zero débito comercial, preservando custo API; função tarifada sem vínculo permanece explicitamente não vinculada.
+- D-04: agrupar síntese por job, mantendo a referência comercial de cada tentativa mesmo após retry. Preservar as transações de entrega/liquidação existentes.
+- D-05: disponibilizar consulta interna paginada por ação e requisição na Gestão de Tokens Prisma, somente para Super Admin ativo, com funções internas e detalhes progressivos de tentativas/cobrança. Metadados técnicos não alteram o extrato comercial do cliente.
+- D-06: manter compatibilidade com leitores/escritores anteriores, sem inventar backfill; histórico anterior sem detalhes é identificado. Publicar migração aditiva antes dos consumidores, com rollback dos consumidores que preserve os registros.
+- D-07: validar offline com mocks e PostgreSQL local descartável, incluindo permissões negativas, replay, falha, cache, retries e ausência de nova cobrança; integrar/publicar o SHA validado, versão 3.1.2 e smoke sem inferência.
+
+## PROIBIDO
+
+- P-01: disparar inferências durante desenvolvimento, testes ou smoke; executar classificadores/benchmarks live para preencher histórico.
+- P-02: mudar tarifas, franquias, planos, regras de liquidação, prompts, modelos, dados humanos, autoridade ou decisões de contratação; duplicar débito por tentativa; atribuir custo global a empresa arbitrária.
+- P-03: gravar prompts, currículos, respostas pessoais ou segredos na medição; permitir escrita de custos pelo navegador ou consulta cruzada por usuário sem autoridade.
+- P-04: apresentar null como zero, cálculo como cobrança confirmada ou rateio como confirmação individual da fatura.
+
+## FORA DE ESCOPO
+
+- F-01: importação retroativa dos artefatos da auditoria; novas vendas, preços ou margem líquida.
+- F-02: integração automática à conta financeira OpenAI, nova credencial administrativa ou importador de faturas. Mantém-se a distinção de custo observado existente; a conciliação financeira depende de dados/autorização de conta que não foram fornecidos. Nenhum custo novo será declarado conciliado.
+- F-03: scripts offline de curadoria/benchmark não são runtime do produto e não serão executados/modificados para criar consumo.
+
+## AUTONOMIA
+
+- A-01: engenharia escolhe campos aditivos, índices, RPCs, calculadora pura, filtros/paginação e testes mínimos suficientes, reutilizando componentes e tokens visuais.
+- A-02: detalhes não fornecidos pelo provedor produzem custo parcial/desconhecido com limites explícitos quando calculáveis; modelos/tier/ferramentas sem preço validado não recebem tarifa inventada.
+
+## CRITÉRIOS DE ACEITE
+
+CA-01/D-01: duas tentativas aparecem na mesma ação; falha mantém custo conhecido e timeout sem usage é desconhecido. CA-02/D-02: fixtures de cache, contexto longo, raciocínio, ferramentas, modelo/tier desconhecido, metadados privados e replay. CA-03/D-03: reservas distintas somadas uma vez com origem correta, vínculo de outro tenant rejeitado, interno zero versus falta de vínculo tarifado. CA-04/D-04: duas leases do mesmo job mantêm ação e snapshots de referência comercial. CA-05/D-05: tabela, detalhe e paginação testados; anon/member/recruiter/owner recusados no relatório global. CA-06/D-06: migração preserva linhas anteriores e writers v1, sem reescrita de custos; rollout/rollback registrados. CA-07/D-07: checks proporcionais, CI, publicação e smoke documentados no AoT.
 
 ---
 
@@ -18934,6 +19022,58 @@ Local/main/origin/VPS no mesmo SHA funcional na conferência de publicação. Fe
 ## Conclusão
 
 Todos os D e P aplicáveis PASS dentro das evidências declaradas. Versão2.0.10 publicada somente na web. Não se afirma teste de clique autenticado em Pessoa real nem runtime de todos os estados do inventário. Evidências e autoridade preservadas, sem decisões artificiais de classificação.
+
+---
+
+## Source: `docs/qa/aot-ai-cost-metering-v312.md`
+
+# AoT — medição de IA 3.1.2
+
+Contrato: agreement-ai-cost-metering-v312.md v1.0.0; execução homônima v1.0.0. Baseline e120387846bc6ed317cd401e59f1b9c0d09d0e07. Implementação/QA local concluídos; publicação ainda pendente neste registro pré-release.
+
+## Mapa de Impacto e Preservação
+
+| Área/capacidade | Relação | Baseline e preservação | Validação necessária | Estado |
+| --- | --- | --- | --- | --- |
+| Ledger, calculadora e consultas | direct | ADR-080; metadata writer, custos desconhecidos, replay e RLS | 191 testes dirigidos + SQL integrado/negativos | PASS local |
+| Reservas/entregas e origem do saldo | critical_transversal | ADR-083; tarifas e liquidações existentes; seis reservas históricas, nenhum pacote vendido na auditoria | 259 asserções SQL, incluindo regressão Tokens/atividade/conteúdo e correlação sem novo débito | PASS local |
+| Parser/Synthesis | direct | workers hosted, cache privado, job/lease e resultado validados | fixtures de transporte/erro/cache/retry; smoke produtivo pendente | PARTIAL |
+| Knowledge/matching/questões/atividade | direct | wrappers e dois consumidores manuais; contratos/prompt/modelo preservados | calculadora, controladores reais com transporte fake e regressões de matching/normalização/Pessoas | PASS local |
+| Gestão de Tokens / Super Admin | direct | card resumido de custos; padrão visual compacto | 16 checks browser em1448/390, SQL nega anon/owner/recruiter/member/Super inativo | PASS local |
+| Perfis, decisões humanas e Score | plausible_indirect | nenhuma alteração da lógica, dados e prompts | snapshots SQL preservados e regressões dirigidas do matching/ingestão | PASS local |
+| Auth/config financeira/infra adjacente | no_impact_identified | só leitura de identidade ativa; nenhum novo segredo/provedor/serviço | revisão do diff; autenticação existente e escopos mantidos | PASS local |
+
+## Acordos / Proibições
+
+| ID | Implementação | Evidência | Estado |
+| --- | --- | --- | --- |
+| D-01 | ai_requests/ai_usage_events, agrupamento por job, falhas preservadas | unit-tests.txt; sql/sql.txt | PASS local |
+| D-02 | measureAiResponse e validação SQL com preço versionado/cache/ferramentas/tier e desconhecidos | testes aiCostMeasurement/aiCostConsumers, replay e proibição de payload livre | PASS local |
+| D-03 | vínculo capturado por operação, reserva única, origens e interno/cache zero sem falsa equivalência de unidades | SQL: 2 tentativas/1 reserva, mensal+adicional, cache sem cotação, falha libera sem ocultar API | PASS local |
+| D-04 | job estável + snapshot comercial por lease, replay não religa cotações | SQL de duas leases/binding alterado e worker real com fetch fake | PASS local |
+| D-05 | tab Super Admin, ações25/tentativas50 por cursor, detalhes progressivos | browser/checks.json e renders1448/390; 60 tentativas em duas páginas SQL | PASS local |
+| D-06 | colunas aditivas, writers anteriores aceitos, sem reprecificação/backfill | snapshots históricos SQL iguais; arquivos remotos de quatro Edge Functions equivalentes ao baseline após normalizar CRLF | PASS local |
+| D-07 | QA offline/tipos/build concluídos; CI/integração/rollout pendentes | registro final após publicação | PARTIAL |
+| P-01 | mocks de transporte e guarda de rede durante191 testes; browser permite sólocalhost; SQL local com ROLLBACK | unit-tests.txt, browser/checks.json, sql/sql.txt | PASS local |
+| P-02 | tarifas/franquia/modelos/prompts/decisões intactos, cálculo legado de teto de questões preservado | diff, testes reais de controlador e snapshots SQL | PASS local |
+| P-03 | chaves técnicas estritas e report Super ativo; nenhum segredo/PII ou writer do navegador | negativos SQL/transporte e revisão | PASS local |
+| P-04 | calculado/parcial/desconhecido separados de observado, ausência não vira zero | fixtures cache/tier/ferramentas e UI “Não conciliado” | PASS local |
+
+Não há referência visual normativa nova; componentes e tipografia da Gestão de Tokens preservados. Quatro renders desktop/celular mostram listagem/detalhe com dados fictícios equivalentes. Tabelas têm rolagem própria e nenhum overflow global. São evidências sintéticas, não jornada humana autenticada em produção.
+
+## Novidade, preservação e limites
+
+Consulta interna é somente leitura e não pode renovar saldo ou gerar IA. Rebind explícito conserva as definições/grants atuais das fronteiras worker/activity start para invalidar planos do writer anterior; activity finish mantém a transação original e anexa somente metadata validada. O cache local prova zero débito sem confundi-lo com vínculo comercial ausente. Scripts administrativos/benchmarks, faturas, novas credenciais, preços, margem líquida e backfill permanecem fora do escopo (F-01–F-03 PASS no diff). Não foram alterados contratos humanos, Auth, planos ou rotas de outros módulos.
+
+Sem desvios do acordo. Custos históricos ausentes não foram recuperados; tiers/modelos/ferramentas sem preço validado ficam desconhecidos. Conciliação financeira automática está fora do acordo. A consulta paginada foi testada com60 tentativas, sem benchmark de grande volume produtivo. Não houve nova inferência para validar.
+
+## Validação final local
+
+191 testes Node dirigidos PASS e 15 checks finais da calculadora/transporte PASS (com sobreposição), com bloqueio de rede a provedores reais; 259 asserções PostgreSQL local PASS/ROLLBACK; 16 checks de UI PASS em1448/390. Build TypeScript, typecheck web, build web e tipos especializados do Parser PASS. Warning preexistente de bundle >900kB. SQL, logs e screenshots em `docs/qa/evidence/ai-cost-metering-v312`. As únicas falhas intermediárias foram corrigidas: nome SQL ambíguo, duplicação de membership na fixture, contrato ausente no teste do controller e executor Chrome indisponível (usado Chromium headless já instalado) e imports da fixture ajustados ao NodeNext. Nenhuma dessas ocorrências disparou IA.
+
+## Git / QA / ambiente
+
+Branch codex/ai-action-cost-metering. PostgreSQL local 127.0.0.1:55479 disponível; único Supabase remoto produtivo, sem QA remoto separado. Arquivos não rastreados preexistentes preservados e fora dos commits/contexto gerado.
 
 ---
 
@@ -26904,6 +27044,18 @@ Revisão de fonte e estados: 30 páginas, componentes assíncronos e autenticaç
 Complementos necessários: refresh de Pessoa/Documento/Revisão; opções e reutilização de Posição; detalhes e atualização de avaliação; histórico/seleção da taxonomia; classificações; fontes de evidência; consulta e estado queued/processing da análise persistida; ações de Conhecimento; navegação/pausa/retomada da verificação; cópia/gestão de convite; acesso/saída da sessão e readiness visível da importação. Tarefas usam tokens independentes e encerramento em finally. Modais que ficam montados vinculam feedback ao estado aberto.
 
 VacancyAssistPage é síncrona, sem espera artificial. ResumeImport, ProfileSearch e PasswordChange não carregam dados essenciais ao abrir: feedback inicia na operação real. Rotas de placeholder/negação/404 são estáticas. Troca de empresa navega/atualiza escopo local e os carregamentos das páginas subsequentes são sinalizados. Telemetria de foco e registros técnicos que não mudam a visualização não geram aviso artificial.
+
+---
+
+## Source: `docs/qa/execution-ai-cost-metering-v312.md`
+
+# Execução — medição de IA, v1.0.0
+
+Executar integralmente `docs/qa/agreement-ai-cost-metering-v312.md` v1.0.0, incluindo D-01–D-07, P-01–P-04, F-01–F-03, A-01–A-02 e CA-01–CA-07. A aprovação é o pedido de implementação de Bruno em 18/10/2026; este documento não abre nova decisão de produto.
+
+Reutilizar ai_requests/ai_usage_events, reservas/alocações existentes, worker boundary e Gestão de Tokens. Nenhuma chamada live de IA ou mutação de dados humanos para provar o funcionamento. Classificação D, branch codex/ai-action-cost-metering. Consulta financeira somente explicita o que é calculado/parcial/desconhecido; não conectar nova conta administrativa. Entrega 3.1.2. Rollout: banco aditivo -> quatro funções Edge afetadas -> Parser e Synthesis -> web; confirmar o release plan do diff antes de publicar.
+
+Mínimo suficiente: calculadora/transporte com fixtures; SQL local integrado ao baseline de Tokens com negativos de autoridade, tenant e replay; testes dirigidos dos consumidores; tipos/build; UI determinística da consulta; Context Pack e CI obrigatória. Não executar suite integral local. Encerrar após evidência, publicação, smoke e sincronização, sem repetir cenários válidos sem nova alteração.
 
 ---
 

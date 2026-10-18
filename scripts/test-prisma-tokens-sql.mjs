@@ -26,7 +26,8 @@ if(nonround){
 }else sql+=await readFile('supabase/qa/prisma_tokens_verification.sql','utf8');
 const timeline=process.argv.includes('--response-timeline');
 const content=process.argv.includes('--content-signals')||timeline;
-const activity=process.argv.includes('--activity-analysis')||content;
+const metering=process.argv.includes('--ai-cost-metering');
+const activity=process.argv.includes('--activity-analysis')||content||metering;
 if(activity){
  sql+=await readFile('supabase/migrations/20261013120000_assessment_activity_analysis.sql','utf8');
  const rate=await readFile('supabase/migrations/20261013130000_assessment_activity_analysis_rate.sql','utf8');
@@ -50,7 +51,8 @@ if(calendar){
  sql+=await readFile('supabase/migrations/20261014230000_tokens_calendar_wallet.sql','utf8');
  sql+=await readFile('supabase/qa/tokens_calendar_verification.sql','utf8');
 }
+if(metering){sql+='\nreset role; create temp table cost_legacy_requests as select to_jsonb(r) data from public.ai_requests r; create temp table cost_legacy_events as select to_jsonb(e) data from public.ai_usage_events e;\n';sql+=await readFile('supabase/migrations/20261018210000_ai_action_cost_metering.sql','utf8');sql+=await readFile('supabase/qa/ai_action_cost_metering_verification.sql','utf8');}
 sql+='\nrollback;';
-const dir=calendar?'docs/qa/evidence/tokens-v262/sql':timeline?'docs/qa/evidence/assessment-question-timeline/sql':content?'docs/qa/evidence/assessment-content-signals/sql':activity?'docs/qa/evidence/assessment-activity-v252/sql':nonround?'docs/qa/evidence/tokens-nonround-rates/sql':'docs/qa/evidence/tokens-prisma-v240/sql';await mkdir(dir,{recursive:true});await mkdir('tmp',{recursive:true});await writeFile('tmp/tokens-prisma-local.sql',sql);
+const dir=metering?'docs/qa/evidence/ai-cost-metering-v312/sql':calendar?'docs/qa/evidence/tokens-v262/sql':timeline?'docs/qa/evidence/assessment-question-timeline/sql':content?'docs/qa/evidence/assessment-content-signals/sql':activity?'docs/qa/evidence/assessment-activity-v252/sql':nonround?'docs/qa/evidence/tokens-nonround-rates/sql':'docs/qa/evidence/tokens-prisma-v240/sql';await mkdir(dir,{recursive:true});await mkdir('tmp',{recursive:true});await writeFile('tmp/tokens-prisma-local.sql',sql);
 const r=spawnSync('C:/Program Files/PostgreSQL/17/bin/psql.exe',['-X','-h','127.0.0.1','-p','55479','-U','prisma_v202_qa','-d','import_evidence_v202','-v','ON_ERROR_STOP=1','-f','tmp/tokens-prisma-local.sql'],{encoding:'utf8',windowsHide:true});
 const rawOutput=(r.stdout+'\n'+r.stderr).replaceAll('\r\n','\n');const output=activity||calendar?rawOutput.split('\n').map(line=>line.trimEnd()).join('\n'):rawOutput;await writeFile(`${dir}/sql.txt`,output);console.log(output.slice(-6500));process.exitCode=r.status??1;

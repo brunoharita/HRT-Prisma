@@ -1,0 +1,71 @@
+{
+  "checks": [
+    {
+      "label": "1448: zero customer debit is distinguished from unknown API cost",
+      "pass": true
+    },
+    {
+      "label": "1448: reservation appears once with two API attempts",
+      "pass": true
+    },
+    {
+      "label": "1448: no viewport overflow in detail",
+      "pass": true
+    },
+    {
+      "label": "1448: keyset cursor sent on next page",
+      "pass": true
+    },
+    {
+      "label": "1448: local cache proves zero debit and no new provider call",
+      "pass": true
+    },
+    {
+      "label": "1448: no viewport overflow in list",
+      "pass": true
+    },
+    {
+      "label": "1448: no external requests or runtime errors",
+      "pass": true
+    },
+    {
+      "label": "1448: read failure can recover",
+      "pass": true
+    },
+    {
+      "label": "390: zero customer debit is distinguished from unknown API cost",
+      "pass": true
+    },
+    {
+      "label": "390: reservation appears once with two API attempts",
+      "pass": true
+    },
+    {
+      "label": "390: no viewport overflow in detail",
+      "pass": true
+    },
+    {
+      "label": "390: keyset cursor sent on next page",
+      "pass": true
+    },
+    {
+      "label": "390: local cache proves zero debit and no new provider call",
+      "pass": true
+    },
+    {
+      "label": "390: no viewport overflow in list",
+      "pass": true
+    },
+    {
+      "label": "390: no external requests or runtime errors",
+      "pass": true
+    },
+    {
+      "label": "390: read failure can recover",
+      "pass": true
+    }
+  ],
+  "limits": [
+    "Real UI with deterministic fixtures, no live AI/Auth/database. SQL separately verifies permissions."
+  ]
+}

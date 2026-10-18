@@ -1,5 +1,7 @@
 # Versionamento
 
+Pedido de Bruno18/10/2026 autoriza nova entrega **3.1.2**, medição de IA por ação/requisição e correlação com Tokens Prisma. `ai-action-cost-metering-1.0.0`, `ai-cost-measurement-1.0.0` e `ai-action-cost-report-1.0.0` são aditivos; contratos históricos e regras comerciais preservados. Publicação só é confirmada pelo AoT `ai-cost-metering-v312`.
+
 Decisão explícita de Bruno em17/10/2026: correção Cadastrar Owner publicada como **3.0.1**, substituindo a escolha anterior2.9.0 para esta nova entrega. Registry acrescenta geração3/movimento0/primeira entrega1 sem fabricar uma publicação3.0.0 ou renumerar2.9.0. Novo contrato contextual owner-onboarding-1.0.0; contratos genéricos, esquema de usuários, versões anteriores e regras comerciais permanecem. Acordo/AoT owner-onboarding-v301.
 
 V3M0 autorizado17/10/2026, inclusive parâmetros delegados, usa entrega **2.9.0**; o identificador da discussão não promove3.0.0. `tenant-authorization`2.0.0 explicita Recruiter como administrador e Admin como alias histórico; `organization-administration`1.0.0 versiona grupos/empresas/planos/vínculos/default/revisão; `platform-user-management`2.0.0 usa persistência transacional via save_platform_user_v3, exclusivamente service_role. Enum e auditorias antigos preservados; Global exclusivo Super, contratos de talentos/IA/Tokens intactos. Acordo e execução V3M0, ADR-085; ativação só comprovada pelo AoT.

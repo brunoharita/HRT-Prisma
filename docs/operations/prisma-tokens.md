@@ -1,5 +1,11 @@
 # Operação de Tokens Prisma
 
+## Medição por ação — 3.1.2
+
+Migração aditiva `20261018210000_ai_action_cost_metering.sql` antes dos consumidores; `aiHistory.ts` afeta quatro Edge Functions (position-assessment, matching-trajectory, knowledge-agent, assessment-item-generator), Parser e Synthesis. Web expõe a consulta somente na gestão Super Admin. Mesmas credenciais, preços, franquias, prompts e modelos. Nenhuma conta financeira nova é conectada. Ver `docs/ai/consumption-cost-metering.md` e AoT `ai-cost-metering-v312`.
+
+Rollback: restaurar os consumidores anteriores preservando as colunas, funções compatíveis e os registros novos; não remover histórico ou reaplicar migrations antigas. Writers v1 continuam aceitos e ficam explicitamente sem metadata completa. Smoke somente leitura/health, sem generate/research/parse/retry/drain ou nova chamada de IA. Testes: `node scripts/test-prisma-tokens-sql.mjs --ai-cost-metering --content-signals`, mocks e UI determinística; nenhum dado comercial produtivo fictício.
+
 2.4.0 / ADR-083. Migrations prisma_tokens e prisma_tokens_consumers antecedem Edge position-assessment, gateway, Parser e web. Synthesis reutiliza RPCs compatíveis sem nova imagem. Ledger técnico separado; nenhum prompt/modelo alterado. Não usar db push geral ou replay de migrations históricas.
 
 Renovação/expiração são calculadas idempotentemente no servidor ao consultar/utilizar, sem cron de navegador. Somente período atual recebe franquia, sem compensar meses não visitados. Suspensão bloqueia reservas novas e preserva liquidação anterior. Reserva sobre lote vencido continua retida até conclusão/conciliação, sem voltar ao disponível. Resultado incerto exige evidência de entrega ou ausência de entrega, razão e super usuário após15min. Falha de worker encerrada fora da completion RPC pode deixar reserva para conciliação, nunca libera silenciosamente. Custo técnico do fornecedor pode existir mesmo sem entrega cobrável.

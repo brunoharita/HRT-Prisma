@@ -1,0 +1,23 @@
+✔ complete provider usage produces calculated cost and reasoning is not counted twice (3.834ms)
+✔ cache reads and writes are disjoint, with the actual model and long-context prices (0.6461ms)
+✔ missing cache fields produces an explicit interval, never an exact invoice (1.1122ms)
+✔ web tool calls are measured separately; unknown tools keep full cost unknown (0.8128ms)
+✔ unknown model or nonstandard tier cannot be priced with a fallback tariff (0.725ms)
+✔ usage absent, invalid counters and overlapping cache counts are unknown, not zero (2.0183ms)
+✔ only minimal metadata escapes the calculator; unsupported technical strings are discarded (0.5073ms)
+✔ requested default tier does not masquerade as a tier confirmed by the provider (1.4898ms)
+✔ history is committed before external I/O; parallel requests retain separate usage and never persist input (100.1662ms)
+✔ missing usage and web tool costs remain unknown, never zero (9.2761ms)
+✔ provider failure and failed validation preserve incurred usage and logical failure (11.5699ms)
+✔ unavailable mandatory ledger prevents provider call (7.6682ms)
+✔ cache hit is explicitly zero external cost with unknown tokens and no fetch (5.457ms)
+✔ real generation controller records richer cost even on HTTP failure without changing its existing budget estimate (669.1981ms)
+✔ activity HTTP rejection and lost response preserve cost or unknown without another provider call (39.48ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1829.2475

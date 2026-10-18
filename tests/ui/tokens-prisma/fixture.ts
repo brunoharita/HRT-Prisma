@@ -1,3 +1,4 @@
+import {aiCostFixture} from "./aiCostFixture.js";
 // Browser fixture only. Never contacts Auth, a provider or a production database.
 const params=new URLSearchParams(location.search);
 const wallet=params.get("wallet")==="calendar";
@@ -37,6 +38,7 @@ Object.assign(window,{__tokensFixture:fixture});
 export const supabase={rpc(name:string,args:any){return {abortSignal:async()=>{
  fixture.calls.push({name,args});while(fixture.hold)await new Promise(r=>setTimeout(r,20));await new Promise(r=>setTimeout(r,60));
  if(fixture.fail)return {data:null,error:{message:"PT_ACCESS_DENIED"}};
+ if(name==="ai_cost_history_v1")return {data:aiCostFixture(args),error:null};
  if(name!=="prisma_tokens")throw Error("Unexpected synthetic RPC");
  const action=args.p_action,d=args.p_data??{};
  if(action==="quote")return {error:null,data:{contract:"prisma-token-quote-1.0.0",organizationId:args.p_organization_id,id:crypto.randomUUID(),functionName:d.functionName,quantity:d.quantity,tokensPerUnit:rates.find(r=>r.functionName===d.functionName)?.tokensPerUnit??2000,amount:(rates.find(r=>r.functionName===d.functionName)?.tokensPerUnit??2000)*d.quantity,available:1000000,expiresAt:new Date(Date.now()+600000).toISOString()}};

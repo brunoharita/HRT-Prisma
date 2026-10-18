@@ -65,7 +65,7 @@ export async function runOnce(config, fetcher = fetch) {
   const started = Date.now(); let output; let error = null; let diagnostic = null; let inputTokens = 0; let outputTokens = 0;
   try {
     output = config.historySecret
-      ? await withAiHistory(createWorkerHistory({ ...config, fetcher }), {organizationId:job.organizationId,functionName:"profile_synthesis",operationId:job.lease,sourceVersion:"profile-synthesis-2.0.0",inputFingerprint:job.basisHash}, tracked => generateSynthesis(job.sources,{...config,model:job.model},tracked),fetcher)
+      ? await withAiHistory(createWorkerHistory({ ...config, fetcher }), {organizationId:job.organizationId,functionName:"profile_synthesis",operationId:job.lease,actionOperationId:job.id,sourceVersion:"profile-synthesis-2.0.0",inputFingerprint:job.basisHash}, tracked => generateSynthesis(job.sources,{...config,model:job.model},tracked),fetcher)
       : await generateSynthesis(job.sources, { ...config, model: job.model }, fetcher);
   }
   catch (cause) {

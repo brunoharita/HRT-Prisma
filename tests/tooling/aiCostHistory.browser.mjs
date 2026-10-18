@@ -1,0 +1,22 @@
+import assert from 'node:assert/strict';import {createRequire} from 'node:module';import {mkdir,writeFile} from 'node:fs/promises';
+const {chromium}=createRequire(import.meta.url)(process.env.PRISMA_PLAYWRIGHT_PATH??'playwright');
+const browser=await chromium.launch({headless:true,executablePath:process.env.PRISMA_BROWSER_PATH});
+const dir='docs/qa/evidence/ai-cost-metering-v312/browser';await mkdir(dir,{recursive:true});const checks=[];
+const check=(label,value)=>{checks.push({label,pass:value});assert.ok(value,label);};
+try{for(const width of [1448,390]){const page=await browser.newPage({viewport:{width,height:1000}});const errors=[],external=[];page.on('pageerror',e=>errors.push(e.message));await page.route('**/*',route=>{const u=new URL(route.request().url());if(u.protocol.startsWith('http')&&u.hostname!=='127.0.0.1'){external.push(u.origin);return route.abort();}return route.continue();});
+ await page.goto('http://127.0.0.1:5712/tokens-prisma.html?role=super');await page.getByRole('tab',{name:'Consumo e custo de IA',exact:true}).click();await page.getByText('Incluído na assinatura',{exact:true}).waitFor();
+ check(width+': zero customer debit is distinguished from unknown API cost',(await page.locator('body').innerText()).includes('Consumo incompleto'));
+ await page.screenshot({path:dir+'/list-'+width+'.png',fullPage:true});
+ await page.getByRole('button',{name:'Ver detalhes',exact:true}).first().click();const modal=page.getByRole('dialog');await modal.getByText('Franquia mensal: 14.785',{exact:true}).waitFor();await modal.getByText('Não conciliado',{exact:true}).waitFor();
+ check(width+': reservation appears once with two API attempts',await modal.getByText('Debitada: 14.785 Tokens Prisma',{exact:true}).count()===1&&await modal.getByText('gpt-5.6-luna',{exact:true}).count()===2);
+ await modal.locator('.ant-table-row-expand-icon').first().click();await modal.getByText('resp_synthetic / req_synthetic',{exact:true}).waitFor();
+ await page.screenshot({path:dir+'/detail-'+width+'.png',fullPage:true});
+ check(width+': no viewport overflow in detail',await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));await modal.getByRole('button',{name:'Fechar',exact:true}).last().click();
+ await page.getByRole('button',{name:'Próximas ações',exact:true}).click();await page.waitForFunction(()=>window.__tokensFixture.calls.some(c=>c.name==='ai_cost_history_v1'&&c.args.p_before));
+ check(width+': keyset cursor sent on next page',await page.evaluate(()=>window.__tokensFixture.calls.some(c=>c.name==='ai_cost_history_v1'&&c.args.p_before&&c.args.p_before_id)));
+ await page.getByText('Resultado reutilizado',{exact:true}).waitFor();check(width+': local cache proves zero debit and no new provider call',(await page.locator('body').innerText()).includes('Sem nova chamada'));
+ await page.getByRole('button',{name:'Mais recentes',exact:true}).click();await page.getByRole('button',{name:'Ver detalhes',exact:true}).nth(1).waitFor();
+ check(width+': no viewport overflow in list',await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));check(width+': no external requests or runtime errors',external.length===0&&errors.length===0);
+ await page.evaluate(()=>window.__tokensFixture.fail=true);await page.getByRole('button',{name:'Atualizar custos',exact:true}).click();await page.getByText('Não foi possível consultar o consumo e custo de IA. Verifique o acesso e tente novamente.',{exact:true}).waitFor();await page.evaluate(()=>window.__tokensFixture.fail=false);await page.getByRole('button',{name:'Tentar novamente',exact:true}).click();await page.getByText('Incluído na assinatura',{exact:true}).waitFor();check(width+': read failure can recover',true);
+ await page.close();}}finally{await writeFile(dir+'/checks.json',JSON.stringify({checks,limits:['Real UI with deterministic fixtures, no live AI/Auth/database. SQL separately verifies permissions.']},null,2));await browser.close();}
+console.log(JSON.stringify({passed:checks.filter(c=>c.pass).length,total:checks.length}));

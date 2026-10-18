@@ -3,11 +3,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.91.0
-last_verified: 2026-10-17
+version: 2.92.0
+last_verified: 2026-10-18
 ---
 
 # Estado atual do Prisma
+
+## Medição de IA por ação e requisição — 3.1.2 em validação
+
+Implementação local de correlação entre ai_requests/ai_usage_events e reservas/alocações de Tokens Prisma. Captura mínima de modelo retornado, IDs técnicos, cache, raciocínio e ferramentas; cálculo versionado com estados calculado/parcial/desconhecido, sem fingir conciliação financeira. Agrupamento por job/ação, reserva somada uma vez, custo interno com zero débito comercial. Consulta paginada na Gestão de Tokens exclusiva Super Admin ativo; histórico anterior sem backfill. Tarifas, prompts, modelos, autoridade humana e dados produtivos preservados. Testes locais de metadados, consumidores e SQL/negativos sem inferência real. Publicação pendente de checks finais/CI/rollout, comprovada somente no AoT `docs/qa/aot-ai-cost-metering-v312.md`.
 
 ## Coerência tipográfica entre telas — publicada sem mudar 3.1.1
 

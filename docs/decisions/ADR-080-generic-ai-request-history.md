@@ -1,5 +1,7 @@
 # ADR-080 — Histórico genérico de solicitações de IA
 
+Extensão aprovada18/10/2026: `ai-action-cost-metering-1.0.0` reutiliza estes mesmos ledgers para agrupar ações/jobs, capturar o vínculo comercial por requisição e medir cache, ferramentas, modelo retornado e custo com versão de preço. Consulta interna paginada exclusiva Super Admin ativo; nenhum novo fornecedor, prompt, modelo, preço ou débito. Cálculo completo/parcial/desconhecido permanece distinto de custo observado com evidência. Acordo e limites em `docs/qa/agreement-ai-cost-metering-v312.md`; sem backfill ou integração financeira automática. A declaração histórica de publicação abaixo refere-se à versão original; ativação desta extensão é comprovada apenas pelo AoT próprio.
+
 Status: **Aceito pelo PO e publicado em09/10/2026 na2.3.0**. Data: 09/10/2026. Movimento: Avaliação para Posição v2.3.0, Agreement v0.5.0 D-14. Resposta explícita “OK” do PO à recomendação: decisão aceita; consumidores runtime instrumentados, testados e implantados; recibos no AoT.
 
 ## Problema e autoridade
