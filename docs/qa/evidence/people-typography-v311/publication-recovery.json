@@ -1,0 +1,15 @@
+{
+  "runtimeSha": "c13e355e836109d4744cc9a96de2944d64610e00",
+  "productVersion": "3.1.1",
+  "dispatcherExit": 22,
+  "reason": "Immediate post-recreation HEAD returned transient404.",
+  "resolution": "No rebuild/redeploy. Independent runtime/SHA/version/assets/routes/CSS/rollback checks passed after stabilization.",
+  "publicChecks": 28,
+  "cssVerified": [
+    "headings14px/20px/600",
+    "roles14px/20px/400"
+  ],
+  "protectedServices": 5,
+  "configurationPreserved": true,
+  "databaseOrHumanDataMutation": "NONE"
+}

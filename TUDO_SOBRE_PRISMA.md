@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 538
-source_manifest_sha256: 9d178771121047593a560d69b9a5489f05be449e6313048ca4116d3efb1044b5
+source_manifest_sha256: 19d01ee45aa74e58c1ccf2264d0804a5b04cc34ba7b24b028c6c76c22a94d533
 -->
 
 # Tudo sobre o Prisma
@@ -2652,7 +2652,7 @@ last_verified: 2026-10-17
 
 ## Retomada de importação —3.1.1 publicada
 
-Ajuste visual de Pessoas em validação, sem mudar3.1.1: cabeçalhos14/20/600 e cargos14/20/400, nomes600 e complementos12/18 mantidos; equivalente móvel com peso400 sem aumentar densidade.35checks browser em1448/390/320 PASS; nenhum handler, regra, backend ou registro de versão alterado. Evidência/limites em `docs/qa/people-typography-v311.md`; publicação do ajuste pendente.
+Ajuste visual de Pessoas publicado sem mudar3.1.1: cabeçalhos14/20/600 e cargos14/20/400, nomes600 e complementos12/18 mantidos; equivalente móvel com peso400 sem aumentar densidade.35checks browser em1448/390/320 PASS; tipos/build/lint/contexto PASS. Runtimec13e355e836109d4744cc9a96de2944d64610e00, web453daf4b0d1a/running0; CI branch39085174619/main39085277691 SUCCESS.28checks públicos incluindo CSS/versão/SHA/rotas/assets;404 imediato transitório verificado sem rebuild. Rollback,recuperação3.0.7,5serviços e configuração preservados. Nenhum handler, regra, backend ou registro de versão alterado. Evidência/limites em `docs/qa/people-typography-v311.md`; fechamento documental sincroniza checkouts sem rebuild.
 
 Página de documento consulta/exibe custo e saldo, com atualização acessível antes da retomada com IA. Ambos botões aguardam previsão válida/saldo suficiente, revalidam a versão confirmada no clique e bloqueiam duplicidade; expiração e falhas são recuperáveis. Contratos privados/SHA/intake/revisão/publicação humana preservados. Investigação por leitura confirmou tentativa histórica12/09 com diagnóstico genérico e documento posterior aprovado do mesmo PDF; correções antigas de listas/LinkedIn presentes, sem atribuir causa específica ausente. Hash dos documentos idêntico antes/depois; nenhuma escrita real/IA paga. Runtime5e210b90290edc985dfa61f75adb0949e52ad3e3, web78ac70337c45/running0; CI branch39079063691/main39079140863 SUCCESS.59Node/55browser/25smokes públicos PASS; tipos/build/lint/contexto PASS.404 imediato transitório verificado sem rebuild; assets,rollback3.1.0,recuperação3.0.7,configuração e5serviços preservados. Somente web publicada; sem QA remoto separado ou retomada autenticada de Pessoa real. Acordo/execução/AoT resume-recovery-v3111.0.0 e recibos registram limites. Fechamento documental sincroniza checkouts sem rebuild.
 
@@ -31624,7 +31624,7 @@ Fechamento mínimo: CA-01/02, tipos/build, contexto/lint/diff, CI, publicação 
 | --- | --- | --- |
 | D-01 | Estilos computados: cabeçalhos14/20/600 (antes11,52/17,28/740), cargos14/20/400 (antes700). Mobile preserva entrelinha23,1 e reduz apenas peso700→400. before.json/after.json e capturas nos3viewports. | PASS |
 | D-02 | 35checks browser: nomes/metadados idênticos, padding e altura de linhas desktop preservados, densidade móvel sem aumento, busca/colunas/seleção/ordenação e ausência de overflow/erros. checks.json. | PASS |
-| D-03 | Aguardando publicação/CI/smoke | NOT TESTED |
+| D-03 | Runtimec13e355 publicado, versão3.1.1 intacta; CI branch39085174619/main39085277691 SUCCESS.28checks públicos incluindo CSS,assets/SHA/versão/rotas. Rollback,5serviços e configuração preservados. production.json/public-smoke.json/ci-runtime.json. Fechamento documental sem rebuild. | PASS |
 | P-01 / F-01 | Diff runtime só styles.css; seletores da tabela exclusivos de PeoplePage e móvel escopado à página. Nenhum handler, contrato, dado, token global ou registro de versão alterado. | PASS |
 
 Sem desvio autorizado. Evidências serão registradas em `docs/qa/evidence/people-typography-v311/`. Limite: fixture/browser sintéticos e smoke produtivo público, sem jornada autenticada humana real ou escrita produtiva.
@@ -31632,6 +31632,24 @@ Sem desvio autorizado. Evidências serão registradas em `docs/qa/evidence/peopl
 ### Render e preservação
 
 Mesmos dados/estado/viewports nas capturas before/after1448/390/320. Alturas desktop e complementos inalterados. Em390px o primeiro cartão móvel perde23,09px e em320px o segundo perde23,09px: o cargo em peso400 ocupa uma linha a menos. Padding e entrelinha mantidos; nenhum registro aumenta. É consequência natural da tipografia solicitada, sem espaço artificial para congelar a quebra anterior. O cabeçalho passa a20px de entrelinha para a legibilidade prevista; não se aumenta o padding ou a altura das linhas de dados.
+
+## Mapa final e validação
+
+| Capacidade | Relação final | Prova / status |
+| --- | --- | --- |
+| Cabeçalhos/cargos | direct | before/after computados/capturas e35checks locais; CSS produtivo14/20/600 e14/20/400 conferido — PASS |
+| Densidade/nomes/complementos/mobile | direct | Nomes/metadados/padding e linhas desktop idênticos; mobile sem aumento; exceções de quebra documentadas — PASS |
+| Busca/seleção/ordem/colunas | plausible_indirect | Interações locais com3registros, seleção de2, busca e dialog de colunas; ordenação desktop — PASS |
+| Permissões/Perfil/IA/tenant | no_impact_identified | Nenhum handler/writer/dado/backend alterado;5serviços preservados; leitura pública não aciona IA — PASS |
+| Outras telas/tema | plausible_indirect | Nenhum token/global alterado, classe da tabela usada só por PeoplePage e seletor móvel escopado; diff revisado — PASS |
+
+Tipos web/build web, lint1936arquivos do snapshot rastreado, Context Pack e diff PASS. Suíte integral local não executada: dispatcher roteia, mas CSS limitado é comprovado pelo browser afetado; CI obrigatório executou os gates do repositório. Registro de versão sem diff.
+
+Publicado c13e355e836109d4744cc9a96de2944d64610e00; web0557c6903b91/imagem453daf4b0d1a/running/restart0. HEAD imediato após recriação respondeu404 transitório, impedindo recibo final do dispatcher. Sem novo rebuild, runtime/health/SHA/versão/assets/CSS/rotas/rollback foram conferidos independentemente (28checks). Cinco serviços adjacentes e hash da configuração idênticos. Rollback anterior78ac70337c45 disponível; recuperação3.0.7 preservada. Sem deploy de banco/Edge/Parser/serviços, consumo de IA ou mutação de dados reais.
+
+Main/origin/VPS alinhados ao publicar. Fechamento documental atualiza checkouts sem reconstruir runtime; CI final continua obrigatório. Arquivos alheios não rastreados preservados; servidor Vite desta tarefa encerrado, servidor existente na5731 preservado. Limite de evidência: fixture sintética e smoke público, sem jornada autenticada humana real.
+
+Conclusão: D-01/D-02/D-03 e P-01/F-01 PASS. Nenhum desvio de contrato; versão de produto permanece3.1.1.
 
 ---
 
