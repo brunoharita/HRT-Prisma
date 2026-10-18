@@ -1979,8 +1979,9 @@ textarea {
 
 .prisma-people-table-card .ant-table-thead > tr > th {
   color: #5c6b84;
-  font-size: 0.72rem;
-  font-weight: 740;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
   letter-spacing: 0.025em;
   background: #f9fbfe;
 }
@@ -7226,6 +7227,12 @@ textarea {
   font-weight: 600;
 }
 .prisma-people-page .prisma-people-table-card .prisma-directory-cell { gap: 4px; }
+.prisma-people-page .prisma-people-table-card .prisma-directory-cell > strong {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+}
+.prisma-people-page .prisma-person-mobile-record > p > strong { font-weight: 400; }
 .prisma-people-page .prisma-people-table-card .prisma-directory-concept {
   font-size: 14px;
   line-height: 20px;

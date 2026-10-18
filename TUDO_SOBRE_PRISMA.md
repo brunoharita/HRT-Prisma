@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 537
-source_manifest_sha256: 59042fbb68987fe91cad9374e27450d4c4d6b8bdf44c25b984514cce4976c015
+documentation_source_count: 538
+source_manifest_sha256: 9d178771121047593a560d69b9a5489f05be449e6313048ca4116d3efb1044b5
 -->
 
 # Tudo sobre o Prisma
@@ -2651,6 +2651,8 @@ last_verified: 2026-10-17
 # Estado atual do Prisma
 
 ## Retomada de importação —3.1.1 publicada
+
+Ajuste visual de Pessoas em validação, sem mudar3.1.1: cabeçalhos14/20/600 e cargos14/20/400, nomes600 e complementos12/18 mantidos; equivalente móvel com peso400 sem aumentar densidade.35checks browser em1448/390/320 PASS; nenhum handler, regra, backend ou registro de versão alterado. Evidência/limites em `docs/qa/people-typography-v311.md`; publicação do ajuste pendente.
 
 Página de documento consulta/exibe custo e saldo, com atualização acessível antes da retomada com IA. Ambos botões aguardam previsão válida/saldo suficiente, revalidam a versão confirmada no clique e bloqueiam duplicidade; expiração e falhas são recuperáveis. Contratos privados/SHA/intake/revisão/publicação humana preservados. Investigação por leitura confirmou tentativa histórica12/09 com diagnóstico genérico e documento posterior aprovado do mesmo PDF; correções antigas de listas/LinkedIn presentes, sem atribuir causa específica ausente. Hash dos documentos idêntico antes/depois; nenhuma escrita real/IA paga. Runtime5e210b90290edc985dfa61f75adb0949e52ad3e3, web78ac70337c45/running0; CI branch39079063691/main39079140863 SUCCESS.59Node/55browser/25smokes públicos PASS; tipos/build/lint/contexto PASS.404 imediato transitório verificado sem rebuild; assets,rollback3.1.0,recuperação3.0.7,configuração e5serviços preservados. Somente web publicada; sem QA remoto separado ou retomada autenticada de Pessoa real. Acordo/execução/AoT resume-recovery-v3111.0.0 e recibos registram limites. Fechamento documental sincroniza checkouts sem rebuild.
 
@@ -12993,6 +12995,8 @@ Referência normativa: proposta-processos-seletivos-v2m6-2026-10-14/03-lista-pai
 Contrato de apresentação atual: `prisma-ux-foundation-1.5.0`. Acordos aprovados: `docs/qa/agreement-ux-foundation.md` 1.0.0, `docs/qa/agreement-visual-reference-fidelity.md` 1.0.0, `docs/qa/agreement-sidebar-branding-v171.md` 1.0.0 e `docs/qa/agreement-visual-option4-v211.md` 1.0.0. Fontes: decisões de Bruno em2026-09-13,2026-09-18 e2026-10-06. A versão1.3.0 aplica a direção visual4 escolhida para toda a plataforma, preservando organização, navegação e contratos de domínio anteriores.
 
 ## Padronização visual V2M8 — 2.8.0
+
+Correção pontual17/10/2026, sem alterar versão3.1.1: cabeçalhos de Pessoas14/20/peso600 e cargos14/20/peso400; nomes600 e complementos12/18 preservados. No equivalente móvel, peso400 com espaçamentos/entrelinha existentes. Escopo restrito a Pessoas, sem normalização global ou mudança funcional. Acordo, mapa e AoT em `docs/qa/people-typography-v311.md`.
 
 Correção de Propostas,16/10/2026: ações pendentes quebram linhas dentro do cartão; candidatos/fontes longos e campos respeitam a largura disponível, inclusive no celular. Conteúdo, ordem, regras e autoridade de curadoria preservados. Escopo local à aba, reutilizando Space.wrap/AntD; sem mudança de contrato ou incremento da versão2.8.0. Acordo/execução e evidência: `docs/qa/aot-knowledge-proposals-overflow.md`. A fixture anterior de Conhecimento cobria somente proposta aprovada e não provava a contenção das quatro ações pendentes; o novo roteiro cobre explicitamente essa lacuna.
 
@@ -31580,6 +31584,54 @@ D-UX-01..04/P-01 PASS:18verificações de tipografia/alinhamento/badge/ausência
 2.7.6 publicada no runtime166213640b6a776efd62ad5229aff7625a21dd93 após CIs branch38843350893/main38843360673 SUCCESS. Plano exige somente web. Smoke18checks PASS:13HTTP,4bundle e1CSS; SHA/versão, seletor tipográfico e assets antigos/novos. Host/rollback em publication.json. Parser/gateway/synthesis/mail/Traefik mantêm IDs da versão anterior. Rollbackweb:prisma-web:rollback-before-166213640b6a. Sem reprocessamento, alteração de banco ou chamada de IA. Produção autenticada real NOT TESTED; evidência visual é sintética. Fonte documental sincroniza main/origin/VPS sem rebuild adicional.
 
 Início02:55:41UTC; tipos/build/teste versão/browser/lint/contexto e implementação concluídos antes03:00:40; CI aprovado03:02:12. Tempo restante de publicação/fechamento registrado na conversa. Reutilizado bootstrap validado e teste de versão atualizado antes do primeiro CI; não houve rodada extra de CI por falha de produto ou versão. Tooltip no teste usa hover, interação existente; nenhuma semântica nova.
+
+---
+
+## Source: `docs/qa/people-typography-v311.md`
+
+# Cabeçalhos e cargos de Pessoas — correção visual sem mudança de versão
+
+## Acordo 1.0.0 e execução congelada
+
+Bruno aprovou em17/10/2026 corrigir cabeçalhos e cargos conforme a diretriz, preservar densidade, validar, integrar em main e publicar sem alterar a versão3.1.1. Restauração de `docs/product/ux-foundation.md`1.5.0, tabela compacta14/20 e complementos12/18; sem nova decisão de produto.
+
+- D-01: cabeçalhos14px/20px/peso600; cargos da tabela14px/20px/peso400; equivalente móvel com14px/peso400 e entrelinha existente preservada. CA-01: estilos computados no navegador.
+- D-02: manter nomes600, complementos12/18, padding/densidade, conteúdo, cores, busca, seleção, ordenação, colunas e responsividade. CA-02: mesmas fixtures/estados/viewports antes/depois e interações dirigidas.
+- D-03: publicar somente web, preservar versão3.1.1, demais serviços/configuração/dados e rollback; main/origin/VPS sincronizados. CA-03: CI, SHA/versão/assets/rotas/serviços e recuperação.
+- P-01: não alterar regra de negócio, contratos, acesso, dados, IA ou publicação de Perfil.
+- F-01: redesenho de tela, normalização global, outras tabelas/telas, funcionalidades e nova versão.
+- A-01: CSS estritamente escopado a Pessoas; reutilizar Ant Design, tema, fixture e fluxo seletivo existentes. Screenshot é evidência do defeito, não nova topologia normativa. Nenhuma Q pendente.
+
+Execução: implementar integralmente D-01 a D-03 preservando P-01/F-01, exercer A-01. Primeiro capturar baseline computado/renderizado; ajustar somente os papéis incorretos; conferir cascata efetiva e densidade em1448/390/320. Reusar cenário sintético existente; nenhum teste permanente adicional para esta correção CSS reversível. Tipos/build, lint/contexto, diff e CI obrigatórios; publicação seletiva e fechamento sem rebuild documental.
+
+## Mapa de impacto e preservação inicial
+
+Baseline main/local/origin1b60b4f42cf15d4d2ffc94984ff518b16930fd2a, runtime3.1.1/5e210b9. Tracked limpo, rascunhos alheios preservados. Classe B visual, mudança exclusivamente CSS.
+
+| Capacidade | Relação | Baseline / validação proporcional |
+| --- | --- | --- |
+| Cabeçalhos/cargos Pessoas | direct | Screenshot + fixture sintética, estilos computados e capturas antes/depois |
+| Densidade/nomes/complementos/mobile | direct | Fonte/peso/altura/padding e layout sem overflow nos3viewports |
+| Busca/seleção/ordem/colunas | plausible_indirect | Interações da fixture real de Pessoas; sem alteração de handlers |
+| Permissões/Perfil/IA/tenant | no_impact_identified | Nenhum código, writer ou backend modificado; plano seletivo e serviços preservados |
+| Outras telas/tema compartilhado | plausible_indirect | Seletores restritos a Pessoas; revisão do diff sem mudança de tokens globais |
+
+Fechamento mínimo: CA-01/02, tipos/build, contexto/lint/diff, CI, publicação web no SHA validado e verificação operacional/rollback. Sem suíte integral local nem banco produtivo para validar CSS.
+
+## AoT — resultados
+
+| ID | Implementação / teste / evidência | Status |
+| --- | --- | --- |
+| D-01 | Estilos computados: cabeçalhos14/20/600 (antes11,52/17,28/740), cargos14/20/400 (antes700). Mobile preserva entrelinha23,1 e reduz apenas peso700→400. before.json/after.json e capturas nos3viewports. | PASS |
+| D-02 | 35checks browser: nomes/metadados idênticos, padding e altura de linhas desktop preservados, densidade móvel sem aumento, busca/colunas/seleção/ordenação e ausência de overflow/erros. checks.json. | PASS |
+| D-03 | Aguardando publicação/CI/smoke | NOT TESTED |
+| P-01 / F-01 | Diff runtime só styles.css; seletores da tabela exclusivos de PeoplePage e móvel escopado à página. Nenhum handler, contrato, dado, token global ou registro de versão alterado. | PASS |
+
+Sem desvio autorizado. Evidências serão registradas em `docs/qa/evidence/people-typography-v311/`. Limite: fixture/browser sintéticos e smoke produtivo público, sem jornada autenticada humana real ou escrita produtiva.
+
+### Render e preservação
+
+Mesmos dados/estado/viewports nas capturas before/after1448/390/320. Alturas desktop e complementos inalterados. Em390px o primeiro cartão móvel perde23,09px e em320px o segundo perde23,09px: o cargo em peso400 ocupa uma linha a menos. Padding e entrelinha mantidos; nenhum registro aumenta. É consequência natural da tipografia solicitada, sem espaço artificial para congelar a quebra anterior. O cabeçalho passa a20px de entrelinha para a legibilidade prevista; não se aumenta o padding ou a altura das linhas de dados.
 
 ---
 

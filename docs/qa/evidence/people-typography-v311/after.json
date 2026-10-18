@@ -1,0 +1,1109 @@
+[
+  {
+    "width": 1448,
+    "headers": [
+      {
+        "text": "Pessoa",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "600",
+          "color": "rgb(92, 107, 132)",
+          "paddingTop": "12px",
+          "paddingBottom": "12px"
+        },
+        "height": 49
+      },
+      {
+        "text": "Atuação recente",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "600",
+          "color": "rgb(92, 107, 132)",
+          "paddingTop": "12px",
+          "paddingBottom": "12px"
+        },
+        "height": 49
+      },
+      {
+        "text": "Cidade",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "600",
+          "color": "rgb(92, 107, 132)",
+          "paddingTop": "12px",
+          "paddingBottom": "12px"
+        },
+        "height": 49
+      },
+      {
+        "text": "Data do Perfil",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "600",
+          "color": "rgb(92, 107, 132)",
+          "paddingTop": "12px",
+          "paddingBottom": "12px"
+        },
+        "height": 49
+      }
+    ],
+    "roles": [
+      {
+        "text": "Gerente de Operações",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 20
+      },
+      {
+        "text": "Coordenador de Operações",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 20
+      },
+      {
+        "text": "Analista de Processos",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 20
+      }
+    ],
+    "names": [
+      {
+        "text": "Marina Costa ",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "600",
+          "color": "rgb(12, 67, 141)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 20
+      },
+      {
+        "text": "Rafael Lima ",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "600",
+          "color": "rgb(12, 67, 141)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 20
+      },
+      {
+        "text": "Joana Alves ",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "600",
+          "color": "rgb(12, 67, 141)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 20
+      }
+    ],
+    "metadata": [
+      {
+        "text": "Operações",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "12px",
+          "lineHeight": "18px",
+          "fontWeight": "400",
+          "color": "rgb(83, 99, 125)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 18
+      },
+      {
+        "text": "Empresa Aurora · 2022 - Atual",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "12px",
+          "lineHeight": "18px",
+          "fontWeight": "400",
+          "color": "rgb(83, 99, 125)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 18
+      },
+      {
+        "text": "Operações",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "12px",
+          "lineHeight": "18px",
+          "fontWeight": "400",
+          "color": "rgb(83, 99, 125)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 18
+      },
+      {
+        "text": "Empresa Atlântica · 2022 - Atual",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "12px",
+          "lineHeight": "18px",
+          "fontWeight": "400",
+          "color": "rgb(83, 99, 125)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 18
+      },
+      {
+        "text": "Operações",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "12px",
+          "lineHeight": "18px",
+          "fontWeight": "400",
+          "color": "rgb(83, 99, 125)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 18
+      },
+      {
+        "text": "Empresa Vale · 2022 - Atual",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "12px",
+          "lineHeight": "18px",
+          "fontWeight": "400",
+          "color": "rgb(83, 99, 125)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 18
+      }
+    ],
+    "cells": [
+      {
+        "text": "",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Pessoa",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Atuação recente",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Cidade",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Data do Perfil",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      }
+    ],
+    "mobileRoles": [
+      {
+        "text": "Gerente de Operações",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "23.1px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Coordenador de Operações",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "23.1px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Analista de Processos",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "23.1px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      }
+    ],
+    "mobileCards": [
+      {
+        "text": "Marina CostaOperaçõesGerente de OperaçõesEmpresa Aurora · 2022 - AtualCidade: São PauloPerfil publicado: 06/10/2026Abrir Perfil",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "26.4px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "18px",
+          "paddingBottom": "18px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Rafael LimaOperaçõesCoordenador de OperaçõesEmpresa Atlântica · 2022 - AtualCidade: BauruPerfil publicado: 06/10/2026Abrir Perfil",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "26.4px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "18px",
+          "paddingBottom": "18px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Joana AlvesOperaçõesAnalista de ProcessosEmpresa Vale · 2022 - AtualCidade: CampinasPerfil publicado: 06/10/2026Abrir Perfil",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "26.4px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "18px",
+          "paddingBottom": "18px"
+        },
+        "height": 0
+      }
+    ],
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "headers": [
+      {
+        "text": "Pessoa",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "600",
+          "color": "rgb(92, 107, 132)",
+          "paddingTop": "12px",
+          "paddingBottom": "12px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Atuação recente",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "600",
+          "color": "rgb(92, 107, 132)",
+          "paddingTop": "12px",
+          "paddingBottom": "12px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Cidade",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "600",
+          "color": "rgb(92, 107, 132)",
+          "paddingTop": "12px",
+          "paddingBottom": "12px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Data do Perfil",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "600",
+          "color": "rgb(92, 107, 132)",
+          "paddingTop": "12px",
+          "paddingBottom": "12px"
+        },
+        "height": 0
+      }
+    ],
+    "roles": [
+      {
+        "text": "Gerente de Operações",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Coordenador de Operações",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Analista de Processos",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      }
+    ],
+    "names": [
+      {
+        "text": "Marina Costa ",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "600",
+          "color": "rgb(12, 67, 141)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Rafael Lima ",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "600",
+          "color": "rgb(12, 67, 141)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Joana Alves ",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "600",
+          "color": "rgb(12, 67, 141)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      }
+    ],
+    "metadata": [
+      {
+        "text": "Operações",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "12px",
+          "lineHeight": "18px",
+          "fontWeight": "400",
+          "color": "rgb(83, 99, 125)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Empresa Aurora · 2022 - Atual",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "12px",
+          "lineHeight": "18px",
+          "fontWeight": "400",
+          "color": "rgb(83, 99, 125)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Operações",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "12px",
+          "lineHeight": "18px",
+          "fontWeight": "400",
+          "color": "rgb(83, 99, 125)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Empresa Atlântica · 2022 - Atual",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "12px",
+          "lineHeight": "18px",
+          "fontWeight": "400",
+          "color": "rgb(83, 99, 125)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Operações",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "12px",
+          "lineHeight": "18px",
+          "fontWeight": "400",
+          "color": "rgb(83, 99, 125)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Empresa Vale · 2022 - Atual",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "12px",
+          "lineHeight": "18px",
+          "fontWeight": "400",
+          "color": "rgb(83, 99, 125)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      }
+    ],
+    "cells": [
+      {
+        "text": "",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Pessoa",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Atuação recente",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Cidade",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Data do Perfil",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      }
+    ],
+    "mobileRoles": [
+      {
+        "text": "Gerente de Operações",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "23.1px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 19
+      },
+      {
+        "text": "Coordenador de Operações",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "23.1px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 19
+      },
+      {
+        "text": "Analista de Processos",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "23.1px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 19
+      }
+    ],
+    "mobileCards": [
+      {
+        "text": "Marina CostaOperaçõesGerente de OperaçõesEmpresa Aurora · 2022 - AtualCidade: São PauloPerfil publicado: 06/10/2026Abrir Perfil",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "26.4px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "18px",
+          "paddingBottom": "18px"
+        },
+        "height": 222.28125
+      },
+      {
+        "text": "Rafael LimaOperaçõesCoordenador de OperaçõesEmpresa Atlântica · 2022 - AtualCidade: BauruPerfil publicado: 06/10/2026Abrir Perfil",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "26.4px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "18px",
+          "paddingBottom": "18px"
+        },
+        "height": 245.375
+      },
+      {
+        "text": "Joana AlvesOperaçõesAnalista de ProcessosEmpresa Vale · 2022 - AtualCidade: CampinasPerfil publicado: 06/10/2026Abrir Perfil",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "26.4px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "18px",
+          "paddingBottom": "18px"
+        },
+        "height": 222.28125
+      }
+    ],
+    "overflow": false
+  },
+  {
+    "width": 320,
+    "headers": [
+      {
+        "text": "Pessoa",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "600",
+          "color": "rgb(92, 107, 132)",
+          "paddingTop": "12px",
+          "paddingBottom": "12px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Atuação recente",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "600",
+          "color": "rgb(92, 107, 132)",
+          "paddingTop": "12px",
+          "paddingBottom": "12px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Cidade",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "600",
+          "color": "rgb(92, 107, 132)",
+          "paddingTop": "12px",
+          "paddingBottom": "12px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Data do Perfil",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "600",
+          "color": "rgb(92, 107, 132)",
+          "paddingTop": "12px",
+          "paddingBottom": "12px"
+        },
+        "height": 0
+      }
+    ],
+    "roles": [
+      {
+        "text": "Gerente de Operações",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Coordenador de Operações",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Analista de Processos",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      }
+    ],
+    "names": [
+      {
+        "text": "Marina Costa ",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "600",
+          "color": "rgb(12, 67, 141)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Rafael Lima ",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "600",
+          "color": "rgb(12, 67, 141)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Joana Alves ",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "600",
+          "color": "rgb(12, 67, 141)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      }
+    ],
+    "metadata": [
+      {
+        "text": "Operações",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "12px",
+          "lineHeight": "18px",
+          "fontWeight": "400",
+          "color": "rgb(83, 99, 125)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Empresa Aurora · 2022 - Atual",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "12px",
+          "lineHeight": "18px",
+          "fontWeight": "400",
+          "color": "rgb(83, 99, 125)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Operações",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "12px",
+          "lineHeight": "18px",
+          "fontWeight": "400",
+          "color": "rgb(83, 99, 125)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Empresa Atlântica · 2022 - Atual",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "12px",
+          "lineHeight": "18px",
+          "fontWeight": "400",
+          "color": "rgb(83, 99, 125)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Operações",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "12px",
+          "lineHeight": "18px",
+          "fontWeight": "400",
+          "color": "rgb(83, 99, 125)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Empresa Vale · 2022 - Atual",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "12px",
+          "lineHeight": "18px",
+          "fontWeight": "400",
+          "color": "rgb(83, 99, 125)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      }
+    ],
+    "cells": [
+      {
+        "text": "",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Pessoa",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Atuação recente",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Cidade",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      },
+      {
+        "text": "Data do Perfil",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 0
+      }
+    ],
+    "mobileRoles": [
+      {
+        "text": "Gerente de Operações",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "23.1px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 19
+      },
+      {
+        "text": "Coordenador de Operações",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "23.1px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 19
+      },
+      {
+        "text": "Analista de Processos",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "lineHeight": "23.1px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "0px",
+          "paddingBottom": "0px"
+        },
+        "height": 19
+      }
+    ],
+    "mobileCards": [
+      {
+        "text": "Marina CostaOperaçõesGerente de OperaçõesEmpresa Aurora · 2022 - AtualCidade: São PauloPerfil publicado: 06/10/2026Abrir Perfil",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "26.4px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "18px",
+          "paddingBottom": "18px"
+        },
+        "height": 245.375
+      },
+      {
+        "text": "Rafael LimaOperaçõesCoordenador de OperaçõesEmpresa Atlântica · 2022 - AtualCidade: BauruPerfil publicado: 06/10/2026Abrir Perfil",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "26.4px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "18px",
+          "paddingBottom": "18px"
+        },
+        "height": 245.375
+      },
+      {
+        "text": "Joana AlvesOperaçõesAnalista de ProcessosEmpresa Vale · 2022 - AtualCidade: CampinasPerfil publicado: 06/10/2026Abrir Perfil",
+        "style": {
+          "fontFamily": "Aptos, \"Segoe UI Variable\", \"Segoe UI\", sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "26.4px",
+          "fontWeight": "400",
+          "color": "rgb(16, 32, 58)",
+          "paddingTop": "18px",
+          "paddingBottom": "18px"
+        },
+        "height": 245.375
+      }
+    ],
+    "overflow": false
+  }
+]

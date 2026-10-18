@@ -1,0 +1,145 @@
+{
+  "checks": [
+    {
+      "name": "1448: headings 14/20/600",
+      "pass": true
+    },
+    {
+      "name": "1448: roles 14/20/400",
+      "pass": true
+    },
+    {
+      "name": "1448: names unchanged",
+      "pass": true
+    },
+    {
+      "name": "1448: metadata unchanged",
+      "pass": true
+    },
+    {
+      "name": "1448: cell padding preserved",
+      "pass": true
+    },
+    {
+      "name": "1448: row density preserved",
+      "pass": true
+    },
+    {
+      "name": "1448: mobile density preserved",
+      "pass": true
+    },
+    {
+      "name": "1448: no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "1448: search retained",
+      "pass": true
+    },
+    {
+      "name": "1448: column controls retained",
+      "pass": true
+    },
+    {
+      "name": "1448: selection retained",
+      "pass": true
+    },
+    {
+      "name": "1448: sorting retained",
+      "pass": true
+    },
+    {
+      "name": "390: headings 14/20/600",
+      "pass": true
+    },
+    {
+      "name": "390: roles 14/20/400",
+      "pass": true
+    },
+    {
+      "name": "390: names unchanged",
+      "pass": true
+    },
+    {
+      "name": "390: metadata unchanged",
+      "pass": true
+    },
+    {
+      "name": "390: cell padding preserved",
+      "pass": true
+    },
+    {
+      "name": "390: row density preserved",
+      "pass": true
+    },
+    {
+      "name": "390: mobile density preserved",
+      "pass": true
+    },
+    {
+      "name": "390: no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "390: search retained",
+      "pass": true
+    },
+    {
+      "name": "390: column controls retained",
+      "pass": true
+    },
+    {
+      "name": "390: selection retained",
+      "pass": true
+    },
+    {
+      "name": "320: headings 14/20/600",
+      "pass": true
+    },
+    {
+      "name": "320: roles 14/20/400",
+      "pass": true
+    },
+    {
+      "name": "320: names unchanged",
+      "pass": true
+    },
+    {
+      "name": "320: metadata unchanged",
+      "pass": true
+    },
+    {
+      "name": "320: cell padding preserved",
+      "pass": true
+    },
+    {
+      "name": "320: row density preserved",
+      "pass": true
+    },
+    {
+      "name": "320: mobile density preserved",
+      "pass": true
+    },
+    {
+      "name": "320: no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "320: search retained",
+      "pass": true
+    },
+    {
+      "name": "320: column controls retained",
+      "pass": true
+    },
+    {
+      "name": "320: selection retained",
+      "pass": true
+    },
+    {
+      "name": "no browser errors",
+      "pass": true
+    }
+  ],
+  "errors": []
+}

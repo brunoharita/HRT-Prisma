@@ -1,0 +1,17 @@
+{
+  "baseline": "1b60b4f42cf15d4d2ffc94984ff518b16930fd2a",
+  "productVersion": "3.1.1",
+  "versionRegistryDiff": "NONE",
+  "browserChecks": 35,
+  "viewports": [
+    1448,
+    390,
+    320
+  ],
+  "webTypecheck": "PASS",
+  "webBuild": "PASS",
+  "lint": "PASS (1936 tracked-snapshot files)",
+  "context": "PASS",
+  "localFullSuite": "NOT RUN; bounded CSS fix, browser interactions cover affected surface",
+  "scope": "Only People-specific CSS; no Auth, real-person data mutation, backend deployment or paid AI."
+}

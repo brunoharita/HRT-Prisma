@@ -4,6 +4,8 @@ Contrato de apresentação atual: `prisma-ux-foundation-1.5.0`. Acordos aprovado
 
 ## Padronização visual V2M8 — 2.8.0
 
+Correção pontual17/10/2026, sem alterar versão3.1.1: cabeçalhos de Pessoas14/20/peso600 e cargos14/20/peso400; nomes600 e complementos12/18 preservados. No equivalente móvel, peso400 com espaçamentos/entrelinha existentes. Escopo restrito a Pessoas, sem normalização global ou mudança funcional. Acordo, mapa e AoT em `docs/qa/people-typography-v311.md`.
+
 Correção de Propostas,16/10/2026: ações pendentes quebram linhas dentro do cartão; candidatos/fontes longos e campos respeitam a largura disponível, inclusive no celular. Conteúdo, ordem, regras e autoridade de curadoria preservados. Escopo local à aba, reutilizando Space.wrap/AntD; sem mudança de contrato ou incremento da versão2.8.0. Acordo/execução e evidência: `docs/qa/aot-knowledge-proposals-overflow.md`. A fixture anterior de Conhecimento cobria somente proposta aprovada e não provava a contenção das quatro ações pendentes; o novo roteiro cobre explicitamente essa lacuna.
 
 O contrato 1.5.0 amplia a base existente, conforme `docs/qa/agreement-visual-standard-v280.md` 1.0.0 e seu Execution Prompt. Reutiliza ADR-050, Ant Design, `theme.ts`, `foundation.css` e componentes atuais, sem nova biblioteca ou mudança de domínio. A escala representa papéis, não uma conversão indiscriminada de todos os textos.
