@@ -1,0 +1,334 @@
+{
+  "checks": [
+    {
+      "name": "1448: .prisma-canonical-education h4",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "16px",
+          "weight": "600"
+        },
+        {
+          "size": "16px",
+          "weight": "600"
+        }
+      ]
+    },
+    {
+      "name": "1448: .prisma-canonical-record__heading time",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "14px",
+          "weight": "400"
+        },
+        {
+          "size": "14px",
+          "weight": "400"
+        },
+        {
+          "size": "14px",
+          "weight": "400"
+        }
+      ]
+    },
+    {
+      "name": "1448: .prisma-canonical-education .ant-typography:not(h4)",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "16px",
+          "weight": "400"
+        },
+        {
+          "size": "16px",
+          "weight": "400"
+        },
+        {
+          "size": "16px",
+          "weight": "400"
+        },
+        {
+          "size": "16px",
+          "weight": "400"
+        }
+      ]
+    },
+    {
+      "name": "1448: .prisma-person-document-cards button strong",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "16px",
+          "weight": "600"
+        },
+        {
+          "size": "16px",
+          "weight": "600"
+        }
+      ]
+    },
+    {
+      "name": "1448: .prisma-person-document-cards button small",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "14px",
+          "weight": "400"
+        },
+        {
+          "size": "14px",
+          "weight": "400"
+        }
+      ]
+    },
+    {
+      "name": "1448: .prisma-person-document-context__header > div > span",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "14px",
+          "weight": "400"
+        }
+      ]
+    },
+    {
+      "name": "1448: .prisma-person-document-context__summary small",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "14px",
+          "weight": "400"
+        },
+        {
+          "size": "14px",
+          "weight": "400"
+        },
+        {
+          "size": "14px",
+          "weight": "400"
+        }
+      ]
+    },
+    {
+      "name": "390: .prisma-canonical-education h4",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "16px",
+          "weight": "600"
+        },
+        {
+          "size": "16px",
+          "weight": "600"
+        }
+      ]
+    },
+    {
+      "name": "390: .prisma-canonical-record__heading time",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "14px",
+          "weight": "400"
+        },
+        {
+          "size": "14px",
+          "weight": "400"
+        },
+        {
+          "size": "14px",
+          "weight": "400"
+        }
+      ]
+    },
+    {
+      "name": "390: .prisma-canonical-education .ant-typography:not(h4)",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "16px",
+          "weight": "400"
+        },
+        {
+          "size": "16px",
+          "weight": "400"
+        },
+        {
+          "size": "16px",
+          "weight": "400"
+        },
+        {
+          "size": "16px",
+          "weight": "400"
+        }
+      ]
+    },
+    {
+      "name": "390: .prisma-person-document-cards button strong",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "16px",
+          "weight": "600"
+        },
+        {
+          "size": "16px",
+          "weight": "600"
+        }
+      ]
+    },
+    {
+      "name": "390: .prisma-person-document-cards button small",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "14px",
+          "weight": "400"
+        },
+        {
+          "size": "14px",
+          "weight": "400"
+        }
+      ]
+    },
+    {
+      "name": "390: .prisma-person-document-context__header > div > span",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "14px",
+          "weight": "400"
+        }
+      ]
+    },
+    {
+      "name": "390: .prisma-person-document-context__summary small",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "14px",
+          "weight": "400"
+        },
+        {
+          "size": "14px",
+          "weight": "400"
+        },
+        {
+          "size": "14px",
+          "weight": "400"
+        }
+      ]
+    },
+    {
+      "name": "320: .prisma-canonical-education h4",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "16px",
+          "weight": "600"
+        },
+        {
+          "size": "16px",
+          "weight": "600"
+        }
+      ]
+    },
+    {
+      "name": "320: .prisma-canonical-record__heading time",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "14px",
+          "weight": "400"
+        },
+        {
+          "size": "14px",
+          "weight": "400"
+        },
+        {
+          "size": "14px",
+          "weight": "400"
+        }
+      ]
+    },
+    {
+      "name": "320: .prisma-canonical-education .ant-typography:not(h4)",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "16px",
+          "weight": "400"
+        },
+        {
+          "size": "16px",
+          "weight": "400"
+        },
+        {
+          "size": "16px",
+          "weight": "400"
+        },
+        {
+          "size": "16px",
+          "weight": "400"
+        }
+      ]
+    },
+    {
+      "name": "320: .prisma-person-document-cards button strong",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "16px",
+          "weight": "600"
+        },
+        {
+          "size": "16px",
+          "weight": "600"
+        }
+      ]
+    },
+    {
+      "name": "320: .prisma-person-document-cards button small",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "14px",
+          "weight": "400"
+        },
+        {
+          "size": "14px",
+          "weight": "400"
+        }
+      ]
+    },
+    {
+      "name": "320: .prisma-person-document-context__header > div > span",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "14px",
+          "weight": "400"
+        }
+      ]
+    },
+    {
+      "name": "320: .prisma-person-document-context__summary small",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "14px",
+          "weight": "400"
+        },
+        {
+          "size": "14px",
+          "weight": "400"
+        },
+        {
+          "size": "14px",
+          "weight": "400"
+        }
+      ]
+    }
+  ]
+}

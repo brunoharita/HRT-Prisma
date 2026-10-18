@@ -1,0 +1,28 @@
+{
+  "checks": [
+    {
+      "name": "profile/1448: intentional role .prisma-profile-highlight-headline unchanged",
+      "pass": true
+    },
+    {
+      "name": "profile/390: intentional role .prisma-profile-highlight-headline unchanged",
+      "pass": true
+    },
+    {
+      "name": "home/1448: intentional role .prisma-home-totals strong unchanged",
+      "pass": true
+    },
+    {
+      "name": "home/390: intentional role .prisma-home-totals strong unchanged",
+      "pass": true
+    },
+    {
+      "name": "questions/1448: intentional role .pa-question h2 unchanged",
+      "pass": true
+    },
+    {
+      "name": "questions/390: intentional role .pa-question h2 unchanged",
+      "pass": true
+    }
+  ]
+}

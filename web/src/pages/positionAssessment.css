@@ -6,7 +6,11 @@
 .pa-portal .ant-btn{max-width:100%;white-space:normal;height:auto;min-height:40px}
 .pa-portal .pa-number{min-width:0;padding:0}
 .pa-portal-time{display:grid;gap:8px;flex:0 1 350px;min-width:0;padding:16px;border:1px solid #b9d2ff;border-radius:10px;background:#edf4ff}.pa-portal-time>strong{font-size:18px;line-height:1.5;color:#143d7e}.pa-portal-time>span{font-size:13px;line-height:1.5;overflow-wrap:anywhere}
-.pa-guidance{line-height:1.65}.pa-guidance section{margin-bottom:24px}.pa-guidance section+section{padding-top:20px;border-top:1px solid #e2e8f2}.pa-guidance h2{font-size:17px;margin:0 0 12px}.pa-guidance p{margin:0 0 12px}.pa-guidance ol,.pa-guidance ul{padding-left:24px;margin:0}.pa-guidance li{padding-left:4px;margin-bottom:10px}.pa-guidance details{padding:12px 16px;border:1px solid #dfe5ed;border-radius:8px;background:#f7faff}.pa-guidance summary{cursor:pointer;font-weight:600}.pa-guidance details[open]>summary{margin-bottom:12px}.pa-portal-body .pa-guidance{font-size:13px}.pa-portal-body .pa-guidance h2{font-size:15px}
+.pa-guidance{line-height:1.65}.pa-guidance section{margin-bottom:24px}.pa-guidance section+section{padding-top:20px;border-top:1px solid #e2e8f2}.pa-guidance h2{font-size:20px;line-height:28px;font-weight:600;margin:0 0 12px}.pa-guidance p{margin:0 0 12px}.pa-guidance ol,.pa-guidance ul{padding-left:24px;margin:0}.pa-guidance li{padding-left:4px;margin-bottom:10px}.pa-guidance details{padding:12px 16px;border:1px solid #dfe5ed;border-radius:8px;background:#f7faff}.pa-guidance summary{cursor:pointer;font-weight:600}.pa-guidance details[open]>summary{margin-bottom:12px}.pa-portal-body .pa-guidance{font-size:13px}.pa-portal-body .pa-guidance h2{font-size:20px;line-height:28px;font-weight:600}
 @media(max-width:900px){.pa-portal-context{flex-basis:calc(100% - 100px)}.pa-portal-time{flex-basis:100%;max-width:none}.pa-portal-context h1{font-size:24px}}
 
 .pa-portal-review{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:16px}.pa-portal-review>span{font-size:13px;line-height:1.5}.pa-portal .pa-review-actions{padding-top:20px;border-top:1px solid #dde4ef;justify-content:space-between}
+
+.pa-page h3 { font-size:20px; line-height:28px; font-weight:600; }
+.pa-page .ant-table-thead > tr > th { font-size:14px; line-height:20px; font-weight:600; }
+.pa-portal .prisma-card .ant-card-head-title { font-size:20px; line-height:28px; font-weight:600; }

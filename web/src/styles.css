@@ -1478,8 +1478,9 @@ textarea {
 .prisma-auth-form .ant-form-item-label > label {
   height: auto;
   color: rgba(235, 243, 253, 0.88);
-  font-size: 0.8rem;
-  font-weight: 550;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
 }
 
 .prisma-auth-form .ant-input-affix-wrapper {
@@ -1708,8 +1709,9 @@ textarea {
 .prisma-user-form-section h2 {
   margin: 0 0 18px;
   color: var(--prisma-text);
-  font-size: 1.05rem;
-  font-weight: 700;
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 600;
 }
 
 .prisma-user-form-grid {
@@ -1779,7 +1781,9 @@ textarea {
 
 .prisma-user-password-checklist h3 {
   margin: 0 0 12px;
-  font-size: 0.92rem;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
 }
 
 .prisma-user-password-checklist ul {
@@ -2083,7 +2087,8 @@ textarea {
 
 .prisma-summary-row span {
   color: var(--prisma-text-secondary);
-  font-size: 0.76rem;
+  font-size: 14px;
+  line-height: 20px;
 }
 
 .prisma-summary-row strong {
@@ -4691,27 +4696,27 @@ textarea {
 .prisma-person-document-context__header { display: grid; grid-template-columns: 42px minmax(0, 1fr) auto; align-items: start; gap: 11px; padding-bottom: 16px; border-bottom: 1px solid #e7ebf2; }
 .prisma-person-document-context__header > .anticon { display: grid; width: 42px; height: 46px; place-items: center; color: #d13f35; font-size: 1.25rem; background: #fff0ef; border-radius: 10px; }
 .prisma-person-document-context__header > div { display: grid; min-width: 0; gap: 2px; }
-.prisma-person-document-context__header h3 { overflow: hidden; margin: 0 !important; color: #152a45; font-size: .9rem !important; text-overflow: ellipsis; white-space: nowrap; }
-.prisma-person-document-context__header small { color: #8a6a10; font-size: .65rem; font-weight: 720; letter-spacing: .045em; text-transform: uppercase; }
-.prisma-person-document-context__header span { color: #79879a; font-size: .68rem; }
+.prisma-person-document-context__header h3 { overflow: hidden; margin: 0 !important; color: #152a45; font-size: 16px !important; line-height: 24px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.prisma-person-document-context__header small { color: #8a6a10; font-size: 14px; line-height: 20px; font-weight: 600; letter-spacing: .045em; text-transform: uppercase; }
+.prisma-person-document-context__header span { color: #79879a; font-size: 14px; line-height: 20px; }
 .prisma-person-document-context__summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .prisma-person-document-context__summary article { display: grid; gap: 3px; min-width: 0; padding: 12px; background: #f8fafc; border: 1px solid #e7ebf1; border-radius: 9px; }
-.prisma-person-document-context__summary small { color: #6d7a90; font-size: .65rem; }
-.prisma-person-document-context__summary strong { overflow-wrap: anywhere; color: #143050; font-size: 1.02rem; }
-.prisma-person-document-context__summary span { color: #8290a3; font-size: .62rem; line-height: 1.35; }
+.prisma-person-document-context__summary small { color: #6d7a90; font-size: 14px; line-height: 20px; }
+.prisma-person-document-context__summary strong { overflow-wrap: anywhere; color: #143050; font-size: 16px; line-height: 24px; font-weight: 600; }
+.prisma-person-document-context__summary span { color: #8290a3; font-size: 14px; line-height: 20px; }
 .prisma-document-education-summary { display: grid; gap: 10px; padding: 14px; background: #fbfcff; border: 1px solid #dce6f5; border-radius: 10px; }
 .prisma-document-education-summary__heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
 .prisma-document-education-summary__heading > div { display: grid; gap: 2px; }
-.prisma-document-education-summary__heading small { color: #536a8a; font-size: .65rem; font-weight: 720; text-transform: uppercase; }
-.prisma-document-education-summary__heading strong { color: #17375f; font-size: .82rem; }
+.prisma-document-education-summary__heading small { color: #536a8a; font-size: 14px; line-height: 20px; font-weight: 600; text-transform: uppercase; }
+.prisma-document-education-summary__heading strong { color: #17375f; font-size: 16px; line-height: 24px; font-weight: 600; }
 .prisma-document-education-summary__list { display: grid; gap: 6px; }
 .prisma-document-education-summary__list article { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 8px; padding: 9px 10px; background: #fff; border: 1px solid #e5ebf4; border-radius: 8px; }
 .prisma-document-education-summary__list article > div:first-child { display: grid; min-width: 0; gap: 1px; }
-.prisma-document-education-summary__list article strong { overflow: hidden; color: #1d3655; font-size: .7rem; text-overflow: ellipsis; white-space: nowrap; }
-.prisma-document-education-summary__list article span { color: #74839a; font-size: .63rem; }
+.prisma-document-education-summary__list article strong { overflow: hidden; color: #1d3655; font-size: 16px; line-height: 24px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.prisma-document-education-summary__list article span { color: #74839a; font-size: 14px; line-height: 20px; }
 .prisma-document-education-summary__list article > div:last-child { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
-.prisma-document-education-summary__list .ant-tag { margin: 0; font-size: .6rem; line-height: 17px; }
-.prisma-document-education-summary__legend { display: flex; gap: 12px; flex-wrap: wrap; color: #6c7b91; font-size: .61rem; }
+.prisma-document-education-summary__list .ant-tag { margin: 0; font-size: 13px; line-height: 20px; }
+.prisma-document-education-summary__legend { display: flex; gap: 12px; flex-wrap: wrap; color: #6c7b91; font-size: 14px; line-height: 20px; }
 .prisma-document-education-summary__legend span { display: inline-flex; align-items: center; gap: 5px; }
 .prisma-document-education-summary__legend i { width: 7px; height: 7px; border-radius: 50%; background: #155eef; }
 .prisma-document-education-summary__legend i.inferred { background: #e99b13; }
@@ -4722,9 +4727,9 @@ textarea {
   .prisma-document-education-summary__list article strong { white-space: normal; }
 }
 .prisma-person-document-context__next { padding: 15px; background: #f2f7ff; border: 1px solid #c9dcfa; border-radius: 10px; }
-.prisma-person-document-context__next > small { display: block; color: #426da9; font-size: .65rem; font-weight: 720; text-transform: uppercase; }
-.prisma-person-document-context__next > strong { display: block; margin-top: 3px; color: #17375f; font-size: .86rem; }
-.prisma-person-document-context__next > p { margin: 6px 0 12px; color: #5e7089; font-size: .73rem; line-height: 1.48; }
+.prisma-person-document-context__next > small { display: block; color: #426da9; font-size: 14px; line-height: 20px; font-weight: 600; text-transform: uppercase; }
+.prisma-person-document-context__next > strong { display: block; margin-top: 3px; color: #17375f; font-size: 16px; line-height: 24px; font-weight: 600; }
+.prisma-person-document-context__next > p { margin: 6px 0 12px; color: #5e7089; font-size: 14px; line-height: 20px; }
 .prisma-person-document-context__actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
 .prisma-person-document-context__actions .ant-btn { width: 100%; }
 
@@ -4734,8 +4739,8 @@ textarea {
 .prisma-person-document-cards button.is-selected { background: #f1f6ff; border-color: #84abef; box-shadow: inset 3px 0 #155eef; }
 .prisma-person-document-cards button > span:first-child { display: flex; min-width: 0; align-items: center; gap: 8px; }
 .prisma-person-document-cards button > span:first-child .anticon { color: #d13f35; }
-.prisma-person-document-cards button strong { overflow: hidden; color: #213750; font-size: .8rem; text-overflow: ellipsis; white-space: nowrap; }
-.prisma-person-document-cards button small { color: #77859a; font-size: .68rem; }
+.prisma-person-document-cards button strong { overflow: hidden; color: #213750; font-size: 16px; line-height: 24px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.prisma-person-document-cards button small { color: #77859a; font-size: 14px; line-height: 20px; }
 
 @media (max-width: 1240px) {
   .prisma-person-action-layout,
@@ -4898,7 +4903,7 @@ textarea {
 
 .prisma-canonical-section > header > div { display: flex; align-items: center; gap: 9px; }
 .prisma-canonical-section > header > div > span { display: grid; place-items: center; width: 30px; height: 30px; color: #155eef; border-radius: 9px; background: #eef4ff; }
-.prisma-canonical-section > header h2 { margin: 0 !important; color: #14213a; font-size: 1.12rem !important; }
+.prisma-canonical-section > header h2 { margin: 0 !important; color: #14213a; font-size: 20px !important; line-height: 28px; font-weight: 600; }
 .prisma-canonical-about > .ant-typography { max-width: 1050px; color: #384861; font-size: 0.96rem; line-height: 1.75; }
 .prisma-canonical-labeled-tags { display: grid; grid-template-columns: max-content minmax(0, 1fr); align-items: start; gap: 12px; margin-bottom: 16px; }
 .prisma-canonical-labeled-tags .ant-tag { border-color: #d6e3ff; background: #f0f5ff; }
@@ -4913,17 +4918,17 @@ textarea {
 .prisma-canonical-experience:last-child { padding-bottom: 0; }
 .prisma-canonical-timeline__dot { position: absolute; top: 5px; left: -6px; width: 11px; height: 11px; border: 2px solid #fff; border-radius: 50%; background: #2166f3; box-shadow: 0 0 0 2px #a9c4ff; }
 .prisma-canonical-record__heading { display: flex; justify-content: space-between; gap: 18px; }
-.prisma-canonical-record__heading h4 { margin: 0 0 2px !important; color: #17233a; font-size: 0.98rem !important; }
-.prisma-canonical-record__heading time { flex: 0 0 auto; color: #708098; font-size: 0.78rem; }
+.prisma-canonical-record__heading h4 { margin: 0 0 2px !important; color: #17233a; font-size: 16px !important; line-height: 24px; font-weight: 600; }
+.prisma-canonical-record__heading time { flex: 0 0 auto; color: #708098; font-size: 14px; line-height: 20px; }
 .prisma-canonical-experience > .ant-typography { max-width: 1000px; margin: 10px 0 0; color: #4a5a72; line-height: 1.62; white-space: pre-line; }
 
 .prisma-canonical-education-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
 .prisma-canonical-education { display: flex; gap: 11px; min-width: 0; padding: 15px; border: 1px solid #e5eaf2; border-radius: 12px; background: #fbfcfe; }
 .prisma-canonical-education__icon { display: grid; flex: 0 0 auto; place-items: center; width: 34px; height: 34px; color: #6847d9; border-radius: 10px; background: #f1edff; }
-.prisma-canonical-education h4 { margin: 0 0 5px !important; font-size: 0.9rem !important; }
-.prisma-canonical-education .ant-typography { display: block; color: #52627b; font-size: 0.8rem; }
+.prisma-canonical-education h4 { margin: 0 0 5px !important; font-size: 16px !important; line-height: 24px; font-weight: 600; }
+.prisma-canonical-education .ant-typography { display: block; color: #52627b; font-size: 14px; line-height: 20px; }
 .prisma-canonical-education .ant-space { margin-top: 9px; }
-.prisma-canonical-meta { color: #718097; font-size: 0.75rem; }
+.prisma-canonical-meta { color: #718097; font-size: 14px; line-height: 20px; }
 
 .prisma-canonical-competency-groups { display: grid; gap: 12px; }
 .prisma-canonical-competency-groups > section { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 14px; padding: 10px 0; border-bottom: 1px solid #edf1f6; }
@@ -4936,7 +4941,7 @@ textarea {
 .prisma-canonical-credentials > section,
 .prisma-canonical-custom-grid > section { min-width: 0; padding: 15px 17px; border: 1px solid #e8ecf3; border-radius: 12px; background: #fbfcfe; }
 .prisma-canonical-credentials h4,
-.prisma-canonical-custom-grid h4 { margin: 0 0 10px !important; font-size: 0.9rem !important; }
+.prisma-canonical-custom-grid h4 { margin: 0 0 10px !important; font-size: 16px !important; line-height: 24px; font-weight: 600; }
 .prisma-canonical-credentials ul,
 .prisma-canonical-custom-grid ul { margin: 0; padding-left: 18px; }
 .prisma-canonical-credentials li,
@@ -4970,7 +4975,7 @@ textarea {
 .prisma-search-filter-section > header > span { color: #2563eb; }
 .prisma-search-filter-section > div { display: grid; gap: 12px; padding: 14px; }
 .prisma-search-field { display: grid; gap: 6px; min-width: 0; }
-.prisma-search-field > span { color: #526078; font-size: 0.76rem; font-weight: 700; }
+.prisma-search-field > span { color: #526078; font-size: 14px; line-height: 20px; font-weight: 400; }
 .prisma-search-field .ant-select,
 .prisma-search-field .ant-input-number { width: 100%; }
 .prisma-search-field-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
@@ -5094,8 +5099,8 @@ textarea {
 .prisma-version-list-item > span { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .prisma-version-list-item small, .prisma-version-list-item time { color: #6d7b92; font-size: .78rem; }
 .prisma-version-metadata { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 18px; }
-.prisma-version-metadata > span { display: grid; gap: 3px; padding: 11px; border: 1px solid #e5eaf2; border-radius: 10px; color: #59677d; font-size: .8rem; background: #fafbfd; }
-.prisma-version-metadata strong { color: #162139; }
+.prisma-version-metadata > span { display: grid; gap: 3px; padding: 11px; border: 1px solid #e5eaf2; border-radius: 10px; color: #59677d; font-size: 14px; line-height: 20px; background: #fafbfd; }
+.prisma-version-metadata strong { color: #162139; font-weight: 600; }
 .prisma-version-actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 20px; padding-top: 16px; border-top: 1px solid #e6ebf3; }
 
 .prisma-structured-profile { display: grid; gap: 14px; }
@@ -5514,8 +5519,9 @@ textarea {
 
 .prisma-responsive-table .ant-table-thead .ant-table-cell {
   color: #465771;
-  font-size: 12px;
-  font-weight: 750;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
   letter-spacing: 0.015em;
 }
 

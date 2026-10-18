@@ -52,3 +52,6 @@
 .process-assessment-send {display:flex;justify-content:flex-end;margin-top:24px;padding-top:20px;border-top:1px solid var(--prisma-border,#e2e8f2);}
 .process-assessment-send .ant-btn {min-height:44px;padding:10px 20px;}
 @media(max-width:600px){.process-assessment-deadline{grid-template-columns:minmax(0,1fr);gap:12px;}.process-assessment-send .ant-btn{width:100%;}}
+
+.process-assessment h3 { font-size:20px; line-height:28px; font-weight:600; }
+.process-assessment .ant-table-thead > tr > th { font-size:14px; line-height:20px; font-weight:600; }

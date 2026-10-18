@@ -1,0 +1,2 @@
+generated TUDO_SOBRE_PRISMA.md
+generated FONTE_GPT_PRISMA.md

@@ -1,0 +1,4220 @@
+{
+  "checks": [
+    {
+      "name": "groups/1448: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "groups/1448: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "groups/1448: .prisma-organization-companies th present",
+      "pass": true
+    },
+    {
+      "name": "groups/1448: .prisma-organization-companies th roles",
+      "pass": true
+    },
+    {
+      "name": "groups/1448: .prisma-organization-capacity present",
+      "pass": true
+    },
+    {
+      "name": "groups/1448: .prisma-organization-capacity roles",
+      "pass": true
+    },
+    {
+      "name": "groups/1448: .prisma-organization-next p present",
+      "pass": true
+    },
+    {
+      "name": "groups/1448: .prisma-organization-next p roles",
+      "pass": true
+    },
+    {
+      "name": "groups/1448: .prisma-organization-companies th spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "groups/1448: .prisma-organization-capacity spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "groups/1448: .prisma-organization-next p spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "groups/1448: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "groups/1448: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "groups/1448: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "groups/1448: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "groups/1448: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "groups/1448: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "groups/1448: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "groups/1448: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "groups/1448: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "groups/390: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "groups/390: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "groups/390: .prisma-organization-companies th present",
+      "pass": true
+    },
+    {
+      "name": "groups/390: .prisma-organization-companies th roles",
+      "pass": true
+    },
+    {
+      "name": "groups/390: .prisma-organization-capacity present",
+      "pass": true
+    },
+    {
+      "name": "groups/390: .prisma-organization-capacity roles",
+      "pass": true
+    },
+    {
+      "name": "groups/390: .prisma-organization-next p present",
+      "pass": true
+    },
+    {
+      "name": "groups/390: .prisma-organization-next p roles",
+      "pass": true
+    },
+    {
+      "name": "groups/390: .prisma-organization-companies th spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "groups/390: .prisma-organization-capacity spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "groups/390: .prisma-organization-next p spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "groups/390: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "groups/390: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "groups/390: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "groups/390: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "groups/390: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "groups/390: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "groups/390: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "groups/390: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "groups/390: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "users/1448: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "users/1448: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "users/1448: .prisma-users-table-card th present",
+      "pass": true
+    },
+    {
+      "name": "users/1448: .prisma-users-table-card th roles",
+      "pass": true
+    },
+    {
+      "name": "users/1448: .prisma-users-table-card th spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "users/1448: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "users/1448: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "users/1448: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "users/1448: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "users/1448: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "users/1448: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "users/1448: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "users/1448: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "users/1448: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "users/390: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "users/390: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "users/390: .prisma-users-table-card th present",
+      "pass": true
+    },
+    {
+      "name": "users/390: .prisma-users-table-card th roles",
+      "pass": true
+    },
+    {
+      "name": "users/390: .prisma-users-table-card th spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "users/390: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "users/390: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "users/390: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "users/390: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "users/390: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "users/390: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "users/390: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "users/390: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "users/390: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "owner/1448: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "owner/1448: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "owner/1448: .prisma-user-form-section h2 present",
+      "pass": true
+    },
+    {
+      "name": "owner/1448: .prisma-user-form-section h2 roles",
+      "pass": true
+    },
+    {
+      "name": "owner/1448: .prisma-user-form-card .ant-form-item-label > label present",
+      "pass": true
+    },
+    {
+      "name": "owner/1448: .prisma-user-form-card .ant-form-item-label > label roles",
+      "pass": true
+    },
+    {
+      "name": "owner/1448: .prisma-user-password-checklist h3 present",
+      "pass": true
+    },
+    {
+      "name": "owner/1448: .prisma-user-password-checklist h3 roles",
+      "pass": true
+    },
+    {
+      "name": "owner/1448: .prisma-user-form-section h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "owner/1448: .prisma-user-form-card .ant-form-item-label > label spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "owner/1448: .prisma-user-password-checklist h3 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "owner/1448: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "owner/1448: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "owner/1448: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "owner/1448: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "owner/1448: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "owner/1448: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "owner/1448: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "owner/1448: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "owner/1448: four fields remain locked",
+      "pass": true
+    },
+    {
+      "name": "owner/1448: password reacts immediately",
+      "pass": true
+    },
+    {
+      "name": "owner/1448: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "owner/390: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "owner/390: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "owner/390: .prisma-user-form-section h2 present",
+      "pass": true
+    },
+    {
+      "name": "owner/390: .prisma-user-form-section h2 roles",
+      "pass": true
+    },
+    {
+      "name": "owner/390: .prisma-user-form-card .ant-form-item-label > label present",
+      "pass": true
+    },
+    {
+      "name": "owner/390: .prisma-user-form-card .ant-form-item-label > label roles",
+      "pass": true
+    },
+    {
+      "name": "owner/390: .prisma-user-password-checklist h3 present",
+      "pass": true
+    },
+    {
+      "name": "owner/390: .prisma-user-password-checklist h3 roles",
+      "pass": true
+    },
+    {
+      "name": "owner/390: .prisma-user-form-section h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "owner/390: .prisma-user-form-card .ant-form-item-label > label spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "owner/390: .prisma-user-password-checklist h3 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "owner/390: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "owner/390: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "owner/390: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "owner/390: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "owner/390: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "owner/390: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "owner/390: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "owner/390: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "owner/390: four fields remain locked",
+      "pass": true
+    },
+    {
+      "name": "owner/390: password reacts immediately",
+      "pass": true
+    },
+    {
+      "name": "owner/390: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "user-edit/1448: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "user-edit/1448: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "user-edit/1448: .prisma-user-form-section h2 present",
+      "pass": true
+    },
+    {
+      "name": "user-edit/1448: .prisma-user-form-section h2 roles",
+      "pass": true
+    },
+    {
+      "name": "user-edit/1448: .prisma-user-form-section h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "user-edit/1448: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "user-edit/1448: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "user-edit/1448: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "user-edit/1448: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "user-edit/1448: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "user-edit/1448: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "user-edit/1448: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "user-edit/1448: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "user-edit/1448: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "user-edit/390: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "user-edit/390: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "user-edit/390: .prisma-user-form-section h2 present",
+      "pass": true
+    },
+    {
+      "name": "user-edit/390: .prisma-user-form-section h2 roles",
+      "pass": true
+    },
+    {
+      "name": "user-edit/390: .prisma-user-form-section h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "user-edit/390: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "user-edit/390: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "user-edit/390: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "user-edit/390: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "user-edit/390: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "user-edit/390: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "user-edit/390: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "user-edit/390: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "user-edit/390: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "person/1448: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "person/1448: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "person/1448: .prisma-person-form-card .ant-form-item-label > label present",
+      "pass": true
+    },
+    {
+      "name": "person/1448: .prisma-person-form-card .ant-form-item-label > label roles",
+      "pass": true
+    },
+    {
+      "name": "person/1448: .prisma-summary-row span present",
+      "pass": true
+    },
+    {
+      "name": "person/1448: .prisma-summary-row span roles",
+      "pass": true
+    },
+    {
+      "name": "person/1448: .prisma-person-form-card .ant-form-item-label > label spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "person/1448: .prisma-summary-row span spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "person/1448: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "person/1448: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "person/1448: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "person/1448: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "person/1448: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "person/1448: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "person/1448: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "person/1448: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "person/1448: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "person/390: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "person/390: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "person/390: .prisma-person-form-card .ant-form-item-label > label present",
+      "pass": true
+    },
+    {
+      "name": "person/390: .prisma-person-form-card .ant-form-item-label > label roles",
+      "pass": true
+    },
+    {
+      "name": "person/390: .prisma-summary-row span present",
+      "pass": true
+    },
+    {
+      "name": "person/390: .prisma-summary-row span roles",
+      "pass": true
+    },
+    {
+      "name": "person/390: .prisma-person-form-card .ant-form-item-label > label spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "person/390: .prisma-summary-row span spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "person/390: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "person/390: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "person/390: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "person/390: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "person/390: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "person/390: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "person/390: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "person/390: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "person/390: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "password/1448: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "password/1448: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "password/1448: .prisma-user-password-checklist h3 present",
+      "pass": true
+    },
+    {
+      "name": "password/1448: .prisma-user-password-checklist h3 roles",
+      "pass": true
+    },
+    {
+      "name": "password/1448: .prisma-user-password-checklist h3 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "password/1448: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "password/1448: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "password/1448: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "password/1448: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "password/1448: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "password/1448: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "password/1448: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "password/1448: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "password/1448: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "password/390: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "password/390: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "password/390: .prisma-user-password-checklist h3 present",
+      "pass": true
+    },
+    {
+      "name": "password/390: .prisma-user-password-checklist h3 roles",
+      "pass": true
+    },
+    {
+      "name": "password/390: .prisma-user-password-checklist h3 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "password/390: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "password/390: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "password/390: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "password/390: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "password/390: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "password/390: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "password/390: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "password/390: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "password/390: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "login/1448: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "login/1448: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "login/1448: .prisma-auth-form .ant-form-item-label > label present",
+      "pass": true
+    },
+    {
+      "name": "login/1448: .prisma-auth-form .ant-form-item-label > label roles",
+      "pass": true
+    },
+    {
+      "name": "login/1448: .prisma-auth-form .ant-form-item-label > label spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "login/1448: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "login/1448: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "login/1448: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "login/1448: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "login/1448: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "login/1448: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "login/1448: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "login/1448: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "login/1448: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "login/390: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "login/390: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "login/390: .prisma-auth-form .ant-form-item-label > label present",
+      "pass": true
+    },
+    {
+      "name": "login/390: .prisma-auth-form .ant-form-item-label > label roles",
+      "pass": true
+    },
+    {
+      "name": "login/390: .prisma-auth-form .ant-form-item-label > label spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "login/390: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "login/390: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "login/390: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "login/390: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "login/390: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "login/390: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "login/390: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "login/390: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "login/390: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "home/1448: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "home/1448: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "home/1448: .prisma-home-continue h2 present",
+      "pass": true
+    },
+    {
+      "name": "home/1448: .prisma-home-continue h2 roles",
+      "pass": true
+    },
+    {
+      "name": "home/1448: .prisma-home-task strong present",
+      "pass": true
+    },
+    {
+      "name": "home/1448: .prisma-home-task strong roles",
+      "pass": true
+    },
+    {
+      "name": "home/1448: .prisma-home-continue h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "home/1448: .prisma-home-task strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "home/1448: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "home/1448: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "home/1448: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "home/1448: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "home/1448: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "home/1448: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "home/1448: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "home/1448: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "home/1448: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "home/390: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "home/390: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "home/390: .prisma-home-continue h2 present",
+      "pass": true
+    },
+    {
+      "name": "home/390: .prisma-home-continue h2 roles",
+      "pass": true
+    },
+    {
+      "name": "home/390: .prisma-home-task strong present",
+      "pass": true
+    },
+    {
+      "name": "home/390: .prisma-home-task strong roles",
+      "pass": true
+    },
+    {
+      "name": "home/390: .prisma-home-continue h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "home/390: .prisma-home-task strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "home/390: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "home/390: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "home/390: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "home/390: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "home/390: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "home/390: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "home/390: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "home/390: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "home/390: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "search/1448: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "search/1448: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "search/1448: .prisma-search-field > span present",
+      "pass": true
+    },
+    {
+      "name": "search/1448: .prisma-search-field > span roles",
+      "pass": true
+    },
+    {
+      "name": "search/1448: .prisma-search-switch present",
+      "pass": true
+    },
+    {
+      "name": "search/1448: .prisma-search-switch roles",
+      "pass": true
+    },
+    {
+      "name": "search/1448: .prisma-search-field > span spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "search/1448: .prisma-search-switch spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "search/1448: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "search/1448: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "search/1448: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "search/1448: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "search/1448: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "search/1448: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "search/1448: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "search/1448: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "search/1448: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "search/390: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "search/390: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "search/390: .prisma-search-field > span present",
+      "pass": true
+    },
+    {
+      "name": "search/390: .prisma-search-field > span roles",
+      "pass": true
+    },
+    {
+      "name": "search/390: .prisma-search-switch present",
+      "pass": true
+    },
+    {
+      "name": "search/390: .prisma-search-switch roles",
+      "pass": true
+    },
+    {
+      "name": "search/390: .prisma-search-field > span spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "search/390: .prisma-search-switch spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "search/390: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "search/390: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "search/390: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "search/390: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "search/390: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "search/390: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "search/390: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "search/390: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "search/390: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "contextual/1448: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "contextual/1448: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "contextual/1448: .prisma-comparison-controls h2 present",
+      "pass": true
+    },
+    {
+      "name": "contextual/1448: .prisma-comparison-controls h2 roles",
+      "pass": true
+    },
+    {
+      "name": "contextual/1448: .prisma-vacancy-compare-page > h2 present",
+      "pass": true
+    },
+    {
+      "name": "contextual/1448: .prisma-vacancy-compare-page > h2 roles",
+      "pass": true
+    },
+    {
+      "name": "contextual/1448: .prisma-vacancy-compare-page th present",
+      "pass": true
+    },
+    {
+      "name": "contextual/1448: .prisma-vacancy-compare-page th roles",
+      "pass": true
+    },
+    {
+      "name": "contextual/1448: .prisma-comparison-controls h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "contextual/1448: .prisma-vacancy-compare-page > h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "contextual/1448: .prisma-vacancy-compare-page th spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "contextual/1448: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "contextual/1448: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "contextual/1448: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "contextual/1448: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "contextual/1448: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "contextual/1448: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "contextual/1448: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "contextual/1448: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "contextual/1448: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "contextual/390: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "contextual/390: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "contextual/390: .prisma-comparison-controls h2 present",
+      "pass": true
+    },
+    {
+      "name": "contextual/390: .prisma-comparison-controls h2 roles",
+      "pass": true
+    },
+    {
+      "name": "contextual/390: .prisma-vacancy-compare-page > h2 present",
+      "pass": true
+    },
+    {
+      "name": "contextual/390: .prisma-vacancy-compare-page > h2 roles",
+      "pass": true
+    },
+    {
+      "name": "contextual/390: .prisma-vacancy-compare-page th present",
+      "pass": true
+    },
+    {
+      "name": "contextual/390: .prisma-vacancy-compare-page th roles",
+      "pass": true
+    },
+    {
+      "name": "contextual/390: .prisma-comparison-controls h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "contextual/390: .prisma-vacancy-compare-page > h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "contextual/390: .prisma-vacancy-compare-page th spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "contextual/390: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "contextual/390: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "contextual/390: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "contextual/390: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "contextual/390: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "contextual/390: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "contextual/390: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "contextual/390: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "contextual/390: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "people-control/1448: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "people-control/1448: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "people-control/1448: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "people-control/1448: .prisma-page h1 density and typography",
+      "pass": true
+    },
+    {
+      "name": "people-control/1448: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "people-control/1448: .prisma-card density and typography",
+      "pass": true
+    },
+    {
+      "name": "people-control/1448: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "people-control/1448: .ant-table-tbody > tr:first-child > td density and typography",
+      "pass": true
+    },
+    {
+      "name": "people-control/1448: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "people-control/1448: .prisma-person-primary-copy > strong density and typography",
+      "pass": true
+    },
+    {
+      "name": "people-control/1448: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "people-control/1448: .prisma-person-primary-copy > small density and typography",
+      "pass": true
+    },
+    {
+      "name": "people-control/1448: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "people-control/1448: .prisma-profile-highlight-headline density and typography",
+      "pass": true
+    },
+    {
+      "name": "people-control/1448: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "people-control/1448: .prisma-home-totals strong density and typography",
+      "pass": true
+    },
+    {
+      "name": "people-control/1448: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "people-control/1448: .pa-question h2 density and typography",
+      "pass": true
+    },
+    {
+      "name": "people/1448: filtering retained",
+      "pass": true
+    },
+    {
+      "name": "people/1448: columns retained",
+      "pass": true
+    },
+    {
+      "name": "people-control/1448: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "people-control/390: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "people-control/390: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "people-control/390: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "people-control/390: .prisma-page h1 density and typography",
+      "pass": true
+    },
+    {
+      "name": "people-control/390: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "people-control/390: .prisma-card density and typography",
+      "pass": true
+    },
+    {
+      "name": "people-control/390: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "people-control/390: .ant-table-tbody > tr:first-child > td density and typography",
+      "pass": true
+    },
+    {
+      "name": "people-control/390: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "people-control/390: .prisma-person-primary-copy > strong density and typography",
+      "pass": true
+    },
+    {
+      "name": "people-control/390: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "people-control/390: .prisma-person-primary-copy > small density and typography",
+      "pass": true
+    },
+    {
+      "name": "people-control/390: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "people-control/390: .prisma-profile-highlight-headline density and typography",
+      "pass": true
+    },
+    {
+      "name": "people-control/390: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "people-control/390: .prisma-home-totals strong density and typography",
+      "pass": true
+    },
+    {
+      "name": "people-control/390: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "people-control/390: .pa-question h2 density and typography",
+      "pass": true
+    },
+    {
+      "name": "people/390: filtering retained",
+      "pass": true
+    },
+    {
+      "name": "people/390: columns retained",
+      "pass": true
+    },
+    {
+      "name": "people-control/390: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "verification/1448: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "verification/1448: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "verification/1448: .prisma-responsive-table th present",
+      "pass": true
+    },
+    {
+      "name": "verification/1448: .prisma-responsive-table th roles",
+      "pass": true
+    },
+    {
+      "name": "verification/1448: .prisma-responsive-table th spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "verification/1448: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "verification/1448: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "verification/1448: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "verification/1448: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "verification/1448: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "verification/1448: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "verification/1448: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "verification/1448: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "verification/1448: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "verification/390: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "verification/390: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "verification/390: .prisma-responsive-table th present",
+      "pass": true
+    },
+    {
+      "name": "verification/390: .prisma-responsive-table th roles",
+      "pass": true
+    },
+    {
+      "name": "verification/390: .prisma-responsive-table th spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "verification/390: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "verification/390: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "verification/390: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "verification/390: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "verification/390: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "verification/390: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "verification/390: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "verification/390: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "verification/390: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "document-control/1448: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "document-control/1448: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "document-control/1448: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "document-control/1448: .prisma-page h1 density and typography",
+      "pass": true
+    },
+    {
+      "name": "document-control/1448: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "document-control/1448: .prisma-card density and typography",
+      "pass": true
+    },
+    {
+      "name": "document-control/1448: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "document-control/1448: .ant-table-tbody > tr:first-child > td density and typography",
+      "pass": true
+    },
+    {
+      "name": "document-control/1448: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "document-control/1448: .prisma-person-primary-copy > strong density and typography",
+      "pass": true
+    },
+    {
+      "name": "document-control/1448: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "document-control/1448: .prisma-person-primary-copy > small density and typography",
+      "pass": true
+    },
+    {
+      "name": "document-control/1448: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "document-control/1448: .prisma-profile-highlight-headline density and typography",
+      "pass": true
+    },
+    {
+      "name": "document-control/1448: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "document-control/1448: .prisma-home-totals strong density and typography",
+      "pass": true
+    },
+    {
+      "name": "document-control/1448: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "document-control/1448: .pa-question h2 density and typography",
+      "pass": true
+    },
+    {
+      "name": "document-control/1448: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "document-control/390: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "document-control/390: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "document-control/390: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "document-control/390: .prisma-page h1 density and typography",
+      "pass": true
+    },
+    {
+      "name": "document-control/390: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "document-control/390: .prisma-card density and typography",
+      "pass": true
+    },
+    {
+      "name": "document-control/390: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "document-control/390: .ant-table-tbody > tr:first-child > td density and typography",
+      "pass": true
+    },
+    {
+      "name": "document-control/390: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "document-control/390: .prisma-person-primary-copy > strong density and typography",
+      "pass": true
+    },
+    {
+      "name": "document-control/390: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "document-control/390: .prisma-person-primary-copy > small density and typography",
+      "pass": true
+    },
+    {
+      "name": "document-control/390: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "document-control/390: .prisma-profile-highlight-headline density and typography",
+      "pass": true
+    },
+    {
+      "name": "document-control/390: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "document-control/390: .prisma-home-totals strong density and typography",
+      "pass": true
+    },
+    {
+      "name": "document-control/390: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "document-control/390: .pa-question h2 density and typography",
+      "pass": true
+    },
+    {
+      "name": "document-control/390: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "position/1448: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "position/1448: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "position/1448: .prisma-position-reading h2 present",
+      "pass": true
+    },
+    {
+      "name": "position/1448: .prisma-position-reading h2 roles",
+      "pass": true
+    },
+    {
+      "name": "position/1448: .prisma-position-mission h3 present",
+      "pass": true
+    },
+    {
+      "name": "position/1448: .prisma-position-mission h3 roles",
+      "pass": true
+    },
+    {
+      "name": "position/1448: .prisma-position-reading h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "position/1448: .prisma-position-mission h3 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "position/1448: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "position/1448: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "position/1448: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "position/1448: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "position/1448: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "position/1448: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "position/1448: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "position/1448: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "position/1448: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "position/390: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "position/390: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "position/390: .prisma-position-reading h2 present",
+      "pass": true
+    },
+    {
+      "name": "position/390: .prisma-position-reading h2 roles",
+      "pass": true
+    },
+    {
+      "name": "position/390: .prisma-position-mission h3 present",
+      "pass": true
+    },
+    {
+      "name": "position/390: .prisma-position-mission h3 roles",
+      "pass": true
+    },
+    {
+      "name": "position/390: .prisma-position-reading h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "position/390: .prisma-position-mission h3 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "position/390: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "position/390: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "position/390: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "position/390: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "position/390: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "position/390: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "position/390: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "position/390: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "position/390: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/1448: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/1448: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/1448: .pa-page h3 present",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/1448: .pa-page h3 roles",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/1448: .pa-page th present",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/1448: .pa-page th roles",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/1448: .pa-page h3 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/1448: .pa-page th spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/1448: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/1448: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/1448: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/1448: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/1448: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/1448: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/1448: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/1448: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/1448: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/390: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/390: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/390: .pa-page h3 present",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/390: .pa-page h3 roles",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/390: .pa-page th present",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/390: .pa-page th roles",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/390: .pa-page h3 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/390: .pa-page th spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/390: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/390: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/390: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/390: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/390: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/390: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/390: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/390: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/390: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "instructions/1448: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "instructions/1448: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "instructions/1448: .pa-guidance h2 present",
+      "pass": true
+    },
+    {
+      "name": "instructions/1448: .pa-guidance h2 roles",
+      "pass": true
+    },
+    {
+      "name": "instructions/1448: .pa-guidance h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "instructions/1448: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "instructions/1448: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "instructions/1448: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "instructions/1448: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "instructions/1448: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "instructions/1448: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "instructions/1448: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "instructions/1448: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "instructions/1448: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "instructions/390: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "instructions/390: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "instructions/390: .pa-guidance h2 present",
+      "pass": true
+    },
+    {
+      "name": "instructions/390: .pa-guidance h2 roles",
+      "pass": true
+    },
+    {
+      "name": "instructions/390: .pa-guidance h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "instructions/390: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "instructions/390: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "instructions/390: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "instructions/390: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "instructions/390: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "instructions/390: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "instructions/390: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "instructions/390: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "instructions/390: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "questions/1448: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "questions/1448: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "questions/1448: .pa-question .ant-card-head-title present",
+      "pass": true
+    },
+    {
+      "name": "questions/1448: .pa-question .ant-card-head-title roles",
+      "pass": true
+    },
+    {
+      "name": "questions/1448: .pa-question .ant-card-head-title spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "questions/1448: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "questions/1448: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "questions/1448: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "questions/1448: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "questions/1448: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "questions/1448: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "questions/1448: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "questions/1448: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "questions/1448: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "questions/390: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "questions/390: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "questions/390: .pa-question .ant-card-head-title present",
+      "pass": true
+    },
+    {
+      "name": "questions/390: .pa-question .ant-card-head-title roles",
+      "pass": true
+    },
+    {
+      "name": "questions/390: .pa-question .ant-card-head-title spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "questions/390: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "questions/390: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "questions/390: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "questions/390: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "questions/390: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "questions/390: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "questions/390: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "questions/390: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "questions/390: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "process/1448: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "process/1448: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "process/1448: .process-assessment h3 present",
+      "pass": true
+    },
+    {
+      "name": "process/1448: .process-assessment h3 roles",
+      "pass": true
+    },
+    {
+      "name": "process/1448: .process-assessment th present",
+      "pass": true
+    },
+    {
+      "name": "process/1448: .process-assessment th roles",
+      "pass": true
+    },
+    {
+      "name": "process/1448: .process-assessment h3 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "process/1448: .process-assessment th spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "process/1448: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "process/1448: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "process/1448: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "process/1448: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "process/1448: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "process/1448: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "process/1448: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "process/1448: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "process/1448: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "process/390: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "process/390: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "process/390: .process-assessment h3 present",
+      "pass": true
+    },
+    {
+      "name": "process/390: .process-assessment h3 roles",
+      "pass": true
+    },
+    {
+      "name": "process/390: .process-assessment th present",
+      "pass": true
+    },
+    {
+      "name": "process/390: .process-assessment th roles",
+      "pass": true
+    },
+    {
+      "name": "process/390: .process-assessment h3 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "process/390: .process-assessment th spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "process/390: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "process/390: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "process/390: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "process/390: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "process/390: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "process/390: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "process/390: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "process/390: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "process/390: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/1448: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/1448: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/1448: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/1448: .prisma-page h1 density and typography",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/1448: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/1448: .prisma-card density and typography",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/1448: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/1448: .ant-table-tbody > tr:first-child > td density and typography",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/1448: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/1448: .prisma-person-primary-copy > strong density and typography",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/1448: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/1448: .prisma-person-primary-copy > small density and typography",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/1448: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/1448: .prisma-profile-highlight-headline density and typography",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/1448: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/1448: .prisma-home-totals strong density and typography",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/1448: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/1448: .pa-question h2 density and typography",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/1448: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/390: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/390: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/390: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/390: .prisma-page h1 density and typography",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/390: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/390: .prisma-card density and typography",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/390: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/390: .ant-table-tbody > tr:first-child > td density and typography",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/390: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/390: .prisma-person-primary-copy > strong density and typography",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/390: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/390: .prisma-person-primary-copy > small density and typography",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/390: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/390: .prisma-profile-highlight-headline density and typography",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/390: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/390: .prisma-home-totals strong density and typography",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/390: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/390: .pa-question h2 density and typography",
+      "pass": true
+    },
+    {
+      "name": "kanban-control/390: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/1448: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/1448: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/1448: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/1448: .prisma-page h1 density and typography",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/1448: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/1448: .prisma-card density and typography",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/1448: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/1448: .ant-table-tbody > tr:first-child > td density and typography",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/1448: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/1448: .prisma-person-primary-copy > strong density and typography",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/1448: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/1448: .prisma-person-primary-copy > small density and typography",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/1448: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/1448: .prisma-profile-highlight-headline density and typography",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/1448: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/1448: .prisma-home-totals strong density and typography",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/1448: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/1448: .pa-question h2 density and typography",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/1448: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/390: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/390: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/390: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/390: .prisma-page h1 density and typography",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/390: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/390: .prisma-card density and typography",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/390: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/390: .ant-table-tbody > tr:first-child > td density and typography",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/390: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/390: .prisma-person-primary-copy > strong density and typography",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/390: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/390: .prisma-person-primary-copy > small density and typography",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/390: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/390: .prisma-profile-highlight-headline density and typography",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/390: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/390: .prisma-home-totals strong density and typography",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/390: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/390: .pa-question h2 density and typography",
+      "pass": true
+    },
+    {
+      "name": "knowledge-control/390: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "versions/1448: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "versions/1448: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "versions/1448: .prisma-canonical-section > header h2 present",
+      "pass": true
+    },
+    {
+      "name": "versions/1448: .prisma-canonical-section > header h2 roles",
+      "pass": true
+    },
+    {
+      "name": "versions/1448: .prisma-version-metadata > span present",
+      "pass": true
+    },
+    {
+      "name": "versions/1448: .prisma-version-metadata > span roles",
+      "pass": true
+    },
+    {
+      "name": "versions/1448: .prisma-version-metadata strong present",
+      "pass": true
+    },
+    {
+      "name": "versions/1448: .prisma-version-metadata strong roles",
+      "pass": true
+    },
+    {
+      "name": "versions/1448: .prisma-canonical-section > header h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "versions/1448: .prisma-version-metadata > span spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "versions/1448: .prisma-version-metadata strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "versions/1448: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "versions/1448: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "versions/1448: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "versions/1448: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "versions/1448: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "versions/1448: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "versions/1448: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "versions/1448: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "versions/1448: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "versions/390: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "versions/390: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "versions/390: .prisma-canonical-section > header h2 present",
+      "pass": true
+    },
+    {
+      "name": "versions/390: .prisma-canonical-section > header h2 roles",
+      "pass": true
+    },
+    {
+      "name": "versions/390: .prisma-version-metadata > span present",
+      "pass": true
+    },
+    {
+      "name": "versions/390: .prisma-version-metadata > span roles",
+      "pass": true
+    },
+    {
+      "name": "versions/390: .prisma-version-metadata strong present",
+      "pass": true
+    },
+    {
+      "name": "versions/390: .prisma-version-metadata strong roles",
+      "pass": true
+    },
+    {
+      "name": "versions/390: .prisma-canonical-section > header h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "versions/390: .prisma-version-metadata > span spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "versions/390: .prisma-version-metadata strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "versions/390: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "versions/390: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "versions/390: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "versions/390: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "versions/390: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "versions/390: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "versions/390: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "versions/390: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "versions/390: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "compare-general/1448: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "compare-general/1448: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "compare-general/1448: .prisma-canonical-section > header h2 present",
+      "pass": true
+    },
+    {
+      "name": "compare-general/1448: .prisma-canonical-section > header h2 roles",
+      "pass": true
+    },
+    {
+      "name": "compare-general/1448: .prisma-canonical-section > header h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "compare-general/1448: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "compare-general/1448: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "compare-general/1448: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "compare-general/1448: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "compare-general/1448: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "compare-general/1448: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "compare-general/1448: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "compare-general/1448: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "compare-general/1448: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "compare-general/390: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "compare-general/390: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "compare-general/390: .prisma-canonical-section > header h2 present",
+      "pass": true
+    },
+    {
+      "name": "compare-general/390: .prisma-canonical-section > header h2 roles",
+      "pass": true
+    },
+    {
+      "name": "compare-general/390: .prisma-canonical-section > header h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "compare-general/390: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "compare-general/390: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "compare-general/390: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "compare-general/390: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "compare-general/390: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "compare-general/390: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "compare-general/390: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "compare-general/390: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "compare-general/390: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "profile/1448: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "profile/1448: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "profile/1448: .prisma-synthesis-heading h2,.prisma-synthesis-analysis-heading h2 present",
+      "pass": true
+    },
+    {
+      "name": "profile/1448: .prisma-synthesis-heading h2,.prisma-synthesis-analysis-heading h2 roles",
+      "pass": true
+    },
+    {
+      "name": "profile/1448: .prisma-synthesis-narrative h3 present",
+      "pass": true
+    },
+    {
+      "name": "profile/1448: .prisma-synthesis-narrative h3 roles",
+      "pass": true
+    },
+    {
+      "name": "profile/1448: .prisma-person-rail-pending h3 present",
+      "pass": true
+    },
+    {
+      "name": "profile/1448: .prisma-person-rail-pending h3 roles",
+      "pass": true
+    },
+    {
+      "name": "profile/1448: .prisma-synthesis-heading h2,.prisma-synthesis-analysis-heading h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile/1448: .prisma-synthesis-narrative h3 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile/1448: .prisma-person-rail-pending h3 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile/1448: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile/1448: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile/1448: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile/1448: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile/1448: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile/1448: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile/1448: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile/1448: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/1448: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/1448: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/1448: .prisma-canonical-section > header h2 present",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/1448: .prisma-canonical-section > header h2 roles",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/1448: .prisma-canonical-record__heading h4 present",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/1448: .prisma-canonical-record__heading h4 roles",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/1448: .prisma-canonical-section > header h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/1448: .prisma-canonical-record__heading h4 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/1448: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/1448: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/1448: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/1448: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/1448: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/1448: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/1448: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/1448: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/1448: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/1448: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/1448: .prisma-person-document-context__summary span present",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/1448: .prisma-person-document-context__summary span roles",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/1448: .prisma-document-education-summary__legend present",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/1448: .prisma-document-education-summary__legend roles",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/1448: .prisma-document-education-summary__list article strong present",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/1448: .prisma-document-education-summary__list article strong roles",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/1448: .prisma-document-education-summary__list article span present",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/1448: .prisma-document-education-summary__list article span roles",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/1448: .prisma-person-document-context__summary span spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/1448: .prisma-document-education-summary__legend spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/1448: .prisma-document-education-summary__list article strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/1448: .prisma-document-education-summary__list article span spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/1448: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/1448: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/1448: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/1448: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/1448: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/1448: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/1448: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/1448: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile/1448: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "profile/390: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "profile/390: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "profile/390: .prisma-synthesis-heading h2,.prisma-synthesis-analysis-heading h2 present",
+      "pass": true
+    },
+    {
+      "name": "profile/390: .prisma-synthesis-heading h2,.prisma-synthesis-analysis-heading h2 roles",
+      "pass": true
+    },
+    {
+      "name": "profile/390: .prisma-synthesis-narrative h3 present",
+      "pass": true
+    },
+    {
+      "name": "profile/390: .prisma-synthesis-narrative h3 roles",
+      "pass": true
+    },
+    {
+      "name": "profile/390: .prisma-person-rail-pending h3 present",
+      "pass": true
+    },
+    {
+      "name": "profile/390: .prisma-person-rail-pending h3 roles",
+      "pass": true
+    },
+    {
+      "name": "profile/390: .prisma-synthesis-heading h2,.prisma-synthesis-analysis-heading h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile/390: .prisma-synthesis-narrative h3 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile/390: .prisma-person-rail-pending h3 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile/390: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile/390: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile/390: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile/390: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile/390: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile/390: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile/390: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile/390: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/390: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/390: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/390: .prisma-canonical-section > header h2 present",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/390: .prisma-canonical-section > header h2 roles",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/390: .prisma-canonical-record__heading h4 present",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/390: .prisma-canonical-record__heading h4 roles",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/390: .prisma-canonical-section > header h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/390: .prisma-canonical-record__heading h4 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/390: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/390: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/390: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/390: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/390: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/390: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/390: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/390: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/390: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/390: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/390: .prisma-person-document-context__summary span present",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/390: .prisma-person-document-context__summary span roles",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/390: .prisma-document-education-summary__legend present",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/390: .prisma-document-education-summary__legend roles",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/390: .prisma-document-education-summary__list article strong present",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/390: .prisma-document-education-summary__list article strong roles",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/390: .prisma-document-education-summary__list article span present",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/390: .prisma-document-education-summary__list article span roles",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/390: .prisma-person-document-context__summary span spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/390: .prisma-document-education-summary__legend spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/390: .prisma-document-education-summary__list article strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/390: .prisma-document-education-summary__list article span spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/390: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/390: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/390: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/390: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/390: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/390: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/390: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/390: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "profile/390: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/1448: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/1448: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/1448: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/1448: .prisma-page h1 density and typography",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/1448: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/1448: .prisma-card density and typography",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/1448: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/1448: .ant-table-tbody > tr:first-child > td density and typography",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/1448: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/1448: .prisma-person-primary-copy > strong density and typography",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/1448: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/1448: .prisma-person-primary-copy > small density and typography",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/1448: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/1448: .prisma-profile-highlight-headline density and typography",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/1448: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/1448: .prisma-home-totals strong density and typography",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/1448: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/1448: .pa-question h2 density and typography",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/1448: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/390: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/390: same controls and disabled states",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/390: .prisma-page h1 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/390: .prisma-page h1 density and typography",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/390: .prisma-card spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/390: .prisma-card density and typography",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/390: .ant-table-tbody > tr:first-child > td spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/390: .ant-table-tbody > tr:first-child > td density and typography",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/390: .prisma-person-primary-copy > strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/390: .prisma-person-primary-copy > strong density and typography",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/390: .prisma-person-primary-copy > small spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/390: .prisma-person-primary-copy > small density and typography",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/390: .prisma-profile-highlight-headline spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/390: .prisma-profile-highlight-headline density and typography",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/390: .prisma-home-totals strong spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/390: .prisma-home-totals strong density and typography",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/390: .pa-question h2 spacing family colors",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/390: .pa-question h2 density and typography",
+      "pass": true
+    },
+    {
+      "name": "tokens-control/390: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "groups/320: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "groups/320: .prisma-organization-companies th present",
+      "pass": true
+    },
+    {
+      "name": "groups/320: .prisma-organization-companies th roles",
+      "pass": true
+    },
+    {
+      "name": "groups/320: .prisma-organization-capacity present",
+      "pass": true
+    },
+    {
+      "name": "groups/320: .prisma-organization-capacity roles",
+      "pass": true
+    },
+    {
+      "name": "groups/320: .prisma-organization-next p present",
+      "pass": true
+    },
+    {
+      "name": "groups/320: .prisma-organization-next p roles",
+      "pass": true
+    },
+    {
+      "name": "groups/320: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "search/320: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "search/320: .prisma-search-field > span present",
+      "pass": true
+    },
+    {
+      "name": "search/320: .prisma-search-field > span roles",
+      "pass": true
+    },
+    {
+      "name": "search/320: .prisma-search-switch present",
+      "pass": true
+    },
+    {
+      "name": "search/320: .prisma-search-switch roles",
+      "pass": true
+    },
+    {
+      "name": "search/320: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "contextual/320: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "contextual/320: .prisma-comparison-controls h2 present",
+      "pass": true
+    },
+    {
+      "name": "contextual/320: .prisma-comparison-controls h2 roles",
+      "pass": true
+    },
+    {
+      "name": "contextual/320: .prisma-vacancy-compare-page > h2 present",
+      "pass": true
+    },
+    {
+      "name": "contextual/320: .prisma-vacancy-compare-page > h2 roles",
+      "pass": true
+    },
+    {
+      "name": "contextual/320: .prisma-vacancy-compare-page th present",
+      "pass": true
+    },
+    {
+      "name": "contextual/320: .prisma-vacancy-compare-page th roles",
+      "pass": true
+    },
+    {
+      "name": "contextual/320: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "profile/320: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "profile/320: .prisma-synthesis-heading h2,.prisma-synthesis-analysis-heading h2 present",
+      "pass": true
+    },
+    {
+      "name": "profile/320: .prisma-synthesis-heading h2,.prisma-synthesis-analysis-heading h2 roles",
+      "pass": true
+    },
+    {
+      "name": "profile/320: .prisma-synthesis-narrative h3 present",
+      "pass": true
+    },
+    {
+      "name": "profile/320: .prisma-synthesis-narrative h3 roles",
+      "pass": true
+    },
+    {
+      "name": "profile/320: .prisma-person-rail-pending h3 present",
+      "pass": true
+    },
+    {
+      "name": "profile/320: .prisma-person-rail-pending h3 roles",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/320: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/320: .prisma-canonical-section > header h2 present",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/320: .prisma-canonical-section > header h2 roles",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/320: .prisma-canonical-record__heading h4 present",
+      "pass": true
+    },
+    {
+      "name": "profile-profile/320: .prisma-canonical-record__heading h4 roles",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/320: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/320: .prisma-person-document-context__summary span present",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/320: .prisma-person-document-context__summary span roles",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/320: .prisma-document-education-summary__legend present",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/320: .prisma-document-education-summary__legend roles",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/320: .prisma-document-education-summary__list article strong present",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/320: .prisma-document-education-summary__list article strong roles",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/320: .prisma-document-education-summary__list article span present",
+      "pass": true
+    },
+    {
+      "name": "profile-documents/320: .prisma-document-education-summary__list article span roles",
+      "pass": true
+    },
+    {
+      "name": "profile/320: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/320: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/320: .pa-page h3 present",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/320: .pa-page h3 roles",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/320: .pa-page th present",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/320: .pa-page th roles",
+      "pass": true
+    },
+    {
+      "name": "assessment-config/320: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "instructions/320: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "instructions/320: .pa-guidance h2 present",
+      "pass": true
+    },
+    {
+      "name": "instructions/320: .pa-guidance h2 roles",
+      "pass": true
+    },
+    {
+      "name": "instructions/320: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "questions/320: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "questions/320: .pa-question .ant-card-head-title present",
+      "pass": true
+    },
+    {
+      "name": "questions/320: .pa-question .ant-card-head-title roles",
+      "pass": true
+    },
+    {
+      "name": "questions/320: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "owner/320: no new page overflow",
+      "pass": true
+    },
+    {
+      "name": "owner/320: .prisma-user-form-section h2 present",
+      "pass": true
+    },
+    {
+      "name": "owner/320: .prisma-user-form-section h2 roles",
+      "pass": true
+    },
+    {
+      "name": "owner/320: .prisma-user-form-card .ant-form-item-label > label present",
+      "pass": true
+    },
+    {
+      "name": "owner/320: .prisma-user-form-card .ant-form-item-label > label roles",
+      "pass": true
+    },
+    {
+      "name": "owner/320: .prisma-user-password-checklist h3 present",
+      "pass": true
+    },
+    {
+      "name": "owner/320: .prisma-user-password-checklist h3 roles",
+      "pass": true
+    },
+    {
+      "name": "owner/320: four fields remain locked",
+      "pass": true
+    },
+    {
+      "name": "owner/320: password reacts immediately",
+      "pass": true
+    },
+    {
+      "name": "owner/320: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "1448: .prisma-canonical-education h4",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "16px",
+          "weight": "600"
+        },
+        {
+          "size": "16px",
+          "weight": "600"
+        }
+      ]
+    },
+    {
+      "name": "1448: .prisma-canonical-record__heading time",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "14px",
+          "weight": "400"
+        },
+        {
+          "size": "14px",
+          "weight": "400"
+        },
+        {
+          "size": "14px",
+          "weight": "400"
+        }
+      ]
+    },
+    {
+      "name": "1448: .prisma-canonical-education .ant-typography:not(h4)",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "16px",
+          "weight": "400"
+        },
+        {
+          "size": "16px",
+          "weight": "400"
+        },
+        {
+          "size": "16px",
+          "weight": "400"
+        },
+        {
+          "size": "16px",
+          "weight": "400"
+        }
+      ]
+    },
+    {
+      "name": "1448: .prisma-person-document-cards button strong",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "16px",
+          "weight": "600"
+        },
+        {
+          "size": "16px",
+          "weight": "600"
+        }
+      ]
+    },
+    {
+      "name": "1448: .prisma-person-document-cards button small",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "14px",
+          "weight": "400"
+        },
+        {
+          "size": "14px",
+          "weight": "400"
+        }
+      ]
+    },
+    {
+      "name": "1448: .prisma-person-document-context__header > div > span",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "14px",
+          "weight": "400"
+        }
+      ]
+    },
+    {
+      "name": "1448: .prisma-person-document-context__summary small",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "14px",
+          "weight": "400"
+        },
+        {
+          "size": "14px",
+          "weight": "400"
+        },
+        {
+          "size": "14px",
+          "weight": "400"
+        }
+      ]
+    },
+    {
+      "name": "390: .prisma-canonical-education h4",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "16px",
+          "weight": "600"
+        },
+        {
+          "size": "16px",
+          "weight": "600"
+        }
+      ]
+    },
+    {
+      "name": "390: .prisma-canonical-record__heading time",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "14px",
+          "weight": "400"
+        },
+        {
+          "size": "14px",
+          "weight": "400"
+        },
+        {
+          "size": "14px",
+          "weight": "400"
+        }
+      ]
+    },
+    {
+      "name": "390: .prisma-canonical-education .ant-typography:not(h4)",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "16px",
+          "weight": "400"
+        },
+        {
+          "size": "16px",
+          "weight": "400"
+        },
+        {
+          "size": "16px",
+          "weight": "400"
+        },
+        {
+          "size": "16px",
+          "weight": "400"
+        }
+      ]
+    },
+    {
+      "name": "390: .prisma-person-document-cards button strong",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "16px",
+          "weight": "600"
+        },
+        {
+          "size": "16px",
+          "weight": "600"
+        }
+      ]
+    },
+    {
+      "name": "390: .prisma-person-document-cards button small",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "14px",
+          "weight": "400"
+        },
+        {
+          "size": "14px",
+          "weight": "400"
+        }
+      ]
+    },
+    {
+      "name": "390: .prisma-person-document-context__header > div > span",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "14px",
+          "weight": "400"
+        }
+      ]
+    },
+    {
+      "name": "390: .prisma-person-document-context__summary small",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "14px",
+          "weight": "400"
+        },
+        {
+          "size": "14px",
+          "weight": "400"
+        },
+        {
+          "size": "14px",
+          "weight": "400"
+        }
+      ]
+    },
+    {
+      "name": "320: .prisma-canonical-education h4",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "16px",
+          "weight": "600"
+        },
+        {
+          "size": "16px",
+          "weight": "600"
+        }
+      ]
+    },
+    {
+      "name": "320: .prisma-canonical-record__heading time",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "14px",
+          "weight": "400"
+        },
+        {
+          "size": "14px",
+          "weight": "400"
+        },
+        {
+          "size": "14px",
+          "weight": "400"
+        }
+      ]
+    },
+    {
+      "name": "320: .prisma-canonical-education .ant-typography:not(h4)",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "16px",
+          "weight": "400"
+        },
+        {
+          "size": "16px",
+          "weight": "400"
+        },
+        {
+          "size": "16px",
+          "weight": "400"
+        },
+        {
+          "size": "16px",
+          "weight": "400"
+        }
+      ]
+    },
+    {
+      "name": "320: .prisma-person-document-cards button strong",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "16px",
+          "weight": "600"
+        },
+        {
+          "size": "16px",
+          "weight": "600"
+        }
+      ]
+    },
+    {
+      "name": "320: .prisma-person-document-cards button small",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "14px",
+          "weight": "400"
+        },
+        {
+          "size": "14px",
+          "weight": "400"
+        }
+      ]
+    },
+    {
+      "name": "320: .prisma-person-document-context__header > div > span",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "14px",
+          "weight": "400"
+        }
+      ]
+    },
+    {
+      "name": "320: .prisma-person-document-context__summary small",
+      "pass": true,
+      "nodes": [
+        {
+          "size": "14px",
+          "weight": "400"
+        },
+        {
+          "size": "14px",
+          "weight": "400"
+        },
+        {
+          "size": "14px",
+          "weight": "400"
+        }
+      ]
+    }
+  ],
+  "failures": [],
+  "harnessCorrections": [
+    "Mobile Ant Select uses visible rendered option, replacing inaccessible virtual option locator.",
+    "Token fixture clocks are normalized only for content comparison; raw measurements retain original timestamps.",
+    "Password React update is awaited before counting fulfilled requirements; no product change for these harness issues."
+  ]
+}

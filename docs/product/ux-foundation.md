@@ -188,3 +188,5 @@ A classe compartilhada opt-in prisma-content-standard aplica os tokens existente
 ## Evolução aprovada 3.1.0
 
 As seis composições aprovadas e seus comportamentos estão em [UX3.1.0](ux-v310.md) e no acordo1.0.0 `../qa/agreement-ux-v310.md`. Mantêm esta fundação, a separação de evidência/inferência/decisão, seis seções da Pessoa e divulgação progressiva. Fontes e leitura integral permanecem; simplificar a composição não autoriza omitir conteúdo. Referências e evidências são sintéticas; disponibilidade operacional é registrada no AoT e no Estado Atual.
+
+Aplicação da tipografia em 3.1.1: regras locais de formulários, documentos da Pessoa, Perfis, comparações, administração, avaliações, login e Home seguem os papéis desta fundação. A correção não aplica uma escala universal: mantém a tabela compacta de Pessoas, o Kanban, indicadores ampliados, enunciados e metadados compactos permitidos. Espaçamentos e composição permanecem; textos anteriormente pequenos podem quebrar em mais linhas com a escala legível. Escopo e evidências: `../qa/aot-typography-consistency-v311.md`.

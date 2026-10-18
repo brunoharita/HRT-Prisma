@@ -11,10 +11,10 @@
 .prisma-vacancy-detail-page .prisma-position-tabs > .ant-tabs-nav { background: #fff; border: 1px solid var(--prisma-border); border-radius: 12px; padding: 0 16px; margin-bottom: 16px; }
 .prisma-position-overview { display: grid; grid-template-columns: minmax(0, 72fr) minmax(280px, 28fr); align-items: start; gap: 24px; }
 .prisma-position-reading, .prisma-position-context { min-width: 0; }
-.prisma-position-reading h2 { font-size: 24px; font-weight: 700; margin: 0 0 8px; line-height: 1.35; color: var(--prisma-text); }
+.prisma-position-reading h2 { font-size: 24px; font-weight: 600; margin: 0 0 8px; line-height: 1.35; color: var(--prisma-text); }
 .prisma-position-description { margin: 0 0 24px; color: var(--prisma-text-secondary); }
 .prisma-position-mission { padding: 22px 0; border-top: 1px solid var(--prisma-border); }
-.prisma-position-mission h3 { margin: 0 0 10px; font-size: 22px; font-weight: 700; color: var(--prisma-text); }
+.prisma-position-mission h3 { margin: 0 0 10px; font-size: 22px; font-weight: 600; color: var(--prisma-text); }
 .prisma-position-mission p { margin: 0; white-space: pre-line; overflow-wrap: anywhere; }
 .prisma-position-highlights { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: stretch; }
 .prisma-position-highlight { position: relative; min-width: 0; padding: 22px 20px; border: 1px solid var(--prisma-highlight-border); border-radius: 16px; background: var(--prisma-highlight); overflow-wrap: anywhere; }

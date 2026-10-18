@@ -1,0 +1,39 @@
+{
+  "productVersion": "3.1.1",
+  "baselineSha": "bc736bc67a9561a9cf62de96c0b3b9e2f1360339",
+  "beforeStates": 52,
+  "afterStates": 62,
+  "matchedPairs": 52,
+  "viewports": [
+    1448,
+    390,
+    320
+  ],
+  "checks": 991,
+  "passed": true,
+  "typecheck": {
+    "exitCode": 0,
+    "scope": "tracked web snapshot; CSS-only later refinements do not alter TypeScript"
+  },
+  "build": {
+    "exitCode": 0,
+    "scope": "final CSS source"
+  },
+  "lint": {
+    "exitCode": 0,
+    "files": 1942
+  },
+  "context": {
+    "exitCode": 0
+  },
+  "hashes": {
+    "web/src/styles.css": "1f981980b998d5d0c2dde020db5e16fe4e90f42774f35d7d0d84fa6b05388620",
+    "web/src/ui/foundation.css": "39e82d9e48561c97bb70694f1070704e82c88447513148fde1df668f95d15512",
+    "web/src/ui/uxEvolution.css": "562c9d8479f8eefa7b9469cf97aff451b76d96acc7ae2f9f87bce31c599a6560",
+    "web/src/pages/OrganizationsPage.css": "768a5949bd57e80083641ff647afcac9e519284742080abf691181b0496a201b",
+    "web/src/pages/positionOverview.css": "9ed42802ab7e870938e978d3c6b4924394fc483e31d5ab83f9b07bca387656db",
+    "web/src/pages/positionAssessment.css": "25a9c8c01807ec435245460a18a112f41971328efa5edfef25f8add6e8e63750",
+    "web/src/pages/processAssessment.css": "6d8de87b59981b8ee90991211fd4863f033643fbc5b3a9269a4f9595b366c431"
+  },
+  "limits": "Deterministic local fixtures and measured styles; matched baseline at 1448/390, additional 320 checks without same-width baseline. No paid AI, remote database or real-person mutation. Production evidence is separate."
+}

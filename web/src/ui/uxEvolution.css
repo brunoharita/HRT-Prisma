@@ -17,7 +17,7 @@
 .prisma-v310 .prisma-saved-search{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid #dce4ef;padding:12px 0}
 .prisma-v310 .prisma-home-work-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:24px}
 .prisma-v310 .prisma-home-continue{background:var(--prisma-highlight,#edf4ff);border:1px solid #b9d2ff}
-.prisma-v310 .prisma-home-continue h2{margin:8px 0 12px;font-size:24px}
+.prisma-v310 .prisma-home-continue h2{margin:8px 0 12px;font-size:24px;line-height:32px;font-weight:600}
 .prisma-v310 .prisma-home-task,.prisma-v310 .prisma-home-recent{display:flex;width:100%;justify-content:space-between;gap:14px;align-items:center;padding:16px 0;border:0;border-bottom:1px solid #dce4ef;background:transparent;text-align:left;font:inherit;color:var(--prisma-text,#10203a);cursor:pointer}
 .prisma-v310 .prisma-home-task small,.prisma-v310 .prisma-home-recent small{display:block;font-size:14px;color:var(--prisma-color-text-secondary,#53637d);margin-top:4px}
 .prisma-v310 .prisma-home-task .anticon,.prisma-v310 .prisma-home-recent .anticon{color:var(--prisma-color-primary,#155eef);flex:none}
@@ -79,3 +79,7 @@
 .prisma-v310 .prisma-v310-compare-metrics .prisma-score-summary{margin:0;padding:0;display:flex;flex-direction:column;gap:4px;background:transparent;border:0;color:#10203a;align-items:flex-start}.prisma-v310 .prisma-v310-compare-metrics .prisma-score-summary strong{font-size:24px;color:#10203a}.prisma-v310 .prisma-v310-compare-metrics .prisma-score-summary span,.prisma-v310 .prisma-v310-compare-metrics .prisma-score-summary small{font-size:12px;color:#53637d}
 .prisma-v310 .prisma-v310-comparison-person details>summary{cursor:pointer;color:#155eef;font-size:14px}.prisma-v310 .prisma-v310-comparison-person details p{font-size:14px}
 @media(max-width:380px){.prisma-v310 .prisma-v310-compare-metrics{grid-template-columns:1fr;gap:12px}}
+
+.prisma-v310 .prisma-home-task strong, .prisma-v310 .prisma-home-recent strong { font-weight: 600; }
+.prisma-vacancy-compare-page.prisma-v310 > h2, .prisma-vacancy-compare-page.prisma-v310 .prisma-comparison-controls h2 { font-size: 24px; line-height: 32px; font-weight: 600; }
+.prisma-vacancy-compare-page.prisma-v310 th { font-size: 14px; line-height: 20px; font-weight: 600; }

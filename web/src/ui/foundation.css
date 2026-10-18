@@ -177,19 +177,19 @@ body { background: var(--prisma-canvas); }
 .prisma-profile-highlight-note, .prisma-profile-highlight-empty, .prisma-profile-highlight-source.ant-btn { font-size: 14px; line-height: 1.65; color: #455d80; }
 .prisma-profile-highlight-source.ant-btn { color: #155eef; }
 .prisma-person-reading-main { border-radius: 16px; }
-.prisma-synthesis-heading h2, .prisma-synthesis-analysis-heading h2 { font-size: 24px; font-weight: 750; color: #031531; }
+.prisma-synthesis-heading h2, .prisma-synthesis-analysis-heading h2 { font-size: 24px; line-height: 32px; font-weight: 600; color: #031531; }
 .prisma-synthesis-narrative { border-radius: 16px; border-left-width: 1px; font-size: 16px; line-height: 1.8; }
-.prisma-synthesis-narrative h3 { font-size: 22px; font-weight: 700; color: #031531; }
+.prisma-synthesis-narrative h3 { font-size: 22px; line-height: 28px; font-weight: 600; color: #031531; }
 .prisma-synthesis-narrative h3 .anticon { font-size: 30px; }
 .prisma-synthesis-narrative-heading h3 small, .prisma-synthesis-provenance, .prisma-person-profile-version { font-size: 14px; color: #53637d; }
 .prisma-synthesis-interpretation, .prisma-synthesis-origin-action.ant-btn, .prisma-synthesis-source-note { font-size: 13px; }
-.prisma-synthesis-axis-title, .prisma-person-reading-main .prisma-synthesis-axis-title { font-size: 19px; font-weight: 700; line-height: 1.4; }
+.prisma-synthesis-axis-title, .prisma-person-reading-main .prisma-synthesis-axis-title { font-size: 20px; font-weight: 600; line-height: 28px; }
 .prisma-synthesis-axis-title > span, .prisma-person-reading-main .prisma-synthesis-axis-title > span { display: grid; place-items: center; flex: 0 0 48px; width: 48px; height: 48px; border-radius: 50%; background: var(--prisma-icon-surface); color: #155eef; font-size: 28px; }
 .prisma-synthesis-axis-card.ant-card { border-radius: 16px; }
 .prisma-person-reading-main .prisma-synthesis-axis-card .ant-card-head { padding: 18px; }
-.prisma-person-reading-rail .ant-card-head-title { font-size: 19px; }
+.prisma-person-reading-rail .ant-card-head-title { font-size: 20px; line-height: 28px; font-weight: 600; }
 .prisma-person-rail-pending { border-radius: 16px; }
-.prisma-person-rail-pending h3 { font-size: 20px; }
+.prisma-person-rail-pending h3 { font-size: 20px; line-height: 28px; font-weight: 600; }
 .prisma-person-evidence-strip b { font-size: 26px; }
 .prisma-person-evidence-strip span { font-size: 14px; }
 .prisma-person-center-header__identity h1 { font-size: clamp(30px, 2.4vw, 36px); font-weight: 750; line-height: 1.2; }
@@ -386,3 +386,10 @@ body { background: var(--prisma-canvas); }
   .prisma-content-standard.prisma-reading .ant-alert:not(:has(.ant-alert-icon)) .ant-alert-section { grid-column: 1 / 3; }
   .prisma-content-standard.prisma-reading .ant-alert:not(:has(.ant-alert-icon)) .ant-alert-actions { grid-column: 1 / -1; }
 }
+
+/* Typography-only scopes: retain each surface's existing spacing and density. */
+.prisma-user-form-card .ant-form-item-label > label,
+.prisma-person-form-card .ant-form-item-label > label { font-size: 14px; line-height: 20px; font-weight: 400; }
+.prisma-users-table-card .ant-table-thead > tr > th,
+.prisma-organization-companies .ant-table-thead > tr > th { font-size: 14px; line-height: 20px; font-weight: 600; }
+.prisma-search-switch { font-size: 14px; line-height: 20px; }
