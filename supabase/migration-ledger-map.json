@@ -1634,6 +1634,19 @@
       "name": "owner_lifecycle",
       "localVersion": "20261017210000",
       "remoteVersion": "20261017202907"
+    },
+    {
+      "name": "ai_action_cost_metering",
+      "localVersion": "20261018210000",
+      "remoteVersion": "20261018215345",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "fingerprintMethod": "strip-CR-trim-exterior-whitespace-v1",
+      "localStatementSha256": "151bb9a29f31f7386767d59182ae7207e2e342bb790d0a043f57fcbbbbc39aff",
+      "remoteStatementSha256": "151bb9a29f31f7386767d59182ae7207e2e342bb790d0a043f57fcbbbbc39aff",
+      "localCanonicalLength": 18060,
+      "remoteCanonicalLength": 18060,
+      "verifiedAt": "2026-10-18"
     }
   ],
   "localOnly": [
@@ -1673,12 +1686,12 @@
     }
   ],
   "lastIncrementalVerification": {
-    "date": "2026-10-17",
-    "movement": "owner-lifecycle-v307",
+    "date": "2026-10-18",
+    "movement": "ai-cost-metering-v312",
     "names": [
-      "owner_lifecycle"
+      "ai_action_cost_metering"
     ],
-    "evidence": "docs/qa/evidence/owner-lifecycle-v307/production.json",
+    "evidence": "docs/qa/evidence/ai-cost-metering-v312/production.json",
     "historicalSnapshotVerifiedAtUnchanged": true
   }
 }

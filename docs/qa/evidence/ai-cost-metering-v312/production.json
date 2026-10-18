@@ -1,0 +1,108 @@
+{
+  "date": "2026-10-18",
+  "version": "3.1.2",
+  "releaseSha": "32fc381d7b240ef97c8dc348b4d3d1678c3e533c",
+  "baselineSha": "e120387846bc6ed317cd401e59f1b9c0d09d0e07",
+  "ci": {
+    "branch": {
+      "id": 39169652890,
+      "conclusion": "success"
+    },
+    "main": {
+      "id": 39169775910,
+      "conclusion": "success"
+    }
+  },
+  "database": {
+    "requests": 90,
+    "migration": {
+      "name": "ai_action_cost_metering",
+      "version": "20261018215345",
+      "canonicalMatches": true,
+      "sha256": "151bb9a29f31f7386767d59182ae7207e2e342bb790d0a043f57fcbbbbc39aff",
+      "fingerprintMethod": "strip-CR-trim-exterior-whitespace-v1"
+    },
+    "newMetadata": 0,
+    "observedUsd": null,
+    "usageEvents": 90,
+    "estimatedUsd": 0.0757296,
+    "readerStable": true,
+    "browserWriter": false,
+    "anonymousReader": false,
+    "readerAvailable": true,
+    "writerBackendOnly": true,
+    "browserOldActivity": false,
+    "readOnlySessionSmoke": {
+      "pageCount": 1,
+      "hasMoreType": "boolean",
+      "anonymousDenied": true,
+      "commercialState": "included",
+      "legacyIdentified": "true",
+      "superReadContract": "ai-action-cost-report-1.0.0"
+    },
+    "smokeMethod": "BEGIN READ ONLY/ROLLBACK, existing active Super identity bound to session; no identity/data mutation and no human authenticated browser journey"
+  },
+  "edgeFunctions": [
+    {
+      "name": "position-assessment",
+      "status": "ACTIVE",
+      "version": 6,
+      "verifyJwt": false,
+      "sourceMatch": true,
+      "missing": []
+    },
+    {
+      "name": "knowledge-agent",
+      "status": "ACTIVE",
+      "version": 24,
+      "verifyJwt": true,
+      "sourceMatch": true,
+      "missing": []
+    },
+    {
+      "name": "matching-trajectory",
+      "status": "ACTIVE",
+      "version": 20,
+      "verifyJwt": true,
+      "sourceMatch": true,
+      "missing": []
+    },
+    {
+      "name": "assessment-item-generator",
+      "status": "ACTIVE",
+      "version": 9,
+      "verifyJwt": true,
+      "sourceMatch": true,
+      "missing": []
+    }
+  ],
+  "vps": {
+    "checkout": "32fc381d7b240ef97c8dc348b4d3d1678c3e533c",
+    "web": {
+      "image": "sha256:8c6c75a9fe8481c2a1c9f3a12c48d42b90490b4c86588121310f822e8fc159e8",
+      "state": "running",
+      "restartCount": 0
+    },
+    "parser": {
+      "image": "sha256:5178559d9de269d99eb0f0439022ebcba42d745f50c592747d788ef13bf83630",
+      "state": "healthy",
+      "restartCount": 0
+    },
+    "synthesis": {
+      "image": "sha256:d0fe2c984bc4e660f1ffd139b888f8df3bc93a600984566af8fc01a5c4508cdd",
+      "state": "healthy",
+      "restartCount": 0
+    },
+    "rollbackImagesPresent": true,
+    "initialWebSmoke": "404 immediately after recreation; independent routes/assets/version/SHA checks all200 after stabilization, no rebuild"
+  },
+  "noAiValidationCalls": true,
+  "limitations": [
+    "No historical backfill",
+    "Calculated costs are not reconciled invoices",
+    "No new live AI request exercised",
+    "No authenticated human production browser journey",
+    "No separate remote QA; disposable local SQL and synthetic browser fixtures used",
+    "High-volume production query not benchmarked"
+  ]
+}

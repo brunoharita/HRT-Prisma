@@ -1,0 +1,57 @@
+{
+  "at": "2026-10-18T21:55:55.390Z",
+  "surface": "public HTML/assets only, no login or AI request",
+  "checks": [
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-BgDrFvLK.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/rolldown-runtime-C0FnF6B9.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/antd-vendor-BaKnhCyQ.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/supabase-vendor-DoXvCMLf.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/react-vendor-BdxMnOeJ.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/antd-vendor-B5BXDqMa.css",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-DgF8xsrg.css",
+      "status": 200
+    },
+    {
+      "path": "/platform-tokens",
+      "status": 200
+    },
+    {
+      "path": "/tokens",
+      "status": 200
+    },
+    {
+      "path": "/login",
+      "status": 200
+    }
+  ],
+  "invariants": {
+    "validatedSha": true,
+    "release": true,
+    "costScreen": true,
+    "readRpc": true,
+    "notReconciled": true
+  }
+}
