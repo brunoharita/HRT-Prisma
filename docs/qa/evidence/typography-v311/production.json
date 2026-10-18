@@ -1,0 +1,66 @@
+{
+  "sha": "8c0886dc23adaa51562fffe2f65254f220c35861",
+  "services": [
+    {
+      "name": "prisma-web",
+      "id": "f6bb142dd9ab917d273fb851b303b3cf14eab990126cf74cb6b31773a3f80869",
+      "image": "sha256:121c8c12e5c37e050101e4b36412d6328fbc7586c2c18b1a624e0555917b1348",
+      "restarts": 0,
+      "state": "running",
+      "health": null
+    },
+    {
+      "name": "prisma-parser-ia",
+      "id": "e8bc778c8c00e1f25f54bc1df7e0a78fd0c31f324d847125ff87ded81f1a5fd5",
+      "image": "sha256:8542b81cebc337e052b89bcf9b1ba459ecf0824a0a4a993d8feb614401615039",
+      "restarts": 0,
+      "state": "running",
+      "health": "healthy"
+    },
+    {
+      "name": "prisma-paddle-gateway",
+      "id": "8fb76416f61cd0baf27b14a4fe4e2692e6384487f740337ba5f424145f104653",
+      "image": "sha256:cf414afdb189d3906df09633566e75d56a56dc7779e21a73e80830b0b71c9b73",
+      "restarts": 0,
+      "state": "running",
+      "health": null
+    },
+    {
+      "name": "hrt-mail-forwarder",
+      "id": "b257a83cbb370299dc3666d120a22b47f7fb5acfc4a73516a78b821ae43fea6a",
+      "image": "sha256:ffc0f2a53e093cec01c4a91e652b29b0ede4808ecc2f461df9e6faa52940cc31",
+      "restarts": 0,
+      "state": "running",
+      "health": "healthy"
+    },
+    {
+      "name": "prisma-profile-synthesis",
+      "id": "db6c5c0ef238534ba2967dce3bbf80e9e8c94089ca7bb48b84f4e523961b00d7",
+      "image": "sha256:2fdccaea0fb50449f9f5e800ada1925c690fab319e4d3708ade0f831c7e99167",
+      "restarts": 0,
+      "state": "running",
+      "health": "healthy"
+    },
+    {
+      "name": "traefik-traefik-1",
+      "id": "5e25fdc6d2e6fd3c622972310f67f640b80cac70538e17b42a529d1935488bc6",
+      "image": "sha256:f86a2cab1b5c649070c49f883c743dd32d8485a56e3368c5f93b9e91f1e91259",
+      "restarts": 0,
+      "state": "running",
+      "health": null
+    }
+  ],
+  "configurationHash": "9604259369b6b313242f78a2ede9fd7fdacc934793e0c71ac84ca43c0f166cb1",
+  "restoreImage": "sha256:d336b3925596261b220d81382faa3cf30a02c0b0b6971437be52d03424c3682a",
+  "version": "3.1.1",
+  "protectedServices": [
+    "prisma-parser-ia",
+    "prisma-paddle-gateway",
+    "hrt-mail-forwarder",
+    "prisma-profile-synthesis",
+    "traefik-traefik-1"
+  ],
+  "rollbackImage": "sha256:453daf4b0d1a83d35718001f5f7dddb27ad2f244e0053cc569b63a031f38bfa9",
+  "configurationPreserved": true,
+  "limits": "Only web replaced; no real-person mutation, migration, paid AI or authenticated human smoke."
+}

@@ -1,0 +1,153 @@
+{
+  "runtimeSha": "8c0886dc23adaa51562fffe2f65254f220c35861",
+  "checks": [
+    {
+      "name": "/: HTTP200",
+      "pass": true
+    },
+    {
+      "name": "/login: HTTP200",
+      "pass": true
+    },
+    {
+      "name": "/profiles: HTTP200",
+      "pass": true
+    },
+    {
+      "name": "/profiles/search: HTTP200",
+      "pass": true
+    },
+    {
+      "name": "/profiles/import: HTTP200",
+      "pass": true
+    },
+    {
+      "name": "/vacancies: HTTP200",
+      "pass": true
+    },
+    {
+      "name": "/selection-processes: HTTP200",
+      "pass": true
+    },
+    {
+      "name": "/tokens: HTTP200",
+      "pass": true
+    },
+    {
+      "name": "/assets/index-CxWQvfzP.js: HTTP200",
+      "pass": true
+    },
+    {
+      "name": "/assets/rolldown-runtime-C0FnF6B9.js: HTTP200",
+      "pass": true
+    },
+    {
+      "name": "/assets/antd-vendor-BaKnhCyQ.js: HTTP200",
+      "pass": true
+    },
+    {
+      "name": "/assets/supabase-vendor-DoXvCMLf.js: HTTP200",
+      "pass": true
+    },
+    {
+      "name": "/assets/react-vendor-BdxMnOeJ.js: HTTP200",
+      "pass": true
+    },
+    {
+      "name": "/assets/antd-vendor-B5BXDqMa.css: HTTP200",
+      "pass": true
+    },
+    {
+      "name": "/assets/index-DgF8xsrg.css: HTTP200",
+      "pass": true
+    },
+    {
+      "name": "current build SHA in entry bundle",
+      "pass": true
+    },
+    {
+      "name": "published headings 14px/20px/600",
+      "pass": true
+    },
+    {
+      "name": "published roles 14px/20px/400",
+      "pass": true
+    },
+    {
+      "name": "published user sections 20px/28px/600",
+      "pass": true
+    },
+    {
+      "name": "published search labels 14px/20px/400",
+      "pass": true
+    },
+    {
+      "name": "version 3.1.1 in executable release registry",
+      "pass": true
+    },
+    {
+      "name": "/assets/index-BQu3D5Bg.js: HTTP200",
+      "pass": true
+    },
+    {
+      "name": "/assets/index-DrDEJn_i.css: HTTP200",
+      "pass": true
+    },
+    {
+      "name": "anonymous protected route shows sign-in 1448",
+      "pass": true
+    },
+    {
+      "name": "published login labels 14px/20px/400 1448",
+      "pass": true
+    },
+    {
+      "name": "version visible in fresh public browser 1448",
+      "pass": true
+    },
+    {
+      "name": "no horizontal overflow 1448",
+      "pass": true
+    },
+    {
+      "name": "anonymous protected route shows sign-in 390",
+      "pass": true
+    },
+    {
+      "name": "published login labels 14px/20px/400 390",
+      "pass": true
+    },
+    {
+      "name": "version visible in fresh public browser 390",
+      "pass": true
+    },
+    {
+      "name": "no horizontal overflow 390",
+      "pass": true
+    },
+    {
+      "name": "public browser has no runtime error",
+      "pass": true
+    }
+  ],
+  "assets": [
+    "/assets/index-CxWQvfzP.js",
+    "/assets/rolldown-runtime-C0FnF6B9.js",
+    "/assets/antd-vendor-BaKnhCyQ.js",
+    "/assets/supabase-vendor-DoXvCMLf.js",
+    "/assets/react-vendor-BdxMnOeJ.js",
+    "/assets/antd-vendor-B5BXDqMa.css",
+    "/assets/index-DgF8xsrg.css"
+  ],
+  "previousAssets": [
+    "/assets/index-BQu3D5Bg.js",
+    "/assets/rolldown-runtime-C0FnF6B9.js",
+    "/assets/antd-vendor-BaKnhCyQ.js",
+    "/assets/supabase-vendor-DoXvCMLf.js",
+    "/assets/react-vendor-BdxMnOeJ.js",
+    "/assets/antd-vendor-B5BXDqMa.css",
+    "/assets/index-DrDEJn_i.css"
+  ],
+  "errors": [],
+  "limits": "Anonymous fresh production browser. No Auth account, email, paid AI, real-person mutation or authenticated human workflow was used."
+}

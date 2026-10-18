@@ -9,9 +9,9 @@ last_verified: 2026-10-17
 
 # Estado atual do Prisma
 
-## Coerência tipográfica entre telas — execução sem mudança de versão
+## Coerência tipográfica entre telas — publicada sem mudar 3.1.1
 
-Correção autorizada das inconsistências visuais de documentos da Pessoa, busca, administração, formulários, Perfis/comparações/versões, Posição, avaliações, portal, login e Home. Implementação restrita a CSS, reutilizando a fundação 1.5.0 e preservando as densidades específicas de Pessoas/Kanban, composição, indicadores, controles, cores e família de fonte. Produto permanece 3.1.1. Validação e publicação em andamento; este registro não atesta rollout. Acordo, mapa de impacto e AoT: `docs/qa/aot-typography-consistency-v311.md`.
+Corrigidas as inconsistências de documentos da Pessoa, busca, administração, formulários, Perfis/comparações/versões, Posição, avaliações/portal, login e Home. Sete arquivos CSS, sem mudança de handlers, backend ou registro de versão. Densidades de Pessoas/Kanban, composição, indicadores, controles, cores e família preservados. 52 pares antes/depois em 1448/390 e mais 10 estados em 320; tipos/build/lint/contexto aprovados. Runtime 8c0886dc23adaa51562fffe2f65254f220c35861, CI branch 39088073507/main 39088150818 SUCCESS, web 121c8c12e5c3/running0. 32 checks públicos PASS; rollback, recuperação 3.0.7, configuração e cinco serviços preservados. 404 transitório do smoke imediato verificado independentemente sem rebuild. Fechamento documental sincroniza fontes sem reconstruir runtime. Evidência e limites: docs/qa/aot-typography-consistency-v311.md. Validação sintética local e pública, sem escrita real ou jornada humana autenticada produtiva.
 
 ## Retomada de importação —3.1.1 publicada
 

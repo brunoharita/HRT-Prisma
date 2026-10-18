@@ -1,0 +1,10 @@
+{
+  "sha": "8c0886dc23adaa51562fffe2f65254f220c35861",
+  "dispatcherSucceeded": false,
+  "remoteExitCode": 22,
+  "observation": "Immediate post-recreate root smoke returned 404. Container had already been replaced. Independent subsequent checks passed; no rebuild or redeployment was performed.",
+  "independentRuntimeVerification": "production.json",
+  "independentPublicVerification": "public-smoke.json",
+  "productVersion": "3.1.1",
+  "publicationSurface": "prisma-web only"
+}

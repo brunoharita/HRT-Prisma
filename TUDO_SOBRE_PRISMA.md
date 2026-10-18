@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 539
-source_manifest_sha256: 4a131d76a40e4b9e7af5a9b1d2ecc3f84439edf88be6a9ebddc0095497b42421
+source_manifest_sha256: 4aaf059d94db10a1699f8330b03a5d827c79cddb939bd1d9bc4dd7154f47065d
 -->
 
 # Tudo sobre o Prisma
@@ -2650,9 +2650,9 @@ last_verified: 2026-10-17
 
 # Estado atual do Prisma
 
-## Coerência tipográfica entre telas — execução sem mudança de versão
+## Coerência tipográfica entre telas — publicada sem mudar 3.1.1
 
-Correção autorizada das inconsistências visuais de documentos da Pessoa, busca, administração, formulários, Perfis/comparações/versões, Posição, avaliações, portal, login e Home. Implementação restrita a CSS, reutilizando a fundação 1.5.0 e preservando as densidades específicas de Pessoas/Kanban, composição, indicadores, controles, cores e família de fonte. Produto permanece 3.1.1. Validação e publicação em andamento; este registro não atesta rollout. Acordo, mapa de impacto e AoT: `docs/qa/aot-typography-consistency-v311.md`.
+Corrigidas as inconsistências de documentos da Pessoa, busca, administração, formulários, Perfis/comparações/versões, Posição, avaliações/portal, login e Home. Sete arquivos CSS, sem mudança de handlers, backend ou registro de versão. Densidades de Pessoas/Kanban, composição, indicadores, controles, cores e família preservados. 52 pares antes/depois em 1448/390 e mais 10 estados em 320; tipos/build/lint/contexto aprovados. Runtime 8c0886dc23adaa51562fffe2f65254f220c35861, CI branch 39088073507/main 39088150818 SUCCESS, web 121c8c12e5c3/running0. 32 checks públicos PASS; rollback, recuperação 3.0.7, configuração e cinco serviços preservados. 404 transitório do smoke imediato verificado independentemente sem rebuild. Fechamento documental sincroniza fontes sem reconstruir runtime. Evidência e limites: docs/qa/aot-typography-consistency-v311.md. Validação sintética local e pública, sem escrita real ou jornada humana autenticada produtiva.
 
 ## Retomada de importação —3.1.1 publicada
 
@@ -25778,9 +25778,9 @@ Baseline operacional e resultados serão registrados nas evidências deste movim
 | D-05 / D-10 | Seções de usuário 20/28/600, rótulos 14/20/400, checklist 14/20/600, login e Home; bloqueios e reação da senha conferidos. | PASS |
 | D-06 / D-07 / D-08 | Pesos e hierarquia do Perfil/Posição/comparações, títulos canônicos e metadados; destaques ampliados mantidos. | PASS |
 | D-09 | Subtítulos/configuração, instruções e cartão de questão; enunciado ampliado preservado. | PASS |
-| D-11 / CA-01 | Mesmo conteúdo/estado/viewports em 52 pares; mais 10 estados em 320 px. Padding, gap, família, cores e controles preservados. Pessoas, Kanban, Conhecimento, Tokens e documento operacional usados como controles de preservação. | PASS local |
+| D-11 / CA-01 | Mesmo conteúdo/estado/viewports em 52 pares; mais 10 estados em 320 px. Padding, gap, família, cores e controles preservados. Pessoas, Kanban, Conhecimento, Tokens e documento operacional usados como controles de preservação. | PASS |
 | P-01 / P-02 / F-01 | Sete arquivos CSS como único diff de runtime; sem handlers, dependências, escritores, autenticação, schema ou IA. Registro de versão intacto. | PASS |
-| CA-02 | Tipos, build final web, lint e contexto aprovados no snapshot exato de arquivos rastreados. Publicação/CI/smoke/sincronização ainda pendentes. | PARTIAL |
+| CA-02 | Tipos, build final web, lint e contexto aprovados no snapshot exato de arquivos rastreados. CI da branch e main, publicação web e smoke público aprovados; fechamento documental sincroniza fontes sem rebuild. | PASS |
 
 Evidência: `docs/qa/evidence/typography-v311/`, com `before.json`, `after.json`, `after-checks.json`, `metadata-checks.json`, `protected-checks.json`, `local-summary.json` e capturas em `before/` e `after/`. Scripts temporários em `tmp/typography-v311/` reutilizam os fixtures reais de UI existentes e os adaptadores sintéticos da auditoria. Fontes estabilizadas antes das capturas; refinamento posterior limitado aos mesmos componentes de Perfil/documento foi revalidado nas superfícies afetadas.
 
@@ -25790,7 +25790,18 @@ Nenhum padding, gap, grid, margem, breakpoint ou handler foi alterado. As tabela
 
 O baseline usa 1448/390 px. Os 320 px são uma amostra adicional de responsividade, sem comparação anterior naquela largura. As evidências são sintéticas locais; não provam uma jornada humana autenticada em produção. Não houve banco remoto, IA paga, envio de convite ou alteração de dados reais. Falhas iniciais de seletor virtual do Ant Select, horário variável do fixture e espera pela atualização React foram corrigidas no harness, sem mudança de produto. Avisos de API deprecated/keys sintéticas são preexistentes no fixture.
 
-Sem desvio de produto ou ampliação funcional. Estado operacional e CI serão registrados após publicação.
+Sem desvio de produto ou ampliação funcional. Estado operacional e CI registrados abaixo.
+
+
+## Publicação e fechamento
+
+Runtime 8c0886dc23adaa51562fffe2f65254f220c35861, versão 3.1.1 mantida. CI branch 39088073507 e main 39088150818 SUCCESS. Somente prisma-web foi recriado; imagem 121c8c12e5c3, running/zero reinícios. Os cinco serviços protegidos, hash da configuração e recuperação pré-3.1.0 estão idênticos ao baseline. Rollback imediato aponta para a imagem anterior 453daf4b0d1a.
+
+32 checks públicos PASS: rotas, assets novos/anteriores, SHA executável, versão e regras CSS; navegador anônimo novo em desktop/celular confirmou rótulos 14/20/400, formulário de login e ausência de overflow/erro de runtime. Evidências: production.json, public-smoke.json, ci-runtime.json e release-plan.json.
+
+O smoke imediato do script de deploy recebeu 404 após recriar o web e encerrou com código remoto 22. Verificação posterior independente confirmou estabilização, SHA correto, HTTP 200, assets, serviços e rollback. Nenhum rebuild ou deploy repetido. A anomalia está em publish-anomaly.json; não se declara sucesso do dispatcher.
+
+O commit de fechamento altera somente documentação/evidência/contexto. Main/origin/checkout da VPS serão sincronizados e o CI documental será aguardado; não há novo build de runtime. O recibo final de sincronização fica em tmp/typography-v311/final-sync.json para evitar um ciclo de commits autorreferenciais. Nenhuma jornada humana autenticada produtiva foi executada.
 
 ---
 

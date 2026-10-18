@@ -1,0 +1,19 @@
+{
+  "sha": "8c0886dc23adaa51562fffe2f65254f220c35861",
+  "runs": [
+    {
+      "conclusion": "success",
+      "databaseId": 39088150818,
+      "headBranch": "main",
+      "status": "completed",
+      "url": "https://github.com/brunoharita/HRT-Prisma/actions/runs/39088150818"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 39088073507,
+      "headBranch": "codex/typography-consistency-v311",
+      "status": "completed",
+      "url": "https://github.com/brunoharita/HRT-Prisma/actions/runs/39088073507"
+    }
+  ]
+}

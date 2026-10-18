@@ -45,9 +45,9 @@ Baseline operacional e resultados serão registrados nas evidências deste movim
 | D-05 / D-10 | Seções de usuário 20/28/600, rótulos 14/20/400, checklist 14/20/600, login e Home; bloqueios e reação da senha conferidos. | PASS |
 | D-06 / D-07 / D-08 | Pesos e hierarquia do Perfil/Posição/comparações, títulos canônicos e metadados; destaques ampliados mantidos. | PASS |
 | D-09 | Subtítulos/configuração, instruções e cartão de questão; enunciado ampliado preservado. | PASS |
-| D-11 / CA-01 | Mesmo conteúdo/estado/viewports em 52 pares; mais 10 estados em 320 px. Padding, gap, família, cores e controles preservados. Pessoas, Kanban, Conhecimento, Tokens e documento operacional usados como controles de preservação. | PASS local |
+| D-11 / CA-01 | Mesmo conteúdo/estado/viewports em 52 pares; mais 10 estados em 320 px. Padding, gap, família, cores e controles preservados. Pessoas, Kanban, Conhecimento, Tokens e documento operacional usados como controles de preservação. | PASS |
 | P-01 / P-02 / F-01 | Sete arquivos CSS como único diff de runtime; sem handlers, dependências, escritores, autenticação, schema ou IA. Registro de versão intacto. | PASS |
-| CA-02 | Tipos, build final web, lint e contexto aprovados no snapshot exato de arquivos rastreados. Publicação/CI/smoke/sincronização ainda pendentes. | PARTIAL |
+| CA-02 | Tipos, build final web, lint e contexto aprovados no snapshot exato de arquivos rastreados. CI da branch e main, publicação web e smoke público aprovados; fechamento documental sincroniza fontes sem rebuild. | PASS |
 
 Evidência: `docs/qa/evidence/typography-v311/`, com `before.json`, `after.json`, `after-checks.json`, `metadata-checks.json`, `protected-checks.json`, `local-summary.json` e capturas em `before/` e `after/`. Scripts temporários em `tmp/typography-v311/` reutilizam os fixtures reais de UI existentes e os adaptadores sintéticos da auditoria. Fontes estabilizadas antes das capturas; refinamento posterior limitado aos mesmos componentes de Perfil/documento foi revalidado nas superfícies afetadas.
 
@@ -57,4 +57,15 @@ Nenhum padding, gap, grid, margem, breakpoint ou handler foi alterado. As tabela
 
 O baseline usa 1448/390 px. Os 320 px são uma amostra adicional de responsividade, sem comparação anterior naquela largura. As evidências são sintéticas locais; não provam uma jornada humana autenticada em produção. Não houve banco remoto, IA paga, envio de convite ou alteração de dados reais. Falhas iniciais de seletor virtual do Ant Select, horário variável do fixture e espera pela atualização React foram corrigidas no harness, sem mudança de produto. Avisos de API deprecated/keys sintéticas são preexistentes no fixture.
 
-Sem desvio de produto ou ampliação funcional. Estado operacional e CI serão registrados após publicação.
+Sem desvio de produto ou ampliação funcional. Estado operacional e CI registrados abaixo.
+
+
+## Publicação e fechamento
+
+Runtime 8c0886dc23adaa51562fffe2f65254f220c35861, versão 3.1.1 mantida. CI branch 39088073507 e main 39088150818 SUCCESS. Somente prisma-web foi recriado; imagem 121c8c12e5c3, running/zero reinícios. Os cinco serviços protegidos, hash da configuração e recuperação pré-3.1.0 estão idênticos ao baseline. Rollback imediato aponta para a imagem anterior 453daf4b0d1a.
+
+32 checks públicos PASS: rotas, assets novos/anteriores, SHA executável, versão e regras CSS; navegador anônimo novo em desktop/celular confirmou rótulos 14/20/400, formulário de login e ausência de overflow/erro de runtime. Evidências: production.json, public-smoke.json, ci-runtime.json e release-plan.json.
+
+O smoke imediato do script de deploy recebeu 404 após recriar o web e encerrou com código remoto 22. Verificação posterior independente confirmou estabilização, SHA correto, HTTP 200, assets, serviços e rollback. Nenhum rebuild ou deploy repetido. A anomalia está em publish-anomaly.json; não se declara sucesso do dispatcher.
+
+O commit de fechamento altera somente documentação/evidência/contexto. Main/origin/checkout da VPS serão sincronizados e o CI documental será aguardado; não há novo build de runtime. O recibo final de sincronização fica em tmp/typography-v311/final-sync.json para evitar um ciclo de commits autorreferenciais. Nenhuma jornada humana autenticada produtiva foi executada.
