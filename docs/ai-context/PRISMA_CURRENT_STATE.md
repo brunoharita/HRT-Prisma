@@ -3,11 +3,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.92.0
+version: 2.93.0
 last_verified: 2026-10-18
 ---
 
 # Estado atual do Prisma
+
+## Meu cadastro — 3.1.3 em validação
+
+Edição própria para quatro perfis via menu da identidade: nome/celular/username; Owner preserva username criado, protegido também na administração/SQL. Perfil/status/grupo/empresas ficam bloqueados. Contato compartilhável só muda após senha atual/código temporário, com limites, cancelamento e CAS do contato; senha usa Auth, revoga sessões e volta ao login. Intent auditado tem recibo service-only após revogação, sem permitir novas edições. UI compacta/shared guard, atualização do shell e revisão otimista. Novo contrato operator-self-account-1.0.0 estende ADR086. Publicação ainda não confirmada; ver AoT my-account-v313, owner `docs/security/operator-self-account.md`. Testes sem IA/envio real/mutação de usuários produtivos.
 
 ## Medição de IA por ação e requisição — 3.1.2 publicada
 

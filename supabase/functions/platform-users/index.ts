@@ -421,6 +421,9 @@ async function updatePlatformUser(
     }
   }
 
+  if (existing.access_profile === "owner" && input.username !== existing.username) {
+    throw new HttpError(403, "O username do Owner é definido na criação e não pode ser alterado.");
+  }
   const normalized = await normalizeAndValidateInput(serviceClient, actorContext, input, existing.id);
   if (existing.access_profile === "owner" && await wouldDeactivateLastOwner(serviceClient, existing, normalized)) {
     throw new HttpError(409, "O grupo precisa manter pelo menos um Owner ativo.");

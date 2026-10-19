@@ -95,6 +95,7 @@ function SidebarContent({
   }));
 
   const profileMenuItems: MenuProps["items"] = [
+    { key: "my-account", label: "Meu cadastro" },
     {
       key: "sign-out",
       danger: true,
@@ -182,6 +183,7 @@ function SidebarContent({
           menu={{
             items: profileMenuItems,
             onClick: ({ key }) => {
+              if (key === "my-account") { onNavigate("/my-account"); onNavigationComplete?.(); }
               if (key === "sign-out") onSignOut();
             },
           }}

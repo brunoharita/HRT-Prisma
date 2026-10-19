@@ -28,6 +28,7 @@ import { prismaRepository } from "../infrastructure/supabase/prismaRepository";
 import { platformUsersService } from "../infrastructure/supabase/platformUsersService";
 import { HomePage } from "../pages/HomePage";
 import { PasswordChangePage } from "../pages/PasswordChangePage";
+import { MyAccountPage } from "../pages/MyAccountPage";
 import { PeoplePage } from "../pages/PeoplePage";
 import { DocumentDetailPage } from "../pages/DocumentDetailPage";
 import { DocumentOperationsPage } from "../pages/DocumentOperationsPage";
@@ -173,6 +174,7 @@ const routes: AppRoute[] = [
     rule: { requiresAuth: true, requiresMembership: false, allowedRoles: ["super_admin", "owner", "admin", "recruiter"] },
   },
   { path: "/change-password", rule: { requiresAuth: true, requiresMembership: false } },
+  { path: "/my-account", rule: { requiresAuth: true, requiresMembership: false } },
   { path: "/sign-in", rule: { requiresAuth: false, requiresMembership: false } },
   { path: "/access-denied", rule: { requiresAuth: true, requiresMembership: false } },
   { path: "/unauthorized", rule: { requiresAuth: true, requiresMembership: false } },
@@ -342,6 +344,13 @@ export function PrismaApplication() {
     setState({ ...initialState, initialized: true, infoMessage: "Sessão encerrada." });
     navigate("/sign-in", false, true);
   };
+  const handleOwnPasswordChanged = async (confirmed = true) => {
+    authRefreshVersion.current++;
+    await supabase.auth.signOut({ scope: "local" });
+    clearStoredActiveOrganizationId();
+    setState({ ...initialState, initialized: true, infoMessage: confirmed ? "Senha atualizada. Entre novamente com sua nova senha." : "Não foi possível confirmar a alteração da senha. Entre novamente para verificar seu acesso." });
+    navigate("/sign-in", false, true);
+  };
 
   const handleOrganizationChange = async (organizationId: string) => {
     if (state.currentOperator?.profile === "member") return;
@@ -406,7 +415,7 @@ export function PrismaApplication() {
       <PrismaViewStateProvider key={viewScope} scope={viewScope}>
       <PrismaBackProvider key={pathname} value={{ goBack, canGoBack, goingBack }}>
       <div key={pathname}>
-        {renderRouteContent(route, state.currentOperator, activeMembership, navigationItems, handleNavigate, refreshAuthState)}
+        {renderRouteContent(route, state.currentOperator, activeMembership, navigationItems, handleNavigate, refreshAuthState, handleOwnPasswordChanged)}
       </div>
       </PrismaBackProvider>
       </PrismaViewStateProvider>
@@ -421,6 +430,7 @@ function renderRouteContent(
   navigationItems: PrismaNavigationItem[],
   onNavigate: (path: string) => void,
   onPasswordCompleted: () => Promise<void>,
+  onOwnPasswordChanged: (confirmed?: boolean) => Promise<void>,
 ) {
   if (["/not-found"].includes(route.path)) {
     return <PrismaPage><PrismaPageHeader title={route.path === "/not-found" ? "Página não encontrada" : "Área em preparação"} /><PrismaState kind="unavailable" description={route.path === "/not-found" ? "Este endereço não está disponível. Volte ao início para continuar." : "Esta área ainda não está disponível. As funcionalidades atuais continuam acessíveis pelo menu."} action={{ label: "Voltar ao início", onClick: () => onNavigate("/") }} /></PrismaPage>;
@@ -501,6 +511,7 @@ function renderRouteContent(
   if (route.path === "/change-password" && currentOperator) {
     return <PasswordChangePage currentOperator={currentOperator} onNavigate={onNavigate} onPasswordCompleted={onPasswordCompleted} />;
   }
+  if (route.path === "/my-account" && currentOperator) return <MyAccountPage onNavigate={onNavigate} onChanged={onPasswordCompleted} onPasswordChanged={onOwnPasswordChanged} />;
   if (route.path === "/vacancies" && activeMembership) {
     if (route.vacancyView === "create") return <VacancyEditorPage activeMembership={activeMembership} onNavigate={onNavigate} />;
     if (route.vacancyView === "assist") return <VacancyAssistPage activeMembership={activeMembership} onNavigate={onNavigate} />;

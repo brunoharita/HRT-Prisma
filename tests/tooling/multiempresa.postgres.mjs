@@ -3,11 +3,12 @@ import { execFileSync, spawn } from "node:child_process";
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { resolve } from "node:path";
 const bin=process.env.PRISMA_PG_BIN??"C:/Program Files/PostgreSQL/17/bin/",port=process.env.PRISMA_TEST_PG_PORT??"5846";
-const ownerLifecycle=process.argv.includes('--owner-lifecycle');
+const selfAccount=process.argv.includes('--self-account');
+const ownerLifecycle=process.argv.includes('--owner-lifecycle')||selfAccount;
 const usernameIdentity=process.argv.includes('--username-identity')||ownerLifecycle;
 const sorting=process.argv.includes('--sorting')||ownerLifecycle;
 const ownerOnboarding=process.argv.includes('--owner-onboarding')||sorting||usernameIdentity;
-const work=resolve(`tmp/v3m0-pg-${Date.now()}`),evidence=ownerLifecycle?"docs/qa/evidence/owner-lifecycle-v307":usernameIdentity?"docs/qa/evidence/username-identity-v306":sorting?"docs/qa/evidence/groups-sorting-v303":ownerOnboarding?"docs/qa/evidence/owner-onboarding-v301":"docs/qa/evidence/v3m0-multiempresa",checks=[];
+const work=resolve(`tmp/v3m0-pg-${Date.now()}`),evidence=selfAccount?"docs/qa/evidence/my-account-v313":ownerLifecycle?"docs/qa/evidence/owner-lifecycle-v307":usernameIdentity?"docs/qa/evidence/username-identity-v306":sorting?"docs/qa/evidence/groups-sorting-v303":ownerOnboarding?"docs/qa/evidence/owner-onboarding-v301":"docs/qa/evidence/v3m0-multiempresa",checks=[];
 mkdirSync(work,{recursive:true});mkdirSync(evidence,{recursive:true});
 const cmd=(name,args,input)=>(execFileSync(bin+name+".exe",args,{input,encoding:"utf8",stdio:name==="pg_ctl"?"ignore":["pipe","pipe","pipe"],env:{...process.env,PGCLIENTENCODING:"UTF8"}})??"").trim();
 const args=["-X","-qAt","-v","ON_ERROR_STOP=1","-v","VERBOSITY=verbose","-h","127.0.0.1","-p",port,"-U","prisma_test","-d","postgres","-f","-"];
@@ -264,6 +265,7 @@ try {
  check("all mutations audited",Number(run("select count(*) from public.platform_user_audit_events"))>=7);
  if(usernameIdentity)await (await import('./usernameIdentity.postgres.mjs')).verifyUsernameIdentity({run,check,fail,id,as,bin,args});
  if(ownerLifecycle)await (await import('./ownerLifecycle.postgres.mjs')).verifyOwnerLifecycle({run,check,fail,id,as,bin,args});
+ if(selfAccount)await (await import('./selfAccount.postgres.mjs')).verifySelfAccount({run,check,fail,id,as,bin,args});
 } finally {
  writeFileSync(evidence+"/postgres.json",JSON.stringify({engine:"PostgreSQL17 isolated local; real source table/helper/policy subset; Auth.uid fixture",checks},null,2));
  if(started)cmd("pg_ctl",["-D",work+"/data","-m","fast","-w","stop"]);

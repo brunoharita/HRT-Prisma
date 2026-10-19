@@ -1,5 +1,7 @@
 # Versionamento
 
+Pedido de Bruno18/10/2026 autoriza **3.1.3**, Meu cadastro, username editável exceto Owner, e-mail confirmado e senha com verificação atual. Novo contrato aditivo `operator-self-account-1.0.0`, preservando operator-identity2.0.0, onboarding e lifecycle. Estado de publicação é comprovado no AoT my-account-v313.
+
 Pedido de Bruno18/10/2026 autoriza nova entrega **3.1.2**, medição de IA por ação/requisição e correlação com Tokens Prisma. `ai-action-cost-metering-1.0.0`, `ai-cost-measurement-1.0.0` e `ai-action-cost-report-1.0.0` são aditivos; contratos históricos e regras comerciais preservados. Publicação só é confirmada pelo AoT `ai-cost-metering-v312`.
 
 Decisão explícita de Bruno em17/10/2026: correção Cadastrar Owner publicada como **3.0.1**, substituindo a escolha anterior2.9.0 para esta nova entrega. Registry acrescenta geração3/movimento0/primeira entrega1 sem fabricar uma publicação3.0.0 ou renumerar2.9.0. Novo contrato contextual owner-onboarding-1.0.0; contratos genéricos, esquema de usuários, versões anteriores e regras comerciais permanecem. Acordo/AoT owner-onboarding-v301.

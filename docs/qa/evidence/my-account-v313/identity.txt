@@ -1,0 +1,10 @@
+Check supabase/functions/platform-users/index.test.ts
+Check supabase/functions/platform-users/operatorIdentity.test.ts
+running 3 tests from ./supabase/functions/platform-users/index.test.ts
+four roles: real Edge handler validates scope before Auth and saves atomically with compensation ... ok (250ms)
+Owner onboarding: canonical context, four tamper negatives, authority, collision and atomic revalidation ... ok (43ms)
+manual password minimum8: boundaries, complexity, confirmation, atomic save and compensation ... ok (67ms)
+running 1 test from ./supabase/functions/platform-users/operatorIdentity.test.ts
+operator identity: independent accounts, legacy compatibility, contact edits, delivery and failure boundaries ... ok (416ms)
+
+ok | 4 passed | 0 failed (1s)

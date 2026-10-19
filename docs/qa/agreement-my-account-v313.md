@@ -1,0 +1,19 @@
+# Acordo — Meu cadastro, v1.0.0
+
+Autoridade: Bruno aprovou a proposta de edição do próprio cadastro e autorizou username editável, exceto Owner, integração em main e nova versão em18/10/2026. Entrega3.1.3; baseline9b6273813fefbcfe3b4a51bb773f854796cca64f; riscoD. Extensão do ADR-086, mantendo Supabase Auth, identidade técnica e Resend existentes.
+
+- D-01: menu do usuário oferece Meu cadastro a Super Admin, Owner, Recruiter e usuário comum ativos, sem exigir permissão administrativa. Exibir nome, username, celular, e-mail e escopo atual.
+- D-02: permitir alterar nome/celular/username com validações existentes e unicidade global de username. Owner mantém exatamente o username de criação, bloqueado visualmente e no backend. Atualizar identificação compartilhada após salvar; avisar que o próximo login usa o novo username.
+- D-03: perfil, status, grupo, empresas e identidade Auth não podem ser editados nesse fluxo. Resolver alvo pela sessão, nunca por ID fornecido pelo navegador. Sessão revogada, conta inativa/bloqueada ou primeiro acesso incompleto falham fechados; primeiro acesso permanece no fluxo existente.
+- D-04: trocar e-mail exige senha atual e validação do novo endereço antes de substituir o contato de recuperação. Reutilizar transporte/configuração existentes, código temporário de uso único, limite de tentativas/reenvio, cancelamento e recuperação de falhas. E-mail compartilhado continua permitido; preservar UUID/senha/contato atual até confirmação. Não mudar um contato alterado concorrentemente por administrador.
+- D-05: ação própria de troca de senha exige senha atual, confirmação da nova e política existente de oito caracteres/requisitos reativos. Não exibir nem persistir senhas/códigos/tokens em logs, histórico ou navegador persistente, além da gestão de sessão Auth já existente. Respeitar a revogação nativa do Auth após alteração: informar antes, finalizar o recibo do intent e voltar ao login; resultado desconhecido fica explícito.
+- D-06: preservar auditoria, isolamento, permissões, memberships, Owner/lifecycle, login e recuperação. Dados básicos têm proteção contra sobrescrita concorrente. UX Prisma, densidade compacta, estados claros, Salvar/Cancelar e aviso de alterações pendentes, desktop/celular.
+- D-07: validar offline handlers/transporte, SQL integrado e negativos, UI e regressões de identidade/Owner; CI obrigatória, integrar main e publicar3.1.3 com rollback e smoke sem editar usuários reais/enviar mensagens reais para teste.
+
+- P-01: autoelevação, troca de alvo/tenant/UUID ou alterações de escopo/status, inclusive por payload adulterado.
+- P-02: mudar username de Owner, agregar contas por e-mail, usar contato compartilhado como credencial Auth, perder histórico ou alterar dados de Pessoas/Perfis.
+- P-03: nova chamada de IA, envio de teste real, novos fornecedores/credenciais, registrar segredo ou chamar aceitação do provedor de entrega confirmada.
+- F-01: foto, preferências, MFA, exclusão da conta, administração de terceiros e mudanças nas regras de contratação/planos.
+- A-01: engenharia escolhe rota/componentes, RPCs aditivas, código de confirmação, expiração, limites e testes proporcionais, reutilizando capacidades existentes. Sem decisão material pendente.
+
+CA-01/D01: menu/rota e leitura para os quatro perfis; CA-02/D02: salvar username e conflito global, Owner recusado no servidor/UI; CA-03/D03/P01: IDOR/overposting, sessão/conta/escopo negativos; CA-04/D04: senha errada, código errado/expirado/reusado, reenvio/timeout, conflito de contato, duas contas com mesmo contato independentes; CA-05/D05: senha atual obrigatória, política oito caracteres, sem segredos em recibos; CA-06/D06: snapshot de memberships/autoridade e fluxo Owner/login/reset preservados, CAS e UI responsiva; CA-07/D07: AoT com checks, CI, release plan, rollout/smoke e limites.

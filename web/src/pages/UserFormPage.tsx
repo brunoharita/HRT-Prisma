@@ -332,7 +332,7 @@ export function UserFormPage({ mode, userId, ownerGroupId, onNavigate }: UserFor
                   },
                 ]}
               >
-                <Input placeholder="joao.silva" disabled={ownerOnboarding} />
+                <Input placeholder="joao.silva" disabled={ownerOnboarding || (mode === "edit" && loadedUser?.profile === "owner")} />
               </Form.Item>
               <Form.Item label="E-mail *" name="email" rules={[{ required: true, type: "email", message: "Informe um e-mail válido." }]}>
                 <Input prefix={<MailOutlined />} placeholder="joao.silva@empresa.com" />

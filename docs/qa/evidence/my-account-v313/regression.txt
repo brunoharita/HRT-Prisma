@@ -1,0 +1,26 @@
+✔ immediate origin remains distinct from a hierarchical parent across the real route graph (4.8279ms)
+✔ replace preserves predecessor rather than creating a return cycle (0.4509ms)
+✔ scope change never creates an eligible previous entry (1.8319ms)
+✔ public capability, auth, external, query and malformed URLs never enter operator history (1.2011ms)
+✔ password minimum is eight across web, Edge and Auth configuration (58.725ms)
+✔ password boundaries accept eight through eleven and retain all other requirements (2.4987ms)
+✔ normalizes username to lower case and trims whitespace (0.3135ms)
+✔ rejects reserved and malformed usernames (0.4959ms)
+✔ accepts safe usernames (5.1259ms)
+✔ enforces the password policy expected by M2-A (0.7224ms)
+✔ normalizes phone numbers into E.164-compatible pieces (0.9899ms)
+✔ platform-users function preserves owner memberships and returns phone fields for editing (92.1239ms)
+✔ operator-password-reset resolves username only and never selects by shared contact (3.3583ms)
+✔ accepted deliveries determine the displayed version and a new movement resets the count (7.1584ms)
+✔ registro oficial expõe v3.1.3 por decisão de Bruno e preserva entregas históricas (6.968ms)
+✔ numeração explícita preserva histórico e rejeita contador insuficiente ou inválido (1.2525ms)
+✔ nova geração aceita movimento zero sem alterar contadores anteriores e rejeita movimento inválido (0.8329ms)
+✔ an incomplete or duplicated release registry does not invent a product version (0.7321ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 904.0595

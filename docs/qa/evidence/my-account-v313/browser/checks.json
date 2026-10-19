@@ -1,0 +1,206 @@
+{
+  "checks": [
+    {
+      "name": "1448/member menu accessible",
+      "pass": true
+    },
+    {
+      "name": "1448/member Owner exception enforced visually",
+      "pass": true
+    },
+    {
+      "name": "1448/member authority and email read-only",
+      "pass": true
+    },
+    {
+      "name": "1448/member no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "1448 duplicate preserves edits",
+      "pass": true
+    },
+    {
+      "name": "1448 shared identity refreshed",
+      "pass": true
+    },
+    {
+      "name": "1448 reactive eight-character requirements and checks",
+      "pass": true
+    },
+    {
+      "name": "1448 security error visible inside modal",
+      "pass": true
+    },
+    {
+      "name": "1448 password completion requests reauthentication",
+      "pass": true
+    },
+    {
+      "name": "1448 old contact retained until proof",
+      "pass": true
+    },
+    {
+      "name": "1448 confirmed contact visible",
+      "pass": true
+    },
+    {
+      "name": "1448 navigation guard preserves pending edit",
+      "pass": true
+    },
+    {
+      "name": "1448/owner menu accessible",
+      "pass": true
+    },
+    {
+      "name": "1448/owner Owner exception enforced visually",
+      "pass": true
+    },
+    {
+      "name": "1448/owner authority and email read-only",
+      "pass": true
+    },
+    {
+      "name": "1448/owner no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "1448/super_admin menu accessible",
+      "pass": true
+    },
+    {
+      "name": "1448/super_admin Owner exception enforced visually",
+      "pass": true
+    },
+    {
+      "name": "1448/super_admin authority and email read-only",
+      "pass": true
+    },
+    {
+      "name": "1448/super_admin no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "1448/recruiter menu accessible",
+      "pass": true
+    },
+    {
+      "name": "1448/recruiter Owner exception enforced visually",
+      "pass": true
+    },
+    {
+      "name": "1448/recruiter authority and email read-only",
+      "pass": true
+    },
+    {
+      "name": "1448/recruiter no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "390/member menu accessible",
+      "pass": true
+    },
+    {
+      "name": "390/member Owner exception enforced visually",
+      "pass": true
+    },
+    {
+      "name": "390/member authority and email read-only",
+      "pass": true
+    },
+    {
+      "name": "390/member no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "390 duplicate preserves edits",
+      "pass": true
+    },
+    {
+      "name": "390 shared identity refreshed",
+      "pass": true
+    },
+    {
+      "name": "390 reactive eight-character requirements and checks",
+      "pass": true
+    },
+    {
+      "name": "390 security error visible inside modal",
+      "pass": true
+    },
+    {
+      "name": "390 password completion requests reauthentication",
+      "pass": true
+    },
+    {
+      "name": "390 old contact retained until proof",
+      "pass": true
+    },
+    {
+      "name": "390 confirmed contact visible",
+      "pass": true
+    },
+    {
+      "name": "390 navigation guard preserves pending edit",
+      "pass": true
+    },
+    {
+      "name": "390/owner menu accessible",
+      "pass": true
+    },
+    {
+      "name": "390/owner Owner exception enforced visually",
+      "pass": true
+    },
+    {
+      "name": "390/owner authority and email read-only",
+      "pass": true
+    },
+    {
+      "name": "390/owner no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "390/super_admin menu accessible",
+      "pass": true
+    },
+    {
+      "name": "390/super_admin Owner exception enforced visually",
+      "pass": true
+    },
+    {
+      "name": "390/super_admin authority and email read-only",
+      "pass": true
+    },
+    {
+      "name": "390/super_admin no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "390/recruiter menu accessible",
+      "pass": true
+    },
+    {
+      "name": "390/recruiter Owner exception enforced visually",
+      "pass": true
+    },
+    {
+      "name": "390/recruiter authority and email read-only",
+      "pass": true
+    },
+    {
+      "name": "390/recruiter no horizontal page overflow",
+      "pass": true
+    },
+    {
+      "name": "no browser runtime errors",
+      "pass": true
+    },
+    {
+      "name": "no network outside localhost",
+      "pass": true
+    }
+  ],
+  "errors": [],
+  "outside": []
+}

@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 543
-source_manifest_sha256: 6164448c620fa581152bc538b36671ff0b7995355dbed47d51755634e391de42
+documentation_source_count: 547
+source_manifest_sha256: 43313d4bdfa1e8fa731908b2083797acf5dea940f5aeec7a2e8522c0d766eb89
 -->
 
 # Tudo sobre o Prisma
@@ -2644,11 +2644,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.92.0
+version: 2.93.0
 last_verified: 2026-10-18
 ---
 
 # Estado atual do Prisma
+
+## Meu cadastro — 3.1.3 em validação
+
+Edição própria para quatro perfis via menu da identidade: nome/celular/username; Owner preserva username criado, protegido também na administração/SQL. Perfil/status/grupo/empresas ficam bloqueados. Contato compartilhável só muda após senha atual/código temporário, com limites, cancelamento e CAS do contato; senha usa Auth, revoga sessões e volta ao login. Intent auditado tem recibo service-only após revogação, sem permitir novas edições. UI compacta/shared guard, atualização do shell e revisão otimista. Novo contrato operator-self-account-1.0.0 estende ADR086. Publicação ainda não confirmada; ver AoT my-account-v313, owner `docs/security/operator-self-account.md`. Testes sem IA/envio real/mutação de usuários produtivos.
 
 ## Medição de IA por ação e requisição — 3.1.2 publicada
 
@@ -5168,6 +5172,8 @@ Implementação deve ser separada em movimentos menores: contratos e versões, s
 
 # Catálogo de contratos
 
+`operator-self-account-1.0.0` (3.1.3): Meu cadastro para quatro perfis, username editável exceto Owner, dados básicos com revisão otimista e escopo protegido. Contato compartilhável confirmado por senha atual/código temporário; troca de senha na API Auth com novo login. Edge resolve JWT/sessão, RPCs service-only e auditoria com recibo de intent após revogação. Owner: `docs/security/operator-self-account.md`; evidência/rollout no AoT my-account-v313. Sem mudar Auth UUID, memberships, Pessoas ou IA.
+
 `owner-lifecycle-1.0.0` (3.0.7): RPC autenticada group_owner_lifecycle_v307 com Super ativo, grupo/revisão/Owner esperado, candidatos ativos same-group e motivo5–500. Substituição/inativação/reativação transacionais com auditoria; configured_status privado separado do status efetivo usado pelos gates existentes. Reconciliação idempotente após cadastro/primeiro acesso e trigger deferred de segurança. complete_first_access_v307 e operator_administration_available_v307 são service-only; Edge vincula conta ao JWT verificado e falha fechado. organization-administration1.2.0 projeta Owner designado incluindo inativo, configuredStatus/ownerSuspended/reason; contratos anteriores continuam consulta, mas não podem editar grupo suspenso e apagar causa. Nenhuma alteração dos quatro campos canônicos no cadastro inicial, do Auth UUID, senhas, business algorithms ou capabilidades públicas emitidas. Acordo1.0.0/AoT owner-lifecycle-v307 e ADR-087.
 
 `owner-onboarding-1.0.0` (produto3.0.1, owner Users/security): contexto exclusivo Cadastrar Owner de grupo novo, resolvido por `owner_onboarding_context_v301` e persistido por `create_group_owner_v301`, ambos service-only via Edge com sessão verificada. Grupo em preparação com única primeira empresa e Super ativo; quatro campos exatos, username derivado sem alternativas silenciosas. Revalidação sob lock e audit transacional delegam à persistência genérica inalterada; contrato ausente/desconhecido falha fechado. Sem mutação de usuários existentes, mudança de Owner/faturamento ou transformação da origem de navegação em autoridade. Consumidores platform-users/UserFormPage; acordo1.0.0 e AoT owner-onboarding-v301 determinam evidência/ambiente.
@@ -5957,6 +5963,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+Pedido de Bruno18/10/2026 autoriza **3.1.3**, Meu cadastro, username editável exceto Owner, e-mail confirmado e senha com verificação atual. Novo contrato aditivo `operator-self-account-1.0.0`, preservando operator-identity2.0.0, onboarding e lifecycle. Estado de publicação é comprovado no AoT my-account-v313.
 
 Pedido de Bruno18/10/2026 autoriza nova entrega **3.1.2**, medição de IA por ação/requisição e correlação com Tokens Prisma. `ai-action-cost-metering-1.0.0`, `ai-cost-measurement-1.0.0` e `ai-action-cost-report-1.0.0` são aditivos; contratos históricos e regras comerciais preservados. Publicação só é confirmada pelo AoT `ai-cost-metering-v312`.
 
@@ -10543,6 +10551,8 @@ Remover somente o índice de e-mail seria insuficiente, pois login, convite e re
 Compatibilidade: contas antigas continuam com Auth UUID/senha e endereço Auth atual. Novas usam UUID aleatório em domínio técnico .invalid, sem envio a esse endereço. Ao editar contato legado, converter Auth via API preservando ID/senha e compensar erro de persistência; não executar backfill ou reset em massa. Não reutilizar username como ID técnico, pois pode mudar. Recuperação pública somente por username; quem controla uma caixa compartilhada controla a recuperação de suas contas, consequência aceita pelo PO.
 
 Fontes oficiais verificadas: [Auth password](https://supabase.com/docs/guides/auth/passwords), [generateLink](https://supabase.com/docs/reference/javascript/auth-admin-generatelink). Reaproveitamento não prova operação/entrega; SQL, handlers/browser sintéticos e publicação têm evidências separadas.
+
+Extensão aprovada18/10/2026,3.1.3: Meu cadastro oferece username editável exceto Owner, contato confirmado por código após senha atual e troca de senha com novo login. Reutiliza Auth, Resend/configuração/auditoria. Ver `docs/security/operator-self-account.md`; confirmação nativa de e-mail Auth não representa o contato compartilhável, por isso o código adapta o transporte existente. Recibo de senha vinculado a intent verificado sobrevive à revogação nativa das sessões. Sem novo fornecedor/credencial/biblioteca, hashing próprio de senha ou mudança dos vínculos de autoridade.
 
 ---
 
@@ -16651,6 +16661,30 @@ Decisão: Bruno autorizou em 2026-09-28 implementar o registro de falhas discuti
 | Banco, prompt, UI e VPS | no_impact_identified | Sem alteração de contrato persistido ou visual pretendida | Plano de release confirma destinos ignorados; smoke público da Edge após publicação |
 
 Estado: agreed. Aprovação: pedido explícito de implementação de Bruno nesta conversa em 2026-09-28.
+
+---
+
+## Source: `docs/qa/agreement-my-account-v313.md`
+
+# Acordo — Meu cadastro, v1.0.0
+
+Autoridade: Bruno aprovou a proposta de edição do próprio cadastro e autorizou username editável, exceto Owner, integração em main e nova versão em18/10/2026. Entrega3.1.3; baseline9b6273813fefbcfe3b4a51bb773f854796cca64f; riscoD. Extensão do ADR-086, mantendo Supabase Auth, identidade técnica e Resend existentes.
+
+- D-01: menu do usuário oferece Meu cadastro a Super Admin, Owner, Recruiter e usuário comum ativos, sem exigir permissão administrativa. Exibir nome, username, celular, e-mail e escopo atual.
+- D-02: permitir alterar nome/celular/username com validações existentes e unicidade global de username. Owner mantém exatamente o username de criação, bloqueado visualmente e no backend. Atualizar identificação compartilhada após salvar; avisar que o próximo login usa o novo username.
+- D-03: perfil, status, grupo, empresas e identidade Auth não podem ser editados nesse fluxo. Resolver alvo pela sessão, nunca por ID fornecido pelo navegador. Sessão revogada, conta inativa/bloqueada ou primeiro acesso incompleto falham fechados; primeiro acesso permanece no fluxo existente.
+- D-04: trocar e-mail exige senha atual e validação do novo endereço antes de substituir o contato de recuperação. Reutilizar transporte/configuração existentes, código temporário de uso único, limite de tentativas/reenvio, cancelamento e recuperação de falhas. E-mail compartilhado continua permitido; preservar UUID/senha/contato atual até confirmação. Não mudar um contato alterado concorrentemente por administrador.
+- D-05: ação própria de troca de senha exige senha atual, confirmação da nova e política existente de oito caracteres/requisitos reativos. Não exibir nem persistir senhas/códigos/tokens em logs, histórico ou navegador persistente, além da gestão de sessão Auth já existente. Respeitar a revogação nativa do Auth após alteração: informar antes, finalizar o recibo do intent e voltar ao login; resultado desconhecido fica explícito.
+- D-06: preservar auditoria, isolamento, permissões, memberships, Owner/lifecycle, login e recuperação. Dados básicos têm proteção contra sobrescrita concorrente. UX Prisma, densidade compacta, estados claros, Salvar/Cancelar e aviso de alterações pendentes, desktop/celular.
+- D-07: validar offline handlers/transporte, SQL integrado e negativos, UI e regressões de identidade/Owner; CI obrigatória, integrar main e publicar3.1.3 com rollback e smoke sem editar usuários reais/enviar mensagens reais para teste.
+
+- P-01: autoelevação, troca de alvo/tenant/UUID ou alterações de escopo/status, inclusive por payload adulterado.
+- P-02: mudar username de Owner, agregar contas por e-mail, usar contato compartilhado como credencial Auth, perder histórico ou alterar dados de Pessoas/Perfis.
+- P-03: nova chamada de IA, envio de teste real, novos fornecedores/credenciais, registrar segredo ou chamar aceitação do provedor de entrega confirmada.
+- F-01: foto, preferências, MFA, exclusão da conta, administração de terceiros e mudanças nas regras de contratação/planos.
+- A-01: engenharia escolhe rota/componentes, RPCs aditivas, código de confirmação, expiração, limites e testes proporcionais, reutilizando capacidades existentes. Sem decisão material pendente.
+
+CA-01/D01: menu/rota e leitura para os quatro perfis; CA-02/D02: salvar username e conflito global, Owner recusado no servidor/UI; CA-03/D03/P01: IDOR/overposting, sessão/conta/escopo negativos; CA-04/D04: senha errada, código errado/expirado/reusado, reenvio/timeout, conflito de contato, duas contas com mesmo contato independentes; CA-05/D05: senha atual obrigatória, política oito caracteres, sem segredos em recibos; CA-06/D06: snapshot de memberships/autoridade e fluxo Owner/login/reset preservados, CAS e UI responsiva; CA-07/D07: AoT com checks, CI, release plan, rollout/smoke e limites.
 
 ---
 
@@ -23179,6 +23213,46 @@ Fora de escopo F-01: sem alteração de prompt/modelo/limites/retry/banco/UI e s
 Validação local: `deno check` do handler e testes; `deno test --no-check` do handler/snapshot: 32/32 PASS; `pnpm run lint` PASS; `pnpm run check:matching-runtime` PASS; `pnpm run generate:prisma-context` e `pnpm run check:prisma-context` PASS; `git diff --check` PASS. O typecheck Deno exigiu tipagem explícita do retorno já usado de `prepareTrajectoryContext`, sem mudança de dado.
 
 Git/CI/produção: SHA funcional `a12b4e09884d6017c4cf1da339db73ede28ac5e1` integrado por fast-forward em `main` e `origin/main`. CI `36377229062` PASS. Plano 1.0.1: nove arquivos; documentação/Context Pack e somente Edge `matching-trajectory`; database e web/VPS `skip`. Edge v9 ACTIVE, `verify_jwt=true`, bundle `17a5de86cc73cf7b0bc83bee04dc7fc551722a53ce12da2c96658f649b8d6ec6`, os 12 arquivos publicados comparados ao bundle local. POST sem autenticação recebeu 401; não houve chamada autenticada com Perfil real nem custo de IA de smoke. Git local no worktree de release e GitHub alinhados no SHA funcional. O checkout principal mantém quatro itens não rastreados do usuário e exports gerados temporários fora do commit; não foram sobrescritos. Logs históricos não são recuperáveis. Conclusão: D-01..D-03 e P-01..P-02 PASS, sem desvio; efeito operacional de telemetria em erro real ainda não observado, por decisão de não provocar uma falha paga em produção.
+
+---
+
+## Source: `docs/qa/aot-my-account-v313.md`
+
+# AoT — Meu cadastro3.1.3
+
+Acordo e execução my-account-v313 v1.0.0. Baseline9b6273813fefbcfe3b4a51bb773f854796cca64f. Implementação em codex/my-account-v313; riscoD.
+
+## Mapa de impacto e preservação
+
+| Capacidade | Relação | Baseline / preservação | Validação / fechamento |
+| --- | --- | --- | --- |
+| Próprio cadastro/menu/sessão | direct | menu apenas Sair, edição administrativa existente | quatro perfis, UI, sessão/IDOR/CAS |
+| Identidade/contato/senha/envio | critical_transversal | ADR086, username único, e-mail compartilhável, Auth UUID/senha e Resend atuais | handlers fake, SQL, login/reset e e-mail sem envio real |
+| Owner e administração | direct | criação automatizada, lifecycle3.0.7 | bloqueio de username na UI/backend, regressão Owner/autoridade |
+| Memberships, RLS, recuperação | critical_transversal | escopos/roles e first-access existentes | snapshots/negativos, sessão revogada, integração SQL |
+| Dados de Pessoa, Tokens, IA | no_impact_identified | cadastro de operador é distinto; nenhuma chamada/integração comercial nova | revisão das superfícies e snapshots de autoridade |
+| Layout/navegação | plausible_indirect | shell, guard de alterações, tokens visuais compactos | renders/ações em desktop/celular e regressão shell |
+
+Provas funcionais sintéticas/offline; smoke produtivo não cria/edita usuários nem envia e-mail. Sem referência visual normativa nova. Reuso de Auth/Resend/shared/guard documentado no ADR086 e owner; sem nova biblioteca ou credencial.
+
+## Acordos, implementação, teste e evidência
+
+| ID | Implementação / preservação | Evidência | Estado |
+| --- | --- | --- | --- |
+| D01 | Meu cadastro no menu, rota autenticada sem membership obrigatório e leitura para quatro perfis | browser/checks.json e SQL | PASS local |
+| D02 / P02 | nome/celular/username, revisão otimista; Owner bloqueado UI/handler/trigger, incluindo administração | SQL duplicidade/reservado/Owner/concorrência e browser | PASS local |
+| D03 / P01 | alvo/sessão JWT verificados, auth.sessions/not_after, role/status/first-access e whitelist | SQL negativos de sessão/overposting, handlers payload inválido/IDOR/limite | PASS local |
+| D04 | código vinculado a conta/sessão, hash, TTL/limites/cancelamento, contato compartilhável e antigo preservado | handlers9; SQL expirado/lock/reenvio/replay/CAS; UI | PASS local |
+| D05 | senha atual/8caracteres/checks, Auth API e novo login; recibo recente após revogação | SQL receipt após delete da sessão/imutabilidade, handler de senha/falha de auditoria, browser callback | PASS local |
+| D06 | autoridade/memberships/audit/CAS, shell atualizado, guard e layout compacto | snapshots SQL; substituição Owner real após trigger; Deno login/reset; renders1448/390 | PASS local |
+| D07 | validação offline concluída; integração/rollout ainda pendentes | seção final de publicação será acrescentada após smoke | PARTIAL |
+| P03 | nenhuma inferência/envio de teste real/novo segredo; HTTP fake e localhost restrito | handlers, Deno e browser sem rede externa | PASS local |
+
+303 checks PostgreSQL17 isolado PASS (inclui baseline multiempresa/identidade/Owner e regressão após guard),9 testes de handlers reais com transporte injetado PASS,4 testes Deno de Edges reais anteriores PASS,18 Node dirigidos PASS,50 checks browser desktop/celular PASS e22 tooling PASS. Tipos/build root e web, Deno check PASS; warning de chunk>900kB existente. Sem suíte integral local; CI continua obrigatória.
+
+Falhas intermediárias corrigidas: fixture de grupo precisava configuração lifecycle, import NodeNext explícito, nomes acessíveis dos campos readonly e alinhamento do grid. Seletores do harness foram ajustados para loading/diálogo e espera da atualização React. Conferência da implementação oficial do Auth identificou revogação de sessões na troca de senha; o fluxo foi estabilizado com recibo service-only vinculado a intent, informação prévia e retorno ao login, mantendo D05/A01. Quatro screenshots representam dados fictícios equivalentes; não comprovam login humano ou entrega de e-mail em produção. Avisos do Modal estático pertencem ao guard existente, preservado neste movimento.
+
+Baseline operacional: main9b627381; web3.1.2; Supabase ioldpnqqvobprjiontre, sem QA remoto separado. Arquivos não rastreados preexistentes preservados e excluídos do Context Pack por snapshot dos documentos rastreados. Não há desvios do escopo; pendência operacional D07 impede declarar conclusão até publicação/smoke/sincronização.
 
 ---
 
@@ -30226,6 +30300,18 @@ Fonte integral e imutável por versão: `docs/qa/agreement-matching-trajectory-d
 
 ---
 
+## Source: `docs/qa/execution-my-account-v313.md`
+
+# Execução — Meu cadastro, v1.0.0
+
+Implementar integralmente `docs/qa/agreement-my-account-v313.md` v1.0.0, D01–D07/P01–P03/F01/A01/CA01–CA07. A autorização explícita de Bruno aprova a proposta anterior e supersede o bloqueio de username proposto para não Owners; Owner permanece imutável. Nenhuma nova aprovação administrativa é necessária.
+
+Reutilizar Supabase Auth, operatorIdentity, validações shared, auditoria de usuário, transporte Resend/configuração protegida e componentes/navigation guard Prisma. A confirmação nativa de e-mail Auth não serve ao contato compartilhável do ADR-086; adaptar o envio existente com código temporário vinculado à conta/sessão, sem alterar o fornecedor ou o login técnico.
+
+Mínimo suficiente: handlers reais com fetch falso, PostgreSQL local descartável com negativos/replay/concorrência e regressão de identidade/Owner, tipos/build, browser determinístico desktop/celular, Context Pack/ledger/CI. Não executar suíte integral local nem testes com credenciais/usuários reais. Publicar somente superfícies do plano; concluir após smoke e sincronização.
+
+---
+
 ## Source: `docs/qa/execution-navigation-back-v231.md`
 
 # Execução — Retorno à tela anterior v2.3.1
@@ -33688,6 +33774,40 @@ Nova leitura derivada autorizada: papéis operacionais existentes da organizaç�
 ## Complemento2.5.3 — metadados de seleção/cópia/menu
 
 Pedido de Bruno autoriza observação adicional das regiões de enunciado/alternativas durante tentativa ativa e questão visível. Eventos text_selection_observed, copy_action_observed e context_menu_observed guardam região/quantidade de caracteres/horário, com códigos de suporte/limitação e eventual correlação indicativa. Não guardam texto, imagens, clipboard, coordenadas ou teclas gerais e não bloqueiam cópia/menu. PrintScreen considera keydown/keyup recebidos sem duplicar um par. Não confirma captura/cópia concluída, destino ou fraude; programas externos/fotos continuam não observáveis. Instruções informam os novos sinais. Pipeline existente impõe token/tenant/questão/versão e payload mínimo estrito; sem grant novo ou histórico reescrito. Análise método1.1.0 integra padrões calculados e limite copy obrigatório, com envelope1.0.0 preservado e relatórios antigos legíveis; atualização paga somente explícita, tarifa6193 mantida. Acordo/AoT assessment-content-signals registra validação e publicação; estado de rollout deve ser conferido no AoT.
+
+---
+
+## Source: `docs/security/operator-self-account.md`
+
+# Meu cadastro — operator-self-account-1.0.0
+
+Entrega3.1.3; acordo/execução/AoT my-account-v3131.0.0. Operador é distinto de Pessoa/Perfil. Menu abre `/my-account` para quatro perfis ativos, sem autoridade administrativa/membership obrigatório. Primeiro acesso permanece no fluxo obrigatório existente.
+
+## Autoridade e dados básicos
+
+Edge operator-self-service verifica JWT pelo Auth e extrai session_id só do token validado. RPC operator_self_account_v313 é service-only: verifica sessão em auth.sessions/not_after, usuário ativo, primeiro acesso concluído e perfil conhecido. Nenhum alvo vem do navegador. Payload tem whitelist/limite16KiB. Nome/celular/username usam validações shared e constraints existentes; username é único global. Owner conserva exatamente o username criado, protegido por trigger, handlers e UI, inclusive na administração. Não recalcular usernames históricos ou na substituição já aprovada.
+
+Revisão MD5 do registro evita sobrescrita concorrente; não é autenticador. Dados básicos e auditoria são transacionais, sem reescrever memberships, perfil, grupo ou status. O shell recarrega a identificação após salvar. E-mail continua compartilhável conforme ADR086; nenhuma autoridade é agrupada por contato.
+
+## Contato confirmado
+
+Confirmação nativa do e-mail Auth alteraria uma credencial técnica exclusiva, incompatível com o contato compartilhável. Adaptar o transporte Resend/configuração protegida existentes permite confirmar o contato sem novo fornecedor/segredo/biblioteca. Contas legadas convertem o endereço Auth monotonicamente para alias técnico pela API oficial, preservando UUID/senha e contato atual até confirmação.
+
+Solicitar exige senha atual validada em cliente Auth efêmero, cuja sessão é encerrada com scope local. Tokens dessa reautenticação não retornam ao navegador. Limite de cinco tentativas sensíveis por15 minutos. Código aleatório uniforme de oito dígitos,15 minutos/cinco erros/uso único; solicitação uma por60 segundos e três por hora. Banco conserva SHA256 vinculado a request/conta; leitura não retorna código/hash. Novo pedido cancela anterior; cancelamento explícito. Recibo accepted/failed/unknown distingue aceitação de entrega na caixa; timeout não provoca retry automático.
+
+Confirmação vincula conta/sessão/pedido e preserva contador de erros mesmo quando rejeita. Sucesso é idempotente. Contato alterado concorrentemente pela administração invalida o pedido antigo. E-mail anterior continua fonte de recuperação até confirmação transacional auditada. Auditoria sob ACL existente conserva contatos anterior/novo, nunca código/token/senha. Recuperação pública continua por username.
+
+## Senha e sessões
+
+Senha atual obrigatória; nova/confirmada seguem política compartilhada de oito caracteres, maiúscula/minúscula/número/especial e requisitos reativos vermelho/verde+check. API oficial faz hashing. Atualização administrativa de senha do Auth revoga sessões: tela informa antes e volta ao login com mensagem depois.
+
+Intent privado/auditado antecede Auth. finish_operator_self_password_v313 finaliza apenas intent password/verified recente vinculado à mesma conta/sessão, mesmo após revogação nativa. Service-only, cinco minutos, recibo imutável; não lê cadastro nem altera usuário/autoridade. Se resultado se perde, permanece unknown. Atualização confirmada com auditoria final indisponível distingue changed de unknown e exige novo login sem alegar que a senha permaneceu igual. Falhas não recebem sucesso inventado.
+
+Fontes oficiais verificadas18/10/2026: [API administrativa](https://supabase.com/docs/reference/javascript/auth-admin-updateuserbyid), [signOut local](https://supabase.com/docs/reference/javascript/auth-signout), [UpdatePassword/revogação](https://github.com/supabase/auth/blob/master/internal/models/user.go), [adminUserUpdate](https://github.com/supabase/auth/blob/master/internal/api/admin.go). Fundamentam a integração, sem substituir evidência hospedada. Testes usam transportes falsos, Auth.sessions compatível e PostgreSQL real. Nenhum teste com senha/contato de usuário real ou envio externo.
+
+## Rollout e rollback
+
+Migração aditiva antes das duas Edges (operator-self-service nova e platform-users com guard Owner) e web. Confirmar JWT, grants/RLS, fontes/SHA/versão. Não publicar Parser/Synthesis/Knowledge/IA. Rollback restaura consumidores e mantém tabelas, trigger Owner e histórico, sem down destrutivo. AoT registra limites; mocks não provam entrega real ou jornada humana autenticada.
 
 ---
 

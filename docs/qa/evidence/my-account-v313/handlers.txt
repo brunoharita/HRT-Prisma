@@ -1,0 +1,17 @@
+✔ all profiles read their own data without administration and spoofed target is rejected (42.7049ms)
+✔ save normalizes username and phone; rejects protected fields, Owner rename and invalid data (5.0845ms)
+✔ wrong password and identity mismatch block e-mail and password changes before provider mutation (2.9291ms)
+✔ email proof changes contact only after a code, using shared-contact identity and idempotent existing transport (14.9122ms)
+✔ legacy identity migrates to technical alias without resetting password before contact confirmation (3.3878ms)
+✔ mail failure or lost response retains old contact and records failed versus unknown without live retry (3.0707ms)
+✔ eight-character password requirements enforced and current password reverified; no secret in RPC ledger (1.9574ms)
+✔ failure of final audit does not falsely claim password was unchanged (1.5207ms)
+✔ unauthenticated, malformed and oversized requests are denied before data RPC (3.0408ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 919.6606
