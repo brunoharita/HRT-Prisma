@@ -1,0 +1,17 @@
+{
+  "runtimeSha": "ff26d790912b8af2ed16bb3f30700038511dab03",
+  "webImage": "efc8034d3485da9dce2e52972cd6e299502d1ff346efed39267fd96c3240109d",
+  "status": "running",
+  "restarts": 0,
+  "rollbackImage": "189593912b3456e132bfd7984b1d41be85e1aee81dc22f8b7da33eef5d74cabb",
+  "preservedAdjacentServices": [
+    "/prisma-parser-ia",
+    "/prisma-profile-synthesis",
+    "/prisma-paddle-gateway",
+    "/hrt-mail-forwarder",
+    "/traefik-traefik-1"
+  ],
+  "imagesAndStartTimesEqual": true,
+  "edgeFunctions": "unchanged; not in release plan",
+  "immediateSmoke": "404 during recreation; independent public smoke 20 checks PASS; no rebuild"
+}

@@ -1,0 +1,102 @@
+{
+  "checks": [
+    {
+      "name": "/",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "name": "/users",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "name": "/users/new",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "name": "/organizations",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "name": "/my-account",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "name": "/change-password",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "name": "/sign-in",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "name": "/people",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "name": "/assets/index-DVkq3nZT.js",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "name": "/assets/rolldown-runtime-C0FnF6B9.js",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "name": "/assets/antd-vendor-BaKnhCyQ.js",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "name": "/assets/supabase-vendor-DoXvCMLf.js",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "name": "/assets/react-vendor-BdxMnOeJ.js",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "name": "/assets/antd-vendor-B5BXDqMa.css",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "name": "/assets/index-CEcFeY3T.css",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "name": "validated SHA",
+      "pass": true
+    },
+    {
+      "name": "version preserved",
+      "pass": true
+    },
+    {
+      "name": "pending explanation published",
+      "pass": true
+    },
+    {
+      "name": "blocked explanation published",
+      "pass": true
+    },
+    {
+      "name": "/assets/index-C22fNyK9.js",
+      "status": 200,
+      "pass": true
+    }
+  ],
+  "entry": "/assets/index-DVkq3nZT.js",
+  "limits": "Public routes/assets only; not an authenticated human session; previous entry retained; no AI/email"
+}

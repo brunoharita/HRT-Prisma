@@ -5,11 +5,11 @@
   "cliDbPushAllowed": false,
   "rationale": "The production ledger contains historical timestamp aliases, split remote migrations, local-only files, and statement fingerprints that are not all byte-equivalent. The dispatcher must apply only explicitly reviewed new migrations and must not repair or replay history automatically.",
   "summary": {
-    "localMigrations": 191,
-    "remoteMigrations": 195,
-    "mappedByName": 156,
-    "versionAliases": 93,
-    "equalCanonicalFingerprints": 83,
+    "localMigrations": 192,
+    "remoteMigrations": 196,
+    "mappedByName": 157,
+    "versionAliases": 94,
+    "equalCanonicalFingerprints": 84,
     "differentCanonicalFingerprints": 57,
     "localOnly": 2,
     "remoteOnly": 6
@@ -1660,6 +1660,19 @@
       "localStatementSha256": "726a36e271ee986592872c9fb6b2e8d16fa93fb942a546149e8491bbe984a493",
       "remoteStatementSha256": "726a36e271ee986592872c9fb6b2e8d16fa93fb942a546149e8491bbe984a493",
       "verifiedAt": "2026-10-18"
+    },
+    {
+      "name": "preserve_pending_first_access",
+      "localVersion": "20261019110000",
+      "remoteVersion": "20261019104726",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "fingerprintMethod": "strip-CR-trim-exterior-whitespace-v1",
+      "localCanonicalLength": 1244,
+      "remoteCanonicalLength": 1244,
+      "localStatementSha256": "972df8a54032a6ad1f8384f1bb214df3f816d195dccd3f351019d38a8ff15024",
+      "remoteStatementSha256": "972df8a54032a6ad1f8384f1bb214df3f816d195dccd3f351019d38a8ff15024",
+      "verifiedAt": "2026-10-19"
     }
   ],
   "localOnly": [

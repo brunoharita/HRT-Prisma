@@ -9,9 +9,9 @@ last_verified: 2026-10-19
 
 # Estado atual do Prisma
 
-## Preservação do primeiro acesso — correção3.1.3 em validação
+## Preservação do primeiro acesso — correção3.1.3 publicada
 
-Relato de19/10 comprovado por auditoria: editar grupo/empresa de uma conta pendente gravava active, mantendo must_change_password true. Migração direcionada de save_platform_user_v3 revalida status sob lock e mantém pendência, reabilitação incompleta e bloqueio. Formulário identifica pendência sem alegar conclusão; primeiro acesso/lifecycle mantêm autoridade existente. Sem backfill genérico, IA ou envio de teste. Reparo do caso somente com prova histórica/CAS e auditoria, preservando vínculo escolhido. Acordo/execução e AoT first-access-preservation registram o fechamento.
+Correção publicada no SHA funcionalff26d790912b8af2ed16bb3f30700038511dab03, mesma3.1.3. Edição administrativa não conclui primeiro acesso: save_platform_user_v3 deriva status sob lock, preserva pendência, reabilitação incompleta e bloqueio; formulário mostra Pendente com explicação e envia status controlado. Juliano restaurado para pending_first_access por CAS/auditoria do incidente, mantendo VCI Brasil/VCI - Bauru, credenciais e histórico; demais usuários/grupos/memberships/credenciais com fingerprints idênticos.325SQL/27browser/4Deno/14Node, tipos/build/contexto e CI branch39239657653/main39239906858 PASS. Migração remota20261019104726 com fingerprint idêntico; RPC service-only preservada. Webefc8034d3485 running0, rollback189593912b34,20checks públicos PASS após404 transitório sem rebuild; cinco serviços e Edges preservados. Sem backfill genérico, IA ou envio de teste. Sem QA remoto separado/jornada humana produtiva. Acordo/execução e AoT first-access-preservation registram limites. Fechamento documental sincroniza fontes sem reconstruir runtime.
 
 ## Meu cadastro — 3.1.3 publicada
 

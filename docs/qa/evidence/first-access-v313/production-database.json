@@ -1,0 +1,32 @@
+{
+  "runtimeSha": "ff26d790912b8af2ed16bb3f30700038511dab03",
+  "version": "3.1.3",
+  "project": "ioldpnqqvobprjiontre",
+  "migrationVersion": "20261019104726",
+  "migrationFingerprint": "972df8a54032a6ad1f8384f1bb214df3f816d195dccd3f351019d38a8ff15024",
+  "canonicalLength": 1244,
+  "guardInstalled": true,
+  "rpcServiceOnly": true,
+  "repairedAccount": {
+    "status": "pending_first_access",
+    "mustChangePassword": true,
+    "firstAccessCompletedAt": null,
+    "group": "VCI Brasil",
+    "companies": [
+      "VCI - Bauru"
+    ],
+    "auditReceipts": 1,
+    "method": "locked compare-and-set plus audit provenance; aborts on changed target or any completed access event"
+  },
+  "preservation": {
+    "users": 8,
+    "authUsers": 8,
+    "memberships": 10,
+    "membershipHash": "21e467b8d05a7708e6071a3f41b8d3ce",
+    "groupsHash": "2f860ad2e1dd1fd20aa13d5b866fc423",
+    "credentialsHash": "5c2df4655fd7614140390b13d497e8df",
+    "otherUsersHash": "7beae106ce870ce506cf10c473cfd47f",
+    "allBeforeAfterEqual": true
+  },
+  "limits": "No external AI, email or real password change; repair is the authorized incident correction, not a production test user edit."
+}
