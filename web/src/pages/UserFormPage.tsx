@@ -135,7 +135,7 @@ export function UserFormPage({ mode, userId, ownerGroupId, onNavigate }: UserFor
             email: user.email,
             phoneCountryIso2: country?.iso2 ?? "BR",
             phoneNationalNumber: user.phoneNationalNumber ?? "",
-            status: user.status === "inactive" ? "inactive" : "active",
+            status: user.status === "inactive" || user.status === "blocked" ? "inactive" : "active",
             profile: user.profile,
             groupId: user.groupId,
             organizationIds: user.allowedOrganizations.map((organization) => organization.id),
@@ -146,7 +146,7 @@ export function UserFormPage({ mode, userId, ownerGroupId, onNavigate }: UserFor
           setProfile(user.profile);
           setGroupId(user.groupId);
           setCredentialMode("activation_link");
-          setStatus(user.status === "inactive" ? "inactive" : "active");
+          setStatus(user.status === "inactive" || user.status === "blocked" ? "inactive" : "active");
         } else if (ownerGroupId !== undefined) {
           const context = await platformUsersService.loadOwnerContext(ownerGroupId);
           if (!current) return;
@@ -231,7 +231,7 @@ export function UserFormPage({ mode, userId, ownerGroupId, onNavigate }: UserFor
       fullName: values.fullName.trim(),
       username: ownerContext?.username ?? normalizeUsername(values.username),
       email: values.email.trim(),
-      status: values.status,
+      status,
       profile: ownerContext ? "owner" : values.profile,
       groupId: ownerContext?.group.id ?? (values.profile === "super_admin" ? null : values.groupId),
       organizationIds,
@@ -355,17 +355,21 @@ export function UserFormPage({ mode, userId, ownerGroupId, onNavigate }: UserFor
                   </Form.Item>
                 </Space.Compact>
               </Form.Item>
-              <Form.Item className="prisma-user-form-status" label="Status">
+              <Form.Item className="prisma-user-form-status" label="Status"
+                extra={loadedUser?.status === "pending_first_access"
+                  ? "O primeiro acesso permanece pendente até o usuário concluir a definição da senha."
+                  : loadedUser?.status === "blocked" ? "A edição do cadastro preserva o bloqueio de acesso." : undefined}>
                 <Segmented
                   block
+                  disabled={loadedUser?.status === "blocked"}
                   onChange={(value) => {
                     const nextValue = value as "active" | "inactive";
                     setStatus(nextValue);
                     form.setFieldValue("status", nextValue);
                   }}
                   options={[
-                    { label: "Ativo", value: "active" },
-                    { label: "Inativo", value: "inactive" },
+                    { label: loadedUser?.status === "pending_first_access" ? "Pendente" : "Ativo", value: "active" },
+                    { label: loadedUser?.status === "blocked" ? "Bloqueado" : "Inativo", value: "inactive" },
                   ]}
                   value={status}
                 />

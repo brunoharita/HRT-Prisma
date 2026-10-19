@@ -1,0 +1,10 @@
+{
+  "postgres": 325,
+  "browser": 27,
+  "deno": 4,
+  "node": 14,
+  "rootBuild": "PASS",
+  "webTypecheck": "PASS",
+  "webBuild": "PASS",
+  "scope": "synthetic local validation; no external AI/email; full CI remains mandatory"
+}

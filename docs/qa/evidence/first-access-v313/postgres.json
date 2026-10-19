@@ -1,0 +1,1305 @@
+{
+  "engine": "PostgreSQL17 isolated local; real source table/helper/policy subset; Auth.uid fixture",
+  "checks": [
+    {
+      "name": "isolated PG17 on localhost",
+      "pass": true
+    },
+    {
+      "name": "sorting SQL exactly three additive replacements",
+      "pass": true
+    },
+    {
+      "name": "sorting SQL preserves ACL",
+      "pass": true
+    },
+    {
+      "name": "new and legacy contracts preserve exact scope 1",
+      "pass": true
+    },
+    {
+      "name": "group dates from stored row 1 00000000-0000-4000-8000-000000000100",
+      "pass": true
+    },
+    {
+      "name": "company dates from stored row 1 00000000-0000-4000-8000-000000000110",
+      "pass": true
+    },
+    {
+      "name": "company dates from stored row 1 00000000-0000-4000-8000-000000000111",
+      "pass": true
+    },
+    {
+      "name": "group dates from stored row 1 00000000-0000-4000-8000-000000000200",
+      "pass": true
+    },
+    {
+      "name": "company dates from stored row 1 00000000-0000-4000-8000-000000000210",
+      "pass": true
+    },
+    {
+      "name": "new and legacy contracts preserve exact scope 2",
+      "pass": true
+    },
+    {
+      "name": "group dates from stored row 2 00000000-0000-4000-8000-000000000100",
+      "pass": true
+    },
+    {
+      "name": "company dates from stored row 2 00000000-0000-4000-8000-000000000110",
+      "pass": true
+    },
+    {
+      "name": "company dates from stored row 2 00000000-0000-4000-8000-000000000111",
+      "pass": true
+    },
+    {
+      "name": "new and legacy contracts preserve exact scope 3",
+      "pass": true
+    },
+    {
+      "name": "group dates from stored row 3 00000000-0000-4000-8000-000000000100",
+      "pass": true
+    },
+    {
+      "name": "company dates from stored row 3 00000000-0000-4000-8000-000000000110",
+      "pass": true
+    },
+    {
+      "name": "new contract rejects common user",
+      "pass": true
+    },
+    {
+      "name": "sorting rejects unknown contract unknown",
+      "pass": true
+    },
+    {
+      "name": "sorting rejects unknown contract ",
+      "pass": true
+    },
+    {
+      "name": "sorting rejects anonymous",
+      "pass": true
+    },
+    {
+      "name": "sorting preserves private actor boundary",
+      "pass": true
+    },
+    {
+      "name": "update dates advance without changing creation",
+      "pass": true
+    },
+    {
+      "name": "sorting migration refuses unexpected replay baseline",
+      "pass": true
+    },
+    {
+      "name": "existing function body preserved except guard: private.m83_sources",
+      "pass": true
+    },
+    {
+      "name": "existing function body preserved except guard: private.prisma_token_reserve",
+      "pass": true
+    },
+    {
+      "name": "existing function body preserved except guard: public.commit_matching_snapshot",
+      "pass": true
+    },
+    {
+      "name": "existing function body preserved except guard: public.claim_stable_matching_score",
+      "pass": true
+    },
+    {
+      "name": "existing function body preserved except guard: private.authorize_position_follow_up",
+      "pass": true
+    },
+    {
+      "name": "existing function body preserved except guard: public.complete_stable_matching_score",
+      "pass": true
+    },
+    {
+      "name": "existing function body preserved except guard: public.load_matching_trajectory_review",
+      "pass": true
+    },
+    {
+      "name": "existing function body preserved except guard: public.save_matching_trajectory_review",
+      "pass": true
+    },
+    {
+      "name": "existing function body preserved except guard: public.claim_matching_legacy_review_refresh",
+      "pass": true
+    },
+    {
+      "name": "live authority RPC admits local Recruiter",
+      "pass": true
+    },
+    {
+      "name": "live authority RPC rejects common",
+      "pass": true
+    },
+    {
+      "name": "real follow-up gate delegates authorized actor",
+      "pass": true
+    },
+    {
+      "name": "active matching boundary delegates: claim_matching_legacy_review_refresh",
+      "pass": true
+    },
+    {
+      "name": "active matching boundary delegates: claim_stable_matching_score",
+      "pass": true
+    },
+    {
+      "name": "active matching boundary delegates: commit_matching_snapshot",
+      "pass": true
+    },
+    {
+      "name": "active matching boundary delegates: complete_stable_matching_score",
+      "pass": true
+    },
+    {
+      "name": "active matching boundary delegates: load_matching_trajectory_review",
+      "pass": true
+    },
+    {
+      "name": "active matching boundary delegates: save_matching_trajectory_review",
+      "pass": true
+    },
+    {
+      "name": "common synthesis reservation preserved",
+      "pass": true
+    },
+    {
+      "name": "common cannot reserve administrator function",
+      "pass": true
+    },
+    {
+      "name": "legacy Admin migrated without changing memberships",
+      "pass": true
+    },
+    {
+      "name": "legacy Super memberships preserved without default or new authority",
+      "pass": true
+    },
+    {
+      "name": "new Super memberships remain forbidden",
+      "pass": true
+    },
+    {
+      "name": "legacy alias transition is audited as system metadata",
+      "pass": true
+    },
+    {
+      "name": "existing capacity and companies preserved",
+      "pass": true
+    },
+    {
+      "name": "Super sees both groups",
+      "pass": true
+    },
+    {
+      "name": "Owner sees own two companies",
+      "pass": true
+    },
+    {
+      "name": "Recruiter sees only assigned company",
+      "pass": true
+    },
+    {
+      "name": "common cannot administer",
+      "pass": true
+    },
+    {
+      "name": "no identity cannot administer",
+      "pass": true
+    },
+    {
+      "name": "anonymous has no execute",
+      "pass": true
+    },
+    {
+      "name": "unknown contract denied",
+      "pass": true
+    },
+    {
+      "name": "missing contract denied",
+      "pass": true
+    },
+    {
+      "name": "Recruiter cannot read other group",
+      "pass": true
+    },
+    {
+      "name": "Recruiter cannot edit unassigned company",
+      "pass": true
+    },
+    {
+      "name": "company capacity enforced",
+      "pass": true
+    },
+    {
+      "name": "Recruiter cannot change plan",
+      "pass": true
+    },
+    {
+      "name": "Owner cannot change plan",
+      "pass": true
+    },
+    {
+      "name": "below existing capacity denied",
+      "pass": true
+    },
+    {
+      "name": "Professional cap five",
+      "pass": true
+    },
+    {
+      "name": "stale revision denied",
+      "pass": true
+    },
+    {
+      "name": "Recruiter creates within plan",
+      "pass": true
+    },
+    {
+      "name": "creator gets only new explicit link",
+      "pass": true
+    },
+    {
+      "name": "Owner gets new company via existing owner trigger",
+      "pass": true
+    },
+    {
+      "name": "Recruiter still cannot see other group",
+      "pass": true
+    },
+    {
+      "name": "cross group link denied",
+      "pass": true
+    },
+    {
+      "name": "existing common gets second same-group link",
+      "pass": true
+    },
+    {
+      "name": "common default chosen on server",
+      "pass": true
+    },
+    {
+      "name": "hidden membership preserved",
+      "pass": true
+    },
+    {
+      "name": "self membership escalation denied",
+      "pass": true
+    },
+    {
+      "name": "last common link cannot be removed",
+      "pass": true
+    },
+    {
+      "name": "audit failure rolls back mutation",
+      "pass": true
+    },
+    {
+      "name": "audit failure preserves name and revision",
+      "pass": true
+    },
+    {
+      "name": "Recruiter inherits former Admin guarded authority",
+      "pass": true
+    },
+    {
+      "name": "Member cannot inherit admin",
+      "pass": true
+    },
+    {
+      "name": "real Knowledge gate allows Recruiter only locally",
+      "pass": true
+    },
+    {
+      "name": "real Knowledge gate rejects Recruiter global authority",
+      "pass": true
+    },
+    {
+      "name": "real Knowledge gate rejects cross-tenant authority",
+      "pass": true
+    },
+    {
+      "name": "cross-tenant RLS hides organization",
+      "pass": true
+    },
+    {
+      "name": "client cannot call service persistence",
+      "pass": true
+    },
+    {
+      "name": "transactional persistence creates operator and both links",
+      "pass": true
+    },
+    {
+      "name": "transactional persistence sets one default",
+      "pass": true
+    },
+    {
+      "name": "common actor cannot persist users through service boundary",
+      "pass": true
+    },
+    {
+      "name": "Recruiter cannot grant unassigned company",
+      "pass": true
+    },
+    {
+      "name": "Recruiter cannot grant Owner",
+      "pass": true
+    },
+    {
+      "name": "cross group operator assignment denied",
+      "pass": true
+    },
+    {
+      "name": "duplicate active Owner denied",
+      "pass": true
+    },
+    {
+      "name": "failed operator persistence leaves no partial user",
+      "pass": true
+    },
+    {
+      "name": "user audit failure aborts operator and memberships",
+      "pass": true
+    },
+    {
+      "name": "no operator residue after audit failure",
+      "pass": true
+    },
+    {
+      "name": "active Owner cannot be removed",
+      "pass": true
+    },
+    {
+      "name": "self scope expansion denied",
+      "pass": true
+    },
+    {
+      "name": "former Admin erasure actor remains compatible",
+      "pass": true
+    },
+    {
+      "name": "common cannot obtain erasure authority",
+      "pass": true
+    },
+    {
+      "name": "recruiter can read own private person data",
+      "pass": true
+    },
+    {
+      "name": "common cannot read private person data",
+      "pass": true
+    },
+    {
+      "name": "own person remains visible without cross-tenant person",
+      "pass": true
+    },
+    {
+      "name": "inactive organization denies old session helper",
+      "pass": true
+    },
+    {
+      "name": "inactive organization denies Knowledge operational RPC",
+      "pass": true
+    },
+    {
+      "name": "inactive organization denies real follow-up gate",
+      "pass": true
+    },
+    {
+      "name": "inactive matching boundary denied: claim_matching_legacy_review_refresh",
+      "pass": true
+    },
+    {
+      "name": "inactive matching boundary denied: claim_stable_matching_score",
+      "pass": true
+    },
+    {
+      "name": "inactive matching boundary denied: commit_matching_snapshot",
+      "pass": true
+    },
+    {
+      "name": "inactive matching boundary denied: complete_stable_matching_score",
+      "pass": true
+    },
+    {
+      "name": "inactive matching boundary denied: load_matching_trajectory_review",
+      "pass": true
+    },
+    {
+      "name": "inactive matching boundary denied: save_matching_trajectory_review",
+      "pass": true
+    },
+    {
+      "name": "inactive profile sources boundary denied",
+      "pass": true
+    },
+    {
+      "name": "inactive organization denies new token reservation",
+      "pass": true
+    },
+    {
+      "name": "existing token replay survives company inactivation",
+      "pass": true
+    },
+    {
+      "name": "Super retains inactive service boundary visibility",
+      "pass": true
+    },
+    {
+      "name": "Super preserves global visibility of inactive organization",
+      "pass": true
+    },
+    {
+      "name": "inactive organization preserves memberships",
+      "pass": true
+    },
+    {
+      "name": "inactivation does not free a company slot",
+      "pass": true
+    },
+    {
+      "name": "primary company protected",
+      "pass": true
+    },
+    {
+      "name": "new group remains preparation without invented owner",
+      "pass": true
+    },
+    {
+      "name": "new group cannot activate without active Owner",
+      "pass": true
+    },
+    {
+      "name": "Owner context canonical username from group",
+      "pass": true
+    },
+    {
+      "name": "Owner context binds profile/group/first company",
+      "pass": true
+    },
+    {
+      "name": "Owner context cannot be invoked directly by client",
+      "pass": true
+    },
+    {
+      "name": "Owner persistence cannot be invoked directly by client",
+      "pass": true
+    },
+    {
+      "name": "Owner onboarding requires active Super 2",
+      "pass": true
+    },
+    {
+      "name": "Owner onboarding requires active Super 3",
+      "pass": true
+    },
+    {
+      "name": "Owner onboarding requires active Super 4",
+      "pass": true
+    },
+    {
+      "name": "Owner context unknown contract denied",
+      "pass": true
+    },
+    {
+      "name": "Owner context active group denied",
+      "pass": true
+    },
+    {
+      "name": "Owner context unknown group denied",
+      "pass": true
+    },
+    {
+      "name": "Owner protected username cannot change",
+      "pass": true
+    },
+    {
+      "name": "Owner protected profile cannot change",
+      "pass": true
+    },
+    {
+      "name": "Owner protected group cannot change",
+      "pass": true
+    },
+    {
+      "name": "Owner protected company cannot change",
+      "pass": true
+    },
+    {
+      "name": "Owner persistence unknown contract denied",
+      "pass": true
+    },
+    {
+      "name": "Owner persistence never replaces existing identity",
+      "pass": true
+    },
+    {
+      "name": "Owner persistence rejects stale group name",
+      "pass": true
+    },
+    {
+      "name": "Owner username collision never invents suffix",
+      "pass": true
+    },
+    {
+      "name": "Owner contextual audit failure rolls back all domain writes",
+      "pass": true
+    },
+    {
+      "name": "Owner audit failure preserves absent user and memberships",
+      "pass": true
+    },
+    {
+      "name": "concurrent initial Owner creation has one winner",
+      "pass": true
+    },
+    {
+      "name": "Owner contextual audit recorded once",
+      "pass": true
+    },
+    {
+      "name": "Owner context refuses replay after creation",
+      "pass": true
+    },
+    {
+      "name": "unsupported username characters never transliterated",
+      "pass": true
+    },
+    {
+      "name": "long group username never truncated",
+      "pass": true
+    },
+    {
+      "name": "Owner context refuses more than first company",
+      "pass": true
+    },
+    {
+      "name": "explicit Owner can be designated in preparation",
+      "pass": true
+    },
+    {
+      "name": "group activates only after owner and primary are ready",
+      "pass": true
+    },
+    {
+      "name": "drafts do not create token accounts",
+      "pass": true
+    },
+    {
+      "name": "concurrent slot allocation has one winner",
+      "pass": true
+    },
+    {
+      "name": "concurrent slot allocation never exceeds cap",
+      "pass": true
+    },
+    {
+      "name": "all mutations audited",
+      "pass": true
+    },
+    {
+      "name": "migration preserves every existing platform user field",
+      "pass": true
+    },
+    {
+      "name": "migration preserves Auth identities and credentials",
+      "pass": true
+    },
+    {
+      "name": "migration preserves memberships and scopes",
+      "pass": true
+    },
+    {
+      "name": "same contact accepted for independent users in distinct groups",
+      "pass": true
+    },
+    {
+      "name": "username remains globally unique",
+      "pass": true
+    },
+    {
+      "name": "Auth identity remains globally unique",
+      "pass": true
+    },
+    {
+      "name": "contact lookup index is nonunique",
+      "pass": true
+    },
+    {
+      "name": "private email metadata has RLS and no client/table grants",
+      "pass": true
+    },
+    {
+      "name": "only service role executes operator_access_email_configuration()",
+      "pass": true
+    },
+    {
+      "name": "only service role executes claim_operator_access_email(uuid,text,uuid)",
+      "pass": true
+    },
+    {
+      "name": "only service role executes finish_operator_access_email(uuid,text,text)",
+      "pass": true
+    },
+    {
+      "name": "client cannot claim access email",
+      "pass": true
+    },
+    {
+      "name": "claim binds contact and username from selected user",
+      "pass": true
+    },
+    {
+      "name": "immediate duplicate request throttled",
+      "pass": true
+    },
+    {
+      "name": "shared contact does not share request or account identity",
+      "pass": true
+    },
+    {
+      "name": "provider acceptance receipt persisted without token",
+      "pass": true
+    },
+    {
+      "name": "receipt cannot be overwritten",
+      "pass": true
+    },
+    {
+      "name": "fourth hourly request denied",
+      "pass": true
+    },
+    {
+      "name": "concurrent requests serialize with one claim",
+      "pass": true
+    },
+    {
+      "name": "inactive account never produces a claim",
+      "pass": true
+    },
+    {
+      "name": "schema has no password/token/content fields",
+      "pass": true
+    },
+    {
+      "name": "upgrade autoactivates only ready initial draft",
+      "pass": true
+    },
+    {
+      "name": "upgrade preserves explicitly inactive first company and draft group",
+      "pass": true
+    },
+    {
+      "name": "upgrade preserves platform records",
+      "pass": true
+    },
+    {
+      "name": "upgrade preserves Auth identities",
+      "pass": true
+    },
+    {
+      "name": "upgrade preserves memberships",
+      "pass": true
+    },
+    {
+      "name": "existing business algorithms/gates byte-identical",
+      "pass": true
+    },
+    {
+      "name": "automatic backfill honestly audits system actor",
+      "pass": true
+    },
+    {
+      "name": "manual active Owner activates group and first company transactionally",
+      "pass": true
+    },
+    {
+      "name": "pending first access leaves both in preparation",
+      "pass": true
+    },
+    {
+      "name": "pending Owner cannot manually skip initial activation gates",
+      "pass": true
+    },
+    {
+      "name": "first-access audit failure preserves pending and draft states",
+      "pass": true
+    },
+    {
+      "name": "failed first-access did not partially activate group",
+      "pass": true
+    },
+    {
+      "name": "actual first access atomically activates pending Owner/company/group",
+      "pass": true
+    },
+    {
+      "name": "anon cannot complete arbitrary first access",
+      "pass": true
+    },
+    {
+      "name": "authenticated cannot complete arbitrary first access",
+      "pass": true
+    },
+    {
+      "name": "Owner lifecycle denies non Super 2",
+      "pass": true
+    },
+    {
+      "name": "Owner lifecycle denies non Super 3",
+      "pass": true
+    },
+    {
+      "name": "Owner lifecycle denies non Super 4",
+      "pass": true
+    },
+    {
+      "name": "Owner lifecycle denies non Super 6",
+      "pass": true
+    },
+    {
+      "name": "anonymous lifecycle denied",
+      "pass": true
+    },
+    {
+      "name": "unknown owner contract fails closed",
+      "pass": true
+    },
+    {
+      "name": "stale revision denied",
+      "pass": true
+    },
+    {
+      "name": "stale designated Owner denied",
+      "pass": true
+    },
+    {
+      "name": "reason mandatory",
+      "pass": true
+    },
+    {
+      "name": "replacement candidates active same group and never Super/foreign/Owner",
+      "pass": true
+    },
+    {
+      "name": "invalid replacement candidate 1",
+      "pass": true
+    },
+    {
+      "name": "invalid replacement candidate 2",
+      "pass": true
+    },
+    {
+      "name": "invalid replacement candidate 5",
+      "pass": true
+    },
+    {
+      "name": "invalid replacement candidate 6",
+      "pass": true
+    },
+    {
+      "name": "invalid replacement candidate 999",
+      "pass": true
+    },
+    {
+      "name": "replacement rejects inactive candidate",
+      "pass": true
+    },
+    {
+      "name": "replacement rejects pending_first_access candidate",
+      "pass": true
+    },
+    {
+      "name": "replacement rejects blocked candidate",
+      "pass": true
+    },
+    {
+      "name": "replacement mandatory audit failure rolls back entire transaction",
+      "pass": true
+    },
+    {
+      "name": "failed replacement retains active former Owner",
+      "pass": true
+    },
+    {
+      "name": "atomic replacement keeps group operational and assigns new Owner",
+      "pass": true
+    },
+    {
+      "name": "old Owner inactive and new Owner covers every company",
+      "pass": true
+    },
+    {
+      "name": "replacement never rewrites other memberships",
+      "pass": true
+    },
+    {
+      "name": "replacement preserves all credentials/contact/identity fields",
+      "pass": true
+    },
+    {
+      "name": "old Owner JWT denied immediately",
+      "pass": true
+    },
+    {
+      "name": "owner absence suspends effective status while retaining desired active",
+      "pass": true
+    },
+    {
+      "name": "inactivation preserves exact memberships",
+      "pass": true
+    },
+    {
+      "name": "old session business denied 3",
+      "pass": true
+    },
+    {
+      "name": "old session business denied 4",
+      "pass": true
+    },
+    {
+      "name": "old session business denied 7",
+      "pass": true
+    },
+    {
+      "name": "old session business denied 17",
+      "pass": true
+    },
+    {
+      "name": "common default company unavailable during suspension",
+      "pass": true
+    },
+    {
+      "name": "Super retains suspended group visibility",
+      "pass": true
+    },
+    {
+      "name": "suspended real follow-up gate denies open recruiter session",
+      "pass": true
+    },
+    {
+      "name": "suspended service matching denies open session",
+      "pass": true
+    },
+    {
+      "name": "suspended new token reservation denied",
+      "pass": true
+    },
+    {
+      "name": "suspended recruiter Edge administration preflight denied",
+      "pass": true
+    },
+    {
+      "name": "suspended recruiter administration RPC denied",
+      "pass": true
+    },
+    {
+      "name": "anon cannot use service administration preflight",
+      "pass": true
+    },
+    {
+      "name": "authenticated cannot use service administration preflight",
+      "pass": true
+    },
+    {
+      "name": "active suspended recruiter cannot persist user mutation",
+      "pass": true
+    },
+    {
+      "name": "inactive Owner first-access cannot bypass suspension",
+      "pass": true
+    },
+    {
+      "name": "generic user edit cannot reactivate designated Owner",
+      "pass": true
+    },
+    {
+      "name": "generic new Owner cannot bypass replacement",
+      "pass": true
+    },
+    {
+      "name": "old client cannot accidentally overwrite desired suspension state",
+      "pass": true
+    },
+    {
+      "name": "rename without status preserves desired active during Owner suspension",
+      "pass": true
+    },
+    {
+      "name": "reactivation restores only Owner absence gate",
+      "pass": true
+    },
+    {
+      "name": "individual company statuses unchanged across entire Owner lifecycle",
+      "pass": true
+    },
+    {
+      "name": "people and token accounts/history never rewritten",
+      "pass": true
+    },
+    {
+      "name": "independent manual group inactivity survives reactivation",
+      "pass": true
+    },
+    {
+      "name": "security-blocked Owner cannot reactivate",
+      "pass": true
+    },
+    {
+      "name": "blocked first-access denied",
+      "pass": true
+    },
+    {
+      "name": "independent inactive primary company preserved on Owner reinstatement",
+      "pass": true
+    },
+    {
+      "name": "explicit primary reactivation respects desired active group",
+      "pass": true
+    },
+    {
+      "name": "replacement preserves previous security block",
+      "pass": true
+    },
+    {
+      "name": "replacement does not remove administrative inactivity",
+      "pass": true
+    },
+    {
+      "name": "pending Owner reinstatement does not skip first access",
+      "pass": true
+    },
+    {
+      "name": "restored pending Owner activates only on completion",
+      "pass": true
+    },
+    {
+      "name": "concurrent lifecycle mutation has exactly one winner",
+      "pass": true
+    },
+    {
+      "name": "private owner settings deny all direct client writes",
+      "pass": true
+    },
+    {
+      "name": "lifecycle RPC has empty search path and authenticated-only grant",
+      "pass": true
+    },
+    {
+      "name": "self migration preserves every existing user and membership",
+      "pass": true
+    },
+    {
+      "name": "self read supported for active profile 40",
+      "pass": true
+    },
+    {
+      "name": "self read supported for active profile 41",
+      "pass": true
+    },
+    {
+      "name": "self read supported for active profile 42",
+      "pass": true
+    },
+    {
+      "name": "self read supported for active profile 43",
+      "pass": true
+    },
+    {
+      "name": "browser role cannot call backend self writer anon",
+      "pass": true
+    },
+    {
+      "name": "browser role cannot call backend self writer authenticated",
+      "pass": true
+    },
+    {
+      "name": "session from another identity rejected",
+      "pass": true
+    },
+    {
+      "name": "revoked session rejected",
+      "pass": true
+    },
+    {
+      "name": "expired session lifetime rejected",
+      "pass": true
+    },
+    {
+      "name": "self account unavailable inactive",
+      "pass": true
+    },
+    {
+      "name": "self account unavailable blocked",
+      "pass": true
+    },
+    {
+      "name": "self account unavailable pending_first_access",
+      "pass": true
+    },
+    {
+      "name": "mandatory first access cannot be bypassed",
+      "pass": true
+    },
+    {
+      "name": "protected field rejected profile",
+      "pass": true
+    },
+    {
+      "name": "protected field rejected status",
+      "pass": true
+    },
+    {
+      "name": "protected field rejected groupId",
+      "pass": true
+    },
+    {
+      "name": "protected field rejected organizationIds",
+      "pass": true
+    },
+    {
+      "name": "protected field rejected authUserId",
+      "pass": true
+    },
+    {
+      "name": "protected field rejected userId",
+      "pass": true
+    },
+    {
+      "name": "protected field rejected email",
+      "pass": true
+    },
+    {
+      "name": "read refuses user ID selector",
+      "pass": true
+    },
+    {
+      "name": "username change persisted and identity retained",
+      "pass": true
+    },
+    {
+      "name": "global duplicate username rejected",
+      "pass": true
+    },
+    {
+      "name": "reserved username rejected",
+      "pass": true
+    },
+    {
+      "name": "Owner cannot rename itself",
+      "pass": true
+    },
+    {
+      "name": "Owner username cannot be renamed by other writers",
+      "pass": true
+    },
+    {
+      "name": "Owner may edit basic fields preserving username",
+      "pass": true
+    },
+    {
+      "name": "stale revision cannot overwrite newer changes",
+      "pass": true
+    },
+    {
+      "name": "mandatory audit failure rolls basic update back",
+      "pass": true
+    },
+    {
+      "name": "failed audited update unchanged",
+      "pass": true
+    },
+    {
+      "name": "concurrent revision has one winner",
+      "pass": true
+    },
+    {
+      "name": "email remains unchanged before confirmation",
+      "pass": true
+    },
+    {
+      "name": "confirmation bound to account/session",
+      "pass": true
+    },
+    {
+      "name": "wrong code rejected without rolling back counter",
+      "pass": true
+    },
+    {
+      "name": "correct confirmation changes contact only",
+      "pass": true
+    },
+    {
+      "name": "confirmation replay idempotent",
+      "pass": true
+    },
+    {
+      "name": "confirmed email may be shared independently",
+      "pass": true
+    },
+    {
+      "name": "expired code cannot change contact",
+      "pass": true
+    },
+    {
+      "name": "fifth wrong code locks request",
+      "pass": true
+    },
+    {
+      "name": "concurrent administrator contact preserved",
+      "pass": true
+    },
+    {
+      "name": "cancelled request cannot be confirmed",
+      "pass": true
+    },
+    {
+      "name": "resend cooldown enforced",
+      "pass": true
+    },
+    {
+      "name": "resend invalidates prior code",
+      "pass": true
+    },
+    {
+      "name": "fourth hourly send refused",
+      "pass": true
+    },
+    {
+      "name": "reauthentication attempt limit enforced",
+      "pass": true
+    },
+    {
+      "name": "password receipt rejects browser role",
+      "pass": true
+    },
+    {
+      "name": "password receipt bound to original account/session",
+      "pass": true
+    },
+    {
+      "name": "receipt finalized after native Auth revocation",
+      "pass": true
+    },
+    {
+      "name": "password audit stores no secret",
+      "pass": true
+    },
+    {
+      "name": "password result receipt immutable",
+      "pass": true
+    },
+    {
+      "name": "private RLS and no client/service direct grants operator_self_email_changes",
+      "pass": true
+    },
+    {
+      "name": "private RLS and no client/service direct grants operator_self_security_attempts",
+      "pass": true
+    },
+    {
+      "name": "authority and memberships preserved across self actions",
+      "pass": true
+    },
+    {
+      "name": "existing Owner replacement still operates after username guard",
+      "pass": true
+    },
+    {
+      "name": "first access migration changes no existing user or membership",
+      "pass": true
+    },
+    {
+      "name": "unexpected migration replay fails closed",
+      "pass": true
+    },
+    {
+      "name": "pending edit between groups keeps pending and original credential flags",
+      "pass": true
+    },
+    {
+      "name": "pending transfer commits exactly requested company without old memberships",
+      "pass": true
+    },
+    {
+      "name": "update audit records effective pending state",
+      "pass": true
+    },
+    {
+      "name": "cross group recruiter cannot transfer pending target",
+      "pass": true
+    },
+    {
+      "name": "anon cannot bypass Edge to save",
+      "pass": true
+    },
+    {
+      "name": "authenticated cannot bypass Edge to save",
+      "pass": true
+    },
+    {
+      "name": "pending account can be administratively disabled",
+      "pass": true
+    },
+    {
+      "name": "re-enable incomplete activation restores pending",
+      "pass": true
+    },
+    {
+      "name": "only explicit completion clears requirement and activates",
+      "pass": true
+    },
+    {
+      "name": "edit after genuine completion keeps timestamp and active state",
+      "pass": true
+    },
+    {
+      "name": "legacy manual active without first access timestamp remains active",
+      "pass": true
+    },
+    {
+      "name": "generic active edit preserves security block",
+      "pass": true
+    },
+    {
+      "name": "generic inactive edit preserves security block",
+      "pass": true
+    },
+    {
+      "name": "blocked account cannot complete first access",
+      "pass": true
+    },
+    {
+      "name": "inactive account cannot complete first access",
+      "pass": true
+    },
+    {
+      "name": "pending Owner edit does not activate group or first company",
+      "pass": true
+    },
+    {
+      "name": "actual Owner completion still activates group and first company",
+      "pass": true
+    },
+    {
+      "name": "completion/edit race 65 ends active with completed access and requested scope",
+      "pass": true
+    },
+    {
+      "name": "completion/edit race 66 ends active with completed access and requested scope",
+      "pass": true
+    },
+    {
+      "name": "all admin edits preserve native Auth identities",
+      "pass": true
+    }
+  ]
+}

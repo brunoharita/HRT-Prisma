@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 547
-source_manifest_sha256: 7f2beb6c1e7afaae463306aaa80383f8f590d03eea1d41c24549bf287370385a
+documentation_source_count: 549
+source_manifest_sha256: a46d573125a302dd750860e1c076190d94d5ea993cac1de3da71513b7b7cf71c
 -->
 
 # Tudo sobre o Prisma
@@ -2644,11 +2644,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.93.0
-last_verified: 2026-10-18
+version: 2.93.1
+last_verified: 2026-10-19
 ---
 
 # Estado atual do Prisma
+
+## Preservação do primeiro acesso — correção3.1.3 em validação
+
+Relato de19/10 comprovado por auditoria: editar grupo/empresa de uma conta pendente gravava active, mantendo must_change_password true. Migração direcionada de save_platform_user_v3 revalida status sob lock e mantém pendência, reabilitação incompleta e bloqueio. Formulário identifica pendência sem alegar conclusão; primeiro acesso/lifecycle mantêm autoridade existente. Sem backfill genérico, IA ou envio de teste. Reparo do caso somente com prova histórica/CAS e auditoria, preservando vínculo escolhido. Acordo/execução e AoT first-access-preservation registram o fechamento.
 
 ## Meu cadastro — 3.1.3 publicada
 
@@ -5171,6 +5175,8 @@ Implementação deve ser separada em movimentos menores: contratos e versões, s
 ## Source: `docs/architecture/contracts.md`
 
 # Catálogo de contratos
+
+Correção3.1.3 (19/10/2026, sem novo contrato): edição via `save_platform_user_v3` preserva primeiro acesso pendente sob lock, inclusive ao trocar grupo/empresa ou reabilitar ativação incompleta. Payload active significa habilitação administrativa; não conclui acesso nem desbloqueia conta. `complete_first_access_v307` mantém a conclusão explícita e o lifecycle do Owner. Sem backfill de legados ou alteração da identidade/credenciais. Owner: `docs/security/operator-self-account.md`; acordo/AoT first-access-preservation.
 
 `operator-self-account-1.0.0` (3.1.3): Meu cadastro para quatro perfis, username editável exceto Owner, dados básicos com revisão otimista e escopo protegido. Contato compartilhável confirmado por senha atual/código temporário; troca de senha na API Auth com novo login. Edge resolve JWT/sessão, RPCs service-only e auditoria com recibo de intent após revogação. Owner: `docs/security/operator-self-account.md`; evidência/rollout no AoT my-account-v313. Sem mudar Auth UUID, memberships, Pessoas ou IA.
 
@@ -14054,6 +14060,27 @@ CA-01–05: testes 1/5/6/quantidade maior; aceitar/recusar, navegação e preser
 
 ---
 
+## Source: `docs/qa/agreement-first-access-preservation.md`
+
+# Acordo e execução — preservação do primeiro acesso, v1.0.0
+
+Autoridade: relato de Bruno em19/10/2026 identifica como erro a ativação do usuário pendente após edição de grupo/empresa. Restauração delimitada da regra já aprovada de primeiro acesso (ADR086 e lifecycle3.0.7). Baseline895120b5ce2eeb979c9e4c5607ac906baf7b23e3. RiscoD; correção mantém versão3.1.3, sem nova entrega funcional no registry.
+
+- D01: editar dados/perfil/grupo/empresas preserva primeiro acesso pendente. A habilitação administrativa não equivale à conclusão do primeiro acesso. Mostrar essa distinção no formulário compacto existente.
+- D02: a persistência decide o status sob lock da conta, preservando pendência inclusive com payload active/obsoleto. Inativação continua possível; reabilitar uma ativação ainda incompleta retorna a pendente. Bloqueado permanece bloqueado; o editor genérico não o desbloqueia.
+- D03: conclusão explícita pelo fluxo existente mantém sua autoridade para ativar e auditar; preservar Owner/ativação de grupo/empresa, permissões, isolamento, identidade, senha e recuperação. Contas ativas legadas sem timestamp não são reclassificadas.
+- D04: reparar somente o caso relatado, condicionado à auditoria que comprova pending→active na edição e à ausência de conclusão posterior, com CAS/auditoria. Preservar grupo/empresa escolhidos, credenciais e histórico. Sem backfill genérico.
+- P01: edição administrativa concluir primeiro acesso, inferir acesso humano ou limpar must_change_password; conceder autoridade fora do grupo ou ativar Owner/grupo antes da hora.
+- P02: novas chamadas de IA, mensagens de teste, mudar senha/identidade, apagar histórico ou alterar contas não comprovadamente afetadas.
+- F01: redesenho da gestão, novos estados, revisão comercial ou recuperação de outros registros.
+- A01: reutilizar RPC save_platform_user_v3, lock e auditoria existentes; migração aditiva com substituição exata verificada, componentes e harnesses locais. Sem nova dependência ou arquitetura.
+
+CA01/D01: formulário real pendente em desktop/celular, edição e payload administrativo habilitado sem alegar conclusão. CA02/D02/P01: PostgreSQL real testa edição entre grupos, payload adulterado, inactive→pending, blocked, preservação active legado e corrida com conclusão. CA03/D03: regressões de identidade/Owner e Auth Edges sintéticas, conclusão auditada e isolamento negativo. CA04/D04/P02: CAS só após prova do incidente, recibo mínimo e snapshot dos vínculos/credenciais antes/depois. CI obrigatória, main, rollout por superfícies e smoke sem e-mail/IA; registrar limites no AoT.
+
+Execução: implementar D01–D04 sem violar P01/P02; F01 excluído e A01 restrito ao como. Validação mínima: tipos/build web/root, Node dirigidos, Edge/Auth offline, PostgreSQL integrado com casos negativos e preservação, UI real; contexto em snapshot rastreado para excluir rascunhos preexistentes. Rollback: conservar esquema/histórico e correção do caso; restaurar fontes/imagem consumidoras sem down destrutivo. Não há decisão material pendente.
+
+---
+
 ## Source: `docs/qa/agreement-follow-up-stages.md`
 
 # Acordo — Etapas claras de acompanhamento
@@ -19718,6 +19745,42 @@ Publicado em07/10/2026, SHA funcional `191de3dfd8cd743d46aecc0cf643e74a4b3e72d0`
 Web imagem `sha256:0d6a7664b61990ff5ce5a171764f40928139b83f6e21dcfb50e19ab91c706d37`, running/0, entry `index-sVw5w6Ck.js` e CSS `index-SNTMzHER.css`. Rollback `prisma-web:rollback-before-191de3dfd8cd` preserva imagem28aacc1c/v2.1.6. Parser/Synthesis/gateway preservam IDs/imagens/reinícios; workers healthy. O comando SSH de release saiu22 por404 do curl imediato durante recriação; não é contado como PASS. Smoke posterior independente:14 HTTP200 e9 checks de SHA/versão/confirmar/paginar/ajuda/carregamento/score/negação anônima401 PASS, incluindo assets anteriores. Sem rebuild adicional. Recibo consolidado distingue a falha transitória da verificação posterior.
 
 D-01–05/P-01 PASS; desvios materiais: nenhum identificado. Jornada autenticada real em produção permanece NOT TESTED; evidência sintética não comprova escolha/revisão de Pessoa real. Fechamento documental e ledger sincronizam Git/VPS sem reconstruir o runtime funcional acima. Servidor Vite próprio5697 encerrado; servidor anterior5693 e arquivos alheios preservados. Context Pack usa somente rastreados/arquivos próprios, sem documentos alheios não rastreados.
+
+---
+
+## Source: `docs/qa/aot-first-access-preservation.md`
+
+# AoT — preservação do primeiro acesso3.1.3
+
+Acordo/execução: agreement-first-access-preservation.md1.0.0. Baseline895120b5ce2eeb979c9e4c5607ac906baf7b23e3; codex/preserve-first-access-v313, riscoD. Correção mantém versão3.1.3.
+
+## Mapa de impacto e preservação
+
+| Capacidade | Relação | Baseline e preservação | Prova proporcional |
+| --- | --- | --- | --- |
+| Edição administrativa/status | direct | pending convertido em active no formulário e persistido pela RPC | UI real e SQL de edição entre grupos/payload active |
+| Primeiro acesso/login/reset | critical_transversal | must_change_password ainda true no incidente; conclusão pela RPC3.0.7 | SQL conclusão/concorrência e Edges offline |
+| Owner/grupos/empresas | plausible_indirect | save compartilhado com guard/lifecycle | regressão local Owner pendente não ativa grupo |
+| Authority/RLS/memberships | critical_transversal | RPC service-only com actor e tenant revalidados | negativos e snapshots |
+| Conta de Juliano | direct | auditoria user_updated de19/10 promoveu pending→active junto ao vínculo; sem first_access_completed; flag true | CAS/audit restrito ao incidente, vínculos e credenciais preservados |
+| IA/Pessoas/Tokens | no_impact_identified | RPC de operador não chama IA nem altera esses domínios | revisão do diff/plano; sem chamadas externas |
+
+## AoT
+
+| ID | Implementação | Evidência | Estado |
+| --- | --- | --- | --- |
+| D01 | formulário distingue habilitação e primeiro acesso; envia estado controlado | browser.json /27 checks em1448,390,320 | PASS local |
+| D02/P01 | status derivado sob lock na RPC | postgres.json /325 checks incluindo22 novos | PASS local |
+| D03 | conclusão/lifecycle/identidade preservados | PostgreSQL baseline/Owner/self-account e4 Deno reais/14 Node | PASS local |
+| D04 | reparo específico auditado | pendente | NOT TESTED |
+| P02 | sem IA/e-mail/teste produtivo | pendente | NOT TESTED |
+
+Sem QA remoto separado. Provas funcionais sintéticas locais; leitura produtiva comprova o incidente, não representa login humano. Rascunhos não rastreados preservados e excluídos da release/contexto.
+
+
+Validação local:325 checks PostgreSQL17 em banco isolado PASS; migração não altera registros/ACL, edição entre grupos, payload active/mustChangePassword adulterado, inativação/reativação pendente, conta bloqueada, legado ativo sem timestamp, conclusão concorrente e automações Owner.4 testes Deno de handlers reais com transporte fake PASS;14 Node dirigidos PASS; root build, typecheck web/build web PASS (warnings existentes de chunks/dynamic import). Sem suíte integral local; CI obrigatória permanece.
+
+UI real:27 checks em1448/390/320 PASS, três renders com estado pendente e formulário compacto, edição/salvamento e envio explícito de inactive, bloqueado desabilitado e active preservado. O label usa Pendente com explicação completa, evitando truncamento móvel. A investigação também mostrou que status não é um campo registrado no Form: o envio agora usa o estado controlado do Segmented. Seletores de dropdown/radio do harness precisaram ajuste; o popup sintético ficou fora do viewport. A prova visual limita-se a edição básica/status; a transferência entre grupos/empresas foi exercitada na RPC real PostgreSQL, sem extrapolar a evidência browser. Avisos de depreciação AntD são preexistentes, sem pageerror. Sem teste de acesso humano produtivo, envio de mensagem ou IA.
 
 ---
 
@@ -33794,6 +33857,8 @@ Pedido de Bruno autoriza observação adicional das regiões de enunciado/altern
 # Meu cadastro — operator-self-account-1.0.0
 
 Entrega3.1.3; acordo/execução/AoT my-account-v3131.0.0. Operador é distinto de Pessoa/Perfil. Menu abre `/my-account` para quatro perfis ativos, sem autoridade administrativa/membership obrigatório. Primeiro acesso permanece no fluxo obrigatório existente.
+
+Correção administrativa de19/10/2026: `save_platform_user_v3` deriva o status efetivo sob lock do registro. Habilitar ou transferir conta pendente mantém `pending_first_access`; inativar continua permitido e reabilitar uma ativação incompleta retorna a pendente. Conta bloqueada não é desbloqueada pelo editor genérico. O payload administrativo active não comprova primeiro acesso nem pode limpar `must_change_password`. `complete_first_access_v307` permanece responsável pela conclusão explícita e auditoria. Contas legadas ativas sem timestamp não recebem backfill. Formulário identifica a pendência, mantendo composição/densidade. Acordo/AoT `first-access-preservation` registram provas e reparo delimitado do incidente.
 
 ## Autoridade e dados básicos
 

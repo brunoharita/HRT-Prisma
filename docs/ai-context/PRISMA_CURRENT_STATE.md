@@ -3,11 +3,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.93.0
-last_verified: 2026-10-18
+version: 2.93.1
+last_verified: 2026-10-19
 ---
 
 # Estado atual do Prisma
+
+## Preservação do primeiro acesso — correção3.1.3 em validação
+
+Relato de19/10 comprovado por auditoria: editar grupo/empresa de uma conta pendente gravava active, mantendo must_change_password true. Migração direcionada de save_platform_user_v3 revalida status sob lock e mantém pendência, reabilitação incompleta e bloqueio. Formulário identifica pendência sem alegar conclusão; primeiro acesso/lifecycle mantêm autoridade existente. Sem backfill genérico, IA ou envio de teste. Reparo do caso somente com prova histórica/CAS e auditoria, preservando vínculo escolhido. Acordo/execução e AoT first-access-preservation registram o fechamento.
 
 ## Meu cadastro — 3.1.3 publicada
 

@@ -1,0 +1,113 @@
+{
+  "checks": [
+    {
+      "name": "1448 pending state shown honestly",
+      "pass": true
+    },
+    {
+      "name": "1448 pending label is not truncated",
+      "pass": true
+    },
+    {
+      "name": "1448 preserved compact viewport",
+      "pass": true
+    },
+    {
+      "name": "1448 edit submits enablement intent without concluding first access",
+      "pass": true
+    },
+    {
+      "name": "1448 administrative disable intent is actually submitted",
+      "pass": true
+    },
+    {
+      "name": "1448 blocked status visibly disabled",
+      "pass": true
+    },
+    {
+      "name": "1448 blocked label visible",
+      "pass": true
+    },
+    {
+      "name": "1448 active editing retains enabled status control",
+      "pass": true
+    },
+    {
+      "name": "1448 no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "390 pending state shown honestly",
+      "pass": true
+    },
+    {
+      "name": "390 pending label is not truncated",
+      "pass": true
+    },
+    {
+      "name": "390 preserved compact viewport",
+      "pass": true
+    },
+    {
+      "name": "390 edit submits enablement intent without concluding first access",
+      "pass": true
+    },
+    {
+      "name": "390 administrative disable intent is actually submitted",
+      "pass": true
+    },
+    {
+      "name": "390 blocked status visibly disabled",
+      "pass": true
+    },
+    {
+      "name": "390 blocked label visible",
+      "pass": true
+    },
+    {
+      "name": "390 active editing retains enabled status control",
+      "pass": true
+    },
+    {
+      "name": "390 no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "320 pending state shown honestly",
+      "pass": true
+    },
+    {
+      "name": "320 pending label is not truncated",
+      "pass": true
+    },
+    {
+      "name": "320 preserved compact viewport",
+      "pass": true
+    },
+    {
+      "name": "320 edit submits enablement intent without concluding first access",
+      "pass": true
+    },
+    {
+      "name": "320 administrative disable intent is actually submitted",
+      "pass": true
+    },
+    {
+      "name": "320 blocked status visibly disabled",
+      "pass": true
+    },
+    {
+      "name": "320 blocked label visible",
+      "pass": true
+    },
+    {
+      "name": "320 active editing retains enabled status control",
+      "pass": true
+    },
+    {
+      "name": "320 no runtime errors",
+      "pass": true
+    }
+  ],
+  "limits": "Real UserFormPage, synthetic transports only; database state verified separately; no email or AI"
+}

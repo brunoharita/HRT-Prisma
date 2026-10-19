@@ -2,6 +2,8 @@
 
 Entrega3.1.3; acordo/execução/AoT my-account-v3131.0.0. Operador é distinto de Pessoa/Perfil. Menu abre `/my-account` para quatro perfis ativos, sem autoridade administrativa/membership obrigatório. Primeiro acesso permanece no fluxo obrigatório existente.
 
+Correção administrativa de19/10/2026: `save_platform_user_v3` deriva o status efetivo sob lock do registro. Habilitar ou transferir conta pendente mantém `pending_first_access`; inativar continua permitido e reabilitar uma ativação incompleta retorna a pendente. Conta bloqueada não é desbloqueada pelo editor genérico. O payload administrativo active não comprova primeiro acesso nem pode limpar `must_change_password`. `complete_first_access_v307` permanece responsável pela conclusão explícita e auditoria. Contas legadas ativas sem timestamp não recebem backfill. Formulário identifica a pendência, mantendo composição/densidade. Acordo/AoT `first-access-preservation` registram provas e reparo delimitado do incidente.
+
 ## Autoridade e dados básicos
 
 Edge operator-self-service verifica JWT pelo Auth e extrai session_id só do token validado. RPC operator_self_account_v313 é service-only: verifica sessão em auth.sessions/not_after, usuário ativo, primeiro acesso concluído e perfil conhecido. Nenhum alvo vem do navegador. Payload tem whitelist/limite16KiB. Nome/celular/username usam validações shared e constraints existentes; username é único global. Owner conserva exatamente o username criado, protegido por trigger, handlers e UI, inclusive na administração. Não recalcular usernames históricos ou na substituição já aprovada.
