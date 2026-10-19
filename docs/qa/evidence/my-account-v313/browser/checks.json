@@ -33,6 +33,10 @@
       "pass": true
     },
     {
+      "name": "1448 correction action focuses field",
+      "pass": true
+    },
+    {
       "name": "1448 password completion requests reauthentication",
       "pass": true
     },
@@ -126,6 +130,10 @@
     },
     {
       "name": "390 security error visible inside modal",
+      "pass": true
+    },
+    {
+      "name": "390 correction action focuses field",
       "pass": true
     },
     {

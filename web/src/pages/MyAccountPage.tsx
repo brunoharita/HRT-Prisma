@@ -1,4 +1,6 @@
 import {useEffect,useState} from "react";
+import {useLoadingFeedback} from "../ui/PrismaLoadingFeedback";
+import {focusNoticeFields} from "../ui/noticeActions";
 import {Alert,Button,Form,Input,Modal,Select,Space,Spin} from "antd";
 import {UserOutlined,CheckOutlined} from "@ant-design/icons";
 import {PrismaCard} from "../ui/PrismaCard";
@@ -14,6 +16,7 @@ export function MyAccountPage({onNavigate,onChanged,onPasswordChanged}:{onNaviga
  const [form]=Form.useForm<SelfAccountInput>(),[emailForm]=Form.useForm(),[codeForm]=Form.useForm(),[passwordForm]=Form.useForm();
  const [account,setAccount]=useState<SelfAccount|null>(null),[loading,setLoading]=useState(true),[busy,setBusy]=useState(false),[dirty,setDirty]=useState(false),[error,setError]=useState<string|null>(null),[info,setInfo]=useState<string|null>(null),[modal,setModal]=useState<"email"|"password"|null>(null);
  const markSaved=useUnsavedChanges(dirty);
+ useLoadingFeedback({"Carregando seu cadastro…":loading,"Atualizando seu cadastro…":busy});
  const password=Form.useWatch("password",passwordForm)??"",confirmation=Form.useWatch("confirmation",passwordForm)??"";
  const rules=buildPasswordRequirementState(password,confirmation,account?.username??"");
  function accept(a:SelfAccount,resetBasic=true){setAccount(a);if(resetBasic){form.setFieldsValue({...a,phoneCountryIso2:a.phoneCountryIso2??"BR",phoneNationalNumber:a.phoneNationalNumber??""});setDirty(false);markSaved();}}
@@ -48,7 +51,7 @@ export function MyAccountPage({onNavigate,onChanged,onPasswordChanged}:{onNaviga
  <Space wrap style={{marginTop:16}}><Button disabled={dirty||busy} onClick={()=>setModal("email")}>{pending?"Confirmar ou reenviar código":"Alterar e-mail"}</Button><Button disabled={dirty||busy} onClick={()=>setModal("password")}>Trocar senha</Button></Space>
  </section></PrismaCard>
  <Modal title={modal==="password"?"Trocar senha":"Alterar e-mail"} open={!!modal} onCancel={()=>{if(!busy)close();}} mask={{closable:!busy}} closable={!busy} footer={null} rootClassName="prisma-content-standard prisma-reading prisma-user-form" destroyOnHidden>
- {error?<Alert type="error" showIcon title={error} style={{marginBottom:16}}/>:null}
+ {error?<Alert type="error" showIcon title={error} style={{marginBottom:16}} action={<Button onClick={event=>focusNoticeFields(event.currentTarget)}>Ver campos do formulário</Button>}/>:null}
  {modal==="password"?<Form form={passwordForm} layout="vertical" onFinish={v=>void run(async()=>{await selfAccountService.password(v.currentPassword,v.password,v.confirmation);close();setInfo("Senha atualizada. Entre novamente com sua nova senha.");await onPasswordChanged();})}>
  <p>Ao atualizar a senha, suas sessões serão encerradas e será necessário entrar novamente.</p><Form.Item label="Senha atual" name="currentPassword" rules={[{required:true,message:"Informe a senha atual."}]}><Input.Password autoComplete="current-password"/></Form.Item><Form.Item label="Nova senha" name="password" rules={[{required:true,message:"Informe a nova senha."}]}><Input.Password autoComplete="new-password"/></Form.Item><Form.Item label="Confirmar nova senha" name="confirmation" rules={[{required:true,message:"Confirme a nova senha."}]}><Input.Password autoComplete="new-password"/></Form.Item>
  <div className="prisma-user-password-checklist is-standalone"><h3>Requisitos mínimos</h3><ul>{[[rules.minLength,`Mínimo de ${PASSWORD_MIN_LENGTH} caracteres`],[rules.uppercase,"Letra maiúscula"],[rules.lowercase,"Letra minúscula"],[rules.number,"Número"],[rules.symbol,"Caractere especial"],[rules.confirmationMatches,"As senhas coincidem"]].map(([ok,label])=><li key={String(label)} className={ok?"is-satisfied":"is-pending"}><span className="prisma-user-rule-icon" aria-hidden="true">{ok?<CheckOutlined/>:"•"}</span><span>{String(label)}</span><span className="prisma-user-rule-status">{ok?"Atendido":"Pendente"}</span></li>)}</ul></div><Button type="primary" htmlType="submit" loading={busy}>Atualizar senha</Button></Form>:<>

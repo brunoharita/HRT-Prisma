@@ -1,0 +1,13 @@
+✔ falhas e acessos indisponíveis possuem ação explícita no próprio aviso (106 pontos) (5.1803ms)
+✔ avisos temporários de erro usam mensagem persistente com ação contextual (51.952ms)
+✔ definir grupo reutiliza a operação autorizada e não altera o vínculo factual (3.2183ms)
+✔ every page declares loading feedback; synchronous assisted description has no artificial wait (1633.7775ms)
+✔ loading companion has no network, polling, score recalculation or pointer blocking (205.5238ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3141.1474
