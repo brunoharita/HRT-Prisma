@@ -1,0 +1,64 @@
+{
+  "at": "2026-10-19T02:28:28.926Z",
+  "sha": "a6d6a238abb010fdab8df5e2fdc20c0c7fcaae08",
+  "surface": "public HTML/assets only; no login, write, email or AI",
+  "checks": [
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-C22fNyK9.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/rolldown-runtime-C0FnF6B9.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/antd-vendor-BaKnhCyQ.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/supabase-vendor-DoXvCMLf.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/react-vendor-BdxMnOeJ.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/antd-vendor-B5BXDqMa.css",
+      "status": 200
+    },
+    {
+      "path": "/assets/index-CEcFeY3T.css",
+      "status": 200
+    },
+    {
+      "path": "/my-account",
+      "status": 200
+    },
+    {
+      "path": "/sign-in",
+      "status": 200
+    },
+    {
+      "path": "/change-password",
+      "status": 200
+    },
+    {
+      "path": "/platform-tokens",
+      "status": 200
+    }
+  ],
+  "invariants": {
+    "validatedSha": true,
+    "release": true,
+    "account": true,
+    "ownRoute": true,
+    "ownBackend": true,
+    "ownerRule": true,
+    "sharedCostsPreserved": true
+  }
+}

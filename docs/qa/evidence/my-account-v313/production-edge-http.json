@@ -1,0 +1,5 @@
+{
+  "unauthenticatedPost": 401,
+  "preflight": 200,
+  "cors": "*"
+}

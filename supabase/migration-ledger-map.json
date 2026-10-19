@@ -1647,6 +1647,19 @@
       "localCanonicalLength": 18060,
       "remoteCanonicalLength": 18060,
       "verifiedAt": "2026-10-18"
+    },
+    {
+      "name": "operator_self_account",
+      "localVersion": "20261018230000",
+      "remoteVersion": "20261019022718",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "fingerprintMethod": "strip-CR-trim-exterior-whitespace-v1",
+      "localCanonicalLength": 14891,
+      "remoteCanonicalLength": 14891,
+      "localStatementSha256": "726a36e271ee986592872c9fb6b2e8d16fa93fb942a546149e8491bbe984a493",
+      "remoteStatementSha256": "726a36e271ee986592872c9fb6b2e8d16fa93fb942a546149e8491bbe984a493",
+      "verifiedAt": "2026-10-18"
     }
   ],
   "localOnly": [
@@ -1687,11 +1700,11 @@
   ],
   "lastIncrementalVerification": {
     "date": "2026-10-18",
-    "movement": "ai-cost-metering-v312",
+    "movement": "my-account-v313",
     "names": [
-      "ai_action_cost_metering"
+      "operator_self_account"
     ],
-    "evidence": "docs/qa/evidence/ai-cost-metering-v312/production.json",
+    "evidence": "docs/qa/evidence/my-account-v313/production.json",
     "historicalSnapshotVerifiedAtUnchanged": true
   }
 }

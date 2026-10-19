@@ -1,0 +1,139 @@
+{
+  "date": "2026-10-18",
+  "version": "3.1.3",
+  "releaseSha": "a6d6a238abb010fdab8df5e2fdc20c0c7fcaae08",
+  "baselineSha": "9b6273813fefbcfe3b4a51bb773f854796cca64f",
+  "ci": {
+    "initial": {
+      "id": 39189537275,
+      "conclusion": "failure",
+      "resolved": "new page needed shared loading registration and an actionable modal notice"
+    },
+    "branch": {
+      "id": 39189878619,
+      "conclusion": "success"
+    },
+    "main": {
+      "id": 39190011867,
+      "conclusion": "success"
+    }
+  },
+  "database": {
+    "trigger": true,
+    "migration": {
+      "name": "operator_self_account",
+      "version": "20261019022718",
+      "canonicalMatches": true,
+      "canonicalLength": 14891,
+      "sha256": "726a36e271ee986592872c9fb6b2e8d16fa93fb942a546149e8491bbe984a493",
+      "fingerprintMethod": "strip-CR-trim-exterior-whitespace-v1"
+    },
+    "emailRequests": 0,
+    "privateTables": [
+      {
+        "rls": true,
+        "table": "operator_self_email_changes",
+        "browserAccess": false,
+        "directServiceAccess": false
+      },
+      {
+        "rls": true,
+        "table": "operator_self_security_attempts",
+        "browserAccess": false,
+        "directServiceAccess": false
+      }
+    ],
+    "rpcBackendOnly": true,
+    "securityIntents": 0,
+    "receiptBackendOnly": true,
+    "baseline": {
+      "users": 8,
+      "authUsers": 8,
+      "memberships": 10,
+      "userFingerprint": "c6ab08c6e5e467c658d35ae7ebd2073d",
+      "membershipFingerprint": "5ffd2b86bb8bcd43b00b2f2f839247a7",
+      "ownerUsernameFingerprint": "62eb33b8d12aec2e815e8766874fa41c"
+    },
+    "after": {
+      "users": 8,
+      "authUsers": 8,
+      "memberships": 10,
+      "userFingerprint": "c6ab08c6e5e467c658d35ae7ebd2073d",
+      "membershipFingerprint": "5ffd2b86bb8bcd43b00b2f2f839247a7",
+      "ownerUsernameFingerprint": "62eb33b8d12aec2e815e8766874fa41c"
+    },
+    "preserved": true,
+    "readSmoke": {
+      "reads": [
+        {
+          "profile": "super_admin",
+          "contract": "operator-self-account-1.0.0",
+          "companiesType": "array",
+          "secretExposed": false,
+          "revisionPresent": true
+        },
+        {
+          "profile": "owner",
+          "contract": "operator-self-account-1.0.0",
+          "companiesType": "array",
+          "secretExposed": false,
+          "revisionPresent": true
+        },
+        {
+          "profile": "recruiter",
+          "contract": "operator-self-account-1.0.0",
+          "companiesType": "array",
+          "secretExposed": false,
+          "revisionPresent": true
+        },
+        {
+          "profile": "member",
+          "contract": "operator-self-account-1.0.0",
+          "companiesType": "array",
+          "secretExposed": false,
+          "revisionPresent": true
+        }
+      ],
+      "method": "existing active identities/sessions, metadata only, ROLLBACK; not a human authenticated browser journey",
+      "missingSessionDenied": true
+    }
+  },
+  "edgeFunctions": [
+    {
+      "name": "operator-self-service",
+      "status": "ACTIVE",
+      "version": 1,
+      "verifyJwt": true,
+      "sourceMatch": true,
+      "mismatches": []
+    },
+    {
+      "name": "platform-users",
+      "status": "ACTIVE",
+      "version": 11,
+      "verifyJwt": true,
+      "sourceMatch": true,
+      "mismatches": [],
+      "sourcePathNormalization": "Supabase bundle strips the supabase/functions prefix; compare function-relative paths and CRLF-normalized source"
+    }
+  ],
+  "vps": {
+    "checkout": "a6d6a238abb010fdab8df5e2fdc20c0c7fcaae08",
+    "webImage": "sha256:189593912b3456e132bfd7984b1d41be85e1aee81dc22f8b7da33eef5d74cabb",
+    "state": "running",
+    "restartCount": 0,
+    "rollbackImage": "sha256:8c6c75a9fe8481c2a1c9f3a12c48d42b90490b4c86588121310f822e8fc159e8",
+    "otherFiveServicesPreserved": true,
+    "initialSmoke": "Immediate404 after recreation; independent routes/assets/version/SHA checks all200 after stabilization, no rebuild"
+  },
+  "noAiCalls": true,
+  "noLiveTestEmail": true,
+  "noProductionUserEdits": true,
+  "limitations": [
+    "No separate remote QA; real local PostgreSQL and synthetic transports/browser used",
+    "No authenticated human production browser journey",
+    "No real email delivery, credential change or contact confirmation exercised against production",
+    "SQL production reads used existing identities/sessions and ROLLBACK, metadata only"
+  ],
+  "mailConfigurationAvailable": true
+}
