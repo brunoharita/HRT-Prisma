@@ -42,3 +42,7 @@ CA-03/D-07: tipos/build, checks afetados, Context Pack, CI obrigatório, migrati
 | Parser/Synthesis/Auth/processos | no_impact_identified | fontes publicadas só de leitura e diff sem regras dessas jornadas; smoke de serviços preservados |
 
 Decisão de versão: matching determinístico5.2.0; reconhecimento1.0.0; triagem2.1.0. Semântica7.0.0, prompt/modelo e score1.4.0 preservados. Atualização de método em dependências autoriza uma avaliação por par sob demanda; não é invalidação por relógio/visita nem lote global.
+
+## Emenda1.0.1 — versão pública aprovada
+
+Bruno determinou explicitamente em23/10/2026: “versão deve ser3.1.4”. Acrescenta D-08: identificar esta entrega como Prisma3.1.4 no registro central e nas superfícies que o consomem. CA-04: teste de registry confirma3.1.4 e história3.1.3 preservada; build e publicação web conferem3.1.4 em produção. Esta decisão substitui a identificação pública3.1.3 da entrega, sem modificar D-01..07/P-01..03/F-01. A-01 abrange o ajuste mecânico.

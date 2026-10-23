@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 556
-source_manifest_sha256: 2c4c2986d0afa9a665330a22a0fa62ab79308310ec079637b5004ea35c7c654a
+source_manifest_sha256: f992d3493d567871c6adc01f7428c48d59642b3482c7af58f9bfcb159bb67339
 -->
 
 # Tudo sobre o Prisma
@@ -2644,13 +2644,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.93.2
+version: 2.93.3
 last_verified: 2026-10-23
 ---
 
 # Estado atual do Prisma
 
 ## Reconhecimento da trajetória pelas atividades —23/10/2026
+
+Versão pública3.1.4 explicitamente determinada por Bruno após a publicação funcional; ajuste do registry/login/sidebar em andamento. Matching5.2.0, score1.4.0 e histórico permanecem. AoT da mesma entrega registra a emenda1.0.1.
 
 Implementação autorizada por Bruno: matching5.2.0 e triagem2.1.0 reconhecem atividades atribuídas às experiências, combinam evidências históricas e mantêm senioridade/requisitos separados. Relação incerta fica identificada e visível; ferramentas/área ampla/negação não viram equivalência. Pesos, score1.4.0, prompt/modelo e decisões humanas preservados. Nova dependência causal atualiza resultados sob demanda, com histórico imutável e anterior preservado na falha; nenhuma varredura/IA em massa na publicação. Reutiliza motor, Knowledge, cache e leases existentes. Publicado runtime82794add612cb8949f460e1a3f2cce075a827ab1 após CI branch40027537656/main40027888027 success. Migration remota20261023213441 e Edge21/jwt true/14arquivos iguais; webff4c7a04dd28 running0,15checks HTTP/assets/SHA/negação anônima PASS após404 transitório sem rebuild.200testes domínio+7taxonomia,42Edge,50SQL,32browser e22tooling PASS; perfil/5avaliações/decisão humana reais preservados em leitura, caso real validado offline com fontes publicadas. Sem IA paga nem mutação de Perfil real; recálculo autenticado real NOT TESTED. Seis containers adjacentes inalterados. Acordo/execução/AoT `docs/qa/*trajectory-activity-recognition.md`.
 
@@ -5991,6 +5993,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+Decisão explícita de Bruno em23/10/2026: a entrega de reconhecimento da trajetória por atividades deve ser **Prisma3.1.4**. O registry acrescenta a entrega4 ao movimento1 da geração3; login e sidebar consomem o mesmo registro central. Substitui somente a identificação pública anterior desta entrega, mantendo versões históricas, matching5.2.0, score1.4.0 e demais contratos. Publicação identificada pelo AoT trajectory-activity-recognition.
 
 Apresentação de desempenho do processo (23/10/2026): reutiliza resultados persistidos e Score existente, sem fórmula, contrato persistido ou nova entrega numerada aprovada no registry. Decisão de versão deste escopo: manter3.1.3; helper de apresentação e acordo1.0.0 não renumeram correção, matching ou instrumentos. Acordo/AoT process-assessment-performance e evidência de publicação distinguem implementação de rollout.
 
@@ -18574,6 +18578,10 @@ CA-03/D-07: tipos/build, checks afetados, Context Pack, CI obrigatório, migrati
 
 Decisão de versão: matching determinístico5.2.0; reconhecimento1.0.0; triagem2.1.0. Semântica7.0.0, prompt/modelo e score1.4.0 preservados. Atualização de método em dependências autoriza uma avaliação por par sob demanda; não é invalidação por relógio/visita nem lote global.
 
+## Emenda1.0.1 — versão pública aprovada
+
+Bruno determinou explicitamente em23/10/2026: “versão deve ser3.1.4”. Acrescenta D-08: identificar esta entrega como Prisma3.1.4 no registro central e nas superfícies que o consomem. CA-04: teste de registry confirma3.1.4 e história3.1.3 preservada; build e publicação web conferem3.1.4 em produção. Esta decisão substitui a identificação pública3.1.3 da entrega, sem modificar D-01..07/P-01..03/F-01. A-01 abrange o ajuste mecânico.
+
 ---
 
 ## Source: `docs/qa/agreement-trajectory-evidence-recovery.md`
@@ -26217,6 +26225,10 @@ Leitura remota após DDL/Edge confirma hash do Perfil inalterado,5avaliações a
 
 D-01..07 e P-01..03 PASS nas fronteiras e ambientes acima, com limites explícitos; F-01 preservado. Nenhum desvio do acordo. Fechamento documental posterior sincroniza Git/VPS sem rebuild, sem reabrir escopo; CI desse fechamento permanece obrigatório.
 
+## Complemento autorizado — Prisma3.1.4
+
+Bruno determinou3.1.4 após a publicação funcional. Acordo emenda1.0.1/D-08, execução e CA-04 acrescentados ao mesmo movimento. Baseline890b9d5. Mapa: registry/login/sidebar direct; numeração histórica plausible_indirect; matching/banco/Edge/Perfil/decisões no_impact_identified, pois diff só acrescenta registro público e docs/teste. ClasseA, ajuste mecânico autorizado, sem decisão nova. Validação mínima: teste productRelease existente, tipos/build web, contexto e smoke da versão publicada; CI permanece obrigatório. D-08/CA-04: publicação e evidência em andamento. Nenhuma regressão funcional já comprovada será repetida por este ajuste de identificação.
+
 ---
 
 ## Source: `docs/qa/aot-trajectory-evidence-recovery.md`
@@ -30938,6 +30950,8 @@ Implementar integralmente `agreement-stable-score-v214.md` 1.0.0, aprovado em 07
 # Execução — reconhecimento da trajetória pelas atividades
 
 Executar integralmente `docs/qa/agreement-trajectory-activity-recognition.md`v1.0.0, lido neste movimento. Implementar D-01..07 e CA-01..03; respeitar P-01..03 e F-01; A-01 delega apenas mecânica. Autorização explícita de implementação/validação/publicação de Bruno em23/10/2026. Reutilizar motor e interpretação seletiva existentes, sem biblioteca nem provedor novo. Baselineb00f03f; branchcodex/trajectory-activity-recognition. Fechar com AoT, regressão proporcional, Context Pack, CI e publicação seletiva. Não repetir aprovação já concedida.
+
+Complemento autorizado23/10/2026: aplicar emenda1.0.1/D-08/CA-04 do acordo completo, lida nesta execução. Alterar somente registry/teste/owner docs e publicar web com a identificação3.1.4. Matching, banco, Edge e pesos permanecem nos runtimes já validados.
 
 ---
 
