@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 556
-source_manifest_sha256: f992d3493d567871c6adc01f7428c48d59642b3482c7af58f9bfcb159bb67339
+source_manifest_sha256: 1ce3a07d19324ae5965a080b7f7f914af89b4ba375637686149ec51e2c76b67a
 -->
 
 # Tudo sobre o Prisma
@@ -2652,7 +2652,7 @@ last_verified: 2026-10-23
 
 ## Reconhecimento da trajetória pelas atividades —23/10/2026
 
-Versão pública3.1.4 explicitamente determinada por Bruno após a publicação funcional; ajuste do registry/login/sidebar em andamento. Matching5.2.0, score1.4.0 e histórico permanecem. AoT da mesma entrega registra a emenda1.0.1.
+Versão pública3.1.4 determinada por Bruno e publicada no runtimeb03d5fb227a64fa503b1b056486c6ffef64bae4b: CI branch40032546449/main40032709485 success,11checks de HTTP/assets/SHA/login visível PASS; web02d7c9616bf6 running0 e seis serviços adjacentes preservados. Registry/login/sidebar atualizados. Matching5.2.0, score1.4.0 e histórico permanecem. AoT da mesma entrega registra a emenda1.0.1.
 
 Implementação autorizada por Bruno: matching5.2.0 e triagem2.1.0 reconhecem atividades atribuídas às experiências, combinam evidências históricas e mantêm senioridade/requisitos separados. Relação incerta fica identificada e visível; ferramentas/área ampla/negação não viram equivalência. Pesos, score1.4.0, prompt/modelo e decisões humanas preservados. Nova dependência causal atualiza resultados sob demanda, com histórico imutável e anterior preservado na falha; nenhuma varredura/IA em massa na publicação. Reutiliza motor, Knowledge, cache e leases existentes. Publicado runtime82794add612cb8949f460e1a3f2cce075a827ab1 após CI branch40027537656/main40027888027 success. Migration remota20261023213441 e Edge21/jwt true/14arquivos iguais; webff4c7a04dd28 running0,15checks HTTP/assets/SHA/negação anônima PASS após404 transitório sem rebuild.200testes domínio+7taxonomia,42Edge,50SQL,32browser e22tooling PASS; perfil/5avaliações/decisão humana reais preservados em leitura, caso real validado offline com fontes publicadas. Sem IA paga nem mutação de Perfil real; recálculo autenticado real NOT TESTED. Seis containers adjacentes inalterados. Acordo/execução/AoT `docs/qa/*trajectory-activity-recognition.md`.
 
@@ -26227,7 +26227,10 @@ D-01..07 e P-01..03 PASS nas fronteiras e ambientes acima, com limites explícit
 
 ## Complemento autorizado — Prisma3.1.4
 
-Bruno determinou3.1.4 após a publicação funcional. Acordo emenda1.0.1/D-08, execução e CA-04 acrescentados ao mesmo movimento. Baseline890b9d5. Mapa: registry/login/sidebar direct; numeração histórica plausible_indirect; matching/banco/Edge/Perfil/decisões no_impact_identified, pois diff só acrescenta registro público e docs/teste. ClasseA, ajuste mecânico autorizado, sem decisão nova. Validação mínima: teste productRelease existente, tipos/build web, contexto e smoke da versão publicada; CI permanece obrigatório. D-08/CA-04: publicação e evidência em andamento. Nenhuma regressão funcional já comprovada será repetida por este ajuste de identificação.
+Bruno determinou3.1.4 após a publicação funcional. Acordo emenda1.0.1/D-08, execução e CA-04 acrescentados ao mesmo movimento. Baseline890b9d5. Mapa: registry/login/sidebar direct; numeração histórica plausible_indirect; matching/banco/Edge/Perfil/decisões no_impact_identified, pois diff só acrescenta registro público e docs/teste. ClasseA, ajuste mecânico autorizado, sem decisão nova. Validação mínima: teste productRelease existente, tipos/build web, contexto e smoke da versão publicada; CI permanece obrigatório. D-08/CA-04: PASS; versão3.1.4 publicada e visível no login, conforme evidência abaixo. Nenhuma regressão funcional já comprovada será repetida por este ajuste de identificação.
+
+
+Publicação3.1.4: runtimeb03d5fb227a64fa503b1b056486c6ffef64bae4b, CI branch40032546449/main40032709485 success.5testes de registry, tipos/build web, lint e contexto em snapshot rastreado PASS. Histórico3.1.3 preservado; o registro central alimenta login/sidebar sem regra nova.11checks de HTTP/assets/SHA/footer visível sem erro JS PASS. Uma primeira busca de texto exato não encontrava o footer composto; o seletor foi corrigido para o footer real, sem mudança de produto. Web02d7c9616bf6, imagem214df02c48dbe76896414d6d11be0cff08ae18298f25d1edc9732bc166e582c5, running0; rollback-before-b03d5fb227a6 mantém imagem0eaa081e5c58a63a2826fa2e1287500cf8590326005e2d2f04195f02805e7a26. HEAD404 imediato estabilizou200 sem rebuild. Seis serviços adjacentes idênticos; release-plan só web/docs, nenhum acesso/publicação Supabase, Edge ou worker. Git/local/VPS sincronizados; fechamento documental não reconstrói runtime, CI obrigatório preservado.
 
 ---
 

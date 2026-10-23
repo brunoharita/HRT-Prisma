@@ -1,0 +1,64 @@
+{
+  "runtimeSha": "b03d5fb227a64fa503b1b056486c6ffef64bae4b",
+  "checks": [
+    {
+      "name": "root HTTP 200",
+      "pass": true
+    },
+    {
+      "name": "asset /assets/index-AHinBGGo.js",
+      "pass": true
+    },
+    {
+      "name": "asset /assets/rolldown-runtime-C0FnF6B9.js",
+      "pass": true
+    },
+    {
+      "name": "asset /assets/antd-vendor-BaKnhCyQ.js",
+      "pass": true
+    },
+    {
+      "name": "asset /assets/supabase-vendor-DoXvCMLf.js",
+      "pass": true
+    },
+    {
+      "name": "asset /assets/react-vendor-BdxMnOeJ.js",
+      "pass": true
+    },
+    {
+      "name": "asset /assets/antd-vendor-B5BXDqMa.css",
+      "pass": true
+    },
+    {
+      "name": "asset /assets/index-CbWl015i.css",
+      "pass": true
+    },
+    {
+      "name": "exact deployed SHA",
+      "pass": true
+    },
+    {
+      "name": "login visibly displays v3.1.4",
+      "pass": true
+    },
+    {
+      "name": "no page runtime errors",
+      "pass": true
+    }
+  ],
+  "productVersion": "3.1.4",
+  "registryTestsPassed": 5,
+  "ci": {
+    "branch": 40032546449,
+    "main": 40032709485,
+    "conclusion": "success"
+  },
+  "surfaces": [
+    "web",
+    "documentation"
+  ],
+  "sixAdjacentContainersUnchanged": true,
+  "webImage": "214df02c48dbe76896414d6d11be0cff08ae18298f25d1edc9732bc166e582c5",
+  "webContainer": "02d7c9616bf6",
+  "rollbackImage": "0eaa081e5c58a63a2826fa2e1287500cf8590326005e2d2f04195f02805e7a26"
+}
