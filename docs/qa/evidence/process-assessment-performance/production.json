@@ -1,0 +1,33 @@
+{
+  "functionalSha": "7a905c140c7534e789caa6e72571704781d349a9",
+  "version": "3.1.3",
+  "ci": {
+    "branch": 40017264584,
+    "main": 40017642362,
+    "status": "success"
+  },
+  "web": {
+    "container": "6fe0728579a0",
+    "image": "sha256:6128874ace2f19c5161f8e5ff5b4af83e4025fd348a2f996a5dd235d9cae4974",
+    "state": "running",
+    "restartCount": 0,
+    "entry": "index-DfAMsaHX.js",
+    "rollbackTag": "prisma-web:rollback-before-7a905c140c75",
+    "rollbackImage": "sha256:efc8034d3485da9dce2e52972cd6e299502d1ff346efed39267fd96c3240109d"
+  },
+  "publicSmokeChecks": 22,
+  "adjacentContainersPreserved": [
+    "horus-web",
+    "prisma-profile-synthesis",
+    "prisma-parser-ia",
+    "prisma-paddle-gateway",
+    "hrt-mail-forwarder",
+    "traefik-traefik-1"
+  ],
+  "dispatcherOutcome": "Image built and web recreated once. Immediate public HEAD returned transient404, so dispatcher exited22 before receipt. Independent HTTP, assets, SHA, CSS, Docker state and rollback verification passed afterward without rebuilding.",
+  "localPublishGuard": "Initial attempt blocked before publication because the regression runner updated its own historical captures. Those results were copied into this movement and only those own generated edits were restored before retrying the clean validated SHA.",
+  "limits": [
+    "Synthetic authenticated-service substitutes in browser QA; public production smoke only. No real candidate assessment, database mutation, email or paid AI executed."
+  ],
+  "adjacentPreservationVerified": true
+}

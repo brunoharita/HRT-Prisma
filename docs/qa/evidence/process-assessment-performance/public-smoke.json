@@ -1,0 +1,96 @@
+{
+  "sha": "7a905c140c7534e789caa6e72571704781d349a9",
+  "checks": [
+    {
+      "name": "HTTP /",
+      "status": 200
+    },
+    {
+      "name": "HTTP /login",
+      "status": 200
+    },
+    {
+      "name": "HTTP /vacancies",
+      "status": 200
+    },
+    {
+      "name": "HTTP /vacancies/00000000-0000-4000-8000-000000000001/follow-up/assessment",
+      "status": 200
+    },
+    {
+      "name": "HTTP /assets/index-DfAMsaHX.js",
+      "status": 200
+    },
+    {
+      "name": "HTTP /assets/rolldown-runtime-C0FnF6B9.js",
+      "status": 200
+    },
+    {
+      "name": "HTTP /assets/antd-vendor-BaKnhCyQ.js",
+      "status": 200
+    },
+    {
+      "name": "HTTP /assets/supabase-vendor-DoXvCMLf.js",
+      "status": 200
+    },
+    {
+      "name": "HTTP /assets/react-vendor-BdxMnOeJ.js",
+      "status": 200
+    },
+    {
+      "name": "HTTP /assets/antd-vendor-B5BXDqMa.css",
+      "status": 200
+    },
+    {
+      "name": "HTTP /assets/index-CbWl015i.css",
+      "status": 200
+    },
+    {
+      "name": "expected functional SHA",
+      "pass": true
+    },
+    {
+      "name": "application version3.1.3 preserved",
+      "pass": true
+    },
+    {
+      "name": "candidate results component published",
+      "pass": true
+    },
+    {
+      "name": "responsive metric styles published",
+      "pass": true
+    },
+    {
+      "name": "HTTP /assets/index-DVkq3nZT.js",
+      "status": 200
+    },
+    {
+      "name": "HTTP /assets/rolldown-runtime-C0FnF6B9.js",
+      "status": 200
+    },
+    {
+      "name": "HTTP /assets/antd-vendor-BaKnhCyQ.js",
+      "status": 200
+    },
+    {
+      "name": "HTTP /assets/supabase-vendor-DoXvCMLf.js",
+      "status": 200
+    },
+    {
+      "name": "HTTP /assets/react-vendor-BdxMnOeJ.js",
+      "status": 200
+    },
+    {
+      "name": "HTTP /assets/antd-vendor-B5BXDqMa.css",
+      "status": 200
+    },
+    {
+      "name": "HTTP /assets/index-CEcFeY3T.css",
+      "status": 200
+    }
+  ],
+  "limits": [
+    "Public routes and static assets only; no authenticated real candidate or mutation."
+  ]
+}

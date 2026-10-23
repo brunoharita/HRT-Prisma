@@ -19,12 +19,12 @@ Baseline mínimo: código/SHA acima e screenshot do problema (contraexemplo). QA
 
 | ID | Implementação | Evidência | Status |
 | --- | --- | --- | --- |
-| D-01 | ProcessAssessmentResults mostra métricas, acertos/total, estado e resultado existente |17Node dirigidos e65browser, dados distintos para Score/avaliação | PASS local |
-| D-02 | assessmentResultRows ordena proporções exatas; nome/ID estabilizam empates; ausentes depois de zero | Helper não modifica entrada; malformado/parcial/contexto incompatível permanece indisponível | PASS local |
-| D-03 | Consulta opcional existente, valida processo, cancela aplicação visual de resposta antiga; metadados preservados | Falha não bloqueia resultado; prova de parâmetros/processo; zero IA/escrita até ação humana | PASS local |
-| D-04 | Tabela desktop/cartões mobile, resumo de quantidades e details de envios; callbacks mantidos |4viewports, sem overflow; modal, retomada, cancelamento e histórico | PASS local |
-| P-01 / P-02 | Nenhuma composição de notas, pontuação de atividade ou decisão automática; leituras apenas | Testes negativos e registro de chamadas; sem backend/schema/RLS/IA no diff | PASS local |
-| F-01 | Preparação/correção/portal mantidos; nenhuma alteração comercial ou de instrumento |32checks de regressão integrada e diff | PASS local |
+| D-01 | ProcessAssessmentResults mostra métricas, acertos/total, estado e resultado existente |17Node dirigidos e65browser, dados distintos para Score/avaliação; bundle produtivo confirmado | PASS |
+| D-02 | assessmentResultRows ordena proporções exatas; nome/ID estabilizam empates; ausentes depois de zero | Helper não modifica entrada; malformado/parcial/contexto incompatível permanece indisponível | PASS |
+| D-03 | Consulta opcional existente, valida processo, cancela aplicação visual de resposta antiga; metadados preservados | Falha não bloqueia resultado; prova de parâmetros/processo; zero IA/escrita até ação humana | PASS na fronteira afetada |
+| D-04 | Tabela desktop/cartões mobile, resumo de quantidades e details de envios; callbacks mantidos |4viewports, sem overflow; modal, retomada, cancelamento e histórico; CSS e SHA produtivos | PASS |
+| P-01 / P-02 | Nenhuma composição de notas, pontuação de atividade ou decisão automática; leituras apenas | Testes negativos e registro de chamadas; sem backend/schema/RLS/IA no diff | PASS |
+| F-01 | Preparação/correção/portal mantidos; nenhuma alteração comercial ou de instrumento |32checks de regressão integrada e diff, somente web publicada | PASS |
 
 ## Visual
 
@@ -32,4 +32,12 @@ Referência do usuário é contraexemplo, não alvo visual normativo. Mesmo esta
 
 ## Validação e limites
 
-Primeiro typecheck identificou import ainda usado pela lista de convites e extensão de import necessária no helper NodeNext; ambos corrigidos. Tipos web/root,17Node e build web PASS. Browser65checks da nova lista e32da integração existente PASS com página/modal reais e serviços sintéticos. Ajuste final de título/warning repetiu somente helper/browser/build afetados, sem contar novamente os mesmos testes. Build emite avisos preexistentes de tamanho de chunk/import dinâmico. Sem suíte integral local; dispatcher será deduplicado contra os checks dirigidos. Sem avaliação autenticada de humano real, IA paga ou envio real. Publicação/CI/contextos/smoke/sincronização pendentes. Contrato e fontes evoluem juntos; completar status depois da evidência operacional, sem inventar PASS produtivo.
+Primeiro typecheck identificou import ainda usado pela lista de convites e extensão de import necessária no helper NodeNext; ambos corrigidos. Tipos web/root,17Node e build web PASS. Browser65checks da nova lista e32da integração existente PASS com página/modal reais e serviços sintéticos. Regressão existente foi preservada neste movimento em evidence/process-assessment-performance/regression; suas capturas históricas originais foram restauradas após o runner. Ajuste final de título/warning repetiu somente helper/browser/build afetados, sem contar novamente os mesmos testes. Build emite avisos preexistentes de tamanho de chunk/import dinâmico. Contextos/checker/lint2015arquivos/foundation e ledger PASS em snapshot rastreado, excluindo rascunhos alheios. Dispatcher deduplicado: pnpm test genérico substituído localmente pelos17Node/97browser; CI manteve seus gates completos. Sem avaliação autenticada de humano real, IA paga ou envio real.
+
+## Publicação, preservação e encerramento
+
+SHA funcional7a905c140c7534e789caa6e72571704781d349a9, main por fast-forward, CI branch40017264584/main40017642362 SUCCESS. Plano exige somente web, sem migration, Edge, Parser, gateway, mail ou Synthesis. Web6fe0728579a0 running/restarts0, imagem6128874ace2f, entryindex-DfAMsaHX.js. Rollback prisma-web:rollback-before-7a905c140c75 conserva efc8034d3485. Seis outros contêineres (incluindo Horus) mantiveram IDs e tags de imagem.22checks públicos confirmam rotas, assets novos/anteriores, SHA, versão3.1.3, componente e CSS responsivo. Evidências mínimas: production.json, public-smoke.json, runtime-before/after.txt e release-plan.json no diretório deste movimento.
+
+Guard local recusou a primeira tentativa por saídas próprias do runner de regressão, antes de qualquer publicação. Só essas saídas próprias foram arquivadas/restauradas; nova tentativa passou com árvore limpa e o mesmo SHA validado. O primeiro HEAD após recriação retornou404 transitório, encerrando o dispatcher antes de gravar recibo final. Verificações independentes seguintes confirmaram disponibilidade, assets, container e rollback sem novo build/deploy. Não remover órfãos, serviços ou metadados alheios por avisos do Compose/Git.
+
+Fechamento apenas documental/contextos e evidências sincroniza Git/GitHub/VPS sem reconstruir runtime nem repetir testes válidos. Nenhum desvio do acordo identificado; nenhuma relação reclassificada além do import mecânico documentado. D-01..04/P-01..02 comprovados nas fronteiras exigidas e F-01 preservado. Limites de QA sintético e smoke público não são prova de jornada autenticada humana ou calibração empírica.

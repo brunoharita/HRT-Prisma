@@ -1,0 +1,10 @@
+7a905c140c7534e789caa6e72571704781d349a9
+prisma-web 6fe0728579a0 prisma-web:1.6.4
+horus-web 606cac362cd7 horus-web:production-64fbf7f579416a989034902837fdaf5c96e5a11e
+prisma-profile-synthesis fe703dbe055d prisma-profile-synthesis:32fc381d7b240ef97c8dc348b4d3d1678c3e533c
+prisma-parser-ia 7b6a32a69ad6 prisma-parser-ia:1.0.0
+prisma-paddle-gateway 8fb76416f61c prisma-paddle-gateway:1.1.0
+hrt-mail-forwarder b257a83cbb37 hrt-mail-forwarder:ffc5a8ce626b6d87c219e1f511cc0f467682714f
+traefik-traefik-1 5e25fdc6d2e6 traefik:latest
+running 0 sha256:6128874ace2f19c5161f8e5ff5b4af83e4025fd348a2f996a5dd235d9cae4974
+sha256:efc8034d3485da9dce2e52972cd6e299502d1ff346efed39267fd96c3240109d

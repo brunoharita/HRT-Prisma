@@ -9,9 +9,9 @@ last_verified: 2026-10-19
 
 # Estado atual do Prisma
 
-## Acompanhamento do desempenho na avaliação — implementação em validação
+## Acompanhamento do desempenho na avaliação — publicado em3.1.3
 
-Aplicações e resultados individuais mostra Nota Prisma salva e acertos/total/porcentagem, ordenada pela proporção exata de acertos decrescente, empates por nome e ausentes ao final. Desktop em colunas/mobile em cartões; envio sob disclosure, modal/retomada/cancelamento explícitos e histórico preservados. Consulta opcional pelo serviço de acompanhamento existente, vinculada ao tenant/Posição/processo; falha não bloqueia resultados, sem IA ou alteração de cálculo/decisão.17Node e97browser em1448/768/390/320, tipos raiz/web e build PASS. Versão3.1.3 mantida; sem backend/schema/Edge/serviços. Acordo1.0.0 e AoT process-assessment-performance registram mapa, limites e evidências; CI/publicação/contextos em fechamento.
+Aplicações e resultados individuais mostra Nota Prisma salva e acertos/total/porcentagem, ordenada pela proporção exata de acertos decrescente, empates por nome e ausentes ao final. Desktop em colunas/mobile em cartões; envio sob disclosure, modal/retomada/cancelamento explícitos e histórico preservados. Consulta opcional existente no tenant/Posição/processo; falha não bloqueia resultados, sem IA ou alteração de cálculo/decisão.17Node/97browser em4viewports, tipos/build/contextos/lint/foundation PASS. Runtime7a905c140c7534e789caa6e72571704781d349a9, CI branch40017264584/main40017642362 SUCCESS; web6fe0728579a0/imagem6128874ace2f running0, rollbackefc8034d3485.22checks públicos de SHA/3.1.3/rotas/assets novos e antigos/CSS PASS após404 transitório, sem rebuild. Seis serviços adjacentes preservados; sem banco/Edge/IA. Sem jornada autenticada humana para teste. Acordo1.0.0/AoT e recibos process-assessment-performance registram limites. Fechamento documental sincroniza Git sem novo runtime.
 
 ## Publicação de campos simples do Perfil — correção3.1.3 publicada
 

@@ -1,0 +1,66 @@
+{
+  "command": "plan",
+  "plan": {
+    "version": "1.0.6",
+    "files": [
+      "FONTE_GPT_PRISMA.md",
+      "TUDO_SOBRE_PRISMA.md",
+      "docs/ai-context/PRISMA_CURRENT_STATE.md",
+      "docs/architecture/versioning.md",
+      "docs/product/process-assessment.md",
+      "docs/qa/agreement-process-assessment-performance.md",
+      "docs/qa/aot-process-assessment-performance.md",
+      "docs/qa/evidence/process-assessment-performance/browser-checks.json",
+      "docs/qa/evidence/process-assessment-performance/page-1448.png",
+      "docs/qa/evidence/process-assessment-performance/page-320.png",
+      "docs/qa/evidence/process-assessment-performance/page-390.png",
+      "docs/qa/evidence/process-assessment-performance/page-768.png",
+      "docs/qa/evidence/process-assessment-performance/results-1448.png",
+      "docs/qa/evidence/process-assessment-performance/results-320.png",
+      "docs/qa/evidence/process-assessment-performance/results-390.png",
+      "docs/qa/evidence/process-assessment-performance/results-768.png",
+      "tests/processAssessmentResults.test.ts",
+      "tests/tooling/processAssessmentPerformance.browser.mjs",
+      "tests/ui/process-assessment/main.tsx",
+      "web/src/components/ProcessAssessmentResults.tsx",
+      "web/src/domain/processAssessmentData.ts",
+      "web/src/pages/ProcessAssessmentPage.tsx",
+      "web/src/pages/processAssessment.css",
+      "web/src/shared/processAssessmentResults.ts"
+    ],
+    "impact": {
+      "surfaces": [
+        "context-pack",
+        "documentation",
+        "generated-context",
+        "hosting",
+        "tests",
+        "web"
+      ],
+      "edgeFunctions": [],
+      "migrations": [],
+      "modifiedMigrations": [],
+      "unknown": []
+    },
+    "validationCommands": [
+      "git diff --check",
+      "pnpm run generate:prisma-context",
+      "pnpm run check:prisma-context",
+      "pnpm run typecheck:web",
+      "pnpm run build:web",
+      "pnpm run test"
+    ],
+    "deployments": {
+      "git": true,
+      "database": [],
+      "edgeFunctions": [],
+      "web": true,
+      "parserIa": false,
+      "paddleGateway": false,
+      "profileSynthesis": false,
+      "mailForwarder": false
+    },
+    "blockedReasons": [],
+    "publishable": true
+  }
+}
