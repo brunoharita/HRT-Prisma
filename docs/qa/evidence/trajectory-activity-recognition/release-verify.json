@@ -1,0 +1,95 @@
+{
+  "command": "verify",
+  "local": "82794add612cb8949f460e1a3f2cce075a827ab1",
+  "originMain": "82794add612cb8949f460e1a3f2cce075a827ab1",
+  "gitAligned": true,
+  "site": {
+    "status": 200,
+    "ok": true
+  },
+  "plan": {
+    "version": "1.0.6",
+    "files": [
+      "FONTE_GPT_PRISMA.md",
+      "TUDO_SOBRE_PRISMA.md",
+      "docs/ai-context/PRISMA_CURRENT_STATE.md",
+      "docs/ai/matching-contract.md",
+      "docs/qa/agreement-trajectory-activity-recognition.md",
+      "docs/qa/aot-trajectory-activity-recognition.md",
+      "docs/qa/evidence/trajectory-activity-recognition/browser-results.json",
+      "docs/qa/evidence/trajectory-activity-recognition/contextual-1448.png",
+      "docs/qa/evidence/trajectory-activity-recognition/contextual-390.png",
+      "docs/qa/evidence/trajectory-activity-recognition/domain-tests.txt",
+      "docs/qa/evidence/trajectory-activity-recognition/edge-tests.txt",
+      "docs/qa/evidence/trajectory-activity-recognition/real-source-readonly.json",
+      "docs/qa/evidence/trajectory-activity-recognition/related-1448.png",
+      "docs/qa/evidence/trajectory-activity-recognition/related-390.png",
+      "docs/qa/evidence/trajectory-activity-recognition/sql.txt",
+      "docs/qa/evidence/trajectory-activity-recognition/uncertain-1448.png",
+      "docs/qa/evidence/trajectory-activity-recognition/uncertain-390.png",
+      "docs/qa/execution-trajectory-activity-recognition.md",
+      "supabase/functions/matching-trajectory/_generated/web/src/domain/matchingScore.js",
+      "supabase/functions/matching-trajectory/_generated/web/src/domain/semanticMatching.js",
+      "supabase/functions/matching-trajectory/_generated/web/src/domain/vacancy.js",
+      "supabase/migrations/20261023180000_trajectory_activity_recognition.sql",
+      "supabase/qa/trajectory_activity_recognition_verification.sql",
+      "tests/positionTaxonomy.test.ts",
+      "tests/semanticTrajectory.test.ts",
+      "tests/tooling/trajectoryActivityRecognition.browser.mjs",
+      "tests/trajectoryActivityRecognition.test.ts",
+      "tests/ui/trajectory-activity.html",
+      "tests/ui/trajectory-activity.vite.config.mts",
+      "tests/ui/trajectory-activity/main.tsx",
+      "web/src/domain/matchingScore.ts",
+      "web/src/domain/semanticMatching.ts",
+      "web/src/domain/vacancy.ts",
+      "web/src/pages/VacancyPages.tsx"
+    ],
+    "impact": {
+      "surfaces": [
+        "context-pack",
+        "database",
+        "database-tests",
+        "documentation",
+        "edge-functions",
+        "generated-context",
+        "hosting",
+        "tests",
+        "web"
+      ],
+      "edgeFunctions": [
+        "matching-trajectory"
+      ],
+      "migrations": [
+        "supabase/migrations/20261023180000_trajectory_activity_recognition.sql"
+      ],
+      "modifiedMigrations": [],
+      "unknown": []
+    },
+    "validationCommands": [
+      "git diff --check",
+      "pnpm run generate:prisma-context",
+      "pnpm run check:prisma-context",
+      "pnpm run typecheck:web",
+      "pnpm run build:web",
+      "pnpm run test",
+      "pnpm run check:supabase-ledger"
+    ],
+    "deployments": {
+      "git": true,
+      "database": [
+        "supabase/migrations/20261023180000_trajectory_activity_recognition.sql"
+      ],
+      "edgeFunctions": [
+        "matching-trajectory"
+      ],
+      "web": true,
+      "parserIa": false,
+      "paddleGateway": false,
+      "profileSynthesis": false,
+      "mailForwarder": false
+    },
+    "blockedReasons": [],
+    "publishable": true
+  }
+}

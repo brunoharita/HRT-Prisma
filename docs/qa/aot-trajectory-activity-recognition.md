@@ -6,13 +6,13 @@ Acordo congelado `docs/qa/agreement-trajectory-activity-recognition.md`v1.0.0 e 
 
 | ID | Implementação | Teste/evidência | Status |
 | --- | --- | --- | --- |
-| D-01 | Recuperação conservadora de atividades atribuídas ao núcleo e responsabilidades específicas; conjunto das experiências e fontes | Casos de cargo distinto, estoques plural, experiências históricas, marketing e responsabilidade fiscal em `trajectoryActivityRecognition.test.ts`;200testes dirigidos | PASS local |
-| D-02 | Trajetória relacionada sem equivalência integral; requisito e senioridade separados; nota provisória explicada | Estoque/SAP/gestão de pessoas, nível adjacente, fonte real de leitura restrita executada offline no runtime exato | PASS local |
-| D-03 | Dúvida explícita em resumo/tag/drawer; grupo contextual com dúvidas aberto e título próprio |32checks browser1448/390, screenshots com componentes reais, zero chamadas externas | PASS local |
-| D-04 | Triagem seletiva por atividades; precedência de decisões/referências mantida; fallback intacto |200Node/42Edge, paridade web/Edge e falha da interpretação | PASS local |
-| D-05 | Allowlist5.2.0 em score/SQL; CREATE OR REPLACE por substituição estrita preserva guardas/grants |50assertivas SQL locais, comparação ACL, versão desconhecida negada, histórico e M6.2 | PASS local |
-| D-06 | Dependência causal trajectoryRecognition; atualização append-only sob demanda, lease e anterior na falha | SQL: uma atualização causal, nova versão aceita, segunda consulta estável, histórico imutável; testes Edge de atualização/falha/autoridade | PASS local |
-| D-07 | Positivos e negativos contrastantes; publicação seletiva | QA local PASS; CI/publicação/smoke pendentes | PARTIAL |
+| D-01 | Recuperação conservadora de atividades atribuídas ao núcleo e responsabilidades específicas; conjunto das experiências e fontes | Casos de cargo distinto, estoques plural, experiências históricas, marketing e responsabilidade fiscal em `trajectoryActivityRecognition.test.ts`;200testes dirigidos | PASS |
+| D-02 | Trajetória relacionada sem equivalência integral; requisito e senioridade separados; nota provisória explicada | Estoque/SAP/gestão de pessoas, nível adjacente, fonte real de leitura restrita executada offline no runtime exato | PASS |
+| D-03 | Dúvida explícita em resumo/tag/drawer; grupo contextual com dúvidas aberto e título próprio |32checks browser1448/390, screenshots com componentes reais, zero chamadas externas | PASS |
+| D-04 | Triagem seletiva por atividades; precedência de decisões/referências mantida; fallback intacto |200Node/42Edge, paridade web/Edge e falha da interpretação | PASS |
+| D-05 | Allowlist5.2.0 em score/SQL; CREATE OR REPLACE por substituição estrita preserva guardas/grants |50assertivas SQL locais, comparação ACL, versão desconhecida negada, histórico e M6.2 | PASS |
+| D-06 | Dependência causal trajectoryRecognition; atualização append-only sob demanda, lease e anterior na falha | SQL: uma atualização causal, nova versão aceita, segunda consulta estável, histórico imutável; testes Edge de atualização/falha/autoridade | PASS |
+| D-07 | Positivos e negativos contrastantes; publicação seletiva | QA local, CI branch40027537656/main40027888027 e produção conforme fechamento abaixo | PASS |
 
 ## Proibições
 
@@ -44,3 +44,17 @@ Sem referência visual normativa nova: imagem anterior é exemplo do produto, n�
 F-01 preservado: sem redesign, taxonomia externa, novo modelo/prompt/biblioteca ou decisão de contratação. Nenhum desvio do acordo identificado na validação local. Publicação/CI/smoke e sincronização serão registrados após conclusão.
 
 Revisão de rollout: worker5.1.0 não pode concluir avaliação com a dependência nova; leitura histórica5.1.0 e M6.2 permanecem.50assertivas SQL locais PASS. Primeiro CI40027104054 detectou somente expectativa antiga de versão em positionTaxonomy (1011/1012 passaram); expectativa atualizada para5.2.0 e teste dirigido repetido. Sem mudança de regra de taxonomia. Trava Git vazia ficou sem escritor/handle e só então foi removida; commit7d1bdec concluído no checkout original. Worktree de contingência terminou depois e teve arquivamento solicitado sem uso. Avisos de pruning de outros worktrees não foram tratados como falha funcional nem motivaram limpeza alheia.
+
+## Publicação e sincronização verificadas
+
+Runtime coerente82794add612cb8949f460e1a3f2cce075a827ab1 em main/origin/VPS. CI branch40027537656 e main40027888027 success, fundação integral obrigatória. Complemento de versão:7testes de positionTaxonomy PASS. Tipos/build web, foundation,22release-tooling, ledger e Context Pack PASS. Lint do diretório original encontrou apenas arquivos alheios em output; lint e geração/check de contexto passaram no snapshot exato de4346arquivos rastreados/staged, preservando rascunhos não rastreados.
+
+Migration20261023180000 aplicada como20261023213441 no projeto únicoioldpnqqvobprjiontre. Três funções preservam ACL/security-definer/search_path/guards; hashes restaurados removendo somente os fragmentos autorizados são idênticos aos anteriores. Edge matching-trajectory21 ACTIVE/jwt true,14/14arquivos iguais ao SHA validado; bundle8b5b2bd85622b36c26e5409899379ba8cff759e3b34cfba14a7a31d8f0f79047. Advisors de segurança sem alteração.
+
+Web containerff4c7a04dd28, imagem0eaa081e5c58a63a2826fa2e1287500cf8590326005e2d2f04195f02805e7a26, running/restarts0. Script saiu22 por HEAD404 imediato na troca; conferência independente posterior estabilizou200 sem novo build.15checks de HTTP/assets/SHA/aviso de incerteza/negação anônima PASS; entryindex-DojCWbi-.js/CSSindex-CbWl015i.css. Um primeiro assert de smoke procurava versão do motor no JS cliente; foi corrigido: cálculo ocorre no servidor e essa constante não integra o bundle cliente. A prova do motor é a igualdade dos14arquivos Edge, não uma string no frontend.
+
+Parser, Synthesis, gateway, mail, Horus e Traefik preservam exatamente IDs/imagens/reinícios/status dos seis containers. A advertência de compose sobre orphan containers não motivou remoção. Imagem anterior6128874ace2f19c5161f8e5ff5b4af83e4025fd348a2f996a5dd235d9cae4974 preservada em prisma-web:rollback-before-82794add612c; Edge20 e suas14fontes anteriores foram guardadas localmente para recuperação. Rollback coordenado: restaurar fragmentos anteriores de stable_matching_sources/complete_stable_matching_score antes do worker20, manter M6.2 compatível com históricos5.2.0 e restaurar imagem web; nunca apagar avaliações/decisões para rollback.
+
+Leitura remota após DDL/Edge confirma hash do Perfil inalterado,5avaliações anteriores preservadas e decisionSource humana idêntica. Nenhum backfill/reprocessamento em massa, Perfil real alterado ou chamada paga para teste. Resultado salvo antigo é atualizado pela primeira consulta autorizada; não foi fabricada avaliação real para smoke. Jornada autenticada de recálculo real permanece NOT TESTED; validação do caso real foi somente leitura/offline no runtime exato, seguida da conferência de igualdade do servidor publicado. A recuperação textual segue conservadora e pode não resolver toda paráfrase.
+
+D-01..07 e P-01..03 PASS nas fronteiras e ambientes acima, com limites explícitos; F-01 preservado. Nenhum desvio do acordo. Fechamento documental posterior sincroniza Git/VPS sem rebuild, sem reabrir escopo; CI desse fechamento permanece obrigatório.

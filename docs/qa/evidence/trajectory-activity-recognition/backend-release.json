@@ -1,0 +1,102 @@
+{
+  "runtimeSha": "82794add612cb8949f460e1a3f2cce075a827ab1",
+  "migration": {
+    "local": "20261023180000",
+    "remote": "20261023213441",
+    "name": "trajectory_activity_recognition"
+  },
+  "edge": {
+    "version": 21,
+    "verifyJwt": true,
+    "sha256": "8b5b2bd85622b36c26e5409899379ba8cff759e3b34cfba14a7a31d8f0f79047",
+    "comparisons": [
+      {
+        "name": "supabase/functions/matching-trajectory/index.ts",
+        "match": true
+      },
+      {
+        "name": "supabase/functions/matching-trajectory/handler.ts",
+        "match": true
+      },
+      {
+        "name": "src/infrastructure/aiHistory.ts",
+        "match": true
+      },
+      {
+        "name": "supabase/functions/matching-trajectory/_generated/src/domain/semanticTrajectory.js",
+        "match": true
+      },
+      {
+        "name": "supabase/functions/matching-trajectory/snapshot.ts",
+        "match": true
+      },
+      {
+        "name": "supabase/functions/matching-trajectory/_generated/web/src/domain/vacancy.js",
+        "match": true
+      },
+      {
+        "name": "supabase/functions/matching-trajectory/_generated/web/src/domain/matchingScore.js",
+        "match": true
+      },
+      {
+        "name": "supabase/functions/matching-trajectory/_generated/src/domain/resumeDates.js",
+        "match": true
+      },
+      {
+        "name": "supabase/functions/matching-trajectory/_generated/web/src/domain/semanticMatching.js",
+        "match": true
+      },
+      {
+        "name": "supabase/functions/matching-trajectory/_generated/web/src/infrastructure/supabase/personIngestionService.js",
+        "match": true
+      },
+      {
+        "name": "supabase/functions/matching-trajectory/_generated/web/src/domain/narrativeText.js",
+        "match": true
+      },
+      {
+        "name": "supabase/functions/matching-trajectory/_generated/src/domain/educationClassification.js",
+        "match": true
+      },
+      {
+        "name": "supabase/functions/matching-trajectory/_generated/web/src/domain/reviewFieldLifecycle.js",
+        "match": true
+      },
+      {
+        "name": "supabase/functions/matching-trajectory/stable.ts",
+        "match": true
+      }
+    ]
+  },
+  "database": [
+    {
+      "signature": "create_m62_verification_need(uuid,uuid,text,text)",
+      "aclPreserved": true,
+      "securityPreserved": true,
+      "onlyExpectedChange": true
+    },
+    {
+      "signature": "private.stable_matching_sources(uuid,uuid,uuid,uuid)",
+      "aclPreserved": true,
+      "securityPreserved": true,
+      "onlyExpectedChange": true
+    },
+    {
+      "signature": "complete_stable_matching_score(uuid,uuid,uuid,uuid,uuid,jsonb,jsonb,text,jsonb)",
+      "aclPreserved": true,
+      "securityPreserved": true,
+      "onlyExpectedChange": true
+    }
+  ],
+  "preservation": {
+    "profilePreserved": true,
+    "historyCountBefore": 5,
+    "historyCountAfter": 5,
+    "humanDecisionPreserved": true
+  },
+  "ci": {
+    "branch": 40027537656,
+    "main": 40027888027,
+    "status": "success"
+  }
+}

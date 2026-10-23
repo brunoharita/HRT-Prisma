@@ -1,0 +1,66 @@
+{
+  "runtimeSha": "82794add612cb8949f460e1a3f2cce075a827ab1",
+  "matchingVersionEvidence": "Exact 14-file server bundle verification; frontend does not run the scorer",
+  "checks": [
+    {
+      "name": "root HTTP 200",
+      "pass": true
+    },
+    {
+      "name": "asset /assets/index-DojCWbi-.js",
+      "pass": true
+    },
+    {
+      "name": "asset /assets/rolldown-runtime-C0FnF6B9.js",
+      "pass": true
+    },
+    {
+      "name": "asset /assets/antd-vendor-BaKnhCyQ.js",
+      "pass": true
+    },
+    {
+      "name": "asset /assets/supabase-vendor-DoXvCMLf.js",
+      "pass": true
+    },
+    {
+      "name": "asset /assets/react-vendor-BdxMnOeJ.js",
+      "pass": true
+    },
+    {
+      "name": "asset /assets/antd-vendor-B5BXDqMa.css",
+      "pass": true
+    },
+    {
+      "name": "asset /assets/index-CbWl015i.css",
+      "pass": true
+    },
+    {
+      "name": "served exact validated SHA",
+      "pass": true
+    },
+    {
+      "name": "served activity uncertainty notice",
+      "pass": true
+    },
+    {
+      "name": "route /login",
+      "pass": true
+    },
+    {
+      "name": "route /vacancies",
+      "pass": true
+    },
+    {
+      "name": "route /profiles/search",
+      "pass": true
+    },
+    {
+      "name": "route /selection-processes",
+      "pass": true
+    },
+    {
+      "name": "Edge rejects unauthenticated request",
+      "pass": true
+    }
+  ]
+}
