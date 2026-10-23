@@ -1,0 +1,551 @@
+BEGIN
+DO
+        set_config
+---------------------------
+ trajectory-evidence-1.2.0
+(1 row)
+
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+INSERT 0 1
+INSERT 0 2
+INSERT 0 4
+INSERT 0 4
+INSERT 0 4
+INSERT 0 1
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+REVOKE
+DO
+ALTER FUNCTION
+REVOKE
+CREATE FUNCTION
+REVOKE
+ALTER TABLE
+CREATE INDEX
+CREATE FUNCTION
+REVOKE
+CREATE TRIGGER
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+CREATE INDEX
+ALTER TABLE
+ALTER TABLE
+DO
+CREATE FUNCTION
+REVOKE
+CREATE FUNCTION
+REVOKE
+GRANT
+CREATE FUNCTION
+REVOKE
+CREATE FUNCTION
+REVOKE
+CREATE FUNCTION
+REVOKE
+CREATE TRIGGER
+CREATE FUNCTION
+REVOKE
+CREATE TRIGGER
+CREATE FUNCTION
+REVOKE
+GRANT
+DO
+REVOKE
+COMMENT
+COMMENT
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 72c08182-63ae-46f7-2888-124d9cf74e60
+(1 row)
+
+SET
+CREATE TABLE
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+RESET
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+SET
+INSERT 0 1
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+INSERT 0 1
+INSERT 0 1
+UPDATE 1
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+DO
+ m83_assert
+------------
+
+(1 row)
+
+RESET
+SET
+SET
+ALTER TABLE
+ALTER TABLE
+SET
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+UPDATE 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+UPDATE 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ fb5558da-3d02-d4f3-b8e3-459bd9f53ecf
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+UPDATE 0
+ m83_assert
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 1c84eaeb-a2c3-d1ec-df63-34dd2093d9a2
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+ set_config
+------------
+
+(1 row)
+
+ m83_reject
+------------
+
+(1 row)
+
+RESET
+              set_config
+--------------------------------------
+ 72c08182-63ae-46f7-2888-124d9cf74e60
+(1 row)
+
+SET
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+INSERT 0 1
+INSERT 0 1
+ m83_reject
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+RESET
+UPDATE 1
+              set_config
+--------------------------------------
+ 72c08182-63ae-46f7-2888-124d9cf74e60
+(1 row)
+
+SET
+DO
+RESET
+DO
+DO
+ m83_assert
+------------
+
+(1 row)
+
+ m83_assert
+------------
+
+(1 row)
+
+ROLLBACK
+
+psql:tmp/profile-scalar-targets/verification.sql:420: NOTICE:  PASS: anon cannot create manual profile
+psql:tmp/profile-scalar-targets/verification.sql:421: NOTICE:  PASS: publication inner writer remains private
+psql:tmp/profile-scalar-targets/verification.sql:422: NOTICE:  PASS: direct review writes remain denied
+psql:tmp/profile-scalar-targets/verification.sql:426: NOTICE:  PASS: denied (22023)
+psql:tmp/profile-scalar-targets/verification.sql:427: NOTICE:  PASS: denied (22023)
+psql:tmp/profile-scalar-targets/verification.sql:429: NOTICE:  PASS: new Person defaults No and draft is not generated profile
+psql:tmp/profile-scalar-targets/verification.sql:430: NOTICE:  PASS: manual draft does not fabricate document
+psql:tmp/profile-scalar-targets/verification.sql:431: NOTICE:  PASS: manual draft does not fabricate extraction attempt
+psql:tmp/profile-scalar-targets/verification.sql:432: NOTICE:  PASS: manual draft does not fabricate evidence
+psql:tmp/profile-scalar-targets/verification.sql:433: NOTICE:  PASS: partial draft is never published
+psql:tmp/profile-scalar-targets/verification.sql:434: NOTICE:  PASS: replay returns original draft
+psql:tmp/profile-scalar-targets/verification.sql:435: NOTICE:  PASS: creation replay never duplicates Person
+psql:tmp/profile-scalar-targets/verification.sql:436: NOTICE:  PASS: denied (23505)
+psql:tmp/profile-scalar-targets/verification.sql:437: NOTICE:  PASS: duplicate exact normalized name
+psql:tmp/profile-scalar-targets/verification.sql:438: NOTICE:  PASS: denied (23505)
+psql:tmp/profile-scalar-targets/verification.sql:440: NOTICE:  PASS: manual origin is explicit without source document
+psql:tmp/profile-scalar-targets/verification.sql:443: NOTICE:  PASS: partial draft saves without contact and resumes persisted
+psql:tmp/profile-scalar-targets/verification.sql:444: NOTICE:  PASS: denied (22023)
+psql:tmp/profile-scalar-targets/verification.sql:446: NOTICE:  PASS: failed publication preserves empty current profile
+psql:tmp/profile-scalar-targets/verification.sql:447: NOTICE:  PASS: migration defaults existing Person to administrative No
+psql:tmp/profile-scalar-targets/verification.sql:459: NOTICE:  PASS: all structured sections and multiple records saved
+psql:tmp/profile-scalar-targets/verification.sql:460: NOTICE:  PASS: per-fact manual origin author and date stored
+psql:tmp/profile-scalar-targets/verification.sql:461: NOTICE:  PASS: denied (P0001)
+psql:tmp/profile-scalar-targets/verification.sql:462: NOTICE:  PASS: denied (22023)
+psql:tmp/profile-scalar-targets/verification.sql:464: NOTICE:  PASS: human publication creates version with true manual provenance and private separation
+psql:tmp/profile-scalar-targets/verification.sql:465: NOTICE:  PASS: contact persisted privately
+psql:tmp/profile-scalar-targets/verification.sql:466: NOTICE:  PASS: publication replay reuses same version
+psql:tmp/profile-scalar-targets/verification.sql:467: NOTICE:  PASS: publication replay does not duplicate version
+psql:tmp/profile-scalar-targets/verification.sql:469: NOTICE:  PASS: existing current profile prefills every professional fact faithfully
+psql:tmp/profile-scalar-targets/verification.sql:470: NOTICE:  PASS: private contact prefills from private registry
+psql:tmp/profile-scalar-targets/verification.sql:471: NOTICE:  PASS: prefilled private data does not fabricate a new manual author or extraction origin
+psql:tmp/profile-scalar-targets/verification.sql:472: NOTICE:  PASS: resume returns existing manual draft without reset
+psql:tmp/profile-scalar-targets/verification.sql:477: NOTICE:  PASS: saving or leaving draft preserves entire published version
+psql:tmp/profile-scalar-targets/verification.sql:488: NOTICE:  PASS: baseline reproduces exact23514 constraint for title and summary
+psql:tmp/profile-scalar-targets/verification.sql:489: NOTICE:  PASS: baseline failure rolls back Profile and preserves saved review
+psql:tmp/profile-scalar-targets/verification.sql:512: NOTICE:  PASS: updated title and summary published with complete audit and no fabricated block IDs
+psql:tmp/profile-scalar-targets/verification.sql:513: NOTICE:  PASS: new version updates requested fact while omissions preserve prior experiences
+psql:tmp/profile-scalar-targets/verification.sql:514: NOTICE:  PASS: previous historical version is preserved, only superseded timestamp changes
+psql:tmp/profile-scalar-targets/verification.sql:515: NOTICE:  PASS: omitted preserved facts keep original manual provenance
+psql:tmp/profile-scalar-targets/verification.sql:517: NOTICE:  PASS: authorized reviewer sets active employee Yes
+psql:tmp/profile-scalar-targets/verification.sql:518: NOTICE:  PASS: employee Yes has mandatory author date history
+psql:tmp/profile-scalar-targets/verification.sql:520: NOTICE:  PASS: employee No records second immutable historical change
+psql:tmp/profile-scalar-targets/verification.sql:521: NOTICE:  PASS: employee changes never change current professional version
+psql:tmp/profile-scalar-targets/verification.sql:522: NOTICE:  PASS: denied (23502)
+psql:tmp/profile-scalar-targets/verification.sql:523: NOTICE:  PASS: duplicate normalized email
+psql:tmp/profile-scalar-targets/verification.sql:524: NOTICE:  PASS: duplicate normalized phone
+psql:tmp/profile-scalar-targets/verification.sql:525: NOTICE:  PASS: denied (42501)
+psql:tmp/profile-scalar-targets/verification.sql:526: NOTICE:  PASS: denied (42501)
+psql:tmp/profile-scalar-targets/verification.sql:528: NOTICE:  PASS: denied (42501)
+psql:tmp/profile-scalar-targets/verification.sql:529: NOTICE:  PASS: denied (42501)
+psql:tmp/profile-scalar-targets/verification.sql:530: NOTICE:  PASS: denied (42501)
+psql:tmp/profile-scalar-targets/verification.sql:532: NOTICE:  PASS: member cannot alter active employee through direct DML
+psql:tmp/profile-scalar-targets/verification.sql:534: NOTICE:  PASS: denied (42501)
+psql:tmp/profile-scalar-targets/verification.sql:536: NOTICE:  PASS: denied (42501)
+psql:tmp/profile-scalar-targets/verification.sql:545: NOTICE:  PASS: only explicit human removal removes the selected stable record
+psql:tmp/profile-scalar-targets/verification.sql:546: NOTICE:  PASS: explicit removal remains in immutable audit
+psql:tmp/profile-scalar-targets/verification.sql:549: NOTICE:  PASS: denied (P0001)
+psql:tmp/profile-scalar-targets/verification.sql:550: NOTICE:  PASS: current-version conflict preserves manual draft
+psql:tmp/profile-scalar-targets/verification.sql:551: NOTICE:  PASS: failed stale publication preserves the current restored profile
+psql:tmp/profile-scalar-targets/verification.sql:552: NOTICE:  PASS: restoration preserves original manual fact provenance
+psql:tmp/profile-scalar-targets/verification.sql:553: NOTICE:  PASS: manual lifecycle still has zero fabricated documents and evidence
+psql:tmp/profile-scalar-targets/verification.sql:589: NOTICE:  PASS: scalar values published: merge/update
+psql:tmp/profile-scalar-targets/verification.sql:589: NOTICE:  PASS: seven scalar/list decisions audited: merge/update
+psql:tmp/profile-scalar-targets/verification.sql:589: NOTICE:  PASS: replay preserves audit and versions: merge/update
+psql:tmp/profile-scalar-targets/verification.sql:589: NOTICE:  PASS: scalar values published: merge/replace
+psql:tmp/profile-scalar-targets/verification.sql:589: NOTICE:  PASS: seven scalar/list decisions audited: merge/replace
+psql:tmp/profile-scalar-targets/verification.sql:589: NOTICE:  PASS: replay preserves audit and versions: merge/replace
+psql:tmp/profile-scalar-targets/verification.sql:589: NOTICE:  PASS: scalar values published: replace/update
+psql:tmp/profile-scalar-targets/verification.sql:589: NOTICE:  PASS: seven scalar/list decisions audited: replace/update
+psql:tmp/profile-scalar-targets/verification.sql:589: NOTICE:  PASS: replay preserves audit and versions: replace/update
+psql:tmp/profile-scalar-targets/verification.sql:589: NOTICE:  PASS: scalar values published: replace/replace
+psql:tmp/profile-scalar-targets/verification.sql:589: NOTICE:  PASS: seven scalar/list decisions audited: replace/replace
+psql:tmp/profile-scalar-targets/verification.sql:589: NOTICE:  PASS: replay preserves audit and versions: replace/replace
+psql:tmp/profile-scalar-targets/verification.sql:589: NOTICE:  PASS: denied (42501)
+psql:tmp/profile-scalar-targets/verification.sql:589: NOTICE:  PASS: denied (42501)
+psql:tmp/profile-scalar-targets/verification.sql:589: NOTICE:  PASS: denied (42501)
+psql:tmp/profile-scalar-targets/verification.sql:589: NOTICE:  PASS: denied (42501)
+psql:tmp/profile-scalar-targets/verification.sql:589: NOTICE:  PASS: denied (42501)
+psql:tmp/profile-scalar-targets/verification.sql:589: NOTICE:  PASS: denied (42501)
+psql:tmp/profile-scalar-targets/verification.sql:589: NOTICE:  PASS: denied (42501)
+psql:tmp/profile-scalar-targets/verification.sql:589: NOTICE:  PASS: denied (42501)
+psql:tmp/profile-scalar-targets/verification.sql:601: NOTICE:  PASS: denied (22023)
+psql:tmp/profile-scalar-targets/verification.sql:601: NOTICE:  PASS: denied (22023)
+psql:tmp/profile-scalar-targets/verification.sql:601: NOTICE:  PASS: denied (23514)
+psql:tmp/profile-scalar-targets/verification.sql:601: NOTICE:  PASS: denied (22023)
+psql:tmp/profile-scalar-targets/verification.sql:601: NOTICE:  PASS: denied (22023)
+psql:tmp/profile-scalar-targets/verification.sql:601: NOTICE:  PASS: denied (23514)
+psql:tmp/profile-scalar-targets/verification.sql:601: NOTICE:  PASS: denied (22023)
+psql:tmp/profile-scalar-targets/verification.sql:601: NOTICE:  PASS: denied (22023)
+psql:tmp/profile-scalar-targets/verification.sql:601: NOTICE:  PASS: denied (23514)
+psql:tmp/profile-scalar-targets/verification.sql:601: NOTICE:  PASS: denied (22023)
+psql:tmp/profile-scalar-targets/verification.sql:601: NOTICE:  PASS: denied (22023)
+psql:tmp/profile-scalar-targets/verification.sql:601: NOTICE:  PASS: denied (23514)
+psql:tmp/profile-scalar-targets/verification.sql:601: NOTICE:  PASS: denied (22023)
+psql:tmp/profile-scalar-targets/verification.sql:601: NOTICE:  PASS: denied (22023)
+psql:tmp/profile-scalar-targets/verification.sql:601: NOTICE:  PASS: denied (23514)
+psql:tmp/profile-scalar-targets/verification.sql:601: NOTICE:  PASS: denied (22023)
+psql:tmp/profile-scalar-targets/verification.sql:601: NOTICE:  PASS: denied (22023)
+psql:tmp/profile-scalar-targets/verification.sql:601: NOTICE:  PASS: denied (23514)
+psql:tmp/profile-scalar-targets/verification.sql:601: NOTICE:  PASS: denied (22023)
+psql:tmp/profile-scalar-targets/verification.sql:601: NOTICE:  PASS: denied (22023)
+psql:tmp/profile-scalar-targets/verification.sql:601: NOTICE:  PASS: denied (23514)
+psql:tmp/profile-scalar-targets/verification.sql:601: NOTICE:  PASS: denied (22023)
+psql:tmp/profile-scalar-targets/verification.sql:601: NOTICE:  PASS: denied (22023)
+psql:tmp/profile-scalar-targets/verification.sql:601: NOTICE:  PASS: denied (23514)
+psql:tmp/profile-scalar-targets/verification.sql:609: NOTICE:  PASS: valid entity update preserved
+psql:tmp/profile-scalar-targets/verification.sql:610: NOTICE:  PASS: audit RLS and direct-write restrictions preserved
+psql:tmp/profile-scalar-targets/verification.sql:612: NOTICE:  PASS: publication never enqueues AI

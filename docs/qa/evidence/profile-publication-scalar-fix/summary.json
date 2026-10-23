@@ -1,0 +1,5 @@
+{
+  "environment": "LOCAL PostgreSQL17; schema-only clone; synthetic fixtures; transaction rollback and clone removed",
+  "status": "PASS",
+  "assertions": 108
+}

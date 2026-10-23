@@ -18,7 +18,7 @@ Todas as mutações usam `SECURITY DEFINER`, `search_path = ''`, objetos totalme
 
 ## Publicação e blocos
 
-`publish_profile_review` recebe modo e decisões de bloco. `merge` reutiliza o compositor Delta. `replace` usa a revisão integral. `update` e `replace` exigem `targetBlockId` existente no mesmo array tipado. O ledger `profile_publication_decisions` preserva ação, resolvedor, origem, alvo, ator e instante.
+`publish_profile_review` recebe modo e decisões de bloco. `merge` reutiliza o compositor Delta. `replace` usa a revisão integral. Para entidades (`experiences`, `education`, `keyResults`, `customSections`), `update` e `replace` exigem `targetBlockId` existente no mesmo array tipado. Campos simples e listas de texto usam `fieldPath` e não possuem ID de bloco; a constraint do ledger segue essa distinção, alinhada ao validador existente (correção de23/10/2026, sem alterar contrato2.0.0). O ledger `profile_publication_decisions` preserva ação, resolvedor, origem, alvo quando aplicável, ator e instante. Publicação, histórico e proteção transacional continuam obrigatórios; ver AoT `docs/qa/aot-profile-publication-scalar-fix.md`.
 
 ## Restauração e reinício
 

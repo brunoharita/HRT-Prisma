@@ -9,6 +9,10 @@ last_verified: 2026-10-19
 
 # Estado atual do Prisma
 
+## Publicação de campos simples do Perfil — correção3.1.3 em validação
+
+Correção delimitada da constraint profile_publication_decisions_check: título, objetivo, resumo e listas textuais usam fieldPath sem ID de bloco; experiências/formação/resultados/seções continuam exigindo targetBlockId para update/replace. Baseline reproduziu23514 e rollback na RPC;108asserts PostgreSQL17 local PASS para publicação/auditoria/replay, histórico/omissões/restauração, tenant/papéis/lock e destinos inválidos. Sem alteração de UI/RPC/permissões/IA, sem publicar Perfil real. Acordo1.0.0 e AoT profile-publication-scalar-fix registram evidências e limites; CI/publicação/sincronização pendentes.
+
 ## Preservação do primeiro acesso — correção3.1.3 publicada
 
 Correção publicada no SHA funcionalff26d790912b8af2ed16bb3f30700038511dab03, mesma3.1.3. Edição administrativa não conclui primeiro acesso: save_platform_user_v3 deriva status sob lock, preserva pendência, reabilitação incompleta e bloqueio; formulário mostra Pendente com explicação e envia status controlado. Juliano restaurado para pending_first_access por CAS/auditoria do incidente, mantendo VCI Brasil/VCI - Bauru, credenciais e histórico; demais usuários/grupos/memberships/credenciais com fingerprints idênticos.325SQL/27browser/4Deno/14Node, tipos/build/contexto e CI branch39239657653/main39239906858 PASS. Migração remota20261019104726 com fingerprint idêntico; RPC service-only preservada. Webefc8034d3485 running0, rollback189593912b34,20checks públicos PASS após404 transitório sem rebuild; cinco serviços e Edges preservados. Sem backfill genérico, IA ou envio de teste. Sem QA remoto separado/jornada humana produtiva. Acordo/execução e AoT first-access-preservation registram limites. Fechamento documental sincroniza fontes sem reconstruir runtime.

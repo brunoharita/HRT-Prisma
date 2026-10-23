@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 549
-source_manifest_sha256: 5e4c343a9b15215b60ff95b6241d855043182fef2af4a69d3582be5215c2b754
+documentation_source_count: 551
+source_manifest_sha256: 647ce81c68022a182f740448e96e43567bf3fe626a4199760c152a7b0f30d957
 -->
 
 # Tudo sobre o Prisma
@@ -2649,6 +2649,10 @@ last_verified: 2026-10-19
 ---
 
 # Estado atual do Prisma
+
+## Publicação de campos simples do Perfil — correção3.1.3 em validação
+
+Correção delimitada da constraint profile_publication_decisions_check: título, objetivo, resumo e listas textuais usam fieldPath sem ID de bloco; experiências/formação/resultados/seções continuam exigindo targetBlockId para update/replace. Baseline reproduziu23514 e rollback na RPC;108asserts PostgreSQL17 local PASS para publicação/auditoria/replay, histórico/omissões/restauração, tenant/papéis/lock e destinos inválidos. Sem alteração de UI/RPC/permissões/IA, sem publicar Perfil real. Acordo1.0.0 e AoT profile-publication-scalar-fix registram evidências e limites; CI/publicação/sincronização pendentes.
 
 ## Preservação do primeiro acesso — correção3.1.3 publicada
 
@@ -5764,7 +5768,7 @@ Todas as mutações usam `SECURITY DEFINER`, `search_path = ''`, objetos totalme
 
 ## Publicação e blocos
 
-`publish_profile_review` recebe modo e decisões de bloco. `merge` reutiliza o compositor Delta. `replace` usa a revisão integral. `update` e `replace` exigem `targetBlockId` existente no mesmo array tipado. O ledger `profile_publication_decisions` preserva ação, resolvedor, origem, alvo, ator e instante.
+`publish_profile_review` recebe modo e decisões de bloco. `merge` reutiliza o compositor Delta. `replace` usa a revisão integral. Para entidades (`experiences`, `education`, `keyResults`, `customSections`), `update` e `replace` exigem `targetBlockId` existente no mesmo array tipado. Campos simples e listas de texto usam `fieldPath` e não possuem ID de bloco; a constraint do ledger segue essa distinção, alinhada ao validador existente (correção de23/10/2026, sem alterar contrato2.0.0). O ledger `profile_publication_decisions` preserva ação, resolvedor, origem, alvo quando aplicável, ator e instante. Publicação, histórico e proteção transacional continuam obrigatórios; ver AoT `docs/qa/aot-profile-publication-scalar-fix.md`.
 
 ## Restauração e reinício
 
@@ -17783,6 +17787,26 @@ Executar D-01..04, P-01 e F-01 com A-01 e CA-01..04, preservando todos os acordo
 
 ---
 
+## Source: `docs/qa/agreement-profile-publication-scalar-fix.md`
+
+# Acordo e execução — atualização de campos simples do Perfil, v1.0.0
+
+Autoridade: Bruno solicitou corrigir e publicar a falha ao atualizar o Perfil em23/10/2026. Restauração do comportamento existente de comparação/publicação2.0.0 (ADR025), sem nova decisão de produto. Baseline4c4db2465d6c4eb4c32d7f106af7cb2230c09d79. RiscoD. Aplicação permanece3.1.3; correção de integridade sem nova entrega no registry.
+
+- D-01: publicar uma atualização/substituição de campo simples ou item de lista, sem ID de bloco, deve concluir e auditar a decisão. O banco deve concordar com o validador existente.
+- D-02: experiências, formação, resultados e seções personalizadas continuam exigindo destino para update/replace; RPC mantém verificação de existência, origem e vínculo, organização, papel, lock, idempotência e atomicidade.
+- D-03: preservar versões anteriores, omissões no modo merge, ações humanas, rascunho e comparação em falhas. Publicar somente a migração necessária, com CI e sincronização.
+- P-01: inventar IDs de bloco, remover auditoria ou aceitar update/replace de entidade sem destino; enfraquecer RLS/grants/validador.
+- P-02: publicar o Perfil real ou alterar dados humanos para testar; backfill, IA paga ou nova extração.
+- F-01: redesign, mudança de conteúdo curricular, mensagens genéricas de outras falhas, outros serviços e regras comerciais.
+- A-01: ajustar a constraint existente por migração transacional, reutilizar harnesses e fixtures sintéticas locais, manter contratos e versão da aplicação.
+
+CA-01/D-01: reproduzir23514 na constraint original; após migração comprovar publicação real da RPC com título/resumo/objetivo e listas, update/replace sem targetBlockId, auditoria e replay. CA-02/D-02/P-01: casos negativos de entidades sem destino/desconhecido, tenant/papel, DML direto e constraints de ação/resolvedor. CA-03/D-03/P-02: regressão do fluxo manual existente, versões/omissões/rollback, hashes produtivos antes/depois, plano e fingerprint da migração. Sem QA remoto separado: PostgreSQL17 local descartável e smoke produtivo por metadados somente leitura.
+
+Execução: implementar D-01..03 sem violar P-01/02, F-01 excluído; A-01 somente no como. Validação mínima: dispatcher deduplicado, PostgreSQL integrado sintético com casos negativos, ledger, lint/contextos no snapshot rastreado, CI branch/main e verificação remota. Rollback sem apagar histórico: consumidores atuais permanecem compatíveis; reverter a constraint antiga somente após avaliar novas auditorias sem destino, pois a reversão pode reintroduzir o defeito. Preferir correção adiante.
+
+---
+
 ## Source: `docs/qa/agreement-profile-summary-cards-v2012.md`
 
 # Acordo e execução — Resumo executivo enriquecido v2.0.12
@@ -24726,6 +24750,41 @@ Screenshot do incidente é contraexemplo. Referência normativa continua acordo2
 ## Desvios / conclusão
 
 Nenhum desvio de produto identificado. Fonte do diagnóstico: código e leitura produtiva limitada ao Perfil vigente de Bruno no turno anterior; nenhum dado real versionado. D-01..04 e P/F PASS nas fronteiras requeridas. Publicação comprovada; comportamento autenticado de Pessoa real NOT TESTED e não usado para declarar a aceitação sintética. Fechamento Git documental mantém SHA funcional no bundle; verificação final local/origin/VPS registrada no retorno da execução.
+
+---
+
+## Source: `docs/qa/aot-profile-publication-scalar-fix.md`
+
+# AoT — atualização de campos simples do Perfil
+
+Contrato: `docs/qa/agreement-profile-publication-scalar-fix.md`v1.0.0. Baseline4c4db24. Fonte: screenshot como contraexemplo, logs produtivos23/10/2026 às14:22/14:23UTC com23514/profile_publication_decisions_check e leitura delimitada de revisão draft com mudança de professionalTitle. Nenhum conteúdo curricular versionado. A causa confirmada é a divergência entre constraint de auditoria e validador/RPC; campo simples legitimamente não possui targetBlockId.
+
+## Mapa de impacto inicial e preservação
+
+| Capacidade | Relação | Baseline / regressão mínima | Status |
+| --- | --- | --- | --- |
+| Auditoria/publicação de campos simples | direct | Baseline23514 reproduzido; título/resumo publicados e auditados sem IDs; quatro combinações merge/replace e update/replace com sete campos/listas e replay | PASS local |
+| Blocos de experiência/formação/resultados/seções | plausible_indirect | Oito pares root/ação sem destino falham23514; validador rejeita destino ausente/desconhecido; atualização válida de experiência preservada | PASS local |
+| Organização/papel, lock, replay, escrita direta | critical_transversal | Regressão SQL manual: tenant/papel/inativo/sem sessão, lock, replay e DML; helpers privados/RLS mantidos | PASS local |
+| Histórico/omissões/remoção/restauração | plausible_indirect | Versões, omissões, proveniência, remoção explícita e restauração no harness reutilizado | PASS local |
+| Tela, IA, Parser, matching, Auth e serviços VPS | no_impact_identified | Diff somente constraint da auditoria, sem consumidor; zero jobs IA, sem alteração de UI/serviços | PASS diff/local; plano/publicação pendentes |
+
+## Matriz de acordos e proibições
+
+| ID | Implementação / evidência esperada | Status |
+| --- | --- | --- |
+| D-01 | Migração da constraint; RPC real local com ações simples, auditoria/replay | PASS local; rollout pendente |
+| D-02 / P-01 | Somente sete campos/listas conhecidos dispensam target; entidades e demais guardas preservados | PASS local |
+| D-03 / P-02 | Regressão108asserts/rollback; sem escrita humana produtiva; hashes/plano/CI/sincronização pendentes | PARTIAL |
+| F-01 | Diff somente migração, harness/evidência/docs/contextos | PASS |
+
+Fidelidade visual: não aplicável; screenshot é contraexemplo de falha, sem nova composição visual.
+
+## Validação e fechamento
+
+`node scripts/test-profile-publication-scalar-targets.mjs`:108asserts PASS. Reutiliza a regressão manual existente em clone vazio schema-only PostgreSQL17 localhost55479; transação revertida e clone removido. Evidência `docs/qa/evidence/profile-publication-scalar-fix/sql.txt` e `summary.json`. Duas falhas do harness foram corrigidas: escape de$$ em String.replace e rascunho sintético obsoleto deixado pelo cenário de conflito; nenhuma correção adicional de produto foi necessária. Migração de produto permaneceu a mesma durante os três ciclos.
+
+QA local sintético não prova comportamento autenticado de Pessoa real; não executar publicação real como smoke. Sem QA remoto separado. CI/contextos/rollout/sincronização pendentes. Nenhuma divergência do contrato identificada até esta etapa. Nenhuma relação reclassificada.
 
 ---
 
