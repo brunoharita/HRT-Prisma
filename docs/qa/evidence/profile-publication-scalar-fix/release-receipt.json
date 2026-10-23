@@ -1,0 +1,21 @@
+{
+  "command": "publish",
+  "status": "GIT_PUBLISHED",
+  "sha": "021083abfc423cfd3a6707cc42bb9a43119014d3",
+  "branch": "codex/profile-publication-scalar-fix",
+  "web": "SKIPPED",
+  "parserIa": "SKIPPED",
+  "profileSynthesis": "SKIPPED",
+  "mailForwarder": "SKIPPED",
+  "remaining": {
+    "database": [
+      "supabase/migrations/20261023144000_profile_publication_scalar_targets.sql"
+    ],
+    "edgeFunctions": [],
+    "web": false,
+    "paddleGateway": false,
+    "parserIa": false,
+    "profileSynthesis": false,
+    "mailForwarder": false
+  }
+}

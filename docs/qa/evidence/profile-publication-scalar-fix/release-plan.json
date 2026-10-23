@@ -1,0 +1,57 @@
+{
+  "command": "plan",
+  "plan": {
+    "version": "1.0.6",
+    "files": [
+      "FONTE_GPT_PRISMA.md",
+      "TUDO_SOBRE_PRISMA.md",
+      "docs/ai-context/PRISMA_CURRENT_STATE.md",
+      "docs/architecture/profile-document-lifecycle.md",
+      "docs/qa/agreement-profile-publication-scalar-fix.md",
+      "docs/qa/aot-profile-publication-scalar-fix.md",
+      "docs/qa/evidence/profile-publication-scalar-fix/sql.txt",
+      "docs/qa/evidence/profile-publication-scalar-fix/summary.json",
+      "scripts/test-profile-publication-scalar-targets.mjs",
+      "supabase/migrations/20261023144000_profile_publication_scalar_targets.sql",
+      "supabase/qa/profile_publication_scalar_targets_verification.sql"
+    ],
+    "impact": {
+      "surfaces": [
+        "context-pack",
+        "database",
+        "database-tests",
+        "documentation",
+        "generated-context",
+        "tooling"
+      ],
+      "edgeFunctions": [],
+      "migrations": [
+        "supabase/migrations/20261023144000_profile_publication_scalar_targets.sql"
+      ],
+      "modifiedMigrations": [],
+      "unknown": []
+    },
+    "validationCommands": [
+      "git diff --check",
+      "pnpm run test:release-tooling",
+      "pnpm run generate:prisma-context",
+      "pnpm run check:prisma-context",
+      "pnpm run test",
+      "pnpm run check:supabase-ledger"
+    ],
+    "deployments": {
+      "git": true,
+      "database": [
+        "supabase/migrations/20261023144000_profile_publication_scalar_targets.sql"
+      ],
+      "edgeFunctions": [],
+      "web": false,
+      "parserIa": false,
+      "paddleGateway": false,
+      "profileSynthesis": false,
+      "mailForwarder": false
+    },
+    "blockedReasons": [],
+    "publishable": true
+  }
+}

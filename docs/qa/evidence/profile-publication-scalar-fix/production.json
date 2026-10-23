@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-23",
+  "project": "ioldpnqqvobprjiontre",
+  "functionalSha": "021083abfc423cfd3a6707cc42bb9a43119014d3",
+  "ci": { "branch": 39972770184, "main": 39973388063, "conclusion": "success" },
+  "migration": {
+    "name": "profile_publication_scalar_targets",
+    "localVersion": "20261023144000",
+    "remoteVersion": "20261023145525",
+    "constraintValidated": true,
+    "canonicalLength": 722,
+    "canonicalSha256": "e38a3435f2c74532c15faf1021a7921a2ac571249df6b63a5b1777f605a6748b",
+    "localRemoteStatementsEqual": true
+  },
+  "preservation": {
+    "beforeEqualsAfter": true,
+    "affectedPersonReviewsHash": "dde9535bcfa82dc2a688ad1188f78fa4",
+    "affectedPersonProfilesHash": "605ab1a74b958907518e7f44e9a17f95",
+    "publicationAndValidationFunctionsHash": "b64ed551597dced63e6cf6580c048908",
+    "publicationAuditCount": 409,
+    "auditRls": true,
+    "auditAcl": "{postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres,authenticated=r/postgres}",
+    "securityAdvisoryCountsUnchanged": true
+  },
+  "runtimeConsumers": "unchanged; dispatcher skips web, Edge Functions, Parser, gateway, mail and synthesis",
+  "limitation": "Authenticated real-person publication intentionally not executed; proof is local synthetic RPC integration plus production schema, fingerprint and preservation metadata. Dispatcher receipt database pending is superseded by this verified connector application; never replay it."
+}

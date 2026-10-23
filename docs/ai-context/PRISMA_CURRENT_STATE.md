@@ -9,9 +9,9 @@ last_verified: 2026-10-19
 
 # Estado atual do Prisma
 
-## Publicação de campos simples do Perfil — correção3.1.3 em validação
+## Publicação de campos simples do Perfil — correção3.1.3 publicada
 
-Correção delimitada da constraint profile_publication_decisions_check: título, objetivo, resumo e listas textuais usam fieldPath sem ID de bloco; experiências/formação/resultados/seções continuam exigindo targetBlockId para update/replace. Baseline reproduziu23514 e rollback na RPC;108asserts PostgreSQL17 local PASS para publicação/auditoria/replay, histórico/omissões/restauração, tenant/papéis/lock e destinos inválidos. Sem alteração de UI/RPC/permissões/IA, sem publicar Perfil real. Acordo1.0.0 e AoT profile-publication-scalar-fix registram evidências e limites; CI/publicação/sincronização pendentes.
+Constraint profile_publication_decisions_check corrigida: título, objetivo, resumo e listas textuais usam fieldPath sem ID de bloco; experiências/formação/resultados/seções continuam exigindo targetBlockId para update/replace. Baseline23514 reproduzido;108asserts PostgreSQL17/22tooling, lint/foundation/contextos/ledger PASS. SHA funcional021083abfc423cfd3a6707cc42bb9a43119014d3, CI branch39972770184/main39973388063 SUCCESS. Migração remota20261023145525 validada e fingerprint exato; hashes produtivos de revisão/Perfil/funções/grants e409auditorias preservados. Somente banco/docs, sem reconstruir runtime ou mudar3.1.3. Sem alterar UI/RPC/permissões/IA ou publicar Perfil real; jornada humana real NOT TESTED. Acordo1.0.0, AoT e recibos profile-publication-scalar-fix registram limites. Fechamento documental/contextos sincroniza Git sem novo rollout.
 
 ## Preservação do primeiro acesso — correção3.1.3 publicada
 

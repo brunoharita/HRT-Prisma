@@ -1673,6 +1673,19 @@
       "localStatementSha256": "972df8a54032a6ad1f8384f1bb214df3f816d195dccd3f351019d38a8ff15024",
       "remoteStatementSha256": "972df8a54032a6ad1f8384f1bb214df3f816d195dccd3f351019d38a8ff15024",
       "verifiedAt": "2026-10-19"
+    },
+    {
+      "name": "profile_publication_scalar_targets",
+      "localVersion": "20261023144000",
+      "remoteVersion": "20261023145525",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "fingerprintMethod": "strip-CR-trim-exterior-whitespace-v1",
+      "localCanonicalLength": 722,
+      "remoteCanonicalLength": 722,
+      "localStatementSha256": "e38a3435f2c74532c15faf1021a7921a2ac571249df6b63a5b1777f605a6748b",
+      "remoteStatementSha256": "e38a3435f2c74532c15faf1021a7921a2ac571249df6b63a5b1777f605a6748b",
+      "verifiedAt": "2026-10-23"
     }
   ],
   "localOnly": [
@@ -1712,12 +1725,12 @@
     }
   ],
   "lastIncrementalVerification": {
-    "date": "2026-10-18",
-    "movement": "my-account-v313",
+    "date": "2026-10-23",
+    "movement": "profile-publication-scalar-fix",
     "names": [
-      "operator_self_account"
+      "profile_publication_scalar_targets"
     ],
-    "evidence": "docs/qa/evidence/my-account-v313/production.json",
+    "evidence": "docs/qa/evidence/profile-publication-scalar-fix/production.json",
     "historicalSnapshotVerifiedAtUnchanged": true
   }
 }

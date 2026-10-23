@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 551
-source_manifest_sha256: 647ce81c68022a182f740448e96e43567bf3fe626a4199760c152a7b0f30d957
+source_manifest_sha256: af3efb806ef6c59ffd670accf4aa12a5781785a12c5224751232c5e43c0f4ffd
 -->
 
 # Tudo sobre o Prisma
@@ -2650,9 +2650,9 @@ last_verified: 2026-10-19
 
 # Estado atual do Prisma
 
-## Publicação de campos simples do Perfil — correção3.1.3 em validação
+## Publicação de campos simples do Perfil — correção3.1.3 publicada
 
-Correção delimitada da constraint profile_publication_decisions_check: título, objetivo, resumo e listas textuais usam fieldPath sem ID de bloco; experiências/formação/resultados/seções continuam exigindo targetBlockId para update/replace. Baseline reproduziu23514 e rollback na RPC;108asserts PostgreSQL17 local PASS para publicação/auditoria/replay, histórico/omissões/restauração, tenant/papéis/lock e destinos inválidos. Sem alteração de UI/RPC/permissões/IA, sem publicar Perfil real. Acordo1.0.0 e AoT profile-publication-scalar-fix registram evidências e limites; CI/publicação/sincronização pendentes.
+Constraint profile_publication_decisions_check corrigida: título, objetivo, resumo e listas textuais usam fieldPath sem ID de bloco; experiências/formação/resultados/seções continuam exigindo targetBlockId para update/replace. Baseline23514 reproduzido;108asserts PostgreSQL17/22tooling, lint/foundation/contextos/ledger PASS. SHA funcional021083abfc423cfd3a6707cc42bb9a43119014d3, CI branch39972770184/main39973388063 SUCCESS. Migração remota20261023145525 validada e fingerprint exato; hashes produtivos de revisão/Perfil/funções/grants e409auditorias preservados. Somente banco/docs, sem reconstruir runtime ou mudar3.1.3. Sem alterar UI/RPC/permissões/IA ou publicar Perfil real; jornada humana real NOT TESTED. Acordo1.0.0, AoT e recibos profile-publication-scalar-fix registram limites. Fechamento documental/contextos sincroniza Git sem novo rollout.
 
 ## Preservação do primeiro acesso — correção3.1.3 publicada
 
@@ -24767,15 +24767,15 @@ Contrato: `docs/qa/agreement-profile-publication-scalar-fix.md`v1.0.0. Baseline4
 | Blocos de experiência/formação/resultados/seções | plausible_indirect | Oito pares root/ação sem destino falham23514; validador rejeita destino ausente/desconhecido; atualização válida de experiência preservada | PASS local |
 | Organização/papel, lock, replay, escrita direta | critical_transversal | Regressão SQL manual: tenant/papel/inativo/sem sessão, lock, replay e DML; helpers privados/RLS mantidos | PASS local |
 | Histórico/omissões/remoção/restauração | plausible_indirect | Versões, omissões, proveniência, remoção explícita e restauração no harness reutilizado | PASS local |
-| Tela, IA, Parser, matching, Auth e serviços VPS | no_impact_identified | Diff somente constraint da auditoria, sem consumidor; zero jobs IA, sem alteração de UI/serviços | PASS diff/local; plano/publicação pendentes |
+| Tela, IA, Parser, matching, Auth e serviços VPS | no_impact_identified | Diff somente constraint da auditoria, sem consumidor; zero jobs IA; plano somente banco/docs e nenhum runtime reconstruído | PASS |
 
 ## Matriz de acordos e proibições
 
 | ID | Implementação / evidência esperada | Status |
 | --- | --- | --- |
-| D-01 | Migração da constraint; RPC real local com ações simples, auditoria/replay | PASS local; rollout pendente |
+| D-01 | Migração da constraint; RPC real local com ações simples, auditoria/replay; constraint produtiva validada e statements idênticos | PASS |
 | D-02 / P-01 | Somente sete campos/listas conhecidos dispensam target; entidades e demais guardas preservados | PASS local |
-| D-03 / P-02 | Regressão108asserts/rollback; sem escrita humana produtiva; hashes/plano/CI/sincronização pendentes | PARTIAL |
+| D-03 / P-02 | Regressão108asserts/rollback; sem escrita humana produtiva; hashes antes/depois iguais, CI branch/main e migração aplicada | PASS |
 | F-01 | Diff somente migração, harness/evidência/docs/contextos | PASS |
 
 Fidelidade visual: não aplicável; screenshot é contraexemplo de falha, sem nova composição visual.
@@ -24784,7 +24784,15 @@ Fidelidade visual: não aplicável; screenshot é contraexemplo de falha, sem no
 
 `node scripts/test-profile-publication-scalar-targets.mjs`:108asserts PASS. Reutiliza a regressão manual existente em clone vazio schema-only PostgreSQL17 localhost55479; transação revertida e clone removido. Evidência `docs/qa/evidence/profile-publication-scalar-fix/sql.txt` e `summary.json`. Duas falhas do harness foram corrigidas: escape de$$ em String.replace e rascunho sintético obsoleto deixado pelo cenário de conflito; nenhuma correção adicional de produto foi necessária. Migração de produto permaneceu a mesma durante os três ciclos.
 
-QA local sintético não prova comportamento autenticado de Pessoa real; não executar publicação real como smoke. Sem QA remoto separado. CI/contextos/rollout/sincronização pendentes. Nenhuma divergência do contrato identificada até esta etapa. Nenhuma relação reclassificada.
+QA local sintético não prova comportamento autenticado de Pessoa real. Sem QA remoto separado; publicação humana real NOT TESTED deliberadamente. Nenhuma divergência do contrato identificada. Nenhuma relação reclassificada. Snapshot rastreado excluiu todos os rascunhos alheios dos contextos; lint2006arquivos, foundation/contextos/ledger e22testes do release tooling PASS. A seleção genérica `pnpm run test` do dispatcher foi substituída localmente pelo harness SQL integrado da fronteira afetada, sem suíte integral local; CI obrigatória executou seus gates completos e auditoria de dependências.
+
+## Publicação e sincronização
+
+SHA funcional021083abfc423cfd3a6707cc42bb9a43119014d3 integrado por fast-forward. CI branch39972770184/main39973388063 SUCCESS. Migração remota20261023145525, constraint convalidated=true e fingerprint exato igual ao source validado: e38a3435f2c74532c15faf1021a7921a2ac571249df6b63a5b1777f605a6748b (722caracteres canônicos). PostgreSQL produtivo manteve hashes de todas as revisões e versões do caso, funções de publicação/aprovação/validação, RLS/grants e409auditorias. Advisors de segurança antes/depois mantêm as mesmas contagens preexistentes, sem nova concessão ou alteração de fronteira.
+
+Recibos e evidência mínima no diretório deste movimento: release-plan.json/release-receipt.json/production.json. `remaining.database` no recibo do dispatcher antecede a aplicação pelo conector; a evidência produtiva e o alias no ledger comprovam aplicação, sem replay. Apenas banco/docs; aplicação permanece3.1.3 e nenhum container/Edge foi reconstruído. Não se acessou VPS para publicar superfícies excluídas pelo plano. Encerramento documental sincroniza Git sem novo rollout de runtime. Worktree auxiliar sem uso arquivada; branch isolada preservou os arquivos alheios. Avisos de manutenção Git sobre metadados antigos foram preservados, sem limpeza forçada. PostgreSQL local teve recuperação de sua parada anterior antes do teste; lentidão/timeout do checker local foi resolvida executando apenas o checker interrompido, sem repetir as verificações concluídas.
+
+Conclusão: D-01..03 e P-01/02 PASS nas fronteiras requeridas, F-01 preservado, sem alteração de dados humanos. A correção restaura publicação legítima de campos sem ID de bloco; somente a ação explícita do operador publicará a revisão real.
 
 ---
 
