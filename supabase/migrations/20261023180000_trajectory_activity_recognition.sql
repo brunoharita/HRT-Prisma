@@ -11,7 +11,9 @@ begin
 
   definition:=pg_get_functiondef('public.complete_stable_matching_score(uuid,uuid,uuid,uuid,uuid,jsonb,jsonb,text,jsonb)'::regprocedure);
   old_guard:=$old$not in ('vacancy-matching-explainable-5.1.0','vacancy-matching-semantic-7.0.0')$old$;
-  new_guard:=$new$not in ('vacancy-matching-explainable-5.1.0','vacancy-matching-explainable-5.2.0','vacancy-matching-semantic-7.0.0')$new$;
+  -- Old evaluations remain readable. During the database -> Edge deployment
+  -- window an old worker must not stamp a 5.1.0 result with the new dependency.
+  new_guard:=$new$not in ('vacancy-matching-explainable-5.2.0','vacancy-matching-semantic-7.0.0')$new$;
   if position(old_guard in definition)=0 then raise exception 'TRAJECTORY_RECOGNITION_STABLE_BASELINE_MISMATCH'; end if;
   execute replace(definition,old_guard,new_guard);
 

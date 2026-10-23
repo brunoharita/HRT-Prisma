@@ -102,12 +102,12 @@ CREATE TABLE
 GRANT
 SET
 INSERT 0 2
-psql:tmp/trajectory-recognition-local.sql:1034: NOTICE:  PASS: initial calculation acquires lease
  m83_assert
 ------------
 
 (1 row)
 
+psql:tmp/trajectory-recognition-local.sql:1034: NOTICE:  PASS: initial calculation acquires lease
  m83_assert
 ------------
 
@@ -121,18 +121,18 @@ psql:tmp/trajectory-recognition-local.sql:1037: NOTICE:  PASS: reload returns or
 
 (1 row)
 
+ m83_assert
+------------
+
+(1 row)
+
 psql:tmp/trajectory-recognition-local.sql:1038: NOTICE:  PASS: reload returns exact score and reference date
- m83_assert
-------------
-
-(1 row)
-
- m83_assert
-------------
-
-(1 row)
-
 psql:tmp/trajectory-recognition-local.sql:1039: NOTICE:  PASS: calculation timestamp remains exact
+ m83_assert
+------------
+
+(1 row)
+
 psql:tmp/trajectory-recognition-local.sql:1040: NOTICE:  PASS: reading result never recomputes
  m83_assert
 ------------
@@ -146,12 +146,12 @@ SET
  72c08182-63ae-46f7-2888-124d9cf74e60
 (1 row)
 
-psql:tmp/trajectory-recognition-local.sql:1044: NOTICE:  PASS: stable snapshot preserves contextual verification journey
  m83_assert
 ------------
 
 (1 row)
 
+psql:tmp/trajectory-recognition-local.sql:1044: NOTICE:  PASS: stable snapshot preserves contextual verification journey
 RESET
 psql:tmp/trajectory-recognition-local.sql:1047: NOTICE:  PASS: global counters excluded
  m83_assert
@@ -182,7 +182,7 @@ psql:tmp/trajectory-recognition-local.sql:1054: NOTICE:  PASS: other person unch
 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            complete
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
- {"audit": {"reason": "dependencies_changed", "actorId": "72c08182-63ae-46f7-2888-124d9cf74e60", "contract": "matching-stable-result-1.0.0", "newScore": 55, "dependencies": {"profile": "2a4a851ac7e0e337e4fdcc88e5fef3f29702763ec96da0b06583dfd386217810", "decision": "71d127561cd6e6fe4957b70d6942d270ea73c3571daa6d021ea0e12df9d7b816", "evidence": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945", "position": "7628fee9af5e85490460748fcd4e6340e8da1f97b4298ae007abddd603cff30b", "knowledge": "889fe94e26f3731553cb60706fda52096a69ef0dd0701d9dfab3103c4c732a3f"}, "previousScore": 50, "changedDependencies": ["profile"], "previousEvaluationId": "b888eaaa-82b6-479e-8cb2-70d04f1cb9b0"}, "match": {"score": {"score": 55, "referenceDate": "2026-10-07", "profileVersion": "fd2e7ad9-9c9c-b324-7a80-84b145cf6ef2", "positionVersion": "c00907a4-c580-c875-a1d9-901c6ade3f69", "scoreContractVersion": "matching-score-1.4.0", "matchingContractVersion": "vacancy-matching-explainable-5.1.0"}, "requirements": [{"status": "no_evidence", "evidence": [], "explanation": "Synthetic evidence missing", "requirement": {"label": "SQL", "stableId": "abe05ae8-8afe-4bde-26e2-66103c63b3c7"}}], "discoveryGroup": "main_area"}, "state": "current", "calculatedAt": "2026-10-23T18:12:27.081358-03:00", "evaluationId": "a22c328b-015c-4789-bdbc-229f60357503"}
+ {"audit": {"reason": "dependencies_changed", "actorId": "72c08182-63ae-46f7-2888-124d9cf74e60", "contract": "matching-stable-result-1.0.0", "newScore": 55, "dependencies": {"profile": "2a4a851ac7e0e337e4fdcc88e5fef3f29702763ec96da0b06583dfd386217810", "decision": "71d127561cd6e6fe4957b70d6942d270ea73c3571daa6d021ea0e12df9d7b816", "evidence": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945", "position": "7628fee9af5e85490460748fcd4e6340e8da1f97b4298ae007abddd603cff30b", "knowledge": "889fe94e26f3731553cb60706fda52096a69ef0dd0701d9dfab3103c4c732a3f"}, "previousScore": 50, "changedDependencies": ["profile"], "previousEvaluationId": "aa1f0bbb-4c9c-4703-907d-764a4eedf5dc"}, "match": {"score": {"score": 55, "referenceDate": "2026-10-07", "profileVersion": "fd2e7ad9-9c9c-b324-7a80-84b145cf6ef2", "positionVersion": "c00907a4-c580-c875-a1d9-901c6ade3f69", "scoreContractVersion": "matching-score-1.4.0", "matchingContractVersion": "vacancy-matching-explainable-5.1.0"}, "requirements": [{"status": "no_evidence", "evidence": [], "explanation": "Synthetic evidence missing", "requirement": {"label": "SQL", "stableId": "abe05ae8-8afe-4bde-26e2-66103c63b3c7"}}], "discoveryGroup": "main_area"}, "state": "current", "calculatedAt": "2026-10-23T18:31:03.007118-03:00", "evaluationId": "9cb5e7a5-5064-44f1-bafe-f4c4f6a0d331"}
 (1 row)
 
 psql:tmp/trajectory-recognition-local.sql:1056: NOTICE:  PASS: new completed result published atomically
@@ -238,7 +238,7 @@ psql:tmp/trajectory-recognition-local.sql:1075: NOTICE:  PASS: linked Knowledge 
 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             complete
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
- {"audit": {"reason": "dependencies_changed", "actorId": "72c08182-63ae-46f7-2888-124d9cf74e60", "contract": "matching-stable-result-1.0.0", "newScore": 61, "dependencies": {"profile": "70a9f3a256b10f7ddeacd5e7ddb8380ba5675aa6fc71ffb756e63616c059a39c", "decision": "71d127561cd6e6fe4957b70d6942d270ea73c3571daa6d021ea0e12df9d7b816", "evidence": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945", "position": "7628fee9af5e85490460748fcd4e6340e8da1f97b4298ae007abddd603cff30b", "knowledge": "9482cdc7f8dfbdf67119f7bed7a42d2d9d1878e9d6168996ac03efb3f1a4979b"}, "previousScore": 60, "changedDependencies": ["knowledge"], "previousEvaluationId": "bb957571-286c-4ca2-b3f6-2fd88c49b03e"}, "match": {"score": {"score": 61, "referenceDate": "2026-10-07", "profileVersion": "c854e6cf-f3dd-8c38-bb70-f210407ab5d5", "positionVersion": "c00907a4-c580-c875-a1d9-901c6ade3f69", "scoreContractVersion": "matching-score-1.4.0", "matchingContractVersion": "vacancy-matching-explainable-5.1.0"}, "requirements": [{"status": "no_evidence", "evidence": [], "explanation": "Synthetic evidence missing", "requirement": {"label": "SQL", "stableId": "abe05ae8-8afe-4bde-26e2-66103c63b3c7"}}], "discoveryGroup": "main_area"}, "state": "current", "calculatedAt": "2026-10-23T18:12:27.081358-03:00", "evaluationId": "41135c6e-2444-4479-bf85-b4df61941160"}
+ {"audit": {"reason": "dependencies_changed", "actorId": "72c08182-63ae-46f7-2888-124d9cf74e60", "contract": "matching-stable-result-1.0.0", "newScore": 61, "dependencies": {"profile": "70a9f3a256b10f7ddeacd5e7ddb8380ba5675aa6fc71ffb756e63616c059a39c", "decision": "71d127561cd6e6fe4957b70d6942d270ea73c3571daa6d021ea0e12df9d7b816", "evidence": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945", "position": "7628fee9af5e85490460748fcd4e6340e8da1f97b4298ae007abddd603cff30b", "knowledge": "9482cdc7f8dfbdf67119f7bed7a42d2d9d1878e9d6168996ac03efb3f1a4979b"}, "previousScore": 60, "changedDependencies": ["knowledge"], "previousEvaluationId": "b91fa90b-3b18-4d07-8c5a-9a495e0f2f9e"}, "match": {"score": {"score": 61, "referenceDate": "2026-10-07", "profileVersion": "c854e6cf-f3dd-8c38-bb70-f210407ab5d5", "positionVersion": "c00907a4-c580-c875-a1d9-901c6ade3f69", "scoreContractVersion": "matching-score-1.4.0", "matchingContractVersion": "vacancy-matching-explainable-5.1.0"}, "requirements": [{"status": "no_evidence", "evidence": [], "explanation": "Synthetic evidence missing", "requirement": {"label": "SQL", "stableId": "abe05ae8-8afe-4bde-26e2-66103c63b3c7"}}], "discoveryGroup": "main_area"}, "state": "current", "calculatedAt": "2026-10-23T18:31:03.007118-03:00", "evaluationId": "ebb86535-e0c5-400b-893e-6096c7e68b22"}
 (1 row)
 
 psql:tmp/trajectory-recognition-local.sql:1077: NOTICE:  PASS: Knowledge linked to B does not change A
@@ -259,7 +259,7 @@ psql:tmp/trajectory-recognition-local.sql:1084: NOTICE:  PASS: human review upda
 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             complete
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
- {"audit": {"reason": "dependencies_changed", "actorId": "72c08182-63ae-46f7-2888-124d9cf74e60", "contract": "matching-stable-result-1.0.0", "newScore": 55, "dependencies": {"profile": "2a4a851ac7e0e337e4fdcc88e5fef3f29702763ec96da0b06583dfd386217810", "decision": "f2371a39fd1f987ffec248fffb4ff0e610fe96190479f4aa4ca7853fc7337a12", "evidence": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945", "position": "7628fee9af5e85490460748fcd4e6340e8da1f97b4298ae007abddd603cff30b", "knowledge": "889fe94e26f3731553cb60706fda52096a69ef0dd0701d9dfab3103c4c732a3f"}, "previousScore": 55, "changedDependencies": ["decision"], "previousEvaluationId": "a22c328b-015c-4789-bdbc-229f60357503"}, "match": {"score": {"score": 55, "referenceDate": "2026-10-07", "profileVersion": "fd2e7ad9-9c9c-b324-7a80-84b145cf6ef2", "positionVersion": "c00907a4-c580-c875-a1d9-901c6ade3f69", "scoreContractVersion": "matching-score-1.4.0", "matchingContractVersion": "vacancy-matching-explainable-5.1.0"}, "requirements": [{"status": "no_evidence", "evidence": [], "explanation": "Synthetic evidence missing", "requirement": {"label": "SQL", "stableId": "abe05ae8-8afe-4bde-26e2-66103c63b3c7"}}], "discoveryGroup": "main_area"}, "state": "current", "calculatedAt": "2026-10-23T18:12:27.081358-03:00", "evaluationId": "4bf873d9-a102-458a-bf72-84c14f0a1d4d"}
+ {"audit": {"reason": "dependencies_changed", "actorId": "72c08182-63ae-46f7-2888-124d9cf74e60", "contract": "matching-stable-result-1.0.0", "newScore": 55, "dependencies": {"profile": "2a4a851ac7e0e337e4fdcc88e5fef3f29702763ec96da0b06583dfd386217810", "decision": "f2371a39fd1f987ffec248fffb4ff0e610fe96190479f4aa4ca7853fc7337a12", "evidence": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945", "position": "7628fee9af5e85490460748fcd4e6340e8da1f97b4298ae007abddd603cff30b", "knowledge": "889fe94e26f3731553cb60706fda52096a69ef0dd0701d9dfab3103c4c732a3f"}, "previousScore": 55, "changedDependencies": ["decision"], "previousEvaluationId": "9cb5e7a5-5064-44f1-bafe-f4c4f6a0d331"}, "match": {"score": {"score": 55, "referenceDate": "2026-10-07", "profileVersion": "fd2e7ad9-9c9c-b324-7a80-84b145cf6ef2", "positionVersion": "c00907a4-c580-c875-a1d9-901c6ade3f69", "scoreContractVersion": "matching-score-1.4.0", "matchingContractVersion": "vacancy-matching-explainable-5.1.0"}, "requirements": [{"status": "no_evidence", "evidence": [], "explanation": "Synthetic evidence missing", "requirement": {"label": "SQL", "stableId": "abe05ae8-8afe-4bde-26e2-66103c63b3c7"}}], "discoveryGroup": "main_area"}, "state": "current", "calculatedAt": "2026-10-23T18:31:03.007118-03:00", "evaluationId": "6ad4c262-419c-489b-8b73-558f3359e330"}
 (1 row)
 
 psql:tmp/trajectory-recognition-local.sql:1086: NOTICE:  PASS: reviewing A leaves B evaluation untouched
@@ -280,12 +280,12 @@ psql:tmp/trajectory-recognition-local.sql:1091: NOTICE:  PASS: position change a
 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             complete
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
- {"audit": {"reason": "dependencies_changed", "actorId": "72c08182-63ae-46f7-2888-124d9cf74e60", "contract": "matching-stable-result-1.0.0", "newScore": 55, "dependencies": {"profile": "2a4a851ac7e0e337e4fdcc88e5fef3f29702763ec96da0b06583dfd386217810", "decision": "f2371a39fd1f987ffec248fffb4ff0e610fe96190479f4aa4ca7853fc7337a12", "evidence": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945", "position": "0f2b811fdd346debeeb61af0abaaece3d92a2c409680bfdc4b53b5ec230971b4", "knowledge": "889fe94e26f3731553cb60706fda52096a69ef0dd0701d9dfab3103c4c732a3f"}, "previousScore": 55, "changedDependencies": ["position"], "previousEvaluationId": "4bf873d9-a102-458a-bf72-84c14f0a1d4d"}, "match": {"score": {"score": 55, "referenceDate": "2026-10-07", "profileVersion": "fd2e7ad9-9c9c-b324-7a80-84b145cf6ef2", "positionVersion": "c00907a4-c580-c875-a1d9-901c6ade3f69", "scoreContractVersion": "matching-score-1.4.0", "matchingContractVersion": "vacancy-matching-explainable-5.1.0"}, "requirements": [{"status": "no_evidence", "evidence": [], "explanation": "Synthetic evidence missing", "requirement": {"label": "SQL", "stableId": "abe05ae8-8afe-4bde-26e2-66103c63b3c7"}}], "discoveryGroup": "main_area"}, "state": "current", "calculatedAt": "2026-10-23T18:12:27.081358-03:00", "evaluationId": "8f726a4a-2673-4e07-bbdd-bb938672fd3a"}
+ {"audit": {"reason": "dependencies_changed", "actorId": "72c08182-63ae-46f7-2888-124d9cf74e60", "contract": "matching-stable-result-1.0.0", "newScore": 55, "dependencies": {"profile": "2a4a851ac7e0e337e4fdcc88e5fef3f29702763ec96da0b06583dfd386217810", "decision": "f2371a39fd1f987ffec248fffb4ff0e610fe96190479f4aa4ca7853fc7337a12", "evidence": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945", "position": "0f2b811fdd346debeeb61af0abaaece3d92a2c409680bfdc4b53b5ec230971b4", "knowledge": "889fe94e26f3731553cb60706fda52096a69ef0dd0701d9dfab3103c4c732a3f"}, "previousScore": 55, "changedDependencies": ["position"], "previousEvaluationId": "6ad4c262-419c-489b-8b73-558f3359e330"}, "match": {"score": {"score": 55, "referenceDate": "2026-10-07", "profileVersion": "fd2e7ad9-9c9c-b324-7a80-84b145cf6ef2", "positionVersion": "c00907a4-c580-c875-a1d9-901c6ade3f69", "scoreContractVersion": "matching-score-1.4.0", "matchingContractVersion": "vacancy-matching-explainable-5.1.0"}, "requirements": [{"status": "no_evidence", "evidence": [], "explanation": "Synthetic evidence missing", "requirement": {"label": "SQL", "stableId": "abe05ae8-8afe-4bde-26e2-66103c63b3c7"}}], "discoveryGroup": "main_area"}, "state": "current", "calculatedAt": "2026-10-23T18:31:03.007118-03:00", "evaluationId": "c1a25c54-89d6-4624-88fd-f8efaae08df1"}
 (1 row)
 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             complete
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
- {"audit": {"reason": "dependencies_changed", "actorId": "72c08182-63ae-46f7-2888-124d9cf74e60", "contract": "matching-stable-result-1.0.0", "newScore": 62, "dependencies": {"profile": "70a9f3a256b10f7ddeacd5e7ddb8380ba5675aa6fc71ffb756e63616c059a39c", "decision": "71d127561cd6e6fe4957b70d6942d270ea73c3571daa6d021ea0e12df9d7b816", "evidence": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945", "position": "0f2b811fdd346debeeb61af0abaaece3d92a2c409680bfdc4b53b5ec230971b4", "knowledge": "9482cdc7f8dfbdf67119f7bed7a42d2d9d1878e9d6168996ac03efb3f1a4979b"}, "previousScore": 61, "changedDependencies": ["position"], "previousEvaluationId": "41135c6e-2444-4479-bf85-b4df61941160"}, "match": {"score": {"score": 62, "referenceDate": "2026-10-07", "profileVersion": "c854e6cf-f3dd-8c38-bb70-f210407ab5d5", "positionVersion": "c00907a4-c580-c875-a1d9-901c6ade3f69", "scoreContractVersion": "matching-score-1.4.0", "matchingContractVersion": "vacancy-matching-explainable-5.1.0"}, "requirements": [{"status": "no_evidence", "evidence": [], "explanation": "Synthetic evidence missing", "requirement": {"label": "SQL", "stableId": "abe05ae8-8afe-4bde-26e2-66103c63b3c7"}}], "discoveryGroup": "main_area"}, "state": "current", "calculatedAt": "2026-10-23T18:12:27.081358-03:00", "evaluationId": "e852f7d8-14e0-4712-83b9-7632fc894eea"}
+ {"audit": {"reason": "dependencies_changed", "actorId": "72c08182-63ae-46f7-2888-124d9cf74e60", "contract": "matching-stable-result-1.0.0", "newScore": 62, "dependencies": {"profile": "70a9f3a256b10f7ddeacd5e7ddb8380ba5675aa6fc71ffb756e63616c059a39c", "decision": "71d127561cd6e6fe4957b70d6942d270ea73c3571daa6d021ea0e12df9d7b816", "evidence": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945", "position": "0f2b811fdd346debeeb61af0abaaece3d92a2c409680bfdc4b53b5ec230971b4", "knowledge": "9482cdc7f8dfbdf67119f7bed7a42d2d9d1878e9d6168996ac03efb3f1a4979b"}, "previousScore": 61, "changedDependencies": ["position"], "previousEvaluationId": "ebb86535-e0c5-400b-893e-6096c7e68b22"}, "match": {"score": {"score": 62, "referenceDate": "2026-10-07", "profileVersion": "c854e6cf-f3dd-8c38-bb70-f210407ab5d5", "positionVersion": "c00907a4-c580-c875-a1d9-901c6ade3f69", "scoreContractVersion": "matching-score-1.4.0", "matchingContractVersion": "vacancy-matching-explainable-5.1.0"}, "requirements": [{"status": "no_evidence", "evidence": [], "explanation": "Synthetic evidence missing", "requirement": {"label": "SQL", "stableId": "abe05ae8-8afe-4bde-26e2-66103c63b3c7"}}], "discoveryGroup": "main_area"}, "state": "current", "calculatedAt": "2026-10-23T18:31:03.007118-03:00", "evaluationId": "fbff97d9-1d4b-4075-9a35-25d2b9eef459"}
 (1 row)
 
 RESET
@@ -309,7 +309,7 @@ psql:tmp/trajectory-recognition-local.sql:1108: NOTICE:  PASS: expired evidence 
 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             complete
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
- {"audit": {"reason": "dependencies_changed", "actorId": "72c08182-63ae-46f7-2888-124d9cf74e60", "contract": "matching-stable-result-1.0.0", "newScore": 55, "dependencies": {"profile": "2a4a851ac7e0e337e4fdcc88e5fef3f29702763ec96da0b06583dfd386217810", "decision": "f2371a39fd1f987ffec248fffb4ff0e610fe96190479f4aa4ca7853fc7337a12", "evidence": "5bf9f5f456f2d812888fac9c3ee116e1e8d8f09b4d0e98efd718eb83842cae60", "position": "0f2b811fdd346debeeb61af0abaaece3d92a2c409680bfdc4b53b5ec230971b4", "knowledge": "889fe94e26f3731553cb60706fda52096a69ef0dd0701d9dfab3103c4c732a3f"}, "previousScore": 55, "changedDependencies": ["evidence"], "previousEvaluationId": "8f726a4a-2673-4e07-bbdd-bb938672fd3a"}, "match": {"score": {"score": 55, "referenceDate": "2026-10-07", "profileVersion": "fd2e7ad9-9c9c-b324-7a80-84b145cf6ef2", "positionVersion": "c00907a4-c580-c875-a1d9-901c6ade3f69", "scoreContractVersion": "matching-score-1.4.0", "matchingContractVersion": "vacancy-matching-explainable-5.1.0"}, "requirements": [{"status": "no_evidence", "evidence": [], "explanation": "Synthetic evidence missing", "requirement": {"label": "SQL", "stableId": "abe05ae8-8afe-4bde-26e2-66103c63b3c7"}}], "discoveryGroup": "main_area"}, "state": "current", "calculatedAt": "2026-10-23T18:12:27.081358-03:00", "evaluationId": "8dd9b772-8a25-4097-942f-bc1251e2fbb9"}
+ {"audit": {"reason": "dependencies_changed", "actorId": "72c08182-63ae-46f7-2888-124d9cf74e60", "contract": "matching-stable-result-1.0.0", "newScore": 55, "dependencies": {"profile": "2a4a851ac7e0e337e4fdcc88e5fef3f29702763ec96da0b06583dfd386217810", "decision": "f2371a39fd1f987ffec248fffb4ff0e610fe96190479f4aa4ca7853fc7337a12", "evidence": "d3756c17f15b9fd7b5cb359391bf28f604fd550931bc06759c240b55ab94ccef", "position": "0f2b811fdd346debeeb61af0abaaece3d92a2c409680bfdc4b53b5ec230971b4", "knowledge": "889fe94e26f3731553cb60706fda52096a69ef0dd0701d9dfab3103c4c732a3f"}, "previousScore": 55, "changedDependencies": ["evidence"], "previousEvaluationId": "c1a25c54-89d6-4624-88fd-f8efaae08df1"}, "match": {"score": {"score": 55, "referenceDate": "2026-10-07", "profileVersion": "fd2e7ad9-9c9c-b324-7a80-84b145cf6ef2", "positionVersion": "c00907a4-c580-c875-a1d9-901c6ade3f69", "scoreContractVersion": "matching-score-1.4.0", "matchingContractVersion": "vacancy-matching-explainable-5.1.0"}, "requirements": [{"status": "no_evidence", "evidence": [], "explanation": "Synthetic evidence missing", "requirement": {"label": "SQL", "stableId": "abe05ae8-8afe-4bde-26e2-66103c63b3c7"}}], "discoveryGroup": "main_area"}, "state": "current", "calculatedAt": "2026-10-23T18:31:03.007118-03:00", "evaluationId": "88c4f54b-f59e-46d1-b062-037f2580d86d"}
 (1 row)
 
 psql:tmp/trajectory-recognition-local.sql:1110: NOTICE:  PASS: expired evidence does not cause repeated recalculation
@@ -332,11 +332,11 @@ psql:tmp/trajectory-recognition-local.sql:1114: NOTICE:  PASS: denied (22023)
 (1 row)
 
  m83_reject
+psql:tmp/trajectory-recognition-local.sql:1115: NOTICE:  PASS: denied (22023)
 ------------
 
 (1 row)
 
-psql:tmp/trajectory-recognition-local.sql:1115: NOTICE:  PASS: denied (22023)
 RESET
 UPDATE 1
 SET
@@ -353,19 +353,19 @@ psql:tmp/trajectory-recognition-local.sql:1120: NOTICE:  PASS: expired lease can
 (1 row)
 
 RESET
+psql:tmp/trajectory-recognition-local.sql:1130: NOTICE:  PASS: denied (40001)
+psql:tmp/trajectory-recognition-local.sql:1131: NOTICE:  PASS: stale completion cannot replace valid score
 UPDATE 1
 SET
 INSERT 0 1
 RESET
 UPDATE 1
 SET
-psql:tmp/trajectory-recognition-local.sql:1130: NOTICE:  PASS: denied (40001)
  m83_reject
 ------------
 
 (1 row)
 
-psql:tmp/trajectory-recognition-local.sql:1131: NOTICE:  PASS: stale completion cannot replace valid score
  m83_assert
 ------------
 
@@ -408,19 +408,19 @@ psql:tmp/trajectory-recognition-local.sql:1139: NOTICE:  PASS: denied (42501)
 
 (1 row)
 
+ m83_reject
+------------
+
+(1 row)
+
 psql:tmp/trajectory-recognition-local.sql:1140: NOTICE:  PASS: denied (42501)
- m83_reject
-------------
-
-(1 row)
-
 RESET
+psql:tmp/trajectory-recognition-local.sql:1142: NOTICE:  PASS: denied (42501)
  m83_reject
 ------------
 
 (1 row)
 
-psql:tmp/trajectory-recognition-local.sql:1142: NOTICE:  PASS: denied (42501)
 psql:tmp/trajectory-recognition-local.sql:1143: NOTICE:  PASS: stable pointer RLS enabled
  m83_assert
 ------------
@@ -430,13 +430,13 @@ psql:tmp/trajectory-recognition-local.sql:1143: NOTICE:  PASS: stable pointer RL
 SELECT 8
 SELECT 3
 DO
-psql:tmp/trajectory-recognition-local.sql:1172: NOTICE:  PASS: recognition migration preserves exact ACLs
+psql:tmp/trajectory-recognition-local.sql:1151: NOTICE:  PASS: recognition migration preserves exact ACLs
  m83_assert
 ------------
 
 (1 row)
 
-psql:tmp/trajectory-recognition-local.sql:1173: NOTICE:  PASS: recognition migration leaves all evaluation history immutable
+psql:tmp/trajectory-recognition-local.sql:1152: NOTICE:  PASS: recognition migration leaves all evaluation history immutable
  m83_assert
 ------------
 
@@ -444,20 +444,26 @@ psql:tmp/trajectory-recognition-local.sql:1173: NOTICE:  PASS: recognition migra
 
 UPDATE 2
 INSERT 0 1
-psql:tmp/trajectory-recognition-local.sql:1176: NOTICE:  PASS: new method is a causal dependency, not a date invalidation
+psql:tmp/trajectory-recognition-local.sql:1155: NOTICE:  PASS: new method is a causal dependency, not a date invalidation
  m83_assert
 ------------
 
 (1 row)
 
-psql:tmp/trajectory-recognition-local.sql:1177: NOTICE:  PASS: recognition revision is recorded
+psql:tmp/trajectory-recognition-local.sql:1156: NOTICE:  PASS: recognition revision is recorded
  m83_assert
 ------------
 
 (1 row)
 
-psql:tmp/trajectory-recognition-local.sql:1178: NOTICE:  PASS: old result is retained during method upgrade
+psql:tmp/trajectory-recognition-local.sql:1157: NOTICE:  PASS: old result is retained during method upgrade
  m83_assert
+------------
+
+(1 row)
+
+psql:tmp/trajectory-recognition-local.sql:1158: NOTICE:  PASS: denied (22023)
+ m83_reject
 ------------
 
 (1 row)
@@ -467,21 +473,21 @@ psql:tmp/trajectory-recognition-local.sql:1178: NOTICE:  PASS: old result is ret
 
 (1 row)
 
-psql:tmp/trajectory-recognition-local.sql:1179: NOTICE:  PASS: denied (22023)
+psql:tmp/trajectory-recognition-local.sql:1159: NOTICE:  PASS: denied (22023)
 INSERT 0 1
-psql:tmp/trajectory-recognition-local.sql:1181: NOTICE:  PASS: new deterministic version is accepted
+psql:tmp/trajectory-recognition-local.sql:1161: NOTICE:  PASS: new deterministic version is accepted
  m83_assert
 ------------
 
 (1 row)
 
-psql:tmp/trajectory-recognition-local.sql:1182: NOTICE:  PASS: second read preserves exact updated evaluation
+psql:tmp/trajectory-recognition-local.sql:1162: NOTICE:  PASS: second read preserves exact updated evaluation
  m83_assert
 ------------
 
 (1 row)
 
-psql:tmp/trajectory-recognition-local.sql:1183: NOTICE:  PASS: upgrade appends and preserves every historical evaluation
+psql:tmp/trajectory-recognition-local.sql:1163: NOTICE:  PASS: upgrade appends and preserves every historical evaluation
  m83_assert
 ------------
 
@@ -493,8 +499,8 @@ SET
  72c08182-63ae-46f7-2888-124d9cf74e60
 (1 row)
 
+psql:tmp/trajectory-recognition-local.sql:1166: NOTICE:  PASS: new matching version preserves M62 requirement verification
  m83_assert
-psql:tmp/trajectory-recognition-local.sql:1186: NOTICE:  PASS: new matching version preserves M62 requirement verification
 ------------
 
 (1 row)
