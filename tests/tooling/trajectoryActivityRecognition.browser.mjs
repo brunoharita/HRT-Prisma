@@ -1,0 +1,33 @@
+import assert from 'node:assert/strict';
+import {createRequire} from 'node:module';
+import {mkdir,writeFile} from 'node:fs/promises';
+const {chromium}=createRequire(import.meta.url)('C:/Users/Bruno/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const browser=await chromium.launch({headless:true,executablePath:'C:/Users/Bruno/AppData/Local/ms-playwright/chromium_headless_shell-1228/chrome-headless-shell-win64/chrome-headless-shell.exe'});
+const base='http://127.0.0.1:5711',dir='docs/qa/evidence/trajectory-activity-recognition',checks=[];
+await mkdir(dir,{recursive:true});
+const check=(name,pass)=>{checks.push({name,pass:!!pass});assert.ok(pass,name);};
+try{for(const width of [1448,390])for(const scenario of ['related','uncertain','contextual']){
+ const page=await browser.newPage({viewport:{width,height:1000}}),errors=[],external=[];
+ page.on('pageerror',e=>errors.push(e.message));
+ await page.route('**/*',route=>{if(!route.request().url().startsWith(base+'/')){external.push(route.request().url());return route.abort();}return route.continue();});
+ await page.goto(base+'/trajectory-activity.html?case='+scenario);
+ await page.getByRole('heading',{name:'Pessoa sintética'}).waitFor();
+ const body=await page.locator('body').innerText();
+ check(`${scenario}/${width}: readable relation`,scenario==='related'?body.includes('Relação profissional a verificar')&&!body.includes('Sem trajetória profissional relacionada'):scenario==='uncertain'?body.includes('Relação a verificar')&&!body.includes('Sem trajetória profissional relacionada'):body.includes('Sem trajetória profissional relacionada'));
+ if(scenario==='related')check(`${scenario}/${width}: missing requirement preserved`,body.includes('Gestão de pessoas'));
+ await page.getByRole('checkbox',{name:'Comparar Pessoa sintética'}).check();
+ check(`${scenario}/${width}: comparison action`,await page.evaluate(()=>window.__trajectoryActivity.events.includes('compare')));
+ await page.getByRole('button',{name:'Outras ações',exact:true}).click();
+ await page.getByRole('menuitem',{name:'Recalcular score',exact:true}).click();
+ check(`${scenario}/${width}: explicit recalculation preserved`,await page.evaluate(()=>window.__trajectoryActivity.events.includes('recalculate')));
+ await page.getByRole('button',{name:/Ver (análise|sinais|cálculo)/}).first().click();
+ const drawer=page.getByRole('dialog');await drawer.waitFor();
+ await page.locator('.ant-drawer-content-wrapper').evaluate(async element=>{await Promise.all(element.getAnimations({subtree:true}).map(animation=>animation.finished));});
+ await page.waitForTimeout(350);
+ const detail=await drawer.innerText();
+ check(`${scenario}/${width}: drawer explanation`,scenario==='uncertain'?detail.includes('Relação profissional a verificar')&&detail.includes('não significa baixa relevância'):scenario==='related'?detail.includes('Score e cobertura'):detail.includes('Sinais contextuais observados'));
+ await page.screenshot({path:`${dir}/${scenario}-${width}.png`,fullPage:true});
+ check(`${scenario}/${width}: no runtime errors or external calls`,errors.length===0&&external.length===0);
+ await page.close();
+}}finally{await browser.close();await writeFile(`${dir}/browser-results.json`,JSON.stringify({checks},null,2)+'\n');}
+console.log(`${checks.length} browser checks PASS`);

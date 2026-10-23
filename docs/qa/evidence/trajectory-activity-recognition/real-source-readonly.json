@@ -1,0 +1,35 @@
+{
+  "environment": "READ ONLY production professional sources; offline exact generated runtime; no profile mutation/provider",
+  "profileVersion": 1,
+  "positionVersion": 1,
+  "group": "related_area",
+  "relation": "related",
+  "activitySources": [
+    "experience:experience_01xbrbi100q7:description",
+    "experience:experience_01xbrbi100q7:description",
+    "experience:experience_01xbrbi100q7:evidenceText",
+    "experience:experience_01xbrbi100q7:evidenceText",
+    "experience:experience_00dn01p000mz:description",
+    "experience:experience_00dn01p000mz:evidenceText"
+  ],
+  "requirements": [
+    {
+      "label": "Comunicação",
+      "status": "no_evidence"
+    },
+    {
+      "label": "Gestão de pessoas",
+      "status": "no_evidence"
+    },
+    {
+      "label": "SAP",
+      "status": "met"
+    }
+  ],
+  "seniority": "adjacent_below",
+  "scoreAvailable": true,
+  "scoreStatus": "provisional",
+  "unavailableReason": null,
+  "positionDecision": "confirmed",
+  "triage": "resolved_internal"
+}

@@ -1,0 +1,132 @@
+{
+  "checks": [
+    {
+      "name": "related/1448: readable relation",
+      "pass": true
+    },
+    {
+      "name": "related/1448: missing requirement preserved",
+      "pass": true
+    },
+    {
+      "name": "related/1448: comparison action",
+      "pass": true
+    },
+    {
+      "name": "related/1448: explicit recalculation preserved",
+      "pass": true
+    },
+    {
+      "name": "related/1448: drawer explanation",
+      "pass": true
+    },
+    {
+      "name": "related/1448: no runtime errors or external calls",
+      "pass": true
+    },
+    {
+      "name": "uncertain/1448: readable relation",
+      "pass": true
+    },
+    {
+      "name": "uncertain/1448: comparison action",
+      "pass": true
+    },
+    {
+      "name": "uncertain/1448: explicit recalculation preserved",
+      "pass": true
+    },
+    {
+      "name": "uncertain/1448: drawer explanation",
+      "pass": true
+    },
+    {
+      "name": "uncertain/1448: no runtime errors or external calls",
+      "pass": true
+    },
+    {
+      "name": "contextual/1448: readable relation",
+      "pass": true
+    },
+    {
+      "name": "contextual/1448: comparison action",
+      "pass": true
+    },
+    {
+      "name": "contextual/1448: explicit recalculation preserved",
+      "pass": true
+    },
+    {
+      "name": "contextual/1448: drawer explanation",
+      "pass": true
+    },
+    {
+      "name": "contextual/1448: no runtime errors or external calls",
+      "pass": true
+    },
+    {
+      "name": "related/390: readable relation",
+      "pass": true
+    },
+    {
+      "name": "related/390: missing requirement preserved",
+      "pass": true
+    },
+    {
+      "name": "related/390: comparison action",
+      "pass": true
+    },
+    {
+      "name": "related/390: explicit recalculation preserved",
+      "pass": true
+    },
+    {
+      "name": "related/390: drawer explanation",
+      "pass": true
+    },
+    {
+      "name": "related/390: no runtime errors or external calls",
+      "pass": true
+    },
+    {
+      "name": "uncertain/390: readable relation",
+      "pass": true
+    },
+    {
+      "name": "uncertain/390: comparison action",
+      "pass": true
+    },
+    {
+      "name": "uncertain/390: explicit recalculation preserved",
+      "pass": true
+    },
+    {
+      "name": "uncertain/390: drawer explanation",
+      "pass": true
+    },
+    {
+      "name": "uncertain/390: no runtime errors or external calls",
+      "pass": true
+    },
+    {
+      "name": "contextual/390: readable relation",
+      "pass": true
+    },
+    {
+      "name": "contextual/390: comparison action",
+      "pass": true
+    },
+    {
+      "name": "contextual/390: explicit recalculation preserved",
+      "pass": true
+    },
+    {
+      "name": "contextual/390: drawer explanation",
+      "pass": true
+    },
+    {
+      "name": "contextual/390: no runtime errors or external calls",
+      "pass": true
+    }
+  ]
+}

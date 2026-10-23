@@ -1,0 +1,1210 @@
+TAP version 13
+# Subtest: M8.3: Edge snapshot uses the exact generated domain runtime
+ok 1 - M8.3: Edge snapshot uses the exact generated domain runtime
+  ---
+  duration_ms: 3848.3194
+  type: 'test'
+  ...
+# Subtest: two-digit date policy and temporal scores are identical in web and generated Edge runtime
+ok 2 - two-digit date policy and temporal scores are identical in web and generated Edge runtime
+  ---
+  duration_ms: 129.3811
+  type: 'test'
+  ...
+# Subtest: M8.3: generated decoder and matching run without browser or provider capabilities
+ok 3 - M8.3: generated decoder and matching run without browser or provider capabilities
+  ---
+  duration_ms: 84.2379
+  type: 'test'
+  ...
+# Subtest: M6.1 calcula 100 com quatro dimensões totalmente atendidas
+ok 4 - M6.1 calcula 100 com quatro dimensões totalmente atendidas
+  ---
+  duration_ms: 163.1175
+  type: 'test'
+  ...
+# Subtest: Analista de Sistemas sem desejáveis usa 90 pontos aplicáveis e arredonda somente o final
+ok 5 - Analista de Sistemas sem desejáveis usa 90 pontos aplicáveis e arredonda somente o final
+  ---
+  duration_ms: 16.113
+  type: 'test'
+  ...
+# Subtest: categorias ausentes saem do denominador e ausência total retorna indisponível
+ok 6 - categorias ausentes saem do denominador e ausência total retorna indisponível
+  ---
+  duration_ms: 4.5684
+  type: 'test'
+  ...
+# Subtest: requisitos dividem 35 e 15 igualmente e aplicam escala 100/50/25/0
+ok 7 - requisitos dividem 35 e 15 igualmente e aplicam escala 100/50/25/0
+  ---
+  duration_ms: 9.6829
+  type: 'test'
+  ...
+# Subtest: SAP explícito sem trajetória relacionada permanece sinal contextual sem score comparável
+ok 8 - SAP explícito sem trajetória relacionada permanece sinal contextual sem score comparável
+  ---
+  duration_ms: 3.2384
+  type: 'test'
+  ...
+# Subtest: falta de trajetória impede score comparável sem apagar cobertura ou evidência
+ok 9 - falta de trajetória impede score comparável sem apagar cobertura ou evidência
+  ---
+  duration_ms: 2.6918
+  type: 'test'
+  ...
+# Subtest: unclassified fica fora dos pesos, torna o score provisório e não bloqueia descoberta
+ok 10 - unclassified fica fora dos pesos, torna o score provisório e não bloqueia descoberta
+  ---
+  duration_ms: 4.5003
+  type: 'test'
+  ...
+# Subtest: versão desconhecida falha fechada sem fabricar 0
+ok 11 - versão desconhecida falha fechada sem fabricar 0
+  ---
+  duration_ms: 1.4395
+  type: 'test'
+  ...
+# Subtest: mesmas entradas são determinísticas e versões diferentes não compartilham identidade
+ok 12 - mesmas entradas são determinísticas e versões diferentes não compartilham identidade
+  ---
+  duration_ms: 3.6592
+  type: 'test'
+  ...
+# Subtest: função pura mantém p95 local abaixo de 5 ms em fixture pequena
+ok 13 - função pura mantém p95 local abaixo de 5 ms em fixture pequena
+  ---
+  duration_ms: 147.692
+  type: 'test'
+  ...
+# Subtest: Beatriz e Gerente de Marketing permanecem descobríveis sem inferir senioridade implícita
+ok 14 - Beatriz e Gerente de Marketing permanecem descobríveis sem inferir senioridade implícita
+  ---
+  duration_ms: 4.9251
+  type: 'test'
+  ...
+# Subtest: menção isolada a marketing em Tecnologia não cria área nem pontos
+ok 15 - menção isolada a marketing em Tecnologia não cria área nem pontos
+  ---
+  duration_ms: 41.9463
+  type: 'test'
+  ...
+# Subtest: referência ocupacional sustenta relação transferível sem inventar especialização ou recência
+ok 16 - referência ocupacional sustenta relação transferível sem inventar especialização ou recência
+  ---
+  duration_ms: 15.9421
+  type: 'test'
+  ...
+# Subtest: trajetória separa A, B e C e a exceção de entrada promove potencial ao Grupo B
+ok 17 - trajetória separa A, B e C e a exceção de entrada promove potencial ao Grupo B
+  ---
+  duration_ms: 6.6314
+  type: 'test'
+  ...
+# Subtest: Evidência Demonstrada fortalece somente o requisito exato e respeita nível e teto
+ok 18 - Evidência Demonstrada fortalece somente o requisito exato e respeita nível e teto
+  ---
+  duration_ms: 1.9568
+  type: 'test'
+  ...
+# Subtest: atributos proibidos, nome, volume e repetição não entram no cálculo
+ok 19 - atributos proibidos, nome, volume e repetição não entram no cálculo
+  ---
+  duration_ms: 2.8434
+  type: 'test'
+  ...
+# Subtest: ordenação preserva grupos e usa Prisma Score decrescente inclusive para provisórios
+ok 20 - ordenação preserva grupos e usa Prisma Score decrescente inclusive para provisórios
+  ---
+  duration_ms: 6.1838
+  type: 'test'
+  ...
+# Subtest: relatório sombra ordena pelo score, registra decisão sem usá-la como feature e evita PII textual
+ok 21 - relatório sombra ordena pelo score, registra decisão sem usá-la como feature e evita PII textual
+  ---
+  duration_ms: 2.5411
+  type: 'test'
+  ...
+# Subtest: UI expõe score, cobertura, grupos, explicação, versões e proteção mobile
+ok 22 - UI expõe score, cobertura, grupos, explicação, versões e proteção mobile
+  ---
+  duration_ms: 69.395
+  type: 'test'
+  ...
+# Subtest: M8.3 pilot has 12 contrasted bases, five realizations each and 120 later calls/model
+ok 23 - M8.3 pilot has 12 contrasted bases, five realizations each and 120 later calls/model
+  ---
+  duration_ms: 110.4713
+  type: 'test'
+  ...
+# Subtest: universal activation accepts every non-empty position title and never an empty position
+ok 24 - universal activation accepts every non-empty position title and never an empty position
+  ---
+  duration_ms: 0.4461
+  type: 'test'
+  ...
+# Subtest: response schema is closed, finite and has no score or free explanation
+ok 25 - response schema is closed, finite and has no score or free explanation
+  ---
+  duration_ms: 2.0934
+  type: 'test'
+  ...
+# Subtest: model evidence IDs resolve to exact source substrings and reject invented or cross-entry references
+ok 26 - model evidence IDs resolve to exact source substrings and reject invented or cross-entry references
+  ---
+  duration_ms: 7.3964
+  type: 'test'
+  ...
+# Subtest: human review counts only classification conflicts, reorders safely and keeps cited evidence
+ok 27 - human review counts only classification conflicts, reorders safely and keeps cited evidence
+  ---
+  duration_ms: 14.1678
+  type: 'test'
+  ...
+# Subtest: response accepts each source once in any order and only an exact quote from its own source
+ok 28 - response accepts each source once in any order and only an exact quote from its own source
+  ---
+  duration_ms: 1.9284
+  type: 'test'
+  ...
+# Subtest: independent agreement ignores quote choice and order, not category or source coverage
+ok 29 - independent agreement ignores quote choice and order, not category or source coverage
+  ---
+  duration_ms: 25.4171
+  type: 'test'
+  ...
+# Subtest: shared preparation omits identity, contacts, employers, schools, dates and prestige metadata
+ok 30 - shared preparation omits identity, contacts, employers, schools, dates and prestige metadata
+  ---
+  duration_ms: 16.4427
+  type: 'test'
+  ...
+# Subtest: shared preparation removes dates inside free text, preserving the work evidence
+ok 31 - shared preparation removes dates inside free text, preserving the work evidence
+  ---
+  duration_ms: 0.6928
+  type: 'test'
+  ...
+# Subtest: sanitization must not silently erase work evidence sharing a line with a sensitive attribute
+ok 32 - sanitization must not silently erase work evidence sharing a line with a sensitive attribute
+  ---
+  duration_ms: 1.1605
+  type: 'test'
+  ...
+# Subtest: input limits reject whole input rather than silently truncating sources or text
+ok 33 - input limits reject whole input rather than silently truncating sources or text
+  ---
+  duration_ms: 2162.5206
+  type: 'test'
+  ...
+# Subtest: valid interpretation resolves only the recognition doubt, preserving other material dependencies
+ok 34 - valid interpretation resolves only the recognition doubt, preserving other material dependencies
+  ---
+  duration_ms: 90.4083
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: backend.plain
+ok 35 - rubric integration preserves grounded classes: backend.plain
+  ---
+  duration_ms: 7.0762
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: backend.paraphrase
+ok 36 - rubric integration preserves grounded classes: backend.paraphrase
+  ---
+  duration_ms: 26.0603
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: backend.formatting
+ok 37 - rubric integration preserves grounded classes: backend.formatting
+  ---
+  duration_ms: 8.9945
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: backend.verbosity
+ok 38 - rubric integration preserves grounded classes: backend.verbosity
+  ---
+  duration_ms: 14.0331
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: backend.excluded_metadata
+ok 39 - rubric integration preserves grounded classes: backend.excluded_metadata
+  ---
+  duration_ms: 4.7308
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: leadership.plain
+ok 40 - rubric integration preserves grounded classes: leadership.plain
+  ---
+  duration_ms: 4.869
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: leadership.paraphrase
+ok 41 - rubric integration preserves grounded classes: leadership.paraphrase
+  ---
+  duration_ms: 4.8127
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: leadership.formatting
+ok 42 - rubric integration preserves grounded classes: leadership.formatting
+  ---
+  duration_ms: 5.004
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: leadership.verbosity
+ok 43 - rubric integration preserves grounded classes: leadership.verbosity
+  ---
+  duration_ms: 5.4059
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: leadership.excluded_metadata
+ok 44 - rubric integration preserves grounded classes: leadership.excluded_metadata
+  ---
+  duration_ms: 2.8608
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: sales.plain
+ok 45 - rubric integration preserves grounded classes: sales.plain
+  ---
+  duration_ms: 4.2953
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: sales.paraphrase
+ok 46 - rubric integration preserves grounded classes: sales.paraphrase
+  ---
+  duration_ms: 3.561
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: sales.formatting
+ok 47 - rubric integration preserves grounded classes: sales.formatting
+  ---
+  duration_ms: 3.7131
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: sales.verbosity
+ok 48 - rubric integration preserves grounded classes: sales.verbosity
+  ---
+  duration_ms: 3.0023
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: sales.excluded_metadata
+ok 49 - rubric integration preserves grounded classes: sales.excluded_metadata
+  ---
+  duration_ms: 2.6679
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: abap.plain
+ok 50 - rubric integration preserves grounded classes: abap.plain
+  ---
+  duration_ms: 3.7264
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: abap.paraphrase
+ok 51 - rubric integration preserves grounded classes: abap.paraphrase
+  ---
+  duration_ms: 5.4735
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: abap.formatting
+ok 52 - rubric integration preserves grounded classes: abap.formatting
+  ---
+  duration_ms: 2.6155
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: abap.verbosity
+ok 53 - rubric integration preserves grounded classes: abap.verbosity
+  ---
+  duration_ms: 3.9326
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: abap.excluded_metadata
+ok 54 - rubric integration preserves grounded classes: abap.excluded_metadata
+  ---
+  duration_ms: 4.2625
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: systems_analyst.plain
+ok 55 - rubric integration preserves grounded classes: systems_analyst.plain
+  ---
+  duration_ms: 1.7932
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: systems_analyst.paraphrase
+ok 56 - rubric integration preserves grounded classes: systems_analyst.paraphrase
+  ---
+  duration_ms: 1.9057
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: systems_analyst.formatting
+ok 57 - rubric integration preserves grounded classes: systems_analyst.formatting
+  ---
+  duration_ms: 23.3173
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: systems_analyst.verbosity
+ok 58 - rubric integration preserves grounded classes: systems_analyst.verbosity
+  ---
+  duration_ms: 7.6273
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: systems_analyst.excluded_metadata
+ok 59 - rubric integration preserves grounded classes: systems_analyst.excluded_metadata
+  ---
+  duration_ms: 2.1176
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: ambiguous.plain
+ok 60 - rubric integration preserves grounded classes: ambiguous.plain
+  ---
+  duration_ms: 2.5622
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: ambiguous.paraphrase
+ok 61 - rubric integration preserves grounded classes: ambiguous.paraphrase
+  ---
+  duration_ms: 5.1992
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: ambiguous.formatting
+ok 62 - rubric integration preserves grounded classes: ambiguous.formatting
+  ---
+  duration_ms: 7.0223
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: ambiguous.verbosity
+ok 63 - rubric integration preserves grounded classes: ambiguous.verbosity
+  ---
+  duration_ms: 22.2305
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: ambiguous.excluded_metadata
+ok 64 - rubric integration preserves grounded classes: ambiguous.excluded_metadata
+  ---
+  duration_ms: 8.6283
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: historic_programmer.plain
+ok 65 - rubric integration preserves grounded classes: historic_programmer.plain
+  ---
+  duration_ms: 34.1144
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: historic_programmer.paraphrase
+ok 66 - rubric integration preserves grounded classes: historic_programmer.paraphrase
+  ---
+  duration_ms: 5.5788
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: historic_programmer.formatting
+ok 67 - rubric integration preserves grounded classes: historic_programmer.formatting
+  ---
+  duration_ms: 19.1389
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: historic_programmer.verbosity
+ok 68 - rubric integration preserves grounded classes: historic_programmer.verbosity
+  ---
+  duration_ms: 11.8758
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: historic_programmer.excluded_metadata
+ok 69 - rubric integration preserves grounded classes: historic_programmer.excluded_metadata
+  ---
+  duration_ms: 12.6915
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: empty.plain
+ok 70 - rubric integration preserves grounded classes: empty.plain
+  ---
+  duration_ms: 1.4167
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: empty.paraphrase
+ok 71 - rubric integration preserves grounded classes: empty.paraphrase
+  ---
+  duration_ms: 1.1572
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: empty.formatting
+ok 72 - rubric integration preserves grounded classes: empty.formatting
+  ---
+  duration_ms: 19.8515
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: empty.verbosity
+ok 73 - rubric integration preserves grounded classes: empty.verbosity
+  ---
+  duration_ms: 2.3373
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: empty.excluded_metadata
+ok 74 - rubric integration preserves grounded classes: empty.excluded_metadata
+  ---
+  duration_ms: 1.0892
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: malicious.plain
+ok 75 - rubric integration preserves grounded classes: malicious.plain
+  ---
+  duration_ms: 7.1053
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: malicious.paraphrase
+ok 76 - rubric integration preserves grounded classes: malicious.paraphrase
+  ---
+  duration_ms: 3.1126
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: malicious.formatting
+ok 77 - rubric integration preserves grounded classes: malicious.formatting
+  ---
+  duration_ms: 2.8916
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: malicious.verbosity
+ok 78 - rubric integration preserves grounded classes: malicious.verbosity
+  ---
+  duration_ms: 4.1614
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: malicious.excluded_metadata
+ok 79 - rubric integration preserves grounded classes: malicious.excluded_metadata
+  ---
+  duration_ms: 3.0021
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: other.plain
+ok 80 - rubric integration preserves grounded classes: other.plain
+  ---
+  duration_ms: 6.9006
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: other.paraphrase
+ok 81 - rubric integration preserves grounded classes: other.paraphrase
+  ---
+  duration_ms: 9.8894
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: other.formatting
+ok 82 - rubric integration preserves grounded classes: other.formatting
+  ---
+  duration_ms: 3.8538
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: other.verbosity
+ok 83 - rubric integration preserves grounded classes: other.verbosity
+  ---
+  duration_ms: 3.1769
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: other.excluded_metadata
+ok 84 - rubric integration preserves grounded classes: other.excluded_metadata
+  ---
+  duration_ms: 4.1428
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: declaration_only.plain
+ok 85 - rubric integration preserves grounded classes: declaration_only.plain
+  ---
+  duration_ms: 3.8211
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: declaration_only.paraphrase
+ok 86 - rubric integration preserves grounded classes: declaration_only.paraphrase
+  ---
+  duration_ms: 4.8233
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: declaration_only.formatting
+ok 87 - rubric integration preserves grounded classes: declaration_only.formatting
+  ---
+  duration_ms: 2.0464
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: declaration_only.verbosity
+ok 88 - rubric integration preserves grounded classes: declaration_only.verbosity
+  ---
+  duration_ms: 3.0037
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: declaration_only.excluded_metadata
+ok 89 - rubric integration preserves grounded classes: declaration_only.excluded_metadata
+  ---
+  duration_ms: 1.504
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: hands_on_lead.plain
+ok 90 - rubric integration preserves grounded classes: hands_on_lead.plain
+  ---
+  duration_ms: 3.2825
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: hands_on_lead.paraphrase
+ok 91 - rubric integration preserves grounded classes: hands_on_lead.paraphrase
+  ---
+  duration_ms: 3.6499
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: hands_on_lead.formatting
+ok 92 - rubric integration preserves grounded classes: hands_on_lead.formatting
+  ---
+  duration_ms: 3.544
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: hands_on_lead.verbosity
+ok 93 - rubric integration preserves grounded classes: hands_on_lead.verbosity
+  ---
+  duration_ms: 3.4525
+  type: 'test'
+  ...
+# Subtest: rubric integration preserves grounded classes: hands_on_lead.excluded_metadata
+ok 94 - rubric integration preserves grounded classes: hands_on_lead.excluded_metadata
+  ---
+  duration_ms: 2.3733
+  type: 'test'
+  ...
+# Subtest: systems analyst earns 12, ABAP does not invent Node.js or backend eligibility
+ok 95 - systems analyst earns 12, ABAP does not invent Node.js or backend eligibility
+  ---
+  duration_ms: 3.1786
+  type: 'test'
+  ...
+# Subtest: historical programming survives current leadership and exposes temporal differentiation
+ok 96 - historical programming survives current leadership and exposes temporal differentiation
+  ---
+  duration_ms: 27.9879
+  type: 'test'
+  ...
+# Subtest: liderança sem execução pessoal não qualifica as dimensões temporais de programação
+ok 97 - liderança sem execução pessoal não qualifica as dimensões temporais de programação
+  ---
+  duration_ms: 5.4111
+  type: 'test'
+  ...
+# Subtest: historical execution with two-digit dates is scored without treating current leadership as programming
+ok 98 - historical execution with two-digit dates is scored without treating current leadership as programming
+  ---
+  duration_ms: 6.3193
+  type: 'test'
+  ...
+# Subtest: two different histories with proven backend execution remain additive and traceable
+ok 99 - two different histories with proven backend execution remain additive and traceable
+  ---
+  duration_ms: 28.5606
+  type: 'test'
+  ...
+# Subtest: declarations explain 8 area points but do not fabricate experience or eligibility
+ok 100 - declarations explain 8 area points but do not fabricate experience or eligibility
+  ---
+  duration_ms: 1.5481
+  type: 'test'
+  ...
+# Subtest: duplicate sources and verbosity do not increase points or establish a person preference
+ok 101 - duplicate sources and verbosity do not increase points or establish a person preference
+  ---
+  duration_ms: 5.2397
+  type: 'test'
+  ...
+# Subtest: unclear additional work preserves proven history but makes comparison provisional
+ok 102 - unclear additional work preserves proven history but makes comparison provisional
+  ---
+  duration_ms: 2.7494
+  type: 'test'
+  ...
+# Subtest: failed, divergent and malformed interpretations preserve the entire prior match
+ok 103 - failed, divergent and malformed interpretations preserve the entire prior match
+  ---
+  duration_ms: 3.0374
+  type: 'test'
+  ...
+# Subtest: tenant, profile, position, method, prompt and missing provenance cannot replace the prior match
+ok 104 - tenant, profile, position, method, prompt and missing provenance cannot replace the prior match
+  ---
+  duration_ms: 6.2439
+  type: 'test'
+  ...
+# Subtest: semantic scoring supports the universal 7.0.0 contract with score 1.4.0 and a versioned interpretation
+ok 105 - semantic scoring supports the universal 7.0.0 contract with score 1.4.0 and a versioned interpretation
+  ---
+  duration_ms: 6.3086
+  type: 'test'
+  ...
+# Subtest: fingerprint is deterministic, changes with interpretation identity and never mutates old snapshots
+ok 106 - fingerprint is deterministic, changes with interpretation identity and never mutates old snapshots
+  ---
+  duration_ms: 5.3622
+  type: 'test'
+  ...
+# Subtest: a human-reviewed reading recalculates matching with a distinct auditable fingerprint
+ok 107 - a human-reviewed reading recalculates matching with a distinct auditable fingerprint
+  ---
+  duration_ms: 4.2959
+  type: 'test'
+  ...
+# Subtest: a failed interpretation keeps its prior group and score ordering
+ok 108 - a failed interpretation keeps its prior group and score ordering
+  ---
+  duration_ms: 5.1459
+  type: 'test'
+  ...
+# Subtest: runner offline is default even with credentials; only exact --execute can dispatch
+ok 109 - runner offline is default even with credentials; only exact --execute can dispatch
+  ---
+  duration_ms: 1.2404
+  type: 'test'
+  ...
+# Subtest: request uses shared strict schema, no storage/history/oracle, and prepared sources only
+ok 110 - request uses shared strict schema, no storage/history/oracle, and prepared sources only
+  ---
+  duration_ms: 26.0765
+  type: 'test'
+  ...
+# Subtest: provider parser refuses refusals, partial/malformed envelopes and extra answer messages
+ok 111 - provider parser refuses refusals, partial/malformed envelopes and extra answer messages
+  ---
+  duration_ms: 4.6957
+  type: 'test'
+  ...
+# Subtest: runner makes 120 fresh requests with concurrency two and 90s timeout; stdout report is aggregate only
+ok 112 - runner makes 120 fresh requests with concurrency two and 90s timeout; stdout report is aggregate only
+  ---
+  duration_ms: 928.2292
+  type: 'test'
+  ...
+# Subtest: runner reports repeat disagreement separately from stable-but-wrong readings and failure IDs only
+ok 113 - runner reports repeat disagreement separately from stable-but-wrong readings and failure IDs only
+  ---
+  duration_ms: 52.6105
+  type: 'test'
+  ...
+# Subtest: runner catches timeouts/provider errors without retries, secrets, raw bodies or invented agreement
+ok 114 - runner catches timeouts/provider errors without retries, secrets, raw bodies or invented agreement
+  ---
+  duration_ms: 13.9246
+  type: 'test'
+  ...
+# Subtest: M8.3 review \#1: complex sensitive clause cannot leave a misleading positive title (Gestante. Nunca escrevi codigo de servidor.)
+ok 115 - M8.3 review \#1: complex sensitive clause cannot leave a misleading positive title (Gestante. Nunca escrevi codigo de servidor.)
+  ---
+  duration_ms: 19.9988
+  type: 'test'
+  ...
+# Subtest: M8.3 review \#1: complex sensitive clause cannot leave a misleading positive title (Idade: 71. Nunca escrevi código de servidor.)
+ok 116 - M8.3 review \#1: complex sensitive clause cannot leave a misleading positive title (Idade: 71. Nunca escrevi código de servidor.)
+  ---
+  duration_ms: 1.5632
+  type: 'test'
+  ...
+# Subtest: M8.3 review \#1: complex sensitive clause cannot leave a misleading positive title (Gestante e responsável por APIs, mas nunca escrevi código.)
+ok 117 - M8.3 review \#1: complex sensitive clause cannot leave a misleading positive title (Gestante e responsável por APIs, mas nunca escrevi código.)
+  ---
+  duration_ms: 1.1268
+  type: 'test'
+  ...
+# Subtest: M8.3 review \#1: isolated attributes may be removed without dropping adjacent negation
+ok 118 - M8.3 review \#1: isolated attributes may be removed without dropping adjacent negation
+  ---
+  duration_ms: 1.62
+  type: 'test'
+  ...
+# Subtest: M8.3 review \#3: known two-letter identifiers are removed across all analysis text
+ok 119 - M8.3 review \#3: known two-letter identifiers are removed across all analysis text
+  ---
+  duration_ms: 13.2961
+  type: 'test'
+  ...
+# Subtest: M8.3 review \#3: employer redaction preserves technical words containing its name
+ok 120 - M8.3 review \#3: employer redaction preserves technical words containing its name
+  ---
+  duration_ms: 47.7838
+  type: 'test'
+  ...
+# Subtest: M8.3 review \#3: normalized Unicode names and literal regex characters respect word boundaries
+ok 121 - M8.3 review \#3: normalized Unicode names and literal regex characters respect word boundaries
+  ---
+  duration_ms: 5.9476
+  type: 'test'
+  ...
+# Subtest: M8.3 review \#5: interpreting the same requirement quote does not create independent corroboration
+ok 122 - M8.3 review \#5: interpreting the same requirement quote does not create independent corroboration
+  ---
+  duration_ms: 152.2367
+  type: 'test'
+  ...
+# Subtest: M8.3 review \#5: title, areas, repeated experiences and interpretations still constitute one Profile source
+ok 123 - M8.3 review \#5: title, areas, repeated experiences and interpretations still constitute one Profile source
+  ---
+  duration_ms: 18.0084
+  type: 'test'
+  ...
+# Subtest: M8.3 review \#5: canonical role identity survives a title-only citation
+ok 124 - M8.3 review \#5: canonical role identity survives a title-only citation
+  ---
+  duration_ms: 5.0241
+  type: 'test'
+  ...
+# Subtest: M8.3 review \#5: explicit versioned Demonstrated evidence remains an independent source without duplicate inflation
+ok 125 - M8.3 review \#5: explicit versioned Demonstrated evidence remains an independent source without duplicate inflation
+  ---
+  duration_ms: 4.5876
+  type: 'test'
+  ...
+# Subtest: M8.3 review \#9: new Demonstrated evidence changes the fingerprint without changing Profile or Position IDs
+ok 126 - M8.3 review \#9: new Demonstrated evidence changes the fingerprint without changing Profile or Position IDs
+  ---
+  duration_ms: 9.5582
+  type: 'test'
+  ...
+# Subtest: M8.3 review \#9: requirement evidence sourceId participates in the fingerprint even at equal points
+ok 127 - M8.3 review \#9: requirement evidence sourceId participates in the fingerprint even at equal points
+  ---
+  duration_ms: 28.0775
+  type: 'test'
+  ...
+# Subtest: M8.3 review \#9: requirement evidence label participates in the fingerprint even at equal points
+ok 128 - M8.3 review \#9: requirement evidence label participates in the fingerprint even at equal points
+  ---
+  duration_ms: 5.7182
+  type: 'test'
+  ...
+# Subtest: M8.3 review \#9: requirement evidence source participates in the fingerprint even at equal points
+ok 129 - M8.3 review \#9: requirement evidence source participates in the fingerprint even at equal points
+  ---
+  duration_ms: 5.1012
+  type: 'test'
+  ...
+# Subtest: M8.3 review \#9: requirement evidence sourceVersion participates in the fingerprint even at equal points
+ok 130 - M8.3 review \#9: requirement evidence sourceVersion participates in the fingerprint even at equal points
+  ---
+  duration_ms: 2.8586
+  type: 'test'
+  ...
+# Subtest: M8.3 review \#9: JSON object key insertion order does not cause a false fingerprint mismatch
+ok 131 - M8.3 review \#9: JSON object key insertion order does not cause a false fingerprint mismatch
+  ---
+  duration_ms: 4.9389
+  type: 'test'
+  ...
+# Subtest: M8.3 review \#11: requirement array order matters even when points and evidence are unchanged
+ok 132 - M8.3 review \#11: requirement array order matters even when points and evidence are unchanged
+  ---
+  duration_ms: 6.5023
+  type: 'test'
+  ...
+# Subtest: M8.3 review \#11: relatedSignals ordering selects evidence and can change a same-score fingerprint
+ok 133 - M8.3 review \#11: relatedSignals ordering selects evidence and can change a same-score fingerprint
+  ---
+  duration_ms: 6.3557
+  type: 'test'
+  ...
+# Subtest: M8.3 review \#11: unavailable canonical concept must not preserve resolved matching credit
+ok 134 - M8.3 review \#11: unavailable canonical concept must not preserve resolved matching credit
+  ---
+  duration_ms: 3.7633
+  type: 'test'
+  ...
+# Subtest: M8.3 review \#11: loadConceptLabels content affects matching even with unchanged requirement labels
+ok 135 - M8.3 review \#11: loadConceptLabels content affects matching even with unchanged requirement labels
+  ---
+  duration_ms: 58.752
+  type: 'test'
+  ...
+# Subtest: discovery remains broad while only unresolved occupational relations reach AI
+ok 136 - discovery remains broad while only unresolved occupational relations reach AI
+  ---
+  duration_ms: 8.0095
+  type: 'test'
+  ...
+# Subtest: production batch sends only plausible unresolved relations and counts progress
+ok 137 - production batch sends only plausible unresolved relations and counts progress
+  ---
+  duration_ms: 9.3521
+  type: 'test'
+  ...
+# Subtest: dismissed, contextual and internally resolved profiles never call AI
+ok 138 - dismissed, contextual and internally resolved profiles never call AI
+  ---
+  duration_ms: 4.2202
+  type: 'test'
+  ...
+# Subtest: profiles without usable professional content are excluded before interpretation
+ok 139 - profiles without usable professional content are excluded before interpretation
+  ---
+  duration_ms: 1.596
+  type: 'test'
+  ...
+# Subtest: a Marketing profile stays in its original group when AI returns an invalid response
+ok 140 - a Marketing profile stays in its original group when AI returns an invalid response
+  ---
+  duration_ms: 7.4991
+  type: 'test'
+  ...
+# Subtest: seniority penalty is symmetric and only uses explicit level markers
+ok 141 - seniority penalty is symmetric and only uses explicit level markers
+  ---
+  duration_ms: 2.0983
+  type: 'test'
+  ...
+# Subtest: discovery exposes saved results only after stable server resolution
+ok 142 - discovery exposes saved results only after stable server resolution
+  ---
+  duration_ms: 34.2559
+  type: 'test'
+  ...
+# Subtest: 100 synthetic profiles pass internal triage while only ambiguous occupations consume AI
+ok 143 - 100 synthetic profiles pass internal triage while only ambiguous occupations consume AI
+  ---
+  duration_ms: 120.3613
+  type: 'test'
+  ...
+# Subtest: seven contrasted career tracks route programming and historical development but not adjacent business domains
+ok 144 - seven contrasted career tracks route programming and historical development but not adjacent business domains
+  ---
+  duration_ms: 8.9724
+  type: 'test'
+  ...
+# Subtest: restoration preserves exact score reference without any clock or scoring operation
+ok 145 - restoration preserves exact score reference without any clock or scoring operation
+  ---
+  duration_ms: 3.3209
+  type: 'test'
+  ...
+# Subtest: old result remains visible while updating changed sources; current mismatched identity fails closed
+ok 146 - old result remains visible while updating changed sources; current mismatched identity fails closed
+  ---
+  duration_ms: 1.7066
+  type: 'test'
+  ...
+# Subtest: missing snapshot is never replaced with a guessed score
+ok 147 - missing snapshot is never replaced with a guessed score
+  ---
+  duration_ms: 2.8442
+  type: 'test'
+  ...
+# Subtest: coordenação de estoque com cargo distinto é relacionada; SAP e gestão de pessoas continuam independentes
+ok 148 - coordenação de estoque com cargo distinto é relacionada; SAP e gestão de pessoas continuam independentes
+  ---
+  duration_ms: 138.4217
+  type: 'test'
+  ...
+# Subtest: todas as experiências e trechos pertinentes sustentam a relação, inclusive históricos
+ok 149 - todas as experiências e trechos pertinentes sustentam a relação, inclusive históricos
+  ---
+  duration_ms: 30.288
+  type: 'test'
+  ...
+# Subtest: ferramenta isolada não vira trajetória relacionada
+ok 150 - ferramenta isolada não vira trajetória relacionada
+  ---
+  duration_ms: 15.7156
+  type: 'test'
+  ...
+# Subtest: venda de ferramenta não vira trajetória relacionada
+ok 151 - venda de ferramenta não vira trajetória relacionada
+  ---
+  duration_ms: 4.2931
+  type: 'test'
+  ...
+# Subtest: construção de ferramenta não vira trajetória relacionada
+ok 152 - construção de ferramenta não vira trajetória relacionada
+  ---
+  duration_ms: 2.9559
+  type: 'test'
+  ...
+# Subtest: negação não vira trajetória relacionada
+ok 153 - negação não vira trajetória relacionada
+  ---
+  duration_ms: 3.6165
+  type: 'test'
+  ...
+# Subtest: negação nominal não vira trajetória relacionada
+ok 154 - negação nominal não vira trajetória relacionada
+  ---
+  duration_ms: 2.6531
+  type: 'test'
+  ...
+# Subtest: aspiração não vira trajetória relacionada
+ok 155 - aspiração não vira trajetória relacionada
+  ---
+  duration_ms: 8.6739
+  type: 'test'
+  ...
+# Subtest: área ampla não comprova especialização e atividade insuficiente tem dúvida explícita
+ok 156 - área ampla não comprova especialização e atividade insuficiente tem dúvida explícita
+  ---
+  duration_ms: 10.1173
+  type: 'test'
+  ...
+# Subtest: regra geral reconhece atividades em outra profissão sem cargo equivalente
+ok 157 - regra geral reconhece atividades em outra profissão sem cargo equivalente
+  ---
+  duration_ms: 2.994
+  type: 'test'
+  ...
+# Subtest: responsabilidade específica pode recuperar atividade sem repetir o título; gestão genérica não basta
+ok 158 - responsabilidade específica pode recuperar atividade sem repetir o título; gestão genérica não basta
+  ---
+  duration_ms: 23.6116
+  type: 'test'
+  ...
+# Subtest: decisões confirmada/desconsiderada preservam precedência e histórico não é reescrito na leitura
+ok 159 - decisões confirmada/desconsiderada preservam precedência e histórico não é reescrito na leitura
+  ---
+  duration_ms: 3.4306
+  type: 'test'
+  ...
+# Subtest: web e Edge usam exatamente as mesmas regras e evidências de atividades
+ok 160 - web e Edge usam exatamente as mesmas regras e evidências de atividades
+  ---
+  duration_ms: 70.3629
+  type: 'test'
+  ...
+# Subtest: duas Vagas com o mesmo cargo-base preservam descoberta diferente
+ok 161 - duas Vagas com o mesmo cargo-base preservam descoberta diferente
+  ---
+  duration_ms: 76.2438
+  type: 'test'
+  ...
+# Subtest: equivalência Knowledge publicada satisfaz requisito e preserva o termo observado
+ok 162 - equivalência Knowledge publicada satisfaz requisito e preserva o termo observado
+  ---
+  duration_ms: 3.4573
+  type: 'test'
+  ...
+# Subtest: Figma não comprova UX sem relação específica confirmada
+ok 163 - Figma não comprova UX sem relação específica confirmada
+  ---
+  duration_ms: 3.0774
+  type: 'test'
+  ...
+# Subtest: ausência de idioma permanece sem evidência suficiente e nunca vira fato negativo
+ok 164 - ausência de idioma permanece sem evidência suficiente e nunca vira fato negativo
+  ---
+  duration_ms: 2.6113
+  type: 'test'
+  ...
+# Subtest: categoria organiza o requisito, mas não bloqueia evidência profissional explícita
+ok 165 - categoria organiza o requisito, mas não bloqueia evidência profissional explícita
+  ---
+  duration_ms: 6.2731
+  type: 'test'
+  ...
+# Subtest: menção explícita em conteúdo profissional comprova requisito genérico
+ok 166 - menção explícita em conteúdo profissional comprova requisito genérico
+  ---
+  duration_ms: 5.0297
+  type: 'test'
+  ...
+# Subtest: regressão Bruno reconhece SAP explícito na experiência sem depender do grupo
+ok 167 - regressão Bruno reconhece SAP explícito na experiência sem depender do grupo
+  ---
+  duration_ms: 3.5684
+  type: 'test'
+  ...
+# Subtest: matching explícito respeita limite lexical, negação e nível não comprovado
+ok 168 - matching explícito respeita limite lexical, negação e nível não comprovado
+  ---
+  duration_ms: 11.1556
+  type: 'test'
+  ...
+# Subtest: descoberta ocupacional encontra títulos equivalentes por referência ou experiência sem declarar aderência
+ok 169 - descoberta ocupacional encontra títulos equivalentes por referência ou experiência sem declarar aderência
+  ---
+  duration_ms: 8.9411
+  type: 'test'
+  ...
+# Subtest: experiência na área recupera Beatriz sem transformar função diferente em equivalência ocupacional
+ok 170 - experiência na área recupera Beatriz sem transformar função diferente em equivalência ocupacional
+  ---
+  duration_ms: 7.7436
+  type: 'test'
+  ...
+# Subtest: área declarada no Perfil é sinal de entrada independente do cargo
+ok 171 - área declarada no Perfil é sinal de entrada independente do cargo
+  ---
+  duration_ms: 1.053
+  type: 'test'
+  ...
+# Subtest: descrição de experiência comprova área, enquanto resumo livre não cria o sinal
+ok 172 - descrição de experiência comprova área, enquanto resumo livre não cria o sinal
+  ---
+  duration_ms: 5.2762
+  type: 'test'
+  ...
+# Subtest: descoberta exclui Perfil sem qualquer sinal e preserva confirmação humana
+ok 173 - descoberta exclui Perfil sem qualquer sinal e preserva confirmação humana
+  ---
+  duration_ms: 5.07
+  type: 'test'
+  ...
+# Subtest: ordenação é determinística pelo Prisma Score e mantém explicações neutras
+ok 174 - ordenação é determinística pelo Prisma Score e mantém explicações neutras
+  ---
+  duration_ms: 5.6535
+  type: 'test'
+  ...
+# Subtest: evidência inclui dimensão, origem observável e nível explicável sem score
+ok 175 - evidência inclui dimensão, origem observável e nível explicável sem score
+  ---
+  duration_ms: 1.0217
+  type: 'test'
+  ...
+# Subtest: tecnologias explícitas e legadas são materializadas na dimensão correta
+ok 176 - tecnologias explícitas e legadas são materializadas na dimensão correta
+  ---
+  duration_ms: 1.5034
+  type: 'test'
+  ...
+# Subtest: descoberta pagina todos os Perfis e persiste confirmação ou descarte sem tabela paralela
+ok 177 - descoberta pagina todos os Perfis e persiste confirmação ou descarte sem tabela paralela
+  ---
+  duration_ms: 147.859
+  type: 'test'
+  ...
+# Subtest: estruturação livre confirma itens explícitos e deixa inferência derivada pendente
+ok 178 - estruturação livre confirma itens explícitos e deixa inferência derivada pendente
+  ---
+  duration_ms: 75.5677
+  type: 'test'
+  ...
+# Subtest: estruturação não expõe contexto profissional como cenário da vaga
+ok 179 - estruturação não expõe contexto profissional como cenário da vaga
+  ---
+  duration_ms: 4.0943
+  type: 'test'
+  ...
+# Subtest: M5.4.5 decompõe descrição backend sem cópia, invenção ou requisito ausente
+ok 180 - M5.4.5 decompõe descrição backend sem cópia, invenção ou requisito ausente
+  ---
+  duration_ms: 2.0178
+  type: 'test'
+  ...
+# Subtest: M5.4.6 exige decisão humana de importância e mantém dimensões canônicas
+ok 181 - M5.4.6 exige decisão humana de importância e mantém dimensões canônicas
+  ---
+  duration_ms: 1.0447
+  type: 'test'
+  ...
+# Subtest: vacancy-definition 1.2.0 sincroniza o padrão obrigatório e bloqueia pendência no frontend e na RPC
+ok 182 - vacancy-definition 1.2.0 sincroniza o padrão obrigatório e bloqueia pendência no frontend e na RPC
+  ---
+  duration_ms: 23.9581
+  type: 'test'
+  ...
+# Subtest: M5.4.6 não promove stack isolada a responsabilidade e preserva decisão humana no delta
+ok 183 - M5.4.6 não promove stack isolada a responsabilidade e preserva decisão humana no delta
+  ---
+  duration_ms: 3.0578
+  type: 'test'
+  ...
+# Subtest: M5.4.6 projeta a Vaga pronta sem agrupadores removidos e usa o Inbox organizacional
+ok 184 - M5.4.6 projeta a Vaga pronta sem agrupadores removidos e usa o Inbox organizacional
+  ---
+  duration_ms: 7.3168
+  type: 'test'
+  ...
+# Subtest: referência ocupacional complementa a descrição estruturada sem substituir sua origem
+ok 185 - referência ocupacional complementa a descrição estruturada sem substituir sua origem
+  ---
+  duration_ms: 23.0858
+  type: 'test'
+  ...
+# Subtest: referência profissional materializa proposta canônica sem inventar dados da empresa
+ok 186 - referência profissional materializa proposta canônica sem inventar dados da empresa
+  ---
+  duration_ms: 1.307
+  type: 'test'
+  ...
+# Subtest: M5.4.5 preserva proveniência no snapshot sem reescrever versões históricas
+ok 187 - M5.4.5 preserva proveniência no snapshot sem reescrever versões históricas
+  ---
+  duration_ms: 49.8651
+  type: 'test'
+  ...
+# Subtest: Assistente Prisma separa contexto interno, mercado e sugestão sem fingir pesquisa externa
+ok 188 - Assistente Prisma separa contexto interno, mercado e sugestão sem fingir pesquisa externa
+  ---
+  duration_ms: 1.8537
+  type: 'test'
+  ...
+# Subtest: Assistente Prisma encaminha qualquer pergunta preenchida para pesquisa de mercado por padrão
+ok 189 - Assistente Prisma encaminha qualquer pergunta preenchida para pesquisa de mercado por padrão
+  ---
+  duration_ms: 2.3047
+  type: 'test'
+  ...
+# Subtest: Assistente Prisma encaminha requisitos comuns em vagas do mercado
+ok 190 - Assistente Prisma encaminha requisitos comuns em vagas do mercado
+  ---
+  duration_ms: 0.1989
+  type: 'test'
+  ...
+# Subtest: Assistente Prisma responde semanticamente com Knowledge interna, relações publicadas e metadados secundários
+ok 191 - Assistente Prisma responde semanticamente com Knowledge interna, relações publicadas e metadados secundários
+  ---
+  duration_ms: 2.012
+  type: 'test'
+  ...
+# Subtest: Assistente Prisma preserva a análise interna quando a pesquisa externa falha e não usa Web para compô-la
+ok 192 - Assistente Prisma preserva a análise interna quando a pesquisa externa falha e não usa Web para compô-la
+  ---
+  duration_ms: 9.5281
+  type: 'test'
+  ...
+# Subtest: Web Search da Vaga reutiliza Knowledge Agent com contrato, fontes e auditoria fail-closed
+ok 193 - Web Search da Vaga reutiliza Knowledge Agent com contrato, fontes e auditoria fail-closed
+  ---
+  duration_ms: 6.0081
+  type: 'test'
+  ...
+# Subtest: resolução ocupacional explica segurança sem score e nunca deriva evidência da Pessoa
+ok 194 - resolução ocupacional explica segurança sem score e nunca deriva evidência da Pessoa
+  ---
+  duration_ms: 2.3139
+  type: 'test'
+  ...
+# Subtest: busca de referência profissional comunica origem, progresso e recuperação
+ok 195 - busca de referência profissional comunica origem, progresso e recuperação
+  ---
+  duration_ms: 6.5711
+  type: 'test'
+  ...
+# Subtest: validação de Vaga destaca o campo acionável que bloqueia o salvamento
+ok 196 - validação de Vaga destaca o campo acionável que bloqueia o salvamento
+  ---
+  duration_ms: 35.275
+  type: 'test'
+  ...
+# Subtest: M5.4.4 ordena empresa, Global, Agent, explorador e manual sem contaminar Pessoas
+ok 197 - M5.4.4 ordena empresa, Global, Agent, explorador e manual sem contaminar Pessoas
+  ---
+  duration_ms: 27.4174
+  type: 'test'
+  ...
+# Subtest: resolver ocupacional consulta snapshots seletivamente, é idempotente e mantém RLS
+ok 198 - resolver ocupacional consulta snapshots seletivamente, é idempotente e mantém RLS
+  ---
+  duration_ms: 4.0714
+  type: 'test'
+  ...
+# Subtest: migration M5.4 mantém tenant, versões e escrita autorizada fail-closed
+ok 199 - migration M5.4 mantém tenant, versões e escrita autorizada fail-closed
+  ---
+  duration_ms: 190.2202
+  type: 'test'
+  ...
+# Subtest: exclusão de Vaga é cancelamento auditável e a lista oferece edição e exclusão
+ok 200 - exclusão de Vaga é cancelamento auditável e a lista oferece edição e exclusão
+  ---
+  duration_ms: 5.9913
+  type: 'test'
+  ...
+1..200
+# tests 200
+# suites 0
+# pass 200
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4750.9601

@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 553
-source_manifest_sha256: 8eaa7143652e37dda7e84b0985f803d40579abc99cf5b57b5e5a5cf9191563e5
+documentation_source_count: 556
+source_manifest_sha256: e11de3403bc566a956225a47130f31aa3984424980759cccf285038a957b6049
 -->
 
 # Tudo sobre o Prisma
@@ -2644,11 +2644,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.93.1
-last_verified: 2026-10-19
+version: 2.93.2
+last_verified: 2026-10-23
 ---
 
 # Estado atual do Prisma
+
+## Reconhecimento da trajetória pelas atividades —23/10/2026
+
+Implementação autorizada por Bruno: matching5.2.0 e triagem2.1.0 reconhecem atividades atribuídas às experiências, combinam evidências históricas e mantêm senioridade/requisitos separados. Relação incerta fica identificada e visível; ferramentas/área ampla/negação não viram equivalência. Pesos, score1.4.0, prompt/modelo e decisões humanas preservados. Nova dependência causal atualiza resultados sob demanda, com histórico imutável e anterior preservado na falha; nenhuma varredura/IA em massa na publicação. Reutiliza motor, Knowledge, cache e leases existentes. Estado: validação local e publicação em andamento; acordo/execução/AoT `docs/qa/*trajectory-activity-recognition.md`.
 
 ## Acompanhamento do desempenho na avaliação — publicado em3.1.3
 
@@ -4341,7 +4345,7 @@ Uma avaliação compara uma pessoa com uma vaga específica. Ela não altera o p
 
 Toda Posição com título pode usar a mesma leitura profissional, independentemente da profissão. O servidor preserva a ordem `Knowledge Global/Empresa e decisões humanas autorizadas -> IA somente como último recurso -> revisão humana`; uma resposta interna segura não é substituída por pesquisa. Título incompatível não é veto lexical. Perfis publicados sem conteúdo profissional utilizável não entram no fluxo e não consomem IA, sem que isso seja tratado como incapacidade.
 
-`semantic-triage-2.0.0` altera somente a ativação da IA, não o contrato de uma resposta válida: a descoberta interna examina todos os Perfis utilizáveis e todas as experiências; a IA é reservada a relações ocupacionais plausíveis ainda indefinidas, independentemente do grupo preliminar. Mesma/equivalente/relacionada referência aprovada e decisão humana confirmada são respostas internas suficientes para esta triagem. Possível relação entre títulos profissionais ou experiência direta na área nomeada da Posição sem resolução ocupacional permanece pendente para interpretação. Área declarada, setor, ferramenta e requisito isolados não acionam IA. O servidor recompõe essa decisão em fontes autorizadas antes de cache/provedor/snapshot; a falha conserva o match pré-IA. Esta política substitui a cobertura automática anterior do D-03 M8.6, não a descoberta ampla. Positivos fora desse detector conservador exigem medição de falsos negativos e curadoria, não conclusão de irrelevância.
+A política anterior `semantic-triage-2.0.0`, ampliada pela2.1.0 acima, alterou somente a ativação da IA, não o contrato de uma resposta válida: a descoberta interna examina todos os Perfis utilizáveis e todas as experiências; a IA é reservada a relações ocupacionais plausíveis ainda indefinidas, independentemente do grupo preliminar. Mesma/equivalente/relacionada referência aprovada e decisão humana confirmada são respostas internas suficientes para esta triagem. Possível relação entre títulos profissionais ou experiência direta na área nomeada da Posição sem resolução ocupacional permanece pendente para interpretação. Área declarada, setor, ferramenta e requisito isolados não acionam IA. O servidor recompõe essa decisão em fontes autorizadas antes de cache/provedor/snapshot; a falha conserva o match pré-IA. Esta política substitui a cobertura automática anterior do D-03 M8.6, não a descoberta ampla. Positivos fora desse detector conservador exigem medição de falsos negativos e curadoria, não conclusão de irrelevância.
 
 As relações semânticas são `direct`, `equivalent`, `related`, `entry_potential`, `context`, `other` e `unclear`, projetadas respectivamente nos Grupos A, B ou C sem confundir ausência de prova com prova negativa. Híbridos exigem evidência dos dois componentes centrais para relação integral; uma só parte permanece parcial/relacionada. Senioridade só é comparada quando os níveis estão explicitamente marcados, com penalização simétrica por subqualificação e sobrequalificação. A Posição versiona `experiencePolicy` como `not_required`, `required` ou `unspecified`; somente a primeira remove duração/recência do denominador.
 
@@ -4368,13 +4372,23 @@ O resultado agrega requisitos atendidos, parcialmente atendidos, sinais relacion
 
 Termos explícitos usam limite lexical: `SAP` conecta `migração para SAP` e `SAP EWM`, mas não `sapatos`. Frases negadas como `sem experiência com SAP` ou `nunca utilizei SAP` não são evidência positiva. Se a Vaga exigir nível, duração ou senioridade, a presença do termo isolado prova a conexão, não o grau; o atendimento integral exige que esse qualificador também esteja explícito ou seja sustentado por Evidência Demonstrada válida.
 
+## Reconhecimento por atividades — 5.2.0
+
+O reconhecimento `trajectory-recognition-1.0.0` complementa cargos e referências aprovadas com atividades atribuídas às experiências publicadas. As experiências e trechos pertinentes são combinados, inclusive históricos. Execução/coordenação explícita no núcleo da Posição sustenta trajetória relacionada, sem equivalência integral presumida; responsabilidades específicas também recuperam casos que precisam de interpretação. Área ampla, ferramenta isolada, venda/construção de ferramenta sobre o domínio, curso, aspiração e negação não comprovam execução desse domínio. A recuperação textual é conservadora e não garante resolver toda paráfrase; referências e interpretação existentes continuam responsáveis pela resolução semântica.
+
+Senioridade, requisitos e relação profissional permanecem leituras separadas. Coordenação de estoque pode sustentar relação com gerência de estoque mesmo sem evidência de gestão direta de pessoas. O requisito continua sem evidência e o resultado relacionado sinaliza a verificação necessária; não há confirmação humana inventada. Um caso profissional incerto recebe `reviewRequired` e trechos rastreáveis, sem nota comparável fabricada. O grupo contextual com dúvidas fica aberto e identificado como relações a verificar, sem afirmar baixa relevância; ferramentas isoladas continuam no grupo contextual recolhido.
+
+A triagem `semantic-triage-2.1.0` inclui essas atividades plausíveis ainda não resolvidas. Decisões humanas e referências aprovadas preservam precedência, budgets/cache/modelo/prompt/consenso e fallback permanecem. Fórmula, pesos e score1.4.0 não mudam. Matching determinístico5.2.0 é reconhecido pelos consumidores protegidos e mantém leitura das versões históricas.
+
+Uma dependência causal `trajectoryRecognition` registra a revisão do método no resultado estável. Primeira consulta autorizada após a publicação pode gerar nova avaliação auditada por par, sob lease; consultas seguintes reutilizam o resultado. Avaliações anteriores são imutáveis, a anterior permanece durante atualização/falha, e nenhuma varredura/IA em massa é executada na implantação. Acordo: `docs/qa/agreement-trajectory-activity-recognition.md`v1.0.0.
+
 ## Descoberta orientada pela trajetória
 
 A descoberta separa três leituras: trajetória profissional, proximidade do cargo e aderência detalhada por requisito. A área continua observável quando o valor informado na Posição aparece em `areasOfExpertise` ou em cargo, descrição ou evidência de uma experiência do Perfil publicado, mas a descrição isolada não basta para tornar a trajetória diretamente compatível. O resumo livre não cria relação de área.
 
 A proximidade do cargo usa, nesta ordem, a mesma referência oficial, referência equivalente publicada, relação ocupacional publicada e possível relação textual entre o título da Posição, o título profissional e cargos das experiências. A relação textual exige igualdade, inclusão ou dois ou mais termos ocupacionais comuns. Um termo de área isolado, como `marketing`, não transforma `Analista de Marketing` e `Assistente de Marketing` em cargos equivalentes. O operador pode confirmar ou descartar a relação; essa decisão fica auditada, funciona como desempate depois do score e nunca muda o Perfil, a Posição ou a Knowledge.
 
-Todos os Perfis publicados acessíveis e com conteúdo profissional utilizável são analisados, inclusive quando não há requisito detalhado ou quando requisitos ainda aguardam classificação. `vacancy-matching-explainable-5.1.0` classifica a descoberta antes do score:
+Todos os Perfis publicados acessíveis e com conteúdo profissional utilizável são analisados, inclusive quando não há requisito detalhado ou quando requisitos ainda aguardam classificação. `vacancy-matching-explainable-5.2.0` classifica a descoberta antes do score:
 
 - Grupo A: experiência direta na área ou função equivalente, sustentada por cargo/ocupação e histórico profissional;
 - Grupo B: trajetória adjacente ou transferível; em Posição explicitamente de entrada, formação, projetos ou conhecimentos podem sustentar potencial de entrada;
@@ -4436,7 +4450,7 @@ Toda avaliação persiste `matchingVersion`. Uma futura avaliação com LLM tamb
 
 A separação entre área profissional e proximidade do cargo nasceu em `vacancy-matching-explainable-2.3.0`, registrada no ADR-051. O M6.1 avançou o contrato para 3.0.0 e adicionou `matching-score-1.0.0`, conforme ADR-052. A decisão de 2026-09-14 avançou o matching para `vacancy-matching-explainable-4.0.0`: categorias deixaram de ser barreiras e permaneceram como organização/proveniência, conforme ADR-053. A decisão posterior do mesmo dia avançou o score para `matching-score-1.1.0`, conforme ADR-055. O ADR-057 avança para `vacancy-matching-explainable-5.0.0` e `matching-score-1.2.0`: trajetória define A/B/C e sinais sem trajetória deixam de produzir score comparável. O M8.4, em `matching-score-1.4.0` e ADR-074, adiciona duração e recência como dimensões independentes, com referência civil explícita, sem reescrever snapshots históricos.
 
-O M6.2 não altera fórmula ou pesos. Uma ação humana pode usar o `match_evaluations.id` e o requisito da mesma versão da Posição para criar uma necessidade contextual. A fronteira aceita snapshots determinísticos 4.0.0, 5.0.0 e 5.1.0, além dos semânticos 6.0.0 e 7.0.0; rejeita versão desconhecida. O snapshot preserva o item avaliado, suas evidências, a versão do matching, a versão do score e o fingerprint. Evidência Demonstrada posterior continua afetando somente a competência/requisito exatos, sem bônus genérico.
+O M6.2 não altera fórmula ou pesos. Uma ação humana pode usar o `match_evaluations.id` e o requisito da mesma versão da Posição para criar uma necessidade contextual. A fronteira aceita snapshots determinísticos 4.0.0, 5.0.0, 5.1.0 e 5.2.0, além dos semânticos 6.0.0 e 7.0.0; rejeita versão desconhecida. O snapshot preserva o item avaliado, suas evidências, a versão do matching, a versão do score e o fingerprint. Evidência Demonstrada posterior continua afetando somente a competência/requisito exatos, sem bônus genérico.
 
 ## Normalização conceitual M5.2
 
@@ -18513,6 +18527,55 @@ Reuso escolhido: `match_evaluations` append-only e motor gerado, acrescentando p
 
 ---
 
+## Source: `docs/qa/agreement-trajectory-activity-recognition.md`
+
+# Acordo — reconhecimento da trajetória pelas atividades
+
+Versão1.0.0, congelada pela autorização explícita de Bruno em23/10/2026 após a proposta neste chat. Baseline `b00f03f5c5337772694e779a97b1c40fa41cdad3`. Classe D: matching, runtime compartilhado e persistência versionada.
+
+## DEVE
+
+- D-01: considerar atividades, responsabilidades e entregas das experiências publicadas, em conjunto, mesmo com cargo diferente; reconhecer trajetória relacionada ao núcleo da Posição sem exigir cargo idêntico. Não tornar área ampla equivalente à função específica.
+- D-02: separar relação profissional, senioridade e requisitos; pendência de gestão de pessoas não apaga experiência relacionada. Atividade reconhecida sem equivalência integral permanece relacionada e explicada, com pontos a verificar.
+- D-03: reservar classificação contextual conclusiva para conexões isoladas; quando existe evidência profissional ainda insuficiente para determinar a relação, sinalizar a necessidade de análise e não esconder essa dúvida no grupo recolhido.
+- D-04: reutilizar Knowledge, decisões humanas e interpretação seletiva existentes; ampliar a triagem para atividades profissionais plausíveis não resolvidas, mantendo limites, cache, fallback e proveniência. Considerar todas as experiências pertinentes, não apenas o primeiro trecho.
+- D-05: preservar fórmula, pesos, contrato `matching-score-1.4.0`, requisitos, histórico, decisões humanas e isolamento. Versionar reconhecimento/triagem e aceitar a nova versão nos consumidores protegidos.
+- D-06: resultados anteriores permanecem imutáveis; nova dependência de método permite atualização auditada sob demanda nas consultas autorizadas, com lease e preservação do anterior na falha. Sem varredura ou IA em massa na publicação.
+- D-07: validar positivos semelhantes a coordenação de estoques para gerência, nomes distintos e experiência histórica; negativos de ferramenta isolada, venda de software, área ampla, negação e texto insuficiente. Publicar apenas superfícies derivadas do diff.
+
+## PROIBIDO
+
+- P-01: inventar experiência, equivalência integral, gestão de pessoas, contratação, rejeição ou bônus por palavras/ferramentas.
+- P-02: alterar pesos, Perfil, Knowledge, decisões humanas ou sobrescrever histórico; usar produção como fixture de teste ou disparar IA paga para demonstração.
+- P-03: aceitar versão, tenant, fonte, lease ou autoridade desconhecidos; transformar falha da interpretação em ausência de experiência.
+
+## FORA DE ESCOPO / AUTONOMIA
+
+- F-01: redesenho das telas, taxonomia externa nova, novo modelo/prompt, nova biblioteca, alteração de avaliação de candidatos ou decisão de contratação.
+- A-01: engenharia escolhe recuperação conservadora de atividades e apresentação mínima da incerteza, reutilizando contratos/componentes e sem novo ranking.
+- Q: nenhuma decisão material pendente.
+
+## Aceite e validação mínima
+
+CA-01/D-01..04: fixtures sintéticas contrastantes demonstram reconhecimento, fontes completas, triagem seletiva e dúvidas legíveis; par análogo ao Willian sai de contextual quando há coordenação efetiva de estoque, sem presumir equipe.
+CA-02/D-05..06/P-01..03: testes dirigidos de score, matching, semântica/fallback, runtime idêntico web/Edge, estabilidade/histórico, SQL local descartável com rollback, autorização negativa e leases. Pesos e decisões preservados.
+CA-03/D-07: tipos/build, checks afetados, Context Pack, CI obrigatório, migration/Edge/web conforme plano, smoke e sincronização; limites de evidência explícitos no AoT.
+
+## Mapa de impacto inicial
+
+| Capacidade | Relação | Baseline / preservação e prova |
+| --- | --- | --- |
+| Descoberta, fontes e triagem | direct |5.1.0/triage2.0.0 restringem descrição; regressão positiva/negativa e runtime compartilhado |
+| Score/requisitos/senioridade | plausible_indirect | pesos10/25/35/10/10/10 e contrato1.4.0; testes dirigidos e comparação de pesos |
+| Estabilidade e histórico | direct | resultado salvo só muda por fontes/recálculo; dependência causal de reconhecimento versionada, anterior íntegro e leases testados |
+| Tenant, decisões humanas, M6.2 | critical_transversal | guards/grants existentes; nova versão aceita sem relaxar desconhecidas, SQL negativo e Edge |
+| Busca/comparação | direct | grupos e explicações existentes; dúvida identificada sem novo ranking, render sintético e ações preservadas |
+| Parser/Synthesis/Auth/processos | no_impact_identified | fontes publicadas só de leitura e diff sem regras dessas jornadas; smoke de serviços preservados |
+
+Decisão de versão: matching determinístico5.2.0; reconhecimento1.0.0; triagem2.1.0. Semântica7.0.0, prompt/modelo e score1.4.0 preservados. Atualização de método em dependências autoriza uma avaliação por par sob demanda; não é invalidação por relógio/visita nem lote global.
+
+---
+
 ## Source: `docs/qa/agreement-trajectory-evidence-recovery.md`
 
 # Acordo — recuperação da interpretação semântica com evidência literal
@@ -26091,6 +26154,55 @@ Navegador interno acessou sessão real existente com credenciais salvas e sem ex
 
 ---
 
+## Source: `docs/qa/aot-trajectory-activity-recognition.md`
+
+# AoT — reconhecimento da trajetória pelas atividades
+
+Acordo congelado `docs/qa/agreement-trajectory-activity-recognition.md`v1.0.0 e execução correspondente. Baselineb00f03f5c5337772694e779a97b1c40fa41cdad3; branchcodex/trajectory-activity-recognition. Autorização explícita de implementação/publicação23/10/2026. ClasseD; reaproveitamento de motor/Knowledge/cache/consenso/leases, sem biblioteca/provedor novo. Matching5.2.0/triagem2.1.0/reconhecimento1.0.0; score1.4.0, pesos, semântica7.0.0 e prompt/modelo preservados.
+
+## Acordos, implementação e evidência
+
+| ID | Implementação | Teste/evidência | Status |
+| --- | --- | --- | --- |
+| D-01 | Recuperação conservadora de atividades atribuídas ao núcleo e responsabilidades específicas; conjunto das experiências e fontes | Casos de cargo distinto, estoques plural, experiências históricas, marketing e responsabilidade fiscal em `trajectoryActivityRecognition.test.ts`;200testes dirigidos | PASS local |
+| D-02 | Trajetória relacionada sem equivalência integral; requisito e senioridade separados; nota provisória explicada | Estoque/SAP/gestão de pessoas, nível adjacente, fonte real de leitura restrita executada offline no runtime exato | PASS local |
+| D-03 | Dúvida explícita em resumo/tag/drawer; grupo contextual com dúvidas aberto e título próprio |32checks browser1448/390, screenshots com componentes reais, zero chamadas externas | PASS local |
+| D-04 | Triagem seletiva por atividades; precedência de decisões/referências mantida; fallback intacto |200Node/42Edge, paridade web/Edge e falha da interpretação | PASS local |
+| D-05 | Allowlist5.2.0 em score/SQL; CREATE OR REPLACE por substituição estrita preserva guardas/grants |49assertivas SQL locais, comparação ACL, versão desconhecida negada, histórico e M6.2 | PASS local |
+| D-06 | Dependência causal trajectoryRecognition; atualização append-only sob demanda, lease e anterior na falha | SQL: uma atualização causal, nova versão aceita, segunda consulta estável, histórico imutável; testes Edge de atualização/falha/autoridade | PASS local |
+| D-07 | Positivos e negativos contrastantes; publicação seletiva | QA local PASS; CI/publicação/smoke pendentes | PARTIAL |
+
+## Proibições
+
+P-01: ferramenta isolada, venda/construção de software, aspiração, curso, negação, área ampla e gestão genérica não viram experiência direta. Gestão de pessoas permanece sem evidência no caso analisado. PASS local.
+
+P-02: pesos/fórmula não alterados (matchingScore muda somente allowlist); fixtures sintéticas, sem provider. Fonte profissional real somente leitura, execução offline; não há alteração de Perfil ou decisão humana nem chamada paga para validação. PASS local; preservação remota conferida no fechamento.
+
+P-03: guards de tenant/lease/fontes/autoridade, versão desconhecida, grants e fallback testados. Migration altera somente fragmentos esperados e falha diante de baseline diferente; nenhuma alteração de ACL. PASS local.
+
+## Mapa final de impacto e preservação
+
+| Capacidade | Relação | Baseline / regressão e limite |
+| --- | --- | --- |
+| Atividades, grupos e triagem | direct |5.1.0/triagem2.0.0;200Node/42Edge com positivos, negativos, temporalidade e paridade |
+| Requisitos, pesos e senioridade | plausible_indirect | score1.4.0/pesos10/25/35/10/10/10 preservados; testes de matching/score e diff |
+| Persistência/histórico/M6.2 | direct | lease, avaliação append-only, data fixa e controle de versões;49assertivas em PostgreSQL17 localhost55479, transação ROLLBACK |
+| Tenant/decisões humanas | critical_transversal | SQL negativo/ACL e Edge; funções atuais de produção conferidas antes da substituição, sem remover guarda multiempresa |
+| Busca/comparação/drawer | direct | apresentação existente,32checks browser1448/390, navegação/comparação/recálculo explícito preservados |
+| Parser/Synthesis/Auth/processos | no_impact_identified | nenhuma edição de regras/fontes; release não inclui serviços adjacentes; smoke de IDs/imagens/reinícios no fechamento |
+
+Dependência descoberta e incluída antes da implementação: resultados salvos não atualizariam apenas por deploy. Revisão causal do reconhecimento autoriza atualização única sob demanda, sem varredura ou invalidação por tempo. Ambiente remoto único é produção; QA desta entrega é local sintético. SQL usa baseline descartável vazio `import_evidence_v202`, verificado no início, e fixtures de estabilidade existentes mais `supabase/qa/trajectory_activity_recognition_verification.sql`. A porta estava desligada e foi retomada com pg_ctl no diretório local existente; não se criou ambiente remoto nem se reiniciou serviço de produção.
+
+## Evidência e limites
+
+`docs/qa/evidence/trajectory-activity-recognition/`: testes de domínio/Edge/SQL, browser e screenshots, validação somente leitura de fonte real. Fonte real: perfil1 e posição1 do caso solicitado produzem trajetória relacionada, score provisório disponível, SAP atendido, gestão de pessoas/comunicação sem evidência e senioridade adjacente abaixo; a decisão humana atual `confirmed` permanece e resolve a triagem internamente. Não se afirma nota histórica recalculada em produção, validade empírica universal nem melhor candidato. Falsos negativos por paráfrase ainda são possíveis; recuperação conservadora e interpretação existente não garantem recall universal.
+
+Sem referência visual normativa nova: imagem anterior é exemplo do produto, não alvo de composição para estas regras. Mudança mínima de avisos/grupos, com render real inspecionado. Ajustes de fixture/seletores (env do client, menu Outras ações, animação do drawer) não eram defeitos de produto. Responsabilidades ausentes em fonte legada são tratadas como lista vazia; testes Edge cobrem essa compatibilidade.
+
+F-01 preservado: sem redesign, taxonomia externa, novo modelo/prompt/biblioteca ou decisão de contratação. Nenhum desvio do acordo identificado na validação local. Publicação/CI/smoke e sincronização serão registrados após conclusão.
+
+---
+
 ## Source: `docs/qa/aot-trajectory-evidence-recovery.md`
 
 # AoT — recuperação da evidência semântica
@@ -30802,6 +30914,14 @@ Diagnosticar a shell atual, reutilizar os assets oficiais de login e a fonte exe
 # Execução — estabilidade do Score v2.1.4
 
 Implementar integralmente `agreement-stable-score-v214.md` 1.0.0, aprovado em 07/10/2026, sem reinterpretar D-01–D-05/P-01/F-01/A-01/CA-01–CA-03. Reutilizar motor e snapshots; persistência com autoridade server-side e dependências concretas. Validar em PostgreSQL local descartável e Edge sintético antes de migration/Edge/web de produção. Context Pack e AoT obrigatórios; não alegar jornada autenticada real sem prova.
+
+---
+
+## Source: `docs/qa/execution-trajectory-activity-recognition.md`
+
+# Execução — reconhecimento da trajetória pelas atividades
+
+Executar integralmente `docs/qa/agreement-trajectory-activity-recognition.md`v1.0.0, lido neste movimento. Implementar D-01..07 e CA-01..03; respeitar P-01..03 e F-01; A-01 delega apenas mecânica. Autorização explícita de implementação/validação/publicação de Bruno em23/10/2026. Reutilizar motor e interpretação seletiva existentes, sem biblioteca nem provedor novo. Baselineb00f03f; branchcodex/trajectory-activity-recognition. Fechar com AoT, regressão proporcional, Context Pack, CI e publicação seletiva. Não repetir aprovação já concedida.
 
 ---
 

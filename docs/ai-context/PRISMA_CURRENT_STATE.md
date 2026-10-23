@@ -3,11 +3,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.93.1
-last_verified: 2026-10-19
+version: 2.93.2
+last_verified: 2026-10-23
 ---
 
 # Estado atual do Prisma
+
+## Reconhecimento da trajetória pelas atividades —23/10/2026
+
+Implementação autorizada por Bruno: matching5.2.0 e triagem2.1.0 reconhecem atividades atribuídas às experiências, combinam evidências históricas e mantêm senioridade/requisitos separados. Relação incerta fica identificada e visível; ferramentas/área ampla/negação não viram equivalência. Pesos, score1.4.0, prompt/modelo e decisões humanas preservados. Nova dependência causal atualiza resultados sob demanda, com histórico imutável e anterior preservado na falha; nenhuma varredura/IA em massa na publicação. Reutiliza motor, Knowledge, cache e leases existentes. Estado: validação local e publicação em andamento; acordo/execução/AoT `docs/qa/*trajectory-activity-recognition.md`.
 
 ## Acompanhamento do desempenho na avaliação — publicado em3.1.3
 

@@ -265,6 +265,16 @@ function inputFor(match: VacancyCandidateMatch): MatchingScoreInput {
   };
 }
 
+test("valid interpretation resolves only the recognition doubt, preserving other material dependencies", () => {
+  const item = semanticPilotCases.find(row => (semanticPilotExpectations[row.baseId]?.functionPoints ?? 0) > 0)!;
+  const { need, legacy, assessment } = setup(item);
+  legacy.score.provisionalReasons = ["Relação profissional a verificar: atividades publicadas.", "Verificação específica ainda pendente."];
+  const result = applySemanticAssessment(need, legacy, assessment);
+  assert.equal(result.semanticAssessment?.status, "complete");
+  assert.equal(result.score.provisionalReasons.some(reason => reason.startsWith("Relação profissional a verificar:")), false);
+  assert.ok(result.score.provisionalReasons.includes("Verificação específica ainda pendente."));
+});
+
 for (const item of semanticPilotCases) {
   test(`rubric integration preserves grounded classes: ${item.id}`, () => {
     const { need, legacy, assessment } = setup(item);

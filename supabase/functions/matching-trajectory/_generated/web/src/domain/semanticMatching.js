@@ -3,7 +3,7 @@ import { HUMAN_REVIEW_VERSION, readTrajectoryResponse, SEMANTIC_MATCHING_VERSION
 import { calculateMatchingScore } from "./matchingScore.js";
 import { assessVacancyEvidence, assessVacancySeniority, hasUsableProfessionalContent } from "./vacancy.js";
 /** Activation policy only; semantic output and persisted score contracts are unchanged. */
-export const SEMANTIC_TRIAGE_VERSION = "semantic-triage-2.0.0";
+export const SEMANTIC_TRIAGE_VERSION = "semantic-triage-2.1.0";
 /** Discovery remains broad; only the external interpretation is selective. */
 export function isSemanticDiscoveryEligible(match) {
     return match.positionDecision !== "dismissed" && hasUsableProfessionalContent(match.candidate);
@@ -18,6 +18,8 @@ export function semanticTriageDisposition(match) {
     // A possible occupational title relation is attributable to an actual title/experience,
     // unlike a shared area, isolated technology or requirement. It can start in any group.
     if (match.positionRelation.status === "possible_title_relation")
+        return "needs_interpretation";
+    if (match.trajectoryAssessment.activityEvidence?.length)
         return "needs_interpretation";
     // Direct professional experience in the position's named area is a plausible functional
     // relation even when title wording differs. A declared area alone is not.
@@ -106,7 +108,7 @@ export function applySemanticAssessment(vacancy, match, assessment) {
         coverageState: points ? "evaluated_relation" : "insufficient_evidence", explanation: `${explanation}${seniority.explanation ? ` ${seniority.explanation}` : ""}`,
     };
     const discoveryGroup = relation.discoveryGroup;
-    const dependencies = [...match.score.provisionalReasons.filter(reason => !reason.startsWith("Cobertura das evidências")),
+    const dependencies = [...match.score.provisionalReasons.filter(reason => !reason.startsWith("Cobertura das evidências") && !reason.startsWith("Relação profissional a verificar:")),
         ...(experience.some(item => item.activity === "unclear") ? ["Há experiência cuja natureza permanece indeterminada; diferenças de score não estabelecem prioridade segura."] : [])];
     const score = calculateMatchingScore({
         areaApplicable: Boolean(vacancy.area.trim()), functionApplicable: Boolean(vacancy.title.trim()), areaRelation, functionAssessment,
