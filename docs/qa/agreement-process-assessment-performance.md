@@ -1,0 +1,18 @@
+# Acordo e execução — acompanhamento de desempenho, v1.0.0
+
+Autoridade: pedido de Bruno em23/10/2026 para melhorar Aplicações e resultados individuais, exibir Nota Prisma e avaliação por candidato e ordenar do maior desempenho ao menor. Baseline829c84436a9566b8755be74cb72fdb3b075afbeb. RiscoC: apresentação integrada de duas consultas existentes, sem novo cálculo persistido ou fronteira de autorização. Versão pública3.1.3 mantida nesta evolução da apresentação; contratos de Score e avaliação preservados.
+
+- D-01: cada aplicação mostra Pessoa, Nota Prisma salva, porcentagem de acertos e acertos/total da avaliação concluída, estado e acesso aos resultados/atividade existentes.
+- D-02: ordenação inicial e permanente nesta lista por proporção exata de acertos decrescente, empate por nome; aplicações sem resultado concluído válido ao final. Zero válido continua zero; ausência permanece indisponível. Não compor as duas notas.
+- D-03: preservar estado/proveniência da Nota Prisma (provisória, atualização, falha e versões diferentes), sem recalcular ou solicitar IA. Falha da consulta opcional de notas não bloqueia resultados e ações existentes. Consulta vinculada ao mesmo tenant/Posição/processo, sem exibir resposta de outro contexto.
+- D-04: desktop com colunas alinhadas e medidas lado a lado; celular com cartões na mesma ordem e medidas identificadas. Estado da aplicação em destaque, detalhes de envio recolhíveis sem perder estados, retomada ou limites de comprovação de entrega. Resultado, cancelamento autorizado e leitura histórica continuam disponíveis.
+- P-01: inferir contratação/rejeição/etapa, penalizar ausência, misturar métricas, inventar nota/ID ou converter sinais de atividade em desempenho.
+- P-02: nova escrita no banco, IA paga, envio/cancelamento automático ou mudança de permissões/contratos de correção/publicação.
+- F-01: redesign da preparação/questões/convites/modal individual, backend/RLS, matching, conteúdo das provas e novas decisões humanas.
+- A-01: reutilizar RPC process_assessment_workspace e get_position_follow_up_process via serviço existente; componentes/tokens/estados e harness sintético existentes. Sem nova dependência.
+
+CA-01/D-01..02: testes dirigidos de proporção/empate/zero/ausência/malformado/contexto e UI real com notas diferentes da ordem de desempenho. CA-02/D-03/P-01..02: mock registra somente consultas; falha e resposta de processo incorreto não exibem nota, resultado permanece; nenhuma escrita/IA. CA-03/D-04: browser1448/768/390/320, estados pendente/expirado/concluído, resultado modal, envios/retomada/cancelamento e histórico; sem overflow global e preservação da configuração. Tipos/build/contextos/CI, plano seletivo, web e smoke produtivo sem dados reais.
+
+Referência fornecida: contraexemplo da tabela atual, não alvo visual normativo. Modelo implementável: mesmo cartão no contexto atual, breve resumo de quantidades e ordem, grade de Pessoa/Nota Prisma/Desempenho/Estado/Ações; medidas com tipografia escura, acertos secundários e envio sob disclosure. Mobile transforma cada linha em cartão com cabeçalho, dupla de métricas, estado e ações, sem esconder informações. Não há Q material pendente.
+
+Execução congelada neste arquivo: implementar D-01..04 preservando P-01/02, F-01 excluído e A-01 restrito ao como. Mínimo suficiente: helpers/contratos afetados, tipos/build web, browser real com serviços sintéticos, Context Pack em snapshot rastreado e CI obrigatória; sem suíte integral local. Encerrar após publicação web seletiva, smoke, sincronização e AoT. Rollback: imagem web anterior, sem alteração de dados/backend.

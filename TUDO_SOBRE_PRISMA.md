@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 551
-source_manifest_sha256: af3efb806ef6c59ffd670accf4aa12a5781785a12c5224751232c5e43c0f4ffd
+documentation_source_count: 553
+source_manifest_sha256: b4af85713e43bbeca4ef30e131d9387c0cd1c34a4b39003d26b9d49e4e80ab24
 -->
 
 # Tudo sobre o Prisma
@@ -2649,6 +2649,10 @@ last_verified: 2026-10-19
 ---
 
 # Estado atual do Prisma
+
+## Acompanhamento do desempenho na avaliação — implementação em validação
+
+Aplicações e resultados individuais mostra Nota Prisma salva e acertos/total/porcentagem, ordenada pela proporção exata de acertos decrescente, empates por nome e ausentes ao final. Desktop em colunas/mobile em cartões; envio sob disclosure, modal/retomada/cancelamento explícitos e histórico preservados. Consulta opcional pelo serviço de acompanhamento existente, vinculada ao tenant/Posição/processo; falha não bloqueia resultados, sem IA ou alteração de cálculo/decisão.17Node e97browser em1448/768/390/320, tipos raiz/web e build PASS. Versão3.1.3 mantida; sem backend/schema/Edge/serviços. Acordo1.0.0 e AoT process-assessment-performance registram mapa, limites e evidências; CI/publicação/contextos em fechamento.
 
 ## Publicação de campos simples do Perfil — correção3.1.3 publicada
 
@@ -5973,6 +5977,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+Apresentação de desempenho do processo (23/10/2026): reutiliza resultados persistidos e Score existente, sem fórmula, contrato persistido ou nova entrega numerada aprovada no registry. Decisão de versão deste escopo: manter3.1.3; helper de apresentação e acordo1.0.0 não renumeram correção, matching ou instrumentos. Acordo/AoT process-assessment-performance e evidência de publicação distinguem implementação de rollout.
 
 Pedido de Bruno18/10/2026 autoriza **3.1.3**, Meu cadastro, username editável exceto Owner, e-mail confirmado e senha com verificação atual. Novo contrato aditivo `operator-self-account-1.0.0`, preservando operator-identity2.0.0, onboarding e lifecycle. Estado de publicação é comprovado no AoT my-account-v313.
 
@@ -12657,6 +12663,8 @@ Pedido de Bruno autoriza observação adicional das regiões de enunciado/altern
 
 ## Resultado executivo 2.5.4
 
+Em Aplicações e resultados individuais, a lista compara **Nota Prisma** salva e **Desempenho na avaliação** (porcentagem e acertos/total do resultado concluído), mantendo métricas independentes. A ordem é por proporção exata de acertos, maior primeiro, com empate por nome; aplicações sem resultado válido ficam ao final, sem nota zero inventada. O resumo informa candidatos/com resultado/sem resultado. Estados da Nota Prisma e diferenças de versões permanecem identificados. Falha opcional na consulta da nota deixa o resultado da prova e as ações disponíveis; Atualizar consulta novamente. Desktop usa colunas; celular, cartões na mesma ordem. Envio do convite fica recolhível, com todos os estados/limites e retomada preservados. Ver resultado e atividade, cancelamento explícito e histórico somente leitura continuam disponíveis. Nenhuma IA, recálculo, mudança de etapa ou decisão automática por ordenar/consultar. Evolução de apresentação mantém3.1.3; acordo/AoT `process-assessment-performance` registram critérios, evidências e rollout.
+
 Resultado individual atual e histórico apresentam fundo claro, identificação/versão, acertos persistidos em destaque, tempo decorrido válido entre início/envio e quantidade de questões com registros. Indicadores representam a avaliação inteira; registros são parciais. Visão geral inicia em acertos por assunto. Mostrar alterna acertos, perdas de foco, duração sem foco e alterações de resposta; Agrupar por alterna assunto/dificuldade; filtros por assunto, dificuldade e resposta alteram o recorte com quantidade e limpar. IDs dos requisitos e versões aplicadas sustentam os joins; rótulos iguais não unem assuntos distintos. Dificuldade é classificação atribuída, sem calibração empírica. Ausência de duração ou correção permanece indisponível, sem barra de zero inventada.
 
 Grupo abre Questões mantendo números originais, alternativas, resposta/gabarito, explicação e origem; padrão abre Registros de evidência. Todos os sinais, incluindo seleção/cópia/menu, zoom, atalhos, lacunas, eventos não associados e detalhes técnicos continuam consultáveis. Retorno conserva filtros. Síntese por IA permanece recolhida e identifica avaliação inteira/base histórica; suas evidências usam o snapshot original. Consulta, abas e filtros não geram IA/cotação/débito. Atualização exige o fluxo comercial existente, conserva relatório anterior em erro e evita retry pago automático. Tempo de resposta por questão/assunto é explicitamente indisponível; não é inferido do tempo global ou do mouse/foco. Não há nova coleta, mudança de contratos/métodos/tarifas/backend ou influência em Score/Perfil/etapas. Acordo1.0.0, referência e AoT assessment-results-executive registram escopo, fidelidade, testes e rollout; publicação só é confirmada pela evidência operacional do AoT.
@@ -17624,6 +17632,29 @@ Versão 1.0.0. Estado: agreed para implementação local. PO: Bruno, 2026-09-14.
 ## PENDENTE
 
 Nenhuma decisão material pendente. Automação futura de upload exige decisão própria de integração, autenticação, custo e operação.
+
+---
+
+## Source: `docs/qa/agreement-process-assessment-performance.md`
+
+# Acordo e execução — acompanhamento de desempenho, v1.0.0
+
+Autoridade: pedido de Bruno em23/10/2026 para melhorar Aplicações e resultados individuais, exibir Nota Prisma e avaliação por candidato e ordenar do maior desempenho ao menor. Baseline829c84436a9566b8755be74cb72fdb3b075afbeb. RiscoC: apresentação integrada de duas consultas existentes, sem novo cálculo persistido ou fronteira de autorização. Versão pública3.1.3 mantida nesta evolução da apresentação; contratos de Score e avaliação preservados.
+
+- D-01: cada aplicação mostra Pessoa, Nota Prisma salva, porcentagem de acertos e acertos/total da avaliação concluída, estado e acesso aos resultados/atividade existentes.
+- D-02: ordenação inicial e permanente nesta lista por proporção exata de acertos decrescente, empate por nome; aplicações sem resultado concluído válido ao final. Zero válido continua zero; ausência permanece indisponível. Não compor as duas notas.
+- D-03: preservar estado/proveniência da Nota Prisma (provisória, atualização, falha e versões diferentes), sem recalcular ou solicitar IA. Falha da consulta opcional de notas não bloqueia resultados e ações existentes. Consulta vinculada ao mesmo tenant/Posição/processo, sem exibir resposta de outro contexto.
+- D-04: desktop com colunas alinhadas e medidas lado a lado; celular com cartões na mesma ordem e medidas identificadas. Estado da aplicação em destaque, detalhes de envio recolhíveis sem perder estados, retomada ou limites de comprovação de entrega. Resultado, cancelamento autorizado e leitura histórica continuam disponíveis.
+- P-01: inferir contratação/rejeição/etapa, penalizar ausência, misturar métricas, inventar nota/ID ou converter sinais de atividade em desempenho.
+- P-02: nova escrita no banco, IA paga, envio/cancelamento automático ou mudança de permissões/contratos de correção/publicação.
+- F-01: redesign da preparação/questões/convites/modal individual, backend/RLS, matching, conteúdo das provas e novas decisões humanas.
+- A-01: reutilizar RPC process_assessment_workspace e get_position_follow_up_process via serviço existente; componentes/tokens/estados e harness sintético existentes. Sem nova dependência.
+
+CA-01/D-01..02: testes dirigidos de proporção/empate/zero/ausência/malformado/contexto e UI real com notas diferentes da ordem de desempenho. CA-02/D-03/P-01..02: mock registra somente consultas; falha e resposta de processo incorreto não exibem nota, resultado permanece; nenhuma escrita/IA. CA-03/D-04: browser1448/768/390/320, estados pendente/expirado/concluído, resultado modal, envios/retomada/cancelamento e histórico; sem overflow global e preservação da configuração. Tipos/build/contextos/CI, plano seletivo, web e smoke produtivo sem dados reais.
+
+Referência fornecida: contraexemplo da tabela atual, não alvo visual normativo. Modelo implementável: mesmo cartão no contexto atual, breve resumo de quantidades e ordem, grade de Pessoa/Nota Prisma/Desempenho/Estado/Ações; medidas com tipografia escura, acertos secundários e envio sob disclosure. Mobile transforma cada linha em cartão com cabeçalho, dupla de métricas, estado e ações, sem esconder informações. Não há Q material pendente.
+
+Execução congelada neste arquivo: implementar D-01..04 preservando P-01/02, F-01 excluído e A-01 restrito ao como. Mínimo suficiente: helpers/contratos afetados, tipos/build web, browser real com serviços sintéticos, Context Pack em snapshot rastreado e CI obrigatória; sem suíte integral local. Encerrar após publicação web seletiva, smoke, sincronização e AoT. Rollback: imagem web anterior, sem alteração de dados/backend.
 
 ---
 
@@ -24435,6 +24466,46 @@ Upload em GPT, sincronização externa, produto runtime, Supabase, QA e produç�
 ## Conclusão
 
 PASS. D-001 a D-008 e P-001 a P-006 possuem implementação e prova proporcional. Prisma permanece v1.6.3. Não houve mudança em produto runtime, Supabase, QA ou produção; o upload do novo arquivo no GPT continua sendo uma ação externa manual do Product Owner.
+
+---
+
+## Source: `docs/qa/aot-process-assessment-performance.md`
+
+# AoT — acompanhamento de desempenho dos candidatos
+
+Contrato congelado: `docs/qa/agreement-process-assessment-performance.md`v1.0.0. Baseline829c84436a9566b8755be74cb72fdb3b075afbeb; branchcodex/process-assessment-performance. Pedido23/10/2026. Versão3.1.3 preservada; sem mudança nos contratos de Score/correção/processo.
+
+## Mapa de impacto e preservação
+
+| Capacidade / relação | Baseline e impacto | Regressão / evidência | Status |
+| --- | --- | --- | --- |
+| Lista e ordenação / direct | Tabela mostrava apenas Pessoa/estado/ação, sem medidas; dados de correção já presentes | Helper valida concluído/correção/denominador; UI com seis candidatos, empates, zero e pendentes | PASS local |
+| Nota Prisma / direct | Serviço de acompanhamento já expõe score salvo e metadados; uma consulta extra por atualização, sem N+1 | Reuso get_position_follow_up_process pelo serviço existente; estado/proveniência e falha opcional | PASS local |
+| Tenant/Posição/processo / critical_transversal | Mesma organização/Posição e processo explícito, backend existente mantém autorização | Browser registra parâmetros e recusa processo incompatível; contexto React elimina resposta antiga | PASS na fronteira cliente; RLS inalterada |
+| Resultado/modal/envio/cancelamento/histórico / plausible_indirect | Ações existentes devem continuar, envio sai da região principal para details |65browser1448/768/390/320: resultado correto, limites de envio, retomada/cancelamento explícitos e histórico somente leitura | PASS local |
+| Configuração/convites/prazos / plausible_indirect | Fora do componente substituído; relógio existente continua fornecendo estado | Node assessmentInvitations/processAssessment;32browser integrados de montagem/modal em4viewports | PASS local |
+| Banco/IA/Score/contratação / no_impact_identified | Diff só apresentação/helpers/testes; sem mutação, nova IA, fórmula ou autoridade | Mocks recusam rede e registram apenas load/score_load até ação humana; sem SQL/Edge/worker no diff | PASS local/diff |
+
+Baseline mínimo: código/SHA acima e screenshot do problema (contraexemplo). QA local usa serviços sintéticos na página real; nenhum dado pessoal fornecido virou fixture. Novas dependências: import .js mecânico em processAssessmentData para o helper tipado também compilar em NodeNext; sem alteração de shape/runtime. Não houve reclassificação de relações.
+
+## Acordos → implementação → teste/evidência
+
+| ID | Implementação | Evidência | Status |
+| --- | --- | --- | --- |
+| D-01 | ProcessAssessmentResults mostra métricas, acertos/total, estado e resultado existente |17Node dirigidos e65browser, dados distintos para Score/avaliação | PASS local |
+| D-02 | assessmentResultRows ordena proporções exatas; nome/ID estabilizam empates; ausentes depois de zero | Helper não modifica entrada; malformado/parcial/contexto incompatível permanece indisponível | PASS local |
+| D-03 | Consulta opcional existente, valida processo, cancela aplicação visual de resposta antiga; metadados preservados | Falha não bloqueia resultado; prova de parâmetros/processo; zero IA/escrita até ação humana | PASS local |
+| D-04 | Tabela desktop/cartões mobile, resumo de quantidades e details de envios; callbacks mantidos |4viewports, sem overflow; modal, retomada, cancelamento e histórico | PASS local |
+| P-01 / P-02 | Nenhuma composição de notas, pontuação de atividade ou decisão automática; leituras apenas | Testes negativos e registro de chamadas; sem backend/schema/RLS/IA no diff | PASS local |
+| F-01 | Preparação/correção/portal mantidos; nenhuma alteração comercial ou de instrumento |32checks de regressão integrada e diff | PASS local |
+
+## Visual
+
+Referência do usuário é contraexemplo, não alvo visual normativo. Mesmo estado/dados sintéticos nos quatro viewports: `docs/qa/evidence/process-assessment-performance/results-1448.png`, results-768/390/320 e page correspondentes. Desktop mantém o cartão e compara métricas por coluna; mobile usa cartões na mesma ordem, sem coluna escondida. Informações em texto escuro, ações azuis, barras neutras. Inspeção inicial identificou corte do título mobile e sobreposição externa no recorte; título passou a quebrar linha. Somente nos recortes results-* a captura oculta temporariamente skip-link e botão flutuante de navegação, externos ao cartão. Page-* conserva o shell completo sem esse estilo de captura. Nenhum estilo de produção da navegação foi alterado.
+
+## Validação e limites
+
+Primeiro typecheck identificou import ainda usado pela lista de convites e extensão de import necessária no helper NodeNext; ambos corrigidos. Tipos web/root,17Node e build web PASS. Browser65checks da nova lista e32da integração existente PASS com página/modal reais e serviços sintéticos. Ajuste final de título/warning repetiu somente helper/browser/build afetados, sem contar novamente os mesmos testes. Build emite avisos preexistentes de tamanho de chunk/import dinâmico. Sem suíte integral local; dispatcher será deduplicado contra os checks dirigidos. Sem avaliação autenticada de humano real, IA paga ou envio real. Publicação/CI/contextos/smoke/sincronização pendentes. Contrato e fontes evoluem juntos; completar status depois da evidência operacional, sem inventar PASS produtivo.
 
 ---
 

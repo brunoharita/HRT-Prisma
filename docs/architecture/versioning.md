@@ -1,5 +1,7 @@
 # Versionamento
 
+Apresentação de desempenho do processo (23/10/2026): reutiliza resultados persistidos e Score existente, sem fórmula, contrato persistido ou nova entrega numerada aprovada no registry. Decisão de versão deste escopo: manter3.1.3; helper de apresentação e acordo1.0.0 não renumeram correção, matching ou instrumentos. Acordo/AoT process-assessment-performance e evidência de publicação distinguem implementação de rollout.
+
 Pedido de Bruno18/10/2026 autoriza **3.1.3**, Meu cadastro, username editável exceto Owner, e-mail confirmado e senha com verificação atual. Novo contrato aditivo `operator-self-account-1.0.0`, preservando operator-identity2.0.0, onboarding e lifecycle. Estado de publicação é comprovado no AoT my-account-v313.
 
 Pedido de Bruno18/10/2026 autoriza nova entrega **3.1.2**, medição de IA por ação/requisição e correlação com Tokens Prisma. `ai-action-cost-metering-1.0.0`, `ai-cost-measurement-1.0.0` e `ai-action-cost-report-1.0.0` são aditivos; contratos históricos e regras comerciais preservados. Publicação só é confirmada pelo AoT `ai-cost-metering-v312`.

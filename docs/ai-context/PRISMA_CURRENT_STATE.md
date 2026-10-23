@@ -9,6 +9,10 @@ last_verified: 2026-10-19
 
 # Estado atual do Prisma
 
+## Acompanhamento do desempenho na avaliação — implementação em validação
+
+Aplicações e resultados individuais mostra Nota Prisma salva e acertos/total/porcentagem, ordenada pela proporção exata de acertos decrescente, empates por nome e ausentes ao final. Desktop em colunas/mobile em cartões; envio sob disclosure, modal/retomada/cancelamento explícitos e histórico preservados. Consulta opcional pelo serviço de acompanhamento existente, vinculada ao tenant/Posição/processo; falha não bloqueia resultados, sem IA ou alteração de cálculo/decisão.17Node e97browser em1448/768/390/320, tipos raiz/web e build PASS. Versão3.1.3 mantida; sem backend/schema/Edge/serviços. Acordo1.0.0 e AoT process-assessment-performance registram mapa, limites e evidências; CI/publicação/contextos em fechamento.
+
 ## Publicação de campos simples do Perfil — correção3.1.3 publicada
 
 Constraint profile_publication_decisions_check corrigida: título, objetivo, resumo e listas textuais usam fieldPath sem ID de bloco; experiências/formação/resultados/seções continuam exigindo targetBlockId para update/replace. Baseline23514 reproduzido;108asserts PostgreSQL17/22tooling, lint/foundation/contextos/ledger PASS. SHA funcional021083abfc423cfd3a6707cc42bb9a43119014d3, CI branch39972770184/main39973388063 SUCCESS. Migração remota20261023145525 validada e fingerprint exato; hashes produtivos de revisão/Perfil/funções/grants e409auditorias preservados. Somente banco/docs, sem reconstruir runtime ou mudar3.1.3. Sem alterar UI/RPC/permissões/IA ou publicar Perfil real; jornada humana real NOT TESTED. Acordo1.0.0, AoT e recibos profile-publication-scalar-fix registram limites. Fechamento documental/contextos sincroniza Git sem novo rollout.
