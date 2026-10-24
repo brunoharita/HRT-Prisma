@@ -71,7 +71,7 @@ export const knowledgeService = {
     const proposalViews = await withPublishedClassifications(proposals.map(mapProposal), async (ids) => {
       const { data, error } = await supabase.from("knowledge_competency_classifications" as never)
         .select("concept_id,subgroup_id,version").eq("is_current", true).in("concept_id", ids);
-      if (error) throw error;
+      if (error) throw supabaseOperationError(error, "Não foi possível consultar a classificação publicada.");
       return (data ?? []) as Array<{ concept_id: string; subgroup_id: string; version: number }>;
     });
     const conceptsById = new Map(concepts.map((row) => [row.id, row]));

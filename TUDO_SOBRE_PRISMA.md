@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 566
-source_manifest_sha256: a7e9af323cc2f07f2e31ccc9ac6dbdc0bbfb8a188bd0dd71492b85f6559976b5
+source_manifest_sha256: 92fc0de2c674ceea02b70e3c66af613ef87588b2e476aeab97f3ee1bc79fdc85
 -->
 
 # Tudo sobre o Prisma
@@ -21050,6 +21050,8 @@ Local: 12 testes dirigidos de classificação/visibilidade/governança/decisões
 Referências do usuário são exemplos do defeito, sem redesign normativo. Mantidos grid de cartões, hierarquia, seleção/guia/ações pendentes; mudança intencional no aprovado: classificação salva em consulta. Comparação renderizada de estados equivalentes em desktop/mobile confirmou continuação apenas no pending e H4/v1 no approved. Credencial histórica continua bloqueada; aviso legado não foi redesenhado.
 
 Sem QA remoto separado: QA local determinístico com componentes reais e adapters sintéticos, banco produtivo somente leitura para diagnóstico. Jornada humana autenticada em produção NOT TESTED; não se executam aprovações reais para testar. Publicação web/CI/smoke/sincronização pendentes de recibo; não se declara rollout por código. Nenhuma divergência de contrato identificada.
+
+CI inicial 40132232245 bloqueou o SHA bddc7a9 na regra de tradução de erros dos serviços: embora capturado pelo leitor opcional, o erro bruto não deve atravessar a fronteira Supabase. Consulta corrigida para `supabaseOperationError`; 14 testes `reviewOperationErrors` e os 4 do leitor passaram após o ajuste. Não houve promoção/publicação do SHA reprovado; novo CI deve aprovar o SHA corrigido antes do rollout.
 
 ---
 
