@@ -60,4 +60,3 @@ try{
  }
 }finally{await writeFile(dir+"/checks.json",JSON.stringify({checks},null,2));await browser.close();await server.close();}
 console.log(JSON.stringify({checks:checks.length,pass:true}));
-

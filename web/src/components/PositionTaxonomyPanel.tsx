@@ -71,6 +71,7 @@ export function PositionTaxonomyPanel({ draft, membership, onChange, onEdit }: P
     onChange?.((value) => ({ ...value, taxonomyComplementIds: [...new Set([...(value.taxonomyComplementIds ?? []), id])] })); setComplement(false);
   }
   const groups = groupTaxonomyItems(snapshot?.items ?? []);
+  const recognitionContextKey = JSON.stringify([membership.organizationId,draft.title,draft.mission,draft.responsibilities]);
   return <section className="prisma-position-taxonomy" aria-label="Taxonomia profissional da Posição">
     <PrismaCard title={<Space><ApartmentOutlined />Referência ocupacional Prisma</Space>}
       extra={<Button type="link" icon={<InfoCircleOutlined />} onClick={() => setWhy(true)}>Por que o Prisma associou assim?</Button>}>
@@ -134,7 +135,7 @@ export function PositionTaxonomyPanel({ draft, membership, onChange, onEdit }: P
     </Drawer>
     <KnowledgePicker open={correct} kind="occupation" organizationId={membership.organizationId} initialQuery={draft.title}
       candidates={snapshot?.candidates ?? []} onClose={() => setCorrect(false)} onChoose={choose}
-      recognition={<PositionOccupationalRecognition key={JSON.stringify([membership.organizationId,draft.title,draft.mission,draft.responsibilities])} open={correct} organizationId={membership.organizationId} draft={draft} onChoose={choose}/>}
+      recognition={<PositionOccupationalRecognition key={recognitionContextKey} open={correct} organizationId={membership.organizationId} draft={draft} onChoose={choose}/>}
       footer={<Button onClick={() => { onChange?.((value) => ({ ...value, referenceConceptId: null, taxonomyDecision: "cleared", taxonomy: null })); setCorrect(false); }}>Desfazer associação</Button>} />
     <ComplementDialog open={complement} organizationId={membership.organizationId} canCreate={canCreate} onClose={() => setComplement(false)} onAdd={addComplement} />
   </section>;

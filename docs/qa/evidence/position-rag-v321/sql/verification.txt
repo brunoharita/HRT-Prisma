@@ -239,7 +239,7 @@ SET
 
                     review_occupational_rag_proposal
 ------------------------------------------------------------------------
- {"reused": false, "conceptId": "3fa81766-d41a-48cd-ab64-ffbe9ecc78c8"}
+ {"reused": false, "conceptId": "56a75ae4-74de-4821-9aab-4dfbb09b0bc1"}
 (1 row)
 
 RESET
@@ -262,7 +262,7 @@ SET
 SAVEPOINT
                    approve_occupational_global_alias
 ------------------------------------------------------------------------
- {"reused": false, "conceptId": "dde4dc5e-6ece-44d4-bddc-ec78e3db2161"}
+ {"reused": false, "conceptId": "b67f5c53-567d-4593-a3c8-dc821333f2ed"}
 (1 row)
 
  rag_assert
@@ -273,7 +273,7 @@ SAVEPOINT
 ROLLBACK
       decide_knowledge_global_contribution
 -------------------------------------------------
- (a365aff7-23de-42e3-b911-c003a25c05e0,deferred)
+ (09d77409-5d3e-4308-8238-b9869192ce30,deferred)
 (1 row)
 
 RESET
@@ -875,6 +875,6 @@ NOTICE:  PASS: short search avoids enumeration
 NOTICE:  PASS: RAG projection returns current eligible published candidate and sources
 NOTICE:  PASS: candidate source version reflects current publication
 NOTICE:  PASS: source no longer published removes suggestion eligibility without changing human decisions
-NOTICE:  PERFORMANCE synthetic eligibility old_ms=2960.927000 new_ms=1070.458000
+NOTICE:  PERFORMANCE synthetic eligibility old_ms=3917.267000 new_ms=1622.001000
 
 NOTICE: PASS: two concurrent explicit requests create exactly one Inbox and one original execution

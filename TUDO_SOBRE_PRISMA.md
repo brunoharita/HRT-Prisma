@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 569
-source_manifest_sha256: 4002c35e3aed6063fcb523ce964a0ce3e7bd5636c840173c2623d62df84ae07b
+source_manifest_sha256: ccae060eea0fc5e7472f22415a91419216a038a941666c59db27db3081da8e0a
 -->
 
 # Tudo sobre o Prisma
@@ -24965,6 +24965,8 @@ Busca atual chama m71_concept_allowed por candidato; essa função constrói ref
 QA local: 28 testes de codec/Posição/versão/erros, 10 do worker RAG e 22 de tooling PASS; root/web types e build PASS. Browser: 60 checks novos e 21 da revisão padrão Knowledge PASS, dados sintéticos sem LLM/banco remoto. SQL: 137 verificações, incluindo M7.1, curadoria RAG, permissões, origem/histórico, publicações/reconciliação, fila compartilhada e concorrência real de duas conexões; nenhuma tabela nova. Transações revertidas; fixture de concorrência confirmada apenas no banco descartável, excluído ao terminar. Evidências em `evidence/position-rag-v321`.
 
 Performance sintética (100 repetições limitadas dos mesmos conceitos): elegibilidade anterior 2960,927 ms, atual 1070,458 ms; igualdade dos resultados comprovada inclusive fontes substituídas, reconciliação e outra empresa. Não é SLA de produção. A consulta de detalhes continua preservando as fontes completas.
+
+Revisão final materializou os conceitos textualmente encontrados antes de avaliar elegibilidade, impedindo execução sobre conceitos fora dos resultados pelo plano da consulta. A rodada SQL final repetiu 137 verificações e a concorrência, com medição 3917,267 ms anterior / 1622,001 ms atual. Primeiro CI 40138325973 bloqueou 286a8289 por interpretar JSON.stringify da key React como JSON apresentado; cálculo movido para variável sem mudar a chave/comportamento, dois checks de registros legíveis PASS. Três checks de avisos também PASS. Corrigida somente uma quebra de linha final do teste. Nenhuma migration/produção foi aplicada a partir do SHA reprovado. Manutenção automática ativa do Git foi preservada; não houve limpeza de worktrees ou remoção de locks ativos.
 
 As primeiras falhas foram de fixtures: nome acessível inclui ícone no botão; M7.1 histórico antecedia o subagrupador obrigatório M8.1 e leitura de auditoria exclusiva Super do M7.7; bootstrap não carregava a função de classificação; replacement JavaScript interpretava `$$` da SQL. Adaptadores locais passaram a usar a API v2 vigente, classificação original e ator correto, preservar `$$` via função de replacement e conferir original/decisão persistidos. Nenhuma proteção do produto foi removida para aprovar testes. Ajuste de extensão em import somente de tipo atende NodeNext no novo teste; sem alteração do runtime. Uma atualização de tipo recarregou o harness durante a rodada; testes completaram com todos os cenários e sem exceções; não houve alteração funcional durante a validação visual.
 

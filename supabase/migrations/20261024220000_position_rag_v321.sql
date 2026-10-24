@@ -30,9 +30,12 @@ begin
  with terms as materialized (
   select distinct t.concept_id from public.knowledge_terms t
   where t.status='approved' and (t.scope='global' or t.organization_id=p_organization_id) and position(normalized in t.normalized_term)>0
+ ), matches as materialized (
+  select c.id,c.canonical_label,c.concept_type,c.scope,c.organization_id,c.description from terms t join public.knowledge_concepts c on c.id=t.concept_id
+  where c.status='approved' and ((p_kind='occupation' and c.concept_type='occupation' and (c.scope='global' or c.organization_id=p_organization_id))
+   or (p_kind='complement' and c.scope='organization' and c.organization_id=p_organization_id and c.concept_type<>'occupation'))
  ), candidates as materialized (
-  select c.id,c.canonical_label,c.concept_type,c.scope,c.description from terms t join public.knowledge_concepts c on c.id=t.concept_id
-  where c.status='approved' and ((p_kind='occupation' and private.m71_concept_allowed(p_organization_id,c.id))
+  select * from matches c where ((p_kind='occupation' and private.m71_concept_allowed(p_organization_id,c.id))
    or (p_kind='complement' and c.scope='organization' and c.organization_id=p_organization_id and c.concept_type<>'occupation'))
  ), page as(select * from candidates order by canonical_label,id limit 25 offset p_offset)
  select jsonb_build_object('items',coalesce((select jsonb_agg(jsonb_build_object('id',id,'label',canonical_label,'conceptType',concept_type,'scope',scope,'description',description) order by canonical_label,id) from page),'[]'::jsonb),'total',(select count(*) from candidates)) into result;
