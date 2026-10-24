@@ -1686,6 +1686,19 @@
       "localStatementSha256": "e38a3435f2c74532c15faf1021a7921a2ac571249df6b63a5b1777f605a6748b",
       "remoteStatementSha256": "e38a3435f2c74532c15faf1021a7921a2ac571249df6b63a5b1777f605a6748b",
       "verifiedAt": "2026-10-23"
+    },
+    {
+      "name": "occupational_rag_v320",
+      "localVersion": "20261024090000",
+      "remoteVersion": "20261024064006",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "fingerprintMethod": "strip-CR-trim-exterior-whitespace-v1",
+      "localCanonicalLength": 46449,
+      "remoteCanonicalLength": 46449,
+      "localStatementSha256": "f7bfeb46cef133450114288ad20ed024b2e081e0835efb47d79b8cb0d66ea1f3",
+      "remoteStatementSha256": "f7bfeb46cef133450114288ad20ed024b2e081e0835efb47d79b8cb0d66ea1f3",
+      "verifiedAt": "2026-10-24"
     }
   ],
   "localOnly": [
@@ -1725,12 +1738,12 @@
     }
   ],
   "lastIncrementalVerification": {
-    "date": "2026-10-23",
-    "movement": "profile-publication-scalar-fix",
+    "date": "2026-10-24",
+    "movement": "occupational-rag-v320",
     "names": [
-      "profile_publication_scalar_targets"
+      "occupational_rag_v320"
     ],
-    "evidence": "docs/qa/evidence/profile-publication-scalar-fix/production.json",
+    "evidence": "docs/qa/evidence/occupational-rag-v320/production/release.json",
     "historicalSnapshotVerifiedAtUnchanged": true
   }
 }

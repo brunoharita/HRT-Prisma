@@ -1,0 +1,73 @@
+{
+  "checkedAt": "2026-10-24T06:52:51.315Z",
+  "checks": [
+    {
+      "path": "/",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/login",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/knowledge",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/profiles",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/vacancies",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/assets/index-B_Pcm7OR.js",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/assets/rolldown-runtime-C0FnF6B9.js",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/assets/antd-vendor-BaKnhCyQ.js",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/assets/supabase-vendor-DoXvCMLf.js",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/assets/react-vendor-BdxMnOeJ.js",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/assets/antd-vendor-B5BXDqMa.css",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "path": "/assets/index-BDESWuI2.css",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "name": "validated SHA/version/feature in current bundle",
+      "sha": "d712825a2b089e9c65357ed653182311d0ffa84b",
+      "version": "3.2.0",
+      "pass": true
+    }
+  ],
+  "result": "PASS",
+  "scope": "HTTP/SPA shell and assets; no authenticated human mutation"
+}

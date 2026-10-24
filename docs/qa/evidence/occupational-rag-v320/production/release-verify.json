@@ -1,0 +1,53 @@
+{
+  "command": "verify",
+  "local": "d712825a2b089e9c65357ed653182311d0ffa84b",
+  "originMain": "d712825a2b089e9c65357ed653182311d0ffa84b",
+  "gitAligned": true,
+  "site": {
+    "status": 200,
+    "ok": true
+  },
+  "plan": {
+    "version": "1.0.6",
+    "files": [
+      "docs/qa/evidence/occupational-rag-v320/browser/checks.json",
+      "tests/tooling/occupationalRag.browser.mjs",
+      "tests/ui/occupational-rag/main.tsx",
+      "web/src/components/OccupationalRagPanel.tsx",
+      "web/src/domain/occupationalRagReview.ts"
+    ],
+    "impact": {
+      "surfaces": [
+        "context-pack",
+        "documentation",
+        "hosting",
+        "tests",
+        "web"
+      ],
+      "edgeFunctions": [],
+      "migrations": [],
+      "modifiedMigrations": [],
+      "unknown": []
+    },
+    "validationCommands": [
+      "git diff --check",
+      "pnpm run generate:prisma-context",
+      "pnpm run check:prisma-context",
+      "pnpm run typecheck:web",
+      "pnpm run build:web",
+      "pnpm run test"
+    ],
+    "deployments": {
+      "git": true,
+      "database": [],
+      "edgeFunctions": [],
+      "web": true,
+      "parserIa": false,
+      "paddleGateway": false,
+      "profileSynthesis": false,
+      "mailForwarder": false
+    },
+    "blockedReasons": [],
+    "publishable": true
+  }
+}

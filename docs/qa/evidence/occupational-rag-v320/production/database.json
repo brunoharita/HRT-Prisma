@@ -1,0 +1,198 @@
+{
+  "baseline": {
+    "terms": 50662,
+    "tables": 144,
+    "concepts": {
+      "hash": "20a36fbe2acb091c67df9f1e19c7b882",
+      "count": 30257
+    },
+    "profiles": {
+      "hash": "7f13370aa20934e7c301ad357ebd3347",
+      "count": 21
+    },
+    "approvals": 12,
+    "proposals": 20
+  },
+  "after": {
+    "tables": 144,
+    "version": "20261024064006",
+    "concepts": {
+      "hash": "20a36fbe2acb091c67df9f1e19c7b882",
+      "count": 30257
+    },
+    "profiles": {
+      "hash": "7f13370aa20934e7c301ad357ebd3347",
+      "count": 21
+    },
+    "ragInbox": 0,
+    "approvals": 12,
+    "proposals": 20,
+    "queuedProfiles": 0,
+    "humanRpcAnonDenied": true
+  },
+  "fingerprints": {
+    "matched": 19,
+    "expected": [
+      {
+        "name": "private.rag_clean_text",
+        "hash": "1abd3b503aee8eef3a6301c01e9fc658"
+      },
+      {
+        "name": "private.enqueue_occupational_rag",
+        "hash": "be868e38f5baaf6d6e261f2497315836"
+      },
+      {
+        "name": "public.request_occupational_rag",
+        "hash": "3666847324b3bcb3dd9f8aa22e632425"
+      },
+      {
+        "name": "private.occupation_rag_vacancy_saved",
+        "hash": "8b0935ae8874d5c41121e0f5748d24aa"
+      },
+      {
+        "name": "private.occupation_rag_profile_published",
+        "hash": "64e8c4ffcbf4e05476a48c2ece4c1585"
+      },
+      {
+        "name": "private.reconcile_occupational_profile_roles",
+        "hash": "33965fb4f6cac50fa658b154a14e9fe4"
+      },
+      {
+        "name": "public.claim_occupational_rag",
+        "hash": "7af7135c4bb9cce55c57a9425d8900e7"
+      },
+      {
+        "name": "public.search_occupational_rag_candidates",
+        "hash": "8e98dcdece951e0ebc657e714b28af8e"
+      },
+      {
+        "name": "public.complete_occupational_rag",
+        "hash": "78232f157e31af4bc0282989c1774199"
+      },
+      {
+        "name": "public.retry_occupational_rag",
+        "hash": "1a770d8bac7be002e8d215d3f45c39e6"
+      },
+      {
+        "name": "public.approve_knowledge_proposal",
+        "hash": "37a1c24ac95a7c82367b425a08670218"
+      },
+      {
+        "name": "private.occupation_rag_local_approved",
+        "hash": "270b41c16a7a9bf583f44af53430113e"
+      },
+      {
+        "name": "public.review_occupational_rag_proposal",
+        "hash": "2caa78d122afba807bf16149b945c2b7"
+      },
+      {
+        "name": "public.approve_occupational_global_alias",
+        "hash": "8bb80700c5be5909dce13c248d268a63"
+      },
+      {
+        "name": "private.m77_enqueue_global_contribution",
+        "hash": "4f261fc2944752d3d7bdf07935dc619a"
+      },
+      {
+        "name": "public.load_occupational_rag_reviews",
+        "hash": "9ab02e5b7c125685fbc5068784787e56"
+      },
+      {
+        "name": "public.prepare_occupational_manual_review",
+        "hash": "8083dc96e40c74c92b74467958a1d8a0"
+      },
+      {
+        "name": "public.load_occupational_rag_origin",
+        "hash": "86bdf3f3006bf9b86333c0ee798d0cee"
+      },
+      {
+        "name": "public.record_ai_worker_history_v1",
+        "hash": "cd00244ce40aab82177c1d5a7405ee53"
+      }
+    ],
+    "actual": [
+      {
+        "name": "private.rag_clean_text",
+        "hash": "1abd3b503aee8eef3a6301c01e9fc658"
+      },
+      {
+        "name": "public.review_occupational_rag_proposal",
+        "hash": "2caa78d122afba807bf16149b945c2b7"
+      },
+      {
+        "name": "private.m77_enqueue_global_contribution",
+        "hash": "4f261fc2944752d3d7bdf07935dc619a"
+      },
+      {
+        "name": "public.record_ai_worker_history_v1",
+        "hash": "cd00244ce40aab82177c1d5a7405ee53"
+      },
+      {
+        "name": "private.enqueue_occupational_rag",
+        "hash": "be868e38f5baaf6d6e261f2497315836"
+      },
+      {
+        "name": "public.request_occupational_rag",
+        "hash": "3666847324b3bcb3dd9f8aa22e632425"
+      },
+      {
+        "name": "private.occupation_rag_vacancy_saved",
+        "hash": "8b0935ae8874d5c41121e0f5748d24aa"
+      },
+      {
+        "name": "private.occupation_rag_profile_published",
+        "hash": "64e8c4ffcbf4e05476a48c2ece4c1585"
+      },
+      {
+        "name": "private.reconcile_occupational_profile_roles",
+        "hash": "33965fb4f6cac50fa658b154a14e9fe4"
+      },
+      {
+        "name": "public.claim_occupational_rag",
+        "hash": "7af7135c4bb9cce55c57a9425d8900e7"
+      },
+      {
+        "name": "public.search_occupational_rag_candidates",
+        "hash": "8e98dcdece951e0ebc657e714b28af8e"
+      },
+      {
+        "name": "public.complete_occupational_rag",
+        "hash": "78232f157e31af4bc0282989c1774199"
+      },
+      {
+        "name": "public.retry_occupational_rag",
+        "hash": "1a770d8bac7be002e8d215d3f45c39e6"
+      },
+      {
+        "name": "public.approve_knowledge_proposal",
+        "hash": "37a1c24ac95a7c82367b425a08670218"
+      },
+      {
+        "name": "private.occupation_rag_local_approved",
+        "hash": "270b41c16a7a9bf583f44af53430113e"
+      },
+      {
+        "name": "public.approve_occupational_global_alias",
+        "hash": "8bb80700c5be5909dce13c248d268a63"
+      },
+      {
+        "name": "public.load_occupational_rag_reviews",
+        "hash": "9ab02e5b7c125685fbc5068784787e56"
+      },
+      {
+        "name": "public.prepare_occupational_manual_review",
+        "hash": "8083dc96e40c74c92b74467958a1d8a0"
+      },
+      {
+        "name": "public.load_occupational_rag_origin",
+        "hash": "86bdf3f3006bf9b86333c0ee798d0cee"
+      }
+    ],
+    "result": "PASS"
+  },
+  "denials": [
+    "worker wrong secret 42501",
+    "authenticated role without identity 28000"
+  ],
+  "result": "PASS"
+}

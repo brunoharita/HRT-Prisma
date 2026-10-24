@@ -1,0 +1,59 @@
+{
+  "version": "3.2.0",
+  "functionalSha": "d712825a2b089e9c65357ed653182311d0ffa84b",
+  "workerBuildSha": "6d5e1019b64853ba045c5659f43f518e0e813be8",
+  "workerSourceUnchangedByReadbackFix": true,
+  "migration": {
+    "local": "20261024090000",
+    "remote": "20261024064006",
+    "name": "occupational_rag_v320",
+    "canonicalLength": 46449,
+    "sha256": "f7bfeb46cef133450114288ad20ed024b2e081e0835efb47d79b8cb0d66ea1f3",
+    "functionsMatched": 19
+  },
+  "ci": {
+    "branch": 40071734407,
+    "main": 40071912513,
+    "status": "success"
+  },
+  "deployment": {
+    "database": "PUBLISHED",
+    "worker": "HEALTHY",
+    "model": "PRIVATE_HEALTHY_PINNED",
+    "web": "PUBLISHED_VERIFIED",
+    "edges": "SKIPPED",
+    "parser": "SKIPPED",
+    "gateway": "SKIPPED",
+    "mail": "SKIPPED"
+  },
+  "protectedServices": [
+    {
+      "name": "/horus-web",
+      "preserved": true
+    },
+    {
+      "name": "/prisma-parser-ia",
+      "preserved": true
+    },
+    {
+      "name": "/prisma-paddle-gateway",
+      "preserved": true
+    },
+    {
+      "name": "/hrt-mail-forwarder",
+      "preserved": true
+    },
+    {
+      "name": "/traefik-traefik-1",
+      "preserved": true
+    }
+  ],
+  "transient404": "Immediate web deploy smoke returned 404 twice during separate swaps; subsequent independent HTTP/assets/SHA/version/login checks passed without rebuilding. The final readback publish command exited 1 on that smoke; actual rollout was independently verified.",
+  "limits": [
+    "No separate remote QA environment",
+    "Synthetic model and curation fixtures; no real candidate or human approval fabricated in production",
+    "No production inference for testing; pinned private endpoint and manifests verified",
+    "Benchmark is small; Revenue ambiguous and unknown embedding retrieval not counted as success"
+  ],
+  "result": "PASS"
+}

@@ -3,21 +3,21 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.94.0
+version: 2.94.1
 last_verified: 2026-10-24
 ---
 
 # Estado atual do Prisma
 
-## Reconhecimento ocupacional — 3.2.0 em validação de publicação
+## Reconhecimento ocupacional — 3.2.0 publicada
 
 Implementação aprovada por Bruno em24/10/2026 e registrada em acordo/execução/AoT occupational-rag-v320 e ADR-089. Reutiliza Knowledge sem tabelas novas: expansão lexical e reranking privado recuperam conceitos aprovados, empresa antes de global; IA só prepara proposta pendente. Empresa revisa associação/criação/related_to; aprovação envia contribuição global sanitizada automaticamente. Super aprova/mantém somente local, com motivo opcional e origem preservada. Disparo em versões de Posições/Perfis publicados, cursor5/lease8min/tentativas/dedupe, recuperação manual, sem backfill/pesos/decisões históricas alterados.
 
-PoC real sintética Qwen4B/BGE-M3 privados gratuitos com pins/digests: Vendedor/SDR/Logística-transportes passaram; Revenue ambíguo sustentado, não equivalência. Limitações de recall/latência/memória explícitas no ADR; nenhuma API paga ou classificação oficial inventada. SQL/RLS/negativos/lote1.200cargos, worker/regressão e três telas desktop/mobile validados localmente. Registry3.2.0. CI, migration remota e runtime/smoke ainda não comprovados; não interpretar implementação ou prévias como rollout.
+PoC real sintética Qwen4B/BGE-M3 privados gratuitos com pins/digests: Vendedor/SDR/Logística-transportes passaram; Revenue ambíguo sustentado, não equivalência. Limitações de recall/latência/memória explícitas no ADR; nenhuma API paga ou classificação oficial inventada. SQL/RLS/negativos/lote1.200cargos, worker/regressão e três telas desktop/mobile validados localmente. Registry3.2.0. Publicada web funcionald712825a2b089e9c65357ed653182311d0ffa84b, CI branch40071734407/main40071912513 SUCCESS; worker6d5e101 com fonte idêntica após ajuste somente web da releitura de decisões humanas. Migration20261024064006 com hash igual/19funções conferidas;144tabelas antes/depois,21Perfis e30.257conceitos com hashes iguais, propostas/aprovações preservadas. Worker/modelo healthy, pins/limites/rede privada verificados; web715691bf388f running0, cinco serviços adjacentes inalterados.48SQL/21browser e regressão dirigida/CI PASS;13checks HTTP/assets/SHA/versão e login visível3.2.0 após404 transitório sem rebuild. Sem backfill, inferência de teste ou curadoria fictícia em produção/jornada humana autenticada. Fechamento documental sincroniza fontes sem reconstruir runtime.
 
 ## Origem única da verdade — diretriz aprovada em 24/10/2026
 
-`AGENTS.md` 1.3.4 e GOV-02 no Modelo de dados exigem reuso/ampliação das estruturas originais em todos os domínios, proibindo tabelas/entidades concorrentes para o mesmo objetivo. Outra representação persistida da mesma informação só se justifica por desempenho medido, com ADR e dados derivados reconstruíveis, sem edição ou autoridade independente. ADR-088 registra a decisão; `docs/qa/aot-canonical-data-authority.md` registra o escopo documental. Sem migração, consolidação de legado, novo RAG/modelo, mudança de contratos persistidos ou versão pública; Prisma3.1.4 preservado. Estado documental não comprova implantação de funcionalidade.
+`AGENTS.md` 1.3.4 e GOV-02 no Modelo de dados exigem reuso/ampliação das estruturas originais em todos os domínios, proibindo tabelas/entidades concorrentes para o mesmo objetivo. Outra representação persistida da mesma informação só se justifica por desempenho medido, com ADR e dados derivados reconstruíveis, sem edição ou autoridade independente. ADR-088 registra a decisão; `docs/qa/aot-canonical-data-authority.md` registra o escopo documental. Naquele movimento documental não houve migração, consolidação de legado, RAG/modelo novo ou alteração de versão pública; o produto permaneceu3.1.4 naquele fechamento. A entrega posterior3.2.0 está descrita na seção acima. Estado documental isolado não comprova implantação.
 
 ## Reconhecimento da trajetória pelas atividades —23/10/2026
 
