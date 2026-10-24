@@ -26,7 +26,7 @@ export function OccupationalRagPanel({organizationId,onChanged}:{organizationId:
  useEffect(()=>{setRows([]);setSelectedId(null);setCreating(false);void load();const timer=window.setInterval(()=>void load(),15000);return()=>{revision.current++;window.clearInterval(timer);};},[load]);
  useEffect(()=>{
   const p=payload;if(!p)return;
-  setName(p.proposed_concept.canonical_label);setDescription(p.proposed_concept.description);setAliases(p.aliases);setRelated(p.rag.related_ids??[]);setReason("");setTarget(p.approved_target_id??undefined);
+  setName(p.proposed_concept.canonical_label);setDescription(p.proposed_concept.description);setAliases(p.aliases);setRelated(p.approved_related_ids??p.rag.related_ids??[]);setReason("");setTarget(p.approved_target_id??undefined);
   setMode(proposal?.status==="approved"?(p.approved_target_id?"alias":"create"):p.rag.decision==="alias"?"alias":p.rag.decision==="new_concept"?"create":undefined);
   setOptions(p.candidate_concepts.map(c=>({id:c.id,canonicalLabel:c.label,description:c.description,version:c.version})));
  },[proposal?.id]);

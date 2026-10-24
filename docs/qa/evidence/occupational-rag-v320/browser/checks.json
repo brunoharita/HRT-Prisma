@@ -74,5 +74,13 @@
   {
     "name": "manual recovery works without model",
     "pass": true
+  },
+  {
+    "name": "global error recovery preserves human text",
+    "pass": true
+  },
+  {
+    "name": "reopened approval preserves human definition and cleared relationships",
+    "pass": true
   }
 ]
