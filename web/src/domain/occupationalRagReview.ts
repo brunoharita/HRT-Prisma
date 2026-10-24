@@ -4,7 +4,7 @@ export interface OccupationalRagPayload {
   approved_related_ids?:string[];
   contract: string; input_hash: string; proposed_concept: {canonical_label:string;description:string;concept_type:string};
   aliases:string[]; rationale:string; unresolved_questions:string[]; candidate_concepts:OccupationalCandidate[];
-  rag:{decision:string;target_id:string;related_ids:string[];evidence:Array<{source_id:string;quote:string}>;method:string;};
+  rag:{decision:string;target_id:string;related_ids:string[];evidence:Array<{source_id:string;quote:string}>;method:string;search_prompt_version?:string;draft_prompt_version?:string;};
 }
 export interface OccupationalRagReview {
   id:string;title:string;status:string;errorCode:string|null;

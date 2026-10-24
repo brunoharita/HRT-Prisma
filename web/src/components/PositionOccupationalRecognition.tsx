@@ -6,6 +6,7 @@ import type {PositionOccupationalRecognition as Recognition} from "../domain/pos
 import {positionTaxonomyService} from "../infrastructure/supabase/positionTaxonomyService";
 import {knowledgeService} from "../infrastructure/supabase/knowledgeService";
 import {OccupationalRagPanel} from "./OccupationalRagPanel";
+import {OCCUPATIONAL_SEARCH_VERSION} from "../../../src/domain/occupationalRag";
 
 const statusLabels:Record<string,string>={research_queued:"Na fila",researching:"Reconhecendo",awaiting_human_review:"Revisão pendente",approved:"Aprovado na empresa",failed:"Reconhecimento indisponível",deferred:"Mantido pendente"};
 const pending=(status:string|undefined)=>status==="research_queued"||status==="researching";
@@ -20,7 +21,7 @@ export function PositionOccupationalRecognition({open,organizationId,draft,onCho
  },[organizationId]);
  useEffect(()=>{
   if(!open||!inboxId||!pending(result?.review.status)||pollStopped)return;
-  const timer=window.setInterval(()=>{if(++polls.current>24){setPollStopped(true);window.clearInterval(timer);return;}void refresh(inboxId);},5000);
+  const timer=window.setInterval(()=>{if(++polls.current>96){setPollStopped(true);window.clearInterval(timer);return;}void refresh(inboxId);},5000);
   return()=>window.clearInterval(timer);
  },[open,inboxId,result?.review.status,pollStopped,refresh]);
  async function request(){
@@ -44,6 +45,7 @@ export function PositionOccupationalRecognition({open,organizationId,draft,onCho
    {payload?<><Typography.Paragraph>{payload.rationale}</Typography.Paragraph>{payload.unresolved_questions.map(q=><Typography.Paragraph type="secondary" key={q}>{q}</Typography.Paragraph>)}<Typography.Text type="secondary">Referências para análise. Similaridade e funções relacionadas não estabelecem equivalência.</Typography.Text></>:null}
    <List dataSource={result?.candidates??[]} locale={{emptyText:pending(row.status)?"Aguardando referências do reconhecimento.":"Nenhuma referência aprovada elegível disponível. A ausência não comprova que a função inexiste."}} renderItem={candidate=><List.Item><div><Typography.Text strong>{candidate.label}</Typography.Text><div><Tag>{candidate.scope==="organization"?"Knowledge da empresa":"Base oficial publicada"}</Tag><Typography.Text type="secondary">v{candidate.version}</Typography.Text></div><Typography.Paragraph>{candidate.description}</Typography.Paragraph><Typography.Paragraph type="secondary">{candidate.sources.map(s=>`${s.name} · ${s.version}`).join("; ")||"Conhecimento aprovado na empresa"}</Typography.Paragraph><Button disabled={draft.referenceConceptId===candidate.id} onClick={()=>onChoose(candidate)}>{draft.referenceConceptId===candidate.id?"Associação atual":"Usar nesta Posição"}</Button></div></List.Item>}/>
    {row.proposal?<Button onClick={()=>setReviewOpen(true)}>{row.proposal.status==="awaiting_human_review"?"Revisar proposta na empresa":"Consultar revisão na empresa"}</Button>:null}
+   {row.proposal?.status==="awaiting_human_review"&&!row.proposal.edited&&payload?.rag.search_prompt_version!==OCCUPATIONAL_SEARCH_VERSION?<Button loading={busy} onClick={async()=>{setBusy(true);try{await knowledgeService.retryOccupationalRecognition(row.id);polls.current=0;setPollStopped(false);await refresh(row.id);}catch(e){if(active.current)setError(e instanceof Error?e.message:"Não foi possível refazer o reconhecimento.");}finally{if(active.current)setBusy(false);}}}>Refazer reconhecimento</Button>:null}
    <Typography.Paragraph type="secondary">A aprovação na Knowledge e a associação nesta Posição são decisões distintas. A Posição só registra a mudança ao salvar.</Typography.Paragraph>
   </>:null}
   <Drawer open={reviewOpen&&open} onClose={()=>setReviewOpen(false)} size={1100} title="Revisão do cargo na Knowledge da empresa" destroyOnHidden className="prisma-position-recognition-review">

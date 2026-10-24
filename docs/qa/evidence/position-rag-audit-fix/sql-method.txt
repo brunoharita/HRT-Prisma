@@ -1,0 +1,301 @@
+BEGIN
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+INSERT 0 1
+INSERT 0 2
+INSERT 0 5
+INSERT 0 5
+INSERT 0 4
+INSERT 0 1
+INSERT 0 1
+INSERT 0 3
+INSERT 0 1
+CREATE TABLE
+GRANT
+SET
+              set_config
+--------------------------------------
+ f4c575c9-af96-dda3-7e77-8b058d904063
+(1 row)
+
+INSERT 0 1
+ rag_assert
+------------
+
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+ rag_reject
+------------
+
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 96d4bc6b-9293-ef97-b55e-72ba71f64bbc
+(1 row)
+
+ rag_reject
+------------
+
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 34ea0266-6669-3912-f92c-fde13b988c4b
+(1 row)
+
+ rag_reject
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ b28588cc-09d7-b9dc-d350-6b1262f435b0
+(1 row)
+
+ rag_reject
+------------
+
+(1 row)
+
+RESET
+SET
+ rag_reject
+------------
+
+(1 row)
+
+ rag_reject
+------------
+
+(1 row)
+
+INSERT 0 1
+ rag_assert
+------------
+
+(1 row)
+
+INSERT 0 1
+ rag_assert
+------------
+
+(1 row)
+
+RESET
+DO
+SAVEPOINT
+INSERT 0 1
+DO
+INSERT 0 1000
+INSERT 0 1000
+DO
+ROLLBACK
+SET
+INSERT 0 1
+DO
+RESET
+INSERT 0 1
+SET
+              set_config
+--------------------------------------
+ 96d4bc6b-9293-ef97-b55e-72ba71f64bbc
+(1 row)
+
+ rag_reject
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ f4c575c9-af96-dda3-7e77-8b058d904063
+(1 row)
+
+ retry_occupational_rag
+------------------------
+
+(1 row)
+
+ retry_occupational_rag
+------------------------
+
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+ rag_reject
+------------
+
+(1 row)
+
+RESET
+ rag_assert
+------------
+
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+SET
+UPDATE 1
+ complete_occupational_rag
+---------------------------
+
+(1 row)
+
+RESET
+ rag_assert
+------------
+
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+SET
+              set_config
+--------------------------------------
+ f4c575c9-af96-dda3-7e77-8b058d904063
+(1 row)
+
+ rag_reject
+------------
+
+(1 row)
+
+RESET
+SAVEPOINT
+UPDATE 1
+SET
+ rag_reject
+------------
+
+(1 row)
+
+RESET
+ROLLBACK
+SAVEPOINT
+UPDATE 1
+SET
+ rag_reject
+------------
+
+(1 row)
+
+RESET
+ROLLBACK
+CREATE TABLE
+GRANT
+SET
+INSERT 0 1
+             record_ai_worker_history_v1
+------------------------------------------------------
+ {"eventId": 1, "acquired": true, "attemptNumber": 1}
+(1 row)
+
+   record_ai_worker_history_v1
+----------------------------------
+ {"eventId": 1, "recorded": true}
+(1 row)
+
+                                                                                                                                                                                                                                                                                                                                        record_ai_worker_history_v1
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"request": {"id": "a176fbf6-1a79-4e34-8605-42a6036fa169", "scope": "organization", "status": "succeeded", "actor_id": null, "created_at": "2026-10-24T20:50:42.511164-03:00", "completed_at": "2026-10-24T20:50:44.227929-03:00", "operation_id": "00000000-0000-4000-8000-000000000002", "function_name": "occupational_rag", "error_category": null, "source_version": "occupational-rag-1.0.0", "idempotency_key": "9391c6fe7e1fa37cc8fdff66b393e40a073ce6c8198085ee9d6a5d4fd0650275", "organization_id": "f0109e0c-3387-94d9-4492-099898764df3", "contract_version": "ai-request-1.0.0", "input_fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}, "recorded": true}
+(1 row)
+
+RESET
+ rag_assert
+------------
+
+(1 row)
+
+ rag_reject
+------------
+
+(1 row)
+
+RESET
+ROLLBACK
+
+NOTICE:  PASS: idempotent input reuses original Inbox
+NOTICE:  PASS: approved exact match avoids a new proposal
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: own company reviews visible
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: RLS hides other company
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: lease prevents duplicate acquisition
+NOTICE:  PASS: bounded retrieval finds approved Sales without foreign tenant
+NOTICE:  PASS: optimized retrieval preserves original results and tenant scope
+NOTICE:  PASS: optimized retrieval preserves original results and tenant scope
+NOTICE:  PASS: optimized retrieval preserves original results and tenant scope
+NOTICE:  PASS: optimized retrieval preserves original results and tenant scope
+NOTICE:  PASS: optimized retrieval preserves original results and tenant scope
+NOTICE:  PASS: optimized retrieval preserves original results and tenant scope
+NOTICE:  PASS: optimized retrieval preserves original results and tenant scope
+NOTICE:  PASS: optimized retrieval preserves original results and tenant scope
+NOTICE:  PASS: indexed prefilter preserves a query split across title and accented alias
+NOTICE:  PASS: bounded retrieval remains grounded with 1000 unrelated roles
+NOTICE:  PASS: 1000-role retrieval below PostgreSQL request timeout
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: denied (22023)
+NOTICE:  PASS: denied (22023)
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: refresh shows current queue instead of superseded machine result
+NOTICE:  PASS: superseded proposal is not offered as current review
+NOTICE:  PASS: Knowledge and Position read the same active execution
+NOTICE:  PASS: denied (22023)
+NOTICE:  PASS: original machine proposal and absence of human decision preserved
+NOTICE:  PASS: refresh and replay reuse the original execution
+NOTICE:  PASS: refresh never creates an approval or rejection
+NOTICE:  PASS: exactly one current proposal after reanalysis
+NOTICE:  PASS: prior and current machine proposals retained as history
+NOTICE:  PASS: denied (55000)
+NOTICE:  PASS: denied (55000)
+NOTICE:  PASS: denied (55000)
+NOTICE:  PASS: actual JavaScript worker envelopes complete under PostgreSQL metadata contract
+NOTICE:  PASS: denied (22023)

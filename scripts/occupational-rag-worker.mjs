@@ -1,4 +1,4 @@
-import {OCCUPATIONAL_RAG_VERSION,OCCUPATIONAL_SEARCH_INSTRUCTIONS,OCCUPATIONAL_DRAFT_INSTRUCTIONS,occupationalSearchSchema,occupationalSchemaForCandidates,readOccupationalContext,hasOccupationalContext,insufficientOccupationalDraft,readOccupationalSearch,readOccupationalDraft,rankOccupationalCandidates} from '../dist/src/domain/occupationalRag.js';
+import {OCCUPATIONAL_RAG_VERSION,OCCUPATIONAL_SEARCH_VERSION,OCCUPATIONAL_DRAFT_VERSION,OCCUPATIONAL_SEARCH_INSTRUCTIONS,OCCUPATIONAL_DRAFT_INSTRUCTIONS,occupationalSearchSchema,occupationalSchemaForCandidates,readOccupationalContext,hasOccupationalContext,insufficientOccupationalDraft,readOccupationalSearch,readOccupationalDraft,rankOccupationalCandidates} from '../dist/src/domain/occupationalRag.js';
 
 const allowedModels=new Set(['qwen3:1.7b-q4_K_M','qwen3:4b-instruct-2507-q4_K_M']);
 const vectorCache=new Map();
@@ -16,7 +16,7 @@ export async function openOccupationalHistory(client,job,fetcher=fetch){
   const tracked=async(url,init)=>{
     const body=JSON.parse(init.body),attemptId=crypto.randomUUID(),started=Date.now();
     const stage=String(url).endsWith('/api/embed')?'retrieval':body.format?.properties?.search_terms?'query_expansion':'proposal';
-    const acquired=await write('begin_attempt',{requestId,organizationId:job.organizationId,attemptId,stage,provider:'ollama-local',model:body.model,methodVersion:OCCUPATIONAL_RAG_VERSION,usageKind:'external',pricingVersion:'local-provider-no-api-fee-1.0.0'});
+    const acquired=await write('begin_attempt',{requestId,organizationId:job.organizationId,attemptId,stage,provider:'ollama-local',model:body.model,methodVersion:stage==='query_expansion'?OCCUPATIONAL_SEARCH_VERSION:stage==='proposal'?OCCUPATIONAL_DRAFT_VERSION:OCCUPATIONAL_RAG_VERSION,usageKind:'external',pricingVersion:'local-provider-no-api-fee-1.0.0'});
     if(acquired.acquired!==true)throw Error('RAG_AUDIT_UNAVAILABLE');
     usage.requests++;let response,result,input=null,output=null;
     try{
@@ -103,7 +103,7 @@ export async function runOccupationalRagOnce(config,callRpc,fetcher=fetch){
     payload={contract:OCCUPATIONAL_RAG_VERSION,input_hash:job.inputHash,proposed_concept:{canonical_label:draft.canonical_label,concept_type:'occupation',description:draft.description},
       aliases:draft.aliases,unresolved_questions:draft.unresolved_questions,rationale:draft.rationale,
       candidate_concepts:candidates.map(c=>({...c,canonical_label:c.label,concept_type:'occupation',match:'semantic_candidate'})),
-      rag:{decision:draft.decision,target_id:draft.target_id,related_ids:draft.related_ids,evidence:draft.evidence,model_digest:history?config.modelDigest:null,embedding_digest:history?config.embeddingDigest:null,embedding_model:hasOccupationalContext(context)?config.embeddingModel:null,method:hasOccupationalContext(context)?'lexical-expansion-semantic-reranking':'deterministic-context-guard',version:OCCUPATIONAL_RAG_VERSION}};
+      rag:{decision:draft.decision,target_id:draft.target_id,related_ids:draft.related_ids,evidence:draft.evidence,model_digest:history?config.modelDigest:null,embedding_digest:history?config.embeddingDigest:null,embedding_model:hasOccupationalContext(context)?config.embeddingModel:null,method:hasOccupationalContext(context)?'lexical-expansion-semantic-reranking':'deterministic-context-guard',version:OCCUPATIONAL_RAG_VERSION,search_prompt_version:OCCUPATIONAL_SEARCH_VERSION,draft_prompt_version:OCCUPATIONAL_DRAFT_VERSION}};
   }catch(cause){error=/^RAG_[A-Z_]{1,60}$/.test(cause?.message??'')?cause.message:'RAG_UNAVAILABLE';}
   if(history)try{await history.close(!error);}catch{error='RAG_AUDIT_UNAVAILABLE';payload=null;}
   await callRpc('complete_occupational_rag',{p_job_id:job.id,p_lease:job.lease,p_result:payload,p_model:history?config.model:'none',p_duration_ms:Date.now()-started,p_error:error,p_usage:history?.usage??{requests:0,input_tokens:0,output_tokens:0,complete:true}});

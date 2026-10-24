@@ -1725,6 +1725,19 @@
       "localStatementSha256": "18f9c214aaa2663cafb5f2abd60a972b80d59956edbb993a0cc2e29ab3655cbd",
       "remoteStatementSha256": "18f9c214aaa2663cafb5f2abd60a972b80d59956edbb993a0cc2e29ab3655cbd",
       "verifiedAt": "2026-10-24"
+    },
+    {
+      "name": "occupational_rag_selective_prefilter",
+      "localVersion": "20261024232500",
+      "remoteVersion": "20261024232459",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "fingerprintMethod": "strip-CR-trim-exterior-whitespace-v1",
+      "localCanonicalLength": 4531,
+      "remoteCanonicalLength": 4531,
+      "localStatementSha256": "d31b4879dc0d8322708a6de234a446d3be9da553ff875d08dcb90b83fe7ac09c",
+      "remoteStatementSha256": "d31b4879dc0d8322708a6de234a446d3be9da553ff875d08dcb90b83fe7ac09c",
+      "verifiedAt": "2026-10-24"
     }
   ],
   "localOnly": [
@@ -1767,7 +1780,8 @@
     "date": "2026-10-24",
     "movement": "position-rag-audit-fix",
     "names": [
-      "occupational_rag_search_performance"
+      "occupational_rag_search_performance",
+      "occupational_rag_selective_prefilter"
     ],
     "evidence": "docs/qa/evidence/position-rag-audit-fix/production.json",
     "historicalSnapshotVerifiedAtUnchanged": true
