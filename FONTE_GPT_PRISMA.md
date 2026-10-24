@@ -3,10 +3,10 @@ artifact_role: gpt-prompt-authoring-source
 prompt_source_version: 1.3.0
 context_bundle_version: 2.0.0
 product_version: 2.3.1
-current_state_version: 2.93.3
-current_state_last_verified: 2026-10-23
-documentation_source_count: 556
-source_manifest_sha256: 1ce3a07d19324ae5965a080b7f7f914af89b4ba375637686149ec51e2c76b67a
+current_state_version: 2.93.4
+current_state_last_verified: 2026-10-24
+documentation_source_count: 558
+source_manifest_sha256: ae92b1d0a66d69b5592491a2153b01fa60c9a82caa9d70c996d943d857b13893
 -->
 
 # Fonte do GPT para prompts do Prisma
@@ -45,6 +45,7 @@ Repository instructions never override platform safety, user authority, legal ob
 - AI supports human decisions and is never the authority for hiring, rejection, access control, or sensitive data mutation.
 - Minimize unnecessary human coordination and confirmations. Preserve useful navigation, search, filtering, selection and progressive disclosure. Human judgment, authority and material risk acceptance remain explicit; deterministic coordination, audit metadata and retries are system responsibilities. Optional guidance or telemetry failure must never block the operator; mandatory transactional audit remains mandatory.
 - Do not reinvent the wheel: before creating a material product or engineering solution, determine whether a mature, reliable, secure, licensed, compatible and maintainable solution already exists.
+- Preserve one authoritative origin for each domain fact. Reuse and extend its original tables and entities; never create parallel representations serving the same purpose for a new feature, module, AI flow or integration. Any additional persisted representation of that same information requires a strictly performance-driven, measured justification and must remain derived, rebuildable and without independent editing or authority. Follow `docs/architecture/data-model.md` (GOV-02) and ADR-088; distinct responsibilities such as proposals and audit history must not compete as current truth.
 
 #### 3. Documentation ownership and precedence
 
@@ -81,6 +82,12 @@ For factual availability, consult the relevant section of `docs/ai-context/PRISM
 #### 5. Reuse-first product and engineering decisions
 
 This permanent principle applies to material product and engineering decisions across Prisma, including UX, infrastructure, data and AI.
+
+##### Canonical data authority (GOV-02)
+
+Before proposing or changing persistence, identify the original owning tables/entities, the authoritative writer and the consumers. Extend or reuse those structures for the same objective. Renaming an entity, creating a module, introducing RAG/AI or integrating an external service is not a reason to create another source of truth. Record this ownership in the impact map and verify that the implementation introduces no competing current record or independent write path.
+
+The only exception for an additional persisted representation of the same information is demonstrated performance need. Document the baseline, measured bottleneck, alternatives using the original structures, expected/measured benefit and accepted ADR before implementation. A derived index, cache or projection must identify its canonical origin and version, define synchronization/invalidation/rebuild, preserve authorization and tenant isolation, and have no independent business editing or authority. User edits go through the original owning flow. This directive does not authorize retroactive consolidation, deletion or migration of existing data.
 
 ##### Preferred decision order
 

@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 556
-source_manifest_sha256: 1ce3a07d19324ae5965a080b7f7f914af89b4ba375637686149ec51e2c76b67a
+documentation_source_count: 558
+source_manifest_sha256: ae92b1d0a66d69b5592491a2153b01fa60c9a82caa9d70c996d943d857b13893
 -->
 
 # Tudo sobre o Prisma
@@ -17,7 +17,7 @@ Para interpretar esta exportação, comece pelo índice e pelo estado atual. Dep
 
 # Prisma agent contract
 
-Instruction contract version: 1.3.3. Approved revisions: instruction audit 2026-09-11; standing push authorization 2026-09-12; visual fidelity, standing main/production authorization and impact-scoped release operation 2026-09-18; necessary personal-data transfer to the existing Prisma VPS authorization 2026-10-03; execution economy and timely closeout authorization 2026-10-13. This versions agent guidance, not persisted product contracts.
+Instruction contract version: 1.3.4. Approved revisions: instruction audit 2026-09-11; standing push authorization 2026-09-12; visual fidelity, standing main/production authorization and impact-scoped release operation 2026-09-18; necessary personal-data transfer to the existing Prisma VPS authorization 2026-10-03; execution economy and timely closeout authorization 2026-10-13; canonical data authority and mandatory reuse of original structures 2026-10-24. This versions agent guidance, not persisted product contracts.
 
 ## 1. Authority and scope
 
@@ -41,6 +41,7 @@ Repository instructions never override platform safety, user authority, legal ob
 - AI supports human decisions and is never the authority for hiring, rejection, access control, or sensitive data mutation.
 - Minimize unnecessary human coordination and confirmations. Preserve useful navigation, search, filtering, selection and progressive disclosure. Human judgment, authority and material risk acceptance remain explicit; deterministic coordination, audit metadata and retries are system responsibilities. Optional guidance or telemetry failure must never block the operator; mandatory transactional audit remains mandatory.
 - Do not reinvent the wheel: before creating a material product or engineering solution, determine whether a mature, reliable, secure, licensed, compatible and maintainable solution already exists.
+- Preserve one authoritative origin for each domain fact. Reuse and extend its original tables and entities; never create parallel representations serving the same purpose for a new feature, module, AI flow or integration. Any additional persisted representation of that same information requires a strictly performance-driven, measured justification and must remain derived, rebuildable and without independent editing or authority. Follow `docs/architecture/data-model.md` (GOV-02) and ADR-088; distinct responsibilities such as proposals and audit history must not compete as current truth.
 
 ## 3. Documentation ownership and precedence
 
@@ -115,6 +116,12 @@ Dependência nova, capacidade descoberta ou divergência material revisa o mapa 
 ## 5. Reuse-first product and engineering decisions
 
 This permanent principle applies to material product and engineering decisions across Prisma, including UX, infrastructure, data and AI.
+
+### Canonical data authority (GOV-02)
+
+Before proposing or changing persistence, identify the original owning tables/entities, the authoritative writer and the consumers. Extend or reuse those structures for the same objective. Renaming an entity, creating a module, introducing RAG/AI or integrating an external service is not a reason to create another source of truth. Record this ownership in the impact map and verify that the implementation introduces no competing current record or independent write path.
+
+The only exception for an additional persisted representation of the same information is demonstrated performance need. Document the baseline, measured bottleneck, alternatives using the original structures, expected/measured benefit and accepted ADR before implementation. A derived index, cache or projection must identify its canonical origin and version, define synchronization/invalidation/rebuild, preserve authorization and tenant isolation, and have no independent business editing or authority. User edits go through the original owning flow. This directive does not authorize retroactive consolidation, deletion or migration of existing data.
 
 ### Preferred decision order
 
@@ -2644,11 +2651,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.93.3
-last_verified: 2026-10-23
+version: 2.93.4
+last_verified: 2026-10-24
 ---
 
 # Estado atual do Prisma
+
+## Origem única da verdade — diretriz aprovada em 24/10/2026
+
+`AGENTS.md` 1.3.4 e GOV-02 no Modelo de dados exigem reuso/ampliação das estruturas originais em todos os domínios, proibindo tabelas/entidades concorrentes para o mesmo objetivo. Outra representação persistida da mesma informação só se justifica por desempenho medido, com ADR e dados derivados reconstruíveis, sem edição ou autoridade independente. ADR-088 registra a decisão; `docs/qa/aot-canonical-data-authority.md` registra o escopo documental. Sem migração, consolidação de legado, novo RAG/modelo, mudança de contratos persistidos ou versão pública; Prisma3.1.4 preservado. Estado documental não comprova implantação de funcionalidade.
 
 ## Reconhecimento da trajetória pelas atividades —23/10/2026
 
@@ -5357,6 +5368,25 @@ Gestão `prisma-tokens-2.0.0` e conta `policy_version=prisma-token-policy-2.0.0`
 
 # Modelo de dados
 
+## Origem única da verdade e reuso das estruturas originais (GOV-02)
+
+Diretriz permanente aprovada por Bruno em 24/10/2026, aplicável a todos os domínios e próximas implementações. Cada fato de domínio tem uma origem de verdade explícita, com entidade/tabelas proprietárias e fluxo autorizado de escrita. Funcionalidades novas devem reutilizar ou ampliar essas estruturas originais. É proibido criar tabelas, entidades ou cadastros paralelos para o mesmo objetivo, mesmo sob outro nome, módulo, integração ou fluxo de IA/RAG. Conveniência técnica, separação por tela ou fornecedor e rapidez de desenvolvimento não justificam duplicar a informação.
+
+Antes de alterar persistência, o Mapa de Impacto identifica a origem canônica, os escritores autorizados, consumidores e estruturas existentes reutilizadas. Relações, propostas, evidências, versões e auditoria podem representar responsabilidades distintas; não podem se tornar cadastros concorrentes da mesma informação vigente. Histórico preserva o que foi verdadeiro/decidido em sua versão, sem competir com a referência vigente. Especificidade de uma empresa permanece no escopo organizacional, com identidade e vínculos explícitos, sem cópias independentes sem reconciliação.
+
+A única exceção para persistir outra representação da mesma informação é necessidade estrita de desempenho, comprovada por medição. Antes de implementar, um ADR deve registrar baseline, gargalo, alternativas de consulta/índice nas estruturas originais, benefício esperado/medido e custo de manutenção. Essa exceção permite somente dados derivados, como índices, caches ou projeções, com:
+
+- origem canônica, identidade e versão/dependências identificáveis;
+- sincronização, invalidação e reconstrução definidas, com comportamento explícito para dados desatualizados;
+- reconstrução a partir das origens canônicas e ausência de edição de negócio independente;
+- escrita de negócio no fluxo proprietário original e preservação de autorização, isolamento por empresa e histórico.
+
+Dados derivados nunca se tornam outra autoridade. Snapshots históricos autorizados continuam evidência da versão avaliada, sem virar cadastro editável concorrente. A diretriz não determina que todos os dados fiquem em uma tabela, não proíbe entidades com responsabilidades realmente distintas e não autoriza consolidar, apagar ou migrar registros existentes. A aplicação a legado exige escopo próprio aprovado.
+
+Na Knowledge, conceitos, termos, relações, mappings, Inbox, propostas, aprovações e versões existentes continuam proprietários de suas respectivas responsabilidades. Reconhecimento ocupacional, RAG e enriquecimento assistido devem consumir e ampliar esse fluxo, sem criar outro catálogo de cargos/competências ou promover interpretações contextuais a aliases globais sem curadoria. Esta diretriz não implementa nem ativa essas funcionalidades.
+
+Decisão e justificativa: [ADR-088](../decisions/ADR-088-canonical-data-authority.md). Instruções de execução: `AGENTS.md` 1.3.4. Evidência documental: [AoT](../qa/aot-canonical-data-authority.md).
+
 ## Acompanhamento Pessoa–Posição v2.2.0
 
 `position_evaluation_processes`: identidade/estado/revisão de um processo por organização/Posição. `position_evaluation_entries`: Pessoa existente, etapa/revisão, referências originais de Perfil/definição e dados operacionais validados por RPC (ação/responsável/prazo/notas/entrevista/decisão). `position_evaluation_history`: autor/data/antes/depois transacionais. FKs compostas impedem tenant cruzado. RLS e revogação de grants diretos restringem às RPCs com autoridade viva. Histórico não é apagável pelo processo; exclusão definitiva autorizada da Pessoa limpa seus dados por cascade. Snapshots profissionais são somente lidos. Migration20261008120000, ADR-079, contrato1.0.0 e AoT2.2.0.
@@ -5895,6 +5925,8 @@ Texto do documento permanece dado. Nenhum trecho pode alterar instruções do ag
 - Padrões persistidos são sinais estruturais allowlisted e versionados, sem valores pessoais ou texto integral, promovidos somente na aprovação e sempre isolados por organização.
 
 ## Persistência
+
+Todas as implementações seguem GOV-02: reutilizar as tabelas e entidades proprietárias originais, mantendo uma origem de verdade por fato de domínio. Outra representação persistida da mesma informação exige necessidade estrita de desempenho comprovada e permanece derivada, reconstruível e sem edição/autoridade independente. Regras e limites em [Modelo de dados](data-model.md#origem-única-da-verdade-e-reuso-das-estruturas-originais-gov-02) e [ADR-088](../decisions/ADR-088-canonical-data-authority.md).
 
 PostgreSQL/Supabase é a persistência-alvo. A migration possui organização em agregados de tenant, foreign keys compostas e RLS. O adaptador JSON permite execução determinística e persiste texto apenas em diretório local ignorado pelo Git. No ambiente conectado, documento bruto deve ficar em storage privado; a tabela guarda metadados, checksum e referência.
 
@@ -10609,6 +10641,51 @@ Rollback da web anterior preserva backend novo e metadados de suspensão; client
 
 ---
 
+## Source: `docs/decisions/ADR-088-canonical-data-authority.md`
+
+# ADR-088: Origem única da verdade e reuso das estruturas originais
+
+- Status: accepted
+- Date: 2026-10-24
+- Owners: product, architecture, data
+- Autoridade: decisão explícita de Bruno nesta tarefa e solicitação para registrá-la em AGENTS e arquitetura.
+
+## Context / Problem
+
+A discussão sobre reconhecimento ocupacional e propostas de Knowledge motivou uma regra geral: novas funcionalidades não devem espalhar o mesmo conhecimento em tabelas/entidades concorrentes. Múltiplos escritores e cópias independentes criam divergência de verdade, manutenção e reconciliação, prejudicando a evolução do Prisma. ADR-013 e ADR-065 já determinam reuso dentro da Knowledge; a decisão atual torna o princípio explícito para todos os domínios.
+
+## Decision
+
+Adotar GOV-02, com regras normativas em `docs/architecture/data-model.md`, seção "Origem única da verdade e reuso das estruturas originais", e obrigação operacional em `AGENTS.md` 1.3.4. Reutilizar ou ampliar as entidades/tabelas proprietárias originais; não criar outro cadastro para o mesmo objetivo. A única exceção para outra representação persistida do mesmo fato é desempenho demonstrado, com ADR e representação derivada, reconstruível e sem autoridade/edição independente.
+
+Proposta, evidência, histórico e relação mantêm responsabilidades próprias e não competem como cadastro vigente. Esta decisão não aprova RAG, embeddings, modelos, tabelas novas ou migração/consolidação de legado.
+
+## Alternatives considered / Reasons
+
+- Catálogos independentes por módulo ou fornecedor: rejeitados, pois multiplicam origens e fluxos de edição.
+- Uma única tabela para todos os domínios: rejeitada, pois confunde responsabilidades distintas e não é o objetivo aprovado.
+- Reuso com origem proprietária explícita e exceção medida para dados derivados: escolhido, preserva coerência sem impedir otimização demonstrada.
+
+## Consequences / Risks / Mitigation
+
+Novas entregas devem identificar proprietário, escritores e consumidores antes de alterar persistência. O desenho pode exigir ampliar o fluxo existente. A exceção de desempenho não pode ser usada como justificativa genérica: exige baseline, gargalo, alternativas, benefício e ciclo de sincronização/invalidação/reconstrução. Origem e versões permitem identificar dados derivados desatualizados. Escopos organizacional/global, proveniência, história e autoridade humana permanecem explícitos.
+
+## Technical / Data / Security / AI impact
+
+Mudança exclusivamente normativa/documental. Sem código, schema, migrations, permissões, dados pessoais, produção ou chamadas de IA. Nenhuma auditoria de conformidade integral do legado foi executada ou declarada. Versão do contrato de instruções: 1.3.4; versão pública do produto: manter 3.1.4. Exportações geradas incorporam a diretriz sem incluir rascunhos alheios não rastreados.
+
+## Validation / Compatibility / Review
+
+Revisão do diff, whitespace, links locais alterados, `check:foundation`, geração e `check:prisma-context` em snapshot rastreado. Dispatcher define somente superfícies documentais; não executar deploy de runtime. Compatibilidade de produto/dados preservada pela ausência de alteração executável. Reavaliar apenas diante de nova decisão explícita do Product Owner; exceções concretas de desempenho devem referenciar este ADR. Reversão documental não apaga histórico; qualquer substituição deve declarar a decisão superada.
+
+## References / Change history
+
+- `AGENTS.md` 1.3.4; `docs/architecture/data-model.md` GOV-02; `docs/architecture/system-architecture.md`.
+- ADR-013; ADR-065; `docs/qa/aot-canonical-data-authority.md` (acordo, execução e evidências).
+- 2026-10-24: decisão aprovada por Bruno; registro documental autorizado, sem alteração de runtime.
+
+---
+
 ## Source: `docs/decisions/README.md`
 
 # Architectural Decision Records
@@ -10709,6 +10786,8 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 - [ADR-086: Username único e contato compartilhável](ADR-086-username-contact-identity.md) — accepted; Supabase Auth preservado, contato separado da identidade, rollout no AoT username-identity-v306.
 
 - [ADR-087: Responsável e suspensão do grupo](ADR-087-owner-lifecycle.md) — accepted; ciclo transacional e estados independentes, rollout no AoT owner-lifecycle-v307.
+
+- [ADR-088: Origem única da verdade](ADR-088-canonical-data-authority.md) — accepted; reuso obrigatório das estruturas originais em todos os domínios; representação adicional do mesmo fato somente por desempenho medido, derivada e sem autoridade independente. Movimento exclusivamente documental.
 
 ---
 
@@ -19466,6 +19545,81 @@ Referência: PNG com SHA-256 `de50e17478d3a65a60c0dfc876660d1296f7bba57fe711ad7d
 Lint, typecheck web, build web, gerador/verificador do Context Pack e `git diff --check` passaram no worktree. Dois testes estruturais que buscavam a marcação antiga foram atualizados para verificar o mesmo conteúdo e a proteção responsiva no novo agrupamento; os 22 testes direcionados de `matchingEvidenceLabel` e `matchingScore` passaram. O build apresentou somente avisos existentes de chunks grandes/importação dinâmica. O primeiro CI falhou por export de contexto defasado; o segundo alcançou 716 testes e falhou em três asserções estáticas da composição antiga, corrigidas neste mesmo movimento. CIs do SHA funcional `342ff9aa75896dcf09f306fa42d4df4fb82fb43f`: branch `36803529139` e main `36803703626` PASS. Plano seletivo: web e documentação; banco e Edge `skip`.
 
 `main` local/GitHub e checkout da VPS chegaram ao SHA funcional. Apenas `prisma-web` foi reconstruído/recriado, imagem ativa `sha256:3340361913ae3b752780421ba2bb323cca7e2e6c0983bbab504e0dd3b93e9732`, running/zero reinícios. Rollback `prisma-web:rollback-before-342ff9aa7589` preserva `sha256:668091fb1267488e26c1dca121bf2ea98a1609a93c60bbf7d24aca8b5d6ea080`. O smoke imediato do script recebeu 404 transitório e saiu com código 1; a verificação posterior confirmou `/`, `/login`, `/index.html` e os assets JS/CSS novos com HTTP 200, incluindo marcadores do novo layout. Não houve acesso autenticado a Perfis reais em produção, clique de revisão, decisão humana nem chamada à IA; o smoke funcional autenticado permanece NOT TESTED. Esse limite não reduz os testes locais com dados sintéticos.
+
+---
+
+## Source: `docs/qa/aot-canonical-data-authority.md`
+
+# AoT — Origem única da verdade
+
+Contrato de referência: decisão explícita de Bruno em 24/10/2026 e acordo documental 1.0.0 abaixo. Baseline: main `956c61e9765ef3ef7a8b0ba671561f5ba57a1d72`, AGENTS1.3.3 e produto3.1.4. Escopo documental; não comprova conformidade integral do legado.
+
+## Acordo e execução 1.0.0
+
+- D-01: registrar em AGENTS e arquitetura o reuso/ampliação das estruturas proprietárias originais, sem tabelas/entidades concorrentes para o mesmo objetivo, aplicável a todas as próximas implementações.
+- D-02: limitar a exceção a desempenho comprovado, mantendo dados derivados reconstruíveis, origem/versionamento e ausência de edição/autoridade independente.
+- D-03: preservar responsabilidades distintas de propostas/evidências/histórico, escopos organizacional/global e curadoria; consolidar referências e Context Pack.
+- P-01: não alterar runtime, banco, contratos persistidos, dados, decisões humanas ou versão pública; não implementar RAG ou consolidar legado.
+- F-01: migração, auditoria integral do legado, novos modelos, tabelas ou funcionalidades.
+- A-01: redação e localização dos registros e validação documental proporcional delegadas à engenharia.
+- Q: nenhuma decisão material pendente para este registro.
+- CA-01: os documentos explicitam D-01/D-02/D-03, links resolvem, check:foundation/context passam e diff contém somente documentação autorizada.
+
+Execução: atualizar AGENTS para1.3.4, regra normativa GOV-02 no Modelo de dados, referência em arquitetura do sistema, ADR-088 e índice/estado atual; gerar exportações de snapshot rastreado. Validar apenas documentação e sincronizar Git conforme autorização permanente. Não há superfície executável para QA/deploy/smoke de runtime.
+
+## Matriz de Acordos
+
+| ID | Acordo | Implementação | Teste | Evidência | Status | Ambiente / limitação |
+| --- | --- | --- | --- | --- | --- | --- |
+| D-01 | Reuso e origem única | AGENTS1.3.4 / Modelo de dados GOV-02 / ADR-088 | Revisão dirigida e links | 7 documentos / 75 links locais válidos / whitespace PASS | PASS | Documental |
+| D-02 | Exceção estrita por desempenho | GOV-02 / ADR-088 | Revisão de condições e limites | Baseline, gargalo, alternativas, benefício, ADR e derivação sem edição independente explícitos | PASS | Sem exceção aplicada |
+| D-03 | Responsabilidades e referências preservadas | GOV-02 / estado atual / exportações | Foundation e contexto | check-foundation e check-prisma-context PASS em snapshot rastreado | PASS | Sem consolidação de legado |
+
+## Proibições verificadas
+
+| ID | Guardrail | Teste negativo | Evidência | Status |
+| --- | --- | --- | --- | --- |
+| P-01 | Somente documentação | Revisar lista de arquivos e diff; ausência de migrations/runtime/registry | Dispatcher1.0.6: documentation/context-pack; destinos executáveis vazios | PASS |
+
+## Mapa de Impacto e Preservação
+
+Mapa inicial registrado antes da implementação: comportamento dos agentes e arquitetura são direct; Context Pack é plausible_indirect por geração; schema/runtime/Auth/tenant/Score/histórico são no_impact_identified porque o movimento apenas registra instruções e não altera seus escritores, consumidores executáveis ou contratos. Nenhuma jornada critical_transversal executável entra no escopo.
+
+| Capacidade protegida / área | Relação | Impacto previsto | Baseline | Regressão executada | Evidência | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| Agentes e arquitetura | direct | Norma explícita | SHA baseline / AGENTS1.3.3 | Revisão normativa e foundation | Links válidos; foundation PASS | PASS |
+| Context Pack | plausible_indirect | Propagar norma sem rascunhos | Exportações rastreadas | Gerador e checker em snapshot exato | 5 fontes canônicas / 2 artefatos gerados / checker PASS | PASS |
+| Runtime, banco e dados | no_impact_identified | Nenhuma mudança executável | Produto3.1.4 / baseline | Diff e plano documental | Nenhuma migration, Edge, web ou serviço no plano | PASS |
+
+### Novidade e preservação
+
+Entrega nova: diretriz normativa para próximas implementações, sem afirmar que todo o legado foi auditado. Preservação comprovada pelo diff: produto3.1.4, dados e contratos executáveis não alterados; trabalho alheio não rastreado excluído do snapshot e preservado. Nenhuma reclassificação de impacto ou nova superfície executável descoberta.
+
+## Fora de escopo preservado
+
+| ID | Evidência no diff | Status |
+| --- | --- | --- |
+| F-01 | Ausência de implementação/migração/modelo novo no diff e dispatcher | PASS |
+
+## Evidência de fidelidade visual
+
+Não aplicável: nenhum pedido de mudança de tela ou referência visual normativa neste movimento.
+
+## Desvios / Mudanças autorizadas durante a execução
+
+Nenhum desvio do acordo. Autoridade: pedido explícito para registrar esta diretriz, sem nova decisão funcional. Não houve ampliação do escopo.
+
+## Validação final
+
+Revisão dirigida do diff, whitespace e 75 links locais de 7 documentos PASS. Dispatcher1.0.6 do diff staged: somente documentation/context-pack, sem destino de runtime. Snapshot produzido por checkout-index dos arquivos rastreados/staged, excluindo rascunhos alheios. Scripts de generate-prisma-context, check-prisma-context e check-foundation PASS; equivalem aos scripts pnpm homônimos definidos em package.json. A preparação automática de dependências acionada por duas chamadas pnpm no mesmo snapshot encontrou EBUSY; chamadas interrompidas e validadores sem dependências executados diretamente pelo Node, sem mudança do lockfile. Sem suíte integral local, chamadas pagas ou validação de runtime por não haver alteração executável. CI obrigatória preservada.
+
+## Git / QA / ambiente
+
+Branch `codex/canonical-data-authority`; baseline acima. Commit/push e integração documental em main seguem a autorização permanente; SHA e resultado de CI são verificados no fechamento operacional. QA/produção de runtime fora de escopo; rascunhos não rastreados preservados. Nenhum acesso/deploy da VPS é necessário para este plano documental.
+
+## Conclusão
+
+D-01/D-02/D-03/P-01/F-01 PASS nas evidências documentais delimitadas. Diretriz registrada sem alterar estruturas de dados nem implementar o fluxo de RAG. Sincronização Git/CI faz parte do fechamento; nenhum resultado de runtime ou conformidade integral do legado é declarado por estes checks.
 
 ---
 

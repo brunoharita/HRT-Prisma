@@ -96,3 +96,5 @@ ADRs record durable decisions that would be costly or risky to reconstruct from 
 - [ADR-086: Username único e contato compartilhável](ADR-086-username-contact-identity.md) — accepted; Supabase Auth preservado, contato separado da identidade, rollout no AoT username-identity-v306.
 
 - [ADR-087: Responsável e suspensão do grupo](ADR-087-owner-lifecycle.md) — accepted; ciclo transacional e estados independentes, rollout no AoT owner-lifecycle-v307.
+
+- [ADR-088: Origem única da verdade](ADR-088-canonical-data-authority.md) — accepted; reuso obrigatório das estruturas originais em todos os domínios; representação adicional do mesmo fato somente por desempenho medido, derivada e sem autoridade independente. Movimento exclusivamente documental.

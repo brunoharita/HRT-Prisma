@@ -3,11 +3,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.93.3
-last_verified: 2026-10-23
+version: 2.93.4
+last_verified: 2026-10-24
 ---
 
 # Estado atual do Prisma
+
+## Origem única da verdade — diretriz aprovada em 24/10/2026
+
+`AGENTS.md` 1.3.4 e GOV-02 no Modelo de dados exigem reuso/ampliação das estruturas originais em todos os domínios, proibindo tabelas/entidades concorrentes para o mesmo objetivo. Outra representação persistida da mesma informação só se justifica por desempenho medido, com ADR e dados derivados reconstruíveis, sem edição ou autoridade independente. ADR-088 registra a decisão; `docs/qa/aot-canonical-data-authority.md` registra o escopo documental. Sem migração, consolidação de legado, novo RAG/modelo, mudança de contratos persistidos ou versão pública; Prisma3.1.4 preservado. Estado documental não comprova implantação de funcionalidade.
 
 ## Reconhecimento da trajetória pelas atividades —23/10/2026
 

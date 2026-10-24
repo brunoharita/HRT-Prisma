@@ -1,5 +1,24 @@
 # Modelo de dados
 
+## Origem única da verdade e reuso das estruturas originais (GOV-02)
+
+Diretriz permanente aprovada por Bruno em 24/10/2026, aplicável a todos os domínios e próximas implementações. Cada fato de domínio tem uma origem de verdade explícita, com entidade/tabelas proprietárias e fluxo autorizado de escrita. Funcionalidades novas devem reutilizar ou ampliar essas estruturas originais. É proibido criar tabelas, entidades ou cadastros paralelos para o mesmo objetivo, mesmo sob outro nome, módulo, integração ou fluxo de IA/RAG. Conveniência técnica, separação por tela ou fornecedor e rapidez de desenvolvimento não justificam duplicar a informação.
+
+Antes de alterar persistência, o Mapa de Impacto identifica a origem canônica, os escritores autorizados, consumidores e estruturas existentes reutilizadas. Relações, propostas, evidências, versões e auditoria podem representar responsabilidades distintas; não podem se tornar cadastros concorrentes da mesma informação vigente. Histórico preserva o que foi verdadeiro/decidido em sua versão, sem competir com a referência vigente. Especificidade de uma empresa permanece no escopo organizacional, com identidade e vínculos explícitos, sem cópias independentes sem reconciliação.
+
+A única exceção para persistir outra representação da mesma informação é necessidade estrita de desempenho, comprovada por medição. Antes de implementar, um ADR deve registrar baseline, gargalo, alternativas de consulta/índice nas estruturas originais, benefício esperado/medido e custo de manutenção. Essa exceção permite somente dados derivados, como índices, caches ou projeções, com:
+
+- origem canônica, identidade e versão/dependências identificáveis;
+- sincronização, invalidação e reconstrução definidas, com comportamento explícito para dados desatualizados;
+- reconstrução a partir das origens canônicas e ausência de edição de negócio independente;
+- escrita de negócio no fluxo proprietário original e preservação de autorização, isolamento por empresa e histórico.
+
+Dados derivados nunca se tornam outra autoridade. Snapshots históricos autorizados continuam evidência da versão avaliada, sem virar cadastro editável concorrente. A diretriz não determina que todos os dados fiquem em uma tabela, não proíbe entidades com responsabilidades realmente distintas e não autoriza consolidar, apagar ou migrar registros existentes. A aplicação a legado exige escopo próprio aprovado.
+
+Na Knowledge, conceitos, termos, relações, mappings, Inbox, propostas, aprovações e versões existentes continuam proprietários de suas respectivas responsabilidades. Reconhecimento ocupacional, RAG e enriquecimento assistido devem consumir e ampliar esse fluxo, sem criar outro catálogo de cargos/competências ou promover interpretações contextuais a aliases globais sem curadoria. Esta diretriz não implementa nem ativa essas funcionalidades.
+
+Decisão e justificativa: [ADR-088](../decisions/ADR-088-canonical-data-authority.md). Instruções de execução: `AGENTS.md` 1.3.4. Evidência documental: [AoT](../qa/aot-canonical-data-authority.md).
+
 ## Acompanhamento Pessoa–Posição v2.2.0
 
 `position_evaluation_processes`: identidade/estado/revisão de um processo por organização/Posição. `position_evaluation_entries`: Pessoa existente, etapa/revisão, referências originais de Perfil/definição e dados operacionais validados por RPC (ação/responsável/prazo/notas/entrevista/decisão). `position_evaluation_history`: autor/data/antes/depois transacionais. FKs compostas impedem tenant cruzado. RLS e revogação de grants diretos restringem às RPCs com autoridade viva. Histórico não é apagável pelo processo; exclusão definitiva autorizada da Pessoa limpa seus dados por cascade. Snapshots profissionais são somente lidos. Migration20261008120000, ADR-079, contrato1.0.0 e AoT2.2.0.

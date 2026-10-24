@@ -61,6 +61,8 @@ Texto do documento permanece dado. Nenhum trecho pode alterar instruções do ag
 
 ## Persistência
 
+Todas as implementações seguem GOV-02: reutilizar as tabelas e entidades proprietárias originais, mantendo uma origem de verdade por fato de domínio. Outra representação persistida da mesma informação exige necessidade estrita de desempenho comprovada e permanece derivada, reconstruível e sem edição/autoridade independente. Regras e limites em [Modelo de dados](data-model.md#origem-única-da-verdade-e-reuso-das-estruturas-originais-gov-02) e [ADR-088](../decisions/ADR-088-canonical-data-authority.md).
+
 PostgreSQL/Supabase é a persistência-alvo. A migration possui organização em agregados de tenant, foreign keys compostas e RLS. O adaptador JSON permite execução determinística e persiste texto apenas em diretório local ignorado pelo Git. No ambiente conectado, documento bruto deve ficar em storage privado; a tabela guarda metadados, checksum e referência.
 
 ## Fail-closed
