@@ -1,5 +1,7 @@
 # Consumo e custo por ação de IA
 
+Em3.2.0 `occupational_rag` acrescenta finalidade no escritor do worker existente. Provider `ollama-local`, modelos/digests ADR-089; `usageKind=external` é o enum técnico para tentativa sem cache, sem envio a provedor público. Tokens ausentes desconhecidos; API estimada zero só com contagem conhecida, observado nulo; infraestrutura não declarada gratuita. Sem tarifa/reserva/débito novo de Tokens Prisma ou backfill.
+
 Contrato `ai-action-cost-metering-1.0.0`, medição `ai-cost-measurement-1.0.0`, leitura `ai-action-cost-report-1.0.0`; entrega 3.1.2. Acordo/execução/AoT `ai-cost-metering-v312`. Extensão aditiva do ADR-080 e correlação com ADR-083, sem novo gateway, biblioteca ou serviço.
 
 ## Autoridade e unidades

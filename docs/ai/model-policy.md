@@ -1,5 +1,9 @@
 # Política de modelos
 
+## Reconhecimento ocupacional gratuito — 3.2.0
+
+Função `occupational_rag`: modelos privados gratuitos aprovados no ADR-089, pins no compose do worker e digest conferido por trabalho. Sem fallback pago. Expansão lexical/reranking recuperam candidatos aprovados, empresa antes de global; modelo gera somente proposta pendente com citações literais. Alias/novo conceito/ambiguidade/contexto insuficiente distintos. Benchmark e falhas preservados no AoT, sem promessa de qualidade universal ou decisão automática. Troca de modelo/digest exige validação proporcional.
+
 ## Escopo
 
 As funções, registry, benchmarks e gates de troca abaixo governam modelos utilizados pelo produto Prisma. Não são um procedimento para alternar o agente que desenvolve o repositório.

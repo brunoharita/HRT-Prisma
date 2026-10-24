@@ -1,5 +1,9 @@
 # Modelo de dados
 
+## Reconhecimento ocupacional 3.2.0
+
+ADR-089 aplica GOV-02 sem tabela nova. `knowledge_inbox.occupation_context` conserva contexto mínimo/origem/hash; `knowledge_research_runs` mantém lease/tentativas/histórico; `knowledge_proposals.origin_term_id` vincula contribuição de alias à identidade local; `professional_profiles.occupation_rag_cursor` é cursor técnico sem alterar fatos/versionamento. Conceitos/termos/relações/change sets/aprovações originais continuam proprietários. Vetores temporários não têm autoridade independente. Proposta pendente não alimenta matching como conhecimento aprovado; só curadoria humana publica. Sem backfill/recálculo histórico.
+
 ## Origem única da verdade e reuso das estruturas originais (GOV-02)
 
 Diretriz permanente aprovada por Bruno em 24/10/2026, aplicável a todos os domínios e próximas implementações. Cada fato de domínio tem uma origem de verdade explícita, com entidade/tabelas proprietárias e fluxo autorizado de escrita. Funcionalidades novas devem reutilizar ou ampliar essas estruturas originais. É proibido criar tabelas, entidades ou cadastros paralelos para o mesmo objetivo, mesmo sob outro nome, módulo, integração ou fluxo de IA/RAG. Conveniência técnica, separação por tela ou fornecedor e rapidez de desenvolvimento não justificam duplicar a informação.

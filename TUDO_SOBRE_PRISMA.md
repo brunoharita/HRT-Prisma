@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 558
-source_manifest_sha256: ae92b1d0a66d69b5592491a2153b01fa60c9a82caa9d70c996d943d857b13893
+documentation_source_count: 563
+source_manifest_sha256: 0524468df209466f8b93cc460765ff949402ec71c4ca0e54d9f2482a9a63119a
 -->
 
 # Tudo sobre o Prisma
@@ -2651,11 +2651,17 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.93.4
+version: 2.94.0
 last_verified: 2026-10-24
 ---
 
 # Estado atual do Prisma
+
+## Reconhecimento ocupacional — 3.2.0 em validação de publicação
+
+Implementação aprovada por Bruno em24/10/2026 e registrada em acordo/execução/AoT occupational-rag-v320 e ADR-089. Reutiliza Knowledge sem tabelas novas: expansão lexical e reranking privado recuperam conceitos aprovados, empresa antes de global; IA só prepara proposta pendente. Empresa revisa associação/criação/related_to; aprovação envia contribuição global sanitizada automaticamente. Super aprova/mantém somente local, com motivo opcional e origem preservada. Disparo em versões de Posições/Perfis publicados, cursor5/lease8min/tentativas/dedupe, recuperação manual, sem backfill/pesos/decisões históricas alterados.
+
+PoC real sintética Qwen4B/BGE-M3 privados gratuitos com pins/digests: Vendedor/SDR/Logística-transportes passaram; Revenue ambíguo sustentado, não equivalência. Limitações de recall/latência/memória explícitas no ADR; nenhuma API paga ou classificação oficial inventada. SQL/RLS/negativos/lote1.200cargos, worker/regressão e três telas desktop/mobile validados localmente. Registry3.2.0. CI, migration remota e runtime/smoke ainda não comprovados; não interpretar implementação ou prévias como rollout.
 
 ## Origem única da verdade — diretriz aprovada em 24/10/2026
 
@@ -3988,6 +3994,8 @@ Não assumir que randomização significa justiça. Não usar tempo como proxy a
 
 # Consumo e custo por ação de IA
 
+Em3.2.0 `occupational_rag` acrescenta finalidade no escritor do worker existente. Provider `ollama-local`, modelos/digests ADR-089; `usageKind=external` é o enum técnico para tentativa sem cache, sem envio a provedor público. Tokens ausentes desconhecidos; API estimada zero só com contagem conhecida, observado nulo; infraestrutura não declarada gratuita. Sem tarifa/reserva/débito novo de Tokens Prisma ou backfill.
+
 Contrato `ai-action-cost-metering-1.0.0`, medição `ai-cost-measurement-1.0.0`, leitura `ai-action-cost-report-1.0.0`; entrega 3.1.2. Acordo/execução/AoT `ai-cost-metering-v312`. Extensão aditiva do ADR-080 e correlação com ADR-083, sem novo gateway, biblioteca ou serviço.
 
 ## Autoridade e unidades
@@ -4474,6 +4482,10 @@ Busca e matching podem consumir `concept_id` apenas de observações `resolved` 
 ## Source: `docs/ai/model-policy.md`
 
 # Política de modelos
+
+## Reconhecimento ocupacional gratuito — 3.2.0
+
+Função `occupational_rag`: modelos privados gratuitos aprovados no ADR-089, pins no compose do worker e digest conferido por trabalho. Sem fallback pago. Expansão lexical/reranking recuperam candidatos aprovados, empresa antes de global; modelo gera somente proposta pendente com citações literais. Alias/novo conceito/ambiguidade/contexto insuficiente distintos. Benchmark e falhas preservados no AoT, sem promessa de qualidade universal ou decisão automática. Troca de modelo/digest exige validação proporcional.
 
 ## Escopo
 
@@ -5368,6 +5380,10 @@ Gestão `prisma-tokens-2.0.0` e conta `policy_version=prisma-token-policy-2.0.0`
 
 # Modelo de dados
 
+## Reconhecimento ocupacional 3.2.0
+
+ADR-089 aplica GOV-02 sem tabela nova. `knowledge_inbox.occupation_context` conserva contexto mínimo/origem/hash; `knowledge_research_runs` mantém lease/tentativas/histórico; `knowledge_proposals.origin_term_id` vincula contribuição de alias à identidade local; `professional_profiles.occupation_rag_cursor` é cursor técnico sem alterar fatos/versionamento. Conceitos/termos/relações/change sets/aprovações originais continuam proprietários. Vetores temporários não têm autoridade independente. Proposta pendente não alimenta matching como conhecimento aprovado; só curadoria humana publica. Sem backfill/recálculo histórico.
+
 ## Origem única da verdade e reuso das estruturas originais (GOV-02)
 
 Diretriz permanente aprovada por Bruno em 24/10/2026, aplicável a todos os domínios e próximas implementações. Cada fato de domínio tem uma origem de verdade explícita, com entidade/tabelas proprietárias e fluxo autorizado de escrita. Funcionalidades novas devem reutilizar ou ampliar essas estruturas originais. É proibido criar tabelas, entidades ou cadastros paralelos para o mesmo objetivo, mesmo sob outro nome, módulo, integração ou fluxo de IA/RAG. Conveniência técnica, separação por tela ou fornecedor e rapidez de desenvolvimento não justificam duplicar a informação.
@@ -6025,6 +6041,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+Decisão de Bruno em24/10/2026: **Prisma3.2.0**, movimento2/entrega0 da geração3. Contratos aditivos `occupational-rag-1.0.0`, `occupational-rag-proposal-1.0.0`, `knowledge-grounded-1.0.0`. Curadoria empresa/global e decisões globais2.0.0 reutilizadas; Perfil/Score/matching/pesos/história preservados. ADR-089 e acordo/execução/AoT occupational-rag-v320. Rollout somente migration, worker de síntese/modelo privado e web, mediante gates registrados.
 
 Decisão explícita de Bruno em23/10/2026: a entrega de reconhecimento da trajetória por atividades deve ser **Prisma3.1.4**. O registry acrescenta a entrega4 ao movimento1 da geração3; login e sidebar consomem o mesmo registro central. Substitui somente a identificação pública anterior desta entrega, mantendo versões históricas, matching5.2.0, score1.4.0 e demais contratos. Publicação identificada pelo AoT trajectory-activity-recognition.
 
@@ -10686,6 +10704,52 @@ Revisão do diff, whitespace, links locais alterados, `check:foundation`, geraç
 
 ---
 
+## Source: `docs/decisions/ADR-089-occupational-rag-existing-knowledge.md`
+
+# ADR-089 — RAG ocupacional na Knowledge existente
+
+Estado: accepted. Data:24/10/2026. Produto3.2.0. Contrato `docs/qa/agreement-occupational-rag-v320.md`1.0.0 aprovado por Bruno; estende ADR-088 e curadoria empresa/global vigente.
+
+## Decisão
+
+Reutilizar conceitos, termos, relações, mappings, Inbox, pesquisas, propostas, aprovações e change sets. Nenhuma tabela, catálogo ou banco vetorial novo. Colunas técnicas ficam nos proprietários: contexto/origem/hash no Inbox; lease/tentativas/histórico nas pesquisas; cursor no Perfil; origem de alias nas propostas. Vetores transitórios são limitados e vinculados a tenant/modelo/identidade/versão/aliases/conteúdo.
+
+Preservar primeiro associação exata aprovada e inequívoca. Para desconhecidos, expandir a consulta como hipótese, recuperar até40 conceitos ocupacionais aprovados e reordenar semanticamente até cinco, empresa antes de global. Mappings oficiais exigem versão publicada/vigente. Similaridade nunca publica equivalência, confiança, competência pessoal ou seleção. Título sem atividades gera pendências, sem modelo nem definição inventada. Contexto limitado e citações/IDs/versões pós-validados.
+
+Responsável autorizado escolhe associação de termo a conceito existente ou criação local. Relações `related_to` são distintas de equivalência e persistidas para novo conceito local somente quando selecionadas. Original da IA, edição, versões/citações/ator permanecem separados. Aprovação local envia automaticamente definição/aliases curados e vínculo de origem à curadoria global; não envia currículo, trechos privados ou contexto pessoal. Super Admin aprova globalmente ou mantém somente local, motivo opcional. Origem da empresa permanece intacta.
+
+Salvar Posição/publicar Perfil inicia trabalho assíncrono. Cursor de cinco cargos por passagem, sem backfill. Pesquisa tem lease8min, até três tentativas e deduplicação pelo contexto. Falha explícita permite retry ou assumir revisão manual, invalidando lease e sem chamada de IA. Escritores de origem não ficam bloqueados.
+
+## Reuso, alternativas e modelos
+
+Reutiliza o motor lexical e a curadoria. APIs pagas/Textkernel excluídas por decisão do PO. Banco vetorial separado e treinamento próprio acrescentariam manutenção sem resolver autoridade. Execução privada evita destino novo. Tarefa independente dentro do worker de síntese existente; Ollama em Docker privado, sem porta pública, credenciais ou ferramentas para o modelo.
+
+Pins operacionais no compose, digests conferidos a cada trabalho:
+
+- Ollama0.40.10, imagem `sha256:4c5b27871a3239a717048f9b93057680a51b60c8119a7016aebb57f938e25e35`; [MIT](https://github.com/ollama/ollama/blob/main/LICENSE), [saída estruturada oficial](https://docs.ollama.com/capabilities/structured-outputs).
+- `qwen3:4b-instruct-2507-q4_K_M`, digest `0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0`; família [Qwen3-4B-Instruct-2507 / Apache-2.0](https://huggingface.co/Qwen/Qwen3-4B-Instruct-2507).
+- `bge-m3`, digest `7907646426070047a77226ac3e684fbbe8410524f7b4a74d02837e43f2146bab`; [MIT e modelo multilíngue](https://huggingface.co/BAAI/bge-m3).
+
+## Evidência e limites
+
+PoC sintética real na VPS existente, sem credenciais/dados produtivos no runner. O1.7B foi explorado; ambos os tamanhos tiveram referências incoerentes no protocolo inicial. O codec passou a uma decisão `alias:<id>` com enum e destino derivado no servidor. Não atribuir diferenças somente ao tamanho: o protocolo também mudou.
+
+Ensaio final4B: Vendedor/Sales Representative, SDR comercial/pré-vendas e Logística dedicada a transportes passaram. Revenue ficou `ambiguous`, com definição/citações válidas:3/4 decisões categóricas esperadas,4/4 respostas sustentadas para revisão pendente. Expectativa de novo conceito em Revenue não passou; incerteza preservada é comportamento permitido, não prova de qualidade universal.
+
+Embeddings acertaram top1 nos seis controles positivos, inclusive outras famílias e Logística com/sem estoque. Revenue sem conceito equivalente trouxe software architect primeiro: não contar como acerto, mesmo com `pass:true` exploratório no arquivo bruto. Recuperação nunca decide publicação. Amostra pequena não mede recall de toda a biblioteca nem qualidade estatística de produção.
+
+Geração final85–102s por resposta; expansão4B cerca de30s. Sem promessa de resposta imediata. Limites CPU1,25/RAM-swap5GiB/um modelo e uma tarefa; pico cgroup atingiu limite incluindo cache, com reclaim, zero OOM/OOM-kill. Não presumir folga de RAM. Consulta lexical global somente leitura em30.257 conceitos:245 resultados/4.166ms no ensaio; não exigiu índice ou réplica persistida.
+
+Tentativas usam histórico original, provider `ollama-local`, usageKind `external` (enum técnico de tentativa sem cache, não envio à internet). Custo estimado de API zero somente com contagens verificadas; observado nulo. Infraestrutura continua tendo custo. Sem tarifa/débito novo de Tokens Prisma.
+
+## Compatibilidade e rollback
+
+Desabilitar flag `OCCUPATIONAL_RAG_ENABLED`, restaurar imagem anterior do worker/web e parar somente o modelo. Preservar banco/histórico, sem migration inversa destrutiva. Leases permitem retomada. Falha de configuração nova não interrompe síntese/e-mails existentes. Perfil, Score, matching, pesos, credenciais e decisões humanas preservados. Evidência final e limites: AoT occupational-rag-v320.
+
+Controles reais adicionais: Logística com inventário/armazenagem foi associada a Estoque (89.976ms); SDR em rádio/processamento de sinais ficou ambíguo sem destino comercial (78.796ms). Ambos passaram nos critérios de segurança/contexto. Arquivo `models/additional-controls.json`.
+
+---
+
 ## Source: `docs/decisions/README.md`
 
 # Architectural Decision Records
@@ -11215,6 +11279,24 @@ Cross-tenant denial anômalo, pico de exportação, falhas de Auth, custo por te
 ## Retenção
 
 Retenção de logs e auditoria ainda depende de política legal e operacional. Logs precisam permitir diagnóstico sem conservar conteúdo pessoal integral.
+
+---
+
+## Source: `docs/operations/occupational-rag.md`
+
+# Operação do reconhecimento ocupacional
+
+Contrato `occupational-rag-1.0.0`, proposta `occupational-rag-proposal-1.0.0`, fonte `knowledge-grounded-1.0.0`. ADR-089 e acordo/execução/AoT occupational-rag-v320. Produto3.2.0.
+
+Empresa acompanha em Conhecimento > Termos para revisar > Reconhecimento de cargos. Novas versões de Posições e Perfis publicados geram tarefas. Pode solicitar por título/contexto, tentar novamente após falha ou assumir revisão manual. Aprovação escolhe associação ou criação e envia contribuição global automaticamente. Super Admin aprova ou mantém local em Propostas; motivo opcional e origem intacta.
+
+`prisma-knowledge-model` no compose do worker, sem porta publicada, pesos públicos em `/var/lib/prisma/knowledge-models` somente leitura. Pins/digests/limites no compose. Nunca montar credenciais no modelo. Worker usa segredo de síntese nas RPCs e segredo próprio no histórico; nenhum service-role no navegador/modelo. Não registrar prompts/respostas integrais/currículos em logs.
+
+Publicação seletiva: migration occupational_rag_v320, profile-synthesis (inclui modelo privado) e web. Preflight exige pesos e configuração protegida existentes, modelo saudável antes de recriar worker. Conferência de manifest digests antes de inferir. Sem `db push` ou atualização implícita dos pesos. Não publicar Parser/Edges/gateway/mail/Horus por adjacência.
+
+Lease8min, três tentativas, timeout180s por chamada; cinco cargos por passagem de Perfil, lotes retomáveis acima de1.000 registros. Sem backfill. Falha explícita permite retry manual; assumir revisão invalida lease e deixa definição vazia para edição. Nada vira rejeição de pessoa. Nova tarefa assíncrona não bloqueia fila principal do worker.
+
+Diagnóstico: eventos fixos `occupational_rag`, `occupational_rag_unavailable`, `occupational_rag_configuration_unavailable`, saúde e recursos. Histórico técnico distingue tokens conhecidos/desconhecidos e custo de API, sem regra comercial nova. Rollback: desabilitar flag efetiva, restaurar imagem de rollback indicada no recibo e web anterior, parar só `knowledge-model`; preservar colunas/propostas/aprovações e histórico.
 
 ---
 
@@ -16876,6 +16958,68 @@ Baseline local main 79f12a54eb727c42ab237304a7e1ce9c251a3ec2; levantamento de de
 | Backend/Score/modelos/Resend/Parser/Synthesis/Mail | no_impact_identified | Nenhuma mudança de contrato, dados ou chamada de negócio; release web isolado | Revisão do diff/plano e IDs/imagens/restarts dos serviços |
 
 Sem referência visual normativa fornecida; posição superior esquerda é requisito explícito, demais detalhes seguem o design system.
+
+---
+
+## Source: `docs/qa/agreement-occupational-rag-v320.md`
+
+# Contrato de Acordos — RAG ocupacional 3.2.0
+
+Versão1.0.0. Estado: agreed. Autoridade: Bruno aprovou a proposta, o envio global automático após aprovação local, as três prévias visuais e, em24/10/2026, determinou validar modelos gratuitos, implementar e publicar3.2.0 sem tabelas novas, preservando histórico e decisões humanas. Baseline `6b434a6c12853a3a824f68bc9cd5783ff66e6bdf` / produto3.1.4. Fonte visual: `output/occupational-rag-preview-20261024/01-reconhecimento.png`, `02-empresa.png`, `03-global.png`; referências serão preservadas na evidência antes da validação visual.
+
+## DEVE
+
+- D-01: reutilizar Knowledge, conceitos, termos, relações, mappings, Inbox, pesquisas, propostas, aprovações, change sets e fluxos proprietários. Nenhuma tabela ou catálogo paralelo. Ampliações aditivas nas estruturas originais são permitidas; derivados não são outra verdade (GOV-02).
+- D-02: recuperar cargos por termo e significado das atividades, com precedência empresa→global, autorização backend, conceitos aprovados e fontes/versões explicitadas. Similaridade recupera candidatos e não é equivalência, evidência pessoal nem probabilidade de contratação. Correspondência exata aprovada/inequívoca preserva resolução existente.
+- D-03: disparar reconhecimento automaticamente após salvar Posição e publicar Perfil, sem bloquear o trabalho manual. Distinguir alias, novo conceito, ambiguidade e falha técnica. Somente descrição suficiente permite proposta de definição sustentada; título isolado mantém hipóteses/pendências sem inventar atividades da pessoa. Reutilizar a fila existente com deduplicação, limites, retomada e preservação de estados decididos.
+- D-04: propostas automáticas ficam pendentes para responsável autorizado da empresa revisar/editar/associar/aprovar; só aprovação torna conceito/termo reutilizável. Preservar original da IA, edição, ator, fonte, método e versão. Não elevar declaração/inferência a competência demonstrada.
+- D-05: aprovação local gera automaticamente contribuição global sanitizada pelo fluxo existente, vinculada à origem local. Somente Super Admin decide Aprovar na Base Global ou Manter somente local, com justificativa opcional; nenhuma decisão global altera/apaga a origem local. Política vigente de fontes permanece.
+- D-06: somente ferramentas/modelos gratuitos e execução privada na infraestrutura existente. Validar qualidade, saída estruturada, limites de RAM/CPU e latência antes de ativar. Não usar fallback pago. Indisponibilidade fica explícita e preserva operação manual. Nenhum dado privado vai à base global ou destino novo.
+- D-07: preservar títulos literais, histórico de Perfis/Score/avaliações, pesos, decisões humanas, contratos e permissões não alterados explicitamente. Sem recálculo, reimportação ou reinterpretação em massa. Processamentos >1.000 itens são retomáveis, idempotentes e limitados por tempo; estado anterior permanece até completar.
+- D-08: publicar versão pública3.2.0, com registros/contratos aditivos, rollback de ativação e evidência local→produção→smoke→sincronização; sem declarar integração a partir de protótipos.
+- D-UX-01: manter shell/sidebar e tabs da Knowledge; reconhecimento com contexto à esquerda e resultado/próximo passo à direita, correspondências relacionadas visíveis; revisão com definição/aliases/relações/evidência à esquerda e origem/andamento à direita; ação de aprovação local ao fim, com informação do envio automático. Global mantém definição/referências à esquerda e origem local à direita, justificativa opcional e as duas decisões vigentes ao fim. Mobile empilha as regiões e preserva ordem/ações; sem overflow. Tokens/componentes atuais prevalecem sobre detalhes ilustrativos das prévias.
+
+## PROIBIDO
+
+- P-01: novas tabelas/entidades concorrentes; publicação pela IA; uso de proposta pendente como Knowledge aprovada; criação de alias global a partir de interpretação contextual; sobreposição de decisões humanas.
+- P-02: inventar referências/códigos oficiais/atividades pessoais, considerar ausência/falha como evidência negativa, consolidar funções por semelhança verbal, expor tenant/PII/secrets ou usar SQL gerado pelo modelo.
+- P-03: modelo/API pago, mudança silenciosa de pesos, reescrita histórica, decisões automáticas de seleção, varredura de Pessoas reais para teste ou alteração de serviços adjacentes sem dependência demonstrada.
+- P-UX-01: substituir a topologia aprovada por composição materialmente diferente, ocultar origem/incerteza ou introduzir nova decisão Rejeitar no fluxo global.
+
+## FORA DE ESCOPO
+
+- F-01: LinkedIn, scraping, treinamento/fine tuning, nova base vetorial, consolidação de legado, recálculo em massa, alteração comercial/Tokens ou de fórmulas de Score.
+
+## AUTONOMIA / PENDÊNCIAS
+
+- A-01: comparar modelos gratuitos, escolher o menor que passar nos gates, pin de versão/digest, limites e estratégias de recuperação/reranking; reutilizar/adaptar providers e fluxos existentes, com ADR para a decisão durável. Nenhum desempenho ou qualidade é presumido.
+- A-02: SQL/RPCs/colunas aditivas nas tabelas originais, orquestração/fila, componentes/tokens, seletores e detalhes acessíveis delegados; relações distintas de dados permanecem explícitas.
+- Q: nenhuma pergunta de comportamento pendente; qualidade/infra/modelos são gates a comprovar antes da ativação, não permissões para reduzir D-*.
+
+## CRITÉRIOS DE ACEITE
+
+- CA-D01: diff não cria tabelas; identidades originais e fluxos de curadoria reutilizados. Provar schema e ausência de escrita em cadastro paralelo.
+- CA-D02/D03: fixtures positivas/negativas para Vendedor/Sales Representative, SDR comercial/sem contexto/rádio, Logística/Estoque com e sem atividades e Arquiteto de Revenue com e sem descrição; amostra de outras famílias. Candidatos relevantes recuperados nos casos positivos; zero equivalência automática indevida nos casos críticos. Falha, concorrência, repetição, versão/escopo e decisão humana preservados.
+- CA-D04/D05: provar pending→aprovação local→contribuição global, edição/original, alias/conceito, rejeição de ator/tenant incorreto, Super Admin exclusivo, decisão global sem alterar origem, justificativa opcional e replay sem duplicação.
+- CA-D06: execução real com dados sintéticos e modelos gratuitos; medição de latência/memória/CPU; JSON e citações pós-validados; falha sem chamada paga e sem publicação. Artefatos públicos não contêm PII.
+- CA-D07: regressão dirigida de publicação de Perfil, salvamento de Posição, Knowledge e consumidores afetados; histórico/decisões/pesos preservados. Nenhuma criação de dados de teste em produção.
+- CA-D08: CI obrigatória, SHA coerente, plano de superfícies, migração seletiva quando necessária, runtime/schema/web compatíveis, versão3.2.0 e smoke sem mutações de teste em produção.
+- CA-UX: comparar render com os três alvos, mesmos dados/estado/viewport1600px e mobile430px; registrar desvios necessários de tokens/componentes atuais, sem aceitar divergência estrutural não aprovada.
+
+## MAPA DE IMPACTO INICIAL
+
+| Área | Relação | Baseline / preservação | Evidência mínima |
+| --- | --- | --- | --- |
+| Knowledge/curadoria/empresa→global | direct | Baseline acima, regras ADR-013/060/065/069/088 | SQL transacional, negativos/RLS, replay e UI |
+| Posição e publicação de Perfil | direct | Escritores vigentes e versões/histórico | Fixtures de disparo e não bloqueio, contratos de escrita |
+| IA/modelo privado e operação VPS | direct | VPS2CPU/8GB, ~7GB disponíveis em leitura anterior; serviços atuais sem inferência local | PoC sintética limitada; baseline e após; isolamento de rede e recursos |
+| Score/matching/evidências | plausible_indirect | Fórmulas, pesos e decisões existentes | Associação de conceito não vira evidência/decisão; regressão afetada |
+| Auth/tenant e histórico | critical_transversal | Autoridade backend/RLS/atores vivos | Negativos de anon/outro tenant/inativo; histórico preservado |
+| Web/Knowledge | direct | Prévia aprovada + componentes/tokens atuais | Navegador desktop/mobile e comparação visual |
+| Serviços adjacentes/Horus | plausible_indirect | Mesma VPS compartilhada | Recursos limitados e snapshots de imagem/início antes/depois |
+| Fontes/importadores/comercial | no_impact_identified inicialmente | Fontes publicadas existentes, tarifas/ledger intactos | Reavaliar mapa se recuperação exigir ampliar ingestão; sem alteração silenciosa |
+
+AoT da mesma entrega registra evidências e o mapa final. Nenhuma suíte integral local por padrão; CI existente preservada.
 
 ---
 
@@ -23677,6 +23821,69 @@ CI inicial38045473960 bloqueou promoção:872/873, expectativa estática antiga 
 Dispatcher publicou a unidade, mas seu smoke imediato terminou exit22/HTTP404 durante recriação. A verificação independente após estabilização passou, sem reconstruir/republicar nem contornar gate. Recibo publication-preservation.json conserva essa distinção. Rollback prisma-web:rollback-before-96c912d8eeb6 corresponde à imagem anterior b53ee95bb7b8. Seis demais containers mantiveram IDs/imagens/restarts/status; Parser/Synthesis/Mail continuam healthy. O experimento paddle-vl-llama-test já estava unhealthy no baseline e permaneceu assim: não é capacidade validada ou alterada neste movimento.
 
 Fechamento documental e Context Pack seguem em commit posterior, sem reconstrução do runtime funcional. D-01..05 e P-01..03 PASS; nenhuma divergência do escopo aprovado. Jornada autenticada real continua NOT TESTED. Arquivos alheios e worktrees preexistentes preservados; avisos locais de prune com Permission denied não impediram commit/fetch e não foram tratados por exclusão. Evidências: ci-branch/main.json, release-plan.json, production-after.json, publication-preservation.json e production-browser.json. Nenhuma migration, função, runtime IA ou mail publicado.
+
+---
+
+## Source: `docs/qa/aot-occupational-rag-v320.md`
+
+# AoT — Reconhecimento ocupacional 3.2.0
+
+Contrato [agreement-occupational-rag-v320.md](agreement-occupational-rag-v320.md)1.0.0; execução [execution-occupational-rag-v320.md](execution-occupational-rag-v320.md). Autoridade: Bruno,24/10/2026. Baseline `6b434a6c12853a3a824f68bc9cd5783ff66e6bdf`, produto3.1.4. ADR-089. Fechamento operacional ainda pendente antes da publicação.
+
+## Matriz de acordos
+
+| ID | Implementação | Teste/evidência | Status / limite |
+| --- | --- | --- | --- |
+| D-01 | Colunas/RPCs nos proprietários Knowledge e Perfil; nenhuma tabela | SQL compara quantidade de tabelas; diff migration | PASS local |
+| D-02 | Associação exata preservada; expansão lexical, candidato40/reranking5; empresa antes de global; fontes vigentes | PoC real sintética; domínio, SQL,28 regressões Knowledge/matching; consulta global4.166ms/30.257conceitos | PASS com limites do benchmark no ADR |
+| D-03 | Triggers Posição/publicação Perfil, cursor5, lease8min, dedupe/tentativas; falha e manual explícitos | SQL salva versão/publica evento,1.200cargos/seis Perfis retomáveis,lease/replay/falha; worker determinístico | PASS local |
+| D-04 | Revisão exige modo/destino/versão, edição/original/ator; alias não clona | SQL RLS/versão/citações/curadoria; browser exige decisão explícita | PASS local |
+| D-05 | Envio global automático sanitizado; Super aprova/mantém local, motivo opcional | SQL alias/conceito,aprovação/replay/manter; origem preservada; UI duas ações | PASS local |
+| D-06 | Ollama/Qwen/BGE gratuitos privados, pins/digests; nenhum fallback pago | PoC/resources e testes de falha/URLs/JSON/citações; histórico IA original | PASS no escopo de proposta pendente; amostra pequena, sem qualidade universal |
+| D-07 | Sem reprocessamento/pesos/decisões históricas; cursor aditivo | SQL payload/versão Perfil intactos;28 regressões existentes e worker anterior | PASS local; sem mutações de teste produtivas |
+| D-08 | Registry3.2.0, rollout migration/worker+modelo/web | CI/recibos/smoke ainda pendentes | NOT TESTED operacional |
+| D-UX-01 | Topologia em duas colunas, revisão/andamento e aprovação ao fim; mobile empilhado |19 checks browser em1600/430 e renders em evidence/occupational-rag-v320/browser | PASS local |
+
+## Proibições verificadas
+
+| ID | Prova | Status |
+| --- | --- | --- |
+| P-01 | Zero tabelas novas; IA só insere proposta; alias não duplica conceito; replay preserva decisão | PASS local |
+| P-02 | Tenant/ator/lease/versão/ID/citação inválidos negados; modelo recebe contexto mínimo sem ferramentas/SQL; global sem texto privado | PASS local |
+| P-03 | URLs privadas, sem fallback; fórmulas/tarifas intactas, fixtures sintéticas; serviços adjacentes a conferir após rollout | PARTIAL até smoke |
+| P-UX-01 | Composição reconhecível e origem/incerteza visíveis; nenhuma nova ação global Rejeitar | PASS local |
+| F-01 | Sem LinkedIn,treinamento,base vetorial,backfill,recalculo/tarifa nova | PASS diff |
+
+## Mapa de impacto e preservação final
+
+| Área / capacidade | Relação | Baseline e prova proporcional | Status |
+| --- | --- | --- | --- |
+| Knowledge/empresa/global | direct | SQL PostgreSQL17 com M77/M81 reais, negativos/RLS/replay/alias/conceito/related_to; propostas,termos,aprovações originais | PASS local |
+| Posição e publicação de Perfil | direct | Triggers aditivos; fixtures salvam versão e evento vigente; perfil/versão preservados; lote1.200cargos sem backfill | PASS local |
+| IA/histórico técnico | direct (reclassificado) | Nova finalidade no escritor existente, mesmo segredo separado; tentativas sem PII, tokens desconhecidos nulos/API estimada0; nenhum débito comercial | PASS local |
+| Auth/tenant | critical_transversal | Negativos anon,membro,inativo,outro tenant; somente Super em global; nenhuma service-role no cliente/modelo | PASS local |
+| Score/matching/evidências | plausible_indirect | Fórmulas e pesos sem diff; fixtures trajetória/negação/ferramenta/histórico e normalização já existentes | PASS local |
+| UX Knowledge | direct | Três estados equivalentes/shell atual e mobile,19 checks; aprovação/recuperação manual | PASS local |
+| VPS/Horus/serviços adjacentes | plausible_indirect | Baseline images/StartedAt/restarts em models/resources-before-release.txt; CPU/RAM limitados; pós ainda pendente | PARTIAL |
+| Fontes/importadores/comercial | no_impact_identified | Só consulta mappings vigentes; nenhum importador,tarifa/reserva/pesos alterado; sem novo destino externo | PASS diff e regressão dirigida |
+
+Diferença do mapa inicial: histórico de IA passou a `direct`; finalidade nova foi adicionada ao escritor original, sem mudar tarifas nem o contrato de custo. Sem QA remoto separado: clone lógico local PostgreSQL17, funções dependentes já implantadas, fixtures transacionais e rollback. Clone físico inicial falhou por arquivo ausente no baseline descartável; schema lógico preservou baseline. Falhas intermediárias foram corrigidas antes do PASS (ambiguidade SQL de variável e ajustes de fixtures aos limites/identidades atuais), sem alterar dados produtivos ou restrições para acomodar teste.
+
+## Fidelidade visual
+
+Referências preservadas em `evidence/occupational-rag-v320/references`; dados fictícios Arquiteto de Revenue, definição/Revenue Architect/Operações de receita e Empresa demonstração. Mesmo viewport1600×1100; mobile430×1100. Renders `*-recognition.png`, `*-company.png`, `*-global.png`; inspeção visual acompanha checks funcionais.
+
+Topologia, hierarquia, agrupamentos, ordem e ações preservados. Adaptações delegadas D-UX/A-02: shell real288px versus ilustrativo250px, componentes/tokens atuais, seletor explícito associar/criar e justificativa opcional na revisão; tela mais alta mantém aprovação ao fim. Barra de demonstração/navegação ilustrativa não entra no produto. Nenhuma cópia de texto/estatística fictícia para produção. Sem divergência estrutural material identificada. Screenshots são de componentes reais com serviços sintéticos, não evidência de curadoria real em produção.
+
+## Qualidade e limites dos modelos
+
+ADR-089 registra resultados e fontes oficiais/licenças. Artefatos brutos em `models/`: falhas iniciais de referência preservadas; codec ajustado. Ensaio final4B:3/4 decisões esperadas e4/4 propostas sustentadas; Revenue ambíguo, sem promoção automática. BGE seis controles positivos corretos; Revenue recuperou software architect e **não** é contado como acerto, apesar do marcador exploratório bruto. Sem prova de recall de todas as bibliotecas. Latência85–102s por geração e~30s de expansão; serviço em segundo plano. Pico de memória/reclaim no limite5GiB, sem OOM; manter contenção.
+
+## Validação e publicação
+
+Evidência SQL `sql/verification.txt`/`environment.json`, browser `browser/checks.json`, modelos/digests/resources em `models/`. Typechecks/backend/web, build web e testes dirigidos locais passam; warnings de chunks grandes/import dinâmico preexistentes, sem falha. Testes release/context/worker69 e depois72 incluindo checker de contexto;28 regressões Knowledge/matching. Sem suíte integral local; CI obrigatória ainda será comprovada. Divergências contratuais: nenhuma alteração de comportamento aprovada foi retirada; resultado ambíguo do modelo permanece limite explícito.
+
+Git/main/SHA, CI, versão remota de migration/fingerprint, imagens/health e smoke serão preenchidos no recibo operacional antes do encerramento. Rollback no ADR/runbook, preservando banco/histórico. Trabalho preexistente não rastreado permanece fora da entrega.
 
 ---
 
@@ -30848,6 +31055,22 @@ Mínimo suficiente: handlers reais com fetch falso, PostgreSQL local descartáve
 # Execução — Retorno à tela anterior v2.3.1
 
 Implementar integralmente docs/qa/agreement-navigation-back-v231.md v1.0.0, lido integralmente, incluindo D-01/02/03/04/05, P-01/02/03, F-01, A-01, CA-01/02/03/04 e mapa de impacto. Reutilizar navegação e guardas existentes, seta compartilhada com origem imediata e atalhos fixos sem seta. Fazer QA sintético proporcional e negativos; publicar uma unidade coerente web 2.3.1 em main/origin/VPS, preservar serviços e fechar AoT com limites explícitos.
+
+---
+
+## Source: `docs/qa/execution-occupational-rag-v320.md`
+
+# Execução do RAG ocupacional 3.2.0
+
+Contrato congelado: [agreement-occupational-rag-v320.md](agreement-occupational-rag-v320.md), versão 1.0.0, integralmente aplicável. Autoridade: aprovação explícita de Bruno em 24/10/2026, incluindo produção e versão 3.2.0.
+
+Implementar D-01 a D-08 e D-UX-01, preservando P-01 a P-03 e P-UX-01. F-01 permanece excluído; A-01/A-02 delegam a seleção validada dos modelos e a engenharia, sem alterar a autoridade humana. Não há pendência de comportamento.
+
+Executar no branch isolado `codex/occupational-rag-v320` a partir de `6b434a6c12853a3a824f68bc9cd5783ff66e6bdf`. Reutilizar filas, curadoria, persistência e histórico existentes; alterações aditivas somente. Recuperação lexical com expansão e reranking semântico é candidata, nunca equivalência publicada. Gerar somente propostas pendentes. Aprovação local alimenta automaticamente a contribuição global sanitizada. Preservar entradas originais, edições, fontes, autoria e versões.
+
+Gates mínimos: PoC real sintética dos modelos gratuitos (qualidade, JSON, memória/CPU/latência); testes determinísticos domínio/worker; SQL PostgreSQL com dependências reais, RLS e negativos; regressão dirigida de curadoria, publicação e filas; render das três telas e mobile frente às referências; typecheck/build, lint e checks afetados; CI obrigatória. Não executar suíte integral local. Atualizar ADR, documentação proprietária, mapa/AoT e Context Pack. Publicar somente superfícies determinadas pelo diff, com migração seletiva, rollback de ativação, smoke e sincronização.
+
+Conclusão exige todos os D-* comprovados; registrar limitações e falhas de benchmark sem convertê-las em aprovação. Não criar dados sintéticos em produção nem reprocessar pessoas históricas.
 
 ---
 

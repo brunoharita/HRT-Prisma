@@ -13,6 +13,14 @@ if docker inspect prisma-profile-synthesis >/dev/null 2>&1; then
  docker tag "$previous_image" "prisma-profile-synthesis:rollback-before-${expected_sha:0:12}"
 fi
 "${compose[@]}" build profile-synthesis
+[[ -d /var/lib/prisma/knowledge-models/manifests/registry.ollama.ai/library/qwen3 && -d /var/lib/prisma/knowledge-models/manifests/registry.ollama.ai/library/bge-m3 ]] || { echo "Validated local model weights missing" >&2; exit 2; }
+"${compose[@]}" up -d --no-deps knowledge-model
+model_ready=false
+for attempt in $(seq 1 30); do
+ if [[ "$(docker inspect --format '{{.State.Health.Status}}' prisma-knowledge-model)" == "healthy" ]]; then model_ready=true; break; fi
+ sleep 2
+done
+[[ "$model_ready" == true ]] || { echo "Private model unavailable; worker left untouched" >&2; exit 2; }
 "${compose[@]}" up -d --no-deps profile-synthesis
 for attempt in $(seq 1 30); do
  if [[ "$(docker inspect --format '{{.State.Health.Status}}' prisma-profile-synthesis)" == "healthy" ]]; then

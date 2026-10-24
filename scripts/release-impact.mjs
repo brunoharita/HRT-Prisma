@@ -37,7 +37,7 @@ export function classifyChanges(changes) {
     if (path.startsWith("services/mail-forwarder/") || ["deploy/mail-forwarder.compose.yml", "deploy/release-mail-forwarder.sh"].includes(path)) {
       surfaces.add("mail-forwarder"); classified = true;
     }
-    if (["src/domain/profileSynthesis.ts", "scripts/profile-synthesis-worker.mjs", "scripts/position-assessment-email-worker.mjs", "deploy/release-profile-synthesis.sh", "deploy/profile-synthesis.compose.yml"].includes(path) || path.startsWith("services/profile-synthesis/")) {
+    if (["src/domain/profileSynthesis.ts", "src/domain/occupationalRag.ts", "scripts/occupational-rag-worker.mjs", "scripts/profile-synthesis-worker.mjs", "scripts/position-assessment-email-worker.mjs", "deploy/release-profile-synthesis.sh", "deploy/profile-synthesis.compose.yml"].includes(path) || path.startsWith("services/profile-synthesis/")) {
       surfaces.add("profile-synthesis"); classified = true;
     }
     if (contextSource(path)) {

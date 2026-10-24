@@ -1,4 +1,5 @@
 import {drainAssessmentEmails} from "./position-assessment-email-worker.mjs";
+import {readOccupationalModelConfig,runOccupationalRagOnce} from "./occupational-rag-worker.mjs";
 import { readFile, writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 import { resolve } from "node:path";
@@ -98,8 +99,17 @@ export async function loadConfig() {
 }
 async function main() {
   const config = await loadConfig();
+  let occupationalConfig=null;
+  try{occupationalConfig=readOccupationalModelConfig(process.env);}catch{console.error('{"event":"occupational_rag_configuration_unavailable"}');}
+  let occupationalTask=null;
   let stopping = false; process.on("SIGTERM", () => { stopping = true; }); process.on("SIGINT", () => { stopping = true; });
   while (!stopping) {
+    if(occupationalConfig&&!occupationalTask&&!process.argv.includes('--once')){
+      occupationalTask=runOccupationalRagOnce({...occupationalConfig,historyClient:createWorkerHistory(config)},(name,args)=>rpc(config,name,args))
+        .then(state=>{if(state.state!=='idle')console.log(JSON.stringify({event:'occupational_rag',...state}));})
+        .catch(()=>console.error('{"event":"occupational_rag_unavailable"}'))
+        .finally(()=>{occupationalTask=null;});
+    }
     try {
       try {await drainAssessmentEmails(config);} catch {console.error(JSON.stringify({event:"assessment_outbox_unavailable"}));}
       const state = await runOnce(config);

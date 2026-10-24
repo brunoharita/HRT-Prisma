@@ -16,6 +16,7 @@ import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
 import {KnowledgeStructure} from "../components/KnowledgeStructure";
 import {KnowledgeSourceMonitor} from "../components/KnowledgeSourceMonitor";
 import { ProfessionalAreas } from "../components/ProfessionalAreas";
+import {OccupationalRagPanel,OccupationalGlobalContribution} from "../components/OccupationalRagPanel";
 import { PrismaCard } from "../ui/PrismaCard";
 
 interface Props { profile: PlatformAccessProfile; activeMembership: OrganizationMembership | null; initialTab?:string; }
@@ -207,15 +208,15 @@ export function KnowledgePage({ profile, activeMembership, initialTab="overview"
     ]} /></div></>;
   }
   function inboxPanel() {
-    return <Table rowKey="id" loading={loading} dataSource={dashboard?.inbox ?? []} scroll={{ x: 820 }} columns={[
+    return <>{!isGlobal&&organizationId?<OccupationalRagPanel organizationId={organizationId} onChanged={()=>void load()} onManual={id=>{const row=dashboard?.inbox.find(x=>x.id===id);if(row){setSelectedInbox(row);setSuggestions([]);setDecisionReason("");setProposalLabel("");setProposalType("occupation");}}}/>:null}<Table rowKey="id" loading={loading} dataSource={(dashboard?.inbox ?? []).filter(x=>!x.isOccupationalRag)} scroll={{ x: 820 }} columns={[
       { title: "Termo", dataIndex: "originalTerm" }, { title: "Ocorrências", dataIndex: "occurrenceCount" },
       { title: "Primeira vez", dataIndex: "firstSeenAt", render: formatDate }, { title: "Última vez", dataIndex: "lastSeenAt", render: formatDate },
       { title: "Status", dataIndex: "status", render: statusTag },
       { title: "Ação", render: (_, row) => <Space><Button onClick={() => { setSelectedInbox(row); setSuggestions([]); setDecisionReason(""); setProposalLabel(""); }}>Revisar</Button><Button icon={<GlobalOutlined />} onClick={async () => knowledgeOperation.run(async () => { try { await knowledgeService.research(row.id); message.success("Pesquisa enfileirada."); await load(); } catch (reason) { showFailure(reason instanceof Error ? reason.message : "Falha na pesquisa."); } })}>Pesquisar</Button></Space> },
-    ]} />;
+    ]} /></>;
   }
   function proposalsPanel() {
-    return <div className="prisma-knowledge-proposals">{dashboard?.proposals.length ? dashboard.proposals.filter(p => p.proposedConcept.concept_type !== "professional_area").map((proposal) => <PrismaCard key={proposal.id} title={proposal.proposedConcept.canonical_label ?? proposal.observedTerm}>
+    return <div className="prisma-knowledge-proposals">{dashboard?.proposals.length ? dashboard.proposals.filter(p => p.proposedConcept.concept_type !== "professional_area").map((proposal) => proposal.originWorkflow==="occupational-rag-1.0.0"||proposal.originTermId?<OccupationalGlobalContribution key={proposal.id} proposal={proposal} concepts={dashboard.concepts} onChanged={()=>void load()}/>:<PrismaCard key={proposal.id} title={proposal.proposedConcept.canonical_label ?? proposal.observedTerm}>
       <Space direction="vertical" size="middle" style={{ width: "100%" }}><Space wrap><Tag>{proposal.proposedConcept.concept_type === "occupation" ? "Ocupação" : proposal.proposedConcept.concept_type === "certification" ? "Certificação legada" : "Competência"}</Tag><Tag color={proposal.scope === "global" ? "blue" : "purple"}>{proposal.scope === "organization" ? "Proposta legada · Empresa ativa" : proposal.originOrganizationId ? "Contribuição de empresa" : "Global Prisma"}</Tag>{statusTag(proposal.status)}</Space>
       <Typography.Paragraph>{proposal.proposedConcept.description ?? "Sem descrição."}</Typography.Paragraph>
       {proposal.proposedConcept.concept_type !== "occupation" ? <><Select aria-label={`Subagrupador de ${proposal.proposedConcept.canonical_label ?? "proposta"}`} placeholder="Classifique antes de aprovar" value={approvalSubgroups[proposal.id] ?? proposal.proposedConcept.subgroup_id ?? null} onChange={(value) => setApprovalSubgroups((current) => ({ ...current, [proposal.id]: value }))} options={subgroupSelectOptions(subgroups, proposal.scope)} /><SubgroupGuide subgroups={subgroups} id={approvalSubgroups[proposal.id] ?? proposal.proposedConcept.subgroup_id ?? null} /></> : null}

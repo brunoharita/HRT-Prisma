@@ -3,11 +3,17 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.93.4
+version: 2.94.0
 last_verified: 2026-10-24
 ---
 
 # Estado atual do Prisma
+
+## Reconhecimento ocupacional — 3.2.0 em validação de publicação
+
+Implementação aprovada por Bruno em24/10/2026 e registrada em acordo/execução/AoT occupational-rag-v320 e ADR-089. Reutiliza Knowledge sem tabelas novas: expansão lexical e reranking privado recuperam conceitos aprovados, empresa antes de global; IA só prepara proposta pendente. Empresa revisa associação/criação/related_to; aprovação envia contribuição global sanitizada automaticamente. Super aprova/mantém somente local, com motivo opcional e origem preservada. Disparo em versões de Posições/Perfis publicados, cursor5/lease8min/tentativas/dedupe, recuperação manual, sem backfill/pesos/decisões históricas alterados.
+
+PoC real sintética Qwen4B/BGE-M3 privados gratuitos com pins/digests: Vendedor/SDR/Logística-transportes passaram; Revenue ambíguo sustentado, não equivalência. Limitações de recall/latência/memória explícitas no ADR; nenhuma API paga ou classificação oficial inventada. SQL/RLS/negativos/lote1.200cargos, worker/regressão e três telas desktop/mobile validados localmente. Registry3.2.0. CI, migration remota e runtime/smoke ainda não comprovados; não interpretar implementação ou prévias como rollout.
 
 ## Origem única da verdade — diretriz aprovada em 24/10/2026
 

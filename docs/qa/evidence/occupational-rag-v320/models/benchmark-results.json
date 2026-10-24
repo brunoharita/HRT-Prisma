@@ -1,0 +1,342 @@
+[
+  {
+    "model": "qwen3:4b-instruct-2507-q4_K_M",
+    "case": "seller",
+    "pass": true,
+    "output": {
+      "aliases": [
+        "Vendedor"
+      ],
+      "canonical_label": "Sales Representative",
+      "decision": "alias:sales",
+      "description": "Identificar clientes, negociar condições comerciais e fechar vendas de produtos.",
+      "evidence": [
+        {
+          "quote": "Identificar clientes, negociar condições comerciais e fechar vendas de produtos.",
+          "source_id": "context"
+        }
+      ],
+      "rationale": "O cargo de 'Vendedor' corresponde diretamente às responsabilidades descritas no contexto, que são replicadas no perfil do Sales Representative.",
+      "related_ids": [
+        "presales"
+      ],
+      "unresolved_questions": [
+        "O vendedor atua em B2B ou B2C? Qual o alcance geográfico das vendas?"
+      ]
+    },
+    "ms": 89003,
+    "promptTokens": 909,
+    "outputTokens": 187,
+    "draft": {
+      "aliases": [
+        "Vendedor"
+      ],
+      "canonical_label": "Sales Representative",
+      "decision": "alias",
+      "description": "Identificar clientes, negociar condições comerciais e fechar vendas de produtos.",
+      "evidence": [
+        {
+          "quote": "Identificar clientes, negociar condições comerciais e fechar vendas de produtos.",
+          "source_id": "context"
+        }
+      ],
+      "rationale": "O cargo de 'Vendedor' corresponde diretamente às responsabilidades descritas no contexto, que são replicadas no perfil do Sales Representative.",
+      "related_ids": [
+        "presales"
+      ],
+      "unresolved_questions": [
+        "O vendedor atua em B2B ou B2C? Qual o alcance geográfico das vendas?"
+      ],
+      "target_id": "sales"
+    }
+  },
+  {
+    "model": "qwen3:4b-instruct-2507-q4_K_M",
+    "case": "sdr",
+    "pass": true,
+    "output": {
+      "aliases": [
+        "Especialista de pré-vendas"
+      ],
+      "canonical_label": "Especialista de pré-vendas",
+      "decision": "alias:presales",
+      "description": "Prospectar clientes B2B, qualificar oportunidades e agendar reuniões para os executivos comerciais. Não realiza o fechamento.",
+      "evidence": [
+        {
+          "quote": "Prospectar clientes B2B, qualificar oportunidades e agendar reuniões para os executivos comerciais. Não realiza o fechamento.",
+          "source_id": "context"
+        }
+      ],
+      "rationale": "O escopo funcional de 'Especialista de pré-vendas' corresponde exatamente às responsabilidades descritas no contexto.",
+      "related_ids": [],
+      "unresolved_questions": [
+        "O que significa 'executivos comerciais' no contexto de B2B?"
+      ]
+    },
+    "ms": 84725,
+    "promptTokens": 924,
+    "outputTokens": 212,
+    "draft": {
+      "aliases": [
+        "Especialista de pré-vendas"
+      ],
+      "canonical_label": "Especialista de pré-vendas",
+      "decision": "alias",
+      "description": "Prospectar clientes B2B, qualificar oportunidades e agendar reuniões para os executivos comerciais. Não realiza o fechamento.",
+      "evidence": [
+        {
+          "quote": "Prospectar clientes B2B, qualificar oportunidades e agendar reuniões para os executivos comerciais. Não realiza o fechamento.",
+          "source_id": "context"
+        }
+      ],
+      "rationale": "O escopo funcional de 'Especialista de pré-vendas' corresponde exatamente às responsabilidades descritas no contexto.",
+      "related_ids": [],
+      "unresolved_questions": [
+        "O que significa 'executivos comerciais' no contexto de B2B?"
+      ],
+      "target_id": "presales"
+    }
+  },
+  {
+    "model": "qwen3:4b-instruct-2507-q4_K_M",
+    "case": "logistics-transport",
+    "pass": true,
+    "output": {
+      "aliases": [
+        "Gestor de transportes"
+      ],
+      "canonical_label": "Gestor de transportes",
+      "decision": "alias:transport",
+      "description": "Planejar rotas, negociar fretes e gerir transportadoras. Não gerencia estoque ou armazenagem.",
+      "evidence": [
+        {
+          "quote": "Planejar rotas, negociar fretes e gerir transportadoras. Não gerencia estoque ou armazenagem.",
+          "source_id": "context"
+        }
+      ],
+      "rationale": "O cargo de 'Gestor de transportes' possui as responsabilidades exatas descritas no contexto.",
+      "related_ids": [
+        "stock"
+      ],
+      "unresolved_questions": [
+        "O gestor de transportes atua diretamente em rotas e fretes, mas há necessidade de definir se há interação com equipes de logística ou de operações de armazenagem?"
+      ]
+    },
+    "ms": 85665,
+    "promptTokens": 920,
+    "outputTokens": 221,
+    "draft": {
+      "aliases": [
+        "Gestor de transportes"
+      ],
+      "canonical_label": "Gestor de transportes",
+      "decision": "alias",
+      "description": "Planejar rotas, negociar fretes e gerir transportadoras. Não gerencia estoque ou armazenagem.",
+      "evidence": [
+        {
+          "quote": "Planejar rotas, negociar fretes e gerir transportadoras. Não gerencia estoque ou armazenagem.",
+          "source_id": "context"
+        }
+      ],
+      "rationale": "O cargo de 'Gestor de transportes' possui as responsabilidades exatas descritas no contexto.",
+      "related_ids": [
+        "stock"
+      ],
+      "unresolved_questions": [
+        "O gestor de transportes atua diretamente em rotas e fretes, mas há necessidade de definir se há interação com equipes de logística ou de operações de armazenagem?"
+      ],
+      "target_id": "transport"
+    }
+  },
+  {
+    "model": "qwen3:4b-instruct-2507-q4_K_M",
+    "case": "revenue",
+    "pass": false,
+    "output": {
+      "aliases": [
+        "Arquiteto de Revenue"
+      ],
+      "canonical_label": "Arquiteto de Revenue",
+      "decision": "ambiguous",
+      "description": "Desenhar processos integrados de marketing, vendas e sucesso do cliente. Definir indicadores de receita, identificar gargalos e estruturar previsibilidade comercial.",
+      "evidence": [
+        {
+          "quote": "Desenhar processos integrados de marketing, vendas e sucesso do cliente. Definir indicadores de receita, identificar gargalos e estruturar previsibilidade comercial.",
+          "source_id": "context"
+        }
+      ],
+      "rationale": "Nenhum candidato possui responsabilidades que cobrem a integração de marketing, vendas e sucesso do cliente com definição de indicadores de receita e previsibilidade comercial.",
+      "related_ids": [
+        "commercial",
+        "sales"
+      ],
+      "unresolved_questions": [
+        "O que significa 'previsibilidade comercial' no contexto de um arquiteto de receita?",
+        "Como a função de arquiteto de revenue se diferencia da de gerente comercial em termos de escopo de processos integrados?"
+      ]
+    },
+    "ms": 102482,
+    "promptTokens": 935,
+    "outputTokens": 275,
+    "draft": {
+      "aliases": [
+        "Arquiteto de Revenue"
+      ],
+      "canonical_label": "Arquiteto de Revenue",
+      "decision": "ambiguous",
+      "description": "Desenhar processos integrados de marketing, vendas e sucesso do cliente. Definir indicadores de receita, identificar gargalos e estruturar previsibilidade comercial.",
+      "evidence": [
+        {
+          "quote": "Desenhar processos integrados de marketing, vendas e sucesso do cliente. Definir indicadores de receita, identificar gargalos e estruturar previsibilidade comercial.",
+          "source_id": "context"
+        }
+      ],
+      "rationale": "Nenhum candidato possui responsabilidades que cobrem a integração de marketing, vendas e sucesso do cliente com definição de indicadores de receita e previsibilidade comercial.",
+      "related_ids": [
+        "commercial",
+        "sales"
+      ],
+      "unresolved_questions": [
+        "O que significa 'previsibilidade comercial' no contexto de um arquiteto de receita?",
+        "Como a função de arquiteto de revenue se diferencia da de gerente comercial em termos de escopo de processos integrados?"
+      ],
+      "target_id": ""
+    }
+  },
+  {
+    "case": "title-only",
+    "pass": true,
+    "method": "deterministic guard"
+  },
+  {
+    "model": "qwen3:1.7b-q4_K_M",
+    "case": "search-expansion",
+    "pass": true,
+    "terms": [
+      "Arquiteto de Revenue",
+      "Processos de Marketing",
+      "Indicadores de Receita",
+      "Gargalos de Vendas",
+      "Previsibilidade Comercial",
+      "Estruturar Comercial",
+      "Marketing e Vendas",
+      "Indicadores de Sucesso do Cliente"
+    ],
+    "ms": 14920
+  },
+  {
+    "model": "qwen3:4b-instruct-2507-q4_K_M",
+    "case": "search-expansion",
+    "pass": true,
+    "terms": [
+      "Arquiteto de Revenue",
+      "arquiteto revenue",
+      "desenhar processos marketing vendas cliente",
+      "indicadores receita comercial",
+      "gargalos vendas",
+      "previsibilidade comercial",
+      "processos integrados revenue",
+      "estruturar receita",
+      "análise receita comercial"
+    ],
+    "ms": 30124
+  },
+  {
+    "model": "bge-m3",
+    "case": "seller",
+    "pass": true,
+    "ranked": [
+      "sales",
+      "commercial",
+      "accountant",
+      "presales",
+      "cook"
+    ],
+    "ms": 260,
+    "catalogMs": 6094
+  },
+  {
+    "model": "bge-m3",
+    "case": "sdr",
+    "pass": true,
+    "ranked": [
+      "presales",
+      "sales",
+      "commercial",
+      "accountant",
+      "transport"
+    ],
+    "ms": 307,
+    "catalogMs": 6094
+  },
+  {
+    "model": "bge-m3",
+    "case": "logistics-transport",
+    "pass": true,
+    "ranked": [
+      "transport",
+      "stock",
+      "commercial",
+      "nurse",
+      "sales"
+    ],
+    "ms": 276,
+    "catalogMs": 6094
+  },
+  {
+    "model": "bge-m3",
+    "case": "revenue",
+    "pass": true,
+    "ranked": [
+      "software",
+      "sales",
+      "accountant",
+      "commercial",
+      "cook"
+    ],
+    "ms": 336,
+    "catalogMs": 6094
+  },
+  {
+    "model": "bge-m3",
+    "case": "stock-different-title",
+    "pass": true,
+    "ranked": [
+      "stock",
+      "transport",
+      "commercial",
+      "nurse",
+      "cook"
+    ],
+    "ms": 301,
+    "catalogMs": 6094
+  },
+  {
+    "model": "bge-m3",
+    "case": "nurse-en",
+    "pass": true,
+    "ranked": [
+      "nurse",
+      "cook",
+      "sales",
+      "accountant",
+      "commercial"
+    ],
+    "ms": 273,
+    "catalogMs": 6094
+  },
+  {
+    "model": "bge-m3",
+    "case": "cook-en",
+    "pass": true,
+    "ranked": [
+      "cook",
+      "accountant",
+      "nurse",
+      "stock",
+      "sales"
+    ],
+    "ms": 195,
+    "catalogMs": 6094
+  }
+]

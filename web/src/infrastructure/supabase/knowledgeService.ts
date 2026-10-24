@@ -4,10 +4,50 @@ import { supabaseFunctionOperationError, supabaseOperationError } from "../../do
 import type { Json } from "./database.types";
 import { supabase } from "./client";
 import { readCompetencyTaxonomySearch } from "../../domain/competencyTaxonomy";
+import {readOccupationalRagReviews} from "../../domain/occupationalRagReview";
 import { isKnowledgeProposalVisible } from "../../shared/knowledgeProposalVisibility";
 import type { CompetencySubgroupOption } from "../../domain/profileCompetencyCuration";
 
 export const knowledgeService = {
+  async loadOccupationalReviews(organizationId:string){
+    const {data,error}=await supabase.rpc("load_occupational_rag_reviews" as never,{p_organization_id:organizationId} as never);
+    if(error)throw supabaseOperationError(error,"Não foi possível carregar o reconhecimento de cargos.");
+    return readOccupationalRagReviews(data);
+  },
+  async requestOccupationalRecognition(organizationId:string,title:string,responsibilities:string){
+    const {data,error}=await supabase.rpc("request_occupational_rag" as never,{p_organization_id:organizationId,p_title:title,p_responsibilities:responsibilities} as never);
+    if(error)throw supabaseOperationError(error,"Não foi possível solicitar o reconhecimento do cargo.");return data as string|null;
+  },
+  async retryOccupationalRecognition(inboxId:string){
+    const {error}=await supabase.rpc("retry_occupational_rag" as never,{p_inbox_id:inboxId} as never);
+    if(error)throw supabaseOperationError(error,"Não foi possível retomar o reconhecimento.");
+  },
+  async prepareOccupationalManualReview(inboxId:string){
+    const {error}=await supabase.rpc("prepare_occupational_manual_review" as never,{p_inbox_id:inboxId} as never);
+    if(error)throw supabaseOperationError(error,"Não foi possível iniciar a revisão manual.");
+  },
+  async searchOccupationalConcepts(organizationId:string,query:string){
+    const suggestions=await this.suggestConcepts(organizationId,query);
+    const ids=suggestions.filter(x=>x.conceptType==="occupation").map(x=>x.id);
+    if(!ids.length)return [];
+    const {data,error}=await supabase.from("knowledge_concepts").select("id,canonical_label,description,version,scope").in("id",ids).eq("status","approved").eq("concept_type","occupation");
+    if(error)throw supabaseOperationError(error,"Não foi possível conferir os conceitos.");
+    return (data??[]).map(c=>({id:c.id,canonicalLabel:c.canonical_label,description:c.description,version:c.version,scope:c.scope}));
+  },
+  async loadOccupationalOrigin(proposalId:string):Promise<{companyName:string;label:string;version:number;active:boolean}>{
+    const {data,error}=await supabase.rpc("load_occupational_rag_origin" as never,{p_proposal_id:proposalId} as never);
+    if(error)throw supabaseOperationError(error,"Não foi possível conferir a origem da contribuição.");
+    const origin=data as unknown as {companyName:string;label:string;version:number;active:boolean};
+    if(!origin||typeof origin.companyName!=="string"||typeof origin.label!=="string"||!Number.isInteger(origin.version)||typeof origin.active!=="boolean")throw Error("Origem incompatível com esta versão.");return origin;
+  },
+  async approveOccupationalProposal(proposalId:string,inputHash:string,edited:{canonical_label:string;description:string;aliases:string[];related_ids:string[];target_version?:number|undefined},targetId:string|null,reason:string){
+    const {data,error}=await supabase.rpc("review_occupational_rag_proposal" as never,{p_proposal_id:proposalId,p_input_hash:inputHash,p_edited:edited,p_target_id:targetId,p_reason:reason||null} as never);
+    if(error)throw supabaseOperationError(error,"Não foi possível aprovar a proposta. Confira o estado e as fontes.");return data;
+  },
+  async approveOccupationalGlobalAlias(proposalId:string,targetId:string|null,reason:string){
+    const {error}=await supabase.rpc("approve_occupational_global_alias" as never,{p_proposal_id:proposalId,p_target_id:targetId,p_reason:reason||null} as never);
+    if(error)throw supabaseOperationError(error,"Não foi possível aprovar o nome alternativo global.");
+  },
   async loadDashboard(profile: PlatformAccessProfile, organizationId: string | null): Promise<KnowledgeDashboard> {
     const [sourcesResult, versionsResult, conceptsResult, termsResult, mappingsResult, relationsResult, inboxResult, proposalsResult, impactsResult, settingsResult] = await Promise.all([
       supabase.from("knowledge_sources").select("*").order("name"),
@@ -40,7 +80,8 @@ export const knowledgeService = {
           source: sourcesById.get(relation.source_id ?? "")?.name ?? "Fonte", sourceVersion: versionsById.get(relation.source_version_id ?? "")?.external_version ?? "Versão não disponível", attributes: relation.relation_attributes })),
       })),
       inbox: inbox.map((row) => ({ id: row.id, originalTerm: row.original_term, occurrenceCount: row.occurrence_count, firstSeenAt: row.first_seen_at, lastSeenAt: row.last_seen_at, scope: row.scope, status: row.status,
-        candidateConcepts: row.candidate_concept_ids.flatMap((id) => { const concept = conceptsById.get(id); return concept ? [{ id, label: concept.canonical_label }] : []; }), observationCount: row.observation_ids.length })),
+        candidateConcepts: row.candidate_concept_ids.flatMap((id) => { const concept = conceptsById.get(id); return concept ? [{ id, label: concept.canonical_label }] : []; }), observationCount: row.observation_ids.length,
+        isOccupationalRag: (row as typeof row & {occupation_context?:{contract?:string}|null}).occupation_context?.contract === "occupational-rag-1.0.0" })),
       proposals: proposals.map(mapProposal),
       impacts: (impactsResult.data ?? []).map((row) => ({ id: row.id, personId: row.person_id, profileId: row.profile_id, conceptId: row.concept_id, policy: row.policy, status: row.status, createdAt: row.created_at })),
       settings: settingsResult.data ? { allowExternalKnowledgeEnrichment: settingsResult.data.allow_external_knowledge_enrichment, reinterpretationPolicy: settingsResult.data.reinterpretation_policy } : { allowExternalKnowledgeEnrichment: false, reinterpretationPolicy: "off" },
@@ -174,6 +215,9 @@ function mapProposal(row: { id: string; inbox_id: string; scope: "global" | "org
       match: typeof candidate.match === "string" ? candidate.match : undefined,
     })) : [],
     originOrganizationId: row.origin_organization_id,
+    originTermId: (row as typeof row & {origin_term_id?:string|null}).origin_term_id??null,
+    originWorkflow:typeof payload.origin_workflow==="string"?payload.origin_workflow:null,
+    targetConceptId:(row as typeof row & {target_concept_id?:string|null}).target_concept_id??null,
   };
 }
 function isObject(value: unknown): value is Record<string, Json | undefined> { return typeof value === "object" && value !== null && !Array.isArray(value); }

@@ -1,0 +1,65 @@
+[
+  {
+    "case": "logistics-stock",
+    "pass": true,
+    "draft": {
+      "aliases": [
+        "Gestor de estoque"
+      ],
+      "canonical_label": "Gestor de estoque",
+      "decision": "alias",
+      "description": "Gerenciar recebimento, armazenagem, inventários e expedição, liderando a equipe de estoque.",
+      "evidence": [
+        {
+          "quote": "Gerenciar recebimento, armazenagem, inventários e expedição, liderando a equipe de estoque.",
+          "source_id": "context"
+        }
+      ],
+      "rationale": "O cargo 'Gestor de estoque' possui as responsabilidades exatas do escopo de 'Gerente de Logística' no contexto de gestão de estoque e equipe.",
+      "related_ids": [
+        "transport"
+      ],
+      "unresolved_questions": [
+        "O gestor de logística inclui atividades de transporte ou apenas gestão de estoque?"
+      ],
+      "target_id": "stock"
+    },
+    "durationMs": 89976,
+    "promptTokens": 698,
+    "outputTokens": 213
+  },
+  {
+    "case": "sdr-radio",
+    "pass": true,
+    "draft": {
+      "aliases": [
+        "Especialista de pré-vendas",
+        "Gestor de estoque",
+        "Gestor de transportes",
+        "Gerente comercial"
+      ],
+      "canonical_label": "Sales Representative",
+      "decision": "ambiguous",
+      "description": "Desenvolver aplicações de rádio definido por software, processar sinais digitais e testar transmissores de radiofrequência.",
+      "evidence": [
+        {
+          "quote": "Desenvolver aplicações de rádio definido por software, processar sinais digitais e testar transmissores de radiofrequência.",
+          "source_id": "context"
+        }
+      ],
+      "rationale": "Nenhum dos cargos listados possui responsabilidades alinhadas ao desenvolvimento de aplicações de rádio definido por software ou processamento de sinais digitais.",
+      "related_ids": [
+        "presales",
+        "stock"
+      ],
+      "unresolved_questions": [
+        "O cargo de 'Especialista de pré-vendas' pode incluir atividades técnicas de desenvolvimento de software para rádio?",
+        "Há algum cargo com experiência em processamento de sinais digitais ou testes de transmissores de radiofrequência?"
+      ],
+      "target_id": ""
+    },
+    "durationMs": 78796,
+    "promptTokens": 702,
+    "outputTokens": 290
+  }
+]

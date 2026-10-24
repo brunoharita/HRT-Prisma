@@ -1,0 +1,30 @@
+[
+  {
+    "model": "qwen3:1.7b-q4_K_M",
+    "case": "seller",
+    "pass": false,
+    "error": "RAG_TARGET_INVALID",
+    "ms": 73042
+  },
+  {
+    "model": "qwen3:1.7b-q4_K_M",
+    "case": "sdr",
+    "pass": false,
+    "error": "RAG_TARGET_INVALID",
+    "ms": 50344
+  },
+  {
+    "model": "qwen3:1.7b-q4_K_M",
+    "case": "logistics-transport",
+    "pass": false,
+    "error": "RAG_REFERENCE_INVALID",
+    "ms": 52907
+  },
+  {
+    "model": "qwen3:1.7b-q4_K_M",
+    "case": "revenue",
+    "pass": false,
+    "error": "RAG_REFERENCE_INVALID",
+    "ms": 53708
+  }
+]

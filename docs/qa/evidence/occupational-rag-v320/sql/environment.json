@@ -1,0 +1,17 @@
+{
+  "environment": "Owned PostgreSQL17 local schema-only clone 127.0.0.1:55479",
+  "dependencies": [
+    "20260919040000_m77_company_knowledge_global_governance.sql",
+    "20260919041500_m77_global_contribution_review_actions.sql",
+    "20260919164100_m77_legacy_company_proposal_transition.sql",
+    "20260920110000_m81_competency_structure.sql",
+    "20260920112000_m81_competency_curation.sql",
+    "20261016153000_knowledge_global_decisions_v2.sql",
+    "20261009140000_generic_ai_request_history.sql",
+    "20261009160000_ai_history_worker_boundary.sql"
+  ],
+  "newTables": 0,
+  "syntheticOnly": true,
+  "transaction": "rolled back",
+  "result": "PASS"
+}

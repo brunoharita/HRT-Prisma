@@ -1,0 +1,18 @@
+/prisma-web|sha256:214df02c48dbe76896414d6d11be0cff08ae18298f25d1edc9732bc166e582c5|2026-10-23T22:18:31.008871761Z|0
+/horus-web|sha256:9fb9c4d2ed9cb3d47daaf31ac9a21d8865e4b04139f6c30e90e3d92f7ac76c32|2026-10-23T00:18:13.483493093Z|0
+/prisma-profile-synthesis|sha256:d0fe2c984bc4e660f1ffd139b888f8df3bc93a600984566af8fc01a5c4508cdd|2026-10-18T21:55:05.272393756Z|0
+/prisma-parser-ia|sha256:5178559d9de269d99eb0f0439022ebcba42d745f50c592747d788ef13bf83630|2026-10-18T21:54:49.574818928Z|0
+/prisma-paddle-gateway|sha256:cf414afdb189d3906df09633566e75d56a56dc7779e21a73e80830b0b71c9b73|2026-10-17T03:50:46.161234533Z|0
+/hrt-mail-forwarder|sha256:ffc0f2a53e093cec01c4a91e652b29b0ede4808ecc2f461df9e6faa52940cc31|2026-10-17T03:50:46.167802994Z|0
+/traefik-traefik-1|sha256:f86a2cab1b5c649070c49f883c743dd32d8485a56e3368c5f93b9e91f1e91259|2026-10-17T03:50:46.159859692Z|0
+5368717312
+low 0
+high 0
+max 10040
+oom 0
+oom_kill 0
+oom_group_kill 0
+               total        used        free      shared  buff/cache   available
+Mem:            7940         814        2244           1        5181        7126
+Swap:              0           0           0
+prisma-occupational-model-poc|47.1MiB / 5GiB|0.00%
