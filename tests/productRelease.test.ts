@@ -10,15 +10,17 @@ test("accepted deliveries determine the displayed version and a new movement res
   assert.equal(current.deliveries.length, 2);
 });
 
-test("registro oficial expõe v3.1.4 por decisão de Bruno e preserva entregas históricas", () => {
-  assert.equal(PRISMA_RELEASE.displayVersion, "v3.1.4");
-  assert.equal(PRISMA_RELEASE.movement, 1);
-  assert.equal(PRISMA_RELEASE.delivery, 4);
-  const currentMovement = PRISMA_RELEASE_HISTORY.at(-1)!;
-  assert.equal(calculateProductRelease([...PRISMA_RELEASE_HISTORY.slice(0,-1), {...currentMovement, deliveries:currentMovement.deliveries.slice(0,-1)}]).version,"3.1.3");
-  assert.equal(calculateProductRelease(PRISMA_RELEASE_HISTORY.slice(0,-1)).version,"3.0.7");
-  assert.equal(calculateProductRelease(PRISMA_RELEASE_HISTORY.slice(0,-2)).version,"2.9.0");
-  const history = PRISMA_RELEASE_HISTORY.slice(0,-3);
+test("registro oficial expõe v3.2.0 por decisão de Bruno e preserva entregas históricas", () => {
+  assert.equal(PRISMA_RELEASE.displayVersion, "v3.2.0");
+  assert.equal(PRISMA_RELEASE.movement, 2);
+  assert.equal(PRISMA_RELEASE.delivery, 0);
+  const before320 = PRISMA_RELEASE_HISTORY.slice(0,-1);
+  assert.equal(calculateProductRelease(before320).version,"3.1.4");
+  const currentMovement = before320.at(-1)!;
+  assert.equal(calculateProductRelease([...before320.slice(0,-1), {...currentMovement, deliveries:currentMovement.deliveries.slice(0,-1)}]).version,"3.1.3");
+  assert.equal(calculateProductRelease(before320.slice(0,-1)).version,"3.0.7");
+  assert.equal(calculateProductRelease(before320.slice(0,-2)).version,"2.9.0");
+  const history = before320.slice(0,-3);
   assert.equal(calculateProductRelease(history).version,"2.8.1");
   assert.equal(calculateProductRelease(history.slice(0,-1)).version,"2.7.8");
   assert.equal(calculateProductRelease(history.slice(0,-2)).version,"2.6.2");
