@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 569
-source_manifest_sha256: ccae060eea0fc5e7472f22415a91419216a038a941666c59db27db3081da8e0a
+source_manifest_sha256: cac76018e245a48dc00f6687ac6bd22cb38629ad724aaf0a328cfbcced7f46c6
 -->
 
 # Tudo sobre o Prisma
@@ -2651,15 +2651,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.94.4
+version: 2.94.5
 last_verified: 2026-10-24
 ---
 
 # Estado atual do Prisma
 
-## Reconhecimento em Corrigir associação — implementação 3.2.1
+## Reconhecimento em Corrigir associação — 3.2.1 publicada
 
-Implementação autorizada por Bruno: reconhecimento explícito no drawer de referência ocupacional da Posição, usando título/missão/responsabilidades e a mesma fila RAG do salvamento. Candidatos elegíveis e revisão da Knowledge reutilizados; aprovação local e associação na Posição são decisões distintas. Sem tabelas/modelos/pesos/histórico alterados. Busca paginada deixa de montar referências completas para verificar elegibilidade, mantém publicação/escopo/reconciliação e distingue erro de ausência. Testes dirigidos, SQL local/concorrência, browser e rollout são documentados no AoT `docs/qa/aot-position-rag-v321.md`; publicação não é presumida deste texto. Versão solicitada 3.2.1, seguindo incremento do terceiro número para esta melhoria.
+Reconhecimento explícito no drawer de referência ocupacional da Posição, usando título/missão/responsabilidades e a mesma fila RAG do salvamento. Candidatos elegíveis e revisão da Knowledge reutilizados; aprovação local e associação na Posição são decisões distintas. Sem tabelas/modelos/pesos/histórico alterados. Busca paginada filtra termos antes de avaliar elegibilidade e não monta referências completas para verificar apenas a permissão; mantém publicação/escopo/reconciliação e distingue erro de ausência. Publicada em24/10/2026 no SHA funcional22f5c2b21a9f94e1692ee41d11e0d2976a54e247, CI branch40138646351/main40138999192 SUCCESS; migration20261024222951 com hash igual,144tabelas e hashes de conceitos/Perfis/Posições/aprovações preservados. Web75d0faf51c58 running0, sete serviços adjacentes inalterados;17checks públicos e login3.2.1 PASS após404 transitório, sem rebuild.65checks dirigidos/81browser/137SQL e tipos/build/contexto/lint PASS. Concorrência e limite de truncamento reusam a fila original. Jornada humana autenticada/LLM real neste painel NOT TESTED em produção; encerramento documental/ledger sem nova implantação. AoT `docs/qa/aot-position-rag-v321.md` reúne prova e limites. Incremento do terceiro número conforme decisão do PO.
 
 ## Cartões de classificação do Conhecimento — correção 3.2.0
 
@@ -24952,9 +24952,9 @@ Fechamento mínimo: todos os D e P aplicáveis PASS com testes dirigidos/SQL loc
 | D-02 | RPC contextual + helper original de composição; fingerprint antigo inclusive limite de 3.500 caracteres; cliques/salvar e duas conexões concorrentes convergem para uma execução | PASS |
 | D-03 | Candidatos elegíveis e abertura do componente original por Inbox exata; browser prova aprovação de Knowledge e seleção da Posição separadas | PASS |
 | D-04/P-01 | Resposta tardia descartada por contexto/fechamento; humanos/requisitos/histórico/tenant/fontes e negativos SQL; nenhum catálogo/modelo/prompt novo | PASS |
-| D-05 | Plano requer somente migration seletiva e web; CI/publicação pendentes | NOT TESTED |
+| D-05 | CI branch40138646351/main40138999192 SUCCESS; migration20261024222951 com hash igual e web22f5c2b2 publicada, 17checks públicos/login/serviços preservados | PASS |
 | D-UX-01 | 60 checks em 1448/390/320 e screenshots de reconhecimento/revisão; drawer e ações manuais preservados | PASS |
-| CA-01 | Local PASS, rollout pendente | PARTIAL |
+| CA-01 | Local e rollout PASS; limites da jornada humana real abaixo | PASS |
 
 ## Diagnóstico
 
@@ -24974,7 +24974,13 @@ Referência do usuário é exemplo do fluxo/defeito. Mantidos drawer à direita,
 
 Rollback: web anterior retida; RPCs novas são aditivas, predicado e trigger mantêm assinatura/semântica. Se necessário, restaurar definições anteriores das funções alteradas por migration de avanço e usar web anterior; não apagar fila, conceitos ou decisões. Sem worker/modelo/Edge novo requerido. Advisors prévios: avisos de segurança existentes (7 anon definers, 147 authenticated definers, 40 RLS sem policy, proteção de senha); não são corrigidos neste escopo. As duas novas RPCs restringem execução a authenticated e validam admin/empresa no backend.
 
-CI, migration remota, smoke e sincronização pendentes. Sem QA remoto separado. Jornada autenticada humana e LLM real neste novo painel NOT TESTED em produção; nenhuma proposta/decisão real será criada para teste. Nenhum desvio de contrato identificado; rollout não é presumido pelo código.
+Publicada em 24/10/2026, SHA funcional `22f5c2b21a9f94e1692ee41d11e0d2976a54e247`, CI branch `40138646351` e main `40138999192` SUCCESS. Migration seletiva `20261024222951`/position_rag_v321: MD5 43d83461812d630d2d3701c472531dbe igual à fonte, SHA256 canônico 343693684294643898130bbeb73d48fb01e484962ae7d145a3903f617a0a6eab. As 144 tabelas, 30.257 conceitos, 21 Perfis, 23 versões de Posições e 12 aprovações mantêm contagens/hashes exatos antes/depois. RPCs novas authenticated-only, helpers privados sem grant público; autorização tenant/admin conferida. Advisors mantêm avisos prévios, acrescentando somente as duas APIs authenticated definer esperadas, sem novo acesso anon. Ledger incremental sincronizado sem reexecutar divergências históricas.
+
+Busca somente leitura com ator Super existente e organização Prisma: Gerente de Estoque retornou zero resultados textuais em 1829,16 ms; estoque retornou dois em 1298,37 ms; consulta vazia retornou zero em 1,48 ms. Isso comprova resposta sem timeout, não equivalência semântica nem ausência de uma função. Nenhuma associação, curadoria ou solicitação de IA real foi criada nesses probes.
+
+Web imagem `sha256:75d0faf51c58eda87f2db005663e51729df2563ab64b0d1d41714e211c752dc4`, running/zero reinícios, início2026-10-24T22:33:33.818311784Z; rollbackeded254fbc16 retido. O script recebeu404 no HEAD imediato da recriação e terminou com código22; verificação independente após estabilização passou 17checks de rotas/assets novos/anteriores/SHA/versão3.2.1/renderer/CSS e login público sem exceções. Não houve rebuild adicional. Sete serviços adjacentes, incluindo worker/modelo/Parser/Horus, preservam imagem/início/reinícios exatos. Recibos `evidence/position-rag-v321/production.json` e `production-db.json`.
+
+Fontes local/origin/VPS alinhadas ao SHA funcional no smoke. Fechamento documental/ledger posterior sincroniza fontes sem alterar esse runtime ou publicar outro destino; CI obrigatório mantido. Tipos/build, 65 testes/checks locais dirigidos (incluindo avisos e registros legíveis), 81checks browser e 137SQL PASS. Sem QA remoto separado. Jornada autenticada humana e LLM real neste novo painel NOT TESTED em produção; testes funcionais usam componentes reais e dados sintéticos localmente, sem decisões reais. Nenhum desvio de contrato identificado. Rascunhos não rastreados alheios preservados.
 
 ---
 

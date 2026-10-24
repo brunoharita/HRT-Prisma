@@ -1,0 +1,153 @@
+{
+  "database": {
+    "before": {
+      "tables": 144,
+      "concepts": {
+        "hash": "20a36fbe2acb091c67df9f1e19c7b882",
+        "count": 30257
+      },
+      "profiles": {
+        "hash": "1cde3748a8a2f010a5c1e8757773475d",
+        "count": 21
+      },
+      "approvals": {
+        "hash": "7e7931e6c74824a28c8c42180acb486a",
+        "count": 12
+      },
+      "positions": {
+        "hash": "9953c62ea8bd79af80a309abe2f86708",
+        "count": 23
+      }
+    },
+    "after": {
+      "tables": 144,
+      "concepts": {
+        "hash": "20a36fbe2acb091c67df9f1e19c7b882",
+        "count": 30257
+      },
+      "profiles": {
+        "hash": "1cde3748a8a2f010a5c1e8757773475d",
+        "count": 21
+      },
+      "approvals": {
+        "hash": "7e7931e6c74824a28c8c42180acb486a",
+        "count": 12
+      },
+      "positions": {
+        "hash": "9953c62ea8bd79af80a309abe2f86708",
+        "count": 23
+      }
+    },
+    "verification": {
+      "functions": [
+        {
+          "anon": false,
+          "name": "load_position_occupational_rag",
+          "config": [
+            "search_path=\"\""
+          ],
+          "schema": "public",
+          "authenticated": true
+        },
+        {
+          "anon": false,
+          "name": "m71_concept_allowed",
+          "config": [
+            "search_path=\"\""
+          ],
+          "schema": "private",
+          "authenticated": false
+        },
+        {
+          "anon": false,
+          "name": "position_rag_context",
+          "config": [
+            "search_path=\"\""
+          ],
+          "schema": "private",
+          "authenticated": false
+        },
+        {
+          "anon": false,
+          "name": "request_position_occupational_rag",
+          "config": [
+            "search_path=\"\""
+          ],
+          "schema": "public",
+          "authenticated": true
+        }
+      ],
+      "migration": {
+        "md5": "43d83461812d630d2d3701c472531dbe",
+        "name": "position_rag_v321",
+        "version": "20261024222951",
+        "statements": 1
+      }
+    },
+    "unchanged": true
+  },
+  "search": [
+    {
+      "term": "Gerente de Estoque",
+      "total": 0,
+      "returned": 0,
+      "elapsed_ms": "1829.16"
+    },
+    {
+      "term": "estoque",
+      "total": 2,
+      "returned": 2,
+      "elapsed_ms": "1298.37"
+    },
+    {
+      "term": "",
+      "total": 0,
+      "returned": 0,
+      "elapsed_ms": "1.48"
+    }
+  ],
+  "securityBefore": [
+    {
+      "name": "rls_enabled_no_policy",
+      "level": "INFO",
+      "count": 40
+    },
+    {
+      "name": "anon_security_definer_function_executable",
+      "level": "WARN",
+      "count": 7
+    },
+    {
+      "name": "authenticated_security_definer_function_executable",
+      "level": "WARN",
+      "count": 147
+    },
+    {
+      "name": "auth_leaked_password_protection",
+      "level": "WARN",
+      "count": 1
+    }
+  ],
+  "securityAfter": [
+    {
+      "name": "rls_enabled_no_policy",
+      "level": "INFO",
+      "count": 40
+    },
+    {
+      "name": "anon_security_definer_function_executable",
+      "level": "WARN",
+      "count": 7
+    },
+    {
+      "name": "authenticated_security_definer_function_executable",
+      "level": "WARN",
+      "count": 149
+    },
+    {
+      "name": "auth_leaked_password_protection",
+      "level": "WARN",
+      "count": 1
+    }
+  ]
+}

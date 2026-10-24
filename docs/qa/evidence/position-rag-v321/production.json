@@ -1,0 +1,134 @@
+{
+  "functionalSha": "22f5c2b21a9f94e1692ee41d11e0d2976a54e247",
+  "branchCi": {
+    "id": 40138646351,
+    "status": "SUCCESS"
+  },
+  "mainCi": {
+    "id": 40138999192,
+    "status": "SUCCESS"
+  },
+  "deployment": {
+    "surfaces": [
+      "database",
+      "web"
+    ],
+    "immediateHeadExit": 22,
+    "reason": "Transient 404 during container replacement; independent smoke passed, no rebuild"
+  },
+  "databaseEvidence": "production-db.json",
+  "smoke": {
+    "timestamp": "2026-10-24T22:34:48.709Z",
+    "expected": "22f5c2b21a9f94e1692ee41d11e0d2976a54e247",
+    "assets": [
+      "/assets/index-DqwgoXvX.js",
+      "/assets/rolldown-runtime-C0FnF6B9.js",
+      "/assets/antd-vendor-BaKnhCyQ.js",
+      "/assets/supabase-vendor-DoXvCMLf.js",
+      "/assets/react-vendor-BdxMnOeJ.js",
+      "/assets/antd-vendor-B5BXDqMa.css",
+      "/assets/index-B6uUBtyO.css"
+    ],
+    "checks": [
+      {
+        "name": "HTTP 200 /login",
+        "pass": true
+      },
+      {
+        "name": "HTTP 200 /knowledge",
+        "pass": true
+      },
+      {
+        "name": "HTTP 200 /",
+        "pass": true
+      },
+      {
+        "name": "hashed assets present",
+        "pass": true
+      },
+      {
+        "name": "HTTP 200 /assets/supabase-vendor-DoXvCMLf.js",
+        "pass": true
+      },
+      {
+        "name": "HTTP 200 /assets/antd-vendor-B5BXDqMa.css",
+        "pass": true
+      },
+      {
+        "name": "HTTP 200 /assets/index-B6uUBtyO.css",
+        "pass": true
+      },
+      {
+        "name": "HTTP 200 /assets/rolldown-runtime-C0FnF6B9.js",
+        "pass": true
+      },
+      {
+        "name": "HTTP 200 /assets/index-DqwgoXvX.js",
+        "pass": true
+      },
+      {
+        "name": "HTTP 200 /assets/react-vendor-BdxMnOeJ.js",
+        "pass": true
+      },
+      {
+        "name": "HTTP 200 /assets/antd-vendor-BaKnhCyQ.js",
+        "pass": true
+      },
+      {
+        "name": "expected functional SHA",
+        "pass": true
+      },
+      {
+        "name": "expected public version",
+        "pass": true
+      },
+      {
+        "name": "position recognition renderer",
+        "pass": true
+      },
+      {
+        "name": "scoped responsive recovery",
+        "pass": true
+      },
+      {
+        "name": "HTTP 200 /assets/index-CL5z08AP.css",
+        "pass": true
+      },
+      {
+        "name": "HTTP 200 /assets/index-DAHdKYY3.js",
+        "pass": true
+      }
+    ]
+  },
+  "login": {
+    "timestamp": "2026-10-24T22:34:14.716Z",
+    "version": "3.2.1",
+    "loginVisible": true,
+    "errors": []
+  },
+  "containers": {
+    "before": [
+      "/prisma-web|sha256:eded254fbc16301758a721e5f4b3c3f0ebf7e6b6a2161fc24cc595deafd3e955|running|2026-10-24T21:07:13.187434296Z|0",
+      "/prisma-profile-synthesis|sha256:eb43069f37b5a0c2a2a327b2e33aaf99aa9f07ee569edd5ce7c57c50a01e5a73|running|2026-10-24T06:41:58.195380567Z|0",
+      "/prisma-knowledge-model|sha256:4c5b27871a3239a717048f9b93057680a51b60c8119a7016aebb57f938e25e35|running|2026-10-24T06:41:50.878853905Z|0",
+      "/horus-web|sha256:9fb9c4d2ed9cb3d47daaf31ac9a21d8865e4b04139f6c30e90e3d92f7ac76c32|running|2026-10-23T00:18:13.483493093Z|0",
+      "/prisma-parser-ia|sha256:5178559d9de269d99eb0f0439022ebcba42d745f50c592747d788ef13bf83630|running|2026-10-18T21:54:49.574818928Z|0",
+      "/prisma-paddle-gateway|sha256:cf414afdb189d3906df09633566e75d56a56dc7779e21a73e80830b0b71c9b73|running|2026-10-17T03:50:46.161234533Z|0",
+      "/hrt-mail-forwarder|sha256:ffc0f2a53e093cec01c4a91e652b29b0ede4808ecc2f461df9e6faa52940cc31|running|2026-10-17T03:50:46.167802994Z|0",
+      "/traefik-traefik-1|sha256:f86a2cab1b5c649070c49f883c743dd32d8485a56e3368c5f93b9e91f1e91259|running|2026-10-17T03:50:46.159859692Z|0"
+    ],
+    "after": [
+      "/prisma-web|sha256:75d0faf51c58eda87f2db005663e51729df2563ab64b0d1d41714e211c752dc4|running|2026-10-24T22:33:33.818311784Z|0",
+      "/prisma-profile-synthesis|sha256:eb43069f37b5a0c2a2a327b2e33aaf99aa9f07ee569edd5ce7c57c50a01e5a73|running|2026-10-24T06:41:58.195380567Z|0",
+      "/prisma-knowledge-model|sha256:4c5b27871a3239a717048f9b93057680a51b60c8119a7016aebb57f938e25e35|running|2026-10-24T06:41:50.878853905Z|0",
+      "/horus-web|sha256:9fb9c4d2ed9cb3d47daaf31ac9a21d8865e4b04139f6c30e90e3d92f7ac76c32|running|2026-10-23T00:18:13.483493093Z|0",
+      "/prisma-parser-ia|sha256:5178559d9de269d99eb0f0439022ebcba42d745f50c592747d788ef13bf83630|running|2026-10-18T21:54:49.574818928Z|0",
+      "/prisma-paddle-gateway|sha256:cf414afdb189d3906df09633566e75d56a56dc7779e21a73e80830b0b71c9b73|running|2026-10-17T03:50:46.161234533Z|0",
+      "/hrt-mail-forwarder|sha256:ffc0f2a53e093cec01c4a91e652b29b0ede4808ecc2f461df9e6faa52940cc31|running|2026-10-17T03:50:46.167802994Z|0",
+      "/traefik-traefik-1|sha256:f86a2cab1b5c649070c49f883c743dd32d8485a56e3368c5f93b9e91f1e91259|running|2026-10-17T03:50:46.159859692Z|0",
+      "rollback|sha256:eded254fbc16301758a721e5f4b3c3f0ebf7e6b6a2161fc24cc595deafd3e955",
+      "22f5c2b21a9f94e1692ee41d11e0d2976a54e247"
+    ],
+    "preservedAdjacent": 7
+  }
+}

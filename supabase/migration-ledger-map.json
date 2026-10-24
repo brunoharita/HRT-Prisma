@@ -1699,6 +1699,19 @@
       "localStatementSha256": "f7bfeb46cef133450114288ad20ed024b2e081e0835efb47d79b8cb0d66ea1f3",
       "remoteStatementSha256": "f7bfeb46cef133450114288ad20ed024b2e081e0835efb47d79b8cb0d66ea1f3",
       "verifiedAt": "2026-10-24"
+    },
+    {
+      "name": "position_rag_v321",
+      "localVersion": "20261024220000",
+      "remoteVersion": "20261024222951",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "fingerprintMethod": "strip-CR-trim-exterior-whitespace-v1",
+      "localCanonicalLength": 9299,
+      "remoteCanonicalLength": 9299,
+      "localStatementSha256": "343693684294643898130bbeb73d48fb01e484962ae7d145a3903f617a0a6eab",
+      "remoteStatementSha256": "343693684294643898130bbeb73d48fb01e484962ae7d145a3903f617a0a6eab",
+      "verifiedAt": "2026-10-24"
     }
   ],
   "localOnly": [
@@ -1739,11 +1752,11 @@
   ],
   "lastIncrementalVerification": {
     "date": "2026-10-24",
-    "movement": "occupational-rag-v320",
+    "movement": "position-rag-v321",
     "names": [
-      "occupational_rag_v320"
+      "position_rag_v321"
     ],
-    "evidence": "docs/qa/evidence/occupational-rag-v320/production/release.json",
+    "evidence": "docs/qa/evidence/position-rag-v321/production.json",
     "historicalSnapshotVerifiedAtUnchanged": true
   }
 }

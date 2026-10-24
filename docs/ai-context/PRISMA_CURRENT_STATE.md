@@ -3,15 +3,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.94.4
+version: 2.94.5
 last_verified: 2026-10-24
 ---
 
 # Estado atual do Prisma
 
-## Reconhecimento em Corrigir associação — implementação 3.2.1
+## Reconhecimento em Corrigir associação — 3.2.1 publicada
 
-Implementação autorizada por Bruno: reconhecimento explícito no drawer de referência ocupacional da Posição, usando título/missão/responsabilidades e a mesma fila RAG do salvamento. Candidatos elegíveis e revisão da Knowledge reutilizados; aprovação local e associação na Posição são decisões distintas. Sem tabelas/modelos/pesos/histórico alterados. Busca paginada deixa de montar referências completas para verificar elegibilidade, mantém publicação/escopo/reconciliação e distingue erro de ausência. Testes dirigidos, SQL local/concorrência, browser e rollout são documentados no AoT `docs/qa/aot-position-rag-v321.md`; publicação não é presumida deste texto. Versão solicitada 3.2.1, seguindo incremento do terceiro número para esta melhoria.
+Reconhecimento explícito no drawer de referência ocupacional da Posição, usando título/missão/responsabilidades e a mesma fila RAG do salvamento. Candidatos elegíveis e revisão da Knowledge reutilizados; aprovação local e associação na Posição são decisões distintas. Sem tabelas/modelos/pesos/histórico alterados. Busca paginada filtra termos antes de avaliar elegibilidade e não monta referências completas para verificar apenas a permissão; mantém publicação/escopo/reconciliação e distingue erro de ausência. Publicada em24/10/2026 no SHA funcional22f5c2b21a9f94e1692ee41d11e0d2976a54e247, CI branch40138646351/main40138999192 SUCCESS; migration20261024222951 com hash igual,144tabelas e hashes de conceitos/Perfis/Posições/aprovações preservados. Web75d0faf51c58 running0, sete serviços adjacentes inalterados;17checks públicos e login3.2.1 PASS após404 transitório, sem rebuild.65checks dirigidos/81browser/137SQL e tipos/build/contexto/lint PASS. Concorrência e limite de truncamento reusam a fila original. Jornada humana autenticada/LLM real neste painel NOT TESTED em produção; encerramento documental/ledger sem nova implantação. AoT `docs/qa/aot-position-rag-v321.md` reúne prova e limites. Incremento do terceiro número conforme decisão do PO.
 
 ## Cartões de classificação do Conhecimento — correção 3.2.0
 
