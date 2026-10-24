@@ -1,0 +1,3 @@
+# Execução — classificação publicada
+
+Aplicar integralmente `agreement-knowledge-published-classification.md`1.0.0: D-01/D-02/D-03 e CA-01, sem P-01/F-01; A-01 para engenharia. Reusar classificação canônica e componentes existentes. Leitura adicional opcional não pode bloquear a aprovação pendente. Não alterar dados reais, schema, modelos ou decisões anteriores. Validar reprodução/negativos de estado, pending/approved/histórico, consulta limitada, erro recuperável, desktop/mobile, types/build, contexto/CI e smoke de publicação web. AoT da mesma entrega registra mapa, prova e limites. Sem suíte integral local.

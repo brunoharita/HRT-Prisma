@@ -1,0 +1,160 @@
+{
+  "checks": [
+    {
+      "name": "1448 approved reads current H4 without a dead selector",
+      "pass": true
+    },
+    {
+      "name": "1448 pending continuation waits for classification",
+      "pass": true
+    },
+    {
+      "name": "1448 missing is explicit",
+      "pass": true
+    },
+    {
+      "name": "1448 query failure distinct from missing",
+      "pass": true
+    },
+    {
+      "name": "1448 retry has no writes and preserves pending",
+      "pass": true
+    },
+    {
+      "name": "1448 rejected history is read only",
+      "pass": true
+    },
+    {
+      "name": "1448 occupation has no competency selector",
+      "pass": true
+    },
+    {
+      "name": "1448 certification approval remains blocked",
+      "pass": true
+    },
+    {
+      "name": "1448 selecting shows guide and enables approval without saving",
+      "pass": true
+    },
+    {
+      "name": "1448 responsive has no document overflow",
+      "pass": true
+    },
+    {
+      "name": "1448 explicit approval transitions to saved read only state",
+      "pass": true
+    },
+    {
+      "name": "1448 reload restores published source without reapproval",
+      "pass": true
+    },
+    {
+      "name": "1448 no runtime exception",
+      "pass": true
+    },
+    {
+      "name": "390 approved reads current H4 without a dead selector",
+      "pass": true
+    },
+    {
+      "name": "390 pending continuation waits for classification",
+      "pass": true
+    },
+    {
+      "name": "390 missing is explicit",
+      "pass": true
+    },
+    {
+      "name": "390 query failure distinct from missing",
+      "pass": true
+    },
+    {
+      "name": "390 retry has no writes and preserves pending",
+      "pass": true
+    },
+    {
+      "name": "390 rejected history is read only",
+      "pass": true
+    },
+    {
+      "name": "390 occupation has no competency selector",
+      "pass": true
+    },
+    {
+      "name": "390 certification approval remains blocked",
+      "pass": true
+    },
+    {
+      "name": "390 selecting shows guide and enables approval without saving",
+      "pass": true
+    },
+    {
+      "name": "390 responsive has no document overflow",
+      "pass": true
+    },
+    {
+      "name": "390 explicit approval transitions to saved read only state",
+      "pass": true
+    },
+    {
+      "name": "390 reload restores published source without reapproval",
+      "pass": true
+    },
+    {
+      "name": "390 no runtime exception",
+      "pass": true
+    },
+    {
+      "name": "320 approved reads current H4 without a dead selector",
+      "pass": true
+    },
+    {
+      "name": "320 pending continuation waits for classification",
+      "pass": true
+    },
+    {
+      "name": "320 missing is explicit",
+      "pass": true
+    },
+    {
+      "name": "320 query failure distinct from missing",
+      "pass": true
+    },
+    {
+      "name": "320 retry has no writes and preserves pending",
+      "pass": true
+    },
+    {
+      "name": "320 rejected history is read only",
+      "pass": true
+    },
+    {
+      "name": "320 occupation has no competency selector",
+      "pass": true
+    },
+    {
+      "name": "320 certification approval remains blocked",
+      "pass": true
+    },
+    {
+      "name": "320 selecting shows guide and enables approval without saving",
+      "pass": true
+    },
+    {
+      "name": "320 responsive has no document overflow",
+      "pass": true
+    },
+    {
+      "name": "320 explicit approval transitions to saved read only state",
+      "pass": true
+    },
+    {
+      "name": "320 reload restores published source without reapproval",
+      "pass": true
+    },
+    {
+      "name": "320 no runtime exception",
+      "pass": true
+    }
+  ]
+}

@@ -3891,6 +3891,11 @@ textarea {
 .prisma-knowledge-proposals .ant-btn { height: auto; min-height: var(--ant-control-height, 32px); }
 .prisma-knowledge-proposals :is(p, a, .ant-alert-title, .ant-alert-description) { overflow-wrap: anywhere; }
 
+.prisma-knowledge-classification-notice.ant-alert { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px; align-items: start; }
+.prisma-knowledge-classification-notice .ant-alert-icon { grid-column: 1; grid-row: 1; margin-inline-end: 0; }
+.prisma-knowledge-classification-notice .ant-alert-section { grid-column: 2; grid-row: 1; }
+.prisma-knowledge-classification-notice .ant-alert-actions { grid-column: 2; grid-row: 2; margin: 0; }
+
 @media (max-width: 1280px) {
   .prisma-review-split { grid-template-columns: minmax(380px, 46fr) minmax(490px, 54fr); }
   .prisma-evidence-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }

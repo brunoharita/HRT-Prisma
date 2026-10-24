@@ -1,5 +1,7 @@
 # Versionamento
 
+Correção de exibição de 24/10/2026: manter a versão pública **3.2.0** e contratos persistidos. Os cartões aprovados passam a ler a classificação vigente da fonte canônica, enquanto o seletor permanece apenas nas propostas pendentes. Sem reclassificação ou nova autoridade. Escopo e publicação comprovados pelo AoT `knowledge-published-classification`.
+
 Decisão de Bruno em24/10/2026: **Prisma3.2.0**, movimento2/entrega0 da geração3. Contratos aditivos `occupational-rag-1.0.0`, `occupational-rag-proposal-1.0.0`, `knowledge-grounded-1.0.0`. Curadoria empresa/global e decisões globais2.0.0 reutilizadas; Perfil/Score/matching/pesos/história preservados. ADR-089 e acordo/execução/AoT occupational-rag-v320. Rollout somente migration, worker de síntese/modelo privado e web, mediante gates registrados.
 
 Decisão explícita de Bruno em23/10/2026: a entrega de reconhecimento da trajetória por atividades deve ser **Prisma3.1.4**. O registry acrescenta a entrega4 ao movimento1 da geração3; login e sidebar consomem o mesmo registro central. Substitui somente a identificação pública anterior desta entrega, mantendo versões históricas, matching5.2.0, score1.4.0 e demais contratos. Publicação identificada pelo AoT trajectory-activity-recognition.

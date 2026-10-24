@@ -3,11 +3,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.94.1
+version: 2.94.2
 last_verified: 2026-10-24
 ---
 
 # Estado atual do Prisma
+
+## Cartões de classificação do Conhecimento — correção 3.2.0
+
+Diagnóstico somente leitura: Transformação operacional já aprovada com classificação vigente H4/v1; o original não contém o subagrupador. A correção lê a classificação de `knowledge_competency_classifications` pelo conceito publicado, mostra versão e mantém edição apenas nas propostas pendentes. Consulta limitada às identidades visíveis, sob RLS existente; ausência e indisponibilidade são explícitas sem bloquear aprovação pendente. Nenhuma escrita de classificação, tabela, IA, Score ou decisão humana alterada. Implementação e validação/publicação registradas em `docs/qa/aot-knowledge-published-classification.md`; texto não substitui evidência de rollout.
 
 ## Reconhecimento ocupacional — 3.2.0 publicada
 

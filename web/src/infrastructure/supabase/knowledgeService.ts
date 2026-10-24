@@ -6,6 +6,7 @@ import { supabase } from "./client";
 import { readCompetencyTaxonomySearch } from "../../domain/competencyTaxonomy";
 import {readOccupationalRagReviews} from "../../domain/occupationalRagReview";
 import { isKnowledgeProposalVisible } from "../../shared/knowledgeProposalVisibility";
+import { withPublishedClassifications } from "../../domain/knowledgePublishedClassification";
 import type { CompetencySubgroupOption } from "../../domain/profileCompetencyCuration";
 
 export const knowledgeService = {
@@ -67,6 +68,12 @@ export const knowledgeService = {
     const concepts = (conceptsResult.data ?? []).filter((row) => profile === "super_admin" ? row.scope === "global" : row.scope === "global" || row.organization_id === organizationId);
     const inbox = (inboxResult.data ?? []).filter((row) => profile === "super_admin" ? row.scope === "global" : row.organization_id === organizationId);
     const proposals = (proposalsResult.data ?? []).filter((row) => isKnowledgeProposalVisible({ scope: row.scope, organizationId: row.organization_id, status: row.status }, profile, organizationId));
+    const proposalViews = await withPublishedClassifications(proposals.map(mapProposal), async (ids) => {
+      const { data, error } = await supabase.from("knowledge_competency_classifications" as never)
+        .select("concept_id,subgroup_id,version").eq("is_current", true).in("concept_id", ids);
+      if (error) throw error;
+      return (data ?? []) as Array<{ concept_id: string; subgroup_id: string; version: number }>;
+    });
     const conceptsById = new Map(concepts.map((row) => [row.id, row]));
     const sourcesById = new Map((sourcesResult.data ?? []).map((row) => [row.id, row]));
     const versionsById = new Map((versionsResult.data ?? []).map((row) => [row.id, row]));
@@ -82,7 +89,7 @@ export const knowledgeService = {
       inbox: inbox.map((row) => ({ id: row.id, originalTerm: row.original_term, occurrenceCount: row.occurrence_count, firstSeenAt: row.first_seen_at, lastSeenAt: row.last_seen_at, scope: row.scope, status: row.status,
         candidateConcepts: row.candidate_concept_ids.flatMap((id) => { const concept = conceptsById.get(id); return concept ? [{ id, label: concept.canonical_label }] : []; }), observationCount: row.observation_ids.length,
         isOccupationalRag: (row as typeof row & {occupation_context?:{contract?:string}|null}).occupation_context?.contract === "occupational-rag-1.0.0" })),
-      proposals: proposals.map(mapProposal),
+      proposals: proposalViews,
       impacts: (impactsResult.data ?? []).map((row) => ({ id: row.id, personId: row.person_id, profileId: row.profile_id, conceptId: row.concept_id, policy: row.policy, status: row.status, createdAt: row.created_at })),
       settings: settingsResult.data ? { allowExternalKnowledgeEnrichment: settingsResult.data.allow_external_knowledge_enrichment, reinterpretationPolicy: settingsResult.data.reinterpretation_policy } : { allowExternalKnowledgeEnrichment: false, reinterpretationPolicy: "off" },
     };
@@ -201,7 +208,7 @@ export const knowledgeService = {
   },
 };
 
-function mapProposal(row: { id: string; inbox_id: string; scope: "global" | "organization"; status: string; organization_id: string | null; origin_organization_id: string | null; original_proposal: Json }): KnowledgeProposalView {
+function mapProposal(row: { id: string; inbox_id: string; scope: "global" | "organization"; status: string; organization_id: string | null; origin_organization_id: string | null; original_proposal: Json; published_concept_id?: string | null }): KnowledgeProposalView {
   const payload = isObject(row.original_proposal) ? row.original_proposal : {};
   return {
     id: row.id, inboxId: row.inbox_id, scope: row.scope, organizationId: row.organization_id, status: row.status, originalProposal: row.original_proposal,
@@ -215,6 +222,7 @@ function mapProposal(row: { id: string; inbox_id: string; scope: "global" | "org
       match: typeof candidate.match === "string" ? candidate.match : undefined,
     })) : [],
     originOrganizationId: row.origin_organization_id,
+    publishedConceptId: row.published_concept_id ?? null,
     originTermId: (row as typeof row & {origin_term_id?:string|null}).origin_term_id??null,
     originWorkflow:typeof payload.origin_workflow==="string"?payload.origin_workflow:null,
     targetConceptId:(row as typeof row & {target_concept_id?:string|null}).target_concept_id??null,

@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 563
-source_manifest_sha256: 3cf77578bbaae056588f82fc47e0921910226b62ad4f79fdd51d763ff49d5a5c
+documentation_source_count: 566
+source_manifest_sha256: a7e9af323cc2f07f2e31ccc9ac6dbdc0bbfb8a188bd0dd71492b85f6559976b5
 -->
 
 # Tudo sobre o Prisma
@@ -2651,11 +2651,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.94.1
+version: 2.94.2
 last_verified: 2026-10-24
 ---
 
 # Estado atual do Prisma
+
+## Cartões de classificação do Conhecimento — correção 3.2.0
+
+Diagnóstico somente leitura: Transformação operacional já aprovada com classificação vigente H4/v1; o original não contém o subagrupador. A correção lê a classificação de `knowledge_competency_classifications` pelo conceito publicado, mostra versão e mantém edição apenas nas propostas pendentes. Consulta limitada às identidades visíveis, sob RLS existente; ausência e indisponibilidade são explícitas sem bloquear aprovação pendente. Nenhuma escrita de classificação, tabela, IA, Score ou decisão humana alterada. Implementação e validação/publicação registradas em `docs/qa/aot-knowledge-published-classification.md`; texto não substitui evidência de rollout.
 
 ## Reconhecimento ocupacional — 3.2.0 publicada
 
@@ -5770,6 +5774,12 @@ Rollback: voltar web/Edge para2.7.3 e desativar somente cron people-directory ca
 
 # Arquitetura da Fundação de Conhecimento
 
+## Classificação publicada nos cartões de propostas — correção 3.2.0
+
+O cartão aprovado consulta o conceito identificado por `published_concept_id` e sua classificação `is_current` em `knowledge_competency_classifications`, sob RLS existente. Não reconstrói a classificação publicada a partir de `original_proposal`: o original é histórico e pode não conter o subagrupador escolhido na aprovação. A leitura é limitada aos conceitos aprovados visíveis, deduplicada em lotes de até 100 IDs. Ausência e falha de consulta são estados distintos, com nova consulta explícita; a falha adicional não bloqueia propostas pendentes.
+
+Somente propostas pendentes oferecem seleção e ações de aprovação. Propostas aprovadas mostram subagrupador e versão em modo de consulta; outras decisões históricas preservam a classificação proposta sem editor. Nenhuma reclassificação, reaprovação, nova tabela ou alteração do histórico ocorre. Acordo, execução e evidências: `docs/qa/aot-knowledge-published-classification.md`.
+
 ## M8.2: classificação assistida do catálogo global (publicada)
 
 O aditivo M8.2 v1.0.0 determina classificação semântica em lote dos conceitos globais de competência ESCO/O*NET, usando as mesmas identidades `knowledge_concepts` e os nove subagrupadores M8.1. O tipo nativo `knowledge`/`skill/competence` da ESCO é evidência de origem, não resposta Hard/Soft. O classificador recebe apenas rótulo, definição e contexto públicos da fonte; a saída traz subagrupador, razão, versão e método `ai_assisted`. Auditoria adversarial, amostra diversificada e resolução dos conceitos com múltiplas URIs antecedem a gravação. A meta de ≥99% refere-se à cobertura; erros de classificação são medidos e corrigidos separadamente. Classificações humanas correntes não são sobrescritas. ADR-071 e AoT M8.2 registram decisão e prova.
@@ -6041,6 +6051,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+Correção de exibição de 24/10/2026: manter a versão pública **3.2.0** e contratos persistidos. Os cartões aprovados passam a ler a classificação vigente da fonte canônica, enquanto o seletor permanece apenas nas propostas pendentes. Sem reclassificação ou nova autoridade. Escopo e publicação comprovados pelo AoT `knowledge-published-classification`.
 
 Decisão de Bruno em24/10/2026: **Prisma3.2.0**, movimento2/entrega0 da geração3. Contratos aditivos `occupational-rag-1.0.0`, `occupational-rag-proposal-1.0.0`, `knowledge-grounded-1.0.0`. Curadoria empresa/global e decisões globais2.0.0 reutilizadas; Perfil/Score/matching/pesos/história preservados. ADR-089 e acordo/execução/AoT occupational-rag-v320. Rollout somente migration, worker de síntese/modelo privado e web, mediante gates registrados.
 
@@ -14839,6 +14851,24 @@ Q: nenhum. Referência visual é a composição existente observada em produçã
 
 ---
 
+## Source: `docs/qa/agreement-knowledge-published-classification.md`
+
+# Acordo — classificação publicada nos cartões de Conhecimento
+
+Versão1.0.0, agreed. Correção solicitada por Bruno em24/10/2026, após selecionar H4 em Transformação operacional e não encontrar continuação. Baseline84741a1cef3a664f796e2c2ef096a9e5a87ce8a8 /3.2.0. Restaura curadoria M8.1 e decisões globais2.0.0 (AoT knowledge-decisions-v281), sem nova autoridade.
+
+- D-01: cartão aprovado exibe classificação vigente do conceito publicado, lida de `knowledge_competency_classifications`, mesmo que a proposta original não contenha subgrupo. Identificar estado aprovado e versão da classificação; não apresentar seleção editável sem ação válida.
+- D-02: somente propostas pendentes mantêm seletor/guia e continuação das ações vigentes. Selecionar não grava; aprovar exige classificação válida, certificações continuam bloqueadas, motivo global opcional e duas decisões preservadas.
+- D-03: preservar original, histórico, aprovações, escopos/RLS, conceitos e demais fluxos. Falha de consulta adicional fica explícita com retry; não bloqueia operação pendente nem simula ausência/classificação salva.
+- P-01: alteração automática de classificação ou proposta aprovada; reabertura/reaprovação implícita; nova tabela/entidade, migration, IA, mudança de pesos ou permissões.
+- F-01: criar funcionalidade para reclassificar conceitos já aprovados ou migrar/regularizar dados históricos. O registro reportado já possui H4, confirmado somente leitura.
+- A-01: consultas limitadas às identidades visíveis, DTO/componente e engenharia delegados, mantendo layout dos cartões. Referências fornecidas são exemplos do defeito, não alvo de um redesign.
+- CA-01: reproduzir original sem subgroup + classificação publicada H4; render somente leitura e sem nova decisão. Pending seleção libera aprovação existente; reload/erro/missing/rejected/deferred/occupation preservados. Desktop/mobile, tipos/build, regressão dirigida e CI; release só web, smoke e sincronização. Manter3.2.0 como correção da exibição.
+
+Sem Q material pendente. Aprovação de publicação coberta pela autorização permanente do repositório.
+
+---
+
 ## Source: `docs/qa/agreement-linkedin-pdf-evaluation.md`
 
 # Contrato de Acordos - Avaliação de PDF LinkedIn
@@ -20977,6 +21007,49 @@ Runtime eab0961ae19001f3d98c5db6028cbaf2f93ceaeb publicado em16/10/2026 12:03:39
 Contêiner prisma-web4aab0302e45f running/0restarts; imagem sha256:57ebbaea04b6c4441c6c9299ca5c6a9cde64af153008e04659fd1c802c823c58. nginx -t PASS. Rollback prisma-web:rollback-before-eab0961ae190 aponta à imagem anterior sha256:2298f378f7286cbba12bcf58c74dd4e6d1f741c3b5ac96c9a68a325be3e12a0a; não foi necessário exercê-lo. Parser e8bc778c8c00, gateway8fb76416f61c, mailb257a83cbb37, Synthesisdb6c5c0ef238, Paddled991a574e45e e Traefik5e25fdc6d2e6 mantiveram IDs. O curl imediato do script recebeu404 transitório após recriação; smoke independente recebeu200 e confirmou o SHA/assets, sem rebuild adicional.
 
 Fechamento documental posterior apenas registra evidências e sincroniza refs/VPS, mantendo o runtime eab0961 e o mesmo contêiner. CI do fechamento continua obrigatório. Avisos antigos de permissões em housekeeping de worktrees Git não impediram operações; nenhuma worktree/lock alheia foi removida. Todos D/P e mapa PASS dentro da cobertura declarada; nenhum desvio ou resíduo funcional conhecido.
+
+---
+
+## Source: `docs/qa/aot-knowledge-published-classification.md`
+
+# AoT — classificação publicada no Conhecimento
+
+Acordo/execução knowledge-published-classification1.0.0, classe C, baseline84741a1cef3a664f796e2c2ef096a9e5a87ce8a8. Versão pública3.2.0 preservada. Referências do usuário são exemplos do defeito: cartão aprovado com seletor vazio/editável e sem continuação; preservar composição, densidade e ações dos cartões pendentes.
+
+## Mapa de impacto anterior à implementação
+
+| Área / capacidade | Relação | Baseline e regressão proporcional |
+| --- | --- | --- |
+| Propostas/consulta de classificação | direct | original sem subgroup, conceito aprovado com H4; consultar somente identidades visíveis e ler fonte vigente |
+| Aprovação pendente/global/legado | plausible_indirect | seletor, guia, classificação obrigatória, motivo opcional e ações existentes; testes de UI/contrato |
+| Auth/RLS/histórico | critical_transversal | nenhuma nova permissão/escrita; consulta no cliente com RLS vigente, zero reaprovação/histórico alterado |
+| RAG/áreas/Score/IA/banco | no_impact_identified | renderer separado, nenhuma alteração de handlers/fontes desses fluxos; plano exclui backend/migrations/modelos |
+| Web/hospedagem | direct | fonte funcional/CI/smoke e comparação de estados desktop/mobile |
+
+Validação mínima: fixture fiel ao defeito, approved current/missing/unavailable e pending com seleção/ações, histórico sem edição; teste do leitor limitado e sem escrita; typecheck/build, contexto/lint em snapshot rastreado, regressão dirigida e CI obrigatório. Terminar após release web, smoke e sync, sem decisões reais ou pesquisa por IA.
+
+Revisão proporcional do mapa: aviso novo de classificação usa grid próprio para manter mensagem e retry legíveis a 320 px. Somente esta classe de aviso é afetada; não altera estilos globais de outros avisos ou ações pendentes. Regressão desktop/mobile e build cobrem o ajuste.
+
+## Acordos → implementação → teste → evidência
+
+| ID | Implementação / evidência | Status |
+| --- | --- | --- |
+| D-01 | DTO publicado e leitor canônico por conceito; `knowledgePublishedClassification.test.ts` e browser reproduzem original sem subgroup com H4/v1; versão salva sem seletor | PASS |
+| D-02 | Condição pending mantém handlers anteriores; browser comprova selecionar sem gravar, liberação e aprovação explícita, certificação bloqueada/ocupação sem subgrupo; regressão decisões globais | PASS |
+| D-03/P-01 | Somente SELECT autenticado na tabela original/RLS M8.1; leitor em lotes de 100/dedupe/erro isolado/missing distinto; histórico e original preservados; retry sem escrita | PASS |
+| F-01 | Sem reclassificação ou mudança de histórico, schema ou modelos; plano somente web | PASS |
+
+## Diagnóstico confirmado
+
+Produção somente leitura: Transformação operacional aprovada tanto local quanto globalmente; conceito global possui classificação vigente H4/v1. Propostas originais não possuem subgroup_id. Frontend sempre renderiza seletor para não ocupações, mas ações só existem quando pending. Não houve decisão humana ou dado faltante a corrigir no banco.
+
+## Publicação / limites
+
+Local: 12 testes dirigidos de classificação/visibilidade/governança/decisões e 3 de avisos acionáveis PASS; 39 verificações browser novas e 30 de decisões globais PASS em 1448/390/320 px, types root/web e build PASS. Lint em snapshot rastreado PASS; contexto e CI serão registrados no recibo final. `evidence/knowledge-published-classification/browser.json` e `classification-{1448,390,320}.png` registram estados sintéticos. As falhas iniciais foram seletor ambíguo do teste e, a 320 px, texto de aviso comprimido pela ação; seletor por teclado e grid restrito ao aviso resolveram cada causa, seguido de rodada final completa PASS. Sem exceções runtime; avisos preexistentes de depreciação AntD/bundle permanecem.
+
+Referências do usuário são exemplos do defeito, sem redesign normativo. Mantidos grid de cartões, hierarquia, seleção/guia/ações pendentes; mudança intencional no aprovado: classificação salva em consulta. Comparação renderizada de estados equivalentes em desktop/mobile confirmou continuação apenas no pending e H4/v1 no approved. Credencial histórica continua bloqueada; aviso legado não foi redesenhado.
+
+Sem QA remoto separado: QA local determinístico com componentes reais e adapters sintéticos, banco produtivo somente leitura para diagnóstico. Jornada humana autenticada em produção NOT TESTED; não se executam aprovações reais para testar. Publicação web/CI/smoke/sincronização pendentes de recibo; não se declara rollout por código. Nenhuma divergência de contrato identificada.
 
 ---
 
@@ -28084,6 +28157,14 @@ Contrato: `docs/qa/agreement-knowledge-proposal-visibility.md` 1.0.0.
 Executar integralmente `docs/qa/agreement-knowledge-proposals-overflow.md`1.0.0, lido por completo, D-01..04, P-01..02, F-01, A-01 e CA-01..03. Autorização de Bruno em16/10/2026 inclui produção. Nenhuma decisão material pendente.
 
 Reutilizar Space.wrap e CSS restrito a prisma-knowledge-proposals. Ampliar fixture/roteiro existentes com pendentes, candidatos/fontes longos, ação legada e motivos. Não alterar handlers. Registrar baseline, medidas/capturas e preservação no AoT. Tipos web/build, lint/foundation/contexto e regressão focada; CI obrigatório. Sem suíte integral local. Plano de release deriva do diff commitado; publicar SHA validado somente em prisma-web, smoke autenticado sem mutações, rollback e sincronização. Corrigir apenas falhas necessárias ao escopo.
+
+---
+
+## Source: `docs/qa/execution-knowledge-published-classification.md`
+
+# Execução — classificação publicada
+
+Aplicar integralmente `agreement-knowledge-published-classification.md`1.0.0: D-01/D-02/D-03 e CA-01, sem P-01/F-01; A-01 para engenharia. Reusar classificação canônica e componentes existentes. Leitura adicional opcional não pode bloquear a aprovação pendente. Não alterar dados reais, schema, modelos ou decisões anteriores. Validar reprodução/negativos de estado, pending/approved/histórico, consulta limitada, erro recuperável, desktop/mobile, types/build, contexto/CI e smoke de publicação web. AoT da mesma entrega registra mapa, prova e limites. Sem suíte integral local.
 
 ---
 

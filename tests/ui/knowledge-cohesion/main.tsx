@@ -25,7 +25,14 @@ const decisionDashboard={...proposalDashboard,proposals:[...proposalDashboard.pr
  {...dashboard.proposals[0],id:"rejected-history",status:"rejected",proposedConcept:{...dashboard.proposals[0].proposedConcept,canonical_label:"Rejeição histórica preservada"}},
 ]};
 const decisions:{id:string;action:string;reason:string;subgroupId?:string|null}[]=[];Object.assign(window,{__knowledgeDecisions:decisions});
-knowledgeService.loadDashboard=async()=>{if(state==="error")throw Error("Falha sintética de consulta");return (state==="empty"?{...dashboard,sources:[],concepts:[],inbox:[],proposals:[],impacts:[]}:state==="proposals"?proposalDashboard:state==="decisions"?decisionDashboard:dashboard) as never;};
+const classificationDashboard={...decisionDashboard,proposals:[
+ {...dashboard.proposals[0],id:"governance",status:"awaiting_human_review",proposedConcept:{canonical_label:"Governança Corporativa",concept_type:"competency",description:"Governança e prestação de contas."}},
+ {...dashboard.proposals[0],id:"transformation",publishedConceptId:"published",proposedConcept:{canonical_label:"Transformação operacional",concept_type:"competency",description:"Redesenho estrutural e integrado de processos, pessoas, dados e tecnologias de uma organização."},publishedClassification:{state:"published",subgroupId:"strategy",version:1}},
+ {...dashboard.proposals[0],id:"missing",proposedConcept:{canonical_label:"Sem classificação publicada",concept_type:"competency"},publishedClassification:{state:"missing"}},
+ {...dashboard.proposals[0],id:"unavailable",proposedConcept:{canonical_label:"Consulta indisponível",concept_type:"competency"},publishedClassification:{state:"unavailable"}},
+ ...decisionDashboard.proposals.filter(p=>["rejected-history","occupation","certification"].includes(p.id)),
+]};
+knowledgeService.loadDashboard=async()=>{if(state==="error")throw Error("Falha sintética de consulta");return (state==="empty"?{...dashboard,sources:[],concepts:[],inbox:[],proposals:[],impacts:[]}:state==="proposals"?proposalDashboard:state==="decisions"?decisionDashboard:state==="classification"?classificationDashboard:dashboard) as never;};
 knowledgeService.listCompetencyMacroGroups=async()=>state==="empty"?[]:[{code:"hard",label:"Competências técnicas",definition:"Conhecimentos profissionais",sortOrder:1},{code:"soft",label:"Competências comportamentais",definition:"Práticas de relacionamento",sortOrder:2}];
 knowledgeService.listCompetencySubgroups=async()=>state==="empty"?[]:[{id:"strategy",code:"H4",macroGroupCode:"hard",label:"Estratégia e gestão",definition:"Definir prioridades e acompanhar os resultados.",classificationQuestion:"Qual é o contexto profissional?",examples:["Planejamento"],scope:"global",sortOrder:1}] as never;
 professionalAreaService.load=async()=>({options:state==="empty"?[]:[{id:"area",label:"Recursos Humanos",description:"Gestão de pessoas e desenvolvimento organizacional.",aliases:["RH","HRBP"],active:true,version:1,scope:local?"organization":"global",organizationId:local?"synthetic":null}],suggestion:[]}) as never;
@@ -33,8 +40,8 @@ professionalAreaService.contributions=async()=>[];
 prismaRepository.loadHomeSummary=async()=>({peopleCount:0,structuredProfilesCount:0,openVacanciesCount:0,knowledgeSources:state==="empty"?[]:[{id:"CBO",name:"CBO",status:"current",published:true,version:"2026.1",releaseDate:"2026-01-01",lastCheckedAt:"2026-10-10"}]}) as never;
 for(const name of ["save","decide"] as const)professionalAreaService[name]=async()=>{writes.push(name);throw Error("Unexpected write");};
 for(const name of ["research","researchGlobalContribution","approveProposal","decideGlobalContribution","saveSettings","dispatchReinterpretation","transitionLegacyProposal"] as const)knowledgeService[name]=async()=>{writes.push(name);throw Error("Unexpected write");};
-if(state==="decisions"){
- const decide=(id:string,action:string,reason:string,subgroupId?:string|null)=>{writes.push(action);decisions.push({id,action,reason,subgroupId});if(params.get("failDecision")==="1")throw Error("Falha sintética de decisão");const row=decisionDashboard.proposals.find(p=>p.id===id);if(row)row.status=action;return {} as never;};
+if(state==="decisions"||state==="classification"){
+ const decide=(id:string,action:string,reason:string,subgroupId?:string|null)=>{writes.push(action);decisions.push({id,action,reason,subgroupId});if(params.get("failDecision")==="1")throw Error("Falha sintética de decisão");const row=(state==="classification"?classificationDashboard:decisionDashboard).proposals.find(p=>p.id===id);if(row){row.status=action;if(state==="classification"&&action==="approved"&&subgroupId)Object.assign(row,{publishedClassification:{state:"published",subgroupId,version:1}});}return {} as never;};
  knowledgeService.approveProposal=async(id,subgroupId,reason)=>decide(id,"approved",reason,subgroupId);
  knowledgeService.decideGlobalContribution=async(id,action,reason)=>decide(id,action,reason);
 }

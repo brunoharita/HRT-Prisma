@@ -1,5 +1,11 @@
 # Arquitetura da Fundação de Conhecimento
 
+## Classificação publicada nos cartões de propostas — correção 3.2.0
+
+O cartão aprovado consulta o conceito identificado por `published_concept_id` e sua classificação `is_current` em `knowledge_competency_classifications`, sob RLS existente. Não reconstrói a classificação publicada a partir de `original_proposal`: o original é histórico e pode não conter o subagrupador escolhido na aprovação. A leitura é limitada aos conceitos aprovados visíveis, deduplicada em lotes de até 100 IDs. Ausência e falha de consulta são estados distintos, com nova consulta explícita; a falha adicional não bloqueia propostas pendentes.
+
+Somente propostas pendentes oferecem seleção e ações de aprovação. Propostas aprovadas mostram subagrupador e versão em modo de consulta; outras decisões históricas preservam a classificação proposta sem editor. Nenhuma reclassificação, reaprovação, nova tabela ou alteração do histórico ocorre. Acordo, execução e evidências: `docs/qa/aot-knowledge-published-classification.md`.
+
 ## M8.2: classificação assistida do catálogo global (publicada)
 
 O aditivo M8.2 v1.0.0 determina classificação semântica em lote dos conceitos globais de competência ESCO/O*NET, usando as mesmas identidades `knowledge_concepts` e os nove subagrupadores M8.1. O tipo nativo `knowledge`/`skill/competence` da ESCO é evidência de origem, não resposta Hard/Soft. O classificador recebe apenas rótulo, definição e contexto públicos da fonte; a saída traz subagrupador, razão, versão e método `ai_assisted`. Auditoria adversarial, amostra diversificada e resolução dos conceitos com múltiplas URIs antecedem a gravação. A meta de ≥99% refere-se à cobertura; erros de classificação são medidos e corrigidos separadamente. Classificações humanas correntes não são sobrescritas. ADR-071 e AoT M8.2 registram decisão e prova.

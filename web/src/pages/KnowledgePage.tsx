@@ -9,7 +9,7 @@ import { GlobalOutlined, LinkOutlined, ReloadOutlined, SafetyCertificateOutlined
 import { Alert, Button, Descriptions, Drawer, Empty, Form, Input, Select, Space, Switch, Table, Tabs, Tag, Typography, message } from "antd";
 import type { PlatformAccessProfile } from "../shared/platformUsers";
 import type { OrganizationMembership } from "../shared/access";
-import type { KnowledgeConceptSuggestion, KnowledgeConceptView, KnowledgeDashboard, KnowledgeInboxView, KnowledgeSettingsView, KnowledgeSourceView } from "../domain/knowledgeData";
+import type { KnowledgeConceptSuggestion, KnowledgeConceptView, KnowledgeDashboard, KnowledgeInboxView, KnowledgeProposalView, KnowledgeSettingsView, KnowledgeSourceView } from "../domain/knowledgeData";
 import { knowledgeService } from "../infrastructure/supabase/knowledgeService";
 import type { CompetencySubgroupOption } from "../domain/profileCompetencyCuration";
 import { PrismaPage, PrismaPageHeader } from "../ui/PrismaPage";
@@ -219,7 +219,7 @@ export function KnowledgePage({ profile, activeMembership, initialTab="overview"
     return <div className="prisma-knowledge-proposals">{dashboard?.proposals.length ? dashboard.proposals.filter(p => p.proposedConcept.concept_type !== "professional_area").map((proposal) => proposal.originWorkflow==="occupational-rag-1.0.0"||proposal.originTermId?<OccupationalGlobalContribution key={proposal.id} proposal={proposal} concepts={dashboard.concepts} onChanged={()=>void load()}/>:<PrismaCard key={proposal.id} title={proposal.proposedConcept.canonical_label ?? proposal.observedTerm}>
       <Space direction="vertical" size="middle" style={{ width: "100%" }}><Space wrap><Tag>{proposal.proposedConcept.concept_type === "occupation" ? "Ocupação" : proposal.proposedConcept.concept_type === "certification" ? "Certificação legada" : "Competência"}</Tag><Tag color={proposal.scope === "global" ? "blue" : "purple"}>{proposal.scope === "organization" ? "Proposta legada · Empresa ativa" : proposal.originOrganizationId ? "Contribuição de empresa" : "Global Prisma"}</Tag>{statusTag(proposal.status)}</Space>
       <Typography.Paragraph>{proposal.proposedConcept.description ?? "Sem descrição."}</Typography.Paragraph>
-      {proposal.proposedConcept.concept_type !== "occupation" ? <><Select aria-label={`Subagrupador de ${proposal.proposedConcept.canonical_label ?? "proposta"}`} placeholder="Classifique antes de aprovar" value={approvalSubgroups[proposal.id] ?? proposal.proposedConcept.subgroup_id ?? null} onChange={(value) => setApprovalSubgroups((current) => ({ ...current, [proposal.id]: value }))} options={subgroupSelectOptions(subgroups, proposal.scope)} /><SubgroupGuide subgroups={subgroups} id={approvalSubgroups[proposal.id] ?? proposal.proposedConcept.subgroup_id ?? null} /></> : null}
+      {proposal.proposedConcept.concept_type !== "occupation" ? proposal.status === "awaiting_human_review" ? <><Select aria-label={`Subagrupador de ${proposal.proposedConcept.canonical_label ?? "proposta"}`} placeholder="Classifique antes de aprovar" value={approvalSubgroups[proposal.id] ?? proposal.proposedConcept.subgroup_id ?? null} onChange={(value) => setApprovalSubgroups((current) => ({ ...current, [proposal.id]: value }))} options={subgroupSelectOptions(subgroups, proposal.scope)} /><SubgroupGuide subgroups={subgroups} id={approvalSubgroups[proposal.id] ?? proposal.proposedConcept.subgroup_id ?? null} /></> : <ProposalClassification proposal={proposal} subgroups={subgroups} onRetry={() => void load()} /> : null}
       {proposal.proposedConcept.concept_type === "certification" ? <Alert type="warning" showIcon message="Certificação é uma credencial. Esta proposta não pode ser aprovada como competência; confira o termo de origem." action={<Button onClick={() => { const origin = dashboard?.inbox.find((item) => item.id === proposal.inboxId); setActiveTab("inbox"); if (origin) { setSelectedInbox(origin); setSuggestions([]); setDecisionReason(""); setProposalLabel(""); } }}>Consultar termo de origem</Button>} /> : null}
       {proposal.candidateConcepts.length ? <Alert type="info" showIcon message="Candidatos globais para análise" description={<Space wrap>{proposal.candidateConcepts.map((candidate, index) => <Tag key={candidate.id ?? index}>{candidate.canonical_label ?? "Conceito"} · {candidate.match ?? "candidato"}</Tag>)}</Space>} /> : null}
       <div>{proposal.sources.map((source, index) => <p key={`${proposal.id}-${index}`}><LinkOutlined /> <a href={source.url} target="_blank" rel="noreferrer">{source.title ?? source.url}</a> · {source.publisher} · {source.source_class}</p>)}</div>
@@ -257,6 +257,17 @@ export function KnowledgePage({ profile, activeMembership, initialTab="overview"
   }
 }
 
+function ProposalClassification({ proposal, subgroups, onRetry }: { proposal: KnowledgeProposalView; subgroups: CompetencySubgroupOption[]; onRetry: () => void }) {
+  if (proposal.status !== "approved") return proposal.proposedConcept.subgroup_id ? <><Typography.Text>Classificação proposta</Typography.Text><SubgroupGuide subgroups={subgroups} id={proposal.proposedConcept.subgroup_id} /></> : null;
+  const classification = proposal.publishedClassification;
+  if (classification?.state === "published") {
+    const subgroup = subgroups.find(item => item.id === classification.subgroupId);
+    return <><Alert type="success" showIcon title={`Classificação salva · v${classification.version}`} description={subgroup ? `${subgroup.code} · ${subgroup.label}` : "Subagrupador registrado; detalhes indisponíveis no catálogo ativo."} /><SubgroupGuide subgroups={subgroups} id={classification.subgroupId} /></>;
+  }
+  return <Alert className="prisma-knowledge-classification-notice" type="warning" showIcon title={classification?.state === "missing" ? "Classificação publicada não localizada" : "Classificação temporariamente indisponível"}
+    description="A aprovação permanece preservada. A proposta original não substitui a classificação publicada."
+    action={<Button onClick={onRetry}>Consultar novamente</Button>} />;
+}
 function statusTag(value: string) {
   const labels: Record<string, string> = { approved: "Aprovado", published: "Publicado", completed: "Concluído", proposal_ready: "Proposta para revisar", awaiting_human_review: "Pendente de revisão", failed: "Falha", rejected: "Rejeitado", deferred: "Mantido somente local", budget_limited: "Limite de orçamento", pending: "Pendente", in_review: "Em revisão", processing: "Processando", queued: "Na fila", imported: "Importado", importing: "Importando", staged: "Aguardando publicação", catalogued: "Catalogado", active: "Ativo", inactive: "Inativo", superseded: "Substituído", draft: "Rascunho", resolved: "Resolvido", unresolved: "Aguardando análise", ambiguous: "Requer esclarecimento", action_required: "Ação necessária" };
   const color = ["approved", "published", "completed", "resolved", "active"].includes(value) ? "green" : ["failed", "rejected", "budget_limited"].includes(value) ? "red" : ["pending", "in_review", "proposal_ready", "awaiting_human_review", "unresolved", "ambiguous", "action_required"].includes(value) ? "gold" : "default";

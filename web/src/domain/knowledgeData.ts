@@ -24,6 +24,8 @@ export interface KnowledgeProposalView {
   candidateConcepts: Array<{ id?: string | undefined; canonical_label?: string | undefined; concept_type?: string | undefined; match?: string | undefined }>;
   originOrganizationId: string | null; organizationId: string | null; scope: "global" | "organization"; status: string; originalProposal: Json;
   originTermId?:string|null; originWorkflow?:string|null; targetConceptId?:string|null;
+  publishedConceptId?: string | null;
+  publishedClassification?: { state: "published"; subgroupId: string; version: number } | { state: "missing" | "unavailable" };
 }
 export interface KnowledgeImpactView {
   id: string; personId: string; profileId: string; conceptId: string; policy: string; status: string; createdAt: string;
