@@ -99,6 +99,14 @@ INSERT 0 1
 
 (1 row)
 
+RESET
+DO
+SAVEPOINT
+INSERT 0 1000
+INSERT 0 1000
+DO
+ROLLBACK
+SET
 INSERT 0 1
 DO
 RESET
@@ -239,7 +247,7 @@ SET
 
                     review_occupational_rag_proposal
 ------------------------------------------------------------------------
- {"reused": false, "conceptId": "471e631d-93b3-4850-8e6d-0d74e1cbf18a"}
+ {"reused": false, "conceptId": "ed26bbe7-419a-46c9-8a98-a9f5026000c1"}
 (1 row)
 
 RESET
@@ -262,7 +270,7 @@ SET
 SAVEPOINT
                    approve_occupational_global_alias
 ------------------------------------------------------------------------
- {"reused": false, "conceptId": "7243e286-7faa-40e6-b489-48fa695d6099"}
+ {"reused": false, "conceptId": "261c8572-347a-4afc-a490-e491a9d0d351"}
 (1 row)
 
  rag_assert
@@ -273,7 +281,7 @@ SAVEPOINT
 ROLLBACK
       decide_knowledge_global_contribution
 -------------------------------------------------
- (76210293-fdc4-465d-a5e4-946753604d9a,deferred)
+ (9aa7161e-09f4-4c2b-aa95-ac6ef112e5f5,deferred)
 (1 row)
 
 RESET
@@ -411,7 +419,7 @@ INSERT 0 1
 
                                                                                                                                                                                                                                                                                                                                         record_ai_worker_history_v1
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
- {"request": {"id": "6f0e8ecb-ae5a-4879-af27-d5e3774c8cbd", "scope": "organization", "status": "succeeded", "actor_id": null, "created_at": "2026-10-24T19:51:19.809863-03:00", "completed_at": "2026-10-24T19:51:19.832968-03:00", "operation_id": "00000000-0000-4000-8000-000000000002", "function_name": "occupational_rag", "error_category": null, "source_version": "occupational-rag-1.0.0", "idempotency_key": "9391c6fe7e1fa37cc8fdff66b393e40a073ce6c8198085ee9d6a5d4fd0650275", "organization_id": "f0109e0c-3387-94d9-4492-099898764df3", "contract_version": "ai-request-1.0.0", "input_fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}, "recorded": true}
+ {"request": {"id": "8703c388-a25d-4daa-9c94-69284dd57d97", "scope": "organization", "status": "succeeded", "actor_id": null, "created_at": "2026-10-24T20:01:16.863001-03:00", "completed_at": "2026-10-24T20:01:16.896533-03:00", "operation_id": "00000000-0000-4000-8000-000000000002", "function_name": "occupational_rag", "error_category": null, "source_version": "occupational-rag-1.0.0", "idempotency_key": "9391c6fe7e1fa37cc8fdff66b393e40a073ce6c8198085ee9d6a5d4fd0650275", "organization_id": "f0109e0c-3387-94d9-4492-099898764df3", "contract_version": "ai-request-1.0.0", "input_fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}, "recorded": true}
 (1 row)
 
 RESET
@@ -440,6 +448,13 @@ NOTICE:  PASS: denied (42501)
 NOTICE:  PASS: denied (42501)
 NOTICE:  PASS: lease prevents duplicate acquisition
 NOTICE:  PASS: bounded retrieval finds approved Sales without foreign tenant
+NOTICE:  PASS: optimized retrieval preserves original results and tenant scope
+NOTICE:  PASS: optimized retrieval preserves original results and tenant scope
+NOTICE:  PASS: optimized retrieval preserves original results and tenant scope
+NOTICE:  PASS: optimized retrieval preserves original results and tenant scope
+NOTICE:  PASS: optimized retrieval preserves original results and tenant scope
+NOTICE:  PASS: bounded retrieval remains grounded with 1000 unrelated roles
+NOTICE:  PASS: 1000-role retrieval below PostgreSQL request timeout
 NOTICE:  PASS: denied (42501)
 NOTICE:  PASS: denied (22023)
 NOTICE:  PASS: denied (22023)

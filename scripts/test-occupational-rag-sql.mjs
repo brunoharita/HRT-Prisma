@@ -17,6 +17,10 @@ try{
  sql(v3.split('\n').slice(1,3).join('\n')+'\n'+v3.slice(v3.indexOf('create or replace function private.canonical_access_role'),v3.indexOf('create or replace function private.validate_membership_scope'))+'\n'+v3.slice(v3.indexOf('create or replace function private.prisma_actor_has_org_role'),v3.indexOf('create or replace function public.can_operate_prisma_organization')));
  const before=sql("select count(*) from pg_tables where schemaname in('public','private');");
  sql(fs.readFileSync('supabase/migrations/20261024090000_occupational_rag_v320.sql','utf8'));
+ if(auditFix){
+  sql("do $$begin execute replace(pg_get_functiondef('public.search_occupational_rag_candidates(text,uuid,uuid,text[])'::regprocedure),'public.search_occupational_rag_candidates(', 'private.qa_rag_old_search('); end$$;");
+  sql(fs.readFileSync('supabase/migrations/20261024231000_occupational_rag_search_performance.sql','utf8'));
+ }
  if(position){
   const classification=fs.readFileSync('supabase/migrations/20260920111000_m81_competency_projection.sql','utf8');
   sql(classification.slice(0,classification.indexOf('create function public.search_competency_taxonomy_v2')));
@@ -32,7 +36,26 @@ try{
  }
  const captured=envelopes.map(({p_action,p_data})=>{const json=JSON.stringify(p_data).replaceAll("'","''");return `${p_action==='open_request'?'insert into audit_response select':'select'} public.record_ai_worker_history_v1(repeat('h',48),'${p_action}',jsonb_set('${json}'::jsonb,'{organizationId}',to_jsonb(rag_id('a')::text))${p_action==='open_request'?'':` || jsonb_build_object('requestId',(select v#>>'{request,id}' from audit_response))`});`;}).join('\n');
  const auditSql=auditFix?`\ncreate temp table audit_response(v jsonb);grant select,insert on audit_response to anon;set local role anon;${captured}\nreset role;select rag_assert((select status='succeeded' from public.ai_requests where operation_id='00000000-0000-4000-8000-000000000002'),'actual JavaScript worker envelopes complete under PostgreSQL metadata contract');\nselect rag_reject(format('select public.record_ai_worker_history_v1(%L,''open_request'',%L)',repeat('h',48),jsonb_build_object('scope','organization','organizationId',rag_id('a'),'functionName','occupational_rag','actionOperationId','forbidden')),'22023');\nreset role;`:'';
- let output=sql('begin;\n'+fs.readFileSync('supabase/qa/occupational_rag_verification.sql','utf8')+(position?'\n'+fs.readFileSync('supabase/qa/position_rag_v321_verification.sql','utf8'):'')+auditSql+'\nrollback;');
+ let fixture=fs.readFileSync('supabase/qa/occupational_rag_verification.sql','utf8');
+ if(auditFix){
+  const check=`reset role;
+do $$declare j jsonb; terms text[];begin select v into j from rag_state where k='job';
+ foreach terms slice 1 in array array[['Sales Representative'],['estoque'],['vendedor'],['cargo privado'],['sales OR estoque']] loop
+ perform rag_assert(public.search_occupational_rag_candidates(repeat('s',48),(j->>'id')::uuid,(j->>'lease')::uuid,terms)=private.qa_rag_old_search(repeat('s',48),(j->>'id')::uuid,(j->>'lease')::uuid,terms),'optimized retrieval preserves original results and tenant scope');end loop;end$$;
+savepoint search_volume;
+insert into public.knowledge_concepts(id,canonical_label,concept_type,scope,description,status,approved_by_auth_user_id)
+ select rag_id('volume-'||n),'Cargo sintético '||n,'occupation','global','Atividades sintéticas não relacionadas.','approved',rag_id('super') from generate_series(1,1000) n;
+insert into public.knowledge_terms(concept_id,scope,term,normalized_term,language,term_type,status,approved_by_auth_user_id)
+ select rag_id('volume-'||n),'global','Cargo sintético '||n,'cargo sintetico '||n,'pt-BR','canonical','approved',rag_id('super') from generate_series(1,1000) n;
+do $$declare j jsonb; started timestamptz:=clock_timestamp();begin select v into j from rag_state where k='job';
+ perform rag_assert(jsonb_array_length(public.search_occupational_rag_candidates(repeat('s',48),(j->>'id')::uuid,(j->>'lease')::uuid,array['estoque']))=1,'bounded retrieval remains grounded with 1000 unrelated roles');
+ perform rag_assert(clock_timestamp()-started<interval '3 seconds','1000-role retrieval below PostgreSQL request timeout');end$$;
+rollback to search_volume;
+set local role anon;
+`;
+  fixture=fixture.replace("insert into rag_state select 'payload'",()=>check+"insert into rag_state select 'payload'");
+ }
+ let output=sql('begin;\n'+fixture+(position?'\n'+fs.readFileSync('supabase/qa/position_rag_v321_verification.sql','utf8'):'')+auditSql+'\nrollback;');
  if(position){
   let m71=fs.readFileSync('supabase/qa/m71_position_taxonomy_verification.sql','utf8');
   // The old fixture predates mandatory M8.1 classification. Use today's existing API.
