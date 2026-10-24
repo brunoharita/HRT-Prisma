@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 566
-source_manifest_sha256: 92fc0de2c674ceea02b70e3c66af613ef87588b2e476aeab97f3ee1bc79fdc85
+source_manifest_sha256: 809271c7a2a46b1828acd7633e95eb152cc81f10cc3d470b391ed33c09118d18
 -->
 
 # Tudo sobre o Prisma
@@ -2651,7 +2651,7 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.94.2
+version: 2.94.3
 last_verified: 2026-10-24
 ---
 
@@ -2659,7 +2659,7 @@ last_verified: 2026-10-24
 
 ## Cartões de classificação do Conhecimento — correção 3.2.0
 
-Diagnóstico somente leitura: Transformação operacional já aprovada com classificação vigente H4/v1; o original não contém o subagrupador. A correção lê a classificação de `knowledge_competency_classifications` pelo conceito publicado, mostra versão e mantém edição apenas nas propostas pendentes. Consulta limitada às identidades visíveis, sob RLS existente; ausência e indisponibilidade são explícitas sem bloquear aprovação pendente. Nenhuma escrita de classificação, tabela, IA, Score ou decisão humana alterada. Implementação e validação/publicação registradas em `docs/qa/aot-knowledge-published-classification.md`; texto não substitui evidência de rollout.
+Diagnóstico somente leitura: Transformação operacional já aprovada com classificação vigente H4/v1; o original não contém o subagrupador. A correção lê a classificação de `knowledge_competency_classifications` pelo conceito publicado, mostra versão e mantém edição apenas nas propostas pendentes. Consulta limitada às identidades visíveis, sob RLS existente; ausência e indisponibilidade são explícitas sem bloquear aprovação pendente. Nenhuma escrita de classificação, tabela, IA, Score ou decisão humana alterada. Publicada somente web em 24/10/2026 no SHA funcional303de238ff900bab5dd11eca85292545273452d0, CI branch40132562112/main40132702692 SUCCESS; imagemeded254fbc16 running0, sete serviços adjacentes com imagem/início/reinícios iguais. 29 testes dirigidos,69 checks browser,tipos/build/contexto/lint e17checks HTTP/assets/SHA/versão/login PASS. Versão pública3.2.0 mantida; fechamento documental sem rebuild. Jornada humana autenticada em produção NOT TESTED, sem decisões reais para teste. AoT `docs/qa/aot-knowledge-published-classification.md` contém evidências e limites.
 
 ## Reconhecimento ocupacional — 3.2.0 publicada
 
@@ -21038,6 +21038,7 @@ Revisão proporcional do mapa: aviso novo de classificação usa grid próprio p
 | D-02 | Condição pending mantém handlers anteriores; browser comprova selecionar sem gravar, liberação e aprovação explícita, certificação bloqueada/ocupação sem subgrupo; regressão decisões globais | PASS |
 | D-03/P-01 | Somente SELECT autenticado na tabela original/RLS M8.1; leitor em lotes de 100/dedupe/erro isolado/missing distinto; histórico e original preservados; retry sem escrita | PASS |
 | F-01 | Sem reclassificação ou mudança de histórico, schema ou modelos; plano somente web | PASS |
+| CA-01 | 29 testes únicos dirigidos, 69 verificações browser, tipos/build/contexto/lint, CI branch/main e publicação/smoke abaixo | PASS |
 
 ## Diagnóstico confirmado
 
@@ -21045,13 +21046,17 @@ Produção somente leitura: Transformação operacional aprovada tanto local qua
 
 ## Publicação / limites
 
-Local: 12 testes dirigidos de classificação/visibilidade/governança/decisões e 3 de avisos acionáveis PASS; 39 verificações browser novas e 30 de decisões globais PASS em 1448/390/320 px, types root/web e build PASS. Lint em snapshot rastreado PASS; contexto e CI serão registrados no recibo final. `evidence/knowledge-published-classification/browser.json` e `classification-{1448,390,320}.png` registram estados sintéticos. As falhas iniciais foram seletor ambíguo do teste e, a 320 px, texto de aviso comprimido pela ação; seletor por teclado e grid restrito ao aviso resolveram cada causa, seguido de rodada final completa PASS. Sem exceções runtime; avisos preexistentes de depreciação AntD/bundle permanecem.
+Local: 12 testes dirigidos de classificação/visibilidade/governança/decisões, 3 de avisos acionáveis e 14 de erros de operação PASS; 39 verificações browser novas e 30 de decisões globais PASS em 1448/390/320 px, types root/web e build PASS. Lint e contexto em snapshot rastreado PASS; CI obrigatório também PASS. `evidence/knowledge-published-classification/browser.json` e `classification-{1448,390,320}.png` registram estados sintéticos. As falhas iniciais foram seletor ambíguo do teste e, a 320 px, texto de aviso comprimido pela ação; seletor por teclado e grid restrito ao aviso resolveram cada causa, seguido de rodada final completa PASS. Sem exceções runtime; avisos preexistentes de depreciação AntD/bundle permanecem.
 
 Referências do usuário são exemplos do defeito, sem redesign normativo. Mantidos grid de cartões, hierarquia, seleção/guia/ações pendentes; mudança intencional no aprovado: classificação salva em consulta. Comparação renderizada de estados equivalentes em desktop/mobile confirmou continuação apenas no pending e H4/v1 no approved. Credencial histórica continua bloqueada; aviso legado não foi redesenhado.
 
-Sem QA remoto separado: QA local determinístico com componentes reais e adapters sintéticos, banco produtivo somente leitura para diagnóstico. Jornada humana autenticada em produção NOT TESTED; não se executam aprovações reais para testar. Publicação web/CI/smoke/sincronização pendentes de recibo; não se declara rollout por código. Nenhuma divergência de contrato identificada.
+Sem QA remoto separado: QA local determinístico com componentes reais e adapters sintéticos, banco produtivo somente leitura para diagnóstico. Jornada humana autenticada em produção NOT TESTED; não se executam aprovações reais para testar. Nenhuma divergência de contrato identificada.
 
 CI inicial 40132232245 bloqueou o SHA bddc7a9 na regra de tradução de erros dos serviços: embora capturado pelo leitor opcional, o erro bruto não deve atravessar a fronteira Supabase. Consulta corrigida para `supabaseOperationError`; 14 testes `reviewOperationErrors` e os 4 do leitor passaram após o ajuste. Não houve promoção/publicação do SHA reprovado; novo CI deve aprovar o SHA corrigido antes do rollout.
+
+Publicada em 24/10/2026, SHA funcional `303de238ff900bab5dd11eca85292545273452d0`, CI branch `40132562112` e main `40132702692` SUCCESS. Dispatcher publicou somente web, sem destinos remanescentes; imagem `sha256:eded254fbc16301758a721e5f4b3c3f0ebf7e6b6a2161fc24cc595deafd3e955`, running/zero reinícios, início `2026-10-24T21:07:13.187434296Z`. Rollback anterior `715691bf388f` retido. Sem erro no deploy; 17 checks públicos de rotas/assets novos e anteriores/SHA/versão 3.2.0/renderer e CSS PASS, login público visível sem exceções. Os sete serviços adjacentes (inclusive worker, modelo privado, Parser, gateway, mail, Traefik e Horus) preservam exatamente imagem/início/reinícios. Recibo `evidence/knowledge-published-classification/production.json` e imagem `production-login.png`.
+
+Main/origin/VPS alinhados ao SHA funcional no smoke. Fechamento documental posterior sincroniza as fontes por fast-forward e mantém esse runtime; plano documental exclui rebuild, migrações e backend, mantendo CI obrigatório. Preservados todos os rascunhos não rastreados existentes. Dois locks vazios inativos foram preservados em tmp após conferir ausência de escritor Git; nenhum processo/lock ativo removido. Avisos preexistentes da manutenção automática de worktrees não bloquearam commits e não motivaram limpeza. Nenhum dado pessoal transferido ou decisão humana executada nesta correção.
 
 ---
 

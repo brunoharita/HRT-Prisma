@@ -3,7 +3,7 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.94.2
+version: 2.94.3
 last_verified: 2026-10-24
 ---
 
@@ -11,7 +11,7 @@ last_verified: 2026-10-24
 
 ## Cartões de classificação do Conhecimento — correção 3.2.0
 
-Diagnóstico somente leitura: Transformação operacional já aprovada com classificação vigente H4/v1; o original não contém o subagrupador. A correção lê a classificação de `knowledge_competency_classifications` pelo conceito publicado, mostra versão e mantém edição apenas nas propostas pendentes. Consulta limitada às identidades visíveis, sob RLS existente; ausência e indisponibilidade são explícitas sem bloquear aprovação pendente. Nenhuma escrita de classificação, tabela, IA, Score ou decisão humana alterada. Implementação e validação/publicação registradas em `docs/qa/aot-knowledge-published-classification.md`; texto não substitui evidência de rollout.
+Diagnóstico somente leitura: Transformação operacional já aprovada com classificação vigente H4/v1; o original não contém o subagrupador. A correção lê a classificação de `knowledge_competency_classifications` pelo conceito publicado, mostra versão e mantém edição apenas nas propostas pendentes. Consulta limitada às identidades visíveis, sob RLS existente; ausência e indisponibilidade são explícitas sem bloquear aprovação pendente. Nenhuma escrita de classificação, tabela, IA, Score ou decisão humana alterada. Publicada somente web em 24/10/2026 no SHA funcional303de238ff900bab5dd11eca85292545273452d0, CI branch40132562112/main40132702692 SUCCESS; imagemeded254fbc16 running0, sete serviços adjacentes com imagem/início/reinícios iguais. 29 testes dirigidos,69 checks browser,tipos/build/contexto/lint e17checks HTTP/assets/SHA/versão/login PASS. Versão pública3.2.0 mantida; fechamento documental sem rebuild. Jornada humana autenticada em produção NOT TESTED, sem decisões reais para teste. AoT `docs/qa/aot-knowledge-published-classification.md` contém evidências e limites.
 
 ## Reconhecimento ocupacional — 3.2.0 publicada
 
