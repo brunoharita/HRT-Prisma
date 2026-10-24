@@ -1712,6 +1712,19 @@
       "localStatementSha256": "343693684294643898130bbeb73d48fb01e484962ae7d145a3903f617a0a6eab",
       "remoteStatementSha256": "343693684294643898130bbeb73d48fb01e484962ae7d145a3903f617a0a6eab",
       "verifiedAt": "2026-10-24"
+    },
+    {
+      "name": "occupational_rag_search_performance",
+      "localVersion": "20261024231000",
+      "remoteVersion": "20261024231026",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "fingerprintMethod": "strip-CR-trim-exterior-whitespace-v1",
+      "localCanonicalLength": 4761,
+      "remoteCanonicalLength": 4761,
+      "localStatementSha256": "18f9c214aaa2663cafb5f2abd60a972b80d59956edbb993a0cc2e29ab3655cbd",
+      "remoteStatementSha256": "18f9c214aaa2663cafb5f2abd60a972b80d59956edbb993a0cc2e29ab3655cbd",
+      "verifiedAt": "2026-10-24"
     }
   ],
   "localOnly": [
@@ -1752,11 +1765,11 @@
   ],
   "lastIncrementalVerification": {
     "date": "2026-10-24",
-    "movement": "position-rag-v321",
+    "movement": "position-rag-audit-fix",
     "names": [
-      "position_rag_v321"
+      "occupational_rag_search_performance"
     ],
-    "evidence": "docs/qa/evidence/position-rag-v321/production.json",
+    "evidence": "docs/qa/evidence/position-rag-audit-fix/production.json",
     "historicalSnapshotVerifiedAtUnchanged": true
   }
 }

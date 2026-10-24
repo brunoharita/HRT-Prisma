@@ -2,6 +2,11 @@ import {OCCUPATIONAL_RAG_VERSION,OCCUPATIONAL_SEARCH_INSTRUCTIONS,OCCUPATIONAL_D
 
 const allowedModels=new Set(['qwen3:1.7b-q4_K_M','qwen3:4b-instruct-2507-q4_K_M']);
 const vectorCache=new Map();
+export function occupationalProposalTimeout(elapsedMs){
+  const remaining=420000-elapsedMs;
+  if(!Number.isFinite(elapsedMs)||elapsedMs<0||remaining<1000)throw Error('RAG_PROCESSING_DEADLINE');
+  return Math.min(300000,remaining);
+}
 export async function openOccupationalHistory(client,job,fetcher=fetch){
   const write=async(action,data)=>{const result=await client.rpc('record_ai_history_v1',{p_action:action,p_data:data});if(result.error)throw Error('RAG_AUDIT_UNAVAILABLE');return result.data;};
   const idempotencyKey=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(`occupational_rag:${job.id}:${job.lease}`));
@@ -91,7 +96,9 @@ export async function runOccupationalRagOnce(config,callRpc,fetcher=fetch){
       const search=readOccupationalSearch(await occupationalChat(config,OCCUPATIONAL_SEARCH_INSTRUCTIONS,context,occupationalSearchSchema,fetcher),context);
       const pool=await callRpc('search_occupational_rag_candidates',{p_job_id:job.id,p_lease:job.lease,p_terms:search});
       candidates=await retrieveOccupationalCandidates(config,job,pool,fetcher);
-      draft=readOccupationalDraft(await occupationalChat(config,OCCUPATIONAL_DRAFT_INSTRUCTIONS,{context,candidates},occupationalSchemaForCandidates(candidates),fetcher),context,candidates);
+      const proposalConfig={...config,timeout:occupationalProposalTimeout(Date.now()-started)};
+      const proposalCandidates=candidates.map(({id,label,description})=>({id,label,description}));
+      draft=readOccupationalDraft(await occupationalChat(proposalConfig,OCCUPATIONAL_DRAFT_INSTRUCTIONS,{context,candidates:proposalCandidates},occupationalSchemaForCandidates(candidates),fetcher),context,candidates);
     }
     payload={contract:OCCUPATIONAL_RAG_VERSION,input_hash:job.inputHash,proposed_concept:{canonical_label:draft.canonical_label,concept_type:'occupation',description:draft.description},
       aliases:draft.aliases,unresolved_questions:draft.unresolved_questions,rationale:draft.rationale,

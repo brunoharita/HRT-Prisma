@@ -20,6 +20,7 @@ try{
  if(auditFix){
   sql("do $$begin execute replace(pg_get_functiondef('public.search_occupational_rag_candidates(text,uuid,uuid,text[])'::regprocedure),'public.search_occupational_rag_candidates(', 'private.qa_rag_old_search('); end$$;");
   sql(fs.readFileSync('supabase/migrations/20261024231000_occupational_rag_search_performance.sql','utf8'));
+  sql(fs.readFileSync('supabase/migrations/20261024232500_occupational_rag_selective_prefilter.sql','utf8'));
  }
  if(position){
   const classification=fs.readFileSync('supabase/migrations/20260920111000_m81_competency_projection.sql','utf8');
@@ -40,7 +41,7 @@ try{
  if(auditFix){
   const check=`reset role;
 do $$declare j jsonb; terms text[];begin select v into j from rag_state where k='job';
- foreach terms slice 1 in array array[['Sales Representative'],['estoque'],['vendedor'],['cargo privado'],['sales OR estoque']] loop
+ foreach terms slice 1 in array array[['Sales Representative'],['estoque'],['vendedor'],['cargo privado'],['sales OR estoque'],['de'],['Sales Representative OR Gestor de Estoque'],['Representative and clientes']] loop
  perform rag_assert(public.search_occupational_rag_candidates(repeat('s',48),(j->>'id')::uuid,(j->>'lease')::uuid,terms)=private.qa_rag_old_search(repeat('s',48),(j->>'id')::uuid,(j->>'lease')::uuid,terms),'optimized retrieval preserves original results and tenant scope');end loop;end$$;
 savepoint search_volume;
 insert into public.knowledge_terms(concept_id,scope,term,normalized_term,language,term_type,status,approved_by_auth_user_id)

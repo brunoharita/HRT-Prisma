@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 571
-source_manifest_sha256: 0545b656df6ceeb5c7d2578f076666ba7fbcd022baa4c51026d09a9a2049e53f
+source_manifest_sha256: 72510a70c3f6b6f052504958e09b7c67f76dad5b1121774f54fd0bc91ecd25f9
 -->
 
 # Tudo sobre o Prisma
@@ -2665,6 +2665,10 @@ Worker publicado em d8160831d328484e3840d1048fcfafa3ab98196d, CI branch401404131
 
 Medição somente leitura com as bibliotecas reais: agregação isolada ainda levou4494ms. Migração ainda não aplicada estendida com índices GIN parciais nas tabelas originais e pré-filtro amplo de lexemas; consulta completa posterior preserva termos repartidos entre título/alias/descrição e mantém as regras de fonte/tenant. Não elevar timeout nem criar nova origem de informação.
 
+Migração aplicada em20261024231026, fonte fee3e984af4ffd427ed6b05cf84622ae6b7c7d71, CI branch40141514530/main40141679356 SUCCESS, hash canônico igual. Retomada real concluiu recuperação e embeddings, mas redação excedeu180s. Correção subsequente minimiza os campos repetidos na entrada da redação e permite até300s dentro do orçamento total7min, reservando1min para conclusão auditada no lease8min; modelos/prompts/schema/600tokens preservados. AoT registra conclusão real ou limitações, sem equivalência automática.
+
+Retentativa com expansão ampla confirmou que conectivos comuns ainda tornavam o pré-filtro lento. Nova migração preserva a anterior e escolhe um lexema obrigatório por ramo OR, seguido da mesma verificação completa. Plano somente leitura nas bibliotecas reais caiu de4494ms para477,754ms, com os mesmos20candidatos de controle. Testes de equivalência antiga/nova, OR/conectivo isolado, aliases/acentos e volume PASS. Migração seletiva/prazo de redação aguardam validação operacional final no AoT.
+
 ## Reconhecimento em Corrigir associação — 3.2.1 publicada
 
 Reconhecimento explícito no drawer de referência ocupacional da Posição, usando título/missão/responsabilidades e a mesma fila RAG do salvamento. Candidatos elegíveis e revisão da Knowledge reutilizados; aprovação local e associação na Posição são decisões distintas. Sem tabelas/modelos/pesos/histórico alterados. Busca paginada filtra termos antes de avaliar elegibilidade e não monta referências completas para verificar apenas a permissão; mantém publicação/escopo/reconciliação e distingue erro de ausência. Publicada em24/10/2026 no SHA funcional22f5c2b21a9f94e1692ee41d11e0d2976a54e247, CI branch40138646351/main40138999192 SUCCESS; migration20261024222951 com hash igual,144tabelas e hashes de conceitos/Perfis/Posições/aprovações preservados. Web75d0faf51c58 running0, sete serviços adjacentes inalterados;17checks públicos e login3.2.1 PASS após404 transitório, sem rebuild.65checks dirigidos/81browser/137SQL e tipos/build/contexto/lint PASS. Concorrência e limite de truncamento reusam a fila original. Jornada humana autenticada/LLM real neste painel NOT TESTED em produção; encerramento documental/ledger sem nova implantação. AoT `docs/qa/aot-position-rag-v321.md` reúne prova e limites. Incremento do terceiro número conforme decisão do PO.
@@ -4685,6 +4689,10 @@ Correção operacional de auditoria: a abertura pelo worker envia somente os cam
 A recuperação agrega aliases aprovados uma vez por conceito/empresa e só verifica as fontes após o filtro textual; evita consulta correlacionada para cada entrada da biblioteca. Permanecem os mesmos termos, escopo, elegibilidade, ordenação e limite de 40 candidatos antes do reranking. Comparação antiga/nova e mil cargos sintéticos integram o teste SQL; não aumentar timeouts para esconder custo da consulta.
 
 Índices GIN parciais em `knowledge_concepts` e `knowledge_terms` sustentam um pré-filtro por qualquer lexema; a busca completa original continua depois dele. Isso preserva consultas cujas palavras estejam repartidas entre título, descrição e aliases, inclusive acentos. Índices são derivados dos dados originais, sem catálogo ou entidade concorrente.
+
+Redação da proposta recebe apenas id, rótulo e descrição dos candidatos, sem repetir aliases/metadados de fontes que permanecem nos snapshots originais. O orçamento dessa etapa é até300s, reduzido pelo tempo já transcorrido para reservar1min antes do lease8min. Modelos, instruções, schema, limite600tokens e verificação de evidência/IDs não mudam. Erro de geração continua sem aprovação ou associação implícita.
+
+O pré-filtro indexado usa um lexema obrigatório por ramo OR positivo da consulta normalizada, preferindo o mais longo. A busca completa continua depois do pré-filtro e mantém sua conjunção/disjunção original. Assim conectivos comuns não selecionam a biblioteca inteira desnecessariamente; termos repartidos entre campos continuam elegíveis. A regressão compara a definição anterior, inclusive OR dentro de um termo, conectivo isolado e alias acentuado.
 
 Reconhecer com IA em Corrigir associação reutiliza o RAG privado gratuito occupational-rag-1.0.0/ADR-089, com contexto profissional atual e a fila original. Este caminho não chama o agente externo descrito abaixo e não troca modelo/prompt/provedor. Mesmo contexto solicitado e salvo converge para a mesma fingerprint; resultados são sugestões, sem equivalência ou associação automática. Somente candidatos atualmente aprovados/elegíveis são selecionáveis. Conceitos novos exigem revisão da empresa pelo fluxo existente, com contribuição global após aprovação local. A revisão não altera a Posição por conta própria. Falha/insuficiência/andamento permanecem explícitos e o fluxo manual segue disponível. Não há novo armazenamento concorrente. Autoridade, validação e publicação: acordo/AoT position-rag-v321.
 
@@ -17874,6 +17882,10 @@ Revisão do mapa após execução real: `direct` inclui também `search_occupati
 
 Prova somente leitura com o volume real revelou 4494ms mesmo após agregação. A migração ainda não aplicada ganha dois índices GIN parciais nas tabelas originais e um pré-filtro lexical amplo (qualquer lexema), seguido da mesma consulta completa; nenhum match válido pode ser excluído por título/alias/descrição repartidos. Índices são estruturas derivadas de desempenho, não nova origem de informação. Validar consulta repartida e comparar resultados, tempo real abaixo do timeout e grants inalterados. Nenhum dado será alterado ou índice antigo removido.
 
+Após a migração, a execução real concluiu recuperação e reranking, mas o provedor interrompeu a redação após180s. `direct` inclui orçamento por etapa e minimização de input: redação recebe apenas id/rótulo/descrição recuperados (snapshots/fontes completos permanecem preservados), até300s, limitada ao restante de7min de trabalho e1min reservado para fechamento antes do lease8min. Modelo, instruções, schema, citações,600tokens e aprovação humana não mudam. Validar limite total, dados mínimos, negativos existentes e execução real. É correção D-01 no worker existente, sem alternativa arquitetural nova.
+
+Retentativa automática revelou timeout de busca em expansão mais ampla: pré-filtro por qualquer palavra incluía conectivos frequentes como “de”. Nova migração mantém a definição já aplicada no histórico e otimiza somente o pré-filtro: um lexema obrigatório de cada ramo OR da consulta positiva é suficiente, escolhendo o mais longo. Normalização anterior remove aspas/parênteses/negação; a consulta websearch resultante contém somente conjunções/disjunções positivas. Cada resultado válido precisa conter o lexema escolhido de ao menos um ramo; validação completa posterior mantém a semântica. Testar OR, termos repartidos, acentos e equivalência antiga/nova; medir plano com base real. Sem retirada de fontes ou ampliação de timeout SQL.
+
 ---
 
 ## Source: `docs/qa/agreement-position-rag-v321.md`
@@ -24986,6 +24998,10 @@ Primeira publicação: worker d8160831d328484e3840d1048fcfafa3ab98196d, CI branc
 Migração de busca: agregação de aliases em lote, filtro textual antes das consultas de fontes; mantém autorização/lease/tenant/versão publicada/40 candidatos. Comparação antiga/nova em cinco buscas, mil cargos sintéticos com limite3s e suite original/negativos PASS (57assertions). Nova superfície direct banco explicitada no mapa antes da implementação SQL; sem aumento de timeout ou grants. Evidência SQL atualizada; publicação seletiva da função pendente.
 
 Plano real somente leitura mostrou4494ms (20candidatos) após agregação; não foi contado como desempenho suficiente. A migração, ainda não aplicada, ganhou dois índices GIN nas tabelas originais e pré-filtro por qualquer lexema, mantendo busca completa posterior. Suite SQL57assertions passou com índices; caso adicional de consulta repartida entre título e alias acentuado em teste incremental próprio. CI da primeira revisão SQL40141087417 SUCCESS; revisão final exige novo CI, sem repetir runtime worker já validado.
+
+Migração publicada20261024231026, revisão fee3e984af4ffd427ed6b05cf84622ae6b7c7d71, CI branch40141514530/main40141679356 SUCCESS. Hash SHA256 canônico18f9c214aaa2663cafb5f2abd60a972b80d59956edbb993a0cc2e29ab3655cbd,4761caracteres, igual à fonte. Sem novas categorias de alertas de segurança. Consulta exploratória ampla ainda levou3398ms; não declarar garantia universal de latência. A execução real de Gerente de Estoque passou pela recuperação e embeddings (6902ms/380ms), expansão32459ms; falhou por180003ms na redação, preservando histórico. Próxima correção minimiza entrada e aloca até300s, limitada ao saldo7min e1min de reserva do lease8min.54testes worker/auditoria/síntese/avaliações PASS, incluindo prazo esgotado, input mínimo e limites de evidência. Não repetir SQL completo pois seu contrato não mudou.
+
+Retentativa automática registrou novo statement_timeout na recuperação após expansão22491ms, sem apagar falhas anteriores. Pré-filtro refinado numa nova migração (a anterior aplicada permanece intacta), usando lexema obrigatório de cada ramo OR positivo. Prova de preservação: busca completa posterior inalterada; comparação em oito consultas, conectivo isolado/OR interno/acentos/termos repartidos, volume1000 e negativos no SQL local PASS. Plano equivalente nas bibliotecas reais:20candidatos,477,754ms execução/134,379ms planejamento, contra4494,414ms anteriores. Geração do script SQL teve erro local por substituição JavaScript com delimitador `$`; corrigida antes de aplicação e validada no PostgreSQL, sem efeito em produção. Evidência incremental `sql-search.txt`.
 
 ---
 

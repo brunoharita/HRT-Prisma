@@ -1,12 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readOccupationalContext,readOccupationalDraft,insufficientOccupationalDraft,occupationalSchemaForCandidates,rankOccupationalCandidates} from '../../dist/src/domain/occupationalRag.js';
-import {readOccupationalModelConfig,runOccupationalRagOnce,openOccupationalHistory} from '../../scripts/occupational-rag-worker.mjs';
+import {readOccupationalModelConfig,runOccupationalRagOnce,openOccupationalHistory,occupationalProposalTimeout} from '../../scripts/occupational-rag-worker.mjs';
 const context={title:'Vendedor',responsibilities:'Prospecta clientes e negocia a venda de produtos e serviços.',language:'pt-BR'};
 const candidate={id:'sales',label:'Sales Representative',description:context.responsibilities,scope:'global',version:1,aliases:[],sources:[]};
 const draft={decision:'alias:sales',canonical_label:'Vendedor',description:'Negocia produtos e serviços com clientes.',aliases:['Sales Rep'],related_ids:[],rationale:'Atividades correspondentes, sujeitas a curadoria.',unresolved_questions:[],evidence:[{source_id:'context',quote:context.responsibilities}]};
 const config={base:'http://127.0.0.1:11435',model:'qwen3:4b-instruct-2507-q4_K_M',modelDigest:'a'.repeat(64),embeddingDigest:'b'.repeat(64),embeddingModel:'bge-m3',timeout:2000};
 const job={id:'job',lease:'lease',organizationId:'org',inputHash:'f'.repeat(64),context};
+test('proposal time fits the remaining lease and preserves one minute for audited completion',()=>{assert.equal(occupationalProposalTimeout(0),300000);assert.equal(occupationalProposalTimeout(200000),220000);assert.equal(occupationalProposalTimeout(419000),1000);for(const elapsed of [419001,420000,480000,NaN,-1])assert.throws(()=>occupationalProposalTimeout(elapsed),/RAG_PROCESSING_DEADLINE/);});
 test('structured alias codec binds only approved retrieval IDs',()=>{assert.equal(readOccupationalDraft(draft,context,[candidate]).target_id,'sales');assert(occupationalSchemaForCandidates([candidate]).properties.decision.enum.includes('alias:sales'));assert.throws(()=>readOccupationalDraft({...draft,decision:'alias:foreign'},context,[candidate]));});
 test('invented citations, unrelated references and ungrounded conclusions fail closed',()=>{for(const changed of [{...draft,evidence:[{source_id:'context',quote:'Invented responsibilities'}]},{...draft,related_ids:['foreign']},{...draft,evidence:[]},{...draft,description:''},{...draft,decision:'new_concept',target_id:'sales'}])assert.throws(()=>readOccupationalDraft(changed,context,[candidate]));});
 test('SDR and Revenue title only never invent a definition',()=>{for(const title of ['SDR','Arquiteto de Revenue','Gerente de Logística']){const c={...context,title,responsibilities:''};assert.deepEqual(readOccupationalDraft(draft,c,[candidate]),insufficientOccupationalDraft(c));}});
@@ -19,6 +20,7 @@ test('end to end worker persists a pending grounded proposal and complete provid
  const result=await runOccupationalRagOnce({...config,historyClient:h.client},async(name,args)=>{rpc.push({name,args});if(name==='claim_occupational_rag')return job;if(name==='search_occupational_rag_candidates')return [candidate];},async(url,init)=>{
   http.push(url);if(url.endsWith('/api/tags'))return Response.json({models:[{name:config.model,digest:config.modelDigest},{name:'bge-m3:latest',digest:config.embeddingDigest}]});
   const body=JSON.parse(init.body);if(url.endsWith('/api/embed'))return Response.json({embeddings:body.input.map(()=>Array(64).fill(1)),prompt_eval_count:20});
+  if(!body.format.properties.search_terms){const input=JSON.parse(body.messages[1].content);assert.deepEqual(Object.keys(input.candidates[0]).sort(),['description','id','label']);assert.equal(input.context.responsibilities,context.responsibilities);}
   return Response.json({model:config.model,done:true,done_reason:'stop',prompt_eval_count:30,eval_count:40,message:{content:JSON.stringify(body.format.properties.search_terms?{search_terms:['sales representative','vendas']}:draft)}});
  });
  assert.equal(result.state,'proposal_ready');const completion=rpc.at(-1).args;assert.equal(completion.p_result.rag.target_id,'sales');assert.equal(completion.p_usage.requests,4);assert.equal(completion.p_error,null);assert(h.writes.some(x=>x.p_action==='complete_request'&&x.p_data.status==='succeeded'));assert(http.every(url=>url.startsWith(config.base)));assert(!JSON.stringify(h.writes).includes(context.responsibilities));assert(!rpc.some(x=>/approve|publish/.test(x.name)));

@@ -125,7 +125,7 @@ INSERT 0 1
 
                                                                                                                                                                                                                                                                                                                                         record_ai_worker_history_v1
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
- {"request": {"id": "2dc113d8-652c-4c79-983e-83656247f020", "scope": "organization", "status": "succeeded", "actor_id": null, "created_at": "2026-10-24T20:07:39.591399-03:00", "completed_at": "2026-10-24T20:07:39.793084-03:00", "operation_id": "00000000-0000-4000-8000-000000000002", "function_name": "occupational_rag", "error_category": null, "source_version": "occupational-rag-1.0.0", "idempotency_key": "9391c6fe7e1fa37cc8fdff66b393e40a073ce6c8198085ee9d6a5d4fd0650275", "organization_id": "f0109e0c-3387-94d9-4492-099898764df3", "contract_version": "ai-request-1.0.0", "input_fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}, "recorded": true}
+ {"request": {"id": "63456cd7-5a69-4bcb-b69f-b152cda7ad3a", "scope": "organization", "status": "succeeded", "actor_id": null, "created_at": "2026-10-24T20:21:29.334367-03:00", "completed_at": "2026-10-24T20:21:29.383279-03:00", "operation_id": "00000000-0000-4000-8000-000000000002", "function_name": "occupational_rag", "error_category": null, "source_version": "occupational-rag-1.0.0", "idempotency_key": "9391c6fe7e1fa37cc8fdff66b393e40a073ce6c8198085ee9d6a5d4fd0650275", "organization_id": "f0109e0c-3387-94d9-4492-099898764df3", "contract_version": "ai-request-1.0.0", "input_fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}, "recorded": true}
 (1 row)
 
 RESET
@@ -154,6 +154,9 @@ NOTICE:  PASS: denied (42501)
 NOTICE:  PASS: denied (42501)
 NOTICE:  PASS: lease prevents duplicate acquisition
 NOTICE:  PASS: bounded retrieval finds approved Sales without foreign tenant
+NOTICE:  PASS: optimized retrieval preserves original results and tenant scope
+NOTICE:  PASS: optimized retrieval preserves original results and tenant scope
+NOTICE:  PASS: optimized retrieval preserves original results and tenant scope
 NOTICE:  PASS: optimized retrieval preserves original results and tenant scope
 NOTICE:  PASS: optimized retrieval preserves original results and tenant scope
 NOTICE:  PASS: optimized retrieval preserves original results and tenant scope
