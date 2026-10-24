@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 571
-source_manifest_sha256: 2e06be1bcc8295a7ffd5e1b00fb1175b10acf86e50945e02327c918702ca5793
+source_manifest_sha256: 0545b656df6ceeb5c7d2578f076666ba7fbcd022baa4c51026d09a9a2049e53f
 -->
 
 # Tudo sobre o Prisma
@@ -2663,6 +2663,8 @@ Falha real de Gerente de Estoque identificada como RAG_AUDIT_UNAVAILABLE antes d
 
 Worker publicado em d8160831d328484e3840d1048fcfafa3ab98196d, CI branch40140413151/main40140527697 SUCCESS, imagem b47540259c7a saudável. Retomada real abriu auditoria e concluiu expansão lexical, revelando timeout SQL na recuperação. Migração seletiva de performance agrega aliases uma vez e filtra texto antes de elegibilidade; resultados/limites/autoridade preservados por comparação antiga/nova e teste de volume local. Sem novo catálogo ou remoção de proteções; validação real e fechamento no mesmo AoT.
 
+Medição somente leitura com as bibliotecas reais: agregação isolada ainda levou4494ms. Migração ainda não aplicada estendida com índices GIN parciais nas tabelas originais e pré-filtro amplo de lexemas; consulta completa posterior preserva termos repartidos entre título/alias/descrição e mantém as regras de fonte/tenant. Não elevar timeout nem criar nova origem de informação.
+
 ## Reconhecimento em Corrigir associação — 3.2.1 publicada
 
 Reconhecimento explícito no drawer de referência ocupacional da Posição, usando título/missão/responsabilidades e a mesma fila RAG do salvamento. Candidatos elegíveis e revisão da Knowledge reutilizados; aprovação local e associação na Posição são decisões distintas. Sem tabelas/modelos/pesos/histórico alterados. Busca paginada filtra termos antes de avaliar elegibilidade e não monta referências completas para verificar apenas a permissão; mantém publicação/escopo/reconciliação e distingue erro de ausência. Publicada em24/10/2026 no SHA funcional22f5c2b21a9f94e1692ee41d11e0d2976a54e247, CI branch40138646351/main40138999192 SUCCESS; migration20261024222951 com hash igual,144tabelas e hashes de conceitos/Perfis/Posições/aprovações preservados. Web75d0faf51c58 running0, sete serviços adjacentes inalterados;17checks públicos e login3.2.1 PASS após404 transitório, sem rebuild.65checks dirigidos/81browser/137SQL e tipos/build/contexto/lint PASS. Concorrência e limite de truncamento reusam a fila original. Jornada humana autenticada/LLM real neste painel NOT TESTED em produção; encerramento documental/ledger sem nova implantação. AoT `docs/qa/aot-position-rag-v321.md` reúne prova e limites. Incremento do terceiro número conforme decisão do PO.
@@ -4681,6 +4683,8 @@ Investigação da tentativa original12/09/2026: registro antigo guarda somente f
 Correção operacional de auditoria: a abertura pelo worker envia somente os campos aceitos por `record_ai_worker_history_v1`/`private.record_ai_history_v1`; o identificador da execução continua vinculado ao Inbox/run e à chave de idempotência, sem campo extra no envelope. A regressão SQL `--audit-fix` captura os envelopes do JavaScript real e os executa no PostgreSQL descartável, incluindo fechamento e rejeição de campos não declarados. Mock permissivo isolado não comprova compatibilidade de integração. A posição Gerente de Estoque é a validação real autorizada; sugestões não aprovam nem aplicam associações.
 
 A recuperação agrega aliases aprovados uma vez por conceito/empresa e só verifica as fontes após o filtro textual; evita consulta correlacionada para cada entrada da biblioteca. Permanecem os mesmos termos, escopo, elegibilidade, ordenação e limite de 40 candidatos antes do reranking. Comparação antiga/nova e mil cargos sintéticos integram o teste SQL; não aumentar timeouts para esconder custo da consulta.
+
+Índices GIN parciais em `knowledge_concepts` e `knowledge_terms` sustentam um pré-filtro por qualquer lexema; a busca completa original continua depois dele. Isso preserva consultas cujas palavras estejam repartidas entre título, descrição e aliases, inclusive acentos. Índices são derivados dos dados originais, sem catálogo ou entidade concorrente.
 
 Reconhecer com IA em Corrigir associação reutiliza o RAG privado gratuito occupational-rag-1.0.0/ADR-089, com contexto profissional atual e a fila original. Este caminho não chama o agente externo descrito abaixo e não troca modelo/prompt/provedor. Mesmo contexto solicitado e salvo converge para a mesma fingerprint; resultados são sugestões, sem equivalência ou associação automática. Somente candidatos atualmente aprovados/elegíveis são selecionáveis. Conceitos novos exigem revisão da empresa pelo fluxo existente, com contribuição global após aprovação local. A revisão não altera a Posição por conta própria. Falha/insuficiência/andamento permanecem explícitos e o fluxo manual segue disponível. Não há novo armazenamento concorrente. Autoridade, validação e publicação: acordo/AoT position-rag-v321.
 
@@ -17868,6 +17872,8 @@ Executar D-01..04; impedir P-01; manter F-01; A-01 governa implementação. Vali
 
 Revisão do mapa após execução real: `direct` inclui também `search_occupational_rag_candidates`, que excedeu statement_timeout após expansão lexical bem-sucedida. D-01 já autoriza corrigir a consulta; sem nova decisão de produto. Migração substitui consultas correlacionadas de aliases por uma agregação e verifica elegibilidade após filtro lexical, preservando filtros, limites, termos e fontes. Regressão exige comparação antiga/nova, volume sintético, negativos anteriores e execução real. Plano de publicação passa a incluir exclusivamente essa função de banco, além do worker já corrigido. Rollback da função pela definição anterior, sem apagar dados. Não elevar timeouts nem retirar gates.
 
+Prova somente leitura com o volume real revelou 4494ms mesmo após agregação. A migração ainda não aplicada ganha dois índices GIN parciais nas tabelas originais e um pré-filtro lexical amplo (qualquer lexema), seguido da mesma consulta completa; nenhum match válido pode ser excluído por título/alias/descrição repartidos. Índices são estruturas derivadas de desempenho, não nova origem de informação. Validar consulta repartida e comparar resultados, tempo real abaixo do timeout e grants inalterados. Nenhum dado será alterado ou índice antigo removido.
+
 ---
 
 ## Source: `docs/qa/agreement-position-rag-v321.md`
@@ -24978,6 +24984,8 @@ Mapa e regressão: direct worker/auditoria, 10 testes; integração com PostgreS
 Primeira publicação: worker d8160831d328484e3840d1048fcfafa3ab98196d, CI branch40140413151/main40140527697 SUCCESS; imagem b47540259c7a saudável e sete serviços adjacentes intactos. Web3.2.1/17smokes PASS, sem rebuild. A primeira invocação do deploy foi rejeitada pelo guard de SHA digitado incorretamente, antes de modificar runtime; corrigido com SHA verificado. Retomado o Inbox real existente: auditoria e expansão lexical concluídas (116371ms); PostgreSQL cancelou a recuperação por statement_timeout, execução registrada com erro preservado. D-01 permanece PARTIAL até conclusão real.
 
 Migração de busca: agregação de aliases em lote, filtro textual antes das consultas de fontes; mantém autorização/lease/tenant/versão publicada/40 candidatos. Comparação antiga/nova em cinco buscas, mil cargos sintéticos com limite3s e suite original/negativos PASS (57assertions). Nova superfície direct banco explicitada no mapa antes da implementação SQL; sem aumento de timeout ou grants. Evidência SQL atualizada; publicação seletiva da função pendente.
+
+Plano real somente leitura mostrou4494ms (20candidatos) após agregação; não foi contado como desempenho suficiente. A migração, ainda não aplicada, ganhou dois índices GIN nas tabelas originais e pré-filtro por qualquer lexema, mantendo busca completa posterior. Suite SQL57assertions passou com índices; caso adicional de consulta repartida entre título e alias acentuado em teste incremental próprio. CI da primeira revisão SQL40141087417 SUCCESS; revisão final exige novo CI, sem repetir runtime worker já validado.
 
 ---
 

@@ -43,6 +43,11 @@ do $$declare j jsonb; terms text[];begin select v into j from rag_state where k=
  foreach terms slice 1 in array array[['Sales Representative'],['estoque'],['vendedor'],['cargo privado'],['sales OR estoque']] loop
  perform rag_assert(public.search_occupational_rag_candidates(repeat('s',48),(j->>'id')::uuid,(j->>'lease')::uuid,terms)=private.qa_rag_old_search(repeat('s',48),(j->>'id')::uuid,(j->>'lease')::uuid,terms),'optimized retrieval preserves original results and tenant scope');end loop;end$$;
 savepoint search_volume;
+insert into public.knowledge_terms(concept_id,scope,term,normalized_term,language,term_type,status,approved_by_auth_user_id)
+ values(rag_id('sales'),'global','Prospecção consultiva','prospeccao consultiva','pt-BR','alias','approved',rag_id('super'));
+do $$declare j jsonb; result jsonb;begin select v into j from rag_state where k='job';
+ result:=public.search_occupational_rag_candidates(repeat('s',48),(j->>'id')::uuid,(j->>'lease')::uuid,array['prospeccao Representative']);
+ perform rag_assert(jsonb_array_length(result)=1 and result=private.qa_rag_old_search(repeat('s',48),(j->>'id')::uuid,(j->>'lease')::uuid,array['prospeccao Representative']),'indexed prefilter preserves a query split across title and accented alias');end$$;
 insert into public.knowledge_concepts(id,canonical_label,concept_type,scope,description,status,approved_by_auth_user_id)
  select rag_id('volume-'||n),'Cargo sintético '||n,'occupation','global','Atividades sintéticas não relacionadas.','approved',rag_id('super') from generate_series(1,1000) n;
 insert into public.knowledge_terms(concept_id,scope,term,normalized_term,language,term_type,status,approved_by_auth_user_id)
@@ -54,6 +59,7 @@ rollback to search_volume;
 set local role anon;
 `;
   fixture=fixture.replace("insert into rag_state select 'payload'",()=>check+"insert into rag_state select 'payload'");
+  if(process.argv.includes('--search-only'))fixture=fixture.slice(0,fixture.indexOf("insert into rag_state select 'payload'"));
  }
  let output=sql('begin;\n'+fixture+(position?'\n'+fs.readFileSync('supabase/qa/position_rag_v321_verification.sql','utf8'):'')+auditSql+'\nrollback;');
  if(position){
@@ -72,7 +78,7 @@ set local role anon;
   assert.match(sql("select (select count(*) from public.knowledge_inbox where original_term='Concurrent role 321')||'|'||(select count(*) from public.knowledge_research_runs r join public.knowledge_inbox i on i.id=r.inbox_id where i.original_term='Concurrent role 321');"),/1\|1/);
   output+='\nNOTICE: PASS: two concurrent explicit requests create exactly one Inbox and one original execution\n';
  }
- if(auditFix){fs.mkdirSync('docs/qa/evidence/position-rag-audit-fix',{recursive:true});fs.writeFileSync('docs/qa/evidence/position-rag-audit-fix/sql.txt',output.replaceAll('\r','').split('\n').map(line=>line.trimEnd()).join('\n'));console.log(output.slice(-3500));}else if(position){fs.mkdirSync('docs/qa/evidence/position-rag-v321/sql',{recursive:true});fs.writeFileSync('docs/qa/evidence/position-rag-v321/sql/verification.txt',output.replaceAll('\r','').split('\n').map(line=>line.trimEnd()).join('\n'));console.log(output.slice(-8000));process.exitCode=0;}else{
+ if(auditFix){fs.mkdirSync('docs/qa/evidence/position-rag-audit-fix',{recursive:true});fs.writeFileSync(process.argv.includes('--search-only')?'docs/qa/evidence/position-rag-audit-fix/sql-search.txt':'docs/qa/evidence/position-rag-audit-fix/sql.txt',output.replaceAll('\r','').split('\n').map(line=>line.trimEnd()).join('\n'));console.log(output.slice(-3500));}else if(position){fs.mkdirSync('docs/qa/evidence/position-rag-v321/sql',{recursive:true});fs.writeFileSync('docs/qa/evidence/position-rag-v321/sql/verification.txt',output.replaceAll('\r','').split('\n').map(line=>line.trimEnd()).join('\n'));console.log(output.slice(-8000));process.exitCode=0;}else{
  fs.mkdirSync('docs/qa/evidence/occupational-rag-v320/sql',{recursive:true});
  fs.writeFileSync('docs/qa/evidence/occupational-rag-v320/sql/verification.txt',output.replaceAll('\r','').split('\n').map(line=>line.trimEnd()).join('\n'));
  fs.writeFileSync('docs/qa/evidence/occupational-rag-v320/sql/environment.json',JSON.stringify({environment:'Owned PostgreSQL17 local schema-only clone 127.0.0.1:55479',dependencies,newTables:0,syntheticOnly:true,transaction:'rolled back',result:'PASS'},null,2));
