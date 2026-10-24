@@ -1,0 +1,34 @@
+-- Extends the original synthetic transactional RAG fixtures; never run on production.
+set local role authenticated;
+select set_config('request.jwt.claim.sub',rag_id('recruiter')::text,true);
+insert into rag_state values('position321',to_jsonb(public.request_position_occupational_rag(rag_id('a'),'Arquiteto sintético 321','Planejar processos.', '["Integrar indicadores de receita.","Orientar operações comerciais."]')));
+select rag_assert(public.request_position_occupational_rag(rag_id('a'),'Arquiteto sintético 321','Planejar processos.', '["Integrar indicadores de receita.","Orientar operações comerciais."]')=(select (v#>>'{}')::uuid from rag_state where k='position321'),'explicit repeated request deduplicates');
+select rag_assert(public.request_occupational_rag(rag_id('a'),'Arquiteto sintético 321',E'Planejar processos.\nIntegrar indicadores de receita.\nOrientar operações comerciais.')=(select (v#>>'{}')::uuid from rag_state where k='position321'),'Knowledge and Position use same original fingerprint');
+select rag_assert(public.load_position_occupational_rag(rag_id('a'),(select (v#>>'{}')::uuid from rag_state where k='position321'))->'review'->>'status'='research_queued','exact scoped read works beyond fifty older terms');
+select rag_assert((public.search_position_taxonomy(rag_id('a'),'','occupation')->>'total')::int=0,'blank query does not enumerate catalog');
+select rag_reject(format('select public.request_position_occupational_rag(%L,''X'','''',''[]'')',rag_id('b')),'42501');
+select rag_reject(format('select public.load_position_occupational_rag(%L,%L)',rag_id('b'),(select v#>>'{}' from rag_state where k='position321')),'42501');
+select rag_reject(format('select public.request_position_occupational_rag(%L,''X'','''',''{}'')',rag_id('a')),'22023');
+select rag_reject(format('select public.search_position_taxonomy(%L,''cargo'',''occupation'',-1)',rag_id('a')),'22023');
+select set_config('request.jwt.claim.sub',rag_id('member')::text,true);
+select rag_reject(format('select public.request_position_occupational_rag(%L,''X'','''',''[]'')',rag_id('a')),'42501');
+select rag_reject(format('select public.load_position_occupational_rag(%L,%L)',rag_id('a'),(select v#>>'{}' from rag_state where k='position321')),'42501');
+select set_config('request.jwt.claim.sub',rag_id('inactive')::text,true);
+select rag_reject(format('select public.request_position_occupational_rag(%L,''X'','''',''[]'')',rag_id('a')),'42501');
+reset role;
+select rag_assert(private.position_rag_context('Missão','["Uma atividade","Outra atividade"]')=E'Missão\nUma atividade\nOutra atividade','context composition is identical to the legacy trigger, sanitation remains in the original enqueue');
+insert into rag_state values('long321',to_jsonb(private.enqueue_occupational_rag(rag_id('a'),'Long context 321',repeat('x',3499)||' '||'truncated continuation',jsonb_build_object('kind','manual'),rag_id('recruiter'))));
+set local role authenticated;
+select set_config('request.jwt.claim.sub',rag_id('recruiter')::text,true);
+select rag_assert(public.request_position_occupational_rag(rag_id('a'),'Long context 321',repeat('x',3499)||' '||'truncated continuation','[]')=(select (v#>>'{}')::uuid from rag_state where k='long321'),'long context at whitespace truncation boundary reuses pre-upgrade fingerprint');
+reset role;
+select rag_assert((select count(*)=1 from public.knowledge_research_runs where inbox_id=(select (v#>>'{}')::uuid from rag_state where k='position321')),'single original run for repeated requests');
+insert into public.vacancy_versions(id,organization_id,vacancy_id,version,title,mission,responsibilities,source_kind,created_by_auth_user_id)
+ values(rag_id('version321'),rag_id('a'),rag_id('vacancy'),2,'Arquiteto sintético 321','Planejar processos.','["Integrar indicadores de receita.","Orientar operações comerciais."]','manual',rag_id('recruiter'));
+select rag_assert((select count(*)=1 from public.knowledge_inbox where original_term='Arquiteto sintético 321'),'saving after explicit request reuses same Inbox');
+select rag_assert((select count(*)=1 from public.knowledge_research_runs where inbox_id=(select (v#>>'{}')::uuid from rag_state where k='position321')),'saving does not duplicate the original run');
+select rag_assert((select bool_and(private.m71_concept_allowed(rag_id('a'),id)=private.qa321_old_allowed(rag_id('a'),id)) from public.knowledge_concepts),'optimized predicate preserves original eligibility');
+set local role anon;
+select rag_reject(format('select public.load_position_occupational_rag(%L,%L)',rag_id('a'),rag_id('unknown')),'42501');
+select rag_reject(format('select public.request_position_occupational_rag(%L,''X'','''',''[]'')',rag_id('a')),'42501');
+reset role;

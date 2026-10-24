@@ -8,6 +8,7 @@ import {knowledgeService} from "../infrastructure/supabase/knowledgeService";
 import {PrismaCard} from "../ui/PrismaCard";
 import {useLoadingTask} from "../ui/PrismaLoadingFeedback";
 import "./OccupationalRagPanel.css";
+import {positionTaxonomyService} from "../infrastructure/supabase/positionTaxonomyService";
 
 const labels:Record<string,string>={research_queued:"Na fila",researching:"Reconhecendo",awaiting_human_review:"Revisão pendente",approved:"Aprovado na empresa",failed:"Reconhecimento indisponível",deferred:"Mantido pendente"};
 const stepItems=[{title:"Reconhecimento"},{title:"Revisão na empresa"},{title:"Contribuição global"}];
@@ -15,15 +16,15 @@ const errorText=(error:unknown)=>error instanceof Error?error.message:"Não foi 
 function CandidateList({candidates}:{candidates:OccupationalCandidate[]}){
  return <div className="occupational-candidates">{candidates.length?candidates.map(c=><div className="occupational-candidate" key={c.id}><Space wrap><Typography.Text strong>{c.label}</Typography.Text><Tag>{c.scope==="organization"?"Empresa":"Base Prisma"}</Tag><Typography.Text type="secondary">v{c.version}</Typography.Text></Space><Typography.Paragraph>{c.description||"Sem descrição publicada."}</Typography.Paragraph><div className="occupational-source">{c.sources.length?c.sources.map(s=>`${s.name} · ${s.version}`).join("; "):"Conhecimento aprovado por curadoria"}</div></div>):<Typography.Paragraph type="secondary">Nenhuma correspondência adequada foi recuperada. Isso não comprova que a função inexiste nas fontes.</Typography.Paragraph>}</div>;
 }
-export function OccupationalRagPanel({organizationId,onChanged}:{organizationId:string;onChanged:()=>void;onManual?:(id:string)=>void}){
+export function OccupationalRagPanel({organizationId,onChanged,initialInboxId,initialStage=0}:{organizationId:string;onChanged:()=>void;onManual?:(id:string)=>void;initialInboxId?:string;initialStage?:0|1}){
  const [rows,setRows]=useState<OccupationalRagReview[]>([]),[selectedId,setSelectedId]=useState<string|null>(null),[stage,setStage]=useState<0|1>(0),[creating,setCreating]=useState(false);
  const [title,setTitle]=useState(""),[responsibilities,setResponsibilities]=useState(""),[name,setName]=useState(""),[description,setDescription]=useState(""),[aliases,setAliases]=useState<string[]>([]),[related,setRelated]=useState<string[]>([]),[reason,setReason]=useState("");
  const [mode,setMode]=useState<"create"|"alias"|undefined>(),[target,setTarget]=useState<string|undefined>(),[options,setOptions]=useState<Array<{id:string;canonicalLabel:string;description:string;version:number}>>([]);
  const [error,setError]=useState<string|null>(null),[loading,setLoading]=useState(false),[searching,setSearching]=useState(false);
  const operation=useLoadingTask("Processando revisão do cargo…"),revision=useRef(0),currentOrg=useRef(organizationId);currentOrg.current=organizationId;
  const selected=rows.find(x=>x.id===selectedId)??null,proposal=selected?.proposal??null,payload=proposal?.status==="approved"&&proposal.edited?proposal.edited as typeof proposal.original:proposal?.original;
- const load=useCallback(async()=>{const ticket=++revision.current;setLoading(true);try{const data=await knowledgeService.loadOccupationalReviews(organizationId);if(ticket===revision.current&&currentOrg.current===organizationId){setRows(data);setError(null);}}catch(e){if(ticket===revision.current)setError(errorText(e));}finally{if(ticket===revision.current)setLoading(false);}},[organizationId]);
- useEffect(()=>{setRows([]);setSelectedId(null);setCreating(false);void load();const timer=window.setInterval(()=>void load(),15000);return()=>{revision.current++;window.clearInterval(timer);};},[load]);
+ const load=useCallback(async()=>{const ticket=++revision.current;setLoading(true);try{const data=initialInboxId?[(await positionTaxonomyService.recognition(organizationId,initialInboxId)).review]:await knowledgeService.loadOccupationalReviews(organizationId);if(ticket===revision.current&&currentOrg.current===organizationId){setRows(data);setError(null);}}catch(e){if(ticket===revision.current)setError(errorText(e));}finally{if(ticket===revision.current)setLoading(false);}},[organizationId,initialInboxId]);
+ useEffect(()=>{setRows([]);setSelectedId(initialInboxId??null);setStage(initialStage);setCreating(false);void load();const timer=window.setInterval(()=>void load(),15000);return()=>{revision.current++;window.clearInterval(timer);};},[load,initialInboxId,initialStage]);
  useEffect(()=>{
   const p=payload;if(!p)return;
   setName(p.proposed_concept.canonical_label);setDescription(p.proposed_concept.description);setAliases(p.aliases);setRelated(p.approved_related_ids??p.rag.related_ids??[]);setReason("");setTarget(p.approved_target_id??undefined);

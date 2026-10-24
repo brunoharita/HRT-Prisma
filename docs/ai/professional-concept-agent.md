@@ -1,5 +1,9 @@
 # Prisma Knowledge Agent
 
+## Reconhecimento ocupacional privado na Posição — 3.2.1
+
+Reconhecer com IA em Corrigir associação reutiliza o RAG privado gratuito occupational-rag-1.0.0/ADR-089, com contexto profissional atual e a fila original. Este caminho não chama o agente externo descrito abaixo e não troca modelo/prompt/provedor. Mesmo contexto solicitado e salvo converge para a mesma fingerprint; resultados são sugestões, sem equivalência ou associação automática. Somente candidatos atualmente aprovados/elegíveis são selecionáveis. Conceitos novos exigem revisão da empresa pelo fluxo existente, com contribuição global após aprovação local. A revisão não altera a Posição por conta própria. Falha/insuficiência/andamento permanecem explícitos e o fluxo manual segue disponível. Não há novo armazenamento concorrente. Autoridade, validação e publicação: acordo/AoT position-rag-v321.
+
 Contrato `knowledge-research-1.0.0`, prompt `knowledge-agent-1.0.0`, schema `knowledge-proposal-1.0.0` e policy `trusted-sources-1.0.0`.
 
 O provider recebe somente `{ term, language, scope }`. Nome, contato, texto de currículo, `person_id`, `organization_id`, paths e metadata privada são proibidos. O termo é bloqueado quando contém padrões de email, telefone, CPF, UUID ou URL. Termos internos só podem sair quando `allow_external_knowledge_enrichment = true`; o default é `false`.

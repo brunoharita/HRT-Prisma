@@ -1,0 +1,16 @@
+# Acordo — reconhecimento em Corrigir associação
+
+Versão 1.0.0, agreed. Bruno autorizou implementar reconhecimento com IA em Corrigir associação, reutilizar o RAG sem duplicidades, preservar decisões humanas, corrigir a busca e publicar 3.2.1. Baseline 00f1ca3655b6f18d78fc6149db43bf30971564e1, contratos M7.1 e occupational-rag-1.0.0/ADR-089 preservados.
+
+- D-01: manter busca manual por nome/alias e seleção/desassociação/reavaliação existentes. Corrigir falha da busca com consulta limitada e autorização/escopo/fontes aprovadas preservados. Falha não significa ausência; retry explícito.
+- D-02: oferecer Reconhecer com IA no drawer Corrigir associação, usando título, missão e responsabilidades atuais. Reutilizar request/fila/fingerprint/worker/modelos gratuitos já existentes e o mesmo contexto do disparo no salvamento. Cliques, reabertura, concorrência e salvar não criam trabalho ou proposta duplicados.
+- D-03: mostrar andamento/resultado, justificativa, fontes e candidatos aprovados elegíveis para referência. Somente confirmação explícita muda o rascunho; salvar registra versão. Novo conceito/proposta não pode ser selecionado antes da aprovação na empresa. Encaminhar à revisão existente e permitir retornar/atualizar sem inventar aprovação.
+- D-04: preservar escolhas humanas e remoções, títulos, requisitos, histórico, pesos e decisões. Mudança de contexto/empresa/fechamento invalida respostas tardias; falha da IA não bloqueia busca ou salvamento. Nenhuma associação automática pela IA.
+- D-05: publicar 3.2.1 com evidência local/SQL negativo/segurança/browser/CI, migration seletiva se necessária e somente destinos comprovados pelo plano. Rollback sem apagar fila ou decisões.
+- D-UX-01: screenshot fornecido é exemplo do fluxo/defeito. Preservar drawer à direita, busca e lista; acrescentar reconhecimento no mesmo contexto com resultado e ação explícita. Revisão completa reutiliza componente existente em região própria. Mobile mantém ordem e ações legíveis, sem overflow.
+- P-01: nova tabela/catálogo/fila, chamada paga, troca de modelo/prompts, aprovação ou substituição humana implícita, publicação global direta, mistura de tenants ou uso de dados pendentes como referência aprovada.
+- F-01: recálculo, backfill, alteração de matching/Score/LinkedIn e redesign geral da Knowledge.
+- A-01: engenharia de RPC/DTO/componentes, consultas e polling limitado enquanto aberto, debounce/cancelamento, testes sintéticos e migração aditiva delegados. Não há nova decisão material de produto pendente.
+- CA-01: selecionar candidatos após ação humana, revisar desconhecido sem associação prematura, reaproveitar fila ao clicar/reabrir/salvar, contexto igual nos dois disparos; falhas/retry, respostas tardias/tenant/título, escolhas e histórico preservados. Busca vazia/termos/acento/alias/paginação/fontes e negativos de acesso. Browser desktop/mobile com componentes reais, SQL local descartável com rollback, CI, versão/SHA/assets e serviços preservados em produção.
+
+Versionamento adotado conforme orientação de Bruno: terceiro número para pequenas melhorias/correções; central para melhorias maiores e terceiro em zero; primeiro somente para mudança extremamente significativa. Esta entrega usa explicitamente 3.2.1.

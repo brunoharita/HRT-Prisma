@@ -1,4 +1,4 @@
-import type { OccupationalCandidate } from "../../../src/domain/occupationalRag";
+import type { OccupationalCandidate } from "../../../src/domain/occupationalRag.js";
 export interface OccupationalRagPayload {
   approved_target_id?:string|null;
   approved_related_ids?:string[];

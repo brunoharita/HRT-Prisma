@@ -3896,6 +3896,15 @@ textarea {
 .prisma-knowledge-classification-notice .ant-alert-section { grid-column: 2; grid-row: 1; }
 .prisma-knowledge-classification-notice .ant-alert-actions { grid-column: 2; grid-row: 2; margin: 0; }
 
+.prisma-position-recognition { margin-block: 16px 24px; padding: 16px; border: 1px solid var(--ant-color-border-secondary, #dbe4f0); border-radius: 12px; }
+.prisma-position-recognition :is(.ant-list-item, .ant-list-item > div, .ant-alert-section) { min-width: 0; max-width: 100%; }
+.prisma-position-recognition :is(p, .ant-typography, .ant-tag, .ant-btn) { overflow-wrap: anywhere; white-space: normal; }
+.prisma-position-recognition .ant-btn { height: auto; min-height: 32px; max-width: 100%; }
+.prisma-position-recognition .ant-alert { margin-top: 12px; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px; }
+.prisma-position-recognition .ant-alert-icon { grid-column: 1; grid-row: 1; margin: 0; }
+.prisma-position-recognition .ant-alert-section { grid-column: 2; grid-row: 1; }
+.prisma-position-recognition .ant-alert-actions { grid-column: 2; grid-row: 2; margin: 0; }
+
 @media (max-width: 1280px) {
   .prisma-review-split { grid-template-columns: minmax(380px, 46fr) minmax(490px, 54fr); }
   .prisma-evidence-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }

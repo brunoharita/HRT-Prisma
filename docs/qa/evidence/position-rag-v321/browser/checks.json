@@ -1,0 +1,244 @@
+{
+  "checks": [
+    {
+      "name": "1448 opening does not request AI",
+      "pass": true
+    },
+    {
+      "name": "1448 AI result preserves human choice and requirements",
+      "pass": true
+    },
+    {
+      "name": "1448 request uses professional fields",
+      "pass": true
+    },
+    {
+      "name": "1448 refresh and reopen reuse request",
+      "pass": true
+    },
+    {
+      "name": "1448 drawer content stays inside viewport",
+      "pass": true
+    },
+    {
+      "name": "1448 only explicit selection changes current association",
+      "pass": true
+    },
+    {
+      "name": "1448 removal remains explicit",
+      "pass": true
+    },
+    {
+      "name": "1448 new proposal is not selectable",
+      "pass": true
+    },
+    {
+      "name": "1448 embedded review reads exact Inbox without implicit approval",
+      "pass": true
+    },
+    {
+      "name": "1448 review contained",
+      "pass": true
+    },
+    {
+      "name": "1448 Knowledge approval does not alter Position",
+      "pass": true
+    },
+    {
+      "name": "1448 approved new concept needs separate Position selection",
+      "pass": true
+    },
+    {
+      "name": "1448 search failure is distinct from no match",
+      "pass": true
+    },
+    {
+      "name": "1448 manual search recovers",
+      "pass": true
+    },
+    {
+      "name": "1448 AI failure preserves manual path",
+      "pass": true
+    },
+    {
+      "name": "1448 AI request retry recovers",
+      "pass": true
+    },
+    {
+      "name": "1448 background does not block manual path",
+      "pass": true
+    },
+    {
+      "name": "1448 exact match does not manufacture a proposal",
+      "pass": true
+    },
+    {
+      "name": "1448 late response from old title cannot appear or select",
+      "pass": true
+    },
+    {
+      "name": "1448 no runtime exceptions",
+      "pass": true
+    },
+    {
+      "name": "390 opening does not request AI",
+      "pass": true
+    },
+    {
+      "name": "390 AI result preserves human choice and requirements",
+      "pass": true
+    },
+    {
+      "name": "390 request uses professional fields",
+      "pass": true
+    },
+    {
+      "name": "390 refresh and reopen reuse request",
+      "pass": true
+    },
+    {
+      "name": "390 drawer content stays inside viewport",
+      "pass": true
+    },
+    {
+      "name": "390 only explicit selection changes current association",
+      "pass": true
+    },
+    {
+      "name": "390 removal remains explicit",
+      "pass": true
+    },
+    {
+      "name": "390 new proposal is not selectable",
+      "pass": true
+    },
+    {
+      "name": "390 embedded review reads exact Inbox without implicit approval",
+      "pass": true
+    },
+    {
+      "name": "390 review contained",
+      "pass": true
+    },
+    {
+      "name": "390 Knowledge approval does not alter Position",
+      "pass": true
+    },
+    {
+      "name": "390 approved new concept needs separate Position selection",
+      "pass": true
+    },
+    {
+      "name": "390 search failure is distinct from no match",
+      "pass": true
+    },
+    {
+      "name": "390 manual search recovers",
+      "pass": true
+    },
+    {
+      "name": "390 AI failure preserves manual path",
+      "pass": true
+    },
+    {
+      "name": "390 AI request retry recovers",
+      "pass": true
+    },
+    {
+      "name": "390 background does not block manual path",
+      "pass": true
+    },
+    {
+      "name": "390 exact match does not manufacture a proposal",
+      "pass": true
+    },
+    {
+      "name": "390 late response from old title cannot appear or select",
+      "pass": true
+    },
+    {
+      "name": "390 no runtime exceptions",
+      "pass": true
+    },
+    {
+      "name": "320 opening does not request AI",
+      "pass": true
+    },
+    {
+      "name": "320 AI result preserves human choice and requirements",
+      "pass": true
+    },
+    {
+      "name": "320 request uses professional fields",
+      "pass": true
+    },
+    {
+      "name": "320 refresh and reopen reuse request",
+      "pass": true
+    },
+    {
+      "name": "320 drawer content stays inside viewport",
+      "pass": true
+    },
+    {
+      "name": "320 only explicit selection changes current association",
+      "pass": true
+    },
+    {
+      "name": "320 removal remains explicit",
+      "pass": true
+    },
+    {
+      "name": "320 new proposal is not selectable",
+      "pass": true
+    },
+    {
+      "name": "320 embedded review reads exact Inbox without implicit approval",
+      "pass": true
+    },
+    {
+      "name": "320 review contained",
+      "pass": true
+    },
+    {
+      "name": "320 Knowledge approval does not alter Position",
+      "pass": true
+    },
+    {
+      "name": "320 approved new concept needs separate Position selection",
+      "pass": true
+    },
+    {
+      "name": "320 search failure is distinct from no match",
+      "pass": true
+    },
+    {
+      "name": "320 manual search recovers",
+      "pass": true
+    },
+    {
+      "name": "320 AI failure preserves manual path",
+      "pass": true
+    },
+    {
+      "name": "320 AI request retry recovers",
+      "pass": true
+    },
+    {
+      "name": "320 background does not block manual path",
+      "pass": true
+    },
+    {
+      "name": "320 exact match does not manufacture a proposal",
+      "pass": true
+    },
+    {
+      "name": "320 late response from old title cannot appear or select",
+      "pass": true
+    },
+    {
+      "name": "320 no runtime exceptions",
+      "pass": true
+    }
+  ]
+}

@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 566
-source_manifest_sha256: 809271c7a2a46b1828acd7633e95eb152cc81f10cc3d470b391ed33c09118d18
+documentation_source_count: 569
+source_manifest_sha256: 4002c35e3aed6063fcb523ce964a0ce3e7bd5636c840173c2623d62df84ae07b
 -->
 
 # Tudo sobre o Prisma
@@ -2651,11 +2651,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.94.3
+version: 2.94.4
 last_verified: 2026-10-24
 ---
 
 # Estado atual do Prisma
+
+## Reconhecimento em Corrigir associação — implementação 3.2.1
+
+Implementação autorizada por Bruno: reconhecimento explícito no drawer de referência ocupacional da Posição, usando título/missão/responsabilidades e a mesma fila RAG do salvamento. Candidatos elegíveis e revisão da Knowledge reutilizados; aprovação local e associação na Posição são decisões distintas. Sem tabelas/modelos/pesos/histórico alterados. Busca paginada deixa de montar referências completas para verificar elegibilidade, mantém publicação/escopo/reconciliação e distingue erro de ausência. Testes dirigidos, SQL local/concorrência, browser e rollout são documentados no AoT `docs/qa/aot-position-rag-v321.md`; publicação não é presumida deste texto. Versão solicitada 3.2.1, seguindo incremento do terceiro número para esta melhoria.
 
 ## Cartões de classificação do Conhecimento — correção 3.2.0
 
@@ -4666,6 +4670,10 @@ Investigação da tentativa original12/09/2026: registro antigo guarda somente f
 
 # Prisma Knowledge Agent
 
+## Reconhecimento ocupacional privado na Posição — 3.2.1
+
+Reconhecer com IA em Corrigir associação reutiliza o RAG privado gratuito occupational-rag-1.0.0/ADR-089, com contexto profissional atual e a fila original. Este caminho não chama o agente externo descrito abaixo e não troca modelo/prompt/provedor. Mesmo contexto solicitado e salvo converge para a mesma fingerprint; resultados são sugestões, sem equivalência ou associação automática. Somente candidatos atualmente aprovados/elegíveis são selecionáveis. Conceitos novos exigem revisão da empresa pelo fluxo existente, com contribuição global após aprovação local. A revisão não altera a Posição por conta própria. Falha/insuficiência/andamento permanecem explícitos e o fluxo manual segue disponível. Não há novo armazenamento concorrente. Autoridade, validação e publicação: acordo/AoT position-rag-v321.
+
 Contrato `knowledge-research-1.0.0`, prompt `knowledge-agent-1.0.0`, schema `knowledge-proposal-1.0.0` e policy `trusted-sources-1.0.0`.
 
 O provider recebe somente `{ term, language, scope }`. Nome, contato, texto de currículo, `person_id`, `organization_id`, paths e metadata privada são proibidos. O termo é bloqueado quando contém padrões de email, telefone, CPF, UUID ou URL. Termos internos só podem sair quando `allow_external_knowledge_enrichment = true`; o default é `false`.
@@ -5774,6 +5782,14 @@ Rollback: voltar web/Edge para2.7.3 e desativar somente cron people-directory ca
 
 # Arquitetura da Fundação de Conhecimento
 
+## Reconhecimento no cadastro da Posição — 3.2.1
+
+Corrigir associação mantém busca manual e oferece reconhecimento explícito por título, missão e responsabilidades atuais. `request_position_occupational_rag` e o trigger de salvamento compartilham `private.position_rag_context`; a higienização/truncamento ocorre uma única vez no enqueue original. Fingerprint, fila, worker, propostas e decisões são os mesmos de occupational-rag-1.0.0; repetir, reabrir ou salvar não cria outra execução para o mesmo contexto. Contexto alterado representa outra solicitação, sem descartar histórico.
+
+`load_position_occupational_rag` autoriza a empresa e lê a Inbox exata, sem depender das cinquenta linhas recentes da listagem. Revalida candidatos contra os conceitos aprovados e referências atuais M7.1. Proposta nova segue pelo componente original de revisão, agora com abertura contextual opcional; aprovação na empresa não seleciona referência na Posição. Usar nesta Posição é outra ação humana, persistida ao salvar nova versão. Polling é limitado a 24 consultas enquanto aberto, com atualização manual e preservação da busca em falhas. Troca de empresa/título/contexto e fechamento invalidam respostas tardias.
+
+A busca exige dois caracteres, normaliza uma vez e retorna páginas de 25 com total. A elegibilidade M7.1 usa os mesmos conceitos, escopos, publicações e reconciliações aprovadas, mas não monta staging/proveniência/JSON completo para responder apenas sim/não. Detalhes completos continuam na projeção de referências. Sem nova tabela, catálogo ou índice não demonstrado. AoT position-rag-v321 registra positivos/negativos e comparação de elegibilidade/performance.
+
 ## Classificação publicada nos cartões de propostas — correção 3.2.0
 
 O cartão aprovado consulta o conceito identificado por `published_concept_id` e sua classificação `is_current` em `knowledge_competency_classifications`, sob RLS existente. Não reconstrói a classificação publicada a partir de `original_proposal`: o original é histórico e pode não conter o subagrupador escolhido na aprovação. A leitura é limitada aos conceitos aprovados visíveis, deduplicada em lotes de até 100 IDs. Ausência e falha de consulta são estados distintos, com nova consulta explícita; a falha adicional não bloqueia propostas pendentes.
@@ -6051,6 +6067,8 @@ As linhas indicam a organização preferencial e a proveniência, não uma barre
 ## Source: `docs/architecture/versioning.md`
 
 # Versionamento
+
+Decisão de Bruno em 24/10/2026: **3.2.1**, integração do reconhecimento com IA em Corrigir associação, busca de ocupações corrigida e reutilização da fila original. Pequenas melhorias/correções incrementam o terceiro número; melhorias maiores incrementam o central e reiniciam o terceiro em zero; o primeiro muda somente em alterações extremamente importantes e significativas. Preservar registros históricos. Contratos M7.1/RAG permanecem compatíveis, sem mudança de pesos/modelos ou novas tabelas. Acordo/execução/AoT position-rag-v321.
 
 Correção de exibição de 24/10/2026: manter a versão pública **3.2.0** e contratos persistidos. Os cartões aprovados passam a ler a classificação vigente da fonte canônica, enquanto o seletor permanece apenas nas propostas pendentes. Sem reclassificação ou nova autoridade. Escopo e publicação comprovados pelo AoT `knowledge-published-classification`.
 
@@ -17817,6 +17835,27 @@ Sem decisão arquitetural nova: reutilização de Ant Design Drawer/Dropdown/Mod
 
 ---
 
+## Source: `docs/qa/agreement-position-rag-v321.md`
+
+# Acordo — reconhecimento em Corrigir associação
+
+Versão 1.0.0, agreed. Bruno autorizou implementar reconhecimento com IA em Corrigir associação, reutilizar o RAG sem duplicidades, preservar decisões humanas, corrigir a busca e publicar 3.2.1. Baseline 00f1ca3655b6f18d78fc6149db43bf30971564e1, contratos M7.1 e occupational-rag-1.0.0/ADR-089 preservados.
+
+- D-01: manter busca manual por nome/alias e seleção/desassociação/reavaliação existentes. Corrigir falha da busca com consulta limitada e autorização/escopo/fontes aprovadas preservados. Falha não significa ausência; retry explícito.
+- D-02: oferecer Reconhecer com IA no drawer Corrigir associação, usando título, missão e responsabilidades atuais. Reutilizar request/fila/fingerprint/worker/modelos gratuitos já existentes e o mesmo contexto do disparo no salvamento. Cliques, reabertura, concorrência e salvar não criam trabalho ou proposta duplicados.
+- D-03: mostrar andamento/resultado, justificativa, fontes e candidatos aprovados elegíveis para referência. Somente confirmação explícita muda o rascunho; salvar registra versão. Novo conceito/proposta não pode ser selecionado antes da aprovação na empresa. Encaminhar à revisão existente e permitir retornar/atualizar sem inventar aprovação.
+- D-04: preservar escolhas humanas e remoções, títulos, requisitos, histórico, pesos e decisões. Mudança de contexto/empresa/fechamento invalida respostas tardias; falha da IA não bloqueia busca ou salvamento. Nenhuma associação automática pela IA.
+- D-05: publicar 3.2.1 com evidência local/SQL negativo/segurança/browser/CI, migration seletiva se necessária e somente destinos comprovados pelo plano. Rollback sem apagar fila ou decisões.
+- D-UX-01: screenshot fornecido é exemplo do fluxo/defeito. Preservar drawer à direita, busca e lista; acrescentar reconhecimento no mesmo contexto com resultado e ação explícita. Revisão completa reutiliza componente existente em região própria. Mobile mantém ordem e ações legíveis, sem overflow.
+- P-01: nova tabela/catálogo/fila, chamada paga, troca de modelo/prompts, aprovação ou substituição humana implícita, publicação global direta, mistura de tenants ou uso de dados pendentes como referência aprovada.
+- F-01: recálculo, backfill, alteração de matching/Score/LinkedIn e redesign geral da Knowledge.
+- A-01: engenharia de RPC/DTO/componentes, consultas e polling limitado enquanto aberto, debounce/cancelamento, testes sintéticos e migração aditiva delegados. Não há nova decisão material de produto pendente.
+- CA-01: selecionar candidatos após ação humana, revisar desconhecido sem associação prematura, reaproveitar fila ao clicar/reabrir/salvar, contexto igual nos dois disparos; falhas/retry, respostas tardias/tenant/título, escolhas e histórico preservados. Busca vazia/termos/acento/alias/paginação/fontes e negativos de acesso. Browser desktop/mobile com componentes reais, SQL local descartável com rollback, CI, versão/SHA/assets e serviços preservados em produção.
+
+Versionamento adotado conforme orientação de Bruno: terceiro número para pequenas melhorias/correções; central para melhorias maiores e terceiro em zero; primeiro somente para mudança extremamente significativa. Esta entrega usa explicitamente 3.2.1.
+
+---
+
 ## Source: `docs/qa/agreement-position-relation-clarity.md`
 
 # Acordo — Clareza da avaliação de relação com a Posição
@@ -24885,6 +24924,58 @@ Todos os D-* e P-* aplicáveis PASS, F-01 preservado; sem desvio material. Entre
 
 ---
 
+## Source: `docs/qa/aot-position-rag-v321.md`
+
+# AoT — reconhecimento em Corrigir associação 3.2.1
+
+Acordo/execução position-rag-v321 1.0.0. Classe D (RPC, fila/IA e seleção humana), baseline 00f1ca3 / web 303de23 / 3.2.0. Autorização explícita de Bruno para implementação e produção, sem nova aprovação administrativa.
+
+## Mapa de impacto anterior à implementação
+
+| Área/capacidade | Relação | Baseline / validação mínima |
+| --- | --- | --- |
+| Drawer da Posição/busca/referências | direct | M7.1, escolha e requisitos explícitos; busca/preview, erro/retry, teclado, desktop/mobile |
+| Fila RAG/curadoria original | direct | fingerprint por empresa/título/contexto, uma execução original; SQL idempotência/concorrência/revisão |
+| Salvamento versionado da Posição | plausible_indirect | trigger existente, requisitos e histórico; prova de mesmo contexto/fila e escolha preservada |
+| Knowledge revisão empresa/global | plausible_indirect | componente reaproveitado; default e embedded, aprovação explícita e estados decididos |
+| Auth/tenant/fontes/histórico | critical_transversal | funções backend/escopo/fail closed; negativos anon/member/outro tenant/inativo/fontes não publicadas |
+| Score/matching/Perfil/modelo e outros serviços | no_impact_identified | sem troca de regras/modelos/handlers; regressão dirigida do contrato e snapshots de serviços |
+| Release/registry/banco/web | direct | 3.2.1, plano, SQL local/CI, smoke e rollback; sem worker novo se diff não exigir |
+
+Fechamento mínimo: todos os D e P aplicáveis PASS com testes dirigidos/SQL local/browser, documentação/contexto/CI, migration seletiva, web e smoke/sync. Nenhum registro humano real será alterado para teste. Produção sem QA remoto separado; QA local PostgreSQL descartável e navegador sintético.
+
+## Acordos → implementação → teste → evidência
+
+| ID | Implementação/teste/evidência | Status |
+| --- | --- | --- |
+| D-01 | Busca limitada, normalização única e predicado sem montar referência completa; SQL M7.1/regressão e falha/retry no browser | PASS |
+| D-02 | RPC contextual + helper original de composição; fingerprint antigo inclusive limite de 3.500 caracteres; cliques/salvar e duas conexões concorrentes convergem para uma execução | PASS |
+| D-03 | Candidatos elegíveis e abertura do componente original por Inbox exata; browser prova aprovação de Knowledge e seleção da Posição separadas | PASS |
+| D-04/P-01 | Resposta tardia descartada por contexto/fechamento; humanos/requisitos/histórico/tenant/fontes e negativos SQL; nenhum catálogo/modelo/prompt novo | PASS |
+| D-05 | Plano requer somente migration seletiva e web; CI/publicação pendentes | NOT TESTED |
+| D-UX-01 | 60 checks em 1448/390/320 e screenshots de reconhecimento/revisão; drawer e ações manuais preservados | PASS |
+| CA-01 | Local PASS, rollout pendente | PARTIAL |
+
+## Diagnóstico
+
+Busca atual chama m71_concept_allowed por candidato; essa função constrói referências completas incluindo staging/proveniência para decidir apenas elegibilidade. Consulta vazia pode ampliar o trabalho a todo catálogo. Logs registram timeout em 24/10/2026 21:24:09 UTC; associação direta desse evento à RPC não é demonstrada pelo log resumido. Fonte operacional da função conferida, não apenas migration. Advisors de desempenho foram inspecionados; achados adjacentes não entram no escopo.
+
+## Publicação / limites
+
+QA local: 28 testes de codec/Posição/versão/erros, 10 do worker RAG e 22 de tooling PASS; root/web types e build PASS. Browser: 60 checks novos e 21 da revisão padrão Knowledge PASS, dados sintéticos sem LLM/banco remoto. SQL: 137 verificações, incluindo M7.1, curadoria RAG, permissões, origem/histórico, publicações/reconciliação, fila compartilhada e concorrência real de duas conexões; nenhuma tabela nova. Transações revertidas; fixture de concorrência confirmada apenas no banco descartável, excluído ao terminar. Evidências em `evidence/position-rag-v321`.
+
+Performance sintética (100 repetições limitadas dos mesmos conceitos): elegibilidade anterior 2960,927 ms, atual 1070,458 ms; igualdade dos resultados comprovada inclusive fontes substituídas, reconciliação e outra empresa. Não é SLA de produção. A consulta de detalhes continua preservando as fontes completas.
+
+As primeiras falhas foram de fixtures: nome acessível inclui ícone no botão; M7.1 histórico antecedia o subagrupador obrigatório M8.1 e leitura de auditoria exclusiva Super do M7.7; bootstrap não carregava a função de classificação; replacement JavaScript interpretava `$$` da SQL. Adaptadores locais passaram a usar a API v2 vigente, classificação original e ator correto, preservar `$$` via função de replacement e conferir original/decisão persistidos. Nenhuma proteção do produto foi removida para aprovar testes. Ajuste de extensão em import somente de tipo atende NodeNext no novo teste; sem alteração do runtime. Uma atualização de tipo recarregou o harness durante a rodada; testes completaram com todos os cenários e sem exceções; não houve alteração funcional durante a validação visual.
+
+Referência do usuário é exemplo do fluxo/defeito. Mantidos drawer à direita, busca/lista e desassociação; bloco de reconhecimento acrescentado no mesmo contexto, revisão contextual reutiliza o layout original. Screenshots desktop/mobile em estados equivalentes registram essa transformação; não houve redesign geral. IA e aprovação local não selecionam automaticamente a Posição.
+
+Rollback: web anterior retida; RPCs novas são aditivas, predicado e trigger mantêm assinatura/semântica. Se necessário, restaurar definições anteriores das funções alteradas por migration de avanço e usar web anterior; não apagar fila, conceitos ou decisões. Sem worker/modelo/Edge novo requerido. Advisors prévios: avisos de segurança existentes (7 anon definers, 147 authenticated definers, 40 RLS sem policy, proteção de senha); não são corrigidos neste escopo. As duas novas RPCs restringem execução a authenticated e validam admin/empresa no backend.
+
+CI, migration remota, smoke e sincronização pendentes. Sem QA remoto separado. Jornada autenticada humana e LLM real neste novo painel NOT TESTED em produção; nenhuma proposta/decisão real será criada para teste. Nenhum desvio de contrato identificado; rollout não é presumido pelo código.
+
+---
+
 ## Source: `docs/qa/aot-position-relation-clarity.md`
 
 # AoT — Clareza da avaliação de relação com a Posição
@@ -31264,6 +31355,14 @@ Branch técnica isolada integra main conforme contrato. Não rodar suíte integr
 # Execução — Posição v2.2.1
 
 Contrato congelado `docs/qa/agreement-position-overview-v221.md` v1.0.0, lido integralmente. Implementar D-01..07 e todos D-UX/CA; impedir P-01..03/P-UX; preservar F-01 e usar somente A-01/A-UX para acabamento e reutilização. Referência normativa imutável: approved-mock.png copiado da proposta04 antes da implementação. A aprovação explícita cobre main/produção. Validação local proporcional, fixtures sem IA/dados reais, CI e publicação conforme plano, AoT com limites de evidência.
+
+---
+
+## Source: `docs/qa/execution-position-rag-v321.md`
+
+# Execução — posição/RAG 3.2.1
+
+Aplicar integralmente `agreement-position-rag-v321.md` versão 1.0.0, incluindo D-01 a D-05, D-UX-01, P-01, F-01, A-01 e CA-01. Reusar fila/Knowledge/revisão existentes; IA sugere e humano confirma. Contexto e dedupe compartilhados entre solicitação explícita e salvamento. Não remover gates para resolver performance. Validação proporcional no AoT; sem suíte integral local, mantendo CI obrigatório. Publicar somente superfícies derivadas do diff, preservar serviços e rascunhos alheios e fechar sem ampliações opcionais.
 
 ---
 

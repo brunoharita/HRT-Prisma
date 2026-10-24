@@ -1,0 +1,880 @@
+BEGIN
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+INSERT 0 1
+INSERT 0 2
+INSERT 0 5
+INSERT 0 5
+INSERT 0 4
+INSERT 0 1
+INSERT 0 1
+INSERT 0 3
+INSERT 0 1
+CREATE TABLE
+GRANT
+SET
+              set_config
+--------------------------------------
+ f4c575c9-af96-dda3-7e77-8b058d904063
+(1 row)
+
+INSERT 0 1
+ rag_assert
+------------
+
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+ rag_reject
+------------
+
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 96d4bc6b-9293-ef97-b55e-72ba71f64bbc
+(1 row)
+
+ rag_reject
+------------
+
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 34ea0266-6669-3912-f92c-fde13b988c4b
+(1 row)
+
+ rag_reject
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ b28588cc-09d7-b9dc-d350-6b1262f435b0
+(1 row)
+
+ rag_reject
+------------
+
+(1 row)
+
+RESET
+SET
+ rag_reject
+------------
+
+(1 row)
+
+ rag_reject
+------------
+
+(1 row)
+
+INSERT 0 1
+ rag_assert
+------------
+
+(1 row)
+
+INSERT 0 1
+ rag_assert
+------------
+
+(1 row)
+
+INSERT 0 1
+DO
+RESET
+ rag_assert
+------------
+
+(1 row)
+
+INSERT 0 1
+SET
+              set_config
+--------------------------------------
+ f4c575c9-af96-dda3-7e77-8b058d904063
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+ rag_reject
+------------
+
+(1 row)
+
+ rag_reject
+------------
+
+(1 row)
+
+                    review_occupational_rag_proposal
+------------------------------------------------------------------------
+ {"reused": false, "conceptId": "1dcc479f-4bc8-dafa-087e-d8919b1e2214"}
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+RESET
+ rag_assert
+------------
+
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+INSERT 0 1
+SET
+              set_config
+--------------------------------------
+ f4c575c9-af96-dda3-7e77-8b058d904063
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+ rag_reject
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 2664b53f-d260-5272-6827-3af87fd8ad65
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+                   approve_occupational_global_alias
+------------------------------------------------------------------------
+ {"reused": false, "conceptId": "1dcc479f-4bc8-dafa-087e-d8919b1e2214"}
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+RESET
+ rag_assert
+------------
+
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+SET
+              set_config
+--------------------------------------
+ f4c575c9-af96-dda3-7e77-8b058d904063
+(1 row)
+
+INSERT 0 1
+RESET
+SET
+INSERT 0 1
+DO
+RESET
+INSERT 0 1
+SET
+              set_config
+--------------------------------------
+ f4c575c9-af96-dda3-7e77-8b058d904063
+(1 row)
+
+                    review_occupational_rag_proposal
+------------------------------------------------------------------------
+ {"reused": false, "conceptId": "3fa81766-d41a-48cd-ab64-ffbe9ecc78c8"}
+(1 row)
+
+RESET
+ rag_assert
+------------
+
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+SET
+              set_config
+--------------------------------------
+ 2664b53f-d260-5272-6827-3af87fd8ad65
+(1 row)
+
+SAVEPOINT
+                   approve_occupational_global_alias
+------------------------------------------------------------------------
+ {"reused": false, "conceptId": "dde4dc5e-6ece-44d4-bddc-ec78e3db2161"}
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+ROLLBACK
+      decide_knowledge_global_contribution
+-------------------------------------------------
+ (a365aff7-23de-42e3-b911-c003a25c05e0,deferred)
+(1 row)
+
+RESET
+ rag_assert
+------------
+
+(1 row)
+
+SET
+              set_config
+--------------------------------------
+ f4c575c9-af96-dda3-7e77-8b058d904063
+(1 row)
+
+INSERT 0 1
+RESET
+SET
+INSERT 0 1
+ complete_occupational_rag
+---------------------------
+
+(1 row)
+
+RESET
+ rag_assert
+------------
+
+(1 row)
+
+SET
+ rag_reject
+------------
+
+(1 row)
+
+ rag_reject
+------------
+
+(1 row)
+
+RESET
+SET
+              set_config
+--------------------------------------
+ f4c575c9-af96-dda3-7e77-8b058d904063
+(1 row)
+
+ prepare_occupational_manual_review
+------------------------------------
+
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+RESET
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+ rag_assert
+------------
+
+(1 row)
+
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+ rag_assert
+------------
+
+(1 row)
+
+INSERT 0 1
+ rag_assert
+------------
+
+(1 row)
+
+ reconcile_occupational_profile_roles
+--------------------------------------
+
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+INSERT 0 5
+INSERT 0 5
+DO
+ rag_assert
+------------
+
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+ reconcile_occupational_profile_roles
+--------------------------------------
+
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+SET
+INSERT 0 1
+ rag_assert
+------------
+
+(1 row)
+
+RESET
+SET
+              set_config
+--------------------------------------
+ f4c575c9-af96-dda3-7e77-8b058d904063
+(1 row)
+
+INSERT 0 1
+ rag_assert
+------------
+
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+ rag_reject
+------------
+
+(1 row)
+
+ rag_reject
+------------
+
+(1 row)
+
+ rag_reject
+------------
+
+(1 row)
+
+ rag_reject
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ b28588cc-09d7-b9dc-d350-6b1262f435b0
+(1 row)
+
+ rag_reject
+------------
+
+(1 row)
+
+ rag_reject
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 34ea0266-6669-3912-f92c-fde13b988c4b
+(1 row)
+
+ rag_reject
+------------
+
+(1 row)
+
+RESET
+ rag_assert
+------------
+
+(1 row)
+
+INSERT 0 1
+SET
+              set_config
+--------------------------------------
+ f4c575c9-af96-dda3-7e77-8b058d904063
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+RESET
+ rag_assert
+------------
+
+(1 row)
+
+INSERT 0 1
+ rag_assert
+------------
+
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+ rag_assert
+------------
+
+(1 row)
+
+SET
+ rag_reject
+------------
+
+(1 row)
+
+ rag_reject
+------------
+
+(1 row)
+
+RESET
+ROLLBACK
+
+NOTICE:  PASS: idempotent input reuses original Inbox
+NOTICE:  PASS: approved exact match avoids a new proposal
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: own company reviews visible
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: RLS hides other company
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: lease prevents duplicate acquisition
+NOTICE:  PASS: bounded retrieval finds approved Sales without foreign tenant
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: denied (22023)
+NOTICE:  PASS: denied (22023)
+NOTICE:  PASS: AI creates no approved concept
+NOTICE:  PASS: own RAG proposal visible through RLS
+NOTICE:  PASS: denied (22023)
+NOTICE:  PASS: denied (40001)
+NOTICE:  PASS: company approval replay safe
+NOTICE:  PASS: alias approval does not clone concept
+NOTICE:  PASS: alias published only in company
+NOTICE:  PASS: automatic pending global alias contribution
+NOTICE:  PASS: AI original and human edit preserved
+NOTICE:  PASS: company cannot see pending global proposals
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: Super Admin sees local origin
+NOTICE:  PASS: global replay safe
+NOTICE:  PASS: global approval adds alias to existing concept
+NOTICE:  PASS: global approval preserves local term
+NOTICE:  PASS: global alias approval avoids clone
+NOTICE:  PASS: human approvals audited
+NOTICE:  PASS: human-approved relationship stored in original relations
+NOTICE:  PASS: global contribution sanitizes private context/model evidence
+NOTICE:  PASS: global new concept reuses existing human publisher
+NOTICE:  PASS: keep global local preserves company approval
+NOTICE:  PASS: failure preserves attempt history and bounded retry
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: manual recovery creates a blank human review, not an invented definition
+NOTICE:  PASS: Position save enqueues its original version and responsibilities
+NOTICE:  PASS: no historical backfill on rollout or row insert
+NOTICE:  PASS: publication marks resumable original profile cursor
+NOTICE:  PASS: profile processing bounded to five roles per pass
+NOTICE:  PASS: 1200 roles across six profiles complete resumably without rewriting profile data/history
+NOTICE:  PASS: all profile roles and primary title queued once
+NOTICE:  PASS: completed cursor does not duplicate queues
+NOTICE:  PASS: existing AI history boundary accepts only authorized new purpose
+NOTICE:  PASS: explicit repeated request deduplicates
+NOTICE:  PASS: Knowledge and Position use same original fingerprint
+NOTICE:  PASS: exact scoped read works beyond fifty older terms
+NOTICE:  PASS: blank query does not enumerate catalog
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: denied (22023)
+NOTICE:  PASS: denied (22023)
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: context composition is identical to the legacy trigger, sanitation remains in the original enqueue
+NOTICE:  PASS: long context at whitespace truncation boundary reuses pre-upgrade fingerprint
+NOTICE:  PASS: single original run for repeated requests
+NOTICE:  PASS: saving after explicit request reuses same Inbox
+NOTICE:  PASS: saving does not duplicate the original run
+NOTICE:  PASS: optimized predicate preserves original eligibility
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: denied (42501)
+BEGIN
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE TABLE
+GRANT
+INSERT 0 1
+INSERT 0 2
+INSERT 0 6
+INSERT 0 6
+INSERT 0 3
+INSERT 0 1
+INSERT 0 3
+INSERT 0 3
+INSERT 0 8
+INSERT 0 3
+INSERT 0 8
+INSERT 0 4
+INSERT 0 2
+INSERT 0 3
+SET
+              set_config
+--------------------------------------
+ d157ffe0-5588-33bc-39d8-78c7b3449b09
+(1 row)
+
+DO
+              set_config
+--------------------------------------
+ ea4bedb9-c235-aa3c-85fe-24a83631d0a9
+(1 row)
+
+ m71_assert
+------------
+
+(1 row)
+
+ m71_assert
+------------
+
+(1 row)
+
+ m71_reject
+------------
+
+(1 row)
+
+ m71_reject
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 46160f43-91d1-4052-8ff3-a87f2fe0deaa
+(1 row)
+
+ m71_reject
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ a46085b9-850f-252a-9825-a4397917cb02
+(1 row)
+
+ m71_reject
+------------
+
+(1 row)
+
+ set_config
+------------
+
+(1 row)
+
+ m71_reject
+------------
+
+(1 row)
+
+              set_config
+--------------------------------------
+ 7588afbf-da24-9686-12c6-34f209bae23e
+(1 row)
+
+DO
+RESET
+INSERT 0 1
+SET
+              set_config
+--------------------------------------
+ d157ffe0-5588-33bc-39d8-78c7b3449b09
+(1 row)
+
+DO
+RESET
+UPDATE 1
+SET
+              set_config
+--------------------------------------
+ 7588afbf-da24-9686-12c6-34f209bae23e
+(1 row)
+
+ m71_assert
+------------
+
+(1 row)
+
+ m71_assert
+------------
+
+(1 row)
+
+RESET
+ m71_assert
+------------
+
+(1 row)
+
+ m71_assert
+------------
+
+(1 row)
+
+SET
+ m71_reject
+------------
+
+(1 row)
+
+RESET
+SET
+              set_config
+--------------------------------------
+ 46387dff-c57c-e952-23d3-d4ff3e5c0988
+(1 row)
+
+ m71_assert
+------------
+
+(1 row)
+
+ m71_reject
+------------
+
+(1 row)
+
+RESET
+ m71_assert
+------------
+
+(1 row)
+
+ m71_assert
+------------
+
+(1 row)
+
+ m71_assert
+------------
+
+(1 row)
+
+ m71_assert
+------------
+
+(1 row)
+
+SET
+              set_config
+--------------------------------------
+ 7588afbf-da24-9686-12c6-34f209bae23e
+(1 row)
+
+ m71_assert
+------------
+
+(1 row)
+
+ m71_assert
+------------
+
+(1 row)
+
+RESET
+INSERT 0 1
+INSERT 0 1
+SET
+              set_config
+--------------------------------------
+ 7588afbf-da24-9686-12c6-34f209bae23e
+(1 row)
+
+ m71_assert
+------------
+
+(1 row)
+
+ m71_assert
+------------
+
+(1 row)
+
+RESET
+UPDATE 1
+SET
+ m71_assert
+------------
+
+(1 row)
+
+RESET
+UPDATE 1
+DO
+ROLLBACK
+
+NOTICE:  PASS: exact alias and raw title preserved
+NOTICE:  PASS: single official source is enough
+NOTICE:  PASS: same labels with different IDs are not merged
+NOTICE:  PASS: deterministic method, no invented human approval
+NOTICE:  PASS: matched alias and its version are reconstructible
+NOTICE:  PASS: organization term precedence stays explicit
+NOTICE:  PASS: ambiguous exact aliases never auto-selected
+NOTICE:  PASS: flagged ambiguous alias never auto-selected
+NOTICE:  PASS: substring is discovery only, not normalization
+NOTICE:  PASS: non-CBO/ESCO/ONET source excluded
+NOTICE:  PASS: search does not leak another tenant
+NOTICE:  PASS: official suggestions never become automatic requirements
+NOTICE:  PASS: stored business title unchanged
+NOTICE:  PASS: explicit desired requirement retains source version
+NOTICE:  PASS: forged client taxonomy is not copied into reusable role templates
+NOTICE:  PASS: source metrics preserved, not converted
+NOTICE:  PASS: denied (40001)
+NOTICE:  PASS: clear association saves explicit human removal
+NOTICE:  PASS: clearing association does not erase prior requirement provenance
+NOTICE:  PASS: old interpretation is not rewritten
+NOTICE:  PASS: each version has immutable resolution ledger
+NOTICE:  PASS: unresolved removal creates tenant Inbox feedback
+NOTICE:  PASS: denied (22023)
+NOTICE:  PASS: denied (22023)
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: assisted description provenance stays atomic with M7.1 version
+NOTICE:  PASS: copy preserves position lineage instead of pretending a new extraction
+NOTICE:  PASS: denied (P0001)
+NOTICE:  PASS: provenance failure rolls back the entire position save
+NOTICE:  PASS: RLS hides A positions from B
+NOTICE:  PASS: RLS hides A snapshots from B
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: complement reuses approved tenant concept without duplication
+NOTICE:  PASS: explicit admin creation stays in company Knowledge
+NOTICE:  PASS: organization concept can have no fabricated official reference
+NOTICE:  PASS: creating/associating complement is not requiring it
+NOTICE:  PASS: human decision is attributable
+NOTICE:  PASS: original proposal and explicit decided payload remain auditable under current M7.7 authority
+NOTICE:  PASS: unchanged human decision keeps original actor separate from saver
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: all approved cross-source references returned
+NOTICE:  PASS: merge stable identity only
+NOTICE:  PASS: dedup keeps every relation and source
+NOTICE:  PASS: ESCO source relevance retained
+NOTICE:  PASS: approved identity reconciliation resolves duplicate aliases
+NOTICE:  PASS: search preserves total beyond final page
+NOTICE:  PASS: new interpretation excludes old publication
+NOTICE:  PASS: old version keeps historical source after publication change
+NOTICE:  PASS: taxonomy created no Person/evidence
+NOTICE:  PASS: local corrections/complements created no Global concepts
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: existing Super Admin authority preserved
+NOTICE:  PASS: denied (42501)
+NOTICE:  PASS: eligibility identical for published/superseded/foreign sources, reconciliation and company concepts
+NOTICE:  PASS: approved reconciliation retains reference through the other current source
+NOTICE:  PASS: foreign official source remains ineligible
+NOTICE:  PASS: another company reference remains ineligible
+NOTICE:  PASS: normalized accent search retains both approved alternatives
+NOTICE:  PASS: short search avoids enumeration
+NOTICE:  PASS: RAG projection returns current eligible published candidate and sources
+NOTICE:  PASS: candidate source version reflects current publication
+NOTICE:  PASS: source no longer published removes suggestion eligibility without changing human decisions
+NOTICE:  PERFORMANCE synthetic eligibility old_ms=2960.927000 new_ms=1070.458000
+
+NOTICE: PASS: two concurrent explicit requests create exactly one Inbox and one original execution

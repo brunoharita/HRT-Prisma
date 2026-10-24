@@ -13,6 +13,7 @@ import type { CompetencySubgroupOption } from "../domain/profileCompetencyCurati
 import { PrismaCard } from "../ui/PrismaCard.js";
 import {ReadableRecord} from "../ui/ReadableRecord";
 import {recordScalarLabel} from "../ui/readableRecordValues";
+import {PositionOccupationalRecognition} from "./PositionOccupationalRecognition";
 
 interface Props {
   draft: VacancyDraft; membership: OrganizationMembership;
@@ -133,6 +134,7 @@ export function PositionTaxonomyPanel({ draft, membership, onChange, onEdit }: P
     </Drawer>
     <KnowledgePicker open={correct} kind="occupation" organizationId={membership.organizationId} initialQuery={draft.title}
       candidates={snapshot?.candidates ?? []} onClose={() => setCorrect(false)} onChoose={choose}
+      recognition={<PositionOccupationalRecognition key={JSON.stringify([membership.organizationId,draft.title,draft.mission,draft.responsibilities])} open={correct} organizationId={membership.organizationId} draft={draft} onChoose={choose}/>}
       footer={<Button onClick={() => { onChange?.((value) => ({ ...value, referenceConceptId: null, taxonomyDecision: "cleared", taxonomy: null })); setCorrect(false); }}>Desfazer associação</Button>} />
     <ComplementDialog open={complement} organizationId={membership.organizationId} canCreate={canCreate} onClose={() => setComplement(false)} onAdd={addComplement} />
   </section>;
@@ -179,9 +181,9 @@ export function TaxonomyOriginDetails({ item }: { item: TaxonomyItem }) {
   </> }]} />;
 }
 
-function KnowledgePicker({ open, kind, organizationId, initialQuery = "", candidates = [], onClose, onChoose, footer }: {
+function KnowledgePicker({ open, kind, organizationId, initialQuery = "", candidates = [], onClose, onChoose, footer, recognition }: {
   open: boolean; kind: "occupation" | "complement"; organizationId: string; initialQuery?: string; candidates?: TaxonomyCandidate[];
-  onClose: () => void; onChoose: (candidate: TaxonomyCandidate) => void; footer?: React.ReactNode;
+  onClose: () => void; onChoose: (candidate: TaxonomyCandidate) => void; footer?: React.ReactNode; recognition?: React.ReactNode;
 }) {
   const [query, setQuery] = useState(initialQuery); const [page, setPage] = useState(1);
   const [items, setItems] = useState<TaxonomyCandidate[]>([]); const [total, setTotal] = useState(0);
@@ -190,6 +192,7 @@ function KnowledgePicker({ open, kind, organizationId, initialQuery = "", candid
   useEffect(() => { if (open) { setQuery(initialQuery); setPage(1); } }, [open, initialQuery]);
   useEffect(() => {
     if (!open) return;
+    if(query.trim().length<2){setItems([]);setTotal(0);setError(null);setLoading(false);return;}
     const controller = new AbortController(); let current = true; setLoading(true); setError(null);
     const timeout = window.setTimeout(() => controller.abort(), 20000);
     const timer = window.setTimeout(() => void positionTaxonomyService.search(organizationId, query, kind, (page - 1) * 25, controller.signal)
@@ -201,10 +204,11 @@ function KnowledgePicker({ open, kind, organizationId, initialQuery = "", candid
   return <Drawer open={open} onClose={onClose} size={560} className="prisma-taxonomy-drawer" footer={footer}
     title={kind === "occupation" ? "Corrigir associação" : "Selecionar Knowledge da empresa"}>
     <Typography.Paragraph>{kind === "occupation" ? "Selecione um conceito aprovado que represente a Posição. A escolha altera somente esta definição e preserva o título da empresa." : "Escolha um item já aprovado na empresa. Associar não o transforma em requisito."}</Typography.Paragraph>
+    {recognition}
     {candidates.length ? <List header="Interpretações para este título" dataSource={candidates} renderItem={(candidate) => <List.Item actions={[<Button key="select" onClick={() => onChoose(candidate)}>Selecionar {candidate.label}</Button>]}>{candidate.label}</List.Item>} /> : null}
     <Input.Search aria-label="Buscar conceitos publicados" placeholder="Buscar por nome ou alias" value={query} onChange={(event) => { setQuery(event.target.value); setPage(1); }} />
     {error ? <Alert type="error" title={error} action={<Button onClick={() => setRetry((value) => value + 1)}>Tentar novamente</Button>} /> : null}
-    <List loading={loading} dataSource={items} locale={{ emptyText: "Nenhum conceito publicado encontrado. Ajuste a busca ou preserve o termo para curadoria." }}
+    <List loading={loading} dataSource={items} locale={{ emptyText: error ? "A consulta falhou; isso não indica ausência de referências." : query.trim().length<2 ? "Digite pelo menos dois caracteres para buscar." : "Nenhum conceito publicado encontrado. Ajuste a busca ou preserve o termo para curadoria." }}
       renderItem={(candidate) => <List.Item actions={[<Button disabled={loading} key="select" onClick={() => onChoose(candidate)}>Selecionar</Button>]}>
         <List.Item.Meta title={candidate.label} description={<><Tag>{candidate.scope === "organization" ? "Knowledge da empresa" : "Base oficial publicada"}</Tag>{candidate.description}</>} />
       </List.Item>} />

@@ -2,9 +2,21 @@ import { POSITION_TAXONOMY_CONTRACT, readPositionTaxonomy, type PositionTaxonomy
 import type { VacancyDraft } from "../../domain/vacancy.js";
 import type { Json } from "./database.types.js";
 import { supabase } from "./client.js";
+import {readPositionOccupationalRecognition} from "../../domain/positionOccupationalRecognition.js";
+import {supabaseOperationError} from "../../domain/reviewOperationErrors.js";
 
 // New RPCs remain on the same Supabase boundary, with server-side membership checks.
 export const positionTaxonomyService = {
+  async requestRecognition(organizationId:string,draft:Pick<VacancyDraft,"title"|"mission"|"responsibilities">):Promise<string|null>{
+    const {data,error}=await supabase.rpc("request_position_occupational_rag" as never,{p_organization_id:organizationId,p_title:draft.title,p_mission:draft.mission,p_responsibilities:draft.responsibilities} as never);
+    if(error)throw supabaseOperationError(error,"Não foi possível solicitar o reconhecimento. A busca manual continua disponível.");
+    if(data!==null&&typeof data!=="string")throw Error("Solicitação de reconhecimento incompatível. Consulte novamente.");return data;
+  },
+  async recognition(organizationId:string,inboxId:string){
+    const {data,error}=await supabase.rpc("load_position_occupational_rag" as never,{p_organization_id:organizationId,p_inbox_id:inboxId} as never);
+    if(error)throw supabaseOperationError(error,"Não foi possível consultar o reconhecimento. A associação foi preservada.");
+    return readPositionOccupationalRecognition(data);
+  },
   async history(organizationId: string, vacancyId: string, offset = 0): Promise<Array<{ version: number; snapshot: PositionTaxonomy | null }>> {
     const { data, error } = await supabase.from("vacancy_versions").select("*")
       .eq("organization_id", organizationId).eq("vacancy_id", vacancyId).order("version", { ascending: false }).range(offset, offset + 19);

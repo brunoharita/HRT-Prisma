@@ -1,0 +1,86 @@
+[
+  {
+    "name": "1600 recognition topology",
+    "pass": true
+  },
+  {
+    "name": "1600 ambiguous proposal requires a human mode",
+    "pass": true
+  },
+  {
+    "name": "1600 no horizontal overflow",
+    "pass": true
+  },
+  {
+    "name": "1600 forms do not publish automatically",
+    "pass": true
+  },
+  {
+    "name": "1600 explicit company decision sent once",
+    "pass": true
+  },
+  {
+    "name": "1600 global only two decisions",
+    "pass": true
+  },
+  {
+    "name": "1600 global optional reason",
+    "pass": true
+  },
+  {
+    "name": "1600 global no horizontal overflow",
+    "pass": true
+  },
+  {
+    "name": "1600 no browser exceptions",
+    "pass": true
+  },
+  {
+    "name": "430 recognition topology",
+    "pass": true
+  },
+  {
+    "name": "430 ambiguous proposal requires a human mode",
+    "pass": true
+  },
+  {
+    "name": "430 no horizontal overflow",
+    "pass": true
+  },
+  {
+    "name": "430 forms do not publish automatically",
+    "pass": true
+  },
+  {
+    "name": "430 explicit company decision sent once",
+    "pass": true
+  },
+  {
+    "name": "430 global only two decisions",
+    "pass": true
+  },
+  {
+    "name": "430 global optional reason",
+    "pass": true
+  },
+  {
+    "name": "430 global no horizontal overflow",
+    "pass": true
+  },
+  {
+    "name": "430 no browser exceptions",
+    "pass": true
+  },
+  {
+    "name": "manual recovery works without model",
+    "pass": true
+  },
+  {
+    "name": "global error recovery preserves human text",
+    "pass": true
+  },
+  {
+    "name": "reopened approval preserves human definition and cleared relationships",
+    "pass": true
+  }
+]

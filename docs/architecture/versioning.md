@@ -1,5 +1,7 @@
 # Versionamento
 
+Decisão de Bruno em 24/10/2026: **3.2.1**, integração do reconhecimento com IA em Corrigir associação, busca de ocupações corrigida e reutilização da fila original. Pequenas melhorias/correções incrementam o terceiro número; melhorias maiores incrementam o central e reiniciam o terceiro em zero; o primeiro muda somente em alterações extremamente importantes e significativas. Preservar registros históricos. Contratos M7.1/RAG permanecem compatíveis, sem mudança de pesos/modelos ou novas tabelas. Acordo/execução/AoT position-rag-v321.
+
 Correção de exibição de 24/10/2026: manter a versão pública **3.2.0** e contratos persistidos. Os cartões aprovados passam a ler a classificação vigente da fonte canônica, enquanto o seletor permanece apenas nas propostas pendentes. Sem reclassificação ou nova autoridade. Escopo e publicação comprovados pelo AoT `knowledge-published-classification`.
 
 Decisão de Bruno em24/10/2026: **Prisma3.2.0**, movimento2/entrega0 da geração3. Contratos aditivos `occupational-rag-1.0.0`, `occupational-rag-proposal-1.0.0`, `knowledge-grounded-1.0.0`. Curadoria empresa/global e decisões globais2.0.0 reutilizadas; Perfil/Score/matching/pesos/história preservados. ADR-089 e acordo/execução/AoT occupational-rag-v320. Rollout somente migration, worker de síntese/modelo privado e web, mediante gates registrados.

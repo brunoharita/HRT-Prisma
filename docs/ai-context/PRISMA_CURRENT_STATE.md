@@ -3,11 +3,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.94.3
+version: 2.94.4
 last_verified: 2026-10-24
 ---
 
 # Estado atual do Prisma
+
+## Reconhecimento em Corrigir associação — implementação 3.2.1
+
+Implementação autorizada por Bruno: reconhecimento explícito no drawer de referência ocupacional da Posição, usando título/missão/responsabilidades e a mesma fila RAG do salvamento. Candidatos elegíveis e revisão da Knowledge reutilizados; aprovação local e associação na Posição são decisões distintas. Sem tabelas/modelos/pesos/histórico alterados. Busca paginada deixa de montar referências completas para verificar elegibilidade, mantém publicação/escopo/reconciliação e distingue erro de ausência. Testes dirigidos, SQL local/concorrência, browser e rollout são documentados no AoT `docs/qa/aot-position-rag-v321.md`; publicação não é presumida deste texto. Versão solicitada 3.2.1, seguindo incremento do terceiro número para esta melhoria.
 
 ## Cartões de classificação do Conhecimento — correção 3.2.0
 

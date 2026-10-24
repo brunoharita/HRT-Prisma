@@ -1,0 +1,63 @@
+import assert from "node:assert/strict";
+import {createRequire} from "node:module";
+import {mkdir,writeFile} from "node:fs/promises";
+import {createServer} from "vite";
+const dir="docs/qa/evidence/position-rag-v321/browser",checks=[];await mkdir(dir,{recursive:true});
+const check=(name,pass)=>{checks.push({name,pass:Boolean(pass)});assert.ok(pass,name);};
+const server=await createServer({configFile:"tests/ui/m71.vite.config.mts",cacheDir:"tmp/vite-position-rag",server:{port:5841}});await server.listen();
+const {chromium}=createRequire(import.meta.url)(process.env.PRISMA_PLAYWRIGHT_PATH??"playwright"),browser=await chromium.launch({headless:true,channel:"msedge"});
+try{
+ for(const width of [1448,390,320]){
+  const page=await browser.newPage({viewport:{width,height:1100},reducedMotion:"reduce"}),errors=[];page.on("pageerror",e=>errors.push(e.message));
+  await page.route("**/*",r=>r.request().url().startsWith("http://127.0.0.1:5841/")?r.continue():r.abort());
+  const open=async(scenario="ready",suffix="")=>{await page.goto(`http://127.0.0.1:5841/m71.html?rag=${scenario}${suffix}`);await page.getByText("Associada automaticamente por correspondência aprovada.",{exact:true}).waitFor();await page.getByRole("button",{name:/Corrigir associação/}).click();};
+  const drawer=()=>page.getByRole("dialog",{name:/Corrigir associação/});
+  await open();
+  check(width+" opening does not request AI",await page.evaluate(()=>!window.__positionRag.calls.some(c=>c.kind==="request")));
+  await drawer().getByRole("button",{name:"Selecionar",exact:true}).first().click();
+  await page.waitForFunction(()=>window.__positionDraft.taxonomyDecision==="human");
+  await page.getByRole("button",{name:/Corrigir associação/}).click();
+  await drawer().getByRole("button",{name:"Reconhecer com IA",exact:true}).click();
+  await drawer().getByRole("button",{name:"Usar nesta Posição",exact:true}).waitFor();
+  check(width+" AI result preserves human choice and requirements",await page.evaluate(()=>window.__positionDraft.taxonomyDecision==="human"&&window.__positionDraft.referenceConceptId==="occupation-fixture"&&window.__positionDraft.requirements.length===0));
+  check(width+" request uses professional fields",await page.evaluate(()=>{const c=window.__positionRag.calls.find(c=>c.kind==="request").context;return c.title==="Gerente de Estoque"&&c.mission==="Controlar inventário."&&c.responsibilities[0]==="Organizar armazenagem.";}));
+  await drawer().getByRole("button",{name:"Atualizar reconhecimento"}).click();
+  await drawer().locator(".ant-drawer-close").click();await page.getByRole("button",{name:/Corrigir associação/}).click();
+  await drawer().getByRole("button",{name:"Usar nesta Posição",exact:true}).waitFor();
+  check(width+" refresh and reopen reuse request",await page.evaluate(()=>window.__positionRag.calls.filter(c=>c.kind==="request").length===1));
+  await drawer().screenshot({path:dir+`/${width}-recognition.png`});
+  check(width+" drawer content stays inside viewport",await drawer().evaluate(e=>{const r=e.getBoundingClientRect();return r.left>=-1&&r.right<=innerWidth+1&&e.scrollWidth<=e.clientWidth+1;}));
+  await drawer().getByRole("button",{name:"Usar nesta Posição",exact:true}).click();await page.waitForFunction(()=>window.__positionDraft.referenceConceptId==="stock");
+  check(width+" only explicit selection changes current association",await page.evaluate(()=>window.__positionDraft.taxonomyDecision==="human"&&window.__positionDraft.title==="Gerente de Estoque"&&window.__positionDraft.requirements.length===0));
+  await page.getByRole("button",{name:/Corrigir associação/}).click();await drawer().getByRole("button",{name:"Desfazer associação"}).click();await page.waitForFunction(()=>window.__positionDraft.taxonomyDecision==="cleared");
+  check(width+" removal remains explicit",await page.evaluate(()=>window.__positionDraft.referenceConceptId===null));
+  await open("new");await drawer().getByRole("button",{name:"Reconhecer com IA",exact:true}).click();await drawer().getByRole("button",{name:"Revisar proposta na empresa"}).waitFor();
+  check(width+" new proposal is not selectable",await drawer().getByRole("button",{name:"Usar nesta Posição",exact:true}).count()===0);
+  await drawer().getByRole("button",{name:"Revisar proposta na empresa"}).click();
+  const review=page.getByRole("dialog",{name:"Revisão do cargo na Knowledge da empresa",exact:true});await review.getByRole("button",{name:"Aprovar na empresa",exact:true}).waitFor();
+  check(width+" embedded review reads exact Inbox without implicit approval",await page.evaluate(()=>!window.__positionRag.calls.some(c=>c.kind==="approve")));
+  await review.screenshot({path:dir+`/${width}-review.png`});
+  check(width+" review contained",await review.evaluate(e=>e.scrollWidth<=e.clientWidth+1));
+  await review.getByRole("button",{name:"Aprovar na empresa",exact:true}).click();await drawer().getByRole("button",{name:"Usar nesta Posição",exact:true}).waitFor();
+  check(width+" Knowledge approval does not alter Position",await page.evaluate(()=>window.__positionDraft.referenceConceptId!=="new-occupation"&&window.__positionRag.calls.filter(c=>c.kind==="approve").length===1));
+  await drawer().getByRole("button",{name:"Usar nesta Posição",exact:true}).click();await page.waitForFunction(()=>window.__positionDraft.referenceConceptId==="new-occupation");
+  check(width+" approved new concept needs separate Position selection",await page.evaluate(()=>window.__positionDraft.taxonomyDecision==="human"));
+  await open("request-error","&searchError=1");await drawer().getByText("A busca não respondeu. Tente novamente.",{exact:true}).waitFor();
+  check(width+" search failure is distinct from no match",await drawer().getByText("A consulta falhou; isso não indica ausência de referências.",{exact:true}).isVisible());
+  await drawer().getByRole("button",{name:"Tentar novamente",exact:true}).click();await drawer().getByRole("button",{name:"Selecionar",exact:true}).first().waitFor();
+  check(width+" manual search recovers",true);
+  await drawer().getByRole("button",{name:"Reconhecer com IA",exact:true}).click();await drawer().getByText("Falha sintética no reconhecimento",{exact:true}).waitFor();
+  check(width+" AI failure preserves manual path",await drawer().getByRole("button",{name:"Selecionar",exact:true}).first().isEnabled());
+  await drawer().getByRole("button",{name:"Tentar reconhecimento novamente",exact:true}).click();await drawer().getByRole("button",{name:"Usar nesta Posição",exact:true}).waitFor();
+  check(width+" AI request retry recovers",true);
+  await open("queued");await drawer().getByRole("button",{name:"Reconhecer com IA",exact:true}).click();await drawer().getByText("Na fila",{exact:true}).waitFor();
+  check(width+" background does not block manual path",await drawer().getByRole("button",{name:"Selecionar",exact:true}).first().isEnabled());
+  await open("exact");await drawer().getByRole("button",{name:"Reconhecer com IA",exact:true}).click();await drawer().getByText("Já existe correspondência aprovada para este título",{exact:true}).waitFor();check(width+" exact match does not manufacture a proposal",await drawer().getByRole("button",{name:"Revisar proposta na empresa"}).count()===0);
+  await open("late");await drawer().getByRole("button",{name:"Reconhecer com IA",exact:true}).click();await page.waitForFunction(()=>typeof window.__resolvePositionRag==="function");
+  await drawer().locator(".ant-drawer-close").click();await page.evaluate(()=>{window.__changePositionTitle("Novo cargo após a solicitação");window.__resolvePositionRag();});await page.getByRole("button",{name:/Corrigir associação/}).click();
+  check(width+" late response from old title cannot appear or select",await drawer().getByRole("button",{name:"Reconhecer com IA",exact:true}).isVisible()&&await drawer().getByRole("button",{name:"Usar nesta Posição",exact:true}).count()===0);
+  check(width+" no runtime exceptions",errors.length===0);await page.close();
+ }
+}finally{await writeFile(dir+"/checks.json",JSON.stringify({checks},null,2));await browser.close();await server.close();}
+console.log(JSON.stringify({checks:checks.length,pass:true}));
+

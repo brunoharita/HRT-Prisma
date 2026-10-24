@@ -1,5 +1,13 @@
 # Arquitetura da Fundação de Conhecimento
 
+## Reconhecimento no cadastro da Posição — 3.2.1
+
+Corrigir associação mantém busca manual e oferece reconhecimento explícito por título, missão e responsabilidades atuais. `request_position_occupational_rag` e o trigger de salvamento compartilham `private.position_rag_context`; a higienização/truncamento ocorre uma única vez no enqueue original. Fingerprint, fila, worker, propostas e decisões são os mesmos de occupational-rag-1.0.0; repetir, reabrir ou salvar não cria outra execução para o mesmo contexto. Contexto alterado representa outra solicitação, sem descartar histórico.
+
+`load_position_occupational_rag` autoriza a empresa e lê a Inbox exata, sem depender das cinquenta linhas recentes da listagem. Revalida candidatos contra os conceitos aprovados e referências atuais M7.1. Proposta nova segue pelo componente original de revisão, agora com abertura contextual opcional; aprovação na empresa não seleciona referência na Posição. Usar nesta Posição é outra ação humana, persistida ao salvar nova versão. Polling é limitado a 24 consultas enquanto aberto, com atualização manual e preservação da busca em falhas. Troca de empresa/título/contexto e fechamento invalidam respostas tardias.
+
+A busca exige dois caracteres, normaliza uma vez e retorna páginas de 25 com total. A elegibilidade M7.1 usa os mesmos conceitos, escopos, publicações e reconciliações aprovadas, mas não monta staging/proveniência/JSON completo para responder apenas sim/não. Detalhes completos continuam na projeção de referências. Sem nova tabela, catálogo ou índice não demonstrado. AoT position-rag-v321 registra positivos/negativos e comparação de elegibilidade/performance.
+
 ## Classificação publicada nos cartões de propostas — correção 3.2.0
 
 O cartão aprovado consulta o conceito identificado por `published_concept_id` e sua classificação `is_current` em `knowledge_competency_classifications`, sob RLS existente. Não reconstrói a classificação publicada a partir de `original_proposal`: o original é histórico e pode não conter o subagrupador escolhido na aprovação. A leitura é limitada aos conceitos aprovados visíveis, deduplicada em lotes de até 100 IDs. Ausência e falha de consulta são estados distintos, com nova consulta explícita; a falha adicional não bloqueia propostas pendentes.
