@@ -1,7 +1,9 @@
 import fs from 'node:fs';
 import {spawn,spawnSync} from 'node:child_process';
 import assert from 'node:assert/strict';
+import {openOccupationalHistory} from './occupational-rag-worker.mjs';
 const position=process.argv.includes('--position-v321');
+const auditFix=process.argv.includes('--audit-fix');
 const exe='C:/Program Files/PostgreSQL/17/bin/',db=position?'position_rag_qa_v321':'occupational_rag_qa_20261024',args=['-X','-v','ON_ERROR_STOP=1','-h','127.0.0.1','-p','55479','-U','prisma_v202_qa'];
 function sql(text,database=db){const r=spawnSync(exe+'psql.exe',[...args,'-d',database],{input:text,encoding:'utf8',maxBuffer:20e6,windowsHide:true});if(r.status!==0)throw Error(r.stderr+'\n'+r.stdout.slice(-1800));return r.stdout+'\n'+r.stderr;}
 // A fixed, disposable local QA database only. Never accepts a remote destination.
@@ -23,7 +25,14 @@ try{
   sql(fs.readFileSync('supabase/migrations/20261024220000_position_rag_v321.sql','utf8'));
  }
  assert.equal(sql("select count(*) from pg_tables where schemaname in('public','private');"),before,'No new table');
- let output=sql('begin;\n'+fs.readFileSync('supabase/qa/occupational_rag_verification.sql','utf8')+(position?'\n'+fs.readFileSync('supabase/qa/position_rag_v321_verification.sql','utf8'):'')+'\nrollback;');
+ const envelopes=[];
+ if(auditFix){
+  const history=await openOccupationalHistory({rpc:async(_name,args)=>{envelopes.push(args);return {error:null,data:args.p_action==='open_request'?{request:{id:'00000000-0000-4000-8000-000000000001'}}:{acquired:true}};}},{id:'audit-regression',lease:'00000000-0000-4000-8000-000000000002',organizationId:'00000000-0000-4000-8000-000000000003',inputHash:'a'.repeat(64)},async()=>Response.json({prompt_eval_count:12,eval_count:5}));
+  await history.fetcher('http://knowledge-model:11434/api/chat',{body:JSON.stringify({model:'qwen3:4b-instruct-2507-q4_K_M'})});await history.close(true);
+ }
+ const captured=envelopes.map(({p_action,p_data})=>{const json=JSON.stringify(p_data).replaceAll("'","''");return `${p_action==='open_request'?'insert into audit_response select':'select'} public.record_ai_worker_history_v1(repeat('h',48),'${p_action}',jsonb_set('${json}'::jsonb,'{organizationId}',to_jsonb(rag_id('a')::text))${p_action==='open_request'?'':` || jsonb_build_object('requestId',(select v#>>'{request,id}' from audit_response))`});`;}).join('\n');
+ const auditSql=auditFix?`\ncreate temp table audit_response(v jsonb);grant select,insert on audit_response to anon;set local role anon;${captured}\nreset role;select rag_assert((select status='succeeded' from public.ai_requests where operation_id='00000000-0000-4000-8000-000000000002'),'actual JavaScript worker envelopes complete under PostgreSQL metadata contract');\nselect rag_reject(format('select public.record_ai_worker_history_v1(%L,''open_request'',%L)',repeat('h',48),jsonb_build_object('scope','organization','organizationId',rag_id('a'),'functionName','occupational_rag','actionOperationId','forbidden')),'22023');\nreset role;`:'';
+ let output=sql('begin;\n'+fs.readFileSync('supabase/qa/occupational_rag_verification.sql','utf8')+(position?'\n'+fs.readFileSync('supabase/qa/position_rag_v321_verification.sql','utf8'):'')+auditSql+'\nrollback;');
  if(position){
   let m71=fs.readFileSync('supabase/qa/m71_position_taxonomy_verification.sql','utf8');
   // The old fixture predates mandatory M8.1 classification. Use today's existing API.
@@ -40,7 +49,7 @@ try{
   assert.match(sql("select (select count(*) from public.knowledge_inbox where original_term='Concurrent role 321')||'|'||(select count(*) from public.knowledge_research_runs r join public.knowledge_inbox i on i.id=r.inbox_id where i.original_term='Concurrent role 321');"),/1\|1/);
   output+='\nNOTICE: PASS: two concurrent explicit requests create exactly one Inbox and one original execution\n';
  }
- if(position){fs.mkdirSync('docs/qa/evidence/position-rag-v321/sql',{recursive:true});fs.writeFileSync('docs/qa/evidence/position-rag-v321/sql/verification.txt',output.replaceAll('\r','').split('\n').map(line=>line.trimEnd()).join('\n'));console.log(output.slice(-8000));process.exitCode=0;}else{
+ if(auditFix){fs.mkdirSync('docs/qa/evidence/position-rag-audit-fix',{recursive:true});fs.writeFileSync('docs/qa/evidence/position-rag-audit-fix/sql.txt',output.replaceAll('\r','').split('\n').map(line=>line.trimEnd()).join('\n'));console.log(output.slice(-3500));}else if(position){fs.mkdirSync('docs/qa/evidence/position-rag-v321/sql',{recursive:true});fs.writeFileSync('docs/qa/evidence/position-rag-v321/sql/verification.txt',output.replaceAll('\r','').split('\n').map(line=>line.trimEnd()).join('\n'));console.log(output.slice(-8000));process.exitCode=0;}else{
  fs.mkdirSync('docs/qa/evidence/occupational-rag-v320/sql',{recursive:true});
  fs.writeFileSync('docs/qa/evidence/occupational-rag-v320/sql/verification.txt',output.replaceAll('\r','').split('\n').map(line=>line.trimEnd()).join('\n'));
  fs.writeFileSync('docs/qa/evidence/occupational-rag-v320/sql/environment.json',JSON.stringify({environment:'Owned PostgreSQL17 local schema-only clone 127.0.0.1:55479',dependencies,newTables:0,syntheticOnly:true,transaction:'rolled back',result:'PASS'},null,2));

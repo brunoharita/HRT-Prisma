@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 569
-source_manifest_sha256: cac76018e245a48dc00f6687ac6bd22cb38629ad724aaf0a328cfbcced7f46c6
+documentation_source_count: 571
+source_manifest_sha256: 93aeeffa73e7eb5a3a20599c6d2e658cfc05392f08baf154630ce6da7591d72c
 -->
 
 # Tudo sobre o Prisma
@@ -2651,11 +2651,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.94.5
+version: 2.94.6
 last_verified: 2026-10-24
 ---
 
 # Estado atual do Prisma
+
+## Correção de auditoria do RAG — mesma versão 3.2.1
+
+Falha real de Gerente de Estoque identificada como RAG_AUDIT_UNAVAILABLE antes de consulta aos modelos. O worker enviava `actionOperationId`, não aceito no contrato PostgreSQL de abertura de auditoria. Correção remove somente esse campo; credenciais, isolamento, contratos, histórico e obrigatoriedade de auditoria preservados. Envelopes capturados do worker agora integram com o PostgreSQL local; campos extras continuam rejeitados. Sem alteração de tabela, frontend, modelo/prompt, Score ou decisão humana. Acordo/execução `docs/qa/agreement-position-rag-audit-fix.md`; estado da publicação e reconhecimento real no AoT correspondente.
 
 ## Reconhecimento em Corrigir associação — 3.2.1 publicada
 
@@ -4671,6 +4675,8 @@ Investigação da tentativa original12/09/2026: registro antigo guarda somente f
 # Prisma Knowledge Agent
 
 ## Reconhecimento ocupacional privado na Posição — 3.2.1
+
+Correção operacional de auditoria: a abertura pelo worker envia somente os campos aceitos por `record_ai_worker_history_v1`/`private.record_ai_history_v1`; o identificador da execução continua vinculado ao Inbox/run e à chave de idempotência, sem campo extra no envelope. A regressão SQL `--audit-fix` captura os envelopes do JavaScript real e os executa no PostgreSQL descartável, incluindo fechamento e rejeição de campos não declarados. Mock permissivo isolado não comprova compatibilidade de integração. A posição Gerente de Estoque é a validação real autorizada; sugestões não aprovam nem aplicam associações.
 
 Reconhecer com IA em Corrigir associação reutiliza o RAG privado gratuito occupational-rag-1.0.0/ADR-089, com contexto profissional atual e a fila original. Este caminho não chama o agente externo descrito abaixo e não troca modelo/prompt/provedor. Mesmo contexto solicitado e salvo converge para a mesma fingerprint; resultados são sugestões, sem equivalência ou associação automática. Somente candidatos atualmente aprovados/elegíveis são selecionáveis. Conceitos novos exigem revisão da empresa pelo fluxo existente, com contribuição global após aprovação local. A revisão não altera a Posição por conta própria. Falha/insuficiência/andamento permanecem explícitos e o fluxo manual segue disponível. Não há novo armazenamento concorrente. Autoridade, validação e publicação: acordo/AoT position-rag-v321.
 
@@ -17835,6 +17841,29 @@ Sem decisão arquitetural nova: reutilização de Ant Design Drawer/Dropdown/Mod
 
 ---
 
+## Source: `docs/qa/agreement-position-rag-audit-fix.md`
+
+# Acordo e execução — correção operacional do reconhecimento 3.2.1
+
+Versão 1.0.0, agreed pela solicitação explícita de Bruno em 2026-10-24. Baseline b1c7f21dd37932e7d5cf27df885c4d4d6ed78b67. Delta do acordo position-rag-v321 1.0.0; contratos e UX preservados.
+
+- D-01: corrigir a falha real do reconhecimento de Gerente de Estoque reutilizando RAG/Knowledge e modelos gratuitos existentes.
+- D-02: validar o contexto real e exibir ao menos uma referência oficial fundamentada disponível nas bibliotecas, com origem e justificativa; similaridade não estabelece equivalência.
+- D-03: manter associação, versões da posição, histórico, aprovações e decisões humanas intactos; qualquer proposta gerada permanece pendente, sem aprovação ou aplicação.
+- D-04: publicar a correção na mesma versão 3.2.1, com CI, smoke e sincronização.
+- P-01: inventar referência/código, forçar equivalência, contornar auditoria/autorização, novo catálogo/tabela, chamada paga ou aprovação implícita.
+- F-01: backfill, alteração de Score/matching, redesign e integração de busca externa, desnecessária se referências oficiais já publicadas atenderem.
+- A-01: correção de integração, testes negativos e evidência proporcional delegados. Nenhuma decisão material pendente.
+- CA-01: envelopes reais do worker aceitos pelo PostgreSQL local e campos extras rejeitados; pipeline real apresenta candidatos oficiais; associação/aprovações inalteradas antes/depois; CI e runtime publicado verificados.
+
+## Mapa de impacto e execução congelada
+
+Classe D, reutilização da decisão ADR-089. `direct`: worker ocupacional e metadados de auditoria; baseline produção falha RAG_AUDIT_UNAVAILABLE antes de pesquisa, em 212 ms. `critical_transversal`: fronteira de auditoria/tenant, contratos PostgreSQL e credenciais privados preservados; sem alteração de grants ou SQL de produção. `plausible_indirect`: síntese de perfil e entrega de avaliações compartilham processo; exigir testes direcionados existentes, health e ausência de alteração dos módulos. `no_impact_identified`: frontend, associação/versionamento, Knowledge aprovada, Score e Horus, porque somente envelope de abertura de auditoria do worker muda, sem funções de decisão ou persistência desses domínios.
+
+Executar D-01..04; impedir P-01; manter F-01; A-01 governa implementação. Validação mínima: testes do worker e auditoria, integração SQL local com envelopes capturados do worker, testes do processo compartilhado, CI obrigatório, execução autorizada do mesmo Inbox real e comparação de hashes de posições/aprovações. Encerrar com AoT e publicação apenas do worker, sem rebuild do web/modelos intactos. Rollback pela imagem anterior, sem apagar fila/histórico.
+
+---
+
 ## Source: `docs/qa/agreement-position-rag-v321.md`
 
 # Acordo — reconhecimento em Corrigir associação
@@ -24921,6 +24950,24 @@ Web novo container22fe0573, imagem5300ddffa5b81c6faa535ee4fa6bb4d0a5a944f427d059
 Fechamento documental/evidências/contextos em main, com push/pullff da VPS e sem novo build. Registros locais/origin/main/VPS sincronizados na verificação final; runtime conserva SHA funcional acima. Arquivos alheios não rastreados e worktrees preexistentes preservados. Avisos de manutenção automática de worktrees durante o dispatcher não impediram integração; nenhum worktree removido pelo movimento. Servidores temporários de testes encerrados.
 
 Todos os D-* e P-* aplicáveis PASS, F-01 preservado; sem desvio material. Entrega funcional/visual comprovada com componentes reais e dados sintéticos. Jornada autenticada real permanece NOT TESTED e não é inferida do smoke público.
+
+---
+
+## Source: `docs/qa/aot-position-rag-audit-fix.md`
+
+# AoT — auditoria RAG / Gerente de Estoque
+
+Acordo/execução: `agreement-position-rag-audit-fix.md` 1.0.0. Baseline b1c7f21dd37932e7d5cf27df885c4d4d6ed78b67. Versão pública 3.2.1 preservada.
+
+| Requisito | Implementação e evidência | Status |
+| --- | --- | --- |
+| D-01 | Removido campo não declarado da abertura de auditoria; 10 testes do worker e integração dos envelopes reais no PostgreSQL local | PASS |
+| D-02 | Referências CBO publicadas existentes; execução real após implantação ainda pendente | NOT TESTED |
+| D-03 | Nenhuma API de aprovação/associação invocada; hashes baseline de 23 versões, 12 aprovações e 30.257 conceitos registrados; comparação final pendente | PARTIAL |
+| D-04 | CI/publicação/smoke/sincronização pendentes | NOT TESTED |
+| P-01 | Sem novo armazenamento, fonte inventada, chamada paga ou enfraquecimento da auditoria. Campos extras negados pelo SQL | PASS |
+
+Mapa e regressão: direct worker/auditoria, 10 testes; integração com PostgreSQL17 local descartável 127.0.0.1:55479, 50 assertions incluindo tenant, dedupe, lease, decisões e payloads reais; 43 testes de síntese, auditoria compartilhada e entrega de avaliações PASS. Primeiro teste de harness falhou porque a consulta auxiliar tentou ler tabela de auditoria como anon; corrigida a captura pelo retorno público permitido, sem alterar produto ou grants. Evidência `evidence/position-rag-audit-fix/sql.txt`. Sem suíte integral local. CI obrigatório preservado.
 
 ---
 

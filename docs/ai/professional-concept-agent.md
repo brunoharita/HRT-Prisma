@@ -2,6 +2,8 @@
 
 ## Reconhecimento ocupacional privado na Posição — 3.2.1
 
+Correção operacional de auditoria: a abertura pelo worker envia somente os campos aceitos por `record_ai_worker_history_v1`/`private.record_ai_history_v1`; o identificador da execução continua vinculado ao Inbox/run e à chave de idempotência, sem campo extra no envelope. A regressão SQL `--audit-fix` captura os envelopes do JavaScript real e os executa no PostgreSQL descartável, incluindo fechamento e rejeição de campos não declarados. Mock permissivo isolado não comprova compatibilidade de integração. A posição Gerente de Estoque é a validação real autorizada; sugestões não aprovam nem aplicam associações.
+
 Reconhecer com IA em Corrigir associação reutiliza o RAG privado gratuito occupational-rag-1.0.0/ADR-089, com contexto profissional atual e a fila original. Este caminho não chama o agente externo descrito abaixo e não troca modelo/prompt/provedor. Mesmo contexto solicitado e salvo converge para a mesma fingerprint; resultados são sugestões, sem equivalência ou associação automática. Somente candidatos atualmente aprovados/elegíveis são selecionáveis. Conceitos novos exigem revisão da empresa pelo fluxo existente, com contribuição global após aprovação local. A revisão não altera a Posição por conta própria. Falha/insuficiência/andamento permanecem explícitos e o fluxo manual segue disponível. Não há novo armazenamento concorrente. Autoridade, validação e publicação: acordo/AoT position-rag-v321.
 
 Contrato `knowledge-research-1.0.0`, prompt `knowledge-agent-1.0.0`, schema `knowledge-proposal-1.0.0` e policy `trusted-sources-1.0.0`.

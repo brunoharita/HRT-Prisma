@@ -3,11 +3,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.94.5
+version: 2.94.6
 last_verified: 2026-10-24
 ---
 
 # Estado atual do Prisma
+
+## Correção de auditoria do RAG — mesma versão 3.2.1
+
+Falha real de Gerente de Estoque identificada como RAG_AUDIT_UNAVAILABLE antes de consulta aos modelos. O worker enviava `actionOperationId`, não aceito no contrato PostgreSQL de abertura de auditoria. Correção remove somente esse campo; credenciais, isolamento, contratos, histórico e obrigatoriedade de auditoria preservados. Envelopes capturados do worker agora integram com o PostgreSQL local; campos extras continuam rejeitados. Sem alteração de tabela, frontend, modelo/prompt, Score ou decisão humana. Acordo/execução `docs/qa/agreement-position-rag-audit-fix.md`; estado da publicação e reconhecimento real no AoT correspondente.
 
 ## Reconhecimento em Corrigir associação — 3.2.1 publicada
 

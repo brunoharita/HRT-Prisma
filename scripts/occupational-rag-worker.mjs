@@ -5,7 +5,7 @@ const vectorCache=new Map();
 export async function openOccupationalHistory(client,job,fetcher=fetch){
   const write=async(action,data)=>{const result=await client.rpc('record_ai_history_v1',{p_action:action,p_data:data});if(result.error)throw Error('RAG_AUDIT_UNAVAILABLE');return result.data;};
   const idempotencyKey=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(`occupational_rag:${job.id}:${job.lease}`));
-  const opened=await write('open_request',{scope:'organization',organizationId:job.organizationId,functionName:'occupational_rag',operationId:job.lease,actionOperationId:job.id,actorId:null,sourceVersion:OCCUPATIONAL_RAG_VERSION,inputFingerprint:job.inputHash,idempotencyKey:Buffer.from(idempotencyKey).toString('hex')});
+  const opened=await write('open_request',{scope:'organization',organizationId:job.organizationId,functionName:'occupational_rag',operationId:job.lease,actorId:null,sourceVersion:OCCUPATIONAL_RAG_VERSION,inputFingerprint:job.inputHash,idempotencyKey:Buffer.from(idempotencyKey).toString('hex')});
   const requestId=opened?.request?.id;if(!requestId)throw Error('RAG_AUDIT_UNAVAILABLE');
   const usage={requests:0,input_tokens:0,output_tokens:0,complete:true};
   const tracked=async(url,init)=>{
