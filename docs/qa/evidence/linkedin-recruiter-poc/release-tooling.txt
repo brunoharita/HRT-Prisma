@@ -1,0 +1,42 @@
+Already up to date
+Done in 1.3s using pnpm v11.19.0
+
+   ╭───────────────────────────────────────────────╮
+   │                                               │
+   │     Update available! 11.19.0 → 12.15.0.      │
+   │     Changelog: https://pnpm.io/v/12.15.0      │
+   │   To update, run: corepack use pnpm@12.15.0   │
+   │                                               │
+   ╰───────────────────────────────────────────────╯
+
+$ node --test tests/tooling/releaseDispatcher.test.mjs tests/tooling/prismaContext.test.mjs
+✔ gera fonte compacta e exportação completa com o mesmo manifesto (1362.2676ms)
+✔ fonte compacta contém contexto vigente e encaminha aprofundamento ao Codex (372.3824ms)
+✔ comparação normalizada distingue conteúdo e aceita LF ou CRLF (0.3992ms)
+✔ corporate forwarding deploys independently of every Prisma runtime (9.7703ms)
+✔ shared AI history routes its actual consumers and the portal preserves independent hosting (1.0629ms)
+✔ synthesis worker has an independent destination and preserves the Parser (0.6789ms)
+✔ parses git name-status including renames (1.0766ms)
+✔ routes documentation without Supabase or VPS (1.0655ms)
+✔ release tooling does not redeploy the application (0.537ms)
+✔ dispatcher resolves pnpm through the Windows command shim (40.5864ms)
+✔ routes web changes only to web and hosting (0.4647ms)
+✔ shared resume normalization explicitly routes web and hosted Parser (3.5481ms)
+✔ Parser-only changes do not rebuild frontend, gateway or other destinations (0.7979ms)
+✔ publication applies only the planned Parser and records its pending destination (8.8032ms)
+✔ routes only the named Edge Function (0.5094ms)
+✔ shared trajectory source routes both consumers without publishing unrelated services (3.9724ms)
+✔ new migrations are publishable and historical edits fail closed (0.4545ms)
+✔ unknown paths block publication (0.3155ms)
+✔ validates migration identity and publish guard arguments (5.6281ms)
+✔ publication guards fail closed before external mutation (0.9374ms)
+✔ writes one structured release receipt (36.8725ms)
+✔ gateway transport is released without touching Parser, web, mail or synthesis (4.8838ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2188.6218

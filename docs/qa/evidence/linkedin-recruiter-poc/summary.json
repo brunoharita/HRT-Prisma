@@ -1,0 +1,23 @@
+{
+  "contract": "linkedin-recruiter-poc-1.0.0",
+  "upstreamSha": "0c5f14ba3efcd9ad1bbd3163b4f2b9e47cda7b17",
+  "upstreamVersion": "4.28.0",
+  "python": "3.14.5",
+  "witnessTests": 12,
+  "witnessPass": true,
+  "upstreamExitCode": 0,
+  "upstreamCounts": {
+    "tests": 106,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "socketEventsBlocked": [
+    "socket.getaddrinfo"
+  ],
+  "seconds": 22.01,
+  "liveLinkedInTested": false,
+  "productionAccessed": false,
+  "llmCalls": 0,
+  "licenseSha256": "106ee6b6b5940af2f826df0c8c5de37336d8460ff26b1e4bee0845d24394d418"
+}

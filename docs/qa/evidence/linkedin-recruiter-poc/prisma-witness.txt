@@ -1,0 +1,17 @@
+test_empty_search_has_no_completeness_guarantee (__main__.main.<locals>.PrismaWitness.test_empty_search_has_no_completeness_guarantee) ... ok
+test_filters_refuse_ignored_company_and_network (__main__.main.<locals>.PrismaWitness.test_filters_refuse_ignored_company_and_network) ... ok
+test_invalid_filter_never_requests_browser (__main__.main.<locals>.PrismaWitness.test_invalid_filter_never_requests_browser) ... ok
+test_inventory_includes_actions_not_a_readonly_service (__main__.main.<locals>.PrismaWitness.test_inventory_includes_actions_not_a_readonly_service) ... ok
+test_mcp_roundtrip_only_inprocess_and_mocked (__main__.main.<locals>.PrismaWitness.test_mcp_roundtrip_only_inprocess_and_mocked) ... ok
+test_network_guard (__main__.main.<locals>.PrismaWitness.test_network_guard) ... ok
+test_no_structured_experience_or_employment_filter (__main__.main.<locals>.PrismaWitness.test_no_structured_experience_or_employment_filter) ... ok
+test_partial_profile_preserves_error (__main__.main.<locals>.PrismaWitness.test_partial_profile_preserves_error) ... ok
+test_portuguese_roundtrip_without_semantic_translation (__main__.main.<locals>.PrismaWitness.test_portuguese_roundtrip_without_semantic_translation) ... ok
+test_search_error_is_distinct_from_no_results (__main__.main.<locals>.PrismaWitness.test_search_error_is_distinct_from_no_results) ... ok
+test_search_returns_text_and_sources_not_scored_people (__main__.main.<locals>.PrismaWitness.test_search_returns_text_and_sources_not_scored_people) ... ok
+test_suspected_rate_limit_stops_remaining_sections (__main__.main.<locals>.PrismaWitness.test_suspected_rate_limit_stops_remaining_sections) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 5.130s
+
+OK
