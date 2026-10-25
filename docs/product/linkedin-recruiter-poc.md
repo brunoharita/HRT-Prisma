@@ -2,6 +2,35 @@
 
 Avaliação experimental1.0.0,25/10/2026. Acordo: `../qa/agreement-linkedin-recruiter-poc.md`1.0.0. Não é integração nem mudança do produto em produção.
 
+## Adendo1.3.0 — amostra de100perfis
+
+Escopo aprovado por Bruno: Gerente de Estoque/Bauru, até100referências únicas, sem ampliar filtros para completar volume. Reutiliza o pacote gratuito congelado e a mesma conta exclusiva. O controlador verifica paginação nativa (URL final e aria-current do botão PáginaN), localidade selecionada, dedupe e encerramento no alvo. O teto técnico de20páginas/200referências brutas acomoda duplicatas; não é recomendação de volume seguro do LinkedIn. Checkpoint1.2.0 permanece compatível nas execuções anteriores; o artefato privado deste piloto é1.3.0.
+
+A amostra acompanha as primeiras referências únicas na ordem da busca do LinkedIn; não são os100melhores da rede nem um ranking produzido pelo Prisma. Bauru aplicado na busca não comprova residência, disponibilidade ou local atual de cada emprego. O ensaio usa título/localidade, sem importar requisitos adicionais da vaga produtiva.
+
+`scripts/linkedin_recruiter_pilot.py` expõe uma ferramenta MCP local de leitura, usa o extrator upstream para a seção de experiência, serializa a conta e limita cada tentativa a70segundos/uma rolagem. Não repete leituras concluídas ou incertas. Erro, parcialidade, desafio, restrição ou limite interrompem a rodada. Dados necessários à revisão ficam em artefato temporário local, ignorado pelo Git e protegido pelas ACLs do usuário; nenhuma identidade ou experiência é publicada no repositório. Não há serviço/API adicional pago, LLM contratado, integração com a Knowledge ou novo cadastro de negócio.
+
+A revisão consultiva distingue atribuições gerenciais de estoque documentadas, título gerencial específico sem atribuições detalhadas, atuação operacional relacionada, cargo operacional relacionado sem atribuições, relação não demonstrada no material disponível e informação insuficiente. Esses estados descrevem a evidência lida; não são Score, aprovação/rejeição ou ranking de contratação. Título exato não comprova responsabilidades; estoque no nome da empresa, competências genéricas e desenvolvimento de software de estoque não comprovam gestão física de estoque. Contexto varejista com controle de materiais pode ser relacionado sem equivaler automaticamente ao escopo especializado da vaga. Não há requisito de recência/duração inventado.
+
+A captura upstream pode incluir sugestões de outras pessoas e rodapé depois da experiência. Fronteiras observadas PT/EN são removidas antes da revisão; texto desconhecido permanece para avaliação, sem parser universal presumido. A minimização também remove URLs/contatos e explicita corte em18000caracteres. O tratamento dos registros desta rodada é local, sem reler pessoas para corrigir ruído da captura.
+
+**Resultado real PARTIAL em25/10/2026:**100referências únicas em10páginas pelo MCP/Edge real, identidade confirmada e localidade/paginação verificadas.50experiências lidas e revisadas; a51ªtentativa retornou AuthenticationError. O controlador pausou,49referências não foram tentadas, sem retry, e o navegador foi fechado/zero processos dedicados. A classe do erro não confirma banimento nem distingue login expirado, authwall ou desafio; não foi reaberta a sessão para investigar/contornar. Não declarar100perfis analisados ou operação estável nessa escala.
+
+| Evidência nas50experiências revisadas | Quantidade |
+| --- | --- |
+| Responsabilidades explícitas de gestão de estoque/depósito/inventário/equipe | 7 |
+| Cargo gerencial específico de estoque declarado, sem atribuições detalhadas | 8 |
+| Atribuições relacionadas, com alcance parcial/operacional ou contexto diferente | 24 |
+| Cargo operacional relacionado declarado, sem atribuições detalhadas | 3 |
+| Relação ocupacional não demonstrada no material disponível | 3 |
+| Informação insuficiente para estabelecer a relação | 5 |
+
+As24relações parciais não são24gerentes aderentes: incluem controle de estoque de loja/oficina, apoio administrativo, estratégia comercial e atuação operacional sem gerência demonstrada. Entre as7descrições gerenciais aparecem logística com armazenagem/ERP/WMS, supervisão de estoque e expedição, depósito com PEPS/layout/equipe e controladoria de estoques de lojas/CD. Isso demonstra a necessidade de analisar funções mesmo com títulos diferentes, sem transformar menções isoladas em aderência. Os8títulos específicos continuam exigindo detalhamento. Os3casos sem relação demonstrada não são rejeições, e os5insuficientes não são fatos negativos.
+
+Método: revisão contextual pelo assistente, sem API adicional de modelo e sem motor produtivo Prisma. Cada uma das50anotações privadas contém categoria, justificativa, trecho literal verificado no texto minimizado e hash desse texto. Os50registros passaram pela remoção de rodapé/sugestões laterais; zero cortes no limite de caracteres. A captura real ocorreu com o sanitizador inicial de contatos; a correção de fronteira foi aplicada/revisada offline nos mesmos textos, sem50novas leituras.38testes offline PASS e22de release-tooling PASS; evidências agregadas `../qa/evidence/linkedin-recruiter-poc/pilot-130-live.json` e `pilot-130-tests.*`.
+
+**Conclusão:** a paginação de100referências funcionou neste ensaio; a leitura contínua de100perfis não foi concluída. O MCP permanece experimental: antes de integração, é necessário esclarecer a interrupção de autenticação com o operador e validar retomada autorizada, cobertura da experiência e qualidade contextual. Não há garantia antibanimento ou aprovação para coletar em produção. Produto3.3.0, main, pesos, histórico, decisões humanas, Knowledge e tabelas originais permanecem intactos; nenhum contato, escrita ou deploy produtivo.
+
 ## Adendo1.2.1 — falha de normalização corrigida e validada pelo MCP
 
 Bruno solicitou resolver a falha após o resultado parcial1.2.0. A causa estava no adaptador local: o classificador do upstream fixado retorna referências de pessoa no formato relativo `/in/identificador/`, enquanto `profile_root` só aceitava URLs absolutas HTTPS. Assim, as dez referências legítimas eram rejeitadas em reference_normalization; o filtro geográfico já estava aplicado. Não era evidência de bloqueio, falta de pessoas ou defeito da conta. A regressão usa o `classify_link` real do upstream: falhou antes da correção e passou depois. Os mocks antigos usavam só URL absoluta e não cobriam esse formato.

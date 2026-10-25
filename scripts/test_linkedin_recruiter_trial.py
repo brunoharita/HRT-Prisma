@@ -22,6 +22,7 @@ from linkedin_recruiter_trial import (
     reviewed_builder,
 )
 from linkedin_recruiter_mcp_trial import execute, single_attempt_reads
+from linkedin_recruiter_pilot import PrivateRun, read_pending, minimal_experience
 
 # Same Windows asyncio wakeup-pipe exception as the original offline harness.
 _local = threading.local()
@@ -146,7 +147,7 @@ class Filters(unittest.TestCase):
                 profile_root(unsafe)
 
     def test_budget_constraints_and_network_guard(self):
-        for args in ({"pages": 7}, {"references": 0}, {"timeout_seconds": 0}):
+        for args in ({"pages": 21}, {"references": 0}, {"references": 201}, {"timeout_seconds": 0}):
             with self.assertRaises(ValueError):
                 Limits(**args)
         with self.assertRaisesRegex(RuntimeError, "Offline"):
@@ -316,6 +317,31 @@ class Execution(unittest.IsolatedAsyncioTestCase):
                          ("paused", "reference_normalization", "invalid_profile_reference"))
         self.assertNotIn("private-person", json.dumps(state))
 
+    async def test_page_number_must_match_url_and_selected_control(self):
+        search = Search("Vendedor", (selection(),), page=2)
+        self.assertIn("page=2", search.url())
+        good = Observation("dedicated-test-account", search.url(), {"location": ("101039681",)}, active_page=2)
+        self.assertEqual(verify_filters(search, good)["page"], "source_applied")
+        self.assertEqual(verify_filters(search, Observation("account", search.url()))["page"], "unverified")
+        with self.assertRaisesRegex(ValueError, "requested page"):
+            verify_filters(search, Observation("account", self.queries[0].url(), active_page=2))
+
+    async def test_unique_target_and_source_exhaustion_do_not_read_more(self):
+        for exhausted in (False, True):
+            calls = []
+            async def source(search, maximum):
+                calls.append(search)
+                return Observation("account", search.url(), references=("/in/a", "/in/b", "/in/c"),
+                                   results_observed=True, has_next=not exhausted)
+            searches = (Search("Vendedor"), Search("Vendedor", page=2))
+            run = Trial(self.root, "account", "target"+str(exhausted), searches, target_unique=4 if exhausted else 2)
+            state = await run.run(source, start=True)
+            self.assertEqual(len(calls), 1)
+            self.assertEqual(len(state["seen"]), 3 if exhausted else 2)
+            self.assertEqual(state["reason"], "source_exhausted" if exhausted else "unique_target_reached")
+            await run.run(source, resume=True)
+            self.assertEqual(len(calls), 1)
+
 
 class McpBoundary(unittest.IsolatedAsyncioTestCase):
     def setUp(self):
@@ -333,7 +359,7 @@ class McpBoundary(unittest.IsolatedAsyncioTestCase):
         self.page.url = Search("Vendedor", (selection(),)).url()
         self.page.get_by_role.side_effect = lambda role, **kw: SimpleNamespace(
             count=AsyncMock(return_value=1 if role == "button" else 0),
-            is_visible=AsyncMock(return_value=True))
+            is_visible=AsyncMock(return_value=True), is_enabled=AsyncMock(return_value=True))
         self.extractor = SimpleNamespace(
             _capture=SimpleNamespace(capture=AsyncMock(), _capture_once=AsyncMock()),
             get_my_profile=AsyncMock(return_value={"url": "https://www.linkedin.com/in/me",
@@ -386,6 +412,59 @@ class McpBoundary(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(result.text, RATE_LIMITED_SECTION_TEXT)
         once.assert_awaited_once()
         session.delay.assert_not_awaited()
+
+
+class ProfilePilot(unittest.IsolatedAsyncioTestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.run = PrivateRun(Path(self.temp.name) / "private")
+
+    async def test_reading_is_not_assessment_and_resume_does_not_repeat(self):
+        self.run.add(("/in/a", "https://www.linkedin.com/in/a/?x=1", "/in/b"))
+        reader = AsyncMock(return_value={"sections": {"experience": "Coordenação de inventário e armazenagem."}})
+        summary = await read_pending(self.run, reader)
+        self.assertEqual((summary["foundUnique"], summary["professionalSectionsRead"], summary["analyzed"]), (2, 2, 0))
+        await read_pending(PrivateRun(self.run.directory), reader)
+        self.assertEqual(reader.await_count, 2)
+
+    async def test_partial_profile_pauses_without_retry_or_negative_inference(self):
+        self.run.add(("/in/a", "/in/b"))
+        reader = AsyncMock(return_value={"sections": {}, "section_errors": {"experience": {"error_type": "rate_limit"}}})
+        summary = await read_pending(self.run, reader)
+        self.assertEqual((summary["status"], summary["profileAttempts"], summary["pending"]), ("paused", 1, 1))
+        reader.assert_awaited_once()
+        self.assertEqual(summary["analyzed"], 0)
+
+    async def test_budget100_and_interrupted_read_are_preserved(self):
+        self.run.add(tuple("/in/test"+str(i) for i in range(110)))
+        self.assertEqual(len(self.run.data["profiles"]), 100)
+        self.run.data["profiles"][0]["status"] = "in_flight"
+        self.run.data["profile_attempts"] = 100
+        self.run.save()
+        loaded = PrivateRun(self.run.directory)
+        reader = AsyncMock()
+        summary = await read_pending(loaded, reader)
+        self.assertEqual(summary["reason"], "profile_budget_exhausted")
+        self.assertEqual(loaded.data["profiles"][0]["status"], "uncertain")
+        reader.assert_not_awaited()
+
+    def test_contact_minimization_and_truncation_are_explicit(self):
+        text, truncated = minimal_experience("contato: worker@example.test +55 11 99999-9999 https://example.test " + "x"*19000)
+        self.assertNotIn("worker@", text)
+        self.assertNotIn("99999", text)
+        self.assertTrue(truncated)
+        self.assertEqual(len(text), 18000)
+
+    def test_sidebar_and_footer_never_become_professional_evidence(self):
+        for boundary in ("Mais perfis para você", "People also viewed", "More profiles for you", "Sobre\n\nAcessibilidade", "About\n\nAccessibility"):
+            text, truncated = minimal_experience("Experiência\n\nAnalista financeiro\n\n" + boundary + "\n\nThird person: Gerente de estoque")
+            self.assertEqual(text.strip(), "Experiência\n\nAnalista financeiro")
+            self.assertFalse(truncated)
+
+    def test_unknown_headings_and_real_responsibilities_are_preserved(self):
+        original = "Experiência\n\nSobre o projeto\n\nGestão de estoque e equipe.\n\nOutro bloco não reconhecido"
+        self.assertEqual(minimal_experience(original), (original, False))
 
 
 if __name__ == "__main__":

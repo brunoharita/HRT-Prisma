@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 578
-source_manifest_sha256: 4c02a45397bb765c594dc85493dba3efc6049d119062d4298523d34a5fd509fd
+source_manifest_sha256: 3118c81b49c4cf395d95a0d15fb5e7fa7b4d5c72f4cab40fda9655eddb716625
 -->
 
 # Tudo sobre o Prisma
@@ -2651,13 +2651,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.96.4
+version: 2.96.5
 last_verified: 2026-10-25
 ---
 
 # Estado atual do Prisma
 
 ## Prisma Recruiter — PoC local, sem integração
+
+Piloto experimental1.3.0 aprovado pelo PO em25/10/2026:100referências únicas de Gerente de Estoque/Bauru em10páginas pelo MCP inprocess/Edge real, com conta exclusiva e recibos de localidade/página ativa.50experiências lidas e revisadas; tentativa51retornou AuthenticationError, pausa sem retry,49não tentadas, browser fechado/zero processos dedicados. Resultado PARTIAL, não100analisados nem banimento confirmado. Revisão consultiva do assistente, sem API de IA adicional/Score:7descrições gerenciais pertinentes,8títulos gerenciais específicos sem atribuições,24relações parciais/operacionais,3cargos operacionais relacionados sem atribuições,3sem relação demonstrada no material e5insuficientes. Relação parcial não equivale a aderência gerencial; ausência não é fato negativo. Evidência individual/trechos/hashes somente em artefatos temporários privados com ACL, fora do Git; agregado pilot-130-live.json. Ruído de sugestões laterais/rodapé removido offline nos mesmos50textos, sem releitura.38testes offline/22release-tooling PASS, limites20páginas/200referências e100tentativas, timeout/retomada/dedupe; sem contorno/contato/integração/main/produção. Acordo/AoT/relatório linkedin-recruiter-poc1.3.0; produto3.3.0/Knowledge/nota/pesos/histórico/decisões/tabelas preservados. Conector segue experimental;100leituras contínuas e causa exata do erro não validadas.
 
 Correção experimental1.2.1 solicitada pelo PO em25/10/2026, concluída: upstream normaliza referências para /in/...; adaptador exigia URL absoluta e rejeitava as10. Regressão com classificador real falhou antes/passou depois; normalização aceita só referência relativa da origem verificada, mantendo rejeição de hosts/esquemas/caminhos indevidos. Diagnóstico sanitizado por etapa/código; captura usa tentativa única upstream para cumprir a pausa sem retry.30testes offline PASS e terceira chamada explícita da rodada concluiu MCP inprocess/Edge real: Estoque/Bauru10referências, conta confirmada, filtro aplicado comprovado por URL final+controle selecionado, zero referências inválidas e browser fechado/zero processos dedicados. Duas chamadas anteriores isolaram a causa, sem retry automático; evidências fix-121-* preservam todas. Falha específica resolvida, sem presumir os demais filtros/recall/segurança antibanimento. Checkpoint1.2.0 compatível, produto3.3.0/nota/pesos/histórico/decisões humanas/Knowledge/tabelas/main/produção preservados. Somente branch experimental; nenhuma integração/produção/contato/LLM ou dado pessoal publicado. Acordo/AoT/relatório linkedin-recruiter-poc1.2.1.
 
@@ -12227,6 +12229,35 @@ A partir de `prisma-ux-foundation-1.0.0`, o módulo antes chamado Vagas aparece 
 
 Avaliação experimental1.0.0,25/10/2026. Acordo: `../qa/agreement-linkedin-recruiter-poc.md`1.0.0. Não é integração nem mudança do produto em produção.
 
+## Adendo1.3.0 — amostra de100perfis
+
+Escopo aprovado por Bruno: Gerente de Estoque/Bauru, até100referências únicas, sem ampliar filtros para completar volume. Reutiliza o pacote gratuito congelado e a mesma conta exclusiva. O controlador verifica paginação nativa (URL final e aria-current do botão PáginaN), localidade selecionada, dedupe e encerramento no alvo. O teto técnico de20páginas/200referências brutas acomoda duplicatas; não é recomendação de volume seguro do LinkedIn. Checkpoint1.2.0 permanece compatível nas execuções anteriores; o artefato privado deste piloto é1.3.0.
+
+A amostra acompanha as primeiras referências únicas na ordem da busca do LinkedIn; não são os100melhores da rede nem um ranking produzido pelo Prisma. Bauru aplicado na busca não comprova residência, disponibilidade ou local atual de cada emprego. O ensaio usa título/localidade, sem importar requisitos adicionais da vaga produtiva.
+
+`scripts/linkedin_recruiter_pilot.py` expõe uma ferramenta MCP local de leitura, usa o extrator upstream para a seção de experiência, serializa a conta e limita cada tentativa a70segundos/uma rolagem. Não repete leituras concluídas ou incertas. Erro, parcialidade, desafio, restrição ou limite interrompem a rodada. Dados necessários à revisão ficam em artefato temporário local, ignorado pelo Git e protegido pelas ACLs do usuário; nenhuma identidade ou experiência é publicada no repositório. Não há serviço/API adicional pago, LLM contratado, integração com a Knowledge ou novo cadastro de negócio.
+
+A revisão consultiva distingue atribuições gerenciais de estoque documentadas, título gerencial específico sem atribuições detalhadas, atuação operacional relacionada, cargo operacional relacionado sem atribuições, relação não demonstrada no material disponível e informação insuficiente. Esses estados descrevem a evidência lida; não são Score, aprovação/rejeição ou ranking de contratação. Título exato não comprova responsabilidades; estoque no nome da empresa, competências genéricas e desenvolvimento de software de estoque não comprovam gestão física de estoque. Contexto varejista com controle de materiais pode ser relacionado sem equivaler automaticamente ao escopo especializado da vaga. Não há requisito de recência/duração inventado.
+
+A captura upstream pode incluir sugestões de outras pessoas e rodapé depois da experiência. Fronteiras observadas PT/EN são removidas antes da revisão; texto desconhecido permanece para avaliação, sem parser universal presumido. A minimização também remove URLs/contatos e explicita corte em18000caracteres. O tratamento dos registros desta rodada é local, sem reler pessoas para corrigir ruído da captura.
+
+**Resultado real PARTIAL em25/10/2026:**100referências únicas em10páginas pelo MCP/Edge real, identidade confirmada e localidade/paginação verificadas.50experiências lidas e revisadas; a51ªtentativa retornou AuthenticationError. O controlador pausou,49referências não foram tentadas, sem retry, e o navegador foi fechado/zero processos dedicados. A classe do erro não confirma banimento nem distingue login expirado, authwall ou desafio; não foi reaberta a sessão para investigar/contornar. Não declarar100perfis analisados ou operação estável nessa escala.
+
+| Evidência nas50experiências revisadas | Quantidade |
+| --- | --- |
+| Responsabilidades explícitas de gestão de estoque/depósito/inventário/equipe | 7 |
+| Cargo gerencial específico de estoque declarado, sem atribuições detalhadas | 8 |
+| Atribuições relacionadas, com alcance parcial/operacional ou contexto diferente | 24 |
+| Cargo operacional relacionado declarado, sem atribuições detalhadas | 3 |
+| Relação ocupacional não demonstrada no material disponível | 3 |
+| Informação insuficiente para estabelecer a relação | 5 |
+
+As24relações parciais não são24gerentes aderentes: incluem controle de estoque de loja/oficina, apoio administrativo, estratégia comercial e atuação operacional sem gerência demonstrada. Entre as7descrições gerenciais aparecem logística com armazenagem/ERP/WMS, supervisão de estoque e expedição, depósito com PEPS/layout/equipe e controladoria de estoques de lojas/CD. Isso demonstra a necessidade de analisar funções mesmo com títulos diferentes, sem transformar menções isoladas em aderência. Os8títulos específicos continuam exigindo detalhamento. Os3casos sem relação demonstrada não são rejeições, e os5insuficientes não são fatos negativos.
+
+Método: revisão contextual pelo assistente, sem API adicional de modelo e sem motor produtivo Prisma. Cada uma das50anotações privadas contém categoria, justificativa, trecho literal verificado no texto minimizado e hash desse texto. Os50registros passaram pela remoção de rodapé/sugestões laterais; zero cortes no limite de caracteres. A captura real ocorreu com o sanitizador inicial de contatos; a correção de fronteira foi aplicada/revisada offline nos mesmos textos, sem50novas leituras.38testes offline PASS e22de release-tooling PASS; evidências agregadas `../qa/evidence/linkedin-recruiter-poc/pilot-130-live.json` e `pilot-130-tests.*`.
+
+**Conclusão:** a paginação de100referências funcionou neste ensaio; a leitura contínua de100perfis não foi concluída. O MCP permanece experimental: antes de integração, é necessário esclarecer a interrupção de autenticação com o operador e validar retomada autorizada, cobertura da experiência e qualidade contextual. Não há garantia antibanimento ou aprovação para coletar em produção. Produto3.3.0, main, pesos, histórico, decisões humanas, Knowledge e tabelas originais permanecem intactos; nenhum contato, escrita ou deploy produtivo.
+
 ## Adendo1.2.1 — falha de normalização corrigida e validada pelo MCP
 
 Bruno solicitou resolver a falha após o resultado parcial1.2.0. A causa estava no adaptador local: o classificador do upstream fixado retorna referências de pessoa no formato relativo `/in/identificador/`, enquanto `profile_root` só aceitava URLs absolutas HTTPS. Assim, as dez referências legítimas eram rejeitadas em reference_normalization; o filtro geográfico já estava aplicado. Não era evidência de bloqueio, falta de pessoas ou defeito da conta. A regressão usa o `classify_link` real do upstream: falhou antes da correção e passou depois. Os mocks antigos usavam só URL absoluta e não cobriam esse formato.
@@ -15273,6 +15304,19 @@ Pedido explícito posterior de Bruno: resolver a falha. Autoriza nova rodada loc
 Mapa/execução1.2.1: baseline5d50955db2659ff641ccd82ba2d2215ef9e86fdf; `direct` adaptador/recibo/harness e documentação; `critical_transversal` sessão/identidade/minimização/parada, preservadas pelo perfil exclusivo e única ferramenta de leitura; `plausible_indirect` controlador/checkpoint caso diagnóstico mostre efeito, testar só a dependência concreta; `no_impact_identified` produto3.3.0/Posição/Knowledge/Score/histórico/schema/produção por ausência de consumidor ou writer alterado. Reutilizar ambiente/SHA fixado, sem novas bibliotecas. Validação suficiente: regressão do defeito, suíte experimental afetada, contexto/lint/dispatcher, uma confirmação real bem-sucedida após correção, commit/push/CI na mesma branch. Encerrar quando D-12 tiver prova ou um impedimento externo real impedir a execução; não fabricar sucesso nem criar novas rodadas apenas administrativas.
 
 Diagnóstico revisou o mapa: o controlador é `direct`, pois rejeitava referências relativas normalizadas pelo upstream; corrigir normalização sem admitir host externo. A captura upstream tem retry interno de resposta vazia suspeita, dependência concreta de D-09; extensão local deve usar sua tentativa única e comprovar que não navega/reaguarda novamente. Não se altera o clone nem a política externa de acesso.
+
+## Adendo1.3.0 — piloto de até100perfis únicos
+
+Bruno aprovou a meta inicial de avaliar100perfis únicos por vaga. Substitui os tetos das rodadas anteriores e F-03 somente para paginação/leitura profissional/análise contextual experimental desta amostra. Não autoriza integração/produção, contato, seleção/rejeição humana, novo Score ou dados/tabelas de domínio.
+
+- D-13: buscar Gerente de Estoque/Bauru com paginação nativa comprovada, até100referências únicas. Orçamento máximo20páginas/200referências brutas para acomodar duplicatas; não ampliar cidade/critério para completar volume. CA: identidade da conta de testes, recibo de filtro e página ativa, dedupe, progresso e motivo real de encerramento. Menos resultados/limite não vira100fabricado.
+- D-14: verificar experiência profissional dos encontrados, até100perfis únicos, separando encontrados, lidos, analisados e insuficientes. A análise é contextual/advisória com evidência de atuação em estoque/inventário/armazenagem/distribuição; habilidades genéricas isoladas não demonstram trajetória. CA: contagens e justificativas rastreáveis ao material disponível; ausência/parcialidade não vira fato negativo nem aprovação/reprovação.
+- D-15: operação serializada, tempo máximo por leitura, tentativa única, checkpoint/retomada, parada em desafio/restrição/limite/erro e nenhuma releitura de concluídos. CA: testes positivos/negativos de paginação, limite, alvo único, retomada e falha; execução real delimitada com resultado observado.
+- P-06: sem mensagens/conexões/reações, inferência de sexo/gênero ou outros atributos sensíveis, notas/decisões/Perfis/Knowledge/produção; não publicar identidades/textos profissionais no Git. O pacote upstream continua fixado/inalterado, sem stealth novo, rotação ou contorno de controles.
+- A-04: reusar controlador/normalizador/captura e métodos de leitura upstream. Estender orçamento e recibo de página; artefato privado temporário do ensaio pode conservar referência mínima/experiência necessária para análise e retomada, com ACL do usuário e fora do Git, sem autoridade de cadastro/catálogo. Evidência pública somente agregada. Sem API adicional de IA ou serviço pago.
+- F-04: ranking de contratação, benchmark estatístico de mercado, mudança da regra/pesos do Prisma e captação produtiva continuam excluídos. Não criar motor paralelo de matching ou taxonomia: esta avaliação local não alimenta o produto.
+
+Mapa/execução1.3: baseline64d8fa80f57f6cf80c8b57fcf86264e89a61a303. `direct` paginação/controlador/runner/amostra/evidências; `critical_transversal` conta/sessão/minimização/limites, com tentativa única e pausa; `plausible_indirect` formatos de checkpoint e classificação consultiva, preservar leitura antiga e separar estados; `no_impact_identified` produto3.3.0/Knowledge/Posição/Score/histórico/schema/RLS/produção, sem consumidores/escritores ou serviços alterados. Antes da operação real, validar paginação/alvo/dedupe/segurança com fixtures; a UI já comprovou page=2 e aria-current=true no controle Página2, preservando Bauru. AoT registra o que foi atingido, inclusive indisponibilidade parcial/limite sem garantia antibanimento. Contexto/lint/dispatcher e CI da branch experimental, sem suíte integral local ou merge/main/deploy.
 
 ---
 
@@ -21757,6 +21801,26 @@ Mapa revisado conforme acordo: normalização/controlador `direct` por causa com
 Validação proporcional:30testes offline PASS, rede bloqueada e mocks da UI; teste usa o classificador verdadeiro para não repetir o falso pressuposto dos mocks antigos (só URLs absolutas). Novo teste de captura inicialmente importava CapturePlan do módulo errado; import corrigido antes da rodada final, sem atribuir esse erro de harness ao LinkedIn. As chamadas reais1/2isolaram ValueError e reference_normalization; chamada3comprovou a correção. Não houve retry automático ou busca adicional após sucesso. Nenhum desvio do contrato.
 
 Encerramento: defeito específico resolvido; sem integrar o Prisma Recruiter nem ampliar garantia para todos os filtros/escala/banimento. Documentação/contexto2.96.4 atualizados, produto3.3.0 e checkpoint1.2.0 mantidos. Verificações administrativas consolidadas em `evidence/linkedin-recruiter-poc/fix-121-validation.json`; CI auditável pelo SHA da branch, independente dos30testes Python locais. Sem merge na main/deploy. Evidências anteriores preservadas e rascunhos alheios não entram na entrega.
+
+## Adendo1.3.0 — ensaio de100referências, leitura parcial
+
+Pedido explícito do PO: tentar100. Acordo1.3.0 e mapa previamente registrados, baseline64d8fa80f57f6cf80c8b57fcf86264e89a61a303. D-13..15/P-06/F-04/A-04 preservam escopo experimental, separação entre busca/leitura/análise e autoridade humana. Não há novo motor produtivo ou integração.
+
+| ID | Implementação / teste / evidência | Resultado |
+| --- | --- | --- |
+| D-13 | Search.page/Observation.active_page, captura compartilhada e Trial.target_unique; URL final+controle PáginaN, localidade nativa, dedupe e término no alvo. pilot-130-live.json:10páginas/100únicas/identidade confirmada | PASS para coleta desta amostra; não mede recall nem melhores100 |
+| D-14 | Runner lê experiência com método upstream; revisão consultiva pelo assistente, trecho literal validado/hash/razão em artefato privado; agregado7+8+24+3+3+5=50, sem Score.50textos tiveram ruído lateral/rodapé removido offline, zero cortes | PARTIAL para meta100:50lidos/analisados,1falha e49não tentados; não declarar amostra completa |
+| D-15 | Exclusão por conta, até20páginas/200refs/100tentativas de perfil, timeout70s e tentativa única; status/checkpoint/retomada preservam concluídos/incertos. AuthenticationError na tentativa51pausou e fechou browser, zero processos dedicados | PASS para parada/contagem neste ensaio e retomada offline; retomada real após erro NOT TESTED |
+| P-03..06 | Conta exclusiva, auto-import/traces off, upstream fixado/inalterado, ferramenta única de leitura, ACL/dados privados; nenhum contato, atributos sensíveis, Score, cadastro/Knowledge/decisão ou produção | PASS no escopo executado; não é garantia antibanimento |
+| F-04/GOV-02 | Somente scripts de ensaio/documentação/evidência agregada/contexto; sem catálogo/tabela/consumidor produtivo | PASS por diff e ausência de acesso; sem smoke de produção alegado |
+
+Mapa final: `direct` controlador/captura/runner/tests e amostra; `critical_transversal` identidade/minimização/parada, conta própria confirmada e browser fechado; `plausible_indirect` checkpoint antigo e distinção leitura/análise, cobertos por testes; `no_impact_identified` runtime3.3.0/web/backend/schema/RLS/nota/pesos/histórico/decisões/Knowledge/produção por ausência de consumidor, writer, destino ou acesso alterado. Sem smoke produtivo porque produção foi explicitamente excluída.
+
+38testes offline PASS/zero falhas/erros/skips, rede externa bloqueada;22release-tooling PASS. Novos cenários: paginação/recibo divergente, dedupe/alvo100, fim nativo, retomada sem releitura, limite/estado incerto, ACL, leitura distinta de análise, parcialidade sem retry e remoção de sugestões/rodapé preservando texto desconhecido. Erro inicial de ACL do harness foi corrigido usando criação segura já existente; não se enfraqueceu proteção. O sanitizador de fronteira entrou após início da rodada e foi aplicado offline aos mesmos textos, sem reiniciar busca/ler pessoas novamente. Não foi alterado driver de navegação durante a operação.
+
+Resultado do conector nesta escala: **PARTIAL**. Causa exata de AuthenticationError não estabelecida; nenhuma atribuição de banimento, expiração ou desafio sem prova, nenhuma insistência para completar100. Não existe evidência de100trajetórias lidas; as50concluídas foram efetivamente revisadas com evidência privada rastreável. Não declarar conclusão integral de D-14. Dados ausentes não viram reprovação. Mantida recomendação experimental, sem integrar/publicar em produção. Checkpoint/artefato privado permitem retomada futura explícita, que não foi executada nesta rodada.
+
+Produto3.3.0 preservado; contexto2.96.5. Evidências históricas intactas e rascunhos alheios excluídos. Validação final de contexto/lint/plano/branch/CI registrada em `evidence/linkedin-recruiter-poc/pilot-130-validation.json`; sem merge/main/deploy, sem leitura adicional da fonte após a pausa.
 
 ---
 

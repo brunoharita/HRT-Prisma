@@ -33,6 +33,59 @@ def single_attempt_reads(extractor):
         yield
 
 
+async def capture_search_page(browser, extractor, search, account_key, expected_path, diagnostic):
+    """Same pinned capture and filter proof, reusable across verified pages."""
+    from linkedin_mcp_server.core.utils import detect_rate_limit
+    await detect_rate_limit(browser.page)
+    # Minimal scoped seam: replace only the URL grammar during this
+    # serialized read, preserving the pinned extractor/capture/errors.
+    with single_attempt_reads(extractor), patch("linkedin_mcp_server.linkedin.person.build_people_search_url",
+               return_value=search.url()):
+        result = await extractor.search_people(search.keywords)
+    await detect_rate_limit(browser.page)
+    selected = {}
+    for f in search.filters:
+        if f.kind == "network":
+            control = browser.page.get_by_role("radio", name="Filtrar conexões de " + f.label, exact=True)
+            applied = await control.count() == 1 and await control.is_checked()
+        else:
+            control = browser.page.get_by_role("button", name="Filtrar " + f.label, exact=True)
+            applied = await control.count() == 1 and await control.is_visible()
+        if applied:
+            selected[f.kind] = (f.value,)
+    errors = result.get("section_errors", {})
+    signal = "rate_limit" if any(e.get("error_type") == "rate_limit" for e in errors.values()) else (
+        "partial" if errors else "ok")
+    empty = await browser.page.get_by_role("heading", name="Nenhum resultado encontrado", exact=True).count() == 1
+    refs = tuple(r["url"] for r in result.get("references", {}).get("search_results", [])
+                 if r.get("kind") == "person" and urlsplit(r.get("url", "")).path.rstrip("/") != expected_path.rstrip("/"))
+    final = urlsplit(browser.page.url)
+    invalid_references = 0
+    own_alias_references = 0
+    for reference in refs:
+        if urlsplit(reference).path.rstrip("/") == "/in/me":
+            own_alias_references += 1
+        try:
+            profile_root(reference)
+        except (ValueError, TypeError):
+            invalid_references += 1
+    diagnostic.update(observation={
+        "sourceHostExpected": final.netloc == "www.linkedin.com",
+        "peopleSearchPath": final.path.rstrip("/") == "/search/results/people",
+        "keywordsMatch": parse_qs(final.query).get("keywords") == [search.keywords],
+        "selectedFilterKinds": list(selected), "references": len(refs),
+        "invalidProfileReferences": invalid_references, "selfAliasReferences": own_alias_references})
+    active_page = 1
+    if search.page > 1:
+        control = browser.page.get_by_role("button", name="Página " + str(search.page), exact=True)
+        active_page = search.page if (await control.count() == 1 and await control.get_attribute("aria-current") == "true") else None
+    next_control = browser.page.get_by_role("button", name="Próxima", exact=True)
+    has_next = await next_control.count() == 1 and await next_control.is_enabled()
+    return Observation(account_key, browser.page.url, selected, refs, signal,
+                       bool(result.get("sections", {}).get("search_results")) or empty, empty,
+                       active_page=active_page, has_next=has_next)
+
+
 async def execute(plan_path: Path, identity_path: Path, run_id: str,
                   *, workspace_root: Path | None = None) -> dict:
     os.environ.update({"PYTHON_DOTENV_DISABLED": "1", "AUTO_IMPORT_FROM_BROWSER": "false",
@@ -93,50 +146,8 @@ async def execute(plan_path: Path, identity_path: Path, run_id: str,
                 if own.get("section_errors") or not name_present or path not in {expected_path.rstrip("/"), "/in/me"}:
                     return Observation("identity-mismatch", browser.page.url, signal="error")
                 identity_confirmed = True
-                await detect_rate_limit(browser.page)
-                # Minimal scoped seam: replace only the URL grammar during this
-                # serialized read, preserving the pinned extractor/capture/errors.
                 stage = "search_capture"
-                with single_attempt_reads(extractor), patch("linkedin_mcp_server.linkedin.person.build_people_search_url",
-                           return_value=search.url()):
-                    result = await extractor.search_people(search.keywords)
-                stage = "selected_controls"
-                await detect_rate_limit(browser.page)
-                selected = {}
-                for f in search.filters:
-                    if f.kind == "network":
-                        control = browser.page.get_by_role("radio", name="Filtrar conexões de " + f.label, exact=True)
-                        applied = await control.count() == 1 and await control.is_checked()
-                    else:
-                        control = browser.page.get_by_role("button", name="Filtrar " + f.label, exact=True)
-                        applied = await control.count() == 1 and await control.is_visible()
-                    if applied:
-                        selected[f.kind] = (f.value,)
-                errors = result.get("section_errors", {})
-                signal = "rate_limit" if any(e.get("error_type") == "rate_limit" for e in errors.values()) else (
-                    "partial" if errors else "ok")
-                stage = "result_observation"
-                empty = await browser.page.get_by_role("heading", name="Nenhum resultado encontrado", exact=True).count() == 1
-                refs = tuple(r["url"] for r in result.get("references", {}).get("search_results", [])
-                             if r.get("kind") == "person" and urlsplit(r.get("url", "")).path.rstrip("/") != expected_path.rstrip("/"))
-                final = urlsplit(browser.page.url)
-                invalid_references = 0
-                own_alias_references = 0
-                for reference in refs:
-                    if urlsplit(reference).path.rstrip("/") == "/in/me":
-                        own_alias_references += 1
-                    try:
-                        profile_root(reference)
-                    except (ValueError, TypeError):
-                        invalid_references += 1
-                diagnostic.update(observation={
-                    "sourceHostExpected": final.netloc == "www.linkedin.com",
-                    "peopleSearchPath": final.path.rstrip("/") == "/search/results/people",
-                    "keywordsMatch": parse_qs(final.query).get("keywords") == [search.keywords],
-                    "selectedFilterKinds": list(selected), "references": len(refs),
-                    "invalidProfileReferences": invalid_references, "selfAliasReferences": own_alias_references})
-                return Observation(account_key, browser.page.url, selected, refs, signal,
-                                   bool(result.get("sections", {}).get("search_results")) or empty, empty)
+                return await capture_search_page(browser, extractor, search, account_key, expected_path, diagnostic)
             except AccountRestrictedError:
                 return Observation(account_key, "", signal="restricted")
             except AuthenticationError:

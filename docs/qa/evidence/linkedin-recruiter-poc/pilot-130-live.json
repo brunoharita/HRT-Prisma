@@ -1,0 +1,156 @@
+{
+  "pilotVersion": "1.3.0",
+  "target": 100,
+  "status": "paused",
+  "reason": "profile_read_AuthenticationError",
+  "foundUnique": 100,
+  "profileAttempts": 51,
+  "professionalSectionsRead": 50,
+  "experienceAvailable": 50,
+  "analyzed": 50,
+  "partialOrUnavailable": 1,
+  "pending": 49,
+  "collection": {
+    "version": "1.2.0",
+    "status": "completed",
+    "reason": "unique_target_reached",
+    "pages": 10,
+    "references": 100,
+    "completed": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "events": [
+      {
+        "page": 0,
+        "filters": {
+          "location": "source_applied"
+        },
+        "returned": 10,
+        "new": 10,
+        "empty": false
+      },
+      {
+        "page": 1,
+        "filters": {
+          "page": "source_applied",
+          "location": "source_applied"
+        },
+        "returned": 10,
+        "new": 10,
+        "empty": false
+      },
+      {
+        "page": 2,
+        "filters": {
+          "page": "source_applied",
+          "location": "source_applied"
+        },
+        "returned": 10,
+        "new": 10,
+        "empty": false
+      },
+      {
+        "page": 3,
+        "filters": {
+          "page": "source_applied",
+          "location": "source_applied"
+        },
+        "returned": 10,
+        "new": 10,
+        "empty": false
+      },
+      {
+        "page": 4,
+        "filters": {
+          "page": "source_applied",
+          "location": "source_applied"
+        },
+        "returned": 10,
+        "new": 10,
+        "empty": false
+      },
+      {
+        "page": 5,
+        "filters": {
+          "page": "source_applied",
+          "location": "source_applied"
+        },
+        "returned": 10,
+        "new": 10,
+        "empty": false
+      },
+      {
+        "page": 6,
+        "filters": {
+          "page": "source_applied",
+          "location": "source_applied"
+        },
+        "returned": 10,
+        "new": 10,
+        "empty": false
+      },
+      {
+        "page": 7,
+        "filters": {
+          "page": "source_applied",
+          "location": "source_applied"
+        },
+        "returned": 10,
+        "new": 10,
+        "empty": false
+      },
+      {
+        "page": 8,
+        "filters": {
+          "page": "source_applied",
+          "location": "source_applied"
+        },
+        "returned": 10,
+        "new": 10,
+        "empty": false
+      },
+      {
+        "page": 9,
+        "filters": {
+          "page": "source_applied",
+          "location": "source_applied"
+        },
+        "returned": 10,
+        "new": 10,
+        "empty": false
+      }
+    ],
+    "unique_references": 100
+  },
+  "productionAccessed": false,
+  "messagesOrConnectionsSent": false,
+  "assessmentCategories": {
+    "declared_occupational_title": 8,
+    "related_duties": 24,
+    "relation_not_demonstrated": 3,
+    "management_duties": 7,
+    "insufficient": 5,
+    "related_title_only": 3
+  },
+  "reviewMethod": "assistant-contextual-review-1.0.0",
+  "reviewKind": "advisory_evidence_review_not_score",
+  "boundaryCleanupRecords": 50,
+  "truncatedReadRecords": 0,
+  "browserCloseRequested": true,
+  "dedicatedBrowserProcessesAfterClose": 0,
+  "noAutomaticRetry": true,
+  "upstreamPin": "0c5f14ba3efcd9ad1bbd3163b4f2b9e47cda7b17",
+  "identityConfirmed": true,
+  "outcome": "PARTIAL: 100 found; 50 read/reviewed; AuthenticationError on attempt 51; 49 unattempted",
+  "authErrorCause": "not established; does not prove ban",
+  "rawLiveSummary": "private local pilot-130-summary.json retained; analyzed=0 before advisory review"
+}

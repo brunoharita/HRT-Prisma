@@ -1,0 +1,33 @@
+{
+  "pilotVersion": "1.3.0",
+  "outcome": "PARTIAL: 100 references found, 50 professional sections read and reviewed, AuthenticationError on attempt 51, 49 unattempted",
+  "localPythonTests": {
+    "tests": 38,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0
+  },
+  "releaseToolingTests": {
+    "tests": 22,
+    "failures": 0
+  },
+  "contextGenerate": "PASS",
+  "contextCheck": "PASS",
+  "lint": "PASS; 2134 files in exact tracked snapshot",
+  "snapshot": "exact tracked sources and explicitly staged pilot files; unrelated untracked drafts excluded",
+  "dispatcherSurfaces": [
+    "context-pack",
+    "documentation",
+    "generated-context",
+    "tooling"
+  ],
+  "runtimeDeployments": false,
+  "productionAccessed": false,
+  "mainChanged": false,
+  "publicVersionUnchanged": "3.3.0",
+  "checkpointFormatUnchanged": "1.2.0; private pilot research artifact 1.3.0",
+  "upstreamTrackedDiff": "empty",
+  "dedicatedBrowserProcessesAfterClose": 0,
+  "realResumeAfterAuthError": "NOT TESTED; no retry",
+  "ci": "inspect experimental branch run after push; separate from local Python tests"
+}

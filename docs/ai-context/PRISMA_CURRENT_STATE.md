@@ -3,13 +3,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.96.4
+version: 2.96.5
 last_verified: 2026-10-25
 ---
 
 # Estado atual do Prisma
 
 ## Prisma Recruiter — PoC local, sem integração
+
+Piloto experimental1.3.0 aprovado pelo PO em25/10/2026:100referências únicas de Gerente de Estoque/Bauru em10páginas pelo MCP inprocess/Edge real, com conta exclusiva e recibos de localidade/página ativa.50experiências lidas e revisadas; tentativa51retornou AuthenticationError, pausa sem retry,49não tentadas, browser fechado/zero processos dedicados. Resultado PARTIAL, não100analisados nem banimento confirmado. Revisão consultiva do assistente, sem API de IA adicional/Score:7descrições gerenciais pertinentes,8títulos gerenciais específicos sem atribuições,24relações parciais/operacionais,3cargos operacionais relacionados sem atribuições,3sem relação demonstrada no material e5insuficientes. Relação parcial não equivale a aderência gerencial; ausência não é fato negativo. Evidência individual/trechos/hashes somente em artefatos temporários privados com ACL, fora do Git; agregado pilot-130-live.json. Ruído de sugestões laterais/rodapé removido offline nos mesmos50textos, sem releitura.38testes offline/22release-tooling PASS, limites20páginas/200referências e100tentativas, timeout/retomada/dedupe; sem contorno/contato/integração/main/produção. Acordo/AoT/relatório linkedin-recruiter-poc1.3.0; produto3.3.0/Knowledge/nota/pesos/histórico/decisões/tabelas preservados. Conector segue experimental;100leituras contínuas e causa exata do erro não validadas.
 
 Correção experimental1.2.1 solicitada pelo PO em25/10/2026, concluída: upstream normaliza referências para /in/...; adaptador exigia URL absoluta e rejeitava as10. Regressão com classificador real falhou antes/passou depois; normalização aceita só referência relativa da origem verificada, mantendo rejeição de hosts/esquemas/caminhos indevidos. Diagnóstico sanitizado por etapa/código; captura usa tentativa única upstream para cumprir a pausa sem retry.30testes offline PASS e terceira chamada explícita da rodada concluiu MCP inprocess/Edge real: Estoque/Bauru10referências, conta confirmada, filtro aplicado comprovado por URL final+controle selecionado, zero referências inválidas e browser fechado/zero processos dedicados. Duas chamadas anteriores isolaram a causa, sem retry automático; evidências fix-121-* preservam todas. Falha específica resolvida, sem presumir os demais filtros/recall/segurança antibanimento. Checkpoint1.2.0 compatível, produto3.3.0/nota/pesos/histórico/decisões humanas/Knowledge/tabelas/main/produção preservados. Somente branch experimental; nenhuma integração/produção/contato/LLM ou dado pessoal publicado. Acordo/AoT/relatório linkedin-recruiter-poc1.2.1.
 

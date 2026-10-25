@@ -92,11 +92,14 @@ class NativeSelection:
 class Search:
     keywords: str
     filters: tuple[NativeSelection, ...] = ()
+    page: int = 1
 
     def url(self) -> str:
         # Reuse the reviewed upstream grammar; extend outside its frozen clone.
         if not self.keywords.strip() or len(self.keywords) > 300:
             raise ValueError("Bounded professional query required")
+        if type(self.page) is not int or not 1 <= self.page <= 20:
+            raise ValueError("Outside the observed bounded pagination contract")
         params = search_query(reviewed_builder()(self.keywords))
         groups: dict[str, list[str]] = {}
         for selected in self.filters:
@@ -106,6 +109,8 @@ class Search:
                 values.append(selected.value)
         for key, values in groups.items():
             params[key] = [json.dumps(values, separators=(",", ":"))]
+        if self.page > 1:
+            params["page"] = [str(self.page)]
         return "https://www.linkedin.com/search/results/people/?" + urlencode(params, doseq=True)
 
 
@@ -119,13 +124,19 @@ class Observation:
     signal: str = "ok"  # challenge/restricted/rate_limit/login/error/partial
     results_observed: bool = False
     explicit_empty: bool = False
+    active_page: int | None = None
+    has_next: bool | None = None
 
 
 def verify_filters(search: Search, page: Observation) -> dict[str, str]:
     actual = search_query(page.final_url)
     if actual.get("keywords") != [search.keywords]:
         raise ValueError("Source changed the requested query")
+    if actual.get("page", ["1"]) != [str(search.page)]:
+        raise ValueError("Source changed the requested page")
     result = {}
+    if search.page > 1:
+        result["page"] = "source_applied" if page.active_page == search.page else "unverified"
     for kind in {item.kind for item in search.filters}:
         expected = {item.value for item in search.filters if item.kind == kind}
         encoded = actual.get(FACETS[kind], [])
@@ -161,7 +172,7 @@ class Limits:
     timeout_seconds: float = 45
 
     def __post_init__(self):
-        if not (1 <= self.pages <= 6 and 1 <= self.references <= 60
+        if not (1 <= self.pages <= 20 and 1 <= self.references <= 200
                 and 0 < self.timeout_seconds <= 120):
             raise ValueError("Outside the bounded local trial budget")
 
@@ -178,16 +189,20 @@ class Trial:
     """
 
     def __init__(self, root: Path, account_key: str, run_id: str,
-                 searches: tuple[Search, ...], limits: Limits = Limits()):
+                 searches: tuple[Search, ...], limits: Limits = Limits(), *, target_unique: int | None = None):
         if not account_key or not re.fullmatch(r"[a-zA-Z0-9_-]{1,80}", run_id):
             raise ValueError("Explicit account and local run ID required")
         if not searches or len(searches) > limits.pages:
             raise ValueError("Search plan exceeds the page budget")
+        if target_unique is not None and not 1 <= target_unique <= 100:
+            raise ValueError("Outside the approved unique-profile target")
+        self.target_unique = target_unique
         self.searches, self.limits, self.account = searches, limits, account_key
         self.root = root / digest(account_key)
         self.root.mkdir(parents=True, exist_ok=True)
         self.path, self.lock = self.root / (run_id + ".json"), self.root / "active.lock"
-        self.plan = digest(json.dumps([s.url() for s in searches]) + repr(limits))
+        self.plan = digest(json.dumps([s.url() for s in searches]) + repr(limits)
+                           + (str(target_unique) if target_unique is not None else ""))
 
     def _save(self, state: dict) -> None:
         temporary = self.path.with_suffix(".pending")
@@ -267,9 +282,11 @@ class Trial:
                         state.update(status="paused", reason="reference_budget_exceeded")
                         break
                     validation_stage = "reference_normalization"
-                    keys = {digest(state["salt"] + profile_root(url)) for url in page.references}
-                    new = keys - set(state["seen"])
-                    state["seen"] = sorted(set(state["seen"]) | keys)
+                    keys = list(dict.fromkeys(digest(state["salt"] + profile_root(url)) for url in page.references))
+                    new = [key for key in keys if key not in set(state["seen"])]
+                    if self.target_unique is not None:
+                        new = new[:self.target_unique - len(state["seen"])]
+                    state["seen"] = sorted(set(state["seen"]) | set(new))
                     state["references"] += len(page.references)
                     state["events"].append({"page": index, "filters": receipts,
                                             "returned": len(page.references), "new": len(new),
@@ -277,6 +294,12 @@ class Trial:
                     state["completed"].append(index)
                     state["in_flight"] = None
                     self._save(state)
+                    if self.target_unique is not None and len(state["seen"]) >= self.target_unique:
+                        state.update(status="completed", reason="unique_target_reached")
+                        break
+                    if page.has_next is False:
+                        state.update(status="completed", reason="source_exhausted")
+                        break
                 except asyncio.CancelledError:
                     state.update(status="paused", reason="cancelled")
                     self._save(state)
@@ -290,6 +313,7 @@ class Trial:
                     # Only our fixed validation messages may leave this boundary.
                     safe_codes = {"Unexpected source destination": "unexpected_source_destination",
                                   "Source changed the requested query": "source_query_changed",
+                                  "Source changed the requested page": "source_page_changed",
                                   "Not a canonical public profile reference": "invalid_profile_reference"}
                     state["failure_code"] = safe_codes.get(str(exc), "unclassified_validation_or_driver_error")
                     break
@@ -305,6 +329,7 @@ def public_summary(state: dict) -> dict:
     """No account ID, hashes of people, query, raw profile or secret in reports."""
     summary = {key: state[key] for key in (
         "version", "status", "reason", "pages", "references", "completed", "events")}
+    summary["unique_references"] = len(state["seen"])
     if state.get("exception_class"):
         summary["exception_class"] = state["exception_class"]
         summary["failure_stage"] = state.get("failure_stage")

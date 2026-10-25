@@ -1,0 +1,17 @@
+{
+  "tests": 38,
+  "failures": 0,
+  "errors": 0,
+  "skips": 0,
+  "externalNetwork": "blocked",
+  "liveBrowser": false,
+  "includes": [
+    "pagination",
+    "unique100",
+    "resume",
+    "single-attempt",
+    "partiality",
+    "private-state",
+    "sidebar-footer-boundary"
+  ]
+}
