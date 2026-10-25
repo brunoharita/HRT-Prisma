@@ -1,0 +1,127 @@
+{
+  "functionalSha": "71fc4f658f4ad9d449ee3bd0cb32fbb127cb84d0",
+  "version": "3.3.0",
+  "environment": "production",
+  "branchCI": {
+    "id": 40158763231,
+    "status": "success"
+  },
+  "mainCI": {
+    "id": 40158882372,
+    "status": "success"
+  },
+  "preservation": {
+    "method": "Read-only counts and deterministic row fingerprints before/after; no mutation endpoints invoked",
+    "equal": true,
+    "before": [
+      {
+        "name": "professional_profiles",
+        "records": 21,
+        "fingerprint": "02227c4cb007c05c92c314044327d5b2"
+      },
+      {
+        "name": "vacancy_versions",
+        "records": 24,
+        "fingerprint": "2014d861a9467ff2bd6bbe611ddce5be"
+      },
+      {
+        "name": "match_evaluations",
+        "records": 101,
+        "fingerprint": "32734329be6b4981ce9135eeac8d3970"
+      },
+      {
+        "name": "matching_score_states",
+        "records": 25,
+        "fingerprint": "da6ddef2ca09625d5f38db9dd9023e44"
+      },
+      {
+        "name": "matching_trajectory_reviews",
+        "records": 3,
+        "fingerprint": "eccade4ad291147eef878547a5f891a1"
+      },
+      {
+        "name": "position_evaluation_entries",
+        "records": 4,
+        "fingerprint": "d6856fbedfabf2d8712432221efa8422"
+      },
+      {
+        "name": "position_evaluation_history",
+        "records": 26,
+        "fingerprint": "7b0290455933618d61107717d1336e41"
+      },
+      {
+        "name": "position_evaluation_processes",
+        "records": 3,
+        "fingerprint": "29b67c30a108ca5ff02120fd9b9a149c"
+      },
+      {
+        "name": "position_assessment_attempts",
+        "records": 4,
+        "fingerprint": "234c35b99d6e02b8c3949dd9589fb84a"
+      }
+    ],
+    "after": [
+      {
+        "name": "professional_profiles",
+        "records": 21,
+        "fingerprint": "02227c4cb007c05c92c314044327d5b2"
+      },
+      {
+        "name": "vacancy_versions",
+        "records": 24,
+        "fingerprint": "2014d861a9467ff2bd6bbe611ddce5be"
+      },
+      {
+        "name": "match_evaluations",
+        "records": 101,
+        "fingerprint": "32734329be6b4981ce9135eeac8d3970"
+      },
+      {
+        "name": "matching_score_states",
+        "records": 25,
+        "fingerprint": "da6ddef2ca09625d5f38db9dd9023e44"
+      },
+      {
+        "name": "matching_trajectory_reviews",
+        "records": 3,
+        "fingerprint": "eccade4ad291147eef878547a5f891a1"
+      },
+      {
+        "name": "position_evaluation_entries",
+        "records": 4,
+        "fingerprint": "d6856fbedfabf2d8712432221efa8422"
+      },
+      {
+        "name": "position_evaluation_history",
+        "records": 26,
+        "fingerprint": "7b0290455933618d61107717d1336e41"
+      },
+      {
+        "name": "position_evaluation_processes",
+        "records": 3,
+        "fingerprint": "29b67c30a108ca5ff02120fd9b9a149c"
+      },
+      {
+        "name": "position_assessment_attempts",
+        "records": 4,
+        "fingerprint": "234c35b99d6e02b8c3949dd9589fb84a"
+      }
+    ]
+  },
+  "runtime": {
+    "onlyPrismaWebChanged": true,
+    "containerStatus": "running",
+    "restartCount": 0,
+    "image": "sha256:fe79a74324ece8a66e7b606e8d7afcf19d4a4de0653a520eff4065452e910d66",
+    "unrelatedServicesPreserved": true
+  },
+  "deployment": {
+    "initialImmediateProbe": "HTTP 404 after container swap",
+    "subsequentPublicChecks": "18 PASS plus rendered public login3.3.0",
+    "rebuiltAfterTransientProbe": false
+  },
+  "limitations": [
+    "Real-case validation applies the new projection offline to saved production observations; no authenticated mutation or live model invocation",
+    "Public smoke validates delivered runtime/routes/assets/version; functional interactions covered by deterministic browser fixtures"
+  ]
+}

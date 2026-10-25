@@ -3,15 +3,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.95.0
+version: 2.95.1
 last_verified: 2026-10-25
 ---
 
 # Estado atual do Prisma
 
-## Descoberta pertinente e ordenação — 3.3.0 em validação
+## Descoberta pertinente e ordenação — 3.3.0 publicada
 
-Aprovada por Bruno em25/10/2026: filtrar recomendações por atuação pertinente, separar dúvidas profissionais de sinais isolados e preservar inclusão humana. Notas salvas ordenam recomendações A/B juntas, acompanhamento/colunas/seletores, comparação e avaliação/convites/resultados. Fórmula/pesos/motor/contratos/histórico originais permanecem; sem nova IA, recálculo, schema ou base paralela. Casos reais somente leitura/offline: Beatriz contextual fica fora; Willian relacionado permanece com48 mesmo sem usar confirmação na simulação. Browser24+65+12checks PASS; publicação ainda pendente, runtime anterior3.2.1. Acordo/AoT position-relevance-v330 registra implementação e limites.
+Aprovada por Bruno em25/10/2026: filtrar recomendações por atuação pertinente, separar dúvidas profissionais de sinais isolados e preservar inclusão humana. Notas salvas ordenam recomendações A/B juntas, acompanhamento/colunas/seletores, comparação e avaliação/convites/resultados. Fórmula/pesos/motor/contratos/histórico originais permanecem; sem nova IA, recálculo, schema ou base paralela. Casos reais somente leitura/offline: Beatriz contextual fica fora; Willian relacionado permanece com48 mesmo sem usar confirmação na simulação.68testes de domínio e24+65+12checks browser PASS; tipos/build/runtime/contextos/lint aprovados. CI inicial apontou apenas texto estático legado, corrigido com40testes dirigidos; CI final branch40158763231/main40158882372 SUCCESS. Produção SHA71fc4f658f4ad9d449ee3bd0cb32fbb127cb84d0, somente web, imagemfe79a74324ec/running0;18checks públicos e login3.3.0 PASS após404 transitório sem rebuild. Nove tabelas preservaram contagens/fingerprints; sete serviços adjacentes intactos. Sem jornada humana autenticada ou mutação real para teste. Fechamento documental sincroniza fontes sem nova implantação. Acordo/AoT position-relevance-v330 registra implementação, evidências e limites; supersede somente a exibição/ordenação anterior das listas, preservando os contratos e snapshots históricos.
 
 
 ## Referências contextuais do RAG — correção publicada na mesma 3.2.1

@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 575
-source_manifest_sha256: b57d7e84ef4c0421542ff40ebfacf0205bf71f98abac22d13c200fd34e921e45
+source_manifest_sha256: 73ce78a88401cf5dbe8371f19af68926fdb47891d355879e9347d63c7071a7e2
 -->
 
 # Tudo sobre o Prisma
@@ -2651,15 +2651,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.95.0
+version: 2.95.1
 last_verified: 2026-10-25
 ---
 
 # Estado atual do Prisma
 
-## Descoberta pertinente e ordenação — 3.3.0 em validação
+## Descoberta pertinente e ordenação — 3.3.0 publicada
 
-Aprovada por Bruno em25/10/2026: filtrar recomendações por atuação pertinente, separar dúvidas profissionais de sinais isolados e preservar inclusão humana. Notas salvas ordenam recomendações A/B juntas, acompanhamento/colunas/seletores, comparação e avaliação/convites/resultados. Fórmula/pesos/motor/contratos/histórico originais permanecem; sem nova IA, recálculo, schema ou base paralela. Casos reais somente leitura/offline: Beatriz contextual fica fora; Willian relacionado permanece com48 mesmo sem usar confirmação na simulação. Browser24+65+12checks PASS; publicação ainda pendente, runtime anterior3.2.1. Acordo/AoT position-relevance-v330 registra implementação e limites.
+Aprovada por Bruno em25/10/2026: filtrar recomendações por atuação pertinente, separar dúvidas profissionais de sinais isolados e preservar inclusão humana. Notas salvas ordenam recomendações A/B juntas, acompanhamento/colunas/seletores, comparação e avaliação/convites/resultados. Fórmula/pesos/motor/contratos/histórico originais permanecem; sem nova IA, recálculo, schema ou base paralela. Casos reais somente leitura/offline: Beatriz contextual fica fora; Willian relacionado permanece com48 mesmo sem usar confirmação na simulação.68testes de domínio e24+65+12checks browser PASS; tipos/build/runtime/contextos/lint aprovados. CI inicial apontou apenas texto estático legado, corrigido com40testes dirigidos; CI final branch40158763231/main40158882372 SUCCESS. Produção SHA71fc4f658f4ad9d449ee3bd0cb32fbb127cb84d0, somente web, imagemfe79a74324ec/running0;18checks públicos e login3.3.0 PASS após404 transitório sem rebuild. Nove tabelas preservaram contagens/fingerprints; sete serviços adjacentes intactos. Sem jornada humana autenticada ou mutação real para teste. Fechamento documental sincroniza fontes sem nova implantação. Acordo/AoT position-relevance-v330 registra implementação, evidências e limites; supersede somente a exibição/ordenação anterior das listas, preservando os contratos e snapshots históricos.
 
 
 ## Referências contextuais do RAG — correção publicada na mesma 3.2.1
@@ -25241,14 +25241,14 @@ Acordo/execução `agreement-position-relevance-v330.md`1.0.0, aprovado em25/10/
 | D-02 | Seções separadas de recomendação, dúvida profissional individual e inclusão humana; entrada exige política not_required e material pertinente. Browser24checks em1448/390/320 | PASS |
 | D-03 | Confirmação/inclusão preservada em faixa própria quando sem sustentação automática; processos/acompanhamentos não filtram seus participantes. Dispensa humana não é desfeita; histórico só é lido | PASS |
 | D-04 | Comparador de notas salvas válido/zero/indisponível; A/B juntos na recomendação, acompanhamento/colunas/seletores/convites/resultados/comparação ordenados pela nota, desempates secundários | PASS |
-| D-05 | Nenhuma alteração de vacancy.ts/matchingScore.ts/runtime gerado; sem migration/Edge/IA/novas entidades. Registro3.3.0 e histórico de versões testados; publicação pendente | PARTIAL |
+| D-05 | Nenhuma alteração de vacancy.ts/matchingScore.ts/runtime gerado; sem migration/Edge/IA/novas entidades. Registro3.3.0 e histórico de versões testados; produção no SHA71fc4f65, CI e smoke aprovados | PASS |
 | D-06 | Casos reais em leitura/offline: Beatriz contextual_only/nota null fica not_recommended; Willian related/48 recomendado mesmo sem considerar a confirmação em simulação. Fontes preservadas | PASS |
 | P-01 | Sem cutoff numérico/hardcode/blacklist de competências; nota não determina inclusão. Negativos de sinais, cargo só declarado, software vendido, confirmação/dispensa, zero/desconhecido e fonte de entrada | PASS |
 | F-01 | RAG/idiomas/modelos/provas/convites e cálculos não alterados; só ordenação e reaproveitamento da consulta opcional de notas | PASS |
 
 ## Mapa final e preservação
 
-`direct`: descoberta/UI, ordenação de acompanhamento/seletores e avaliação. `critical_transversal`: autoridade humana e dados persistidos, sem DML/grants; negativos dirigidos e comparação de fingerprints. `plausible_indirect`: comparação, revisão e seleção para convites mantidas; consulta opcional de notas compartilhada pelo pai/resultados sem nova consulta duplicada. `no_impact_identified`: backend/Score/runtime, RAG/ingestão e Horus, demonstrado por diff/check do runtime e inventário operacional a confirmar. Sem nova dependência ou alternativa arquitetural. Ordem do Kanban é interna à coluna; não muda estágio. Timeline de fatos/ações não é ranking de pessoas e mantém sua ordem histórica.
+`direct`: descoberta/UI, ordenação de acompanhamento/seletores e avaliação. `critical_transversal`: autoridade humana e dados persistidos, sem DML/grants; negativos dirigidos e comparação de fingerprints. `plausible_indirect`: comparação, revisão e seleção para convites mantidas; consulta opcional de notas compartilhada pelo pai/resultados sem nova consulta duplicada. `no_impact_identified`: backend/Score/runtime, RAG/ingestão e Horus, demonstrado por diff/check do runtime e inventário operacional com sete serviços adjacentes inalterados. Sem nova dependência ou alternativa arquitetural. Ordem do Kanban é interna à coluna; não muda estágio. Timeline de fatos/ações não é ranking de pessoas e mantém sua ordem histórica.
 
 Novidade: sinais isolados deixam de aparecer nas recomendações e nota passa antes do grupo/nome/prova nas listas. Preservação: originais A/B/C e notas ficam nos snapshots históricos; a nova projeção não os regrava nem dispara recálculo pelo deploy. Inclusão em processo e decisão de contratação permanecem explícitas.
 
@@ -25258,7 +25258,9 @@ Novidade: sinais isolados deixam de aparecer nas recomendações e nota passa an
 - `browser/`:24checks da composição real de grupos/cartões, exclusão genérica, Willian antes de trajetória direta de nota menor, dúvida individual, ação de comparação e inclusão humana, três viewports. Desktop e320px, além de resultados390px, inspecionados: hierarquia/ações preservadas, sem ruído e sem overflow.
 - `assessment/`:65checks do componente/página/modal reais, notas versus acertos independentes, ordem nova, falha opcional/processo incorreto sem vazamento de nota, zero, histórico somente leitura e callbacks explícitos.
 - `follow-up/`:12checks, ordem no Kanban e lista nos três viewports, sem overflow ou erros.
-- 68testes de domínio PASS; tipos raiz/web, build e check do runtime compartilhado PASS. Contexto/CI/publicação em consolidação. Sem suíte integral local.
+- 68testes de domínio PASS; tipos raiz/web, build e check do runtime compartilhado PASS. Contexto/lint PASS no snapshot exato rastreado, sem incluir rascunhos alheios. Sem suíte integral local.
+- `ci-regression.txt`:40testes dirigidos PASS após CI40158542872 identificar uma asserção estática do texto vazio antigo. Corrigido somente o teste para a composição aprovada; CI final branch40158763231/main40158882372 SUCCESS.
+- `production.json` e `public-smoke.json`: fingerprints e contagens de nove tabelas iguais antes/depois;18checks públicos de rotas/assets/SHA/versão/textos e login renderizado3.3.0 PASS (`production-login.png`). Somente prisma-web mudou; sete serviços adjacentes preservaram imagem/início/reinícios.
 
 O teste visual inicial identificou uma falsa exclusão: o resolver pode citar primeiro o título declarado mesmo havendo cargo idêntico em experiência. Corrigida a atribuição conservadora, com positivo de cargo efetivo e negativo de cargo somente declarado. Um teste estático ainda exigia os antigos títulos A/B/C; atualizado para a composição aprovada, mantendo os checks de nota, cobertura, explicação, fontes e responsividade. Falha de edição CRLF do harness foi corrigida no teste; não se alterou motor para satisfazer seletor ou expectativa antiga.
 
@@ -25268,7 +25270,9 @@ Referência fornecida é contraprova funcional. Cartões/fontes/ações existent
 
 ## Publicação / rollback / conclusão
 
-Publicação e verificação produtiva pendentes. Plano esperado somente web/documentação. Rollback pela imagem web anterior, sem apagar/reprocessar dados ou originais. Não encerrar enquanto D-05 e preservação operacional não estiverem comprovados.
+Publicada em25/10/2026 no SHA funcional71fc4f658f4ad9d449ee3bd0cb32fbb127cb84d0, versão3.3.0, imagemfe79a74324ec/running0. Plano somente web/documentação; sem migração/Edge/worker/modelo. Smoke imediato retornou404 durante a troca do container; verificação posterior independente aprovou rotas/assets e login, sem reconstrução adicional. Rollback preservado em prisma-web:rollback-before-71fc4f658f4a, sem apagar/reprocessar dados ou originais.
+
+Todas as obrigações D/P aplicáveis comprovadas; desvios de contrato: nenhum. Casos reais validados sobre observações salvas, com aplicação offline da projeção; não houve jornada humana autenticada produtiva nem escrita/inferência para teste. O fechamento documental sincroniza fontes com main/GitHub/VPS sem novo build do runtime. Rascunhos não rastreados permaneceram fora da entrega. Um index.lock vazio e sem processo/handle ativo foi preservado em tmp após verificação exclusiva; nenhuma alteração alheia foi descartada.
 
 ---
 

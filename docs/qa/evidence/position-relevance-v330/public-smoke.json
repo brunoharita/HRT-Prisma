@@ -1,0 +1,87 @@
+{
+  "timestamp": "2026-10-25T03:40:28.796Z",
+  "expected": "71fc4f658f4ad9d449ee3bd0cb32fbb127cb84d0",
+  "assets": [
+    "/assets/index-B7mMcYKD.js",
+    "/assets/rolldown-runtime-C0FnF6B9.js",
+    "/assets/antd-vendor-BaKnhCyQ.js",
+    "/assets/supabase-vendor-DoXvCMLf.js",
+    "/assets/react-vendor-BdxMnOeJ.js",
+    "/assets/antd-vendor-B5BXDqMa.css",
+    "/assets/index-B6uUBtyO.css"
+  ],
+  "checks": [
+    {
+      "name": "HTTP200 /login",
+      "pass": true
+    },
+    {
+      "name": "HTTP200 /",
+      "pass": true
+    },
+    {
+      "name": "HTTP200 /selection-processes",
+      "pass": true
+    },
+    {
+      "name": "HTTP200 /vacancies",
+      "pass": true
+    },
+    {
+      "name": "hashed assets",
+      "pass": true
+    },
+    {
+      "name": "HTTP200 /assets/rolldown-runtime-C0FnF6B9.js",
+      "pass": true
+    },
+    {
+      "name": "HTTP200 /assets/react-vendor-BdxMnOeJ.js",
+      "pass": true
+    },
+    {
+      "name": "HTTP200 /assets/antd-vendor-B5BXDqMa.css",
+      "pass": true
+    },
+    {
+      "name": "HTTP200 /assets/supabase-vendor-DoXvCMLf.js",
+      "pass": true
+    },
+    {
+      "name": "HTTP200 /assets/antd-vendor-BaKnhCyQ.js",
+      "pass": true
+    },
+    {
+      "name": "HTTP200 /assets/index-B7mMcYKD.js",
+      "pass": true
+    },
+    {
+      "name": "HTTP200 /assets/index-B6uUBtyO.css",
+      "pass": true
+    },
+    {
+      "name": "functional SHA",
+      "pass": true
+    },
+    {
+      "name": "public3.3.0",
+      "pass": true
+    },
+    {
+      "name": "published Pessoas com trajetória pertinente",
+      "pass": true
+    },
+    {
+      "name": "published Pessoas incluídas por decisão humana",
+      "pass": true
+    },
+    {
+      "name": "published Maior Nota Prisma salva primeiro",
+      "pass": true
+    },
+    {
+      "name": "HTTP200 /assets/index-CQLbPBr1.js",
+      "pass": true
+    }
+  ]
+}
