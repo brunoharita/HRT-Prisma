@@ -2,6 +2,42 @@
 
 Avaliação experimental1.0.0,25/10/2026. Acordo: `../qa/agreement-linkedin-recruiter-poc.md`1.0.0. Não é integração nem mudança do produto em produção.
 
+## Adendo1.4.0 — busca web comparada, sem conta LinkedIn
+
+Pedido explícito do PO em25/10/2026: testar busca web para Gerente de Estoque/Bauru e cidades próximas, ferramentas gratuitas, comparar com a amostra anterior sem conta restrita/produção. Foi usada apenas a ferramenta de busca web desta sessão, sem contratar API/plano, cadastrar Tavily/SearXNG ou instalar dependência. Não é teste de integração ou custo/cota de uma API produtiva. Nenhum navegador/MCP/cookie da conta LinkedIn foi acessado e nenhum link LinkedIn foi aberto diretamente. Conteúdo analisado é somente o devolvido pelo indexador.
+
+Foram20consultas:4exploratórias amplas e16direcionadas, com títulos/responsabilidades relacionados a estoque, inventário, almoxarifado, logística e supply chain. Recorte nominal: Bauru, Agudos, Pederneiras, Piratininga e Lençóis Paulista; não é raio em quilômetros. As4exploratórias orientaram a escolha das consultas e não entram no corpus medido. As16consultas direcionadas retornaram60URLs únicas:25URLs canônicas de perfis e35páginas de outro tipo. Todas as25referências pessoais eram de conteúdo LinkedIn indexado; nenhuma página pessoal de outro domínio foi encontrada neste corpus. O retorno do buscador não é catálogo completo da web nem50referências pertinentes.
+
+| Evidência disponível nas25referências de perfil | Quantidade |
+| --- | --- |
+| Descrição própria operacional de estoque/conferência, no recorte regional | 1 |
+| Resumo próprio genérico de logística, no recorte regional, sem atribuições de estoque detalhadas | 4 |
+| Resumo próprio de logística com localidade da pessoa não confirmada | 1 |
+| Cabeçalho da pessoa indica Santos, Campinas ou São Paulo, fora do recorte nominal | 3 |
+| Atividade própria disponível em outro contexto: inventário de TI ou vendas de peças | 2 |
+| Evidência acadêmica, sem atuação gerencial de estoque demonstrada | 2 |
+| Informação insuficiente: vagas compartilhadas, reações, cargo genérico ou atribuições ausentes | 12 |
+
+Há5indícios profissionais regionais para eventual esclarecimento, não5gerentes aderentes. **Zero descrições de responsabilidade gerencial de estoque demonstradas no material indexado recebido.** Não é evidência de que as pessoas não tenham essa experiência. Uma sexta referência de logística depende também de confirmar cidade. Graduação/artigo/curso, empresa logística, publicação curtida e oportunidade compartilhada não viram experiência do titular.
+
+Casos que explicam o ruído sem publicar identidades: Piratininga apareceu como nome de uma distribuidora CPFL e como bairro em Osasco; anúncio em Bauru apareceu num perfil cujo cabeçalho dizia Campinas; uma descrição de compras/almoxarifado era funcionalmente promissora, mas a pessoa indicava São Paulo. O termo inventário também recuperou projeto de hardware/software. Essas ocorrências foram separadas e não usadas como recomendações pertinentes à posição.
+
+### Comparação descritiva
+
+| Critério | Rodada MCP anterior | Busca web desta sessão |
+| --- | --- | --- |
+| Referências únicas | 100 | 25URLs de perfil |
+| Seções de experiência lidas | 50 | 0leituras integrais;25referências indexadas revisadas |
+| Descrições gerenciais de estoque sustentadas pelo texto disponível | 7das50revisadas | 0nas25referências indexadas |
+| Sobreposição por URL canônica | Base comparativa100/50 | 0com as100;0com as50revisadas |
+| Acesso a conta LinkedIn | Sim, interrompido na tentativa51; restrição posteriormente observada | Nenhum |
+
+Normalização para comparação apenas local: host público br.linkedin.com e variante /en são reduzidos ao identificador de perfil, reusando profile_root. Não se procuraram nomes da base privada na web. Zero sobreposição de URL não comprova25novas pessoas: aliases/mudanças de URL não foram resolvidos. Região ampliada, consultas diferentes e profundidades distintas impedem inferir precisão/recall/superioridade ou taxas comparáveis de aderência. O artefato anterior foi lido sem alteração, hash preservado.
+
+Evidência individual mínima, trechos e URLs somente no artefato privado temporário ignorado, com ACL reaproveitada; nada virou Perfil/prospecto/Score/Knowledge/decisão.25vínculos entre trecho literal e referência conferidos, contagens/dedupe reconciliados. Agregado reproduzível: `../qa/evidence/linkedin-recruiter-poc/web-140-comparison.json`. Não houve código produtivo, novas tabelas, nova taxonomia, contato ou implantação.
+
+**Resultado:** a descoberta pela web funcionou sem usar a conta, mas não entregou50referências pertinentes ou evidência gerencial suficiente para recomendar pessoas à posição. Neste corpus, ela continuou dependendo de conteúdo LinkedIn indexado e trouxe muito ruído. Recomenda-se como canal complementar de descoberta, seguido de obtenção autorizada de dados profissionais e revisão; não substituir currículo/experiência por snippets nem considerar Tavily validada por este ensaio. Produto3.3.0/main/produção e histórico/decisões/pesos preservados.
+
 ## Adendo1.3.1 — restrição confirmada e limite local50
 
 Em25/10/2026, Bruno autorizou verificar a conta de testes no navegador, uma pesquisa diagnóstica e depois reduzir o piloto para50. A navegação inicial para feed no navegador interno redirecionou para login, mostrou o seletor com a identidade anteriormente verificada e e-mail mascarado correspondente e, sem clicar em nada, chegou a Verificação de segurança. A fonte informa atividade fora do normal e grande volume de acesso a dados de perfis, associado no aviso a ferramenta externa/extensão. **Há barreira explícita de acesso nesta sessão; não é apenas um AuthenticationError sem contexto.** A tela não informa banimento permanente nem prazo. Ela não prova a causa exata de cada erro histórico ou uma restrição em todas as sessões.

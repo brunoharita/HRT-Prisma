@@ -3,13 +3,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.96.6
+version: 2.96.7
 last_verified: 2026-10-25
 ---
 
 # Estado atual do Prisma
 
 ## Prisma Recruiter — PoC local, sem integração
+
+Ensaio web1.4.0 autorizado em25/10/2026, sem conta/browser/MCP/cookies LinkedIn ou produção:20consultas gratuitas pela ferramenta desta sessão,4exploratórias fora do corpus e16direcionadas a estoque/logística em Bauru/Agudos/Pederneiras/Piratininga/Lençóis Paulista.60URLs únicas recebidas,25referências de perfis (todas LinkedIn indexado) e35outros documentos; nenhum link LinkedIn aberto diretamente, nenhuma API contratada/Tavily integrada. Nas25:1descrição operacional de estoque+4resumos genéricos de logística regionais,1logística com cidade não confirmada,3cidades fora do recorte,2outros contextos funcionais,2acadêmicos e12insuficientes. Zero atribuições gerenciais de estoque sustentadas pelos snippets, sem inferir inexistência de experiência;5indícios não são5gerentes aderentes. Comparação local por URL com amostra100/50anteriores:0sobreposições; aliases não resolvidos, não declarar25novas pessoas ou benchmark de precisão/recall.25trechos/referências conferidos, dedupe/contagens e histórico privado intacto. Agregado web-140-comparison.json; detalhes individuais só em artefato privado temporário/ACL, nenhum Perfil/Score/Knowledge/decisão criado. Relatório/AoT/acordo linkedin-recruiter-poc1.4.0; ferramenta é complementar,50referências pertinentes não obtidas, custo/cobertura de API produtiva NOT TESTED. Produto3.3.0/main/produção/pesos/histórico/decisões/tabelas preservados.
 
 Adendo experimental1.3.1 em25/10/2026: verificação autorizada no navegador interno redirecionou feed/login para checkpoint de segurança, com aviso explícito de atividade fora do normal/grande volume de dados de perfis e ferramenta externa/extensão. Identidade do seletor corresponde à sessão de testes antes verificada, e-mail mascarado, sem nova conferência integral. Restrição de acesso nesta sessão confirmada; banimento permanente/prazo não informados. Pesquisa diagnóstica BLOCKED antes do envio pela regra de parada; zero pesquisa/leitura nova/reabertura MCP, sem clique/resolução/contorno do checkpoint. Evidência sanitizada account-131-check.json/PNG. Runner reduzido localmente para50únicas/50tentativas de experiência/10páginas/100refs brutas; artefato1.3.1, legados100legíveis e preservados. Nova rodada real50 NOT TESTED por restrição, sem confundir as50análises anteriores com nova coleta. Produto3.3.0/main/produção/pesos/histórico/decisões/Knowledge/tabelas intactos; sem integração nem raio implementado. Acordo/AoT/relatório linkedin-recruiter-poc1.3.1 registram bloqueio e teste offline do teto.
 

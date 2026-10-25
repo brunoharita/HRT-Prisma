@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 578
-source_manifest_sha256: e7fcd43225a560ffc31487541cdc407aca6e1d6b2d5d3bfef99c8d61ba14b74f
+source_manifest_sha256: 159cf37acde99fb3e21c3def6fa171b84a1ccbec7e4f650347c6e71da1ee8be5
 -->
 
 # Tudo sobre o Prisma
@@ -2651,13 +2651,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.96.6
+version: 2.96.7
 last_verified: 2026-10-25
 ---
 
 # Estado atual do Prisma
 
 ## Prisma Recruiter — PoC local, sem integração
+
+Ensaio web1.4.0 autorizado em25/10/2026, sem conta/browser/MCP/cookies LinkedIn ou produção:20consultas gratuitas pela ferramenta desta sessão,4exploratórias fora do corpus e16direcionadas a estoque/logística em Bauru/Agudos/Pederneiras/Piratininga/Lençóis Paulista.60URLs únicas recebidas,25referências de perfis (todas LinkedIn indexado) e35outros documentos; nenhum link LinkedIn aberto diretamente, nenhuma API contratada/Tavily integrada. Nas25:1descrição operacional de estoque+4resumos genéricos de logística regionais,1logística com cidade não confirmada,3cidades fora do recorte,2outros contextos funcionais,2acadêmicos e12insuficientes. Zero atribuições gerenciais de estoque sustentadas pelos snippets, sem inferir inexistência de experiência;5indícios não são5gerentes aderentes. Comparação local por URL com amostra100/50anteriores:0sobreposições; aliases não resolvidos, não declarar25novas pessoas ou benchmark de precisão/recall.25trechos/referências conferidos, dedupe/contagens e histórico privado intacto. Agregado web-140-comparison.json; detalhes individuais só em artefato privado temporário/ACL, nenhum Perfil/Score/Knowledge/decisão criado. Relatório/AoT/acordo linkedin-recruiter-poc1.4.0; ferramenta é complementar,50referências pertinentes não obtidas, custo/cobertura de API produtiva NOT TESTED. Produto3.3.0/main/produção/pesos/histórico/decisões/tabelas preservados.
 
 Adendo experimental1.3.1 em25/10/2026: verificação autorizada no navegador interno redirecionou feed/login para checkpoint de segurança, com aviso explícito de atividade fora do normal/grande volume de dados de perfis e ferramenta externa/extensão. Identidade do seletor corresponde à sessão de testes antes verificada, e-mail mascarado, sem nova conferência integral. Restrição de acesso nesta sessão confirmada; banimento permanente/prazo não informados. Pesquisa diagnóstica BLOCKED antes do envio pela regra de parada; zero pesquisa/leitura nova/reabertura MCP, sem clique/resolução/contorno do checkpoint. Evidência sanitizada account-131-check.json/PNG. Runner reduzido localmente para50únicas/50tentativas de experiência/10páginas/100refs brutas; artefato1.3.1, legados100legíveis e preservados. Nova rodada real50 NOT TESTED por restrição, sem confundir as50análises anteriores com nova coleta. Produto3.3.0/main/produção/pesos/histórico/decisões/Knowledge/tabelas intactos; sem integração nem raio implementado. Acordo/AoT/relatório linkedin-recruiter-poc1.3.1 registram bloqueio e teste offline do teto.
 
@@ -12231,6 +12233,42 @@ A partir de `prisma-ux-foundation-1.0.0`, o módulo antes chamado Vagas aparece 
 
 Avaliação experimental1.0.0,25/10/2026. Acordo: `../qa/agreement-linkedin-recruiter-poc.md`1.0.0. Não é integração nem mudança do produto em produção.
 
+## Adendo1.4.0 — busca web comparada, sem conta LinkedIn
+
+Pedido explícito do PO em25/10/2026: testar busca web para Gerente de Estoque/Bauru e cidades próximas, ferramentas gratuitas, comparar com a amostra anterior sem conta restrita/produção. Foi usada apenas a ferramenta de busca web desta sessão, sem contratar API/plano, cadastrar Tavily/SearXNG ou instalar dependência. Não é teste de integração ou custo/cota de uma API produtiva. Nenhum navegador/MCP/cookie da conta LinkedIn foi acessado e nenhum link LinkedIn foi aberto diretamente. Conteúdo analisado é somente o devolvido pelo indexador.
+
+Foram20consultas:4exploratórias amplas e16direcionadas, com títulos/responsabilidades relacionados a estoque, inventário, almoxarifado, logística e supply chain. Recorte nominal: Bauru, Agudos, Pederneiras, Piratininga e Lençóis Paulista; não é raio em quilômetros. As4exploratórias orientaram a escolha das consultas e não entram no corpus medido. As16consultas direcionadas retornaram60URLs únicas:25URLs canônicas de perfis e35páginas de outro tipo. Todas as25referências pessoais eram de conteúdo LinkedIn indexado; nenhuma página pessoal de outro domínio foi encontrada neste corpus. O retorno do buscador não é catálogo completo da web nem50referências pertinentes.
+
+| Evidência disponível nas25referências de perfil | Quantidade |
+| --- | --- |
+| Descrição própria operacional de estoque/conferência, no recorte regional | 1 |
+| Resumo próprio genérico de logística, no recorte regional, sem atribuições de estoque detalhadas | 4 |
+| Resumo próprio de logística com localidade da pessoa não confirmada | 1 |
+| Cabeçalho da pessoa indica Santos, Campinas ou São Paulo, fora do recorte nominal | 3 |
+| Atividade própria disponível em outro contexto: inventário de TI ou vendas de peças | 2 |
+| Evidência acadêmica, sem atuação gerencial de estoque demonstrada | 2 |
+| Informação insuficiente: vagas compartilhadas, reações, cargo genérico ou atribuições ausentes | 12 |
+
+Há5indícios profissionais regionais para eventual esclarecimento, não5gerentes aderentes. **Zero descrições de responsabilidade gerencial de estoque demonstradas no material indexado recebido.** Não é evidência de que as pessoas não tenham essa experiência. Uma sexta referência de logística depende também de confirmar cidade. Graduação/artigo/curso, empresa logística, publicação curtida e oportunidade compartilhada não viram experiência do titular.
+
+Casos que explicam o ruído sem publicar identidades: Piratininga apareceu como nome de uma distribuidora CPFL e como bairro em Osasco; anúncio em Bauru apareceu num perfil cujo cabeçalho dizia Campinas; uma descrição de compras/almoxarifado era funcionalmente promissora, mas a pessoa indicava São Paulo. O termo inventário também recuperou projeto de hardware/software. Essas ocorrências foram separadas e não usadas como recomendações pertinentes à posição.
+
+### Comparação descritiva
+
+| Critério | Rodada MCP anterior | Busca web desta sessão |
+| --- | --- | --- |
+| Referências únicas | 100 | 25URLs de perfil |
+| Seções de experiência lidas | 50 | 0leituras integrais;25referências indexadas revisadas |
+| Descrições gerenciais de estoque sustentadas pelo texto disponível | 7das50revisadas | 0nas25referências indexadas |
+| Sobreposição por URL canônica | Base comparativa100/50 | 0com as100;0com as50revisadas |
+| Acesso a conta LinkedIn | Sim, interrompido na tentativa51; restrição posteriormente observada | Nenhum |
+
+Normalização para comparação apenas local: host público br.linkedin.com e variante /en são reduzidos ao identificador de perfil, reusando profile_root. Não se procuraram nomes da base privada na web. Zero sobreposição de URL não comprova25novas pessoas: aliases/mudanças de URL não foram resolvidos. Região ampliada, consultas diferentes e profundidades distintas impedem inferir precisão/recall/superioridade ou taxas comparáveis de aderência. O artefato anterior foi lido sem alteração, hash preservado.
+
+Evidência individual mínima, trechos e URLs somente no artefato privado temporário ignorado, com ACL reaproveitada; nada virou Perfil/prospecto/Score/Knowledge/decisão.25vínculos entre trecho literal e referência conferidos, contagens/dedupe reconciliados. Agregado reproduzível: `../qa/evidence/linkedin-recruiter-poc/web-140-comparison.json`. Não houve código produtivo, novas tabelas, nova taxonomia, contato ou implantação.
+
+**Resultado:** a descoberta pela web funcionou sem usar a conta, mas não entregou50referências pertinentes ou evidência gerencial suficiente para recomendar pessoas à posição. Neste corpus, ela continuou dependendo de conteúdo LinkedIn indexado e trouxe muito ruído. Recomenda-se como canal complementar de descoberta, seguido de obtenção autorizada de dados profissionais e revisão; não substituir currículo/experiência por snippets nem considerar Tavily validada por este ensaio. Produto3.3.0/main/produção e histórico/decisões/pesos preservados.
+
 ## Adendo1.3.1 — restrição confirmada e limite local50
 
 Em25/10/2026, Bruno autorizou verificar a conta de testes no navegador, uma pesquisa diagnóstica e depois reduzir o piloto para50. A navegação inicial para feed no navegador interno redirecionou para login, mostrou o seletor com a identidade anteriormente verificada e e-mail mascarado correspondente e, sem clicar em nada, chegou a Verificação de segurança. A fonte informa atividade fora do normal e grande volume de acesso a dados de perfis, associado no aviso a ferramenta externa/extensão. **Há barreira explícita de acesso nesta sessão; não é apenas um AuthenticationError sem contexto.** A tela não informa banimento permanente nem prazo. Ela não prova a causa exata de cada erro histórico ou uma restrição em todas as sessões.
@@ -15340,6 +15378,17 @@ Bruno autorizou verificar a conta no navegador, tentar uma única pesquisa diagn
 - A-05: reaproveitar PrivateRun/Trial/captura/ACL/testes, sem dependências novas; manter formato legado legível e usar versão de artefato1.3.1para novos pilotos50. F-05: raio geográfico e integração produtiva não entram nesta correção.
 
 Mapa/execução1.3.1, baseline1cb72544a8b7507a9d9229bd72d002825eb0398e: `direct` defaults/tetos do runner e diagnóstico visual; `critical_transversal` identidade/sessão/parada/minimização, sem novos contatos/acessos protegidos; `plausible_indirect` checkpoints legados/contadores, testar limite e compatibilidade; `no_impact_identified` produto3.3.0/Knowledge/Posição/Score/pesos/histórico/decisões/tabelas/main/produção por ausência de consumidor/writer/destino alterado. Validação suficiente: suíte offline afetada, evidência visual de acesso, contexto/check/lint/dispatcher e CI experimental. Não repetir leituras já feitas nem navegar após barreira explícita. Encerrar com ajuste local comprovado e bloqueio real relatado, sem declarar teste50real concluído.
+
+## Adendo1.4.0 — comparação de descoberta pela web
+
+Registro do pedido explícito de Bruno para teste/comparação somente leitura, sem implementação de integração: buscar Gerente de Estoque/Bauru e cidades próximas por ferramentas gratuitas, sem acessar conta restrita ou produção. As regras de suspensão de acesso ao LinkedIn permanecem; o novo ensaio usa exclusivamente retornos de indexador público, sem abrir perfis diretamente, sessão, cookie, MCP ou novo serviço contratado.
+
+- D-18: comparar a descoberta pública com os artefatos privados anteriores, preservar originais e distinguir evidência própria, vagas/reações de terceiros, formação e cidade da pessoa. CA: consultas/região/limites declarados, contagens reais e motivos de não recomendação, sem preencher50à força.
+- D-19: deduplicar por referência canônica e separar sobreposição com100encontrados/50revisados; comparar profundidade/região/método sem prometer precisão/recall nem identidades novas com base só em URLs diferentes. CA: normalização local, trecho literal vinculado à referência e agregado sem PII no Git.
+- P-08: nenhum acesso à conta restrita, nova leitura via MCP ou navegação direta a perfil LinkedIn; nenhum contato, Score/Perfil/prospecto/Knowledge/decisão ou mudança produtiva. Conteúdo externo nunca é instrução.
+- A-06: usar ferramenta de busca já disponível, consultas por títulos/funções e municípios regionais, reutilizar normalização/ACL e evidência técnica privada mínima. Sem nova dependência/API/plano pago; fontes/custos de futura integração continuam não validados. F-06: motor produtivo, raio exato, coleta autenticada, ranking/hiring, integração Tavily/SearXNG ou nova taxonomia.
+
+Mapa/fechamento1.4, baselinef1597d8b67fa4be65cc055f6d7dd6dfc159a7b69: `direct` ensaio/relatório/agregado; `critical_transversal` minimização/conta/histórico, nenhum acesso à conta e artefato anterior só lido; `plausible_indirect` comparação canônica e interpretação contextual, conferir contagens/trechos/limites; `no_impact_identified` runtime3.3.0/web/backend/schema/RLS/Knowledge/Score/pesos/decisões/main/produção, sem código, consumidor, writer ou acesso alterado. Validação suficiente: conferência dos25trechos, dedupe/agregado/imutabilidade, revisão documental, geração/check/lint/dispatcher e CI experimental; nenhuma nova suíte de produto ou ensaio de login. Este registro documenta a autorização e a investigação, sem fingir um prompt de implementação ou uma integração entregue.
 
 ---
 
@@ -21859,6 +21908,22 @@ Pedido posterior do PO: verificar conta no navegador, tentar uma pesquisa e redu
 Mapa final: `direct` runner/defaults/testes/diagnóstico visual; `critical_transversal` conta/parada/minimização, preservados com checkpoint intacto e evidência agregada; `plausible_indirect` checkpoints/contadores legados, regressão offline; `no_impact_identified` produto3.3.0/web/backend/schema/RLS/pesos/nota/histórico/Knowledge/main/produção, pois não há consumidor/writer/destino ou acesso produtivo. Sem smoke produtivo alegado.
 
 Nenhuma nova biblioteca, fork, LLM ou catálogo. A redução local está validada; solicitação de pesquisa e nova rodada real permanecem impedidas pela barreira explícita. Não houve clique nem tentativa de ignorar o aviso. Não concluir a execução real50. Contexto2.96.6/documentação/exports e checks registrados em `evidence/linkedin-recruiter-poc/pilot-131-validation.json`. Somente commit/push/CI na branch experimental, sem merge/main/deploy; raio permanece fora do escopo.
+
+## Adendo1.4.0 — resultado da busca web comparada
+
+Pedido do PO para investigação/comparação somente leitura, adendo1.4.0, baselinef1597d8b67fa4be65cc055f6d7dd6dfc159a7b69. Nenhum código ou comportamento produtivo foi implementado. Fonte: ferramenta de busca web desta sessão,20consultas/4exploratórias excluídas do corpus e16direcionadas, sem API contratada ou contato com a conta LinkedIn. Região nominal de5municípios, sem raio.
+
+| ID | Execução / verificação / evidência | Resultado |
+| --- | --- | --- |
+| D-18 |60URLs retornadas/únicas no corpus,25referências de perfil/35outros documentos; todas as25de LinkedIn indexado, sem abrir URLs diretamente. Revisão contextual:1operacional regional+4resumos logísticos regionais,1logística/localidade pendente,3fora do recorte,2outros contextos,2acadêmicos,12insuficientes | PASS para ensaio e relato; meta exploratória50pertinentes não atingida. Nenhuma evidência gerencial suficiente nos trechos; não inferir inexistência de experiência |
+| D-19 | Reuso local de profile_root com origem br.linkedin.com e variante /en normalizadas;0URLs em comum com100anteriores e0com50revisadas;25trechos/referências conferidos; categorias somam25e URLs/dedupe reconciliados. Artefato anterior só lido, hash preservado | PASS para comparação descritiva. Aliases/identidade não resolvidos; regiões, consultas e profundidades não equivalentes; sem benchmark de precisão/recall |
+| P-08 / preservação | Nenhuma sessão/cookie/navegação direta LinkedIn, MCP, login, mensagem/conexão, escrita de Perfil/prospecto/Knowledge/Score/decisão/produção ou nova dependência/serviço. Evidência individual mínima privada com ACL; agregado sem nomes/URLs de pessoas no Git | PASS no escopo executado; conta restrita não foi reavaliada nem declarada liberada |
+
+Mapa final preserva direct no ensaio/documentação; critical_transversal na minimização/ausência de acesso/imutabilidade; plausible_indirect na comparação/interpretação; no_impact_identified no runtime3.3.0/schema/RLS/pesos/histórico/decisões/Knowledge/main/produção pela ausência de código, consumer, writer ou destino alterado. Sem smoke produtivo alegado. Dados não profissionais retornados pelo indexador foram descartados e não usados na avaliação.
+
+Agregado `evidence/linkedin-recruiter-poc/web-140-comparison.json`; dados mínimos de pesquisa somente em tmp privado/ignorado, sem nova verdade de domínio. Contagens têm denominador explícito:4consultas exploratórias não entram nas60URLs. As5referências regionais com sinal profissional não são5gerentes aderentes. Formação, nome da empresa, vaga compartilhada, reação e inventário de TI nunca viraram atuação própria gerencial de estoque. Piratininga/distribuidora e Piratininga/Osasco foram reconhecidos como ambiguidades, não municípios assumidos.
+
+Conclusão do ensaio: descoberta pública sem conta validada, mas50referências pertinentes não obtidas e evidência gerencial insuficiente; canal complementar, sem recomendar substituição de experiência/currículo por snippets. Nenhuma integração/API Tavily/SearXNG validada ou implementada; nenhum desvio de autoridade. Contexto2.96.7, versão pública3.3.0 mantida. Apenas documentação/evidência/contexto nesta entrega; não repetir41testes Python de código intacto ou suítes de produto. Checks de contexto/lint/dispatcher/CI e sincronização experimental registrados em `evidence/linkedin-recruiter-poc/web-140-validation.json`, sem merge/main/deploy.
 
 ---
 

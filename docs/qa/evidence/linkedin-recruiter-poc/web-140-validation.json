@@ -1,0 +1,20 @@
+{
+  "experimentVersion": "1.4.0",
+  "changedCode": false,
+  "evidenceLiteralBindingsVerified": 25,
+  "aggregateAndCanonicalDedupeChecks": "PASS; 60 unique result URLs, 25 unique profile URLs, category sum25, overlap0",
+  "oldSampleReadOnly": "PASS; checksum preserved",
+  "newProductOrPythonTestRun": "not required; code unchanged, read-only study",
+  "accountAccessed": false,
+  "mcpLaunched": false,
+  "paidApiOrNewAccount": false,
+  "productionAccessed": false,
+  "mainChanged": false,
+  "publicVersionUnchanged": "3.3.0",
+  "contextGenerate": "PASS",
+  "contextCheck": "PASS",
+  "lint": "PASS; 2139 files in tracked snapshot",
+  "snapshot": "tracked sources plus own staged study evidence; unrelated drafts excluded",
+  "ci": "inspect experimental branch run after push",
+  "personalReferencesAbsentFromStagedAdditions": true
+}

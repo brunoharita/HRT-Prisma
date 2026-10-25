@@ -1,0 +1,67 @@
+{
+  "experimentVersion": "1.4.0",
+  "date": "2026-10-25",
+  "method": "session web search tool; index-returned content only; no direct LinkedIn URL opened",
+  "costScope": "existing tools only; no contracted API, Tavily account, card, subscription or deployment",
+  "citiesQueried": [
+    "Bauru",
+    "Agudos",
+    "Pederneiras",
+    "Piratininga",
+    "Lençóis Paulista"
+  ],
+  "geography": "explicit city set, not a distance-radius implementation; foreign cities and ambiguous locality separated",
+  "queries": {
+    "total": 20,
+    "exploratory": 4,
+    "measured": 16,
+    "exploratoryExcludedFromMeasuredCorpus": true
+  },
+  "returnedUrlsMeasured": 60,
+  "uniqueReturnedUrlsMeasured": 60,
+  "profileReferences": 25,
+  "uniqueCanonicalProfileUrls": 25,
+  "otherPages": 35,
+  "profileSourceDomains": {
+    "LinkedIn-indexed": 25,
+    "nonLinkedIn-person": 0
+  },
+  "categories": {
+    "insufficient": 12,
+    "related_domain_only": 4,
+    "functional_mismatch_in_available_evidence": 2,
+    "outside_requested_city_set": 3,
+    "operational_stock_evidence": 1,
+    "related_domain_geo_unverified": 1,
+    "education_only": 2
+  },
+  "managerialStockResponsibilitiesDemonstrated": 0,
+  "regionalOperationalOrLogisticsSignals": 5,
+  "regionalSignalMeaning": "1 operational stock description plus 4 generic logistics summaries; not 5 managerial matches",
+  "fullProfessionalSectionsRead": 0,
+  "reviewedIndexReferences": 25,
+  "sourceScope": "public index snapshots, incomplete and possibly stale; posts/reactions/job ads never attributed to profile owner as experience",
+  "previousSample": {
+    "uniqueUrls": 100,
+    "professionalSectionsRead": 50,
+    "reviewed": 50,
+    "managerialDutiesDescriptions": 7
+  },
+  "overlap": {
+    "sameCanonicalUrlAmong100": 0,
+    "sameCanonicalUrlAmong50Reviewed": 0,
+    "identityByNameOrAliasNotAttempted": true
+  },
+  "comparability": "descriptive only: different geography, query breadth and source depth; not precision, recall, superiority or 25 proven new people",
+  "checks": {
+    "literalEvidenceAndReferenceBinding": 25,
+    "duplicateProfileUrls": 0,
+    "aggregateCountsReconciled": true,
+    "historicalRunUnchanged": true
+  },
+  "accountAccessed": false,
+  "mcpLaunched": false,
+  "messagesOrConnections": 0,
+  "productionAccessed": false,
+  "personalRecordsPublished": false
+}
