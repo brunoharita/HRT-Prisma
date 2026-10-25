@@ -2,7 +2,11 @@
   "date": "2026-10-25",
   "contract": "linkedin-recruiter-poc-1.1.0",
   "method": "Authenticated LinkedIn UI through the Codex browser; not a successful real MCP invocation",
-  "account": {"primaryEmailMatchedExplicitTestAccount": true, "verificationSurface": "LinkedIn settings > Sign in and security > Email addresses", "officialAccountUsed": false},
+  "account": {
+    "primaryEmailMatchedExplicitTestAccount": true,
+    "verificationSurface": "LinkedIn settings > Sign in and security > Email addresses",
+    "officialAccountUsed": false
+  },
   "locationExperiment": {
     "query": "Gerente de Estoque",
     "requestedLocation": "Bauru",
@@ -12,22 +16,51 @@
     "locationControlSelected": false,
     "firstPageVisibleCards": 10,
     "firstPageCardsDisplayingBauru": 0,
-    "officialUIFilter": {"label": "Bauru, São Paulo, Brasil", "selected": true, "geoUrn": "101039681", "firstPageVisibleCards": 10, "firstPageCardsDisplayingBauru": 10},
+    "officialUIFilter": {
+      "label": "Bauru, São Paulo, Brasil",
+      "selected": true,
+      "geoUrn": "101039681",
+      "firstPageVisibleCards": 10,
+      "firstPageCardsDisplayingBauru": 10
+    },
     "interpretation": "Textual location parameter does not apply the city filter in this observed session. Selecting the location entity in the UI applies geoUrn. No connector fix implemented."
   },
   "multilingualExperiment": {
     "filter": "Bauru geoUrn 101039681 selected in the source UI",
     "queries": [
-      {"keywords": "Vendedor", "firstPageVisibleCards": 10, "cardsDisplayingBauru": 10},
-      {"keywords": "Sales Representative", "firstPageVisibleCards": 10, "cardsDisplayingBauru": 9, "cardsDisplayingOnlyBroaderRegion": 1}
+      {
+        "keywords": "Vendedor",
+        "firstPageVisibleCards": 10,
+        "cardsDisplayingBauru": 10
+      },
+      {
+        "keywords": "Sales Representative",
+        "firstPageVisibleCards": 10,
+        "cardsDisplayingBauru": 9,
+        "cardsDisplayingOnlyBroaderRegion": 1
+      }
     ],
     "firstPageProfileRootOverlap": 0,
     "method": "Normalize rendered profile links to /in/identity root in memory, deduplicate secondary links, omit own account, persist aggregate counts only",
     "limitations": "First page only; no recall, full-set equivalence or proof of synonym recognition. Broader displayed region does not prove wrong location."
   },
   "professionalContext": "Stock-management search results include logistics, operations, store management and other functions; result presence alone does not prove relevant professional trajectory. No individual was scored, accepted or rejected.",
-  "sideEffects": {"messages": 0, "connectionRequests": 0, "reactions": 0, "prospectsSaved": 0, "prismaWrites": 0, "productionAccessed": false},
+  "sideEffects": {
+    "messages": 0,
+    "connectionRequests": 0,
+    "reactions": 0,
+    "prospectsSaved": 0,
+    "prismaWrites": 0,
+    "productionAccessed": false
+  },
   "privacy": "No names, profile URLs, photos, contacts, resumes, account cookies or raw candidate-page dumps stored in this evidence.",
   "accountSafety": "No challenge during these in-app searches; not evidence of safety at scale or future absence of restrictions.",
-  "mcp": {"upstreamSha": "0c5f14ba3efcd9ad1bbd3163b4f2b9e47cda7b17", "autoImportFromBrowser": false, "dedicatedProfile": true, "initialManualLogin": "timed out after 300 seconds", "realSearchCalls": 0, "status": "awaiting manual authentication in the separate MCP browser"}
+  "mcp": {
+    "upstreamSha": "0c5f14ba3efcd9ad1bbd3163b4f2b9e47cda7b17",
+    "autoImportFromBrowser": false,
+    "dedicatedProfile": true,
+    "initialManualLogin": "timed out after 300 seconds",
+    "realSearchCalls": 3,
+    "status": "completed after separate dedicated login; details in live-mcp.json"
+  }
 }

@@ -1,0 +1,101 @@
+{
+  "method": "real pinned MCP via stdio; dedicated account/profile; no cookies imported",
+  "accountMatchesVerifiedInAppIdentity": true,
+  "calls": [
+    {
+      "query": "Gerente de Estoque",
+      "locationRequested": "Bauru",
+      "seconds": 4.15,
+      "returnedSectionNames": [
+        "search_results"
+      ],
+      "textCharacters": 1504,
+      "personReferences": 10,
+      "sectionErrorTypes": {},
+      "returnedUrlHasLocationParameter": true,
+      "returnedUrlHasGeoUrn": false,
+      "containsLocationText": false,
+      "filterApplicationProven": false
+    },
+    {
+      "query": "Vendedor",
+      "locationRequested": "Bauru",
+      "seconds": 4.6,
+      "returnedSectionNames": [
+        "search_results"
+      ],
+      "textCharacters": 1588,
+      "personReferences": 10,
+      "sectionErrorTypes": {},
+      "returnedUrlHasLocationParameter": true,
+      "returnedUrlHasGeoUrn": false,
+      "containsLocationText": false,
+      "filterApplicationProven": false
+    },
+    {
+      "query": "Sales Representative",
+      "locationRequested": "Bauru",
+      "seconds": 5.1,
+      "returnedSectionNames": [
+        "search_results"
+      ],
+      "textCharacters": 1944,
+      "personReferences": 10,
+      "sectionErrorTypes": {},
+      "returnedUrlHasLocationParameter": true,
+      "returnedUrlHasGeoUrn": false,
+      "containsLocationText": false,
+      "filterApplicationProven": false
+    }
+  ],
+  "productionAccessed": false,
+  "messagesOrConnectionsSent": false,
+  "identityDiagnostic": {
+    "returnedPath": "/in/me",
+    "keys": [
+      "url",
+      "sections",
+      "references"
+    ],
+    "sectionNames": [
+      "main_profile"
+    ],
+    "sectionErrorTypes": {},
+    "ownContactEmailMatches": null,
+    "knownOwnProfileNamePresent": true,
+    "contactInfoRequestedInFinalCall": false
+  },
+  "operatorConfirmedDedicatedAccountLogin": true,
+  "emailWasVerifiedInSourceSettingsViaInAppBrowser": true,
+  "ownProfileSeconds": 14.74,
+  "browserClosedByMCP": true,
+  "date": "2026-10-25",
+  "upstreamSha": "0c5f14ba3efcd9ad1bbd3163b4f2b9e47cda7b17",
+  "identityVerificationMethod": [
+    "primary email verified in LinkedIn settings via the in-app browser",
+    "operator explicitly confirmed login in the separate MCP window",
+    "MCP authenticated self-profile text contains the same verified public account name"
+  ],
+  "earlierContactProbe": {
+    "section": "contact_info",
+    "errorType": "OverlayRootNotFoundError",
+    "emailObserved": false,
+    "interpretation": "email unavailable through this probe, not a mismatching email"
+  },
+  "authSetup": {
+    "initialManualLoginBudgetsExpiredSeconds": [
+      300,
+      900
+    ],
+    "successfulManualLoginTimeoutSeconds": 0,
+    "autoImportFromBrowser": false,
+    "dedicatedLocalProfile": true,
+    "secretsPublished": false
+  },
+  "limitations": [
+    "Small first-page sample; no statistical recall or precision benchmark",
+    "Returned URL echoes the request and is not a filter application receipt",
+    "No long-term or anti-ban safety guarantee",
+    "Saved login remains only in the ignored dedicated local test profile; browser closed through MCP"
+  ]
+}

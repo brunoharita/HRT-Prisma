@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 578
-source_manifest_sha256: 6713717e5e5b11c3b95b93db3684ecef393b7af9925899688384aab59b7b48a4
+source_manifest_sha256: a66f7af63943fbe8f96735b06b37d9732cdc0a74f31b97adfd99a0594a298b5e
 -->
 
 # Tudo sobre o Prisma
@@ -2651,7 +2651,7 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.96.1
+version: 2.96.2
 last_verified: 2026-10-25
 ---
 
@@ -2661,7 +2661,7 @@ last_verified: 2026-10-25
 
 Em25/10/2026, avaliação autorizada de stickerdaniel/linkedin-mcp-server4.28.0/SHA0c5f14ba:12witnesses Prisma e106testes upstream selecionados PASS, incluindo transporte MCP em memória com extrator simulado. Ferramentas gratuitas/venv separado, sem conta/cookies reais/LLM/Supabase/VPS/deploy. Retorno textual por seção, filtros básicos sem recibo de aplicação, nenhuma taxonomia/aderência/tenant ou paginação de pessoas. Sessão automática, ferramentas de escrita e HTTP direto sem auth impedem tratar o projeto como serviço Prisma pronto. Recomendação: não integrar diretamente; discutir busca assistida ou fonte integrada autorizada. Não mede pertinência real/recall/banimento. Relatório e acordo/AoT linkedin-recruiter-poc1.0.0; somente branch experimental, produto3.3.0 inalterado.
 
-Adendo1.1.0 autorizado posteriormente: conta de testes confirmada por e-mail nas configurações; buscas reais no navegador integrado sem mensagens/conexões/produção. Location=Bauru no formato upstream foi descartado; filtro nativo com geoUrn101039681 trouxe10cartões de Bauru. Vendedor/Sales Representative10cartões cada e0em comum entre primeiras páginas, sem medir recall. Evidência sanitizada live-source.json. MCP abriu perfil exclusivo sem auto-import, mas aguarda login próprio após timeout inicial;0buscas reais no conector até este registro. Preservar distinção entre teste da fonte e execução do MCP; nenhuma alteração de conector/cadastro/versão produtiva.
+Adendo1.1.0 autorizado posteriormente e concluído: conta de testes confirmada por e-mail nas configurações; buscas reais no navegador integrado sem mensagens/conexões/produção. Location=Bauru no formato upstream foi descartado; filtro nativo com geoUrn101039681 trouxe10cartões de Bauru. Vendedor/Sales Representative10cartões cada e0em comum entre primeiras páginas, sem medir recall. MCP registrou login próprio em perfil exclusivo sem auto-import; identidade composta por e-mail na UI/declaração do operador/nome próprio lido pelo conector, pois alias /in/me não resolveu e contato falhou sem revelar e-mail. Três buscas stdio reais trouxeram10referências cada em4,15/4,60/5,10s, sem erro de seção; URL de retorno ecoa pedido e não prova filtro. Browser fechado via MCP, credenciais só no perfil local ignorado. Evidências sanitizadas live-source.json/live-mcp.json. Busca básica validada; recomenda-se ensaio de adaptação de geoUrn antes de integrar, sem implementar conector/cadastro/versão produtiva ou prometer qualidade universal/ausência de bloqueio.
 
 ## Descoberta pertinente e ordenação — 3.3.0 publicada
 
@@ -12230,13 +12230,25 @@ Bruno autorizou leitura real após concluir login na conta de testes. O e-mail p
 - **Localidade textual falhou no caso observado:** a URL com `keywords=Gerente+de+Estoque&location=Bauru`, no formato gerado pelo upstream, terminou com apenas keywords após a hidratação. Localidades não estava selecionada; os10cartões da página mostravam outras cidades. Pelo filtro nativo foi selecionada a entidade Bauru/geoUrn101039681;10cartões passaram a exibir Bauru. Assim, enviar location como texto não comprova nem aplicou o filtro nesta sessão. Isso atualiza a limitação anteriormente não validada; nenhuma correção do conector foi implementada.
 - **Nomenclaturas alteram o recorte:** com Bauru selecionada, Vendedor e Sales Representative exibiram10cartões cada; zero perfis em comum entre essas primeiras páginas, após normalizar links secundários à raiz de perfil. Isso sustenta combinar termos e deduplicar em eventual solução, mas não mede recall nem prova disjunção do universo total. Na busca em inglês,9cartões mostraram Bauru e1somente uma região mais ampla; isso não prova que esse último esteja fora da cidade.
 - **Presença não é aderência:** os resultados de estoque misturam cargos de logística, operações, loja e outras funções. Não se avaliou nem rejeitou pessoa individualmente; título/competência/resumo de busca não substituem evidência profissional contextual.
-- **Execução do MCP separada:** o navegador integrado está autenticado, enquanto o MCP usa perfil local próprio com auto-import desligado e traces off. A primeira janela manual expirou em300s; foi reaberta com900s. Até este registro, nenhuma busca real foi executada pelo conector: aguarda autenticação manual nessa janela separada. Não confundir a leitura real da fonte pelo navegador com resultado real do MCP.
+- **Execução do MCP separada, concluída:** após janelas expirarem em300s/900s, login manual sem limite foi registrado no perfil exclusivo, sem auto-import e com traces off. O operador confirmou a conta; o perfil próprio lido pelo MCP contém o mesmo nome público da conta cujo e-mail foi conferido no navegador integrado. O MCP conservou o alias `/in/me`; a tentativa de ler contact_info retornou OverlayRootNotFoundError e não revelou e-mail. Ausência nessa leitura não significa e-mail divergente. Evidência sanitizada: `../qa/evidence/linkedin-recruiter-poc/live-mcp.json`.
+
+| Busca real via MCP stdio | Referências de pessoa retornadas | Tempo da chamada | Erro de seção |
+| --- | --- | --- | --- |
+| Gerente de Estoque, location=Bauru | 10 | 4,15s | nenhum |
+| Vendedor, location=Bauru | 10 | 4,60s | nenhum |
+| Sales Representative, location=Bauru | 10 | 5,10s | nenhum |
+
+São dez referências por resposta, não trinta pessoas distintas comprovadas. O extrator retornou texto e links, sem score ou publicação de Perfil. As três respostas mantiveram location na URL de retorno, não tiveram geoUrn e não contiveram Bauru no texto extraído. A URL é construída a partir do pedido em `PersonReader.search_people`, não um recibo da URL final renderizada ou de filtros aplicados. A combinação com a observação do navegador corrobora a falha geográfica; não usar só a URL retornada para afirmar que uma cidade foi aplicada.
+
+O teste direto atualiza a conclusão: **busca e leitura básicas funcionaram nesta pequena amostra real**; a indisponibilidade de execução real deixa de ser uma lacuna para esses três cenários. Continua sem atender ao produto completo. O próximo ensaio técnico recomendado é uma adaptação local delimitada de localidade: resolver a entidade nativa, aplicar geoUrn e verificar o filtro na fonte, antes de pensar em integração. Isso é recomendação, não correção implementada/autorização de rollout. As demais lacunas de taxonomia, paginação, dados estruturados, tenant, fonte autorizada e confiabilidade continuam.
 
 Nenhuma mensagem/conexão/reação, coleta em massa, cadastro de prospecto, escrita no Prisma, acesso à VPS/Supabase ou deploy. Nenhum desafio surgiu nas buscas do navegador integrado; essa amostra não garante segurança da conta em uso futuro ou escala. As evidências sintéticas abaixo permanecem válidas em seu escopo original.
 
+O navegador próprio foi encerrado por close_session após as buscas. A autenticação fica somente no perfil local exclusivo ignorado por Git; cookies, estado de navegador, logs privados e textos integrais dos perfis não foram publicados. O cliente experimental inicial exigia URL canônica para a identidade e interrompeu a execução diante do alias; esse critério de harness foi ajustado à prova composta de identidade acima, sem modificar o upstream nem tratar ausência de e-mail como divergência. Não foi feita nova inferência ou decisão sobre os profissionais encontrados.
+
 ## Recomendação
 
-**Atende parcialmente como ferramenta de acesso; não atende sozinho ao Prisma Recruiter e não recomendo integrá-lo à produção neste momento.** A PoC comprovou contratos e comportamento local com mocks, inclusive uma chamada MCP cliente/servidor em memória. Não comprovou busca no LinkedIn real, qualidade dos encontrados, aplicação efetiva de localização ou segurança contra bloqueio de conta.
+**Atende parcialmente como ferramenta de acesso; não atende sozinho ao Prisma Recruiter e não recomendo integrá-lo à produção neste momento.** A etapa1.0.0 comprovou contratos e comportamento local com mocks, inclusive uma chamada MCP cliente/servidor em memória. O adendo1.1.0 acima comprova três buscas reais de leitura pelo conector e uma falha geográfica, sem benchmark de qualidade/recall ou garantia contra bloqueio. O funcionamento dessas buscas não elimina as adaptações e os gates de integração.
 
 O componente reaproveitável é o acesso às páginas e suas referências. A interpretação de cargos, pertinência da trajetória, qualidade dos dados e autoridade humana continuam sendo responsabilidades do Prisma. A autorização de acesso ao LinkedIn permanece uma condição externa; melhorar o conector não a resolve.
 
@@ -21568,7 +21580,7 @@ Branch codex/linkedin-recruiter-poc. Entrega experimental em branch própria; ma
 
 PoC concluída no escopo local: atende parcialmente como acesso, não é base de produção pronta. Busca/filtragem reais, pertinência de resultados e segurança de conta permanecem NOT TESTED e não são critérios prometidos nesta PoC sintética. Recomenda-se discutir busca assistida ou fonte integrada autorizada antes de implementar o Prisma Recruiter.
 
-## Adendo1.1.0 — leitura real autorizada, em andamento
+## Adendo1.1.0 — leitura real autorizada, concluída
 
 Decisão posterior do PO e substituição delimitada de P-01/F-01 em `agreement-linkedin-recruiter-poc.md`1.1.0. Baseline branch83b94789533639800d3e9311c82cdbde8be2a1a9. O resultado original acima refere-se à rodada offline, não impede este novo escopo autorizado.
 
@@ -21576,10 +21588,16 @@ Decisão posterior do PO e substituição delimitada de P-01/F-01 em `agreement-
 | --- | --- | --- |
 | D-05 | E-mail principal conferido nas configurações e corresponde à conta de teste solicitada. Nome público não foi usado como único comprovante | PASS |
 | D-06 | Fonte real/UI: location textual descartado e10resultados fora de Bauru; geoUrn selecionado pela UI e10cartões de Bauru. Vendedor/Sales Representative10cada, sobreposição0na primeira página. Agregados em live-source.json | PASS no navegador; não prova execução MCP |
-| D-07 | Perfil MCP exclusivo, --no-auto-import, dotenv/traces off. Primeira janela expirou em300s; segunda aberta com900s | PARTIAL; autenticação manual pendente,0buscas reais pelo MCP |
+| D-07 | Perfil exclusivo/auto-import off/traces off; login manual registrado após mudar timeout para0. E-mail confirmado na UI, operador confirmou janela própria e nome público coincide no self-profile MCP. Três buscas stdio com10referências cada,4,15/4,60/5,10s; close_session concluído | PASS; alias /in/me não resolvido e contato falhou, sem presumir e-mail diferente |
 | P-03/P-04 | Sem mensagens/conexões/reações, salvamento/cadastro, configuração/produção ou publicação de identidades dos encontrados | PASS para a leitura executada |
 
 Mapa adicional conforme acordo: fonte real/sessão são direct; identidade/minimização critical_transversal; produto futuro plausible_indirect; produção/Score/Knowledge no_impact_identified por ausência de ação. Fonte trouxe divergência concreta no filtro location; não se implementou adaptação silenciosa do upstream. Sem benchmark estatístico de qualidade/recall, sem promessa de ausência de bloqueio. A autenticação do MCP usa janela fora do painel Codex; o login existente no navegador integrado não é exportado/importado.
+
+`evidence/linkedin-recruiter-poc/live-mcp.json` conserva somente agregados/diagnósticos, tempos e método de identidade. Nenhum nome, contato ou URL identificável dos encontrados; o e-mail de login não aparece no artefato. URLs de retorno ecoam location solicitado, mas não comprovam aplicação; geoUrn ausente e texto sem Bauru, em conjunto com a observação da UI, corroboram a falha. Não foram30pessoas distintas comprovadas nem perfis avaliados:10referências por resposta.
+
+A chamada get_my_profile inicial iniciou login quando não havia sessão salva; o harness encerrou ao receber erro antes de busca. Após autenticação válida, a exigência inicial de URL canônica também interrompeu antes da busca, pois retornou /in/me. Uma leitura de contato falhou com OverlayRootNotFoundError. A confirmação composta (e-mail UI + declaração do operador + nome próprio MCP) resolveu a identificação sem fingir que o conector validou e-mail. Nenhuma alteração no pacote upstream. Os ensaios adicionais respondiam a essas falhas concretas, não repetiram buscas já aprovadas.
+
+Todas as obrigações do adendo comprovadas, sem desvio de escopo: leitura real básica validada; integração não executada. Banco/VPS não foram acessados, main não foi alterada. Perfil de autenticação exclusivo permanece local/ignorado e navegador foi fechado pelo MCP. Publicação da evidência ocorre apenas na branch experimental. CI da etapa anterior c4d76d27/40192306235 SUCCESS; validação documental final e contexto sem repetir testes de produto ou leituras reais. Recomendação atualizada: ensaio de adaptação de geoUrn antes de integração; depende de nova decisão do PO, sem autorização implícita para corrigir o conector.
 
 ---
 

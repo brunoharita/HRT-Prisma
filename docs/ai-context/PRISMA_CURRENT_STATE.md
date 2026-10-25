@@ -3,7 +3,7 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.96.1
+version: 2.96.2
 last_verified: 2026-10-25
 ---
 
@@ -13,7 +13,7 @@ last_verified: 2026-10-25
 
 Em25/10/2026, avaliação autorizada de stickerdaniel/linkedin-mcp-server4.28.0/SHA0c5f14ba:12witnesses Prisma e106testes upstream selecionados PASS, incluindo transporte MCP em memória com extrator simulado. Ferramentas gratuitas/venv separado, sem conta/cookies reais/LLM/Supabase/VPS/deploy. Retorno textual por seção, filtros básicos sem recibo de aplicação, nenhuma taxonomia/aderência/tenant ou paginação de pessoas. Sessão automática, ferramentas de escrita e HTTP direto sem auth impedem tratar o projeto como serviço Prisma pronto. Recomendação: não integrar diretamente; discutir busca assistida ou fonte integrada autorizada. Não mede pertinência real/recall/banimento. Relatório e acordo/AoT linkedin-recruiter-poc1.0.0; somente branch experimental, produto3.3.0 inalterado.
 
-Adendo1.1.0 autorizado posteriormente: conta de testes confirmada por e-mail nas configurações; buscas reais no navegador integrado sem mensagens/conexões/produção. Location=Bauru no formato upstream foi descartado; filtro nativo com geoUrn101039681 trouxe10cartões de Bauru. Vendedor/Sales Representative10cartões cada e0em comum entre primeiras páginas, sem medir recall. Evidência sanitizada live-source.json. MCP abriu perfil exclusivo sem auto-import, mas aguarda login próprio após timeout inicial;0buscas reais no conector até este registro. Preservar distinção entre teste da fonte e execução do MCP; nenhuma alteração de conector/cadastro/versão produtiva.
+Adendo1.1.0 autorizado posteriormente e concluído: conta de testes confirmada por e-mail nas configurações; buscas reais no navegador integrado sem mensagens/conexões/produção. Location=Bauru no formato upstream foi descartado; filtro nativo com geoUrn101039681 trouxe10cartões de Bauru. Vendedor/Sales Representative10cartões cada e0em comum entre primeiras páginas, sem medir recall. MCP registrou login próprio em perfil exclusivo sem auto-import; identidade composta por e-mail na UI/declaração do operador/nome próprio lido pelo conector, pois alias /in/me não resolveu e contato falhou sem revelar e-mail. Três buscas stdio reais trouxeram10referências cada em4,15/4,60/5,10s, sem erro de seção; URL de retorno ecoa pedido e não prova filtro. Browser fechado via MCP, credenciais só no perfil local ignorado. Evidências sanitizadas live-source.json/live-mcp.json. Busca básica validada; recomenda-se ensaio de adaptação de geoUrn antes de integrar, sem implementar conector/cadastro/versão produtiva ou prometer qualidade universal/ausência de bloqueio.
 
 ## Descoberta pertinente e ordenação — 3.3.0 publicada
 

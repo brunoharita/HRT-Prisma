@@ -43,7 +43,7 @@ Branch codex/linkedin-recruiter-poc. Entrega experimental em branch própria; ma
 
 PoC concluída no escopo local: atende parcialmente como acesso, não é base de produção pronta. Busca/filtragem reais, pertinência de resultados e segurança de conta permanecem NOT TESTED e não são critérios prometidos nesta PoC sintética. Recomenda-se discutir busca assistida ou fonte integrada autorizada antes de implementar o Prisma Recruiter.
 
-## Adendo1.1.0 — leitura real autorizada, em andamento
+## Adendo1.1.0 — leitura real autorizada, concluída
 
 Decisão posterior do PO e substituição delimitada de P-01/F-01 em `agreement-linkedin-recruiter-poc.md`1.1.0. Baseline branch83b94789533639800d3e9311c82cdbde8be2a1a9. O resultado original acima refere-se à rodada offline, não impede este novo escopo autorizado.
 
@@ -51,7 +51,13 @@ Decisão posterior do PO e substituição delimitada de P-01/F-01 em `agreement-
 | --- | --- | --- |
 | D-05 | E-mail principal conferido nas configurações e corresponde à conta de teste solicitada. Nome público não foi usado como único comprovante | PASS |
 | D-06 | Fonte real/UI: location textual descartado e10resultados fora de Bauru; geoUrn selecionado pela UI e10cartões de Bauru. Vendedor/Sales Representative10cada, sobreposição0na primeira página. Agregados em live-source.json | PASS no navegador; não prova execução MCP |
-| D-07 | Perfil MCP exclusivo, --no-auto-import, dotenv/traces off. Primeira janela expirou em300s; segunda aberta com900s | PARTIAL; autenticação manual pendente,0buscas reais pelo MCP |
+| D-07 | Perfil exclusivo/auto-import off/traces off; login manual registrado após mudar timeout para0. E-mail confirmado na UI, operador confirmou janela própria e nome público coincide no self-profile MCP. Três buscas stdio com10referências cada,4,15/4,60/5,10s; close_session concluído | PASS; alias /in/me não resolvido e contato falhou, sem presumir e-mail diferente |
 | P-03/P-04 | Sem mensagens/conexões/reações, salvamento/cadastro, configuração/produção ou publicação de identidades dos encontrados | PASS para a leitura executada |
 
 Mapa adicional conforme acordo: fonte real/sessão são direct; identidade/minimização critical_transversal; produto futuro plausible_indirect; produção/Score/Knowledge no_impact_identified por ausência de ação. Fonte trouxe divergência concreta no filtro location; não se implementou adaptação silenciosa do upstream. Sem benchmark estatístico de qualidade/recall, sem promessa de ausência de bloqueio. A autenticação do MCP usa janela fora do painel Codex; o login existente no navegador integrado não é exportado/importado.
+
+`evidence/linkedin-recruiter-poc/live-mcp.json` conserva somente agregados/diagnósticos, tempos e método de identidade. Nenhum nome, contato ou URL identificável dos encontrados; o e-mail de login não aparece no artefato. URLs de retorno ecoam location solicitado, mas não comprovam aplicação; geoUrn ausente e texto sem Bauru, em conjunto com a observação da UI, corroboram a falha. Não foram30pessoas distintas comprovadas nem perfis avaliados:10referências por resposta.
+
+A chamada get_my_profile inicial iniciou login quando não havia sessão salva; o harness encerrou ao receber erro antes de busca. Após autenticação válida, a exigência inicial de URL canônica também interrompeu antes da busca, pois retornou /in/me. Uma leitura de contato falhou com OverlayRootNotFoundError. A confirmação composta (e-mail UI + declaração do operador + nome próprio MCP) resolveu a identificação sem fingir que o conector validou e-mail. Nenhuma alteração no pacote upstream. Os ensaios adicionais respondiam a essas falhas concretas, não repetiram buscas já aprovadas.
+
+Todas as obrigações do adendo comprovadas, sem desvio de escopo: leitura real básica validada; integração não executada. Banco/VPS não foram acessados, main não foi alterada. Perfil de autenticação exclusivo permanece local/ignorado e navegador foi fechado pelo MCP. Publicação da evidência ocorre apenas na branch experimental. CI da etapa anterior c4d76d27/40192306235 SUCCESS; validação documental final e contexto sem repetir testes de produto ou leituras reais. Recomendação atualizada: ensaio de adaptação de geoUrn antes de integração; depende de nova decisão do PO, sem autorização implícita para corrigir o conector.
