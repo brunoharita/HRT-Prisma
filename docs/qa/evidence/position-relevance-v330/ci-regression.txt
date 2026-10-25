@@ -1,0 +1,48 @@
+✔ duas Vagas com o mesmo cargo-base preservam descoberta diferente (49.1684ms)
+✔ equivalência Knowledge publicada satisfaz requisito e preserva o termo observado (4.2536ms)
+✔ Figma não comprova UX sem relação específica confirmada (2.4007ms)
+✔ ausência de idioma permanece sem evidência suficiente e nunca vira fato negativo (2.4004ms)
+✔ categoria organiza o requisito, mas não bloqueia evidência profissional explícita (2.2323ms)
+✔ menção explícita em conteúdo profissional comprova requisito genérico (2.0062ms)
+✔ regressão Bruno reconhece SAP explícito na experiência sem depender do grupo (3.1548ms)
+✔ matching explícito respeita limite lexical, negação e nível não comprovado (6.1597ms)
+✔ descoberta ocupacional encontra títulos equivalentes por referência ou experiência sem declarar aderência (6.8302ms)
+✔ experiência na área recupera Beatriz sem transformar função diferente em equivalência ocupacional (2.8591ms)
+✔ área declarada no Perfil é sinal de entrada independente do cargo (0.6448ms)
+✔ descrição de experiência comprova área, enquanto resumo livre não cria o sinal (4.1529ms)
+✔ descoberta exclui Perfil sem qualquer sinal e preserva confirmação humana (2.6598ms)
+✔ ordenação é determinística pelo Prisma Score e mantém explicações neutras (3.761ms)
+✔ evidência inclui dimensão, origem observável e nível explicável sem score (0.6024ms)
+✔ tecnologias explícitas e legadas são materializadas na dimensão correta (0.9416ms)
+✔ descoberta pagina todos os Perfis e persiste confirmação ou descarte sem tabela paralela (27.4566ms)
+✔ estruturação livre confirma itens explícitos e deixa inferência derivada pendente (5.5244ms)
+✔ estruturação não expõe contexto profissional como cenário da vaga (1.8513ms)
+✔ M5.4.5 decompõe descrição backend sem cópia, invenção ou requisito ausente (1.0182ms)
+✔ M5.4.6 exige decisão humana de importância e mantém dimensões canônicas (0.2837ms)
+✔ vacancy-definition 1.2.0 sincroniza o padrão obrigatório e bloqueia pendência no frontend e na RPC (5.3915ms)
+✔ M5.4.6 não promove stack isolada a responsabilidade e preserva decisão humana no delta (1.8108ms)
+✔ M5.4.6 projeta a Vaga pronta sem agrupadores removidos e usa o Inbox organizacional (4.7631ms)
+✔ referência ocupacional complementa a descrição estruturada sem substituir sua origem (1.4184ms)
+✔ referência profissional materializa proposta canônica sem inventar dados da empresa (1.2804ms)
+✔ M5.4.5 preserva proveniência no snapshot sem reescrever versões históricas (2.1661ms)
+✔ Assistente Prisma separa contexto interno, mercado e sugestão sem fingir pesquisa externa (1.1728ms)
+✔ Assistente Prisma encaminha qualquer pergunta preenchida para pesquisa de mercado por padrão (0.9465ms)
+✔ Assistente Prisma encaminha requisitos comuns em vagas do mercado (0.1274ms)
+✔ Assistente Prisma responde semanticamente com Knowledge interna, relações publicadas e metadados secundários (1.0935ms)
+✔ Assistente Prisma preserva a análise interna quando a pesquisa externa falha e não usa Web para compô-la (5.4467ms)
+✔ Web Search da Vaga reutiliza Knowledge Agent com contrato, fontes e auditoria fail-closed (4.7013ms)
+✔ resolução ocupacional explica segurança sem score e nunca deriva evidência da Pessoa (1.2747ms)
+✔ busca de referência profissional comunica origem, progresso e recuperação (1.9613ms)
+✔ validação de Vaga destaca o campo acionável que bloqueia o salvamento (4.9722ms)
+✔ M5.4.4 ordena empresa, Global, Agent, explorador e manual sem contaminar Pessoas (2.4519ms)
+✔ resolver ocupacional consulta snapshots seletivamente, é idempotente e mantém RLS (3.6655ms)
+✔ migration M5.4 mantém tenant, versões e escrita autorizada fail-closed (3.3003ms)
+✔ exclusão de Vaga é cancelamento auditável e a lista oferece edição e exclusão (3.4796ms)
+ℹ tests 40
+ℹ suites 0
+ℹ pass 40
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 390.2583

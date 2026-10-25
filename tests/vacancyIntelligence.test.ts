@@ -325,7 +325,7 @@ test("descoberta pagina todos os Perfis e persiste confirmação ou descarte sem
   assert.match(page, /queriedProfileRecordCount/);
   assert.match(page, /expectedProfileRecordCount/);
   assert.doesNotMatch(page, /A análise percorreu todos os Perfis publicados acessíveis/);
-  assert.match(page, /Nenhum Perfil apresentou experiência na área, relação ocupacional ou outra evidência rastreável/);
+  assert.match(await readFile("web/src/components/PositionDiscoveryGroups.tsx","utf8"), /Nenhuma trajetória pertinente foi identificada/);
 });
 
 test("estruturação livre confirma itens explícitos e deixa inferência derivada pendente", () => {
