@@ -3,13 +3,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.96.2
+version: 2.96.3
 last_verified: 2026-10-25
 ---
 
 # Estado atual do Prisma
 
 ## Prisma Recruiter — PoC local, sem integração
+
+Adendo experimental1.2.0 aprovado e executado em25/10/2026: adaptador local sem fork reutiliza construtor upstream, entidades selecionadas na fonte e recibos URL final+controle; exclusão por conta, limites/timeout, pausa sem retry, retomada e dedupe com checkpoint mínimo.26testes offline PASS, incluindo FastMCP real/navegador simulado. Cinco buscas na UI: Estoque/Vendedor em Bauru/São Paulo,10referências por página, mais combinação de sete filtros com vazio explícito. Replay de recibos é separado de execução real. A sexta tentativa, pelo MCP adaptado/navegador real, confirmou conta mas parou sem recibo com erro não diagnosticado naquela revisão; navegador fechado/zero processos dedicados. Classe/etapa sanitizadas acrescentadas e testadas somente com mocks, sem retry real. Portanto, adaptador MCP ao vivo PARTIAL, nenhuma declaração de correção/integrabilidade/segurança antibanimento. IDs são evidência da fonte, sem catálogo paralelo, parser de trajetória, sinonímia nova, LLM, novos dados/tabelas ou decisões humanas. Sexo/gênero excluídos; critérios profissionais sem evidência continuam não verificados. Branch experimental, produto3.3.0/main/produção preservados. Acordo/AoT/relatório linkedin-recruiter-poc1.2.0 e evidências filters-* registram resultado e limites. Nenhuma integração ou deploy autorizado nesta etapa.
 
 Em25/10/2026, avaliação autorizada de stickerdaniel/linkedin-mcp-server4.28.0/SHA0c5f14ba:12witnesses Prisma e106testes upstream selecionados PASS, incluindo transporte MCP em memória com extrator simulado. Ferramentas gratuitas/venv separado, sem conta/cookies reais/LLM/Supabase/VPS/deploy. Retorno textual por seção, filtros básicos sem recibo de aplicação, nenhuma taxonomia/aderência/tenant ou paginação de pessoas. Sessão automática, ferramentas de escrita e HTTP direto sem auth impedem tratar o projeto como serviço Prisma pronto. Recomendação: não integrar diretamente; discutir busca assistida ou fonte integrada autorizada. Não mede pertinência real/recall/banimento. Relatório e acordo/AoT linkedin-recruiter-poc1.0.0; somente branch experimental, produto3.3.0 inalterado.
 

@@ -1,0 +1,71 @@
+{
+  "version": "1.2.0",
+  "status": "completed",
+  "reason": null,
+  "pages": 5,
+  "references": 40,
+  "completed": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "events": [
+    {
+      "page": 0,
+      "filters": {
+        "location": "source_applied"
+      },
+      "returned": 10,
+      "new": 10,
+      "empty": false
+    },
+    {
+      "page": 1,
+      "filters": {
+        "industry": "source_applied",
+        "current_company": "source_applied",
+        "school": "source_applied",
+        "past_company": "source_applied",
+        "profile_language": "source_applied",
+        "network": "source_applied",
+        "location": "source_applied"
+      },
+      "returned": 0,
+      "new": 0,
+      "empty": true
+    },
+    {
+      "page": 2,
+      "filters": {
+        "location": "source_applied"
+      },
+      "returned": 10,
+      "new": 10,
+      "empty": false
+    },
+    {
+      "page": 3,
+      "filters": {
+        "location": "source_applied"
+      },
+      "returned": 10,
+      "new": 10,
+      "empty": false
+    },
+    {
+      "page": 4,
+      "filters": {
+        "location": "source_applied"
+      },
+      "returned": 10,
+      "new": 10,
+      "empty": false
+    }
+  ],
+  "mode": "replay_of_real_ui_receipts",
+  "autonomousMcpAdapterTested": false,
+  "liveSourceSearches": 5,
+  "newNetworkCallsDuringReplay": 0
+}

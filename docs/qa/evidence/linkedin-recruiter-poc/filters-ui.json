@@ -1,0 +1,91 @@
+{
+  "source": "internal-browser-ui",
+  "testAccountVerified": true,
+  "thirdPartyIdentitiesIncluded": false,
+  "observations": [
+    {
+      "keywords": "Gerente de Estoque",
+      "final_url": "https://www.linkedin.com/search/results/people/?keywords=Gerente%20de%20Estoque&geoUrn=%5B%22101039681%22%5D",
+      "selected": {
+        "location": [
+          "101039681"
+        ]
+      },
+      "referenceCount": 10,
+      "explicitEmpty": false,
+      "selectedControlsVerified": true
+    },
+    {
+      "keywords": "Gerente de Estoque",
+      "final_url": "https://www.linkedin.com/search/results/people/?keywords=Gerente%20de%20Estoque&origin=FACETED_SEARCH&network=%5B%22O%22%5D&geoUrn=%5B%22101039681%22%5D&currentCompany=%5B%22966373%22%5D&industry=%5B%2227%22%5D&schoolFilter=%5B%22264214%22%5D&pastCompany=%5B%22162402%22%5D&profileLanguage=%5B%22pt%22%5D",
+      "selected": {
+        "location": [
+          "101039681"
+        ],
+        "current_company": [
+          "966373"
+        ],
+        "past_company": [
+          "162402"
+        ],
+        "school": [
+          "264214"
+        ],
+        "industry": [
+          "27"
+        ],
+        "profile_language": [
+          "pt"
+        ],
+        "network": [
+          "O"
+        ]
+      },
+      "referenceCount": 0,
+      "explicitEmpty": true,
+      "selectedControlsVerified": true
+    },
+    {
+      "keywords": "Vendedor",
+      "final_url": "https://www.linkedin.com/search/results/people/?keywords=Vendedor&geoUrn=%5B%22101039681%22%5D",
+      "selected": {
+        "location": [
+          "101039681"
+        ]
+      },
+      "referenceCount": 10,
+      "explicitEmpty": false,
+      "selectedControlsVerified": true
+    },
+    {
+      "keywords": "Vendedor",
+      "final_url": "https://www.linkedin.com/search/results/people/?keywords=Vendedor&origin=FACETED_SEARCH&geoUrn=%5B%22104746682%22%5D",
+      "selected": {
+        "location": [
+          "104746682"
+        ]
+      },
+      "referenceCount": 10,
+      "explicitEmpty": false,
+      "selectedControlsVerified": true
+    },
+    {
+      "keywords": "Gerente de Estoque",
+      "final_url": "https://www.linkedin.com/search/results/people/?keywords=Gerente%20de%20Estoque&geoUrn=%5B%22104746682%22%5D",
+      "selected": {
+        "location": [
+          "104746682"
+        ]
+      },
+      "referenceCount": 10,
+      "explicitEmpty": false,
+      "selectedControlsVerified": true
+    }
+  ],
+  "verifiedAt": "2026-10-25",
+  "individualProfilesOpened": 0,
+  "messagesSent": 0,
+  "connectionsSent": 0,
+  "restrictionsObserved": false,
+  "sourceIdentityCheck": "primary email in source settings matched the authorized dedicated account"
+}

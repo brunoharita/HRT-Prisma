@@ -1,0 +1,28 @@
+{
+  "version": "1.2.0",
+  "localPythonTests": {
+    "tests": 26,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0
+  },
+  "releaseToolingTests": {
+    "tests": 22,
+    "failures": 0
+  },
+  "contextGenerate": "PASS",
+  "contextCheck": "PASS",
+  "lint": "PASS",
+  "snapshot": "exact tracked files; unrelated untracked excluded",
+  "dispatcherSurfaces": [
+    "context-pack",
+    "documentation",
+    "tooling"
+  ],
+  "runtimeDeployments": false,
+  "mainChanged": false,
+  "productionAccessed": false,
+  "liveMcpDisposition": "PARTIAL; no filter receipt; no retry",
+  "publicVersionUnchanged": "3.3.0",
+  "ci": "branch CI inspected after push; not substituted for local Python tests"
+}

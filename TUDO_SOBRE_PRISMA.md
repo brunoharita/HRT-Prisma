@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 578
-source_manifest_sha256: a66f7af63943fbe8f96735b06b37d9732cdc0a74f31b97adfd99a0594a298b5e
+source_manifest_sha256: 8c19e913316aaffaf1435f2d5af8ffeac2d3f131eff7a57b8eb83692d04aaed6
 -->
 
 # Tudo sobre o Prisma
@@ -2651,13 +2651,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.96.2
+version: 2.96.3
 last_verified: 2026-10-25
 ---
 
 # Estado atual do Prisma
 
 ## Prisma Recruiter — PoC local, sem integração
+
+Adendo experimental1.2.0 aprovado e executado em25/10/2026: adaptador local sem fork reutiliza construtor upstream, entidades selecionadas na fonte e recibos URL final+controle; exclusão por conta, limites/timeout, pausa sem retry, retomada e dedupe com checkpoint mínimo.26testes offline PASS, incluindo FastMCP real/navegador simulado. Cinco buscas na UI: Estoque/Vendedor em Bauru/São Paulo,10referências por página, mais combinação de sete filtros com vazio explícito. Replay de recibos é separado de execução real. A sexta tentativa, pelo MCP adaptado/navegador real, confirmou conta mas parou sem recibo com erro não diagnosticado naquela revisão; navegador fechado/zero processos dedicados. Classe/etapa sanitizadas acrescentadas e testadas somente com mocks, sem retry real. Portanto, adaptador MCP ao vivo PARTIAL, nenhuma declaração de correção/integrabilidade/segurança antibanimento. IDs são evidência da fonte, sem catálogo paralelo, parser de trajetória, sinonímia nova, LLM, novos dados/tabelas ou decisões humanas. Sexo/gênero excluídos; critérios profissionais sem evidência continuam não verificados. Branch experimental, produto3.3.0/main/produção preservados. Acordo/AoT/relatório linkedin-recruiter-poc1.2.0 e evidências filters-* registram resultado e limites. Nenhuma integração ou deploy autorizado nesta etapa.
 
 Em25/10/2026, avaliação autorizada de stickerdaniel/linkedin-mcp-server4.28.0/SHA0c5f14ba:12witnesses Prisma e106testes upstream selecionados PASS, incluindo transporte MCP em memória com extrator simulado. Ferramentas gratuitas/venv separado, sem conta/cookies reais/LLM/Supabase/VPS/deploy. Retorno textual por seção, filtros básicos sem recibo de aplicação, nenhuma taxonomia/aderência/tenant ou paginação de pessoas. Sessão automática, ferramentas de escrita e HTTP direto sem auth impedem tratar o projeto como serviço Prisma pronto. Recomendação: não integrar diretamente; discutir busca assistida ou fonte integrada autorizada. Não mede pertinência real/recall/banimento. Relatório e acordo/AoT linkedin-recruiter-poc1.0.0; somente branch experimental, produto3.3.0 inalterado.
 
@@ -12223,6 +12225,65 @@ A partir de `prisma-ux-foundation-1.0.0`, o módulo antes chamado Vagas aparece 
 
 Avaliação experimental1.0.0,25/10/2026. Acordo: `../qa/agreement-linkedin-recruiter-poc.md`1.0.0. Não é integração nem mudança do produto em produção.
 
+## Adendo1.2.0 — filtros e controle local
+
+Bruno aprovou a próxima etapa experimental em25/10/2026. Reutiliza o SHA4.28.0 já avaliado, sem fork, instalação/dependência paga ou alteração produtiva. `scripts/linkedin_recruiter_trial.py` reutiliza o construtor upstream e estende sua URL somente com entidades selecionadas na fonte. Não contém catálogo de cidades/cargos/empresas nem consulta a Knowledge produtiva. IDs abaixo são evidência datada deste ensaio, não um dicionário permanente.
+
+**Resultado: preparação e controles locais validados; adaptação MCP ao vivo PARTIAL, ainda sem liberação para integração.** A prova na UI não substitui a prova do conector. Não houve promessa/medição de proteção contra banimento.
+
+### Fonte real e limites da prova
+
+Conta exclusiva reconferida pelo e-mail principal nas configurações do navegador interno. Foram cinco buscas na UI e uma tentativa final pelo MCP, sem abrir trajetórias de terceiros, mensagens, conexões ou gravação no Prisma. Evidência agregada `../qa/evidence/linkedin-recruiter-poc/filters-ui.json`:
+
+| Busca / filtro efetivamente selecionado na UI | Referências na primeira página |
+| --- | --- |
+| Gerente de Estoque / Bauru, São Paulo, Brasil | 10 |
+| Vendedor / Bauru, São Paulo, Brasil | 10 |
+| Vendedor / São Paulo, São Paulo, Brasil | 10 |
+| Gerente de Estoque / São Paulo, São Paulo, Brasil | 10 |
+| Estoque/Bauru + empresa atual SERVIMED + anterior Ambev + Anhanguera + Comércio varejista + perfil Português + conexão3º+ | 0, com estado nativo Nenhum resultado encontrado |
+
+Bauru resolveu para geoUrn101039681 e São Paulo **cidade** para104746682. Estado de São Paulo e São Paulo e Região eram escolhas distintas; não houve seleção por semelhança textual. A UI manteve os chips de filtro e a URL final. No ensaio combinado, as sete seleções foram confirmadas: currentCompany966373, pastCompany162402, schoolFilter264214, industry27, profileLanguagept, networkO e Bauru. A empresa repetida em seções diferentes foi desambiguada pela seção atual/anterior. Isso prova aplicação observada dos filtros e estado vazio, não correção de cada dado de perfil, recall, relevância ou comportamento isolado de cada faceta.
+
+As referências foram substituídas por tokens efêmeros somente para conservar igualdade no replay, sem nomes/URLs de pessoas publicados. Quarenta referências distintas entre as quatro páginas observadas não são quarenta candidatos aderentes. Não se avaliou ninguém nem se alterou o ranking do LinkedIn. `filters-replay.json` é explicitamente um replay local de recibos reais, com zero nova busca, não uma execução autônoma do MCP.
+
+`scripts/linkedin_recruiter_mcp_trial.py` expõe **somente run_readonly_trial**, por FastMCP cliente/servidor em memória com navegador real; nenhum endpoint HTTP ou ferramenta de escrita é registrado. Reutiliza o leitor/captura upstream, substituindo temporariamente só o construtor de URL na leitura serializada. O perfil de navegador exclusivo anterior foi reutilizado com auto-import off/traces off; não se copiou a sessão do navegador interno. A identidade própria coincidiu com a conta verificada, mas a chamada parou com invalid_observation_or_driver_error antes de obter recibo válido. O diagnóstico daquela revisão não registrou classe/etapa, portanto **a causa exata permanece desconhecida**; não atribuir ao LinkedIn, à conta, ao filtro ou a bloqueio. O navegador foi fechado e zero processos do perfil dedicado permaneceram. Não houve retry real: a sexta tentativa encerrou o orçamento desta rodada. Evidência histórica preservada em `filters-mcp.json`.
+
+A revisão seguinte acrescentou diagnóstico sanitizado por classe/etapa e passou nos testes com navegador simulado. Essa melhoria **não foi revalidada na fonte real**. Não declarar a integração corrigida nem sucesso do filtro pelo MCP. O teste de transporte inprocess não é teste de stdio; o stdio original permanece coberto pelo adendo1.1.0.
+
+### Comportamento implementado e preservação
+
+- Cada entidade precisa de seleção inequívoca na fonte; texto de cidade/empresa não vira ID por aproximação. O adaptador recebe essa seleção, ainda assistida nesta PoC. URL ecoada, sem controle selecionado, fica unverified e interrompe a execução.
+- Início explícito; exclusão mútua por conta em arquivo criado atomicamente. Outra execução recebe busy; não existe fila distribuída/produtiva. Até6páginas/60referências por rodada local, com timeout e contagem de tentativas também em falhas. O witness MCP final ficou em1página/10referências. Esses números delimitam o experimento e não são limites seguros do LinkedIn.
+- Nenhum retry automático. Desafio, restrição, login, rate limit, erro ou parcialidade interrompem. Não há disfarce de automação, mudança de IP/conta, CAPTCHA automático ou código novo de stealth. Os mecanismos internos do pacote avaliado não constituem garantia antibanimento.
+- Checkpoint contém versão/hash do plano, contadores, índices de trabalho, hashes salgados de referências e eventos agregados. Não contém currículo, texto de perfil, URL de pessoa ou senha. Retomada explícita pula páginas concluídas; página incerta exige decisão explícita de repetição e consome novo orçamento. Lock após crash não é removido automaticamente. O checkpoint é progresso técnico local, sem cadastro ou autoridade de negócio.
+- Sem criação de tabelas/entidades de domínio, LLM, sinonímia nova ou acesso produtivo. Posição/Knowledge/Pessoas, fatos originais, pesos/notas, histórico e decisões humanas permanecem nos fluxos proprietários. Texto externo não controla ferramentas nem vira instrução.
+
+### Capacidades gratuitas e classificação
+
+| Critério | Estado nesta PoC |
+| --- | --- |
+| Localidade, empresas atuais/anteriores, instituição, setor, idioma do perfil, conexão | NativeSelection/URL/recibo suportados; aplicação real conferida na UI, MCP automatizado ainda PARTIAL |
+| Cargo atual/anterior, responsabilidades, liderança, tempo relevante | profile_evidence_required; nenhuma palavra isolada ou resultado de busca confirma trajetória |
+| Curso, grau, conclusão, competências, certificações | profile_evidence_required; instituição selecionada não comprova formação/conclusão |
+| Proficiência linguística, disponibilidade, emprego atual/desemprego | profile_evidence_required; língua do perfil e ausência de vínculo não permitem inferência |
+| Sexo/gênero | excluded; não implementado em filtro, inferência ou ranking |
+| Nomes e demais campos textuais avançados | Disponíveis na UI observada, sem implementação estrutural neste adaptador; indisponibilidade explícita fora das facetas declaradas |
+
+Não há parser de trajetória, aprovação de Knowledge ou avaliação de pessoas neste protótipo. A expansão futura de termos deve consumir conceitos/termos aprovados da Knowledge original, preservando escopo organizacional e decisões humanas. Não se criou um mapa próprio de sinônimos. Dados ausentes, erro, resultado vazio e aderência são estados distintos.
+
+### Validação e reprodução
+
+26testes determinísticos PASS, incluindo testes de FastMCP real em memória/navegador simulado: pin, facetas, Unicode, múltiplas localidades, entidade ambígua, filtro ignorado/ecoado, destino externo, dedupe de URL, versão/checkpoint inválido, concorrência por conta, orçamento, timeout/cancelamento, pausa/retomada, identidade divergente, exceção privada e única ferramenta de leitura. Sockets externos bloqueados no harness; exceção só para wakeup pipe do asyncio Windows. Evidências `filters-tests.json`/`filters-tests.txt`. Nenhuma nova suíte integral local Prisma. Uma edição intermediária do harness colocou métodos na classe errada; corrigida e rodada final passou, sem usar esse erro para diagnosticar o LinkedIn.
+
+```powershell
+& tmp/linkedin-recruiter-poc/venv/Scripts/python.exe scripts/test_linkedin_recruiter_trial.py
+```
+
+Ambiente gratuito existente conforme reprodução1.0.0 abaixo. O adaptador e seus testes não abrem navegador. O runner MCP é **opt-in**, usa plano e identidade verificada em arquivos locais ignorados e não deve ser iniciado para reproduzir os testes sintéticos. O replay recebe recibos mínimos locais via --replay-observations, --checkpoint-root, --run-id e --output; não publica tokens de igualdade. O runner MCP não está pronto para produção, não acessa perfis por conta própria além da amostra explicitamente autorizada e não oferece um serviço multiempresa.
+
+Próximo gate técnico: diagnosticar a falha com o novo registro sanitizado em outra rodada delimitada antes de afirmar que o conector adaptado funciona. O caminho assistido e as capacidades verificadas da UI continuam aproveitáveis. Autorização da fonte, limites comerciais, governança de dados e integração permanecem decisões futuras. Esta etapa não os resolve.
+
 ## Adendo1.1.0 — fonte real, conta exclusiva
 
 Bruno autorizou leitura real após concluir login na conta de testes. O e-mail principal foi conferido em Configurações > Acesso e segurança > Endereços de e-mail e coincide com a conta solicitada; não se usou sua conta oficial. Evidência agregada: `../qa/evidence/linkedin-recruiter-poc/live-source.json`. Não se conservaram nomes/URLs/fotos/contatos dos profissionais.
@@ -12249,6 +12310,8 @@ O navegador próprio foi encerrado por close_session após as buscas. A autentic
 ## Recomendação
 
 **Atende parcialmente como ferramenta de acesso; não atende sozinho ao Prisma Recruiter e não recomendo integrá-lo à produção neste momento.** A etapa1.0.0 comprovou contratos e comportamento local com mocks, inclusive uma chamada MCP cliente/servidor em memória. O adendo1.1.0 acima comprova três buscas reais de leitura pelo conector e uma falha geográfica, sem benchmark de qualidade/recall ou garantia contra bloqueio. O funcionamento dessas buscas não elimina as adaptações e os gates de integração.
+
+Atualização1.2.0: filtros/controles experimentais implementados e conferidos conforme adendo mais recente; witness do adaptador MCP não concluído. Preservada recomendação de não integrar à produção. As referências a adaptação ainda não autorizada nas seções históricas1.0/1.1 não descrevem o escopo local1.2 posteriormente aprovado.
 
 O componente reaproveitável é o acesso às páginas e suas referências. A interpretação de cargos, pertinência da trajetória, qualidade dos dados e autoridade humana continuam sendo responsabilidades do Prisma. A autorização de acesso ao LinkedIn permanece uma condição externa; melhorar o conector não a resolve.
 
@@ -15161,6 +15224,25 @@ Decisão posterior explícita de Bruno: login concluído na conta exclusiva info
 - F-02: integração, ranking de candidatos, coleta em massa e medição estatística de recall/precisão continuam fora do escopo.
 
 Mapa adicional: `direct` filtros/observações da fonte real e sessão experimental; `critical_transversal` identidade/cookies/minimização, com confirmação de e-mail e sessão própria; `plausible_indirect` adequação futura do conector, sem implementar correções; `no_impact_identified` produção/cadastros/Score/Knowledge mantidos por ausência de acesso ou mudança. Encerramento exige relatar o executado e os bloqueios reais, sem inventar sucesso de conector. Nenhuma nova aprovação necessária para passos já autorizados; senha/2FA são fornecidos pelo operador diretamente no site.
+
+## Adendo1.2.0 — adaptação local e controles de execução
+
+Bruno aprovou a próxima etapa após discutir filtros gratuitos e controles operacionais. Substitui a proibição de implementar correções experimentais de D-07/F-02 somente para este adaptador local. Mantém P-03/P-04, ausência de integração/produção e os resultados históricos. Baseline c61eb0d5bf2369f6f2654ae8939fb01c3117785c, produto3.3.0.
+
+- D-08: adaptar a preparação/validação de filtros nativos sem cidade, empresa ou cargo fixos. Resolver entidades pela seleção da fonte, distinguir pedido de filtro aplicado e não confiar na URL ecoada do MCP. CA: duas localidades e dois termos profissionais em amostra real delimitada; filtro ignorado/ambíguo/indisponível coberto por teste negativo. Demais filtros gratuitos têm capacidade/limites documentados e ensaio proporcional quando disponíveis.
+- D-09: implementar controle local reutilizável: início explícito, exclusão mútua por conta, limites de páginas/referências por execução, timeout, nenhuma repetição automática, parada em desafio/restrição/identidade divergente e retomada explícita sem repetir trabalho concluído. CA: testes determinísticos positivos/negativos, inclusive concorrência e reinício. Limites são operacionais, nunca promessa de evitar banimento.
+- D-10: deduplicar referências entre consultas da mesma execução, minimizar checkpoint/evidência e separar informação ausente de erro, de zero resultados e de falta de pertinência. CA: URLs variantes duplicadas, execução parcial e falha preservam contadores; nenhuma identidade de terceiro nos artefatos públicos.
+- D-11: critérios profissionais de cargo atual/anterior, responsabilidade, tempo, formação, competências, certificações e idioma têm estado explícito: aplicado na fonte, dependente de evidência ou indisponível. Nenhuma palavra isolada comprova atuação. CA: matriz de capacidades e testes não promovem filtros textuais a fatos profissionais, não inferem desemprego/proficiência e não expandem sinônimos sem Knowledge aprovada.
+- P-05: nenhum disfarce de automação, rotação de conta/IP, solução automática de CAPTCHA, contorno de limite ou promessa antibanimento; sexo/gênero não participa de busca/classificação. Sem mensagens, conexões, ranking, coleta em massa, escrita de decisões/Perfis/Score/Knowledge ou alteração produtiva.
+- F-03: integração web/backend/Prisma, catálogo paralelo, acesso à Knowledge produtiva, modelo de IA, avaliação individual/seleção de pessoas e validação em escala. Análise contextual e expansão pela Knowledge permanecem consumidores futuros dos fluxos originais, sem uma segunda taxonomia no experimento.
+- A-02: extensão mínima fora do clone congelado, harness com biblioteca padrão/ambiente gratuito existente e controles técnicos locais. Reutilizar construtor/contratos upstream onde corretos; nenhuma dependência ou decisão arquitetural de produção nova.
+- Q: nenhuma pendência para esta PoC local. Autorização da fonte e integração seguem gates futuros, não resolvidos por esta aprovação.
+
+### Mapa1.2 e execução congelada
+
+`direct`: scripts experimentais de filtro/execução/checkpoint e evidências; baseline1.1 sem adaptador, provar D-08..11. `critical_transversal`: identidade/sessão/minimização/controle, preservar conta exclusiva, allowlist de leitura e parada em restrições. `plausible_indirect`: contratos futuros Posição/Knowledge/revisão, consultar origem canônica sem consumidores ou escritores novos. `no_impact_identified`: runtime3.3.0, nota/pesos/histórico/decisões humanas/schema/RLS/produção; preservação por diff, ausência de acesso e plano de superfícies, sem alegar smoke produtivo.
+
+Execução: ler este acordo integral; preparar adaptador externo ao upstream fixado; testar controles/filtros com dados sintéticos e rede bloqueada; conferir amostra pequena pela UI do navegador interno e separar essa evidência de chamadas reais MCP. Se sessão/filtro/capacidade não permitir o ensaio, registrar limite sem fabricar aplicação. Não exceder seis buscas de resultados nesta rodada; não ler trajetórias individuais nem contatar pessoas. Atualizar relatório/AoT/contexto, gerar/verificar exports em snapshot rastreado sem rascunhos alheios, lint e testes do dispatcher afetados. Encerrar com evidência, commit/push/CI apenas na branch experimental; main/VPS/Supabase/produção fora de escopo. Versão experimental1.2.0, sem incremento de versão pública.
 
 ---
 
@@ -21598,6 +21680,35 @@ Mapa adicional conforme acordo: fonte real/sessão são direct; identidade/minim
 A chamada get_my_profile inicial iniciou login quando não havia sessão salva; o harness encerrou ao receber erro antes de busca. Após autenticação válida, a exigência inicial de URL canônica também interrompeu antes da busca, pois retornou /in/me. Uma leitura de contato falhou com OverlayRootNotFoundError. A confirmação composta (e-mail UI + declaração do operador + nome próprio MCP) resolveu a identificação sem fingir que o conector validou e-mail. Nenhuma alteração no pacote upstream. Os ensaios adicionais respondiam a essas falhas concretas, não repetiram buscas já aprovadas.
 
 Todas as obrigações do adendo comprovadas, sem desvio de escopo: leitura real básica validada; integração não executada. Banco/VPS não foram acessados, main não foi alterada. Perfil de autenticação exclusivo permanece local/ignorado e navegador foi fechado pelo MCP. Publicação da evidência ocorre apenas na branch experimental. CI da etapa anterior c4d76d27/40192306235 SUCCESS; validação documental final e contexto sem repetir testes de produto ou leituras reais. Recomendação atualizada: ensaio de adaptação de geoUrn antes de integração; depende de nova decisão do PO, sem autorização implícita para corrigir o conector.
+
+## Adendo1.2.0 — adaptação local, sem integração
+
+Contrato1.2.0 aprovado pelo PO neste chat após filtros gratuitos/controles de operação. Baseline c61eb0d5bf2369f6f2654ae8939fb01c3117785c. Execução conforme mapa1.2; runtime3.3.0. D-08..11 implementam preparação de filtro/controle técnico, P-05 impede disfarce/contorno/sensíveis, F-03 exclui integração e domínio, A-02 permite extensão fora do clone.
+
+| ID | Implementação / teste / evidência | Status e limite |
+| --- | --- | --- |
+| D-08 | NativeSelection, Search, verify_filters; URLs usam construtor fixado e recibos exigem controle+URL final. UI2cidades/2cargos e sete filtros combinados; negativos eco/ignorado/ambiguidades. filters-ui.json, filters-replay.json, filters-tests.* | PASS para preparação/verificação local e ensaio UI; witness adicional MCP real PARTIAL, sem recibo bem-sucedido |
+| D-09 | Trial: início/resume explícitos, arquivo exclusivo por conta, orçamento e timeout, tentativas contam, pausa sem retry, retorno após progresso. Tests Execution/McpBoundary | PASS nos testes determinísticos; não prova resistência a bloqueio/execução distribuída. O witness real parou e fechou navegador |
+| D-10 | profile_root/digests salgados, checkpoint sem nomes/URLs/textos, erro/ausência/vazio distintos, retomada pula concluídos e preserva contadores. Tests Execution/Filters; replay real agregado | PASS;40referências entre quatro páginas não são candidatos avaliados |
+| D-11 | CAPABILITIES e matriz do relatório separam filtro nativo de evidência de experiência/formação/idioma; sem aliases novos ou desemprego inferido | PASS; parser/contextualização/Knowledge em runtime fora de escopo |
+| P-03/P-04/P-05 | Sem mensagens/conexões/reações, novos cadastros ou dados pessoais publicados. Única ferramenta local run_readonly_trial, auto-import/traces off; testes negativos de identidade e falhas. filters-mcp.json: parada/fechamento, zero processos do perfil dedicado | PASS no escopo executado; desconhecimento da exceção não equivale a restrição da conta |
+| F-03 / GOV-02 | Somente scripts experimentais/docs/evidências/contexto. Nenhum writer/entidade/consumidor de domínio, banco, VPS ou produção | PASS por ausência de acesso e revisão de superfícies; sem alegar smoke produtivo |
+
+### Mapa e preservação
+
+`direct`: scripts de preparação/controle/runner/tests e cinco observações UI mais tentativa MCP. Baseline sem adaptador1.2;26testes finais PASS e replay agregados provam capacidades locais. `critical_transversal`: conta reconferida por e-mail nas configurações; self-profile MCP coincide; driver sem ferramentas de escrita; sessão exclusiva e navegador fechado. `plausible_indirect`: Posição/Knowledge/revisão, origem única/GOV-02 consultada; nenhuma integração/consulta produtiva, taxonomia ou decisão nova. `no_impact_identified`: Score/pesos/Perfil/histórico/decisões humanas/web/backend/schema/RLS/produção, preservados por ausência de consumidor/executável/serviço alterado e plano de release, sem inspeção produtiva.
+
+### Resultado negativo que permanece aberto
+
+O sexto ensaio, FastMCP em memória com navegador real, confirmou identidade e parou em invalid_observation_or_driver_error antes de obter um recibo. Não foi registrada classe/etapa naquela revisão; causa exata desconhecida. Evidência preservada sem reescrever o resultado. Nenhum retry real, nenhum bloqueio atribuído à fonte sem prova, nenhum filtro dito aplicado pelo MCP. O controle de orçamento encerrou essa rodada. Adaptador MCP em fonte real: **PARTIAL / não liberado para integração**. Esse limite não invalida a aplicação dos filtros observada no navegador interno nem os testes locais, e estes não o substituem.
+
+Revisão posterior registra classe/etapa sem mensagem privada e tem três testes de fronteira com navegador simulado, incluindo erro na captura e identidade divergente. Não foi revalidada na fonte. A primeira edição desses testes posicionou métodos na classe errada; erro local de harness corrigido antes da rodada final, não relacionado ao resultado do LinkedIn. O teste real pode ter alcançado a navegação de busca; não houve perfil de terceiro aberto ou contato. Não contar a tentativa como busca concluída ou candidata a ranking.
+
+### Encerramento e validação
+
+Ensaio local entregue com limitação de conector explícita; não representa entrega do Prisma Recruiter. Nenhum desvio de autoridade, seis tentativas de busca no máximo, nenhuma repetição real.26testes finais/zero falhas/erros/skips, rede bloqueada no harness; nenhuma suíte integral Prisma local. Gerador/check/lint/dispatcher/CI registrados no fechamento após execução. Versão experimental1.2.0/contexto2.96.3; versão pública3.3.0 preservada. Main e produção permanecem fora da entrega. Nenhuma capacidade protegida de domínio foi alterada ou declarada testada operacionalmente.
+
+Verificações locais finais:22testes de release-tooling PASS; generate/check de contexto PASS em snapshot dos arquivos rastreados, excluindo rascunhos alheios; lint PASS2125arquivos antes do registro técnico final. Dispatcher somente context-pack/documentation/tooling, banco/Edges/web e demais destinos skip. Evidência consolidada em `evidence/linkedin-recruiter-poc/filters-validation.json`; CI da branch é independente dos testes Python locais. Resultado do conector real permanece PARTIAL mesmo com checks de código/documentação aprovados.
 
 ---
 

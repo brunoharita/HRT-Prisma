@@ -1,0 +1,10 @@
+{
+  "version": "1.2.0",
+  "method": "stdlib unittest; real FastMCP inprocess with simulated browser; external sockets blocked; Windows asyncio wakeup socketpair only",
+  "tests": 26,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "liveBrowser": false,
+  "upstream": "0c5f14ba3efcd9ad1bbd3163b4f2b9e47cda7b17"
+}

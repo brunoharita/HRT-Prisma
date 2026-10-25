@@ -1,0 +1,24 @@
+{
+  "version": "1.2.0",
+  "status": "paused",
+  "reason": "invalid_observation_or_driver_error",
+  "pages": 1,
+  "references": 0,
+  "completed": [],
+  "events": [],
+  "mode": "real_mcp_inprocess_real_browser",
+  "toolsExposed": [
+    "run_readonly_trial"
+  ],
+  "identityConfirmed": true,
+  "sourceEmailVerifiedSeparately": true,
+  "liveSourceSearches": 1,
+  "autonomousMcpAdapterTested": true,
+  "thirdPartyProfilesOpened": 0,
+  "browserCloseRequested": true,
+  "limitation": "Live witness stopped after self-identity; exact exception class/stage was not recorded by that revision. No successful filter receipt. No live retry.",
+  "success": false,
+  "reviewDisposition": "PARTIAL; not cleared for integration",
+  "diagnosticImprovementValidated": "simulated browser only",
+  "dedicatedBrowserProcessesAfterClose": 0
+}
