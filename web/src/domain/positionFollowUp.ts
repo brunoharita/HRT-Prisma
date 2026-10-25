@@ -1,3 +1,4 @@
+import {comparePositionScores,savedPositionScore} from "../shared/positionAdherenceOrder.js";
 import type { SelectionOutcome } from "./selectionOutcome.js";
 export const followUpStages = {
   awaiting_evaluation: "Selecionadas para acompanhamento", evaluating: "Selecionadas para acompanhamento",
@@ -67,7 +68,7 @@ export function filterFollowUp(entries: FollowUpEntry[], filter: FollowUpFilters
     && (!filter.stage || followUpColumn(e.stage) === followUpColumn(filter.stage as FollowUpStage))
     && (!filter.assignee || (filter.assignee === "missing" ? !e.details.assignee : e.details.assignee === filter.assignee))
     && (!filter.due || (filter.due === "missing" ? !e.details.dueDate : filter.due === "overdue" ? Boolean(e.details.dueDate && e.details.dueDate < today) : e.details.dueDate === today)))
-    .sort((a,b) => filter.order === "due" ? (a.details.dueDate ?? "9999").localeCompare(b.details.dueDate ?? "9999") || a.fullName.localeCompare(b.fullName,"pt-BR") : a.fullName.localeCompare(b.fullName,"pt-BR"));
+    .sort((a,b) => comparePositionScores(savedPositionScore(a.score,a.scoreState),savedPositionScore(b.score,b.scoreState)) || (filter.order === "due" ? (a.details.dueDate ?? "9999").localeCompare(b.details.dueDate ?? "9999") || a.fullName.localeCompare(b.fullName,"pt-BR") : a.fullName.localeCompare(b.fullName,"pt-BR")) || a.id.localeCompare(b.id));
 }
 export const followUpHistoryLabels: Record<string,string> = {
   add: "Pessoa adicionada", stage: "Etapa alterada", details: "Acompanhamento atualizado",
@@ -89,3 +90,5 @@ export function interviewInstant(wallTime: string, timezone: string): string {
   if(format.format(instant).replace(" ","T").slice(0,16)!==wallTime) throw new Error("Esta hora não existe no fuso selecionado. Confira a data e o fuso.");
   return new Date(instant).toISOString();
 }
+
+export function sortFollowUpByAdherence(entries:FollowUpEntry[]):FollowUpEntry[]{return [...entries].sort((a,b)=>comparePositionScores(savedPositionScore(a.score,a.scoreState),savedPositionScore(b.score,b.scoreState))||a.fullName.localeCompare(b.fullName,"pt-BR")||a.id.localeCompare(b.id));}

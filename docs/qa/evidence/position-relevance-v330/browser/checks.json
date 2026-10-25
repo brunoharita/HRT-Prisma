@@ -1,0 +1,100 @@
+{
+  "checks": [
+    {
+      "name": "1448: generic Beatriz fixture absent",
+      "pass": true
+    },
+    {
+      "name": "1448: related Willian before lower-scored direct trajectory",
+      "pass": true
+    },
+    {
+      "name": "1448: uncertainty is individual, not mixed with generic signals",
+      "pass": true
+    },
+    {
+      "name": "1448: comparison remains explicit",
+      "pass": true
+    },
+    {
+      "name": "1448: original snapshots and scores unchanged",
+      "pass": true
+    },
+    {
+      "name": "1448: viewport contained",
+      "pass": true
+    },
+    {
+      "name": "1448: human inclusion is preserved separately",
+      "pass": true
+    },
+    {
+      "name": "1448: no runtime error",
+      "pass": true
+    },
+    {
+      "name": "390: generic Beatriz fixture absent",
+      "pass": true
+    },
+    {
+      "name": "390: related Willian before lower-scored direct trajectory",
+      "pass": true
+    },
+    {
+      "name": "390: uncertainty is individual, not mixed with generic signals",
+      "pass": true
+    },
+    {
+      "name": "390: comparison remains explicit",
+      "pass": true
+    },
+    {
+      "name": "390: original snapshots and scores unchanged",
+      "pass": true
+    },
+    {
+      "name": "390: viewport contained",
+      "pass": true
+    },
+    {
+      "name": "390: human inclusion is preserved separately",
+      "pass": true
+    },
+    {
+      "name": "390: no runtime error",
+      "pass": true
+    },
+    {
+      "name": "320: generic Beatriz fixture absent",
+      "pass": true
+    },
+    {
+      "name": "320: related Willian before lower-scored direct trajectory",
+      "pass": true
+    },
+    {
+      "name": "320: uncertainty is individual, not mixed with generic signals",
+      "pass": true
+    },
+    {
+      "name": "320: comparison remains explicit",
+      "pass": true
+    },
+    {
+      "name": "320: original snapshots and scores unchanged",
+      "pass": true
+    },
+    {
+      "name": "320: viewport contained",
+      "pass": true
+    },
+    {
+      "name": "320: human inclusion is preserved separately",
+      "pass": true
+    },
+    {
+      "name": "320: no runtime error",
+      "pass": true
+    }
+  ]
+}

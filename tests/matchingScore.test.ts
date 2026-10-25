@@ -406,20 +406,25 @@ test("relatório sombra ordena pelo score, registra decisão sem usá-la como fe
 });
 
 test("UI expõe score, cobertura, grupos, explicação, versões e proteção mobile", async () => {
-  const [page, styles, service] = await Promise.all([
+  const [page, styles, service, groups] = await Promise.all([
     readFile("web/src/pages/VacancyPages.tsx", "utf8"),
     readFile("web/src/styles.css", "utf8"),
     readFile("web/src/infrastructure/supabase/vacancyService.ts", "utf8"),
+    readFile("web/src/components/PositionDiscoveryGroups.tsx", "utf8"),
   ]);
   assert.match(page, /Compatibilidade observada provisória/);
   assert.match(page, /Cobertura das evidências/);
   assert.match(page, /Ver cálculo do score/);
-  assert.match(page, /Grupo A · trajetória diretamente compatível/);
-  assert.match(page, /Grupo B · trajetória relacionada ou potencial de entrada/);
-  assert.match(page, /Grupo C · somente sinais contextuais/);
+
+
+
   assert.match(page, /Sem trajetória profissional relacionada/);
-  assert.match(page, /prisma-contextual-signals-group/);
-  assert.match(page, /maior Prisma Score primeiro/);
+  assert.match(groups,/Pessoas com trajetória pertinente/);
+  assert.match(groups,/Relação profissional a verificar/);
+  assert.match(groups,/Pessoas incluídas por decisão humana/);
+  assert.match(groups,/Maior Nota Prisma salva primeiro/);
+
+
   assert.doesNotMatch(page, /Comparação ainda incompleta · sem prioridade segura/);
   assert.doesNotMatch(page, /Ordem alfabética; comparação incompleta/);
   assert.match(page, /discovery && !discovery.complete/);

@@ -3,7 +3,7 @@ import {createRequire} from 'node:module';
 import {mkdir,writeFile} from 'node:fs/promises';
 const {chromium}=createRequire(import.meta.url)(process.env.PRISMA_PLAYWRIGHT_PATH??'C:/Users/Bruno/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
 const browser=await chromium.launch({headless:true,executablePath:process.env.PRISMA_BROWSER_PATH??'C:/Users/Bruno/AppData/Local/ms-playwright/chromium_headless_shell-1228/chrome-headless-shell-win64/chrome-headless-shell.exe'});
-const base='http://127.0.0.1:5710',dir='docs/qa/evidence/process-assessment-performance',checks=[];
+const base=process.env.PRISMA_ASSESSMENT_ORDER_BASE??'http://127.0.0.1:5710',dir=process.env.PRISMA_ASSESSMENT_ORDER_EVIDENCE??'docs/qa/evidence/process-assessment-performance',checks=[];
 await mkdir(dir,{recursive:true});
 const check=(name,value)=>{checks.push({name,pass:!!value});assert.ok(value,name);};
 try{
@@ -16,7 +16,7 @@ try{
   const surface=card.locator(width>1000?'.process-results-desktop':'.process-results-mobile');
   const rows=width>1000?surface.locator('tbody tr'):surface.locator('.process-result-person');
   await page.waitForFunction(()=>!document.querySelector('.process-results-card')?.textContent.includes('Consultando…'));
-  check(width+': same order on desktop and mobile',JSON.stringify(await rows.locator(width>1000?'.process-result-name':'h3').allTextContents())===JSON.stringify(['André Santos','Carolina Nunes','Beatriz Lima','Diego Costa','Eduarda Alves','Fábio Souza']));
+  check(width+': same order on desktop and mobile',JSON.stringify(await rows.locator(width>1000?'.process-result-name':'h3').allTextContents())===JSON.stringify(['André Santos','Eduarda Alves','Beatriz Lima','Carolina Nunes','Diego Costa','Fábio Souza']));
   const carolina=rows.filter({hasText:'Carolina Nunes'}),beatriz=rows.filter({hasText:'Beatriz Lima'}),zero=rows.filter({hasText:'Diego Costa'}),pending=rows.filter({hasText:'Eduarda Alves'}),expired=rows.filter({hasText:'Fábio Souza'});
   check(width+': Prisma and assessment values remain independent',(await carolina.innerText()).includes('60 / 100')&&(await carolina.innerText()).includes('90%')&&(await carolina.innerText()).includes('18 de 20 acertos')&&(await beatriz.innerText()).includes('82 / 100')&&(await beatriz.innerText()).includes('60%'));
   check(width+': state and provenance preserved',(await carolina.innerText()).includes('nota anterior preservada')&&(await carolina.innerText()).includes('Provisória'));

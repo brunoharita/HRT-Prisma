@@ -1,0 +1,16 @@
+import {createRoot} from "react-dom/client";
+import {ConfigProvider} from "antd";
+import {PositionDiscoveryGroups} from "../../../web/src/components/PositionDiscoveryGroups";
+// @ts-expect-error fixture-only exports
+import {CandidateMatchCard} from "../../../web/src/pages/VacancyPages";
+import {emptyVacancyDraft,matchVacancyCandidate,newVacancyRequirement,type VacancyDetail} from "../../../web/src/domain/vacancy";
+import type {PublishedProfileCandidate} from "../../../web/src/domain/profileDiscovery";
+import {prismaTheme} from "../../../web/src/ui/theme";
+import "../../../web/src/styles.css";
+const vacancy:VacancyDetail={...emptyVacancyDraft(),id:"v",versionId:"v1",version:1,organizationId:"org",title:"Gerente de Estoque",area:"Logística",experiencePolicy:"required",responsibilities:["Gestão do estoque"],requirements:[{...newVacancyRequirement("Comunicação"),importance:"required",importanceConfirmed:true}],createdAt:"",updatedAt:"",jobRoleName:"",occupantName:null};
+function person(name:string,role:string,description:string):PublishedProfileCandidate{return {personId:name,fullName:name,profileId:name+"-p",profileVersion:1,lifecycle:"candidate",operationalStatus:"active",location:null,publishedAt:"",knowledge:[],profileData:{identity:{fullName:name},contact:{email:null,phone:null,linkedin:null,city:null,state:null},professionalTitle:role,summary:null,professionalObjective:null,areasOfExpertise:[],keyResults:[],experiences:[{id:"e1",role,description,evidenceText:"",organization:"Empresa sintética",period:"2020 - 2025",page:null,source:"human"}],education:[],competencies:["Comunicação"],certifications:[],languages:[],customSections:[],uncertainties:[],notIdentified:[]}};}
+const rows=[person("Beatriz · cenário sintético","Analista de Marketing","Planejamento de campanhas e comunicação."),person("Willian · cenário sintético","Coordenador de Planejamento e Controle","Coordenação de planejamento e controle de estoque com inventários periódicos."),person("Outra trajetória direta","Gerente de Estoque","Gestão do estoque."),person("Relação incerta","Analista de operações","Atuação integrada com estoque e outras áreas.")].map(c=>matchVacancyCandidate(vacancy,c,null,[],[],"2026-10-25"));
+rows[1]!.score={...rows[1]!.score,score:85,status:"provisional"};rows[2]!.score={...rows[2]!.score,score:40,status:"definitive"};
+const params=new URLSearchParams(location.search);if(params.has("manual"))rows[0]!.positionDecision="confirmed";
+const before=JSON.stringify(rows),events:string[]=[];Object.assign(window,{__positionDiscovery:{rows,before,events}});
+createRoot(document.getElementById("root")!).render(<ConfigProvider theme={prismaTheme}><main className="prisma-page"><h1>Pessoas para Gerente de Estoque</h1><PositionDiscoveryGroups vacancy={vacancy} matches={rows} manualIds={new Set()} pending={false} onManualSearch={()=>events.push("manual-search")} renderMatch={(match,index)=><CandidateMatchCard key={match.candidate.personId} match={match} vacancy={vacancy} initiallyExpanded={index===0} deciding={false} selected={false} onToggle={()=>events.push("compare")} onNavigate={path=>events.push(path)} onEvaluate={()=>events.push("evaluate")} onDecision={decision=>events.push(decision)}/>}/></main></ConfigProvider>);

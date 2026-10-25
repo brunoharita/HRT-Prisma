@@ -1,3 +1,4 @@
+import {sortFollowUpByAdherence} from "../../domain/positionFollowUp";
 import { supabase } from "./client";
 import type { Json } from "./database.types";
 import type { FollowUpData } from "../../domain/positionFollowUp";
@@ -11,7 +12,7 @@ function decode(value: Json): FollowUpData {
   }
   if(data.process&&(!data.process.id||!["active","closed"].includes(data.process.status)||!Number.isSafeInteger(data.process.revision)))throw new Error("O processo retornou um contrato incompatível. Atualize a página.");
   if(data.process?.outcome && (!isSelectionOutcome(data.process.outcome)||data.process.status!=="closed"))throw new Error("O resultado do processo retornou um contrato incompatível. Atualize a página.");
-  return data;
+  return {...data,entries:sortFollowUpByAdherence(data.entries)};
 }
 function failure(error: { code?: string; message: string }): Error {
   if(error.message.includes("SELECTION_CLOSURE_REQUIRED"))return new Error("Informe o resultado ao encerrar o processo. Atualize a página se necessário.");

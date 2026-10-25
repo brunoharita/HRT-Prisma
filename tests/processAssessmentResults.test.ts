@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {assessmentPerformance,assessmentResultRows,savedAssessmentPrismaScore} from '../web/src/shared/processAssessmentResults.js';
+import {assessmentPerformance,assessmentResultRows,savedAssessmentPrismaScore,orderAssessmentCandidates} from '../web/src/shared/processAssessmentResults.js';
 import type {ProcessAssessmentWorkspace} from '../web/src/domain/processAssessmentData.js';
 import type {AssessmentAttempt} from '../web/src/domain/positionAssessmentData.js';
 import type {FollowUpEntry} from '../web/src/domain/positionFollowUp.js';
@@ -15,6 +15,12 @@ test('only concluded persisted valid results belonging to this instrument produc
  for(const t of [attempt('missing',null),attempt('negative',-1),attempt('too-many',21),attempt('fraction',0.5),attempt('empty',0,0),attempt('wrong-size',10,10),attempt('nan',NaN),attempt('partial',10,20,'started'),{...attempt('foreign',10),assessmentId:'other'}])assert.equal(assessmentPerformance(t,'assessment',20),null);
 });
 const entry={score:0,scoreState:'saved',profileId:'p',scoreProfileId:'p',scorePositionId:'v',match:null} as FollowUpEntry;
+test('saved Prisma adherence orders invitations and results before assessment performance without altering either',()=>{
+ const w=workspace([attempt('High-test',20),attempt('High-Prisma',10),attempt('Pending',null,20,'started'),attempt('Zero',0),attempt('Unknown',20)]);
+ const scores=[['High-test',60],['High-Prisma',80],['Pending',95],['Zero',0]].map(([personId,score])=>({...entry,personId,score} as FollowUpEntry));
+ const before=JSON.stringify({w,scores}),expected=['Pending','High-Prisma','High-test','Zero','Unknown'];
+ assert.deepEqual(assessmentResultRows(w,scores).map(r=>r.name),expected);assert.deepEqual(orderAssessmentCandidates(w,scores).map(r=>r.name),expected);assert.equal(JSON.stringify({w,scores}),before);
+});
 test('saved Prisma zero is valid; unavailable and malformed scores remain unknown',()=>{
  assert.equal(savedAssessmentPrismaScore(entry,'v')?.value,0);
  for(const score of [null,NaN,Infinity,-1,101,'80'])assert.equal(savedAssessmentPrismaScore({...entry,score} as FollowUpEntry,'v'),null);

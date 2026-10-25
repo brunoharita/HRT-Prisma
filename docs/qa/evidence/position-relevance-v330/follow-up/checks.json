@@ -1,0 +1,52 @@
+{
+  "checks": [
+    {
+      "name": "1448: stage retained and strongest first",
+      "pass": true
+    },
+    {
+      "name": "1448: list orders globally by saved adherence",
+      "pass": true
+    },
+    {
+      "name": "1448: viewport contained",
+      "pass": true
+    },
+    {
+      "name": "1448: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "390: stage retained and strongest first",
+      "pass": true
+    },
+    {
+      "name": "390: list orders globally by saved adherence",
+      "pass": true
+    },
+    {
+      "name": "390: viewport contained",
+      "pass": true
+    },
+    {
+      "name": "390: no runtime errors",
+      "pass": true
+    },
+    {
+      "name": "320: stage retained and strongest first",
+      "pass": true
+    },
+    {
+      "name": "320: list orders globally by saved adherence",
+      "pass": true
+    },
+    {
+      "name": "320: viewport contained",
+      "pass": true
+    },
+    {
+      "name": "320: no runtime errors",
+      "pass": true
+    }
+  ]
+}

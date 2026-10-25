@@ -1,0 +1,39 @@
+{
+  "environment": "READ ONLY production saved observations; offline new view policy; no inference, score recalculation, approval or association",
+  "cases": [
+    {
+      "case": "Willian",
+      "savedRelation": "related",
+      "savedScore": 48,
+      "decision": "confirmed",
+      "disposition": "recommended",
+      "withoutDecision": "recommended",
+      "sourcePositionVersion": "8d644021-0bee-43eb-9419-c2dcf96b795b",
+      "sourceReferences": [
+        "experiences.experience_01xbrbi100q7.description",
+        "experiences.experience_01xbrbi100q7.description",
+        "experiences.experience_01xbrbi100q7.evidenceText",
+        "experiences.experience_01xbrbi100q7.evidenceText",
+        "experiences.experience_00dn01p000mz.description",
+        "experiences.experience_00dn01p000mz.evidenceText"
+      ],
+      "evaluationId": "c9793947-23e6-4c92-937b-78e09fce2abb"
+    },
+    {
+      "case": "Beatriz",
+      "savedRelation": "contextual_only",
+      "savedScore": null,
+      "decision": null,
+      "disposition": "not_recommended",
+      "withoutDecision": "not_recommended",
+      "sourcePositionVersion": "8d644021-0bee-43eb-9419-c2dcf96b795b",
+      "sourceReferences": [
+        "experiences.experience_010konse0033.role",
+        "experiences.experience_010konse0033.evidenceText",
+        "education.education_011bahh80058"
+      ],
+      "evaluationId": "563afd6c-5e6e-435a-8d48-e6130790c8fe"
+    }
+  ],
+  "preserved": true
+}

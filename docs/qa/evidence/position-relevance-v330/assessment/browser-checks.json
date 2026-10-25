@@ -1,0 +1,267 @@
+{
+  "checks": [
+    {
+      "name": "1448: same order on desktop and mobile",
+      "pass": true
+    },
+    {
+      "name": "1448: Prisma and assessment values remain independent",
+      "pass": true
+    },
+    {
+      "name": "1448: state and provenance preserved",
+      "pass": true
+    },
+    {
+      "name": "1448: real zero differs from unavailable",
+      "pass": true
+    },
+    {
+      "name": "1448: result summary count",
+      "pass": true
+    },
+    {
+      "name": "1448: score request bound to same org position and explicit process",
+      "pass": true
+    },
+    {
+      "name": "1448: detailed result still opens correct person",
+      "pass": true
+    },
+    {
+      "name": "1448: invitation details progressively disclosed",
+      "pass": true
+    },
+    {
+      "name": "1448: delivery caveat preserved",
+      "pass": true
+    },
+    {
+      "name": "1448: no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "1448: consultation does not mutate or charge",
+      "pass": true
+    },
+    {
+      "name": "1448: optional failure keeps completed results visible",
+      "pass": true
+    },
+    {
+      "name": "1448: other process response exposes no Prisma value",
+      "pass": true
+    },
+    {
+      "name": "1448: explicit resume preserves callback",
+      "pass": true
+    },
+    {
+      "name": "1448: explicit cancellation preserved",
+      "pass": true
+    },
+    {
+      "name": "1448: no runtime errors or external requests",
+      "pass": true
+    },
+    {
+      "name": "768: same order on desktop and mobile",
+      "pass": true
+    },
+    {
+      "name": "768: Prisma and assessment values remain independent",
+      "pass": true
+    },
+    {
+      "name": "768: state and provenance preserved",
+      "pass": true
+    },
+    {
+      "name": "768: real zero differs from unavailable",
+      "pass": true
+    },
+    {
+      "name": "768: result summary count",
+      "pass": true
+    },
+    {
+      "name": "768: score request bound to same org position and explicit process",
+      "pass": true
+    },
+    {
+      "name": "768: detailed result still opens correct person",
+      "pass": true
+    },
+    {
+      "name": "768: invitation details progressively disclosed",
+      "pass": true
+    },
+    {
+      "name": "768: delivery caveat preserved",
+      "pass": true
+    },
+    {
+      "name": "768: no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "768: consultation does not mutate or charge",
+      "pass": true
+    },
+    {
+      "name": "768: optional failure keeps completed results visible",
+      "pass": true
+    },
+    {
+      "name": "768: other process response exposes no Prisma value",
+      "pass": true
+    },
+    {
+      "name": "768: explicit resume preserves callback",
+      "pass": true
+    },
+    {
+      "name": "768: explicit cancellation preserved",
+      "pass": true
+    },
+    {
+      "name": "768: no runtime errors or external requests",
+      "pass": true
+    },
+    {
+      "name": "390: same order on desktop and mobile",
+      "pass": true
+    },
+    {
+      "name": "390: Prisma and assessment values remain independent",
+      "pass": true
+    },
+    {
+      "name": "390: state and provenance preserved",
+      "pass": true
+    },
+    {
+      "name": "390: real zero differs from unavailable",
+      "pass": true
+    },
+    {
+      "name": "390: result summary count",
+      "pass": true
+    },
+    {
+      "name": "390: score request bound to same org position and explicit process",
+      "pass": true
+    },
+    {
+      "name": "390: detailed result still opens correct person",
+      "pass": true
+    },
+    {
+      "name": "390: invitation details progressively disclosed",
+      "pass": true
+    },
+    {
+      "name": "390: delivery caveat preserved",
+      "pass": true
+    },
+    {
+      "name": "390: no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "390: consultation does not mutate or charge",
+      "pass": true
+    },
+    {
+      "name": "390: optional failure keeps completed results visible",
+      "pass": true
+    },
+    {
+      "name": "390: other process response exposes no Prisma value",
+      "pass": true
+    },
+    {
+      "name": "390: explicit resume preserves callback",
+      "pass": true
+    },
+    {
+      "name": "390: explicit cancellation preserved",
+      "pass": true
+    },
+    {
+      "name": "390: no runtime errors or external requests",
+      "pass": true
+    },
+    {
+      "name": "320: same order on desktop and mobile",
+      "pass": true
+    },
+    {
+      "name": "320: Prisma and assessment values remain independent",
+      "pass": true
+    },
+    {
+      "name": "320: state and provenance preserved",
+      "pass": true
+    },
+    {
+      "name": "320: real zero differs from unavailable",
+      "pass": true
+    },
+    {
+      "name": "320: result summary count",
+      "pass": true
+    },
+    {
+      "name": "320: score request bound to same org position and explicit process",
+      "pass": true
+    },
+    {
+      "name": "320: detailed result still opens correct person",
+      "pass": true
+    },
+    {
+      "name": "320: invitation details progressively disclosed",
+      "pass": true
+    },
+    {
+      "name": "320: delivery caveat preserved",
+      "pass": true
+    },
+    {
+      "name": "320: no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "320: consultation does not mutate or charge",
+      "pass": true
+    },
+    {
+      "name": "320: optional failure keeps completed results visible",
+      "pass": true
+    },
+    {
+      "name": "320: other process response exposes no Prisma value",
+      "pass": true
+    },
+    {
+      "name": "320: explicit resume preserves callback",
+      "pass": true
+    },
+    {
+      "name": "320: explicit cancellation preserved",
+      "pass": true
+    },
+    {
+      "name": "320: no runtime errors or external requests",
+      "pass": true
+    },
+    {
+      "name": "historical process remains read-only with results",
+      "pass": true
+    }
+  ],
+  "limits": [
+    "Real page and result modal; synthetic services; no authenticated human, email, database mutation or paid AI."
+  ]
+}

@@ -3,6 +3,10 @@ import test from "node:test";
 import {filterFollowUp,followUpLocation,followUpColumn,followUpColumns,followUpStages,followUpStageAction,followUpProcessName,interviewInstant,type FollowUpEntry,type FollowUpFilters} from "../web/src/domain/positionFollowUp.js";
 const filters:FollowUpFilters={search:"",stage:"",assignee:"",due:"",order:"name",closed:false};
 const entries=[{id:"1",fullName:"Marina Costa",stage:"evaluating",details:{nextAction:"Conferir APIs",dueDate:"2026-10-07",assignee:"a"}},{id:"2",fullName:"Rafael Lima",stage:"awaiting_evaluation",details:{}},{id:"3",fullName:"Joana Alves",stage:"closed",details:{}}] as FollowUpEntry[];
+test("adherence is primary in every lane/list, overriding alphabetical or due preferences without editing stages",()=>{
+ const source=[{...entries[0]!,scoreState:"saved" as const,score:25},{...entries[1]!,scoreState:"saved" as const,score:85},{...entries[1]!,scoreState:"saved" as const,id:"zero",fullName:"Ana",score:0},{...entries[1]!,id:"unknown",fullName:"A",score:null}];
+ const before=structuredClone(source);for(const order of ["name","due"])assert.deepEqual(filterFollowUp(source,{...filters,order},"2026-10-25").map(e=>e.id),["2","1","zero","unknown"]);assert.deepEqual(source,before);
+});
 test("lista/quadro filtram o mesmo conjunto sem inventar prazo ou responsável",()=>{
  assert.deepEqual(filterFollowUp(entries,filters,"2026-10-08").map(e=>e.id),["1","2"]);
  assert.deepEqual(filterFollowUp(entries,{...filters,search:"APIs"},"2026-10-08").map(e=>e.id),["1"]);

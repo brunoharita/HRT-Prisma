@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 573
-source_manifest_sha256: f0188eeab29dc8fef52d036794e648b0524635af4b8668a8edace8989cf58dd4
+documentation_source_count: 575
+source_manifest_sha256: b57d7e84ef4c0421542ff40ebfacf0205bf71f98abac22d13c200fd34e921e45
 -->
 
 # Tudo sobre o Prisma
@@ -2651,11 +2651,16 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.94.8
-last_verified: 2026-10-24
+version: 2.95.0
+last_verified: 2026-10-25
 ---
 
 # Estado atual do Prisma
+
+## Descoberta pertinente e ordenação — 3.3.0 em validação
+
+Aprovada por Bruno em25/10/2026: filtrar recomendações por atuação pertinente, separar dúvidas profissionais de sinais isolados e preservar inclusão humana. Notas salvas ordenam recomendações A/B juntas, acompanhamento/colunas/seletores, comparação e avaliação/convites/resultados. Fórmula/pesos/motor/contratos/histórico originais permanecem; sem nova IA, recálculo, schema ou base paralela. Casos reais somente leitura/offline: Beatriz contextual fica fora; Willian relacionado permanece com48 mesmo sem usar confirmação na simulação. Browser24+65+12checks PASS; publicação ainda pendente, runtime anterior3.2.1. Acordo/AoT position-relevance-v330 registra implementação e limites.
+
 
 ## Referências contextuais do RAG — correção publicada na mesma 3.2.1
 
@@ -4371,6 +4376,15 @@ A primeira rodada dos quatro PDFs foi independente. Depois de observar defeitos 
 ## Source: `docs/ai/matching-contract.md`
 
 # Contrato de matching
+
+## Descoberta e ordenação de pessoas — 3.3.0
+
+A projeção de leitura position-people-discovery-1.0.0 separa recomendação profissional, dúvida individual fundamentada e inclusão humana. Sinais/requisitos isolados e área apenas declarada não admitem uma recomendação; nome do cargo pode diferir quando existe atividade pertinente. Título declarado idêntico a cargo de experiência pode corroborar a mesma evidência, sem tornar declaração isolada uma trajetória. Entrada por formação/projeto exige política explicitamente not_required e pertinência ao trabalho. Ausência de evidência nunca é rejeição.
+
+Listas da Posição usam maior Nota Prisma salva primeiro, inclusive provisória; desconhecidas ao final. A/B ficam juntos nas recomendações, com badges originais. Kanban ordena dentro de cada etapa; nome/prazo são desempates. Convites/resultados/seletores de processo e comparação usam a mesma prioridade; resultado da prova é independente e pode desempatar. Confirmação/inclusão humana preserva presença identificada e não cria nota/aderência. Participantes e decisões existentes não são removidos pelo filtro. Timeline continua cronológica.
+
+Esta decisão supersede a exibição automática do GrupoC e grupo antes da nota no M6.1, e nota de prova antes de aderência no bloco de resultados. Os dados A/B/C, contrato/pesos matching-score-1.4.0, snapshots e motor permanecem inalterados; a política de vista não invalida cache nem dispara IA/recálculo. Acordo/AoT position-relevance-v3301.0.0 registra autoridade/evidência.
+
 
 ## Resultado estável v2.1.4
 
@@ -17958,6 +17972,33 @@ Não há nova jornada transversal crítica: não são alterados auth, navegaçã
 
 ---
 
+## Source: `docs/qa/agreement-position-relevance-v330.md`
+
+# Acordo e execução — descoberta pertinente e ordenação 3.3.0
+
+Versão1.0.0, aprovado explicitamente por Bruno em25/10/2026. Baseline e95876b9a8f1915ff5b010f2c9b157b7201bb762. Delta de apresentação/descoberta dos contratos de trajetória existentes; não modifica o significado dos resultados históricos.
+
+- D-01: para todas as Posições, recomendações exigem relação profissional sustentada por evidência de atuação; requisito genérico, ferramenta ou área declarada isoladamente não admitem uma pessoa. Reutilizar reconhecimento por atividades/Knowledge e interpretações existentes, sem exigir cargo idêntico.
+- D-02: relação profissional plausível ainda incerta fica em seção própria, por evidência individual, sem abrir um bloco de coincidências. Ausência de evidência não significa incapacidade. Posição explicitamente sem exigência de experiência pode considerar formação/projeto pertinente ao núcleo, nunca só competência genérica.
+- D-03: inclusão/confirmação humana permanece identificada; pessoas de processos/acompanhamentos existentes e decisões/estágios/histórico não são removidos ou alterados pelo filtro. Busca manual/Perfil continuam disponíveis. Nenhuma rejeição automática.
+- D-04: toda lista de pessoas vinculada a uma Posição usa maior Nota Prisma salva primeiro, inclusive provisória; indisponíveis ao final, sem inventar nota. Descoberta une A/B na mesma lista ordenada, mantendo os indicadores de trajetória. Pendências e inclusões humanas sem nota ficam identificadas. Kanban mantém etapas e ordena dentro delas. Acompanhamento, seleção para avaliação, resultados e escolhas de pessoas nos processos seguem o mesmo critério; desempates determinísticos, sem decisões humanas ultrapassarem nota maior.
+- D-05: preservar integralmente pesos/fórmula/contrato de nota, Perfil, Knowledge, resultados anteriores, decisões, isolamento e auditoria. Somente projeção de leitura/ordenação; sem nova execução de IA ou recálculo em massa para publicar. Publicar versão3.3.0, conforme regra de incremento de melhoria funcional.
+- D-06: validar Beatriz/Gerente de Estoque sem atuação pertinente e Willian com atividades pertinentes/cargo distinto, além de outros domínios, incerteza, entrada, ferramenta isolada, preservação humana e ordenação entre grupos/provisórios/indisponíveis.
+- P-01: cutoff por nota para inclusão, hardcode de pessoa/cargo/idioma, lista negra de competências, experiência inventada, equivalência ou decisão de contratação/rejeição automática, alteração dos pesos/histórico/decisões ou novos catálogos/tabelas.
+- F-01: busca multilíngue/RAG ocupacional (proposta separada), modelos/prompts, taxonomia e provas/convites/cálculos de avaliação novos.
+- A-01: reutilizar projeções/componentes/consultas existentes; mecânica, testes dirigidos e publicação seletiva delegados. Nenhuma questão material pendente.
+- CA-01: fixtures contrastantes e fontes reais em leitura/offline comprovam Beatriz fora da recomendação por sinais genéricos e Willian preservado; comparação de hashes produtivos antes/depois; testes negativos/ordenação e browser desktop/mobile; versão/build/contexto/CI/smoke e sincronização.
+
+Esta decisão supersede M6.1/acordo1.4.0 D-016 na prioridade de grupos sobre nota e a emenda que mantinha sinais isolados visíveis na descoberta. Supersede também a ordem por prova do bloco de resultados individuais: Nota Prisma passa a ser primária, resultado de prova permanece independente e pode desempatar. Trajetória-atividades1.0.1 D-01..06 permanece; este delta governa elegibilidade e apresentação, não o cálculo histórico.
+
+## Mapa de impacto e execução congelada
+
+Classe D pela apresentação de matching; reuso da capacidade existente atende sem tecnologia nova. `direct`: projeção de descoberta, ordenação compartilhada, Pessoas/Posição, acompanhamento/seletores e avaliação/resultados; baseline inclui GrupoC por sinais, grupo antes da nota, nome/prazo/prova em outras telas. `critical_transversal`: autoridade humana/tenant/histórico; nenhuma escrita ou permissão nova, testar confirmação/inclusão e preservar processos. `plausible_indirect`: comparação, revisão, seleção/convites e encerramento, preservados em browser e testes dirigidos; reutilizar consulta de notas sem duplicá-la. `no_impact_identified`: motor/pesos/semântica, banco/Edge/worker, ingestão, RAG e Horus, pois permanecem resultados/cálculos/contratos originais e só a projeção web muda. Validar diff de score e hashes reais; publicação web conforme dispatcher, sem migrations ou reprocessamento.
+
+Executar D-01..06, impedir P-01, preservar F-01; A-01 governa o como. Validação mínima: testes de política/fórmula e superfícies afetadas, fontes reais sanitizadas somente como evidência e processamento offline restrito, tipos/build web, browser1448/390/320, contexto/lint/CI, smoke e containers. Sem suíte integral local. Screenshot é contraprova funcional, não proposta normativa de redesign. Rollback web anterior; dados intactos. Encerrar com AoT e evidência, sem polimento ou validações adjacentes sem dúvida concreta.
+
+---
+
 ## Source: `docs/qa/agreement-prisma-context-pack-v2.md`
 
 # Contrato de Acordos — Context Pack Prisma 2.0
@@ -25185,6 +25226,49 @@ Fechamento documental/evidências/contextos sincroniza local/origin/main/checkou
 ## Conclusão
 
 Todos os D-* e P-* aplicáveis PASS, F-01 preservado, sem desvio material no resultado final. Entrega textual/visual e preservação funcional comprovadas com componentes reais e dados sintéticos; rollout web verificado. Limite autenticado real permanece explícito.
+
+---
+
+## Source: `docs/qa/aot-position-relevance-v330.md`
+
+# AoT — descoberta pertinente e ordenação 3.3.0
+
+Acordo/execução `agreement-position-relevance-v330.md`1.0.0, aprovado em25/10/2026. Baseline e95876b9a8f1915ff5b010f2c9b157b7201bb762. Projeção versionada `position-people-discovery-1.0.0`; score e motor permanecem originais.
+
+| ID | Implementação / evidência | Status |
+| --- | --- | --- |
+| D-01 | `positionPeopleDiscovery` exige evidência profissional atribuível para relações diretas/relacionadas. Título declarado só corrobora quando idêntico ao de experiência real; competência/área/ferramenta isolada não admitem recomendação | PASS |
+| D-02 | Seções separadas de recomendação, dúvida profissional individual e inclusão humana; entrada exige política not_required e material pertinente. Browser24checks em1448/390/320 | PASS |
+| D-03 | Confirmação/inclusão preservada em faixa própria quando sem sustentação automática; processos/acompanhamentos não filtram seus participantes. Dispensa humana não é desfeita; histórico só é lido | PASS |
+| D-04 | Comparador de notas salvas válido/zero/indisponível; A/B juntos na recomendação, acompanhamento/colunas/seletores/convites/resultados/comparação ordenados pela nota, desempates secundários | PASS |
+| D-05 | Nenhuma alteração de vacancy.ts/matchingScore.ts/runtime gerado; sem migration/Edge/IA/novas entidades. Registro3.3.0 e histórico de versões testados; publicação pendente | PARTIAL |
+| D-06 | Casos reais em leitura/offline: Beatriz contextual_only/nota null fica not_recommended; Willian related/48 recomendado mesmo sem considerar a confirmação em simulação. Fontes preservadas | PASS |
+| P-01 | Sem cutoff numérico/hardcode/blacklist de competências; nota não determina inclusão. Negativos de sinais, cargo só declarado, software vendido, confirmação/dispensa, zero/desconhecido e fonte de entrada | PASS |
+| F-01 | RAG/idiomas/modelos/provas/convites e cálculos não alterados; só ordenação e reaproveitamento da consulta opcional de notas | PASS |
+
+## Mapa final e preservação
+
+`direct`: descoberta/UI, ordenação de acompanhamento/seletores e avaliação. `critical_transversal`: autoridade humana e dados persistidos, sem DML/grants; negativos dirigidos e comparação de fingerprints. `plausible_indirect`: comparação, revisão e seleção para convites mantidas; consulta opcional de notas compartilhada pelo pai/resultados sem nova consulta duplicada. `no_impact_identified`: backend/Score/runtime, RAG/ingestão e Horus, demonstrado por diff/check do runtime e inventário operacional a confirmar. Sem nova dependência ou alternativa arquitetural. Ordem do Kanban é interna à coluna; não muda estágio. Timeline de fatos/ações não é ranking de pessoas e mantém sua ordem histórica.
+
+Novidade: sinais isolados deixam de aparecer nas recomendações e nota passa antes do grupo/nome/prova nas listas. Preservação: originais A/B/C e notas ficam nos snapshots históricos; a nova projeção não os regrava nem dispara recálculo pelo deploy. Inclusão em processo e decisão de contratação permanecem explícitas.
+
+## Evidências
+
+- `evidence/position-relevance-v330/real-cases.json`: dados profissionais relevantes dos resultados salvos atuais, consultados em produção e aplicados offline à projeção nova; sem currículo integral, inferência nova ou mutação. Willian48 preservado; decisão confirmed mantida; Beatriz sem decisão/nota não recomendada.
+- `browser/`:24checks da composição real de grupos/cartões, exclusão genérica, Willian antes de trajetória direta de nota menor, dúvida individual, ação de comparação e inclusão humana, três viewports. Desktop e320px, além de resultados390px, inspecionados: hierarquia/ações preservadas, sem ruído e sem overflow.
+- `assessment/`:65checks do componente/página/modal reais, notas versus acertos independentes, ordem nova, falha opcional/processo incorreto sem vazamento de nota, zero, histórico somente leitura e callbacks explícitos.
+- `follow-up/`:12checks, ordem no Kanban e lista nos três viewports, sem overflow ou erros.
+- 68testes de domínio PASS; tipos raiz/web, build e check do runtime compartilhado PASS. Contexto/CI/publicação em consolidação. Sem suíte integral local.
+
+O teste visual inicial identificou uma falsa exclusão: o resolver pode citar primeiro o título declarado mesmo havendo cargo idêntico em experiência. Corrigida a atribuição conservadora, com positivo de cargo efetivo e negativo de cargo somente declarado. Um teste estático ainda exigia os antigos títulos A/B/C; atualizado para a composição aprovada, mantendo os checks de nota, cobertura, explicação, fontes e responsividade. Falha de edição CRLF do harness foi corrigida no teste; não se alterou motor para satisfazer seletor ou expectativa antiga.
+
+## Limites / visual
+
+Referência fornecida é contraprova funcional. Cartões/fontes/ações existentes preservados; agrupamento muda explicitamente para ordem global das recomendações, dúvida individual e faixa humana. Browser usa fixtures sintéticas; leitura produtiva não confirma uma jornada humana autenticada pela UI. A projeção filtra observações existentes e não promete infalibilidade da interpretação original. Casos sem informação continuam acessíveis manualmente; nenhuma pessoa é rejeitada.
+
+## Publicação / rollback / conclusão
+
+Publicação e verificação produtiva pendentes. Plano esperado somente web/documentação. Rollback pela imagem web anterior, sem apagar/reprocessar dados ou originais. Não encerrar enquanto D-05 e preservação operacional não estiverem comprovados.
 
 ---
 

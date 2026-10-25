@@ -1,3 +1,6 @@
+import {sortPositionMatches as sortVacancyMatches} from "../domain/positionPeopleDiscovery";
+import {PositionDiscoveryGroups} from "../components/PositionDiscoveryGroups";
+import {projectPositionPeople} from "../domain/positionPeopleDiscovery";
 import {buildManagerComparisonSummary,requirementComparisonSignature} from "../domain/comparisonPresentation";
 import {useRecentWork} from "../ui/useRecentWork";
 import "../ui/uxEvolution.css";
@@ -76,7 +79,6 @@ import {
   inferRequirementCategory,
   newManualVacancyRequirement,
   newVacancyRequirement,
-  sortVacancyMatches,
   structureVacancyDescription,
   sourceKindAfterOccupationReference,
   compareVacancyRequirements,
@@ -679,10 +681,11 @@ export function VacancyPeoplePage({ activeMembership, onNavigate, vacancyId }: C
     if (!selected.includes(personId) && selected.length === 2) { setError("Você já selecionou duas pessoas. Remova uma antes de escolher outra."); return; }
     setSelected((current) => toggleComparisonSelection(current, personId));
   }
-  const comparisonPending = semanticComparisonPending(matches);
-  const fallbackNotice = semanticFallbackNotice(matches.flatMap(match => match.semanticFallback ? [match.semanticFallback] : []));
-  const occupationalPending = interpreting ? matches.filter(match => match.discoveryGroup === "contextual_signals"
-    && isSemanticTriageEligible(match) && !match.semanticAssessment && !match.semanticFallback) : [];
+  const manualIds=new Set(followUp.confirmed?followUp.data?.entries.map(entry=>entry.personId)??[]:[]);
+  const projected=vacancy?projectPositionPeople(vacancy,matches,manualIds):null;
+  const visibleMatches=projected?[...projected.recommended,...projected.review,...projected.human]:[];
+  const comparisonPending=semanticComparisonPending(visibleMatches);
+  const fallbackNotice=semanticFallbackNotice(visibleMatches.flatMap(match=>match.semanticFallback?[match.semanticFallback]:[]));
   return <PrismaPage className="prisma-vacancy-people-page">
     <Button onClick={() => onNavigate(`/vacancies/${vacancyId}`)} type="text">Ir para a Posição</Button>
     <PrismaPageHeader icon={<PrismaPageIcon />} title={vacancy ? `Pessoas para ${vacancy.title}` : "Pessoas encontradas"} description="Trajetória e requisitos separados. O score organiza evidências; a decisão é humana." actions={<Space wrap><Button onClick={() => onNavigate(followUp.confirmed && followUp.data?.process?.status === "active" ? `/vacancies/${vacancyId}/follow-up/processes/${followUp.data.process.id}` : `/selection-processes/position/${vacancyId}`)}>{followUp.confirmed && followUp.data?.process?.status === "active" ? "Acompanhamento" : "Processos seletivos"}</Button><Button disabled={selected.length !== 2} icon={<SwapOutlined />} onClick={() => onNavigate(`/vacancies/${vacancyId}/compare/${selected.join("/")}`)} type="primary">Comparar selecionadas ({selected.length}/2)</Button></Space>} />
@@ -695,20 +698,7 @@ export function VacancyPeoplePage({ activeMembership, onNavigate, vacancyId }: C
     {discovery?.unclassifiedRequirementCount ? <Alert showIcon type="warning" title="Há requisitos aguardando classificação." description={`${discovery.unclassifiedRequirementCount} requisito${discovery.unclassifiedRequirementCount === 1 ? " aguarda" : "s aguardam"} classificação. A descoberta ocupacional continua disponível; conclua a classificação para fechar a aderência detalhada.`} action={<Button onClick={() => onNavigate(`/vacancies/${vacancyId}/edit`)}>Classificar requisitos</Button>} /> : null}
     {loading ? <PrismaCard><div role="status" aria-live="polite">Consultando Perfis e resultados salvos…</div><Skeleton active avatar paragraph={{ rows: 14 }} /></PrismaCard> : null}
     {vacancy && !loading && !interpreting && !comparisonPending && !fallbackNotice && !discovery?.unavailablePeople?.length ? <details className="prisma-candidate-triage-notice"><summary><InfoCircleOutlined aria-hidden="true" /> Triagem profissional concluída</summary><Alert showIcon type="info" title="Triagem profissional concluída" description="A Knowledge resolveu relações internas; somente relações ocupacionais plausíveis ainda indefinidas foram enviadas à IA. Ferramentas, especializações e habilitações exigem evidência própria." /></details> : null}
-    {occupationalPending.length ? <section className="prisma-vacancy-match-group"><header><Typography.Title level={2}>Relação ocupacional plausível · interpretação pendente</Typography.Title><Typography.Text type="secondary">A classificação inicial não é uma conclusão de Grupo C; consulte as evidências enquanto a interpretação termina.</Typography.Text></header><div className="prisma-vacancy-match-list">{occupationalPending.map(match => <CandidateMatchCard followUp={followUpAction(match)} followUpStatus={followUpStatus(match)} deciding={decidingPersonId === match.candidate.personId} key={match.candidate.personId} match={match} onDecision={decision => void decidePosition(match, decision)} onEvaluate={() => void evaluate(match)} onNavigate={onNavigate} onToggle={() => toggle(match.candidate.personId)} selected={selected.includes(match.candidate.personId)} />)}</div></section> : null}
-    {!loading && !interpreting && !error && !matches.length && !discovery?.unavailablePeople?.length ? <PrismaCard><Empty description={discovery?.publishedProfileCount ? "Nenhum Perfil apresentou experiência na área, relação ocupacional ou outra evidência rastreável para esta Posição." : "Não há Perfis publicados acessíveis para esta empresa."}><Button onClick={() => onNavigate(discovery?.publishedProfileCount ? `/vacancies/${vacancyId}/edit` : "/profiles/search")}>{discovery?.publishedProfileCount ? "Revisar Posição" : "Consultar Pessoas"}</Button></Empty></PrismaCard> : null}
-    <div className="prisma-vacancy-match-groups">{(["main_area", "related_area", "contextual_signals"] as const).map((group) => {
-      const grouped = matches.filter((match) => match.discoveryGroup === group && (!match.semanticAssessment || match.semanticAssessment.status === "complete")
-        && !occupationalPending.includes(match));
-      if (!grouped.length) return null;
-      const pendingActivity = grouped.some(match => match.trajectoryAssessment.reviewRequired);
-      const title = group === "main_area" ? "Grupo A · trajetória diretamente compatível" : group === "related_area" ? "Grupo B · trajetória relacionada ou potencial de entrada" : pendingActivity ? `Relações profissionais a verificar e sinais contextuais (${grouped.length})` : `Grupo C · somente sinais contextuais (${grouped.length})`;
-      const description = group === "main_area" ? "Atuação direta ou funcionalmente equivalente ao núcleo da Posição. Ordem: maior Prisma Score primeiro." : group === "related_area" ? "Atuação adjacente ou transferível; em Posições de entrada, formação, projetos e conhecimentos também podem sustentar este grupo. Ordem: maior Prisma Score primeiro." : "Contexto, declarações ou sinais sem atuação comparável suficiente; isso não é conclusão de incapacidade.";
-      const cards = <div className="prisma-vacancy-match-list">{grouped.map((match, index) => <CandidateMatchCard initiallyExpanded={index === 0} followUp={followUpAction(match)} followUpStatus={followUpStatus(match)} deciding={decidingPersonId === match.candidate.personId} key={match.candidate.personId} learning={learningPersonId === match.candidate.personId} match={match} vacancy={vacancy} canReview={["super_admin", "owner", "admin", "recruiter"].includes(activeMembership.role)} onReviewed={() => void refreshPerson(match)} onRecalculate={() => void refreshPerson(match, true)} onDecision={(decision) => void decidePosition(match, decision)} onLearn={() => void proposeLearning(match)} onEvaluate={() => void evaluate(match)} onNavigate={onNavigate} onToggle={() => toggle(match.candidate.personId)} selected={selected.includes(match.candidate.personId)} />)}</div>;
-      return group === "contextual_signals"
-        ? <details open={pendingActivity || undefined} className="prisma-vacancy-match-group prisma-contextual-signals-group" key={group}><summary><strong>{title}</strong><span>{pendingActivity ? "Há atividade profissional cuja relação precisa de análise; isso não é uma conclusão de baixa relevância. Consulte os trechos e revise a relação." : description}</span></summary>{cards}</details>
-        : <section className="prisma-vacancy-match-group" key={group}><header><Typography.Title level={2}>{title}</Typography.Title><Typography.Text type="secondary">{description}</Typography.Text></header>{cards}</section>;
-    })}</div>
+    {vacancy&&!loading?<PositionDiscoveryGroups vacancy={vacancy} matches={matches} manualIds={manualIds} pending={interpreting} onManualSearch={()=>onNavigate("/profiles/search")} renderMatch={(match,index)=><CandidateMatchCard key={match.candidate.personId} initiallyExpanded={index===0} followUp={followUpAction(match)} followUpStatus={followUpStatus(match)} deciding={decidingPersonId===match.candidate.personId} learning={learningPersonId===match.candidate.personId} match={match} vacancy={vacancy} canReview={["super_admin","owner","admin","recruiter"].includes(activeMembership.role)} onReviewed={()=>void refreshPerson(match)} onRecalculate={()=>void refreshPerson(match,true)} onDecision={decision=>void decidePosition(match,decision)} onLearn={()=>void proposeLearning(match)} onEvaluate={()=>void evaluate(match)} onNavigate={onNavigate} onToggle={()=>toggle(match.candidate.personId)} selected={selected.includes(match.candidate.personId)}/>}/>:null}
     <MatchDrawer evaluationId={activeEvaluationId} match={activeMatch} onClose={() => { evaluationRequest.current += 1; setActiveMatch(null); setActiveEvaluationId(null); }} onNavigate={onNavigate} open={Boolean(activeMatch)} vacancy={vacancy} />
   </PrismaPage>;
 }

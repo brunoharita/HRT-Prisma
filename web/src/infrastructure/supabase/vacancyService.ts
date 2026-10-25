@@ -1,10 +1,10 @@
+import {sortPositionMatches as sortVacancyMatches} from "../../domain/positionPeopleDiscovery";
 import type { PostgrestError } from "@supabase/supabase-js";
 import { activities, type SemanticAssessment, type TrajectoryConflict, type TrajectoryReviewChoice } from "../../../../src/domain/semanticTrajectory.js";
 import { applySemanticAssessment, isSemanticDiscoveryEligible, isSemanticTriageEligible, unavailableSemantic } from "../../domain/semanticMatching.js";
 import {
   matchVacancyCandidate,
   hasUsableProfessionalContent,
-  sortVacancyMatches,
   type VacancyCandidateMatch,
   type VacancyDemonstratedEvidence,
   type VacancyAdvisorMarketResearch,
@@ -450,7 +450,7 @@ export const vacancyService = {
       const candidate = candidates.find((item) => item.personId === id);
       return candidate ? [candidate] : [];
     });
-    return loadStableCandidates(vacancy, ordered, recalculate, signal);
+    return sortVacancyMatches(await loadStableCandidates(vacancy, ordered, recalculate, signal));
   },
 
   async loadTrajectoryReview(vacancy: VacancyDetail, match: VacancyCandidateMatch): Promise<TrajectoryReviewView> {

@@ -1,5 +1,14 @@
 # Contrato de matching
 
+## Descoberta e ordenação de pessoas — 3.3.0
+
+A projeção de leitura position-people-discovery-1.0.0 separa recomendação profissional, dúvida individual fundamentada e inclusão humana. Sinais/requisitos isolados e área apenas declarada não admitem uma recomendação; nome do cargo pode diferir quando existe atividade pertinente. Título declarado idêntico a cargo de experiência pode corroborar a mesma evidência, sem tornar declaração isolada uma trajetória. Entrada por formação/projeto exige política explicitamente not_required e pertinência ao trabalho. Ausência de evidência nunca é rejeição.
+
+Listas da Posição usam maior Nota Prisma salva primeiro, inclusive provisória; desconhecidas ao final. A/B ficam juntos nas recomendações, com badges originais. Kanban ordena dentro de cada etapa; nome/prazo são desempates. Convites/resultados/seletores de processo e comparação usam a mesma prioridade; resultado da prova é independente e pode desempatar. Confirmação/inclusão humana preserva presença identificada e não cria nota/aderência. Participantes e decisões existentes não são removidos pelo filtro. Timeline continua cronológica.
+
+Esta decisão supersede a exibição automática do GrupoC e grupo antes da nota no M6.1, e nota de prova antes de aderência no bloco de resultados. Os dados A/B/C, contrato/pesos matching-score-1.4.0, snapshots e motor permanecem inalterados; a política de vista não invalida cache nem dispara IA/recálculo. Acordo/AoT position-relevance-v3301.0.0 registra autoridade/evidência.
+
+
 ## Resultado estável v2.1.4
 
 `matching-stable-result-1.0.0` persiste a projeção completa do resultado por organização/Pessoa/Posição. Consultas e passagem do tempo preservam score, grupo, referência e evidências. Primeira avaliação, mudanças concretas nas fontes consumidas ou recálculo explícito por papel de revisão permitem novo cálculo; não se invalida por versão global da Knowledge, acesso, software ou revisão de outra Pessoa. Uma mudança compartilhada de Posição/Knowledge pode afetar todas as avaliações que a consomem. Atualização preserva o anterior até commit validado, sem score transitório; falha não repete provedor por acesso quando há resultado anterior. Sem resultado inicial, indisponibilidade é explícita e mantém acesso manual ao Perfil. Histórico causal append-only e comparação usam o mesmo resultado. Fórmula e contratos numéricos permanecem; acordo v2.1.4 e ADR-078 regem este ciclo e substituem a exposição progressiva de pontuação pré-IA. A entrega progressiva apresenta somente snapshots íntegros.

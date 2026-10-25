@@ -3,11 +3,16 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.94.8
-last_verified: 2026-10-24
+version: 2.95.0
+last_verified: 2026-10-25
 ---
 
 # Estado atual do Prisma
+
+## Descoberta pertinente e ordenação — 3.3.0 em validação
+
+Aprovada por Bruno em25/10/2026: filtrar recomendações por atuação pertinente, separar dúvidas profissionais de sinais isolados e preservar inclusão humana. Notas salvas ordenam recomendações A/B juntas, acompanhamento/colunas/seletores, comparação e avaliação/convites/resultados. Fórmula/pesos/motor/contratos/histórico originais permanecem; sem nova IA, recálculo, schema ou base paralela. Casos reais somente leitura/offline: Beatriz contextual fica fora; Willian relacionado permanece com48 mesmo sem usar confirmação na simulação. Browser24+65+12checks PASS; publicação ainda pendente, runtime anterior3.2.1. Acordo/AoT position-relevance-v330 registra implementação e limites.
+
 
 ## Referências contextuais do RAG — correção publicada na mesma 3.2.1
 
