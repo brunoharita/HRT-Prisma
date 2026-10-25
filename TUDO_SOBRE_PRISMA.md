@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 571
-source_manifest_sha256: cddfd6d7d13ca0544e224bbe326b052d8fb5afdd72d4b673fbf034da5cde120b
+documentation_source_count: 573
+source_manifest_sha256: 4e90cb6c8f0afc581a0cb6049944699e8e4208b1c06ab0ae99d4c30dbde5d980
 -->
 
 # Tudo sobre o Prisma
@@ -2651,11 +2651,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.94.6
+version: 2.94.7
 last_verified: 2026-10-24
 ---
 
 # Estado atual do Prisma
+
+## Referências contextuais do RAG — correção 3.2.1 em validação
+
+A lista passa a mostrar somente o alvo contextual sustentado, em vez de todos os itens recuperados. Projeção no loader e revisão compartilhada; decisões humanas/publicação prevalecem, pool histórico preservado. Sem novos modelos/tabelas/chamadas de IA. Gerente de Estoque: a indicação existente é Gestor de armazém/Gestora de armazém (ESCO1.2.1); couro e vendas não são referências sugeridas. Publicação na mesma3.2.1 ainda pendente. Acordo/AoT `rag-context-references` registra validação e preservação. Supersede a aceitação do ruído visual descrita no fechamento anterior.
 
 ## Reconhecimento ocupacional com IA — correção publicada na mesma versão 3.2.1
 
@@ -4675,6 +4679,10 @@ Investigação da tentativa original12/09/2026: registro antigo guarda somente f
 ## Source: `docs/ai/professional-concept-agent.md`
 
 # Prisma Knowledge Agent
+
+## Referências pertinentes na apresentação — 3.2.1
+
+A lista automática da Posição e da revisão na Knowledge não expõe o pool bruto como recomendação. Uma proposta pendente só oferece o alvo da interpretação contextual `alias`, com justificativa e evidência presentes; relações auxiliares, ambiguidade, novo conceito ou contexto insuficiente não comprovam correspondência. As opções iniciais de revisão seguem a mesma projeção e relações descartadas não ficam pré-selecionadas invisivelmente. O pool original permanece imutável na proposta para auditoria. Aprovação humana prevalece: o loader retorna o conceito efetivamente publicado, inclusive escolha manual ou novo conceito fora do pool. Elegibilidade atual/tenant e ação explícita de associação continuam obrigatórias. Busca manual segue independente. Nenhum threshold numérico, hardcode de cargo, prompt/modelo novo ou nova chamada de IA. Acordo/AoT: `rag-context-references`1.0.0.
 
 ## Reconhecimento ocupacional privado na Posição — 3.2.1
 
@@ -18511,6 +18519,28 @@ Não há pendência de produto conhecida para a topologia e fluxo acima. As cond
 
 ---
 
+## Source: `docs/qa/agreement-rag-context-references.md`
+
+# Acordo e execução — referências pertinentes no RAG
+
+Versão 1.0.0. Decisão explícita de Bruno em 24/10/2026. Baseline d9b1d01ab01dcb1afbe5a1b81336c8e9c0e4caf7; produto permanece 3.2.1. Delta do acordo position-rag-audit-fix: a presença de uma boa indicação não autoriza exibir candidatos auxiliares sem pertinência como sugestões.
+
+- D-01: mostrar na lista automática somente a referência indicada pela interpretação contextual concluída (`alias` com alvo e sustentação), nunca todo o pool recuperado. Contexto insuficiente/ambiguidade/novo conceito não habilitam candidatos do pool como correspondências. Revisão da Knowledge segue o mesmo critério.
+- D-02: manter escolhas e aprovações humanas, busca manual, associação explícita e separada da aprovação, histórico original e dados existentes. Uma aprovação humana prevalece sobre a sugestão automática; o conceito publicado continua disponível independentemente do alvo da IA. Relações não viram equivalências nem aprovações implícitas.
+- D-03: comprovar que Gerente de Estoque mostra Gestor de armazém/Gestora de armazém (ESCO), com justificativa de operações/estoque/equipe, e exclui produção de couro/representantes comerciais. Publicar na mesma 3.2.1.
+- P-01: apagar/reescrever pool ou histórico, associar/aprovar automaticamente, criar tabelas/entidades concorrentes, hardcode de cargos, limiar numérico arbitrário, nova inferência/custo para corrigir a apresentação de um resultado existente.
+- F-01: modelo, prompts, ranking/Score, nova busca externa, reprocessamento ou curadoria produtiva.
+- A-01: projeção de leitura e componentes existentes, migração compatível, testes dirigidos e publicação seletiva delegados. Nenhuma decisão material pendente.
+- CA-01: testes negativos com pool misto, estados sem indicação, fonte retirada e tenant; histórico original idêntico; aprovação humana prevalece; browser nos três viewports sem seleção/aprovação implícita; leitura real, CI, smoke e sincronização.
+
+## Mapa de impacto / execução congelada
+
+Classe D pela leitura do resultado de IA; sem alteração do modelo ou da autoridade. `direct`: projeção `load_position_occupational_rag`, listas/opções de reconhecimento e revisão na Knowledge; baseline mostra cinco recuperados, um alvo contextual. `critical_transversal`: elegibilidade publicada, tenant/ator e decisões humanas, mantidos pelos mesmos guards/RPCs; validar negativos SQL e estados aprovados. `plausible_indirect`: aprovação local/relação proposta, evitando seleção invisível de relações descartadas; testar fluxo explícito já existente. `no_impact_identified`: processamento/worker/modelo, Score/matching, Perfil e serviços compartilhados, pois nenhuma função de escrita/processamento muda. Regressão proporcional: SQL local descartável do loader, testes de projeção e decisões, tipos/build web, browser 1448/390/320, leitura produtiva sem mutação, hash de posições/aprovações/conceitos, smoke público. Sem suíte integral local. Publicar somente banco/web derivados do diff. Rollback da projeção pela definição anterior e imagem web anterior, preservando dados. Encerrar após critérios/evidência/contextos/CI/publicação, sem reexecutar IA nem ampliar polimento.
+
+Implementar D-01..03; impedir P-01; preservar F-01; A-01 governa o como. A captura fornecida é contraprova funcional; composição, fontes, navegação e ações existentes permanecem.
+
+---
+
 ## Source: `docs/qa/agreement-release-efficiency.md`
 
 # Contrato de Acordos — Publicação eficiente por impacto
@@ -26005,6 +26035,59 @@ Migrations remotas `20261012044428_question_bank_workspace_and_review` e `202610
 Deploy web terminou com exit22 no HEAD HTTP404 imediato à recriação. Não houve segunda reconstrução: após estabilização, verificação independente passou 34/34, com raiz/rotas/assets HTTP200, bundle com SHA e release2.5.0, CSS esperado, login público1448/390/320 sem erros/overflow. Web running/restart0, rollback `prisma-web:rollback-before-e16151ec6572` preserva imagem anterior, todos218assets anteriores mantidos (222 no runtime final). Nove containers adjacentes idênticos em ID/imagem/status/início/restarts/health; estados Paddle previamente unhealthy/exited não foram alterados nem declarados recuperados. Evidências production/checks, runtime-before/after e login.
 
 Oito contagens/hashes agregados de dados e políticas permaneceram iguais ao baseline. Não foram publicadas propostas nem inventadas decisões humanas em produção. Falha transitória do script de deploy está registrada com a recuperação observada, sem transformar o recibo original em sucesso fictício. Smoke público e contratos não comprovam jornada autenticada real ou calibração empírica.
+
+---
+
+## Source: `docs/qa/aot-rag-context-references.md`
+
+# AoT — referências pertinentes no reconhecimento
+
+Contrato/executação: `agreement-rag-context-references.md`1.0.0, aprovado pelo pedido explícito de Bruno. Baseline d9b1d01ab01dcb1afbe5a1b81336c8e9c0e4caf7. Versão pública3.2.1 preservada.
+
+## Matriz de acordos
+
+| ID | Implementação | Teste / evidência | Status |
+| --- | --- | --- | --- |
+| D-01 | Loader seleciona alvo contextual com decisão alias/justificativa/evidência; projeção compartilhada filtra lista/opções da Knowledge | 7 testes de reconhecimento e SQL com pool misto; `evidence/rag-context-references/sql.txt` | PASS |
+| D-02 | Original imutável; conceito publicado por humano prevalece; pool descartado não fica como relação pré-selecionada | 7 testes taxonomia; SQL tenant, publicação humana fora do pool, escolha diferente e nenhum approval implícito | PASS |
+| D-03 | Alvo real ESCO existente, exclusão do restante pela projeção; publicação mesma3.2.1 | Leitura produtiva, CI e publicação ainda pendentes | PARTIAL |
+
+## Proibições verificadas
+
+| ID | Guardrail / evidência | Status |
+| --- | --- | --- |
+| P-01 | SQL altera somente loader/mesmos grants; sem DML/modelo/prompt/tabelas; testes preservam original e autoridade | PASS |
+
+## Mapa de impacto e preservação
+
+| Capacidade | Relação | Baseline / regressão | Status |
+| --- | --- | --- | --- |
+| Lista e opções RAG | direct | Baseline cinco recuperados mostrados; alvo stock exclusivo na projeção, inclusive relações auxiliares excluídas | PASS |
+| Tenant, fonte e decisões | critical_transversal | Mesmos guards/eligibilidade/grants; SQL nega outro tenant, oculta retirado e mantém publicação humana | PASS |
+| Revisão/aprovação local | plausible_indirect | Original preservado, nenhuma relação auxiliar invisivelmente selecionada; browser78checks1448/390/320 PASS | PASS |
+| Worker/modelos/Score/Perfil/serviços | no_impact_identified | Nenhum módulo de processamento/escrita desses domínios alterado; comparar containers na publicação | PARTIAL |
+
+Novidade: conjunto recuperado deixa de ser apresentado como recomendação. Preservação: associação e curadoria continuam humanas, e busca manual independente permanece. Sem mudança de arquitetura ou armazenamento. Projeção não garante infalibilidade da interpretação do modelo; ela exige indicação contextual sustentada e não promove itens auxiliares. Referências relacionadas não são equivalências.
+
+## Fora de escopo
+
+F-01 PASS: diff não altera modelo/prompt/Score nem integra fontes externas. Nenhuma nova inferência será executada; a validação reutiliza a proposta existente em leitura.
+
+## Evidência visual
+
+Captura fornecida é contraprova funcional, sem novo desenho normativo. Mesma composição do drawer e revisão, com exclusão do ruído. Browser78checks1448/390/320 PASS; capturas `evidence/rag-context-references/browser/`, desktop/revisão e320px inspecionados. Conteúdo e ações preservados; sem redesign.
+
+## Validação final / ambiente
+
+PostgreSQL17 descartável em127.0.0.1:55479:54assertions PASS, rollback e nenhuma tabela nova.14testes Node (7reconhecimento/7taxonomia), tipos raiz/web e build web PASS. Três tentativas do browser interrompidas por seletores de teste (label sem associação, texto parcial ambíguo e verificação antes de abrir o popup); escopo do label e espera do item corrigidos, sem mudar produto. Execução estabilizada passou78checks. Sem suíte integral local; CI obrigatório preservado.
+
+Baseline produtivo somente leitura:144tabelas,30257conceitos/hash20a36fbe2acb091c67df9f1e19c7b882,12aprovações/hash7e7931e6c74824a28c8c42180acb486a,23versões/hash9953c62ea8bd79af80a309abe2f86708,2propostas/hash6e8469d11ff54f2d02daa51ba346f601 e1run. Proposta corrente pendente, alvo ESCO94b18be6-387a-451c-abd2-9229c0141e6c; pool5. Publicação/smoke e comparação final pendentes. Sem QA remoto separado; não executar aprovação/associação produtiva para testar.
+
+Rollback: definição anterior do loader em migração revisada e imagem web anterior; não apagar pool, proposta, curadoria ou histórico.
+
+## Desvios e conclusão
+
+Nenhuma nova decisão material durante a implementação. Fechamento depende da validação visual/publicação/evidência; não declarar completo antes disso.
 
 ---
 

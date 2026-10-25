@@ -19,6 +19,7 @@ try{
   await page.getByRole("button",{name:/Corrigir associação/}).click();
   await drawer().getByRole("button",{name:"Reconhecer com IA",exact:true}).click();
   await drawer().getByRole("button",{name:"Usar nesta Posição",exact:true}).waitFor();
+  check(width+" recognition excludes all retrieved non-targets",await drawer().locator(".prisma-position-recognition .ant-list-item").count()===1&&await drawer().locator(".prisma-position-recognition").getByText(/Representante comercial|Planificador de produção/).count()===0);
   check(width+" AI result preserves human choice and requirements",await page.evaluate(()=>window.__positionDraft.taxonomyDecision==="human"&&window.__positionDraft.referenceConceptId==="occupation-fixture"&&window.__positionDraft.requirements.length===0));
   check(width+" request uses professional fields",await page.evaluate(()=>{const c=window.__positionRag.calls.find(c=>c.kind==="request").context;return c.title==="Gerente de Estoque"&&c.mission==="Controlar inventário."&&c.responsibilities[0]==="Organizar armazenagem.";}));
   await drawer().getByRole("button",{name:"Atualizar reconhecimento"}).click();
@@ -26,6 +27,18 @@ try{
   await drawer().getByRole("button",{name:"Usar nesta Posição",exact:true}).waitFor();
   check(width+" refresh and reopen reuse request",await page.evaluate(()=>window.__positionRag.calls.filter(c=>c.kind==="request").length===1));
   await drawer().screenshot({path:dir+`/${width}-recognition.png`});
+  await drawer().getByRole("button",{name:"Revisar proposta na empresa"}).click();
+  const pendingReview=page.getByRole("dialog",{name:"Revisão do cargo na Knowledge da empresa",exact:true});
+  await pendingReview.getByRole("button",{name:"Aprovar na empresa",exact:true}).waitFor();
+  await pendingReview.locator(".ant-form-item").filter({has:page.locator("label").filter({hasText:/^Conceito existente$/})}).getByRole("combobox").click();
+  await page.locator(".ant-select-dropdown").getByText("Gestor de Estoque",{exact:true}).waitFor({timeout:5000}).catch(async e=>{await pendingReview.screenshot({path:dir+"/selector-failure.png"});console.log(await page.locator(".ant-select-dropdown").allTextContents());throw e;});
+  check(width+" review target options exclude unrelated retrieval",await page.locator(".ant-select-dropdown").getByText("Gestor de Estoque",{exact:true}).isVisible()&&await page.locator(".ant-select-dropdown").getByText(/Representante comercial|Planificador de produção/).count()===0);
+  await page.keyboard.press("Escape");
+  check(width+" discarded relation is not invisibly preselected",await pendingReview.locator(".ant-checkbox-wrapper-checked").count()===0);
+  await pendingReview.getByRole("button",{name:"Manter pendente",exact:true}).click();
+  check(width+" Knowledge related list also excludes unsupported retrieval",await pendingReview.locator(".occupational-candidate").count()===1&&await pendingReview.getByText(/Representante comercial|Planificador de produção/).count()===0);
+  await pendingReview.screenshot({path:dir+`/${width}-context-review.png`});
+  await pendingReview.locator(".ant-drawer-close").click();
   check(width+" drawer content stays inside viewport",await drawer().evaluate(e=>{const r=e.getBoundingClientRect();return r.left>=-1&&r.right<=innerWidth+1&&e.scrollWidth<=e.clientWidth+1;}));
   await drawer().screenshot({path:dir+`/${width}-legacy.png`});
   await drawer().getByRole("button",{name:"Refazer reconhecimento",exact:true}).click();

@@ -1,5 +1,9 @@
 # Prisma Knowledge Agent
 
+## Referências pertinentes na apresentação — 3.2.1
+
+A lista automática da Posição e da revisão na Knowledge não expõe o pool bruto como recomendação. Uma proposta pendente só oferece o alvo da interpretação contextual `alias`, com justificativa e evidência presentes; relações auxiliares, ambiguidade, novo conceito ou contexto insuficiente não comprovam correspondência. As opções iniciais de revisão seguem a mesma projeção e relações descartadas não ficam pré-selecionadas invisivelmente. O pool original permanece imutável na proposta para auditoria. Aprovação humana prevalece: o loader retorna o conceito efetivamente publicado, inclusive escolha manual ou novo conceito fora do pool. Elegibilidade atual/tenant e ação explícita de associação continuam obrigatórias. Busca manual segue independente. Nenhum threshold numérico, hardcode de cargo, prompt/modelo novo ou nova chamada de IA. Acordo/AoT: `rag-context-references`1.0.0.
+
 ## Reconhecimento ocupacional privado na Posição — 3.2.1
 
 Correção operacional de auditoria: a abertura pelo worker envia somente os campos aceitos por `record_ai_worker_history_v1`/`private.record_ai_history_v1`; o identificador da execução continua vinculado ao Inbox/run e à chave de idempotência, sem campo extra no envelope. A regressão SQL `--audit-fix` captura os envelopes do JavaScript real e os executa no PostgreSQL descartável, incluindo fechamento e rejeição de campos não declarados. Mock permissivo isolado não comprova compatibilidade de integração. A posição Gerente de Estoque é a validação real autorizada; sugestões não aprovam nem aplicam associações.

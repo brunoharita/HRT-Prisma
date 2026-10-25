@@ -3,6 +3,8 @@ import {spawn,spawnSync} from 'node:child_process';
 import assert from 'node:assert/strict';
 import {openOccupationalHistory} from './occupational-rag-worker.mjs';
 const position=process.argv.includes('--position-v321');
+const contextReferences=process.argv.includes('--context-references');
+const methodRefresh=process.argv.includes('--method-refresh')||contextReferences;
 const auditFix=process.argv.includes('--audit-fix');
 const exe='C:/Program Files/PostgreSQL/17/bin/',db=position?'position_rag_qa_v321':'occupational_rag_qa_20261024',args=['-X','-v','ON_ERROR_STOP=1','-h','127.0.0.1','-p','55479','-U','prisma_v202_qa'];
 function sql(text,database=db){const r=spawnSync(exe+'psql.exe',[...args,'-d',database],{input:text,encoding:'utf8',maxBuffer:20e6,windowsHide:true});if(r.status!==0)throw Error(r.stderr+'\n'+r.stdout.slice(-1800));return r.stdout+'\n'+r.stderr;}
@@ -30,6 +32,7 @@ try{
   sql(fs.readFileSync('supabase/migrations/20261024220000_position_rag_v321.sql','utf8'));
  }
  if(auditFix&&position)sql(fs.readFileSync('supabase/migrations/20261024234500_occupational_rag_method_refresh.sql','utf8'));
+ if(contextReferences)sql(fs.readFileSync('supabase/migrations/20261025010000_occupational_context_references.sql','utf8'));
  assert.equal(sql("select count(*) from pg_tables where schemaname in('public','private');"),before,'No new table');
  const envelopes=[];
  if(auditFix){
@@ -61,11 +64,12 @@ rollback to search_volume;
 set local role anon;
 `;
   fixture=fixture.replace("insert into rag_state select 'payload'",()=>check+"insert into rag_state select 'payload'");
-  if(process.argv.includes('--method-refresh')){const cutoff=fixture.indexOf("\nreset role;\nselect rag_assert((select count(*)=3");assert(cutoff>0,'Original fixture boundary must exist');fixture=fixture.slice(0,cutoff)+"\n"+fs.readFileSync('supabase/qa/occupational_rag_method_refresh_verification.sql','utf8');}
+  if(methodRefresh){const cutoff=fixture.indexOf("\nreset role;\nselect rag_assert((select count(*)=3");assert(cutoff>0,'Original fixture boundary must exist');fixture=fixture.slice(0,cutoff)+"\n"+fs.readFileSync('supabase/qa/occupational_rag_method_refresh_verification.sql','utf8');}
   else if(process.argv.includes('--search-only'))fixture=fixture.slice(0,fixture.indexOf("insert into rag_state select 'payload'"));
  }
- let output=sql('begin;\n'+fixture+(position&&!process.argv.includes('--method-refresh')?'\n'+fs.readFileSync('supabase/qa/position_rag_v321_verification.sql','utf8'):'')+auditSql+'\nrollback;');
- if(position&&!process.argv.includes('--method-refresh')){
+ if(contextReferences)fixture+='\n'+fs.readFileSync('supabase/qa/occupational_context_references_verification.sql','utf8');
+ let output=sql('begin;\n'+fixture+(position&&!methodRefresh?'\n'+fs.readFileSync('supabase/qa/position_rag_v321_verification.sql','utf8'):'')+auditSql+'\nrollback;');
+ if(position&&!methodRefresh){
   let m71=fs.readFileSync('supabase/qa/m71_position_taxonomy_verification.sql','utf8');
   // The old fixture predates mandatory M8.1 classification. Use today's existing API.
   m71=m71.replaceAll("public.create_position_knowledge_complement(m71_id('org-a'),'Prática sintética interna','knowledge'", "public.create_position_knowledge_complement_v2(m71_id('org-a'),'Prática sintética interna',(select id from public.competency_subgroups where code='H4' and scope='global')");
@@ -81,7 +85,8 @@ set local role anon;
   assert.match(sql("select (select count(*) from public.knowledge_inbox where original_term='Concurrent role 321')||'|'||(select count(*) from public.knowledge_research_runs r join public.knowledge_inbox i on i.id=r.inbox_id where i.original_term='Concurrent role 321');"),/1\|1/);
   output+='\nNOTICE: PASS: two concurrent explicit requests create exactly one Inbox and one original execution\n';
  }
- if(auditFix){fs.mkdirSync('docs/qa/evidence/position-rag-audit-fix',{recursive:true});fs.writeFileSync(process.argv.includes('--method-refresh')?'docs/qa/evidence/position-rag-audit-fix/sql-method.txt':process.argv.includes('--search-only')?'docs/qa/evidence/position-rag-audit-fix/sql-search.txt':'docs/qa/evidence/position-rag-audit-fix/sql.txt',output.replaceAll('\r','').split('\n').map(line=>line.trimEnd()).join('\n'));console.log(output.slice(-3500));}else if(position){fs.mkdirSync('docs/qa/evidence/position-rag-v321/sql',{recursive:true});fs.writeFileSync('docs/qa/evidence/position-rag-v321/sql/verification.txt',output.replaceAll('\r','').split('\n').map(line=>line.trimEnd()).join('\n'));console.log(output.slice(-8000));process.exitCode=0;}else{
+ if(contextReferences)fs.mkdirSync('docs/qa/evidence/rag-context-references',{recursive:true});
+ if(auditFix){fs.mkdirSync('docs/qa/evidence/position-rag-audit-fix',{recursive:true});fs.writeFileSync(contextReferences?'docs/qa/evidence/rag-context-references/sql.txt':methodRefresh?'docs/qa/evidence/position-rag-audit-fix/sql-method.txt':process.argv.includes('--search-only')?'docs/qa/evidence/position-rag-audit-fix/sql-search.txt':'docs/qa/evidence/position-rag-audit-fix/sql.txt',output.replaceAll('\r','').split('\n').map(line=>line.trimEnd()).join('\n'));console.log(output.slice(-3500));}else if(position){fs.mkdirSync('docs/qa/evidence/position-rag-v321/sql',{recursive:true});fs.writeFileSync('docs/qa/evidence/position-rag-v321/sql/verification.txt',output.replaceAll('\r','').split('\n').map(line=>line.trimEnd()).join('\n'));console.log(output.slice(-8000));process.exitCode=0;}else{
  fs.mkdirSync('docs/qa/evidence/occupational-rag-v320/sql',{recursive:true});
  fs.writeFileSync('docs/qa/evidence/occupational-rag-v320/sql/verification.txt',output.replaceAll('\r','').split('\n').map(line=>line.trimEnd()).join('\n'));
  fs.writeFileSync('docs/qa/evidence/occupational-rag-v320/sql/environment.json',JSON.stringify({environment:'Owned PostgreSQL17 local schema-only clone 127.0.0.1:55479',dependencies,newTables:0,syntheticOnly:true,transaction:'rolled back',result:'PASS'},null,2));

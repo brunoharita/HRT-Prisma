@@ -3,11 +3,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.94.6
+version: 2.94.7
 last_verified: 2026-10-24
 ---
 
 # Estado atual do Prisma
+
+## Referências contextuais do RAG — correção 3.2.1 em validação
+
+A lista passa a mostrar somente o alvo contextual sustentado, em vez de todos os itens recuperados. Projeção no loader e revisão compartilhada; decisões humanas/publicação prevalecem, pool histórico preservado. Sem novos modelos/tabelas/chamadas de IA. Gerente de Estoque: a indicação existente é Gestor de armazém/Gestora de armazém (ESCO1.2.1); couro e vendas não são referências sugeridas. Publicação na mesma3.2.1 ainda pendente. Acordo/AoT `rag-context-references` registra validação e preservação. Supersede a aceitação do ruído visual descrita no fechamento anterior.
 
 ## Reconhecimento ocupacional com IA — correção publicada na mesma versão 3.2.1
 
