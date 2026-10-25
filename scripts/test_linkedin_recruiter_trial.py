@@ -21,7 +21,7 @@ from linkedin_recruiter_trial import (
     profile_root, public_summary, verify_filters,
     reviewed_builder,
 )
-from linkedin_recruiter_mcp_trial import execute
+from linkedin_recruiter_mcp_trial import execute, single_attempt_reads
 
 # Same Windows asyncio wakeup-pipe exception as the original offline harness.
 _local = threading.local()
@@ -132,6 +132,18 @@ class Filters(unittest.TestCase):
         for url in ("http://linkedin.com/in/a", "https://evil.test/in/a", "https://www.linkedin.com/in/me"):
             with self.assertRaises(ValueError):
                 profile_root(url)
+
+    def test_actual_upstream_person_reference_is_relative_and_must_normalize(self):
+        from linkedin_mcp_server.linkedin.link_metadata import classify_link
+
+        kind, reference = classify_link("https://www.linkedin.com/in/synthetic/?tracking=1")
+        self.assertEqual((kind, reference), ("person", "/in/synthetic/"))
+        self.assertEqual(profile_root(reference), profile_root("https://www.linkedin.com/in/synthetic"))
+        for unsafe in ("//evil.test/in/synthetic", "//www.linkedin.com/in/synthetic", "/company/synthetic/",
+                       "in/synthetic", "/in/me/", "/in/synthetic\\evil", "javascript:/in/synthetic",
+                       "/in/../", "/in/%2e%2e/", "/in/synthetic%20name/", "/in/%00"):
+            with self.assertRaises(ValueError):
+                profile_root(unsafe)
 
     def test_budget_constraints_and_network_guard(self):
         for args in ({"pages": 7}, {"references": 0}, {"timeout_seconds": 0}):
@@ -286,6 +298,24 @@ class Execution(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(self.calls, 2)
         self.assertFalse(run.lock.exists())
 
+    async def test_relative_and_absolute_references_deduplicate_with_real_format(self):
+        async def source(search, maximum):
+            return Observation("dedicated-test-account", search.url(), {"location": ("101039681",)},
+                               ("/in/synthetic/", "https://www.linkedin.com/in/synthetic/?tracking=1"),
+                               results_observed=True)
+        state = await self.trial().run(source, start=True)
+        self.assertEqual((state["status"], len(state["seen"])), ("completed", 1))
+        self.assertEqual([e["new"] for e in state["events"]], [1, 0])
+
+    async def test_invalid_reference_still_stops_with_sanitized_diagnostic(self):
+        async def source(search, maximum):
+            return Observation("dedicated-test-account", search.url(), {"location": ("101039681",)},
+                               ("https://external.invalid/in/private-person",), results_observed=True)
+        state = public_summary(await self.trial().run(source, start=True))
+        self.assertEqual((state["status"], state["failure_stage"], state["failure_code"]),
+                         ("paused", "reference_normalization", "invalid_profile_reference"))
+        self.assertNotIn("private-person", json.dumps(state))
+
 
 class McpBoundary(unittest.IsolatedAsyncioTestCase):
     def setUp(self):
@@ -305,11 +335,12 @@ class McpBoundary(unittest.IsolatedAsyncioTestCase):
             count=AsyncMock(return_value=1 if role == "button" else 0),
             is_visible=AsyncMock(return_value=True))
         self.extractor = SimpleNamespace(
+            _capture=SimpleNamespace(capture=AsyncMock(), _capture_once=AsyncMock()),
             get_my_profile=AsyncMock(return_value={"url": "https://www.linkedin.com/in/me",
                                                   "sections": {"main_profile": "Own Synthetic"}}),
             search_people=AsyncMock(return_value={"sections": {"search_results": "Professional result"},
                                                   "references": {"search_results": [
-                                                      {"kind": "person", "url": "https://www.linkedin.com/in/synthetic"}]}}))
+                                                      {"kind": "person", "url": "/in/synthetic/"}]}}))
 
     async def call(self):
         with patch("linkedin_mcp_server.drivers.browser.get_or_create_browser", new=AsyncMock(
@@ -340,6 +371,21 @@ class McpBoundary(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(result["driverDiagnostic"], {"stage": "search_capture", "exceptionClass": "RuntimeError"})
         self.assertNotIn("Private", json.dumps(result))
         self.extractor.search_people.assert_awaited_once()
+
+    async def test_upstream_noise_only_capture_is_not_retried(self):
+        from linkedin_mcp_server.linkedin.capture import SectionCapture, CapturePlan, CaptureMode
+        from linkedin_mcp_server.linkedin.contracts import (
+            ExtractedSection, RATE_LIMITED_SECTION_TEXT,
+        )
+        session = SimpleNamespace(delay=AsyncMock())
+        capture = SectionCapture(session, MagicMock(), MagicMock())
+        once = AsyncMock(return_value=ExtractedSection(RATE_LIMITED_SECTION_TEXT, []))
+        capture._capture_once = once
+        with single_attempt_reads(SimpleNamespace(_capture=capture)):
+            result = await capture.capture(BASE, "search_results", CapturePlan(CaptureMode.SEARCH_RESULTS))
+        self.assertEqual(result.text, RATE_LIMITED_SECTION_TEXT)
+        once.assert_awaited_once()
+        session.delay.assert_not_awaited()
 
 
 if __name__ == "__main__":

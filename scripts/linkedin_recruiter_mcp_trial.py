@@ -6,16 +6,31 @@ tools, trigger login repair, import browser cookies, or bypass source controls.
 
 import argparse
 import asyncio
+from contextlib import contextmanager
 import json
 import os
 from pathlib import Path
 import sys
-from urllib.parse import urlsplit
+from urllib.parse import urlsplit, parse_qs
 from unittest.mock import patch
 
 from linkedin_recruiter_trial import (
     NativeSelection, Observation, Search, Trial, Limits, public_summary, reviewed_builder,
+    profile_root,
 )
+
+
+@contextmanager
+def single_attempt_reads(extractor):
+    """Preserve the local no-retry contract at the pinned capture boundary.
+
+    SectionCapture.capture normally retries a noise-only response. Delegate to
+    the same single-attempt implementation and let the controller pause instead.
+    Search-results capture has no permalink listener/overlay to manage.
+    """
+    capture = extractor._capture
+    with patch.object(capture, "capture", new=capture._capture_once):
+        yield
 
 
 async def execute(plan_path: Path, identity_path: Path, run_id: str,
@@ -82,7 +97,7 @@ async def execute(plan_path: Path, identity_path: Path, run_id: str,
                 # Minimal scoped seam: replace only the URL grammar during this
                 # serialized read, preserving the pinned extractor/capture/errors.
                 stage = "search_capture"
-                with patch("linkedin_mcp_server.linkedin.person.build_people_search_url",
+                with single_attempt_reads(extractor), patch("linkedin_mcp_server.linkedin.person.build_people_search_url",
                            return_value=search.url()):
                     result = await extractor.search_people(search.keywords)
                 stage = "selected_controls"
@@ -104,6 +119,22 @@ async def execute(plan_path: Path, identity_path: Path, run_id: str,
                 empty = await browser.page.get_by_role("heading", name="Nenhum resultado encontrado", exact=True).count() == 1
                 refs = tuple(r["url"] for r in result.get("references", {}).get("search_results", [])
                              if r.get("kind") == "person" and urlsplit(r.get("url", "")).path.rstrip("/") != expected_path.rstrip("/"))
+                final = urlsplit(browser.page.url)
+                invalid_references = 0
+                own_alias_references = 0
+                for reference in refs:
+                    if urlsplit(reference).path.rstrip("/") == "/in/me":
+                        own_alias_references += 1
+                    try:
+                        profile_root(reference)
+                    except (ValueError, TypeError):
+                        invalid_references += 1
+                diagnostic.update(observation={
+                    "sourceHostExpected": final.netloc == "www.linkedin.com",
+                    "peopleSearchPath": final.path.rstrip("/") == "/search/results/people",
+                    "keywordsMatch": parse_qs(final.query).get("keywords") == [search.keywords],
+                    "selectedFilterKinds": list(selected), "references": len(refs),
+                    "invalidProfileReferences": invalid_references, "selfAliasReferences": own_alias_references})
                 return Observation(account_key, browser.page.url, selected, refs, signal,
                                    bool(result.get("sections", {}).get("search_results")) or empty, empty)
             except AccountRestrictedError:

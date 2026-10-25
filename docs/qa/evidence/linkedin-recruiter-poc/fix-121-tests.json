@@ -1,0 +1,20 @@
+{
+  "version": "1.2.1",
+  "method": "unittest, real pinned reference classifier and single-attempt capture seam; real FastMCP inprocess with simulated browser; external sockets blocked",
+  "tests": 30,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "upstream": "0c5f14ba3efcd9ad1bbd3163b4f2b9e47cda7b17",
+  "redBeforeFix": "actual upstream returns /in/synthetic/; prior normalizer raises ValueError",
+  "liveBrowser": false,
+  "negativeCoverage": [
+    "external host",
+    "scheme-relative URL",
+    "unexpected path",
+    "self alias",
+    "backslash",
+    "encoded traversal",
+    "encoded whitespace/control"
+  ]
+}

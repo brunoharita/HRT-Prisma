@@ -1,0 +1,31 @@
+{
+  "fixVersion": "1.2.1",
+  "localPythonTests": {
+    "tests": 30,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0
+  },
+  "releaseToolingTests": {
+    "tests": 22,
+    "failures": 0
+  },
+  "realMcpTest": "PASS: Gerente de Estoque/Bauru; 10 references; native filter verified; dedicated test account",
+  "contextGenerate": "PASS",
+  "contextCheck": "PASS",
+  "snapshot": "exact tracked sources; unrelated untracked drafts excluded",
+  "dispatcherSurfaces": [
+    "context-pack",
+    "documentation",
+    "tooling"
+  ],
+  "runtimeDeployments": false,
+  "mainChanged": false,
+  "productionAccessed": false,
+  "publicVersionUnchanged": "3.3.0",
+  "checkpointFormatUnchanged": "1.2.0",
+  "upstreamTrackedDiff": "empty",
+  "dedicatedBrowserProcessesAfterClose": 0,
+  "ci": "branch CI inspected after push; independent of local Python suite",
+  "lint": "PASS; 2131 files in exact tracked snapshot"
+}

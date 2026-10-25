@@ -2,11 +2,25 @@
 
 Avaliação experimental1.0.0,25/10/2026. Acordo: `../qa/agreement-linkedin-recruiter-poc.md`1.0.0. Não é integração nem mudança do produto em produção.
 
+## Adendo1.2.1 — falha de normalização corrigida e validada pelo MCP
+
+Bruno solicitou resolver a falha após o resultado parcial1.2.0. A causa estava no adaptador local: o classificador do upstream fixado retorna referências de pessoa no formato relativo `/in/identificador/`, enquanto `profile_root` só aceitava URLs absolutas HTTPS. Assim, as dez referências legítimas eram rejeitadas em reference_normalization; o filtro geográfico já estava aplicado. Não era evidência de bloqueio, falta de pessoas ou defeito da conta. A regressão usa o `classify_link` real do upstream: falhou antes da correção e passou depois. Os mocks antigos usavam só URL absoluta e não cobriam esse formato.
+
+Correção: resolver exclusivamente referências raiz `/in/...` da fonte já verificada para a origem LinkedIn permitida, conservando normalização/dedupe de URL absoluta. Permanecem rejeitados hosts externos, URLs de rede `//host`, esquemas indevidos, barras invertidas, alias próprio e outros caminhos relativos. Diagnóstico sanitizado distingue etapa/código de validação sem publicar conteúdo de pessoas. O formato do checkpoint continua1.2.0, com campos diagnósticos opcionais; não houve migração, perda ou reescrita de histórico.
+
+A revisão de preservação encontrou retry interno de SectionCapture.capture para resposta vazia suspeita. O wrapper local usa a tentativa única já existente no mesmo upstream para a busca, mantendo o controlador como dono da pausa. Não adiciona navegação alternativa nem disfarce de automação; o clone/SHA/dependências não foram alterados. Um teste com a captura real e execução simulada comprova uma chamada e nenhuma espera/repetição nessa condição.
+
+Foram três chamadas explícitas nesta nova rodada: diagnóstico inicial isolou ValueError fora do driver; diagnóstico por etapa confirmou reference_normalization/invalid_profile_reference com10referências inválidas; após a correção, a terceira concluiu. Não houve repetição automática, tentativa de provocar restrição, leitura de trajetória de terceiro ou contato. Evidências históricas1.2.0 permanecem intactas; os novos resultados são `../qa/evidence/linkedin-recruiter-poc/fix-121-diagnose-initial.json`, `fix-121-diagnose-reference.json` e `fix-121-live-mcp.json`.
+
+**Teste real PASS:** Gerente de Estoque/Bauru trouxe10referências, conta de testes confirmada, estado completed, filtro location=source_applied por URL final **do navegador MCP** e controle nativo selecionado; keywords/host/rota corretos e zero referências inválidas. Não é replay nem prova emprestada do navegador interno. FastMCP cliente/servidor inprocess com Edge real; não alegar stdio nesta rodada. Browser fechado e zero processos do perfil dedicado.30testes offline PASS/zero falhas/erros/skips, incluindo formato real upstream, dedupe relativo/absoluto, rejeição de link externo, diagnóstico sem PII e preservação de tentativa única. Evidências `fix-121-tests.json`/`fix-121-tests.txt`.
+
+A falha específica do adaptador está resolvida. Isso não libera integração produtiva nem comprova todos os filtros avançados pelo MCP, qualidade dos profissionais, recall, estabilidade em escala ou ausência de banimento. O produto3.3.0, pesos/notas, Perfis, histórico, decisões humanas, Knowledge e tabelas originais permanecem intactos. Somente branch experimental, sem LLM/serviço pago ou acesso ao Prisma produtivo.
+
 ## Adendo1.2.0 — filtros e controle local
 
 Bruno aprovou a próxima etapa experimental em25/10/2026. Reutiliza o SHA4.28.0 já avaliado, sem fork, instalação/dependência paga ou alteração produtiva. `scripts/linkedin_recruiter_trial.py` reutiliza o construtor upstream e estende sua URL somente com entidades selecionadas na fonte. Não contém catálogo de cidades/cargos/empresas nem consulta a Knowledge produtiva. IDs abaixo são evidência datada deste ensaio, não um dicionário permanente.
 
-**Resultado: preparação e controles locais validados; adaptação MCP ao vivo PARTIAL, ainda sem liberação para integração.** A prova na UI não substitui a prova do conector. Não houve promessa/medição de proteção contra banimento.
+**Resultado histórico1.2.0: preparação e controles locais validados; adaptação MCP ao vivo PARTIAL.** A falha específica foi resolvida no adendo1.2.1 acima; a integração produtiva continua fora de escopo. A prova na UI não substitui a prova do conector. Não houve promessa/medição de proteção contra banimento.
 
 ### Fonte real e limites da prova
 
@@ -89,6 +103,8 @@ O navegador próprio foi encerrado por close_session após as buscas. A autentic
 **Atende parcialmente como ferramenta de acesso; não atende sozinho ao Prisma Recruiter e não recomendo integrá-lo à produção neste momento.** A etapa1.0.0 comprovou contratos e comportamento local com mocks, inclusive uma chamada MCP cliente/servidor em memória. O adendo1.1.0 acima comprova três buscas reais de leitura pelo conector e uma falha geográfica, sem benchmark de qualidade/recall ou garantia contra bloqueio. O funcionamento dessas buscas não elimina as adaptações e os gates de integração.
 
 Atualização1.2.0: filtros/controles experimentais implementados e conferidos conforme adendo mais recente; witness do adaptador MCP não concluído. Preservada recomendação de não integrar à produção. As referências a adaptação ainda não autorizada nas seções históricas1.0/1.1 não descrevem o escopo local1.2 posteriormente aprovado.
+
+Atualização1.2.1: witness corrigido e concluído para a busca geográfica; causa/regressão/prova real no adendo acima. As limitações de integração, autorização da fonte e escala permanecem.
 
 O componente reaproveitável é o acesso às páginas e suas referências. A interpretação de cargos, pertinência da trajetória, qualidade dos dados e autoridade humana continuam sendo responsabilidades do Prisma. A autorização de acesso ao LinkedIn permanece uma condição externa; melhorar o conector não a resolve.
 

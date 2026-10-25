@@ -141,8 +141,14 @@ def profile_root(url: str) -> str:
     parsed = urlsplit(url)
     path = unquote(parsed.path)
     match = re.match(r"^/in/([^/]+)(?:/|$)", path)
-    if (parsed.scheme != "https" or parsed.netloc not in {"www.linkedin.com", "linkedin.com"}
-            or not match or match[1] == "me"):
+    # The pinned upstream deliberately returns root-relative /in/... references.
+    # Resolve ONLY that shape to the already verified source, never //host,
+    # relative traversal, arbitrary schemes or a browser-interpreted backslash.
+    source_relative = (not parsed.scheme and not parsed.netloc and url.startswith("/in/"))
+    source_absolute = parsed.scheme == "https" and parsed.netloc in {"www.linkedin.com", "linkedin.com"}
+    if (not (source_relative or source_absolute) or "\\" in path
+            or not match or match[1] in {"me", ".", ".."}
+            or re.search(r"[\s\x00-\x1f\x7f]", path)):
         raise ValueError("Not a canonical public profile reference")
     # URL encoding/query/trailing slash/section links do not create new people.
     return urlunsplit(("https", "www.linkedin.com", "/in/" + match[1], "", ""))
@@ -223,7 +229,8 @@ class Trial:
                 self._save(state)
                 return state
             state.update(status="running", reason=None)
-            state.pop("exception_class", None)
+            for key in ("exception_class", "failure_stage", "failure_code"):
+                state.pop(key, None)
             self._save(state)
             for index, search in enumerate(self.searches):
                 if index in state["completed"]:
@@ -234,6 +241,7 @@ class Trial:
                 state["pages"] += 1  # Attempts consume budget even on failure.
                 state["in_flight"] = index
                 self._save(state)
+                validation_stage = "driver"
                 try:
                     page = await asyncio.wait_for(
                         driver(search, self.limits.references - state["references"]),
@@ -245,6 +253,7 @@ class Trial:
                             page.signal if page.signal in {"challenge", "restricted", "rate_limit", "login", "partial"}
                             else "error"))
                         break
+                    validation_stage = "filter_receipt"
                     receipts = verify_filters(search, page)
                     if "unverified" in receipts.values():
                         state.update(status="paused", reason="filter_not_proven")
@@ -257,6 +266,7 @@ class Trial:
                     if len(page.references) > self.limits.references - state["references"]:
                         state.update(status="paused", reason="reference_budget_exceeded")
                         break
+                    validation_stage = "reference_normalization"
                     keys = {digest(state["salt"] + profile_root(url)) for url in page.references}
                     new = keys - set(state["seen"])
                     state["seen"] = sorted(set(state["seen"]) | keys)
@@ -276,6 +286,12 @@ class Trial:
                     state.update(status="paused", reason=("timeout" if isinstance(exc, TimeoutError)
                                                          else "invalid_observation_or_driver_error"))
                     state["exception_class"] = type(exc).__name__
+                    state["failure_stage"] = validation_stage
+                    # Only our fixed validation messages may leave this boundary.
+                    safe_codes = {"Unexpected source destination": "unexpected_source_destination",
+                                  "Source changed the requested query": "source_query_changed",
+                                  "Not a canonical public profile reference": "invalid_profile_reference"}
+                    state["failure_code"] = safe_codes.get(str(exc), "unclassified_validation_or_driver_error")
                     break
             else:
                 state.update(status="completed", reason=None)
@@ -291,6 +307,8 @@ def public_summary(state: dict) -> dict:
         "version", "status", "reason", "pages", "references", "completed", "events")}
     if state.get("exception_class"):
         summary["exception_class"] = state["exception_class"]
+        summary["failure_stage"] = state.get("failure_stage")
+        summary["failure_code"] = state.get("failure_code")
     return summary
 
 

@@ -1,0 +1,39 @@
+{
+  "version": "1.2.0",
+  "status": "paused",
+  "reason": "invalid_observation_or_driver_error",
+  "pages": 1,
+  "references": 0,
+  "completed": [],
+  "events": [],
+  "exception_class": "ValueError",
+  "failure_stage": "reference_normalization",
+  "failure_code": "invalid_profile_reference",
+  "mode": "real_mcp_inprocess_real_browser",
+  "toolsExposed": [
+    "run_readonly_trial"
+  ],
+  "identityConfirmed": true,
+  "sourceEmailVerifiedSeparately": true,
+  "liveSourceSearches": 1,
+  "autonomousMcpAdapterTested": true,
+  "thirdPartyProfilesOpened": 0,
+  "driverDiagnostic": {
+    "observation": {
+      "sourceHostExpected": true,
+      "peopleSearchPath": true,
+      "keywordsMatch": true,
+      "selectedFilterKinds": [
+        "location"
+      ],
+      "references": 10,
+      "invalidProfileReferences": 10,
+      "selfAliasReferences": 0
+    }
+  },
+  "browserCloseRequested": true,
+  "fixVersion": "1.2.1",
+  "source": "real pinned MCP; inprocess transport; dedicated Edge profile",
+  "productionAccessed": false,
+  "messagesOrConnectionsSent": false
+}
