@@ -1,0 +1,153 @@
+{
+  "version": "3.2.1",
+  "functionalSha": "1f9ab67246b483596461c78548ca90a4ad68ac6c",
+  "ci": {
+    "branch": {
+      "id": 40144686860,
+      "status": "SUCCESS"
+    },
+    "main": {
+      "id": 40144913760,
+      "status": "SUCCESS"
+    }
+  },
+  "worker": {
+    "image": "sha256:e38267942cb9b6d19485974cb83f3dd16d35a312f0b1261d1f244009af417283",
+    "health": "healthy",
+    "restarts": 0
+  },
+  "web": {
+    "image": "sha256:9273e113cbbc0f36444f4312eb2dd283b91727188b39503faab2d9ff3e5ee11a",
+    "entry": "/assets/index-D8ya06dN.js",
+    "publicChecks": 17,
+    "login": "3.2.1 PASS",
+    "restarts": 0,
+    "initialSmoke": "404 at container swap; independent checks passed without rebuilding"
+  },
+  "recognition": {
+    "inboxId": "435f9a53-f730-4794-afec-aea1c5b32bb4",
+    "runId": "93c3d952-a3b3-462d-9634-3e1b6c98bc85",
+    "proposalId": "a33e176e-9432-4dcd-a637-7ea76c4238d9",
+    "status": "awaiting_human_review",
+    "durationMs": 208603,
+    "decision": "alias",
+    "targetId": "94b18be6-387a-451c-abd2-9229c0141e6c",
+    "rationale": "A função de 'Gerente de Estoque' envolve gestão direta do estoque e equipe, com contato com fornecedores, alinhando-se ao papel de gestor de armazém, que assume responsabilidade pelas operações e pessoal no armazém.",
+    "searchVersion": "occupational-search-1.0.1",
+    "draftVersion": "occupational-draft-1.0.1",
+    "model": "qwen3:4b-instruct-2507-q4_K_M",
+    "modelDigest": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+    "embeddingDigest": "7907646426070047a77226ac3e684fbbe8410524f7b4a74d02837e43f2146bab",
+    "displayedCandidates": [
+      {
+        "id": "195c6f05-365c-4ff5-8e9e-870f1b8bfb2f",
+        "label": "Gerente de almoxarifado",
+        "sources": [
+          {
+            "name": "CBO",
+            "version": "CBO 2002-2025-06-06"
+          }
+        ]
+      },
+      {
+        "id": "94b18be6-387a-451c-abd2-9229c0141e6c",
+        "label": "Gestor de armazém/Gestora de armazém",
+        "sources": [
+          {
+            "name": "ESCO",
+            "version": "1.2.1"
+          }
+        ]
+      },
+      {
+        "id": "d689dc5c-c945-4fe8-a4b1-d73ed69d9e89",
+        "label": "Planificador de produção na indústria do couro/Planificadora de produção na indústria do couro",
+        "sources": [
+          {
+            "name": "ESCO",
+            "version": "1.2.1"
+          }
+        ]
+      },
+      {
+        "id": "7f96c924-1bca-4c25-aaed-5e7c20120b41",
+        "label": "Representante comercial",
+        "sources": [
+          {
+            "name": "ESCO",
+            "version": "1.2.1"
+          }
+        ]
+      },
+      {
+        "id": "ff112226-613d-4620-bb6b-e5f5565bab65",
+        "label": "Representante comercial autônomo",
+        "sources": [
+          {
+            "name": "CBO",
+            "version": "CBO 2002-2025-06-06"
+          }
+        ]
+      }
+    ],
+    "recommended": [
+      {
+        "id": "94b18be6-387a-451c-abd2-9229c0141e6c",
+        "label": "Gestor de armazém/Gestora de armazém",
+        "source": "ESCO",
+        "version": "1.2.1",
+        "uri": "http://data.europa.eu/esco/occupation/2f5de1ab-eddf-4715-8193-e994912c22ea"
+      }
+    ],
+    "otherRelevantRetrieved": [
+      {
+        "id": "195c6f05-365c-4ff5-8e9e-870f1b8bfb2f",
+        "label": "Gerente de almoxarifado",
+        "source": "CBO",
+        "code": "142415"
+      }
+    ],
+    "limitation": "Three other retrieved candidates are not the selected equivalent; retrieval pool is not an endorsement or approved synonym."
+  },
+  "preservation": {
+    "positions": {
+      "count": 23,
+      "hash": "9953c62ea8bd79af80a309abe2f86708"
+    },
+    "approvals": {
+      "count": 12,
+      "hash": "7e7931e6c74824a28c8c42180acb486a"
+    },
+    "concepts": {
+      "count": 30257,
+      "hash": "20a36fbe2acb091c67df9f1e19c7b882"
+    },
+    "hashesEqualBeforeAfter": true,
+    "tables": 144,
+    "originalProposal": {
+      "id": "6412d665-5330-4a57-a0d2-db1398f29830",
+      "hash": "2b0b983ba801fa14096e82bc999e942c",
+      "status": "research_requested",
+      "noHumanEdit": true,
+      "noHumanDecision": true
+    },
+    "runs": 1,
+    "currentProposals": 1,
+    "totalProposalRevisions": 2,
+    "associationChanged": false,
+    "approvalCreated": false
+  },
+  "unaffectedServices": [
+    "prisma-knowledge-model",
+    "horus-web",
+    "prisma-parser-ia",
+    "prisma-paddle-gateway",
+    "hrt-mail-forwarder",
+    "traefik-traefik-1"
+  ],
+  "security": "Same advisor categories; same existing RPC grants; tenant/human-decision negative SQL tests PASS",
+  "limitations": [
+    "Only Gerente de Estoque validated with live model in this correction; not a universal taxonomy benchmark.",
+    "No production association, save or approval was performed; authenticated read and processing RPC plus actual frontend decoder were verified."
+  ]
+}

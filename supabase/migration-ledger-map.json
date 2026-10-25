@@ -1738,6 +1738,19 @@
       "localStatementSha256": "d31b4879dc0d8322708a6de234a446d3be9da553ff875d08dcb90b83fe7ac09c",
       "remoteStatementSha256": "d31b4879dc0d8322708a6de234a446d3be9da553ff875d08dcb90b83fe7ac09c",
       "verifiedAt": "2026-10-24"
+    },
+    {
+      "name": "occupational_rag_method_refresh",
+      "localVersion": "20261024234500",
+      "remoteVersion": "20261024235823",
+      "versionStatus": "alias",
+      "statementFingerprintStatus": "equal",
+      "fingerprintMethod": "strip-CR-trim-exterior-whitespace-v1",
+      "localCanonicalLength": 8290,
+      "remoteCanonicalLength": 8290,
+      "localStatementSha256": "6b312fd0f6d0fbe0ae07db22c69346798911ac7edcd4d37c78fbb1fb9bdf8fb5",
+      "remoteStatementSha256": "6b312fd0f6d0fbe0ae07db22c69346798911ac7edcd4d37c78fbb1fb9bdf8fb5",
+      "verifiedAt": "2026-10-24"
     }
   ],
   "localOnly": [
@@ -1781,7 +1794,8 @@
     "movement": "position-rag-audit-fix",
     "names": [
       "occupational_rag_search_performance",
-      "occupational_rag_selective_prefilter"
+      "occupational_rag_selective_prefilter",
+      "occupational_rag_method_refresh"
     ],
     "evidence": "docs/qa/evidence/position-rag-audit-fix/production.json",
     "historicalSnapshotVerifiedAtUnchanged": true
