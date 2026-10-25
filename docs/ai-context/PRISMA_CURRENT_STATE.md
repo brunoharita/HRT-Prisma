@@ -3,7 +3,7 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.96.0
+version: 2.96.1
 last_verified: 2026-10-25
 ---
 
@@ -12,6 +12,8 @@ last_verified: 2026-10-25
 ## Prisma Recruiter — PoC local, sem integração
 
 Em25/10/2026, avaliação autorizada de stickerdaniel/linkedin-mcp-server4.28.0/SHA0c5f14ba:12witnesses Prisma e106testes upstream selecionados PASS, incluindo transporte MCP em memória com extrator simulado. Ferramentas gratuitas/venv separado, sem conta/cookies reais/LLM/Supabase/VPS/deploy. Retorno textual por seção, filtros básicos sem recibo de aplicação, nenhuma taxonomia/aderência/tenant ou paginação de pessoas. Sessão automática, ferramentas de escrita e HTTP direto sem auth impedem tratar o projeto como serviço Prisma pronto. Recomendação: não integrar diretamente; discutir busca assistida ou fonte integrada autorizada. Não mede pertinência real/recall/banimento. Relatório e acordo/AoT linkedin-recruiter-poc1.0.0; somente branch experimental, produto3.3.0 inalterado.
+
+Adendo1.1.0 autorizado posteriormente: conta de testes confirmada por e-mail nas configurações; buscas reais no navegador integrado sem mensagens/conexões/produção. Location=Bauru no formato upstream foi descartado; filtro nativo com geoUrn101039681 trouxe10cartões de Bauru. Vendedor/Sales Representative10cartões cada e0em comum entre primeiras páginas, sem medir recall. Evidência sanitizada live-source.json. MCP abriu perfil exclusivo sem auto-import, mas aguarda login próprio após timeout inicial;0buscas reais no conector até este registro. Preservar distinção entre teste da fonte e execução do MCP; nenhuma alteração de conector/cadastro/versão produtiva.
 
 ## Descoberta pertinente e ordenação — 3.3.0 publicada
 

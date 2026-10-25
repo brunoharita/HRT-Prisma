@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 578
-source_manifest_sha256: 0c1e54da8871f5559e7caff3ba550cc9d08ae3a812d4f547a2392d9be0ff86c7
+source_manifest_sha256: 6713717e5e5b11c3b95b93db3684ecef393b7af9925899688384aab59b7b48a4
 -->
 
 # Tudo sobre o Prisma
@@ -2651,7 +2651,7 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.96.0
+version: 2.96.1
 last_verified: 2026-10-25
 ---
 
@@ -2660,6 +2660,8 @@ last_verified: 2026-10-25
 ## Prisma Recruiter — PoC local, sem integração
 
 Em25/10/2026, avaliação autorizada de stickerdaniel/linkedin-mcp-server4.28.0/SHA0c5f14ba:12witnesses Prisma e106testes upstream selecionados PASS, incluindo transporte MCP em memória com extrator simulado. Ferramentas gratuitas/venv separado, sem conta/cookies reais/LLM/Supabase/VPS/deploy. Retorno textual por seção, filtros básicos sem recibo de aplicação, nenhuma taxonomia/aderência/tenant ou paginação de pessoas. Sessão automática, ferramentas de escrita e HTTP direto sem auth impedem tratar o projeto como serviço Prisma pronto. Recomendação: não integrar diretamente; discutir busca assistida ou fonte integrada autorizada. Não mede pertinência real/recall/banimento. Relatório e acordo/AoT linkedin-recruiter-poc1.0.0; somente branch experimental, produto3.3.0 inalterado.
+
+Adendo1.1.0 autorizado posteriormente: conta de testes confirmada por e-mail nas configurações; buscas reais no navegador integrado sem mensagens/conexões/produção. Location=Bauru no formato upstream foi descartado; filtro nativo com geoUrn101039681 trouxe10cartões de Bauru. Vendedor/Sales Representative10cartões cada e0em comum entre primeiras páginas, sem medir recall. Evidência sanitizada live-source.json. MCP abriu perfil exclusivo sem auto-import, mas aguarda login próprio após timeout inicial;0buscas reais no conector até este registro. Preservar distinção entre teste da fonte e execução do MCP; nenhuma alteração de conector/cadastro/versão produtiva.
 
 ## Descoberta pertinente e ordenação — 3.3.0 publicada
 
@@ -12221,6 +12223,17 @@ A partir de `prisma-ux-foundation-1.0.0`, o módulo antes chamado Vagas aparece 
 
 Avaliação experimental1.0.0,25/10/2026. Acordo: `../qa/agreement-linkedin-recruiter-poc.md`1.0.0. Não é integração nem mudança do produto em produção.
 
+## Adendo1.1.0 — fonte real, conta exclusiva
+
+Bruno autorizou leitura real após concluir login na conta de testes. O e-mail principal foi conferido em Configurações > Acesso e segurança > Endereços de e-mail e coincide com a conta solicitada; não se usou sua conta oficial. Evidência agregada: `../qa/evidence/linkedin-recruiter-poc/live-source.json`. Não se conservaram nomes/URLs/fotos/contatos dos profissionais.
+
+- **Localidade textual falhou no caso observado:** a URL com `keywords=Gerente+de+Estoque&location=Bauru`, no formato gerado pelo upstream, terminou com apenas keywords após a hidratação. Localidades não estava selecionada; os10cartões da página mostravam outras cidades. Pelo filtro nativo foi selecionada a entidade Bauru/geoUrn101039681;10cartões passaram a exibir Bauru. Assim, enviar location como texto não comprova nem aplicou o filtro nesta sessão. Isso atualiza a limitação anteriormente não validada; nenhuma correção do conector foi implementada.
+- **Nomenclaturas alteram o recorte:** com Bauru selecionada, Vendedor e Sales Representative exibiram10cartões cada; zero perfis em comum entre essas primeiras páginas, após normalizar links secundários à raiz de perfil. Isso sustenta combinar termos e deduplicar em eventual solução, mas não mede recall nem prova disjunção do universo total. Na busca em inglês,9cartões mostraram Bauru e1somente uma região mais ampla; isso não prova que esse último esteja fora da cidade.
+- **Presença não é aderência:** os resultados de estoque misturam cargos de logística, operações, loja e outras funções. Não se avaliou nem rejeitou pessoa individualmente; título/competência/resumo de busca não substituem evidência profissional contextual.
+- **Execução do MCP separada:** o navegador integrado está autenticado, enquanto o MCP usa perfil local próprio com auto-import desligado e traces off. A primeira janela manual expirou em300s; foi reaberta com900s. Até este registro, nenhuma busca real foi executada pelo conector: aguarda autenticação manual nessa janela separada. Não confundir a leitura real da fonte pelo navegador com resultado real do MCP.
+
+Nenhuma mensagem/conexão/reação, coleta em massa, cadastro de prospecto, escrita no Prisma, acesso à VPS/Supabase ou deploy. Nenhum desafio surgiu nas buscas do navegador integrado; essa amostra não garante segurança da conta em uso futuro ou escala. As evidências sintéticas abaixo permanecem válidas em seu escopo original.
+
 ## Recomendação
 
 **Atende parcialmente como ferramenta de acesso; não atende sozinho ao Prisma Recruiter e não recomendo integrá-lo à produção neste momento.** A PoC comprovou contratos e comportamento local com mocks, inclusive uma chamada MCP cliente/servidor em memória. Não comprovou busca no LinkedIn real, qualidade dos encontrados, aplicação efetiva de localização ou segurança contra bloqueio de conta.
@@ -15123,6 +15136,19 @@ Baseline Prisma b052be8751e66d495c160959839e4cb133ea5ae4/3.3.0. Branch codex/lin
 `direct`: harness experimental e relatório; provar testes/limitações. `plausible_indirect`: futura conexão com Posição/Knowledge/revisão, somente mapeamento sem alteração. `critical_transversal`: credenciais/dados/autoridade humana; nenhum serviço produtivo acessado e harness bloqueia runtime externo. `no_impact_identified`: web/backend/modelos/Score/RLS/schema/runtime3.3.0, pois nenhum desses executáveis será alterado ou publicado; verificar diff final e plano de superfícies. Produção preservada por ausência de acesso, sem alegar inspeção operacional.
 
 Execução: ler este acordo integral, auditar código congelado, preparar ambiente, executar testes selecionados e witness Prisma, registrar resultado e AoT no relatório. Fechar quando D-01..04 comprovados e P respeitados, mesmo que a recomendação seja não integrar. Não executar suíte completa do Prisma; validação suficiente é teste experimental, documentação/contexto e diff/plan. Contrato da PoC1.0.0; versão do produto3.3.0 permanece.
+
+## Adendo1.1.0 — validação real de leitura,25/10/2026
+
+Decisão posterior explícita de Bruno: login concluído na conta exclusiva informada por ele; confirmar identidade e prosseguir com testes reais de busca, sem mensagens/conexões ou produção. Substitui P-01/F-01 somente quanto a autenticação e leitura delimitada da fonte real. A rodada sintética1.0.0 permanece como evidência histórica.
+
+- D-05: confirmar e-mail principal nas configurações antes da busca. CA: identidade coincide com a conta de testes autorizada; não inferir somente por nome.
+- D-06: executar amostra pequena de buscas profissionais e conferir filtro versus estado real; separar leitura via navegador integrado da execução do MCP. CA: URL/controle selecionado, contagens e limitações, sem promessa de recall/banimento.
+- D-07: para executar o MCP, usar perfil local exclusivo da PoC, sem importação automática ou cookies da conta oficial; autenticação manual quando necessária. CA: caminho segregado/flags e identidade confirmada antes de chamadas. Se a sessão não estiver disponível, registrar como não executado, sem substituir resultado do navegador por resultado do conector.
+- P-03: nenhuma mensagem, conexão, reação, salvamento de prospecto, alteração de configuração, compra/assinatura, contorno de desafio, escrita no Prisma ou acesso/deploy produtivo. Rede real fica restrita ao LinkedIn nas operações manuais e às leituras de teste autorizadas; o harness sintético mantém seu bloqueio original.
+- P-04: não publicar nomes, contatos, fotos ou currículo dos encontrados no repositório. Evidência persistida deve ser agregada/sanitizada; resultados não se tornam Perfis, Scores ou decisões humanas.
+- F-02: integração, ranking de candidatos, coleta em massa e medição estatística de recall/precisão continuam fora do escopo.
+
+Mapa adicional: `direct` filtros/observações da fonte real e sessão experimental; `critical_transversal` identidade/cookies/minimização, com confirmação de e-mail e sessão própria; `plausible_indirect` adequação futura do conector, sem implementar correções; `no_impact_identified` produção/cadastros/Score/Knowledge mantidos por ausência de acesso ou mudança. Encerramento exige relatar o executado e os bloqueios reais, sem inventar sucesso de conector. Nenhuma nova aprovação necessária para passos já autorizados; senha/2FA são fornecidos pelo operador diretamente no site.
 
 ---
 
@@ -21541,6 +21567,19 @@ Nenhum desvio do contrato, nenhuma nova mudança de escopo. Defeitos do harness 
 Branch codex/linkedin-recruiter-poc. Entrega experimental em branch própria; main e produção não recebem a PoC. Código upstream/venv/logs intermediários ficam ignorados em tmp. Rascunhos alheios preservados. Sem incremento da versão do produto; avaliação1.0.0 e runtime3.3.0 mantido.
 
 PoC concluída no escopo local: atende parcialmente como acesso, não é base de produção pronta. Busca/filtragem reais, pertinência de resultados e segurança de conta permanecem NOT TESTED e não são critérios prometidos nesta PoC sintética. Recomenda-se discutir busca assistida ou fonte integrada autorizada antes de implementar o Prisma Recruiter.
+
+## Adendo1.1.0 — leitura real autorizada, em andamento
+
+Decisão posterior do PO e substituição delimitada de P-01/F-01 em `agreement-linkedin-recruiter-poc.md`1.1.0. Baseline branch83b94789533639800d3e9311c82cdbde8be2a1a9. O resultado original acima refere-se à rodada offline, não impede este novo escopo autorizado.
+
+| ID | Prova | Status |
+| --- | --- | --- |
+| D-05 | E-mail principal conferido nas configurações e corresponde à conta de teste solicitada. Nome público não foi usado como único comprovante | PASS |
+| D-06 | Fonte real/UI: location textual descartado e10resultados fora de Bauru; geoUrn selecionado pela UI e10cartões de Bauru. Vendedor/Sales Representative10cada, sobreposição0na primeira página. Agregados em live-source.json | PASS no navegador; não prova execução MCP |
+| D-07 | Perfil MCP exclusivo, --no-auto-import, dotenv/traces off. Primeira janela expirou em300s; segunda aberta com900s | PARTIAL; autenticação manual pendente,0buscas reais pelo MCP |
+| P-03/P-04 | Sem mensagens/conexões/reações, salvamento/cadastro, configuração/produção ou publicação de identidades dos encontrados | PASS para a leitura executada |
+
+Mapa adicional conforme acordo: fonte real/sessão são direct; identidade/minimização critical_transversal; produto futuro plausible_indirect; produção/Score/Knowledge no_impact_identified por ausência de ação. Fonte trouxe divergência concreta no filtro location; não se implementou adaptação silenciosa do upstream. Sem benchmark estatístico de qualidade/recall, sem promessa de ausência de bloqueio. A autenticação do MCP usa janela fora do painel Codex; o login existente no navegador integrado não é exportado/importado.
 
 ---
 

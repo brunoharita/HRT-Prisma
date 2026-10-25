@@ -2,6 +2,17 @@
 
 Avaliação experimental1.0.0,25/10/2026. Acordo: `../qa/agreement-linkedin-recruiter-poc.md`1.0.0. Não é integração nem mudança do produto em produção.
 
+## Adendo1.1.0 — fonte real, conta exclusiva
+
+Bruno autorizou leitura real após concluir login na conta de testes. O e-mail principal foi conferido em Configurações > Acesso e segurança > Endereços de e-mail e coincide com a conta solicitada; não se usou sua conta oficial. Evidência agregada: `../qa/evidence/linkedin-recruiter-poc/live-source.json`. Não se conservaram nomes/URLs/fotos/contatos dos profissionais.
+
+- **Localidade textual falhou no caso observado:** a URL com `keywords=Gerente+de+Estoque&location=Bauru`, no formato gerado pelo upstream, terminou com apenas keywords após a hidratação. Localidades não estava selecionada; os10cartões da página mostravam outras cidades. Pelo filtro nativo foi selecionada a entidade Bauru/geoUrn101039681;10cartões passaram a exibir Bauru. Assim, enviar location como texto não comprova nem aplicou o filtro nesta sessão. Isso atualiza a limitação anteriormente não validada; nenhuma correção do conector foi implementada.
+- **Nomenclaturas alteram o recorte:** com Bauru selecionada, Vendedor e Sales Representative exibiram10cartões cada; zero perfis em comum entre essas primeiras páginas, após normalizar links secundários à raiz de perfil. Isso sustenta combinar termos e deduplicar em eventual solução, mas não mede recall nem prova disjunção do universo total. Na busca em inglês,9cartões mostraram Bauru e1somente uma região mais ampla; isso não prova que esse último esteja fora da cidade.
+- **Presença não é aderência:** os resultados de estoque misturam cargos de logística, operações, loja e outras funções. Não se avaliou nem rejeitou pessoa individualmente; título/competência/resumo de busca não substituem evidência profissional contextual.
+- **Execução do MCP separada:** o navegador integrado está autenticado, enquanto o MCP usa perfil local próprio com auto-import desligado e traces off. A primeira janela manual expirou em300s; foi reaberta com900s. Até este registro, nenhuma busca real foi executada pelo conector: aguarda autenticação manual nessa janela separada. Não confundir a leitura real da fonte pelo navegador com resultado real do MCP.
+
+Nenhuma mensagem/conexão/reação, coleta em massa, cadastro de prospecto, escrita no Prisma, acesso à VPS/Supabase ou deploy. Nenhum desafio surgiu nas buscas do navegador integrado; essa amostra não garante segurança da conta em uso futuro ou escala. As evidências sintéticas abaixo permanecem válidas em seu escopo original.
+
 ## Recomendação
 
 **Atende parcialmente como ferramenta de acesso; não atende sozinho ao Prisma Recruiter e não recomendo integrá-lo à produção neste momento.** A PoC comprovou contratos e comportamento local com mocks, inclusive uma chamada MCP cliente/servidor em memória. Não comprovou busca no LinkedIn real, qualidade dos encontrados, aplicação efetiva de localização ou segurança contra bloqueio de conta.
