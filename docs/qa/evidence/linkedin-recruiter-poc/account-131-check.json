@@ -1,0 +1,19 @@
+{
+  "observedDate": "2026-10-25",
+  "surface": "ChatGPT in-app browser; prior verified test-account session",
+  "identityEvidence": "account chooser matched the previously verified display identity and masked test email; no fresh unmasked email verification",
+  "navigation": ["requested /feed/", "source redirected to /uas/login", "source redirected to /checkpoint/challenge"],
+  "visibleTitle": "Verificação de segurança | LinkedIn",
+  "notice": "Source explicitly reports unusual activity and a large volume of profile-data access, associated by the notice with external tools/extensions",
+  "conclusion": "security access restriction confirmed in this session; permanent ban and restriction duration not established",
+  "screenshot": "account-131-restriction.png",
+  "diagnosticSearchAttempts": 0,
+  "diagnosticSearchStatus": "BLOCKED by explicit source checkpoint before search; stop-on-challenge preserved",
+  "mcpSessionReopened": false,
+  "newProfileReads": 0,
+  "checkpointAcknowledgedOrSolved": false,
+  "sessionOrAccountRotated": false,
+  "messagesOrConnectionsSent": false,
+  "productionAccessed": false,
+  "live50PilotStatus": "NOT TESTED: blocked; local target reduction verified separately"
+}

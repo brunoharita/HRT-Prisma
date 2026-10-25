@@ -3,13 +3,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.96.5
+version: 2.96.6
 last_verified: 2026-10-25
 ---
 
 # Estado atual do Prisma
 
 ## Prisma Recruiter — PoC local, sem integração
+
+Adendo experimental1.3.1 em25/10/2026: verificação autorizada no navegador interno redirecionou feed/login para checkpoint de segurança, com aviso explícito de atividade fora do normal/grande volume de dados de perfis e ferramenta externa/extensão. Identidade do seletor corresponde à sessão de testes antes verificada, e-mail mascarado, sem nova conferência integral. Restrição de acesso nesta sessão confirmada; banimento permanente/prazo não informados. Pesquisa diagnóstica BLOCKED antes do envio pela regra de parada; zero pesquisa/leitura nova/reabertura MCP, sem clique/resolução/contorno do checkpoint. Evidência sanitizada account-131-check.json/PNG. Runner reduzido localmente para50únicas/50tentativas de experiência/10páginas/100refs brutas; artefato1.3.1, legados100legíveis e preservados. Nova rodada real50 NOT TESTED por restrição, sem confundir as50análises anteriores com nova coleta. Produto3.3.0/main/produção/pesos/histórico/decisões/Knowledge/tabelas intactos; sem integração nem raio implementado. Acordo/AoT/relatório linkedin-recruiter-poc1.3.1 registram bloqueio e teste offline do teto.
 
 Piloto experimental1.3.0 aprovado pelo PO em25/10/2026:100referências únicas de Gerente de Estoque/Bauru em10páginas pelo MCP inprocess/Edge real, com conta exclusiva e recibos de localidade/página ativa.50experiências lidas e revisadas; tentativa51retornou AuthenticationError, pausa sem retry,49não tentadas, browser fechado/zero processos dedicados. Resultado PARTIAL, não100analisados nem banimento confirmado. Revisão consultiva do assistente, sem API de IA adicional/Score:7descrições gerenciais pertinentes,8títulos gerenciais específicos sem atribuições,24relações parciais/operacionais,3cargos operacionais relacionados sem atribuições,3sem relação demonstrada no material e5insuficientes. Relação parcial não equivale a aderência gerencial; ausência não é fato negativo. Evidência individual/trechos/hashes somente em artefatos temporários privados com ACL, fora do Git; agregado pilot-130-live.json. Ruído de sugestões laterais/rodapé removido offline nos mesmos50textos, sem releitura.38testes offline/22release-tooling PASS, limites20páginas/200referências e100tentativas, timeout/retomada/dedupe; sem contorno/contato/integração/main/produção. Acordo/AoT/relatório linkedin-recruiter-poc1.3.0; produto3.3.0/Knowledge/nota/pesos/histórico/decisões/tabelas preservados. Conector segue experimental;100leituras contínuas e causa exata do erro não validadas.
 

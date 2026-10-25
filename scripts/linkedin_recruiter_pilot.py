@@ -1,4 +1,4 @@
-"""Explicit, local-only 100-profile pilot. No contacts, product writes or scores.
+"""Explicit, local-only 50-profile pilot. No contacts, product writes or scores.
 
 Private run artifacts are necessary research/progress evidence, not a people
 catalog. Only aggregate counters may be published. Reading is not assessment.
@@ -15,6 +15,9 @@ from urllib.parse import urlsplit
 
 from linkedin_recruiter_trial import Search, NativeSelection, Limits, Trial, profile_root, verify_filters, public_summary, reviewed_builder
 from linkedin_recruiter_mcp_trial import capture_search_page, single_attempt_reads
+
+PILOT_VERSION = "1.3.1"
+TARGET = 50
 
 
 def minimal_experience(text: str) -> tuple[str, bool]:
@@ -35,10 +38,10 @@ class PrivateRun:
         harden_directory(directory)
         self.path = directory / "research.json"
         self.data = json.loads(self.path.read_text(encoding="utf-8")) if self.path.exists() else {
-            "version": "1.3.0", "target": 100, "profiles": [], "profile_attempts": 0,
+            "version": PILOT_VERSION, "target": TARGET, "profiles": [], "profile_attempts": 0,
             "status": "ready", "reason": None, "collection": None,
         }
-        if self.data.get("version") != "1.3.0" or self.data.get("target") != 100:
+        if (self.data.get("version"), self.data.get("target")) not in {("1.3.0", 100), (PILOT_VERSION, TARGET)}:
             raise ValueError("Research run version/target differs")
         for entry in self.data["profiles"]:
             if entry["status"] == "in_flight":
@@ -55,7 +58,7 @@ class PrivateRun:
         known = {entry["source"] for entry in self.data["profiles"]}
         for reference in references:
             root = profile_root(reference)
-            if root not in known and len(known) < 100:
+            if root not in known and len(known) < min(TARGET, self.data["target"]):
                 self.data["profiles"].append({"token": "P" + str(len(known) + 1).zfill(3),
                                                "source": root, "status": "pending", "assessment": None})
                 known.add(root)
@@ -63,7 +66,8 @@ class PrivateRun:
 
     def summary(self):
         entries = self.data["profiles"]
-        return {"pilotVersion": "1.3.0", "target": 100,
+        return {"pilotVersion": self.data["version"], "target": self.data["target"],
+                "effectiveReadLimit": min(TARGET, self.data["target"]),
                 "status": self.data["status"], "reason": self.data["reason"],
                 "foundUnique": len(entries), "profileAttempts": self.data["profile_attempts"],
                 "professionalSectionsRead": sum(p["status"] == "read" for p in entries),
@@ -80,7 +84,7 @@ async def read_pending(run: PrivateRun, read, *, timeout=70):
     for entry in run.data["profiles"]:
         if entry["status"] != "pending":
             continue
-        if run.data["profile_attempts"] >= 100:
+        if run.data["profile_attempts"] >= min(TARGET, run.data["target"]):
             run.data.update(status="paused", reason="profile_budget_exhausted")
             break
         entry["status"] = "in_flight"
@@ -133,10 +137,12 @@ async def execute(identity_path: Path, plan_path: Path, run_id: str, resume: boo
     expected_path, name = identity["publicPath"], identity["publicName"].casefold()
     plan = json.loads(plan_path.read_text(encoding="utf-8"))["searches"][0]
     filters = tuple(NativeSelection(f["kind"], f["value"], f["label"], f["observed_url"], tuple(f["selected_values"])) for f in plan["filters"])
-    searches = tuple(Search(plan["keywords"], filters, page=n) for n in range(1, 21))
+    searches = tuple(Search(plan["keywords"], filters, page=n) for n in range(1, 11))
     trial = Trial(root / "tmp/linkedin-recruiter-poc/control", "dedicated-test-account", run_id,
-                  searches, Limits(pages=20, references=200, timeout_seconds=110), target_unique=100)
-    run = PrivateRun(root / "tmp/linkedin-recruiter-poc/pilot-100" / run_id)
+                  searches, Limits(pages=10, references=100, timeout_seconds=110), target_unique=TARGET)
+    run = PrivateRun(root / "tmp/linkedin-recruiter-poc/pilot-runs" / run_id)
+    if run.data["version"] != PILOT_VERSION or run.data["target"] != TARGET:
+        raise ValueError("Historical pilot is preserved; a new explicit 50-profile run is required")
     if not resume and run.path.exists():
         raise ValueError("Existing run needs explicit resume")
     set_config(AppConfig(browser=BrowserConfig(
@@ -144,7 +150,7 @@ async def execute(identity_path: Path, plan_path: Path, run_id: str, resume: boo
         auto_import_from_browser=False, headless=False,
         chrome_path="C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
         login_inline_wait_seconds=0, default_timeout=5000)))
-    mcp = FastMCP("Local explicit 100-profile professional evidence trial")
+    mcp = FastMCP("Local explicit 50-profile professional evidence trial")
 
     @mcp.tool(timeout=3600, annotations={"readOnlyHint": True})
     async def run_pilot() -> dict:

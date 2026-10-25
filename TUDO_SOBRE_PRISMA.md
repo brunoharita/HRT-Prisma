@@ -2,7 +2,7 @@
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
 documentation_source_count: 578
-source_manifest_sha256: 3118c81b49c4cf395d95a0d15fb5e7fa7b4d5c72f4cab40fda9655eddb716625
+source_manifest_sha256: e7fcd43225a560ffc31487541cdc407aca6e1d6b2d5d3bfef99c8d61ba14b74f
 -->
 
 # Tudo sobre o Prisma
@@ -2651,13 +2651,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.96.5
+version: 2.96.6
 last_verified: 2026-10-25
 ---
 
 # Estado atual do Prisma
 
 ## Prisma Recruiter — PoC local, sem integração
+
+Adendo experimental1.3.1 em25/10/2026: verificação autorizada no navegador interno redirecionou feed/login para checkpoint de segurança, com aviso explícito de atividade fora do normal/grande volume de dados de perfis e ferramenta externa/extensão. Identidade do seletor corresponde à sessão de testes antes verificada, e-mail mascarado, sem nova conferência integral. Restrição de acesso nesta sessão confirmada; banimento permanente/prazo não informados. Pesquisa diagnóstica BLOCKED antes do envio pela regra de parada; zero pesquisa/leitura nova/reabertura MCP, sem clique/resolução/contorno do checkpoint. Evidência sanitizada account-131-check.json/PNG. Runner reduzido localmente para50únicas/50tentativas de experiência/10páginas/100refs brutas; artefato1.3.1, legados100legíveis e preservados. Nova rodada real50 NOT TESTED por restrição, sem confundir as50análises anteriores com nova coleta. Produto3.3.0/main/produção/pesos/histórico/decisões/Knowledge/tabelas intactos; sem integração nem raio implementado. Acordo/AoT/relatório linkedin-recruiter-poc1.3.1 registram bloqueio e teste offline do teto.
 
 Piloto experimental1.3.0 aprovado pelo PO em25/10/2026:100referências únicas de Gerente de Estoque/Bauru em10páginas pelo MCP inprocess/Edge real, com conta exclusiva e recibos de localidade/página ativa.50experiências lidas e revisadas; tentativa51retornou AuthenticationError, pausa sem retry,49não tentadas, browser fechado/zero processos dedicados. Resultado PARTIAL, não100analisados nem banimento confirmado. Revisão consultiva do assistente, sem API de IA adicional/Score:7descrições gerenciais pertinentes,8títulos gerenciais específicos sem atribuições,24relações parciais/operacionais,3cargos operacionais relacionados sem atribuições,3sem relação demonstrada no material e5insuficientes. Relação parcial não equivale a aderência gerencial; ausência não é fato negativo. Evidência individual/trechos/hashes somente em artefatos temporários privados com ACL, fora do Git; agregado pilot-130-live.json. Ruído de sugestões laterais/rodapé removido offline nos mesmos50textos, sem releitura.38testes offline/22release-tooling PASS, limites20páginas/200referências e100tentativas, timeout/retomada/dedupe; sem contorno/contato/integração/main/produção. Acordo/AoT/relatório linkedin-recruiter-poc1.3.0; produto3.3.0/Knowledge/nota/pesos/histórico/decisões/tabelas preservados. Conector segue experimental;100leituras contínuas e causa exata do erro não validadas.
 
@@ -12229,6 +12231,16 @@ A partir de `prisma-ux-foundation-1.0.0`, o módulo antes chamado Vagas aparece 
 
 Avaliação experimental1.0.0,25/10/2026. Acordo: `../qa/agreement-linkedin-recruiter-poc.md`1.0.0. Não é integração nem mudança do produto em produção.
 
+## Adendo1.3.1 — restrição confirmada e limite local50
+
+Em25/10/2026, Bruno autorizou verificar a conta de testes no navegador, uma pesquisa diagnóstica e depois reduzir o piloto para50. A navegação inicial para feed no navegador interno redirecionou para login, mostrou o seletor com a identidade anteriormente verificada e e-mail mascarado correspondente e, sem clicar em nada, chegou a Verificação de segurança. A fonte informa atividade fora do normal e grande volume de acesso a dados de perfis, associado no aviso a ferramenta externa/extensão. **Há barreira explícita de acesso nesta sessão; não é apenas um AuthenticationError sem contexto.** A tela não informa banimento permanente nem prazo. Ela não prova a causa exata de cada erro histórico ou uma restrição em todas as sessões.
+
+A pesquisa única ficou **BLOCKED antes de ser enviada**, pois D-15 exige parar em desafio/restrição. Zero pesquisas novas, zero leituras de terceiros e zero reabertura da sessão MCP. Não houve clique em Entendi, resolução de checkpoint, troca/importação de sessão/conta, mensagens/conexões ou produção. A aba foi mantida para o titular. Evidência: `../qa/evidence/linkedin-recruiter-poc/account-131-check.json` e imagem `account-131-restriction.png`, sem URL tokenizada ou identidade na evidência publicada.
+
+O runner experimental passa a usar alvo50, até50tentativas de experiência, até10páginas/100referências brutas para dedupe, e encerra ao obter50únicas. Novos artefatos têm versão1.3.1 em tmp privado/ignorado; legados1.3.0/100permanecem legíveis com seus metadados originais e não são retomados como nova rodada50. O formato do controlador Trial continua1.2.0; defaults dos outros ensaios não foram ampliados. O limite de leitura efetivo nunca ultrapassa50, inclusive ao carregar um legado. Nenhum catálogo/tabela/dependência foi criado.
+
+**Nova rodada real50: NOT TESTED por restrição da fonte.** As50experiências revisadas na rodada anterior continuam preservadas e não são declaradas50leituras novas. Reduzir o número não comprova segurança, não libera a conta nem autoriza nova coleta diante do aviso. Permanecem os bloqueios de integração produtiva; produto3.3.0/main/produção, nota/pesos/Knowledge/decisões/histórico intactos. Raio geográfico foi apenas discutido, fora desta alteração.
+
 ## Adendo1.3.0 — amostra de100perfis
 
 Escopo aprovado por Bruno: Gerente de Estoque/Bauru, até100referências únicas, sem ampliar filtros para completar volume. Reutiliza o pacote gratuito congelado e a mesma conta exclusiva. O controlador verifica paginação nativa (URL final e aria-current do botão PáginaN), localidade selecionada, dedupe e encerramento no alvo. O teto técnico de20páginas/200referências brutas acomoda duplicatas; não é recomendação de volume seguro do LinkedIn. Checkpoint1.2.0 permanece compatível nas execuções anteriores; o artefato privado deste piloto é1.3.0.
@@ -15317,6 +15329,17 @@ Bruno aprovou a meta inicial de avaliar100perfis únicos por vaga. Substitui os 
 - F-04: ranking de contratação, benchmark estatístico de mercado, mudança da regra/pesos do Prisma e captação produtiva continuam excluídos. Não criar motor paralelo de matching ou taxonomia: esta avaliação local não alimenta o produto.
 
 Mapa/execução1.3: baseline64d8fa80f57f6cf80c8b57fcf86264e89a61a303. `direct` paginação/controlador/runner/amostra/evidências; `critical_transversal` conta/sessão/minimização/limites, com tentativa única e pausa; `plausible_indirect` formatos de checkpoint e classificação consultiva, preservar leitura antiga e separar estados; `no_impact_identified` produto3.3.0/Knowledge/Posição/Score/histórico/schema/RLS/produção, sem consumidores/escritores ou serviços alterados. Antes da operação real, validar paginação/alvo/dedupe/segurança com fixtures; a UI já comprovou page=2 e aria-current=true no controle Página2, preservando Bauru. AoT registra o que foi atingido, inclusive indisponibilidade parcial/limite sem garantia antibanimento. Contexto/lint/dispatcher e CI da branch experimental, sem suíte integral local ou merge/main/deploy.
+
+## Adendo1.3.1 — verificar restrição e reduzir a amostra
+
+Bruno autorizou verificar a conta no navegador, tentar uma única pesquisa diagnóstica e depois reduzir o ensaio de100para50. Mantêm-se D-15/P-03..06/F-04: desafio/restrição interrompem, sem contorno, contato ou produção. A pesquisa depende de acesso liberado; uma barreira explícita encerra a tentativa de acesso sem navegar para além dela.
+
+- D-16: abrir a sessão de testes previamente identificada, registrar o estado exibido e distinguir autenticação genérica de aviso explícito. Fazer no máximo uma pesquisa se a fonte permitir. CA: evidência visual sanitizada e relato exato do que foi/não foi tentado, sem presumir banimento permanente ou sucesso do MCP a partir do navegador interno.
+- D-17: novos pilotos têm alvo50 e até50tentativas de experiência, sem51ªleitura, até10páginas/100refs brutas para dedupe e encerramento antecipado no alvo. Preservar os artefatos/histórico100e as50análises já feitas; nova execução real não pode ser alegada com replay. CA: negativos de teto50, versão/checkpoint e preservação legada, novos padrões e documentação; execução real bloqueada permanece NOT TESTED.
+- P-07: não resolver/ignorar checkpoint, trocar conta/sessão/IP para continuar coleta, reiniciar a rodada para superar restrição, reclassificar o ensaio anterior como100ou50leituras novas ou prometer50como limite seguro.
+- A-05: reaproveitar PrivateRun/Trial/captura/ACL/testes, sem dependências novas; manter formato legado legível e usar versão de artefato1.3.1para novos pilotos50. F-05: raio geográfico e integração produtiva não entram nesta correção.
+
+Mapa/execução1.3.1, baseline1cb72544a8b7507a9d9229bd72d002825eb0398e: `direct` defaults/tetos do runner e diagnóstico visual; `critical_transversal` identidade/sessão/parada/minimização, sem novos contatos/acessos protegidos; `plausible_indirect` checkpoints legados/contadores, testar limite e compatibilidade; `no_impact_identified` produto3.3.0/Knowledge/Posição/Score/pesos/histórico/decisões/tabelas/main/produção por ausência de consumidor/writer/destino alterado. Validação suficiente: suíte offline afetada, evidência visual de acesso, contexto/check/lint/dispatcher e CI experimental. Não repetir leituras já feitas nem navegar após barreira explícita. Encerrar com ajuste local comprovado e bloqueio real relatado, sem declarar teste50real concluído.
 
 ---
 
@@ -21821,6 +21844,21 @@ Mapa final: `direct` controlador/captura/runner/tests e amostra; `critical_trans
 Resultado do conector nesta escala: **PARTIAL**. Causa exata de AuthenticationError não estabelecida; nenhuma atribuição de banimento, expiração ou desafio sem prova, nenhuma insistência para completar100. Não existe evidência de100trajetórias lidas; as50concluídas foram efetivamente revisadas com evidência privada rastreável. Não declarar conclusão integral de D-14. Dados ausentes não viram reprovação. Mantida recomendação experimental, sem integrar/publicar em produção. Checkpoint/artefato privado permitem retomada futura explícita, que não foi executada nesta rodada.
 
 Produto3.3.0 preservado; contexto2.96.5. Evidências históricas intactas e rascunhos alheios excluídos. Validação final de contexto/lint/plano/branch/CI registrada em `evidence/linkedin-recruiter-poc/pilot-130-validation.json`; sem merge/main/deploy, sem leitura adicional da fonte após a pausa.
+
+## Adendo1.3.1 — diagnóstico de conta e teto50
+
+Pedido posterior do PO: verificar conta no navegador, tentar uma pesquisa e reduzir100para50. Contrato1.3.1 registrado antes da alteração, baseline1cb72544a8b7507a9d9229bd72d002825eb0398e, mapa/execução no mesmo acordo. D-16..17 implementados sem violar parada P-07/D-15; nenhuma fonte secundária substitui a evidência da UI, nem o navegador interno é tratado como sessão MCP.
+
+| ID | Implementação / teste / evidência | Resultado |
+| --- | --- | --- |
+| D-16 | Navegação feed → login/seletor correspondente à identidade antes verificada → checkpoint. Aviso explícito de atividade incomum/grande volume de dados de perfis e ferramenta externa/extensão. account-131-check.json e PNG sanitizados; sem token de URL/identidades publicados | PASS para diagnóstico visual; pesquisa única BLOCKED antes de envio, zero tentativas. Não confirma banimento permanente/prazo nem causa exata do erro histórico MCP |
+| D-17 | TARGET50/artefato1.3.1, até50tentativas/10páginas/100refs brutas, pasta técnica privada, schema legado1.3.0/100legível sem mudar alvo/histórico; executor não aceita legado como nova rodada50. Negativos comprovam nenhuma51ªleitura e metadados incompatíveis rejeitados | PASS local,41testes offline/zero falhas/erros/skips; novo teste real50 NOT TESTED por restrição |
+| P-03..07 | Sem mensagens/conexões, PII publicada, produção, alteração de Score/Knowledge/decisões, clique Entendi, resolução de checkpoint, troca/importação de sessão/conta ou reabertura MCP | PASS no escopo executado; nenhum contorno. Aba mantida para o titular |
+| Preservação | Artefato privado original com100encontrados/50analisados preservado, sem releitura/novo resultado simulado. Não se declara50como teto seguro, liberação de conta ou100pessoas analisadas | PASS por revisão e hash antes/depois; capacidade produtiva não acessada |
+
+Mapa final: `direct` runner/defaults/testes/diagnóstico visual; `critical_transversal` conta/parada/minimização, preservados com checkpoint intacto e evidência agregada; `plausible_indirect` checkpoints/contadores legados, regressão offline; `no_impact_identified` produto3.3.0/web/backend/schema/RLS/pesos/nota/histórico/Knowledge/main/produção, pois não há consumidor/writer/destino ou acesso produtivo. Sem smoke produtivo alegado.
+
+Nenhuma nova biblioteca, fork, LLM ou catálogo. A redução local está validada; solicitação de pesquisa e nova rodada real permanecem impedidas pela barreira explícita. Não houve clique nem tentativa de ignorar o aviso. Não concluir a execução real50. Contexto2.96.6/documentação/exports e checks registrados em `evidence/linkedin-recruiter-poc/pilot-131-validation.json`. Somente commit/push/CI na branch experimental, sem merge/main/deploy; raio permanece fora do escopo.
 
 ---
 

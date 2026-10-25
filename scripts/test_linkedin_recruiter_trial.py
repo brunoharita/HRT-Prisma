@@ -22,7 +22,7 @@ from linkedin_recruiter_trial import (
     reviewed_builder,
 )
 from linkedin_recruiter_mcp_trial import execute, single_attempt_reads
-from linkedin_recruiter_pilot import PrivateRun, read_pending, minimal_experience
+from linkedin_recruiter_pilot import PrivateRun, read_pending, minimal_experience, TARGET, PILOT_VERSION
 
 # Same Windows asyncio wakeup-pipe exception as the original offline harness.
 _local = threading.local()
@@ -436,11 +436,11 @@ class ProfilePilot(unittest.IsolatedAsyncioTestCase):
         reader.assert_awaited_once()
         self.assertEqual(summary["analyzed"], 0)
 
-    async def test_budget100_and_interrupted_read_are_preserved(self):
+    async def test_budget50_and_interrupted_read_are_preserved(self):
         self.run.add(tuple("/in/test"+str(i) for i in range(110)))
-        self.assertEqual(len(self.run.data["profiles"]), 100)
+        self.assertEqual(len(self.run.data["profiles"]), 50)
         self.run.data["profiles"][0]["status"] = "in_flight"
-        self.run.data["profile_attempts"] = 100
+        self.run.data["profile_attempts"] = 50
         self.run.save()
         loaded = PrivateRun(self.run.directory)
         reader = AsyncMock()
@@ -448,6 +448,41 @@ class ProfilePilot(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(summary["reason"], "profile_budget_exhausted")
         self.assertEqual(loaded.data["profiles"][0]["status"], "uncertain")
         reader.assert_not_awaited()
+
+    async def test_fiftieth_read_is_last_and_resume_cannot_call_fifty_first(self):
+        self.assertEqual((TARGET, PILOT_VERSION), (50, "1.3.1"))
+        self.run.add(tuple("/in/test"+str(i) for i in range(51)))
+        for entry in self.run.data["profiles"][:49]:
+            entry["status"] = "read"
+        self.run.data["profile_attempts"] = 49
+        reader = AsyncMock(return_value={"sections": {"experience": "Gestão de inventário."}})
+        summary = await read_pending(self.run, reader)
+        self.assertEqual((summary["foundUnique"], summary["profileAttempts"], summary["professionalSectionsRead"]), (50, 50, 50))
+        await read_pending(PrivateRun(self.run.directory), reader)
+        reader.assert_awaited_once()
+
+    async def test_legacy100_is_readable_unchanged_and_cannot_read_after50(self):
+        self.run.data.update(version="1.3.0", target=100, profile_attempts=50)
+        self.run.data["profiles"] = [{"token": "P"+str(i), "source": "https://www.linkedin.com/in/test"+str(i),
+                                     "status": "read" if i < 50 else "pending", "assessment": None} for i in range(100)]
+        self.run.save()
+        original = self.run.path.read_bytes()
+        legacy = PrivateRun(self.run.directory)
+        self.assertEqual(legacy.path.read_bytes(), original)
+        self.assertEqual((legacy.summary()["pilotVersion"], legacy.summary()["target"], legacy.summary()["foundUnique"]), ("1.3.0", 100, 100))
+        reader = AsyncMock()
+        summary = await read_pending(legacy, reader)
+        self.assertEqual(summary["reason"], "profile_budget_exhausted")
+        self.assertEqual((summary["profileAttempts"], summary["professionalSectionsRead"], summary["pending"]), (50, 50, 50))
+        reader.assert_not_awaited()
+
+    def test_target_version_mismatch_does_not_rewrite_checkpoint(self):
+        self.run.data.update(version="1.3.1", target=100)
+        self.run.save()
+        original = self.run.path.read_bytes()
+        with self.assertRaisesRegex(ValueError, "version/target"):
+            PrivateRun(self.run.directory)
+        self.assertEqual(self.run.path.read_bytes(), original)
 
     def test_contact_minimization_and_truncation_are_explicit(self):
         text, truncated = minimal_experience("contato: worker@example.test +55 11 99999-9999 https://example.test " + "x"*19000)

@@ -2,6 +2,16 @@
 
 Avaliação experimental1.0.0,25/10/2026. Acordo: `../qa/agreement-linkedin-recruiter-poc.md`1.0.0. Não é integração nem mudança do produto em produção.
 
+## Adendo1.3.1 — restrição confirmada e limite local50
+
+Em25/10/2026, Bruno autorizou verificar a conta de testes no navegador, uma pesquisa diagnóstica e depois reduzir o piloto para50. A navegação inicial para feed no navegador interno redirecionou para login, mostrou o seletor com a identidade anteriormente verificada e e-mail mascarado correspondente e, sem clicar em nada, chegou a Verificação de segurança. A fonte informa atividade fora do normal e grande volume de acesso a dados de perfis, associado no aviso a ferramenta externa/extensão. **Há barreira explícita de acesso nesta sessão; não é apenas um AuthenticationError sem contexto.** A tela não informa banimento permanente nem prazo. Ela não prova a causa exata de cada erro histórico ou uma restrição em todas as sessões.
+
+A pesquisa única ficou **BLOCKED antes de ser enviada**, pois D-15 exige parar em desafio/restrição. Zero pesquisas novas, zero leituras de terceiros e zero reabertura da sessão MCP. Não houve clique em Entendi, resolução de checkpoint, troca/importação de sessão/conta, mensagens/conexões ou produção. A aba foi mantida para o titular. Evidência: `../qa/evidence/linkedin-recruiter-poc/account-131-check.json` e imagem `account-131-restriction.png`, sem URL tokenizada ou identidade na evidência publicada.
+
+O runner experimental passa a usar alvo50, até50tentativas de experiência, até10páginas/100referências brutas para dedupe, e encerra ao obter50únicas. Novos artefatos têm versão1.3.1 em tmp privado/ignorado; legados1.3.0/100permanecem legíveis com seus metadados originais e não são retomados como nova rodada50. O formato do controlador Trial continua1.2.0; defaults dos outros ensaios não foram ampliados. O limite de leitura efetivo nunca ultrapassa50, inclusive ao carregar um legado. Nenhum catálogo/tabela/dependência foi criado.
+
+**Nova rodada real50: NOT TESTED por restrição da fonte.** As50experiências revisadas na rodada anterior continuam preservadas e não são declaradas50leituras novas. Reduzir o número não comprova segurança, não libera a conta nem autoriza nova coleta diante do aviso. Permanecem os bloqueios de integração produtiva; produto3.3.0/main/produção, nota/pesos/Knowledge/decisões/histórico intactos. Raio geográfico foi apenas discutido, fora desta alteração.
+
 ## Adendo1.3.0 — amostra de100perfis
 
 Escopo aprovado por Bruno: Gerente de Estoque/Bauru, até100referências únicas, sem ampliar filtros para completar volume. Reutiliza o pacote gratuito congelado e a mesma conta exclusiva. O controlador verifica paginação nativa (URL final e aria-current do botão PáginaN), localidade selecionada, dedupe e encerramento no alvo. O teto técnico de20páginas/200referências brutas acomoda duplicatas; não é recomendação de volume seguro do LinkedIn. Checkpoint1.2.0 permanece compatível nas execuções anteriores; o artefato privado deste piloto é1.3.0.

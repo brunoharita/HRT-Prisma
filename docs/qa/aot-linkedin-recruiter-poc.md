@@ -128,3 +128,18 @@ Mapa final: `direct` controlador/captura/runner/tests e amostra; `critical_trans
 Resultado do conector nesta escala: **PARTIAL**. Causa exata de AuthenticationError não estabelecida; nenhuma atribuição de banimento, expiração ou desafio sem prova, nenhuma insistência para completar100. Não existe evidência de100trajetórias lidas; as50concluídas foram efetivamente revisadas com evidência privada rastreável. Não declarar conclusão integral de D-14. Dados ausentes não viram reprovação. Mantida recomendação experimental, sem integrar/publicar em produção. Checkpoint/artefato privado permitem retomada futura explícita, que não foi executada nesta rodada.
 
 Produto3.3.0 preservado; contexto2.96.5. Evidências históricas intactas e rascunhos alheios excluídos. Validação final de contexto/lint/plano/branch/CI registrada em `evidence/linkedin-recruiter-poc/pilot-130-validation.json`; sem merge/main/deploy, sem leitura adicional da fonte após a pausa.
+
+## Adendo1.3.1 — diagnóstico de conta e teto50
+
+Pedido posterior do PO: verificar conta no navegador, tentar uma pesquisa e reduzir100para50. Contrato1.3.1 registrado antes da alteração, baseline1cb72544a8b7507a9d9229bd72d002825eb0398e, mapa/execução no mesmo acordo. D-16..17 implementados sem violar parada P-07/D-15; nenhuma fonte secundária substitui a evidência da UI, nem o navegador interno é tratado como sessão MCP.
+
+| ID | Implementação / teste / evidência | Resultado |
+| --- | --- | --- |
+| D-16 | Navegação feed → login/seletor correspondente à identidade antes verificada → checkpoint. Aviso explícito de atividade incomum/grande volume de dados de perfis e ferramenta externa/extensão. account-131-check.json e PNG sanitizados; sem token de URL/identidades publicados | PASS para diagnóstico visual; pesquisa única BLOCKED antes de envio, zero tentativas. Não confirma banimento permanente/prazo nem causa exata do erro histórico MCP |
+| D-17 | TARGET50/artefato1.3.1, até50tentativas/10páginas/100refs brutas, pasta técnica privada, schema legado1.3.0/100legível sem mudar alvo/histórico; executor não aceita legado como nova rodada50. Negativos comprovam nenhuma51ªleitura e metadados incompatíveis rejeitados | PASS local,41testes offline/zero falhas/erros/skips; novo teste real50 NOT TESTED por restrição |
+| P-03..07 | Sem mensagens/conexões, PII publicada, produção, alteração de Score/Knowledge/decisões, clique Entendi, resolução de checkpoint, troca/importação de sessão/conta ou reabertura MCP | PASS no escopo executado; nenhum contorno. Aba mantida para o titular |
+| Preservação | Artefato privado original com100encontrados/50analisados preservado, sem releitura/novo resultado simulado. Não se declara50como teto seguro, liberação de conta ou100pessoas analisadas | PASS por revisão e hash antes/depois; capacidade produtiva não acessada |
+
+Mapa final: `direct` runner/defaults/testes/diagnóstico visual; `critical_transversal` conta/parada/minimização, preservados com checkpoint intacto e evidência agregada; `plausible_indirect` checkpoints/contadores legados, regressão offline; `no_impact_identified` produto3.3.0/web/backend/schema/RLS/pesos/nota/histórico/Knowledge/main/produção, pois não há consumidor/writer/destino ou acesso produtivo. Sem smoke produtivo alegado.
+
+Nenhuma nova biblioteca, fork, LLM ou catálogo. A redução local está validada; solicitação de pesquisa e nova rodada real permanecem impedidas pela barreira explícita. Não houve clique nem tentativa de ignorar o aviso. Não concluir a execução real50. Contexto2.96.6/documentação/exports e checks registrados em `evidence/linkedin-recruiter-poc/pilot-131-validation.json`. Somente commit/push/CI na branch experimental, sem merge/main/deploy; raio permanece fora do escopo.
