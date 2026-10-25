@@ -1,0 +1,241 @@
+{
+  "version": "3.2.1",
+  "functionalSha": "c188b894d83da118b11c3ab968c41bd4961170bc",
+  "ci": {
+    "branch": 40154682722,
+    "main": 40154815059,
+    "status": "SUCCESS"
+  },
+  "migration": {
+    "version": "20261025023217",
+    "name": "occupational_context_references",
+    "canonical_length": 3742,
+    "statement_sha256": "6c7b7f8cb65b765f00ab6bcfaa19f594aa57d4164cac6e689da11edb76a1a1b9"
+  },
+  "recognition": {
+    "before": {
+      "status": "awaiting_human_review",
+      "target": "94b18be6-387a-451c-abd2-9229c0141e6c",
+      "rationale": "A função de 'Gerente de Estoque' envolve gestão direta do estoque e equipe, com contato com fornecedores, alinhando-se ao papel de gestor de armazém, que assume responsabilidade pelas operações e pessoal no armazém.",
+      "candidates": [
+        {
+          "id": "195c6f05-365c-4ff5-8e9e-870f1b8bfb2f",
+          "label": "Gerente de almoxarifado",
+          "scope": "global",
+          "sources": [
+            {
+              "name": "CBO",
+              "version": "CBO 2002-2025-06-06"
+            }
+          ],
+          "version": 1,
+          "description": ""
+        },
+        {
+          "id": "94b18be6-387a-451c-abd2-9229c0141e6c",
+          "label": "Gestor de armazém/Gestora de armazém",
+          "scope": "global",
+          "sources": [
+            {
+              "name": "ESCO",
+              "version": "1.2.1"
+            }
+          ],
+          "version": 1,
+          "description": "Os gestores de armazém assumem a responsabilidade pelas instalações de armazenagem. Gerem as operações e o pessoal no seu interior."
+        },
+        {
+          "id": "d689dc5c-c945-4fe8-a4b1-d73ed69d9e89",
+          "label": "Planificador de produção na indústria do couro/Planificadora de produção na indústria do couro",
+          "scope": "global",
+          "sources": [
+            {
+              "name": "ESCO",
+              "version": "1.2.1"
+            }
+          ],
+          "version": 1,
+          "description": "Os planificadores de produção na indústria do couro são responsáveis pelo planeamento e acompanhamento da produção. Trabalham com o gestor da produção para garantir o cumprimento dos prazos. Trabalham com o armazém para assegurar que é atingido o nível e qualidade ótimos dos materiais, bem como com o departamento de comercialização e venda para satisfazer os requisitos de encomendas dos clientes."
+        },
+        {
+          "id": "7f96c924-1bca-4c25-aaed-5e7c20120b41",
+          "label": "Representante comercial",
+          "scope": "global",
+          "sources": [
+            {
+              "name": "ESCO",
+              "version": "1.2.1"
+            }
+          ],
+          "version": 1,
+          "description": "Os representantes comerciais representam uma empresa na venda e no fornecimento de informações sobre bens e serviços a empresas e organizações."
+        },
+        {
+          "id": "ff112226-613d-4620-bb6b-e5f5565bab65",
+          "label": "Representante comercial autônomo",
+          "scope": "global",
+          "sources": [
+            {
+              "name": "CBO",
+              "version": "CBO 2002-2025-06-06"
+            }
+          ],
+          "version": 1,
+          "description": ""
+        }
+      ],
+      "originalPoolCount": 5
+    },
+    "after": {
+      "status": "awaiting_human_review",
+      "target": "94b18be6-387a-451c-abd2-9229c0141e6c",
+      "rationale": "A função de 'Gerente de Estoque' envolve gestão direta do estoque e equipe, com contato com fornecedores, alinhando-se ao papel de gestor de armazém, que assume responsabilidade pelas operações e pessoal no armazém.",
+      "candidates": [
+        {
+          "id": "94b18be6-387a-451c-abd2-9229c0141e6c",
+          "label": "Gestor de armazém/Gestora de armazém",
+          "scope": "global",
+          "sources": [
+            {
+              "name": "ESCO",
+              "version": "1.2.1"
+            }
+          ],
+          "version": 1,
+          "description": "Os gestores de armazém assumem a responsabilidade pelas instalações de armazenagem. Gerem as operações e o pessoal no seu interior."
+        }
+      ],
+      "originalPoolCount": 5
+    }
+  },
+  "preservation": {
+    "before": {
+      "tables": 144,
+      "concepts": {
+        "hash": "20a36fbe2acb091c67df9f1e19c7b882",
+        "count": 30257
+      },
+      "runCount": 1,
+      "approvals": {
+        "hash": "7e7931e6c74824a28c8c42180acb486a",
+        "count": 12
+      },
+      "positions": {
+        "hash": "9953c62ea8bd79af80a309abe2f86708",
+        "count": 23
+      },
+      "proposals": {
+        "hash": "6e8469d11ff54f2d02daa51ba346f601",
+        "count": 2
+      }
+    },
+    "after": {
+      "tables": 144,
+      "concepts": {
+        "hash": "20a36fbe2acb091c67df9f1e19c7b882",
+        "count": 30257
+      },
+      "runCount": 1,
+      "approvals": {
+        "hash": "7e7931e6c74824a28c8c42180acb486a",
+        "count": 12
+      },
+      "positions": {
+        "hash": "9953c62ea8bd79af80a309abe2f86708",
+        "count": 23
+      },
+      "proposals": {
+        "hash": "6e8469d11ff54f2d02daa51ba346f601",
+        "count": 2
+      }
+    },
+    "equal": true,
+    "noInferenceOrApprovalOrAssociation": true
+  },
+  "security": {
+    "beforeCount": 4,
+    "afterCount": 4,
+    "beforeCategories": [
+      "anon_security_definer_function_executable",
+      "auth_leaked_password_protection",
+      "authenticated_security_definer_function_executable",
+      "rls_enabled_no_policy"
+    ],
+    "afterCategories": [
+      "anon_security_definer_function_executable",
+      "auth_leaked_password_protection",
+      "authenticated_security_definer_function_executable",
+      "rls_enabled_no_policy"
+    ],
+    "anonExecute": false,
+    "authenticatedExecute": true
+  },
+  "containers": [
+    {
+      "name": "/prisma-web",
+      "image": "sha256:a94a16a71e053415993abb076ac032e99f921bd939d4b8f4124cfcdfb64e94d1",
+      "status": "running",
+      "started": "2026-10-25T02:34:11.990264672Z",
+      "restarts": 0
+    },
+    {
+      "name": "/prisma-profile-synthesis",
+      "image": "sha256:e38267942cb9b6d19485974cb83f3dd16d35a312f0b1261d1f244009af417283",
+      "status": "running",
+      "started": "2026-10-25T00:00:08.570824938Z",
+      "restarts": 0
+    },
+    {
+      "name": "/prisma-knowledge-model",
+      "image": "sha256:4c5b27871a3239a717048f9b93057680a51b60c8119a7016aebb57f938e25e35",
+      "status": "running",
+      "started": "2026-10-24T06:41:50.878853905Z",
+      "restarts": 0
+    },
+    {
+      "name": "/horus-web",
+      "image": "sha256:9fb9c4d2ed9cb3d47daaf31ac9a21d8865e4b04139f6c30e90e3d92f7ac76c32",
+      "status": "running",
+      "started": "2026-10-23T00:18:13.483493093Z",
+      "restarts": 0
+    },
+    {
+      "name": "/prisma-parser-ia",
+      "image": "sha256:5178559d9de269d99eb0f0439022ebcba42d745f50c592747d788ef13bf83630",
+      "status": "running",
+      "started": "2026-10-18T21:54:49.574818928Z",
+      "restarts": 0
+    },
+    {
+      "name": "/prisma-paddle-gateway",
+      "image": "sha256:cf414afdb189d3906df09633566e75d56a56dc7779e21a73e80830b0b71c9b73",
+      "status": "running",
+      "started": "2026-10-17T03:50:46.161234533Z",
+      "restarts": 0
+    },
+    {
+      "name": "/hrt-mail-forwarder",
+      "image": "sha256:ffc0f2a53e093cec01c4a91e652b29b0ede4808ecc2f461df9e6faa52940cc31",
+      "status": "running",
+      "started": "2026-10-17T03:50:46.167802994Z",
+      "restarts": 0
+    },
+    {
+      "name": "/traefik-traefik-1",
+      "image": "sha256:f86a2cab1b5c649070c49f883c743dd32d8485a56e3368c5f93b9e91f1e91259",
+      "status": "running",
+      "started": "2026-10-17T03:50:46.159859692Z",
+      "restarts": 0
+    }
+  ],
+  "web": {
+    "checks": 19,
+    "login": "3.2.1 PASS",
+    "entry": "/assets/index-CQLbPBr1.js",
+    "initialSmoke": "404 at swap; independent public checks passed without rebuild"
+  },
+  "limits": [
+    "Read-only authenticated production RPC; no human approval or association performed",
+    "Browser scenarios use synthetic fixtures; no claim of universal model accuracy"
+  ]
+}

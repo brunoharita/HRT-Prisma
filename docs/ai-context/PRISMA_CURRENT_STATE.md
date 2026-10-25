@@ -3,15 +3,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.94.7
+version: 2.94.8
 last_verified: 2026-10-24
 ---
 
 # Estado atual do Prisma
 
-## Referências contextuais do RAG — correção 3.2.1 em validação
+## Referências contextuais do RAG — correção publicada na mesma 3.2.1
 
-A lista passa a mostrar somente o alvo contextual sustentado, em vez de todos os itens recuperados. Projeção no loader e revisão compartilhada; decisões humanas/publicação prevalecem, pool histórico preservado. Sem novos modelos/tabelas/chamadas de IA. Gerente de Estoque: a indicação existente é Gestor de armazém/Gestora de armazém (ESCO1.2.1); couro e vendas não são referências sugeridas. Publicação na mesma3.2.1 ainda pendente. Acordo/AoT `rag-context-references` registra validação e preservação. Supersede a aceitação do ruído visual descrita no fechamento anterior.
+A lista passa a mostrar somente o alvo contextual sustentado, em vez de todos os itens recuperados. Projeção no loader e revisão compartilhada; decisões humanas/publicação prevalecem, pool histórico preservado. Sem novos modelos/tabelas/chamadas de IA. Gerente de Estoque: a indicação existente é Gestor de armazém/Gestora de armazém (ESCO1.2.1); couro e vendas não são referências sugeridas. Publicada em c188b894d83da118b11c3ab968c41bd4961170bc; CI branch40154682722/main40154815059 SUCCESS. Migração20261025023217/hash6c7b7f8cb65b765f00ab6bcfaa19f594aa57d4164cac6e689da11edb76a1a1b9 igual à fonte. Leitura real retorna somente o alvo ESCO e mantém pool5/proposta pendente; 144tabelas/1run e hashes de30257conceitos/12aprovações/23versões/2propostas preservados.14Node/54SQL/78browser, tipos/build/contextos/lint PASS. Weba94a16a71e05 running0,19checks públicos/login3.2.1 PASS após404 transitório sem rebuild; worker/modelo e seis serviços adjacentes intactos. Nenhuma nova inferência, associação ou aprovação produtiva. Fechamento documental sincroniza fontes sem nova implantação. Acordo/AoT `rag-context-references` registra validação e preservação. Supersede a aceitação do ruído visual descrita no fechamento anterior.
 
 ## Reconhecimento ocupacional com IA — correção publicada na mesma versão 3.2.1
 
