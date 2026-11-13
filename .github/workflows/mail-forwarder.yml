@@ -4,11 +4,20 @@ on:
     paths: ["services/mail-forwarder/**", "deploy/*mail-forwarder*", ".github/workflows/mail-forwarder.yml"]
   pull_request:
     paths: ["services/mail-forwarder/**", "deploy/*mail-forwarder*", ".github/workflows/mail-forwarder.yml"]
+permissions:
+  contents: read
+concurrency:
+  group: prisma-mail-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   mail-forwarder:
-    runs-on: ubuntu-latest
+    # Enable only after the KVM2 readiness/approval checkpoints in the runbook.
+    runs-on: ${{ fromJSON(vars.PRISMA_KVM2_CI_ENABLED == 'true' && github.repository == 'brunoharita/HRT-Prisma' && github.event_name == 'push' && github.ref == 'refs/heads/main' && '["self-hosted","linux","x64","prisma-kvm2-ci"]' || '["ubuntu-latest"]') }}
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: pnpm/action-setup@v4
         with:
           version: 11.19.0
