@@ -3,11 +3,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.95.1
-last_verified: 2026-10-25
+version: 2.95.2
+last_verified: 2026-11-13
 ---
 
 # Estado atual do Prisma
+
+## GitHub Actions na KVM2 — preparação 1.0.0, ativação pendente
+
+Os dois workflows têm seleção opt-in por `PRISMA_KVM2_CI_ENABLED=true`: apenas push de `main` do repositório original pode usar runner `self-hosted/linux/x64/prisma-kvm2-ci`. PRs, forks, branches e configuração ausente/desativada preservam `ubuntu-latest`. Checks/comandos/versões existentes mantidos; tokens read-only, checkout sem persistência de credenciais, timeout e concorrência limitados. Runbook `docs/operations/github-actions-kvm2.md` preserva checkpoints de identidade SSH, capacidade/isolamento, aprovação, smoke e rollback. Nenhum deploy foi adicionado. SSH recusado antes do banner, inclusive fora do sandbox; impressão ED25519 não verificada, runner não instalado e variável remota não inspecionada. Preparação local não comprova migração operacional. Acordo/impacto/evidência em `docs/qa/aot-github-actions-kvm2.md`.
 
 ## Descoberta pertinente e ordenação — 3.3.0 publicada
 

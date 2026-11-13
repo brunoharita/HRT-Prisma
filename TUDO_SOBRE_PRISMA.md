@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 575
-source_manifest_sha256: 73ce78a88401cf5dbe8371f19af68926fdb47891d355879e9347d63c7071a7e2
+documentation_source_count: 577
+source_manifest_sha256: 8be46645f03685b7ae121e950624c1b01e7af14869d5d2d593eb92c04e657c16
 -->
 
 # Tudo sobre o Prisma
@@ -2651,11 +2651,15 @@ prisma_context_id: current-state
 owner: engineering-operations
 
 status: current
-version: 2.95.1
-last_verified: 2026-10-25
+version: 2.95.2
+last_verified: 2026-11-13
 ---
 
 # Estado atual do Prisma
+
+## GitHub Actions na KVM2 — preparação 1.0.0, ativação pendente
+
+Os dois workflows têm seleção opt-in por `PRISMA_KVM2_CI_ENABLED=true`: apenas push de `main` do repositório original pode usar runner `self-hosted/linux/x64/prisma-kvm2-ci`. PRs, forks, branches e configuração ausente/desativada preservam `ubuntu-latest`. Checks/comandos/versões existentes mantidos; tokens read-only, checkout sem persistência de credenciais, timeout e concorrência limitados. Runbook `docs/operations/github-actions-kvm2.md` preserva checkpoints de identidade SSH, capacidade/isolamento, aprovação, smoke e rollback. Nenhum deploy foi adicionado. SSH recusado antes do banner, inclusive fora do sandbox; impressão ED25519 não verificada, runner não instalado e variável remota não inspecionada. Preparação local não comprova migração operacional. Acordo/impacto/evidência em `docs/qa/aot-github-actions-kvm2.md`.
 
 ## Descoberta pertinente e ordenação — 3.3.0 publicada
 
@@ -11123,6 +11127,54 @@ Migration aplicada não prova aplicação publicada; aplicação publicada não 
 ## Rollback
 
 Código: ref/artefato anterior. Migration: preferir forward fix; rollback destrutivo exige plano e aprovação. Prompt/modelo: reativar versão aprovada anterior. Capability: flag fail-closed somente quando existir infraestrutura de flags.
+
+---
+
+## Source: `docs/operations/github-actions-kvm2.md`
+
+# GitHub Actions na KVM2 — CI 1.0.0
+
+## Estado e escolha
+
+Preparação reversível dos workflows `Prisma foundation CI` e `HRT mail forwarding CI`. Os nomes dos jobs/checks, gatilhos, versões e comandos existentes permanecem. A variável de repositório `PRISMA_KVM2_CI_ENABLED=true` seleciona `[self-hosted, linux, x64, prisma-kvm2-ci]` somente para push em `main` de `brunoharita/HRT-Prisma`. Todos os demais cenários usam `ubuntu-latest`. Ausência da variável mantém o comportamento hospedado; falta de runner após ativação deixa o job na fila, sem fallback automático.
+
+Reutiliza o runner oficial do GitHub e uma variável de repositório, sem orquestrador próprio. Mover todos os eventos para um runner persistente na VPS de produção exporia serviços a código de PR; a primeira etapa limita a execução à revisão já integrada em main. Mesmo código em main executa scripts de dependências: usuário separado sozinho não é isolamento suficiente de produção. A ativação exige a revisão de isolamento abaixo. PRs/branches permanecem hospedados e podem continuar consumindo minutos. Não há promessa de custo zero.
+
+## Checkpoint 1 — acesso e diagnóstico
+
+Conectar a `root@72.60.241.90:22` usando `KVM2_SSH_PRIVATE_KEY` somente depois de obter a chave pública ED25519 e conferir exatamente `SHA256:Nq8TDkGbnNPlz3Nl0KSdm0ZvMl7usvYSET36LXMYaik`. Fixar a chave conferida em known_hosts temporário local e usar `StrictHostKeyChecking=yes`, `IdentitiesOnly=yes`, sem agent forwarding e sem imprimir a chave privada. Divergência interrompe o acesso; não aceitar automaticamente nem substituir uma chave divergente.
+
+Consultar versão Linux/glibc/arquitetura, CPU, RAM, swap, disco/inodes e carga, unidades e containers ativos. Não ler arquivos `.env`, chaves, payloads nem configurações privadas. Verificar em GitHub os runners, visibilidade do repositório, proteções de main, rulesets, required checks e environments/reviewers atuais. Registrar o estado antes de qualquer alteração. A variável de ativação deve permanecer ausente ou `false` até o checkpoint3.
+
+## Checkpoint 2 — preparação e isolamento
+
+Após revisar as consultas e autorizar a instalação:
+
+1. Confirmar LinuxX64 compatível; se arquitetura diferente, ajustar label/workflow antes de ativar. Reservar CPU/RAM/disco suficientes para CI sem prejudicar os serviços observados; não inferir capacidade pelo nome KVM2.
+2. Instalar o runner oficial em usuário exclusivo sem sudo, sem grupos Docker/produção, sem socket Docker/Podman, chaves SSH, credenciais de deploy ou leitura dos diretórios/volumes privados. Nunca executar como root ou reutilizar `/opt/prisma` como workspace.
+3. Usar sandbox/container sem privilégios e sem mounts/namespace de host ou acesso à rede privada dos serviços; definir limites de CPU/memória/processos/disco e uma única execução simultânea no host. Os dois workflows compartilham um único runner para não competir entre si. Se não for possível isolar a VPS, manter a variável desativada e discutir executor separado antes de prosseguir.
+4. Registrar runner restrito ao repositório original com label `prisma-kvm2-ci`, além de `self-hosted`, `linux`, `x64`. Token de registro de curta duração somente por canal privado; não gravar em Git/logs/histórico. Habilitar serviço/reinício e atualização conforme instruções oficiais, com credenciais do runner protegidas.
+5. Garantir ferramentas usuais do runner Ubuntu usadas pelos jobs: bash, Git, tar/unzip, Node suportado pelo runner/Actions, bibliotecas exigidas pelo build e acesso HTTPS ao GitHub, artefatos, registries e endpoints de auditoria. `setup-node` instalará Node22/24; `pnpm/action-setup` instalará11.19.0. Não copiar credenciais de produção para satisfazer CI.
+6. Preparar workspace descartável/limpeza entre jobs e cache limitado, sem segredos persistentes. Registrar limites e imagem/configuração utilizada. Não desativar atualizações de segurança do runner.
+
+## Checkpoint 3 — ativação, evidência e aprovação
+
+Preservar required checks, proteção de branch e aprovações dos environments. A variável de roteamento não substitui esses gates; somente administradores autorizados podem alterá-la. Inspecionar antes qualquer valor remoto existente: o checkout não prova que a variável está ausente. Publicar esta preparação não autoriza ativar uma instalação ainda não validada.
+
+Com identidade SSH, isolamento, recursos e runner online comprovados, registrar a aprovação de ativação e definir `PRISMA_KVM2_CI_ENABLED` para `true`. Validar primeiro um push main aprovado que afete apenas CI; para validar também o mail, o diff deve incluir seu workflow ou os caminhos de serviço/deploy já previstos. Reexecutar um run antigo usa a revisão antiga do workflow e não comprova a nova seleção.
+
+Confirmar runner efetivo nos dois jobs, checks e comandos completos bem-sucedidos, duração/consumo de recursos, nenhuma credencial de checkout persistida e nenhuma alteração/reinício dos serviços de produção. Testar que PR e branch continuam em `ubuntu-latest`. Somente então marcar migração parcial de CI operacional concluída. Não adicionar deploy automático, remover gates ou alterar políticas de aprovação nesta mudança.
+
+## Rollback
+
+Definir a variável para `false` ou removê-la faz os próximos runs usarem `ubuntu-latest`, sem alteração de código. Jobs já enfileirados/em execução não mudam de destino: cancelar somente os runs afetados após revisão e iniciar nova execução aprovada usando a configuração atual. Em seguida parar/remover apenas o runner CI se necessário, preservando serviços produtivos e evidências. Não desligar a VPS nem remover volumes/cache de produção.
+
+## Referências
+
+- [Segurança de GitHub Actions](https://docs.github.com/en/actions/security-for-github-actions/security-guides/security-hardening-for-github-actions)
+- [Roteamento a runners próprios](https://docs.github.com/en/actions/how-tos/manage-runners/self-hosted-runners/using-self-hosted-runners-in-a-workflow)
+- [Runner oficial](https://github.com/actions/runner)
+- Acordo, impacto e evidências: `docs/qa/aot-github-actions-kvm2.md`.
 
 ---
 
@@ -20446,6 +20498,48 @@ Local: 34 checks browser Kanban e 51 checks de descoberta PASS, incluindo falha/
 Dispatcher confirmou web apenas; validação local proporcional substituiu o comando genérico pnpm test do plano por 53 testes dirigidos conforme mapa, com CI existente completo. Sem desvio funcional. Rolagem horizontal local preserva largura legível no desktop; mobile mantém uma coluna e os mesmos cinco destinos. Arquivos alheios preservados.
 
 Probe imediato retornou HTTP404 durante recriação; dispatcher exit1/SSH22. A verificação independente posterior passou (16HTTP200/15checks), sem repetir deploy. Resultado consolidado em publication-consolidated.json.
+
+---
+
+## Source: `docs/qa/aot-github-actions-kvm2.md`
+
+# GitHub Actions na KVM2 — acordo, execução e evidência 1.0.0
+
+## Acordo e execução
+
+Autorização: Bruno solicitou em 13/11/2026 as alterações necessárias à migração, preservando os checkpoints de aprovação do pedido inicial. A implementação prepara uma ativação reversível; instalação e ativação dependem da validação operacional abaixo.
+
+- D-01: preparar os dois workflows existentes para runner Linux/X64 com label `prisma-kvm2-ci`, exclusivamente no push de `main` do repositório original e quando `PRISMA_KVM2_CI_ENABLED` for exatamente `true`.
+- D-02: preservar nomes dos checks, gatilhos, versões Node/pnpm, validações e permissões mínimas. PRs, forks, branches e variável ausente/desativada usam `ubuntu-latest`.
+- D-03: documentar identidade SSH, isolamento, capacidade, aprovação de ativação, smoke e rollback antes de habilitar execução na VPS de produção.
+- P-01: não expor chave SSH, executar PRs na VPS, remover validações, dar acesso Docker/root ao runner ou acionar deploy por esta migração.
+- F-01: aplicação, banco, serviços produtivos e migração de PRs à VPS.
+- A-01: engenharia define labels, variável, testes dirigidos e documentação. Não há nova dependência de produção nem alteração de versão pública; configuração de CI 1.0.0.
+- CA-01: matriz negativa do roteamento e sintaxe dos workflows verificadas; comandos existentes preservados.
+- CA-02: ativação somente após identidade, isolamento e capacidade verificados, runner online e aprovação registrada. Enquanto bloqueado, não declarar migração operacional concluída.
+
+## Mapa de impacto antes da implementação
+
+Baseline local: `b052be8751e66d495c160959839e4cb133ea5ae4`, igual ao `origin/main` consultado; worktree limpo. Os dois jobs usam `ubuntu-latest`; foundation usa Node22/pnpm11.19.0 e mail usa Node24/pnpm11.19.0.
+
+| Relação | Área/capacidade protegida | Evidência proporcional |
+| --- | --- | --- |
+| direct | Seleção de runner e execução dos dois checks existentes | Matriz de eventos/variável/repositório; sintaxe; comparação dos steps |
+| critical_transversal | Limite de confiança entre código de PR e serviços produtivos | Negativos para PR/fork/branch; ativação bloqueada sem inspeção da VPS |
+| plausible_indirect | Recursos de produção compartilhados com CI | Medição de CPU/RAM/disco e limites antes da ativação; ainda sem acesso |
+| no_impact_identified | Produto, banco, dados e deploy | Alterações restritas a CI/documentação/teste; nenhum comando de implantação adicionado |
+
+## Evidência e limites
+
+- SSH: conexão TCP recusada em `72.60.241.90:22`, inclusive fora do sandbox. Sem banner nem chave pública. Impressão ED25519 esperada `SHA256:Nq8TDkGbnNPlz3Nl0KSdm0ZvMl7usvYSET36LXMYaik` ainda não conferida; chave privada não exibida nem enviada.
+- Ambiente: variável SSH presente, rede restrita, VPN não configurada e grants TCP vazios; isso não identifica a origem da recusa TCP.
+- GitHub CLI: credencial `GH_TOKEN` rejeitada no `gh auth status`; leitura Git de `origin/main` funciona. Não há evidência das configurações remotas de proteção, environments, runners ou variáveis.
+- Fontes oficiais de referência: links no runbook. A consulta HTTP às páginas docs.github.com retornou403 neste ambiente; documentação remota não foi validada nesta execução.
+- D-01/D-02/CA-01 PASS local: quatro testes Node verificaram320combinações por workflow (640no total), incluindo variável ausente/desativada, fork, PR, pull_request_target, branch/tag e dispatch; tokens read-only, timeout e checkout sem credencial persistida. Leitura YAML dos dois arquivos passou; comparação estrutural com o baseline comprovou nomes, gatilhos, jobs e todos os steps/versões/comandos originais preservados. Não foi executado actionlint; o parsing YAML e a avaliação das expressões não substituem a execução real no GitHub.
+- Regressão dirigida PASS:22testes de dispatcher/contexto, lint e verificação dos contextos regenerados. `git diff --check` sem erros. A suíte integral da aplicação não foi executada localmente, pois não há alteração de produto; o gate integral existente permanece no CI remoto.
+- D-03: runbook preparado; CA-02 e migração operacional BLOCKED por acesso SSH e configuração remota ainda não verificados.
+- P-01: nenhuma instalação, ativação ou implantação executada. Nenhum checkpoint remoto foi alterado.
+- Publicação: preparação em branch `codex/github-actions-kvm2`; main/ativação não devem ser promovidos enquanto a configuração remota da variável e o runner não forem inspecionados. CI remoto e sincronização VPS permanecem não verificados neste registro.
 
 ---
 

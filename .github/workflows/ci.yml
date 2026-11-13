@@ -13,11 +13,14 @@ concurrency:
 
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    # Enable only after the KVM2 readiness/approval checkpoints in the runbook.
+    runs-on: ${{ fromJSON(vars.PRISMA_KVM2_CI_ENABLED == 'true' && github.repository == 'brunoharita/HRT-Prisma' && github.event_name == 'push' && github.ref == 'refs/heads/main' && '["self-hosted","linux","x64","prisma-kvm2-ci"]' || '["ubuntu-latest"]') }}
     timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -32,6 +35,9 @@ jobs:
 
       - name: Install locked dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Validate KVM2 CI routing policy
+        run: node --test tests/tooling/kvm2Ci.test.mjs
 
       - name: Validate foundation
         run: pnpm validate
