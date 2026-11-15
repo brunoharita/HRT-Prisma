@@ -1,0 +1,40 @@
+name: Prisma verified compute contingency
+on:
+  workflow_run:
+    workflows: [Prisma foundation CI]
+    types: [completed]
+permissions:
+  contents: read
+  actions: write
+  checks: read
+  pull-requests: read
+concurrency:
+  group: prisma-compute-contingency-${{ github.event.workflow_run.id }}
+  cancel-in-progress: false
+jobs:
+  verify_and_retry:
+    if: >-
+      vars.PRISMA_KVM2_CI_READY == 'true' &&
+      github.repository == 'brunoharita/HRT-Prisma' &&
+      github.event.workflow_run.run_attempt == 1 &&
+      github.event.workflow_run.conclusion == 'failure' &&
+      github.event.workflow_run.head_repository.full_name == 'brunoharita/HRT-Prisma'
+    runs-on: [self-hosted, linux, x64, prisma-kvm2-ci]
+    timeout-minutes: 3
+    steps:
+      - name: Checkout trusted controller only
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: .ci-controller
+          persist-credentials: false
+          sparse-checkout: |
+            scripts/ci-quota-fallback.mjs
+            scripts/lib/ci-quota-fallback.mjs
+          sparse-checkout-cone-mode: false
+      - name: Verify provider quota and request one retry
+        working-directory: .ci-controller
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PRISMA_QUOTA_RUN_ID: ${{ github.event.workflow_run.id }}
+        run: /usr/bin/node scripts/ci-quota-fallback.mjs request

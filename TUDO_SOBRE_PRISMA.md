@@ -1,8 +1,8 @@
 <!-- GENERATED FILE. DO NOT EDIT.
 artifact_role: portable-complete-context
 context_bundle_version: 2.0.0
-documentation_source_count: 575
-source_manifest_sha256: 73ce78a88401cf5dbe8371f19af68926fdb47891d355879e9347d63c7071a7e2
+documentation_source_count: 578
+source_manifest_sha256: aa9f27f990137b77061306d6b04985c503ce48603bc6906c9271d27f29f4d273
 -->
 
 # Tudo sobre o Prisma
@@ -2656,6 +2656,10 @@ last_verified: 2026-10-25
 ---
 
 # Estado atual do Prisma
+
+## CI KVM2 — preparação 1.0 desativada (14/11/2026)
+
+Contingência GitHub primeiro preparada em branch: somente tentativa2 após prova oficial de billing sem etapas executadas; main/PR interno atual, verificador main antes de dependências e checkouts independentes. `PRISMA_KVM2_CI_READY` deve permanecer ausente/false. Não há runner Prisma criado/ativado nem coordenação conjunta comprovada nesta sessão. SSH root@72.60.241.90:22 recusado no ambiente; conta prisma-ci, sandbox/rede, limites individuais/agregado, persistência e recuperação não inspecionados. Teto exigido do conjunto:1,8CPU/4GiB sem swap, um job pesado por vez entre Horus e Prisma. Não declarar conclusão operacional nem migrar deploy. Próxima ação: diagnóstico read-only do operador e implementação/validação conjunta antes de readiness; ver [runbook](../operations/github-actions-kvm2.md) e [AoT](../qa/aot-prisma-kvm2-ci.md). Produto/produção permanecem sem alteração.
 
 ## Descoberta pertinente e ordenação — 3.3.0 publicada
 
@@ -11126,6 +11130,72 @@ Código: ref/artefato anterior. Migration: preferir forward fix; rollback destru
 
 ---
 
+## Source: `docs/operations/github-actions-kvm2.md`
+
+# Prisma CI KVM2 — preparação 1.0, NÃO operacional
+
+Contrato: [acordo 1.0](../qa/agreement-prisma-kvm2-ci.md). Evidências e limites: [AoT](../qa/aot-prisma-kvm2-ci.md).
+
+## Estado comprovado
+
+Baseline Prisma b052be8751e66d495c160959839e4cb133ea5ae4; referência Horus origin/main 5c288b0c152d813cd32710372c07ce2e0df3f102 e PRs [38](https://github.com/brunoharita/hrt-horus/pull/38)/[39](https://github.com/brunoharita/hrt-horus/pull/39), consultados em 14/11/2026 no horário do cliente. Scripts e workflows remotos foram lidos. A cópia local Horus anterior era anterior aos dois PRs; ela não foi alterada.
+
+O acesso SSH direto a 72.60.241.90:22 retornou Connection refused neste ambiente, inclusive na execução externa disponível. VPN do ambiente desativada. Não houve autenticação, leitura da conta prisma-ci ou alterações no host; a chave ED25519 não pôde ser obtida/validada. Nenhum secret foi impresso ou incluído na entrega. Não se pode presumir que a preparação prisma-ci esteja concluída nem que o isolamento atual seja suficiente.
+
+Não criar `PRISMA_KVM2_CI_READY=true`. O código preparado é inerte por padrão, e não comprova criação de runner, coordenação ou aplicação de limites. Não foi escrito instalador baseado em estado de host presumido.
+
+## Política preparada
+
+`Prisma foundation CI / validate` começa em ubuntu-latest. Tentativa 2 só seleciona label exclusiva `prisma-kvm2-ci` quando o gate de prontidão for habilitado após todas as provas abaixo e a origem for main/PR interno para main. Demais tentativas, refs e forks permanecem hosted. O verificador recusa terceira tentativa, revisões obsoletas e falhas sem prova exata.
+
+O observador da main usa exclusivamente `.ci-controller`, token com actions:write somente para solicitar repetição e nenhum acesso a código PR/dependências. O job validate usa `.ci-verifier` da main para prova novamente antes de checkout do teste ou instalação. São três repositórios Git independentes. O checkout completo `ci-checkout` tem cwd, lockfile e cache pnpm explícitos; relatórios em `ci-checkout/tmp/ci-reports`, identificados por SHA/run/attempt. Falhas de validação/audit/upload continuam bloqueantes. O controller não publica checks aprovados nem deploy.
+
+Política reutilizada do Horus: somente mensagem oficial exata de billing, app github-actions, todos os jobs iniciais sem etapas/runner, failure ou skipped, enumeração completa e pelo menos validate bloqueado. API indisponível, storage, dependências, timeout, testes, anotações ambíguas e eventos/revisões não autorizados falham fechados. Antes do POST, fonte/estado são relidos. Não há aumento de orçamento nem loop.
+
+A suíte foundation existente usa Node 22, pnpm 11.19.0 e dependências do lockfile. A descoberta de `scripts/run-tests.mjs` já inclui os novos testes tooling. O CI atual não inicia PostgreSQL nativo nem imagem Playwright do Horus; scripts locais avulsos de banco não autorizam instalar ferramentas ou acessar um banco remoto. Não portar PostgreSQL/Python/Chromium por analogia. `/usr/bin/node` >=22 confiável no host é pré-requisito do verificador sem instalação. Deploy e QA permanecem nos publicadores canônicos.
+
+## Diagnóstico mínimo para o operador
+
+No checkout desta branch no computador do operador, com o alias administrativo já configurado:
+
+```bash
+# Primeiro conferir a identidade, antes de enviar qualquer script ou autenticar.
+ssh-keyscan -T 10 -t ed25519 72.60.241.90 > kvm2-ci-hostkey.tmp
+ssh-keygen -lf kvm2-ci-hostkey.tmp
+fingerprint=$(ssh-keygen -lf kvm2-ci-hostkey.tmp | awk '{print $2}')
+test "$fingerprint" = 'SHA256:Nq8TDkGbnNPlz3Nl0KSdm0ZvMl7usvYSET36LXMYaik' || exit 1
+# Identidade ED25519 obrigatória:
+# SHA256:Nq8TDkGbnNPlz3Nl0KSdm0ZvMl7usvYSET36LXMYaik
+# Arquivo é chave pública; mantê-lo para verificação estrita da sessão.
+ssh -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$PWD/kvm2-ci-hostkey.tmp" root@72.60.241.90 \
+  'bash -s' < scripts/ci/diagnose-kvm2.sh > kvm2-ci-diagnosis.txt
+```
+
+O script é somente leitura: capacidade, contas/grupos/subids, permissões de caminhos conhecidos, propriedades selecionadas dos serviços/slices e nomes de tabelas nft. Não lê `.credentials`, `.env`, chaves, tokens, logs de produção ou conteúdo das unidades. O arquivo local de chave pública pode ser removido após a sessão. O diagnóstico é a primeira etapa; não é teste de isolamento nem autorização de ativação.
+
+## Coordenação e teto conjunto — bloqueador antes de configurar/ativar
+
+Inspecionar primeiro as unidades root-managed e a preparação prisma-ci existentes. Reutilizar o que passar na auditoria. A coordenação deve envolver ambos os projetos, cobrir o ciclo inteiro do job (incluindo criação de containers e cleanup), manter somente um job pesado e fazer o outro esperar, sem credenciais ou acesso a dados cruzados. Hooks/locks cooperativos em scripts do repo não bastam para comprovar isso: containers são criados antes dos steps e podem sobreviver a cancelamentos.
+
+Usar mecanismos nativos do host quando compatíveis com os controles existentes: uma slice ancestral root-managed com CPUQuota=180%, MemoryHigh=4G, MemoryMax=4G, MemorySwapMax=0 para TODOS os runners/daemons/containers de CI; filhos exclusivos limitados aos mesmos máximos individuais. Isso não unifica contas, runners, sockets ou credenciais. Não basta limitar duas user slices separadas. Incluir serviços user auxiliares se existirem e impedir escape para cgroup sem teto; rootless Docker deve usar delegação corretamente. O filtro de acesso e o árbitro de exclusão precisam ser controlados pelo administrador, inacessíveis aos dois UIDs, com recuperação comprovada após falha/cancelamento e limpeza antes da próxima concessão. A escolha/configuração final depende do diagnóstico real, inclusive do modo usado no Horus.
+
+Se exigir mudança no CI Horus, preparar em branch/PR do repositório Horus, pelo seu fluxo, com identidade explicitamente apropriada; nenhuma alteração Horus foi feita nem administrada com a credencial Prisma. Não habilitar Prisma como forma de testar concorrência irrestrita. Não ampliar recursos/alterar produção/reiniciar VPS ou Docker produtivo.
+
+## Provas necessárias antes de readiness
+
+1. Contas/grupos/subuids/subgids exclusivos sem sudo/docker produtivo; arquivos/credenciais e `/opt`, `/srv`, `/mnt`, `/media`, homes alheias, sockets/bus/runtime e processos protegidos, inclusive mounts alternativos via próprio rootless Docker. Registro do runner sem secrets de deploy e escopo exclusivo ao repo. Root-managed sandbox efetiva, não apenas arquivo planejado.
+2. Rede: tentativas negativas no runner E nos containers para host/serviços produtivos, redes privadas, metadata, IPv4/IPv6/loopbacks equivalentes. Positivos para GitHub/registries/DNS e somente banco descartável próprio se necessário. Rootless sozinho não comprova rede isolada.
+3. `systemctl show` e leitura da hierarquia real em `/sys/fs/cgroup` para CPU/memória/swap dos pais/filhos; confirmar ambos daemons e containers sob ancestral conjunto e workload até 1,8CPU/3GiB dentro do teto 1,8CPU/4GiB. Teto não significa RAM reservada ou ausência de pressão na VPS.
+4. Disputa simultânea com jobs sintéticos de dois UIDs: um executa, outro espera; registrar timestamps e cgroups. Repetir sucesso/falha/cancelamento/morte do worker/daemon e reinício do árbitro; conferir ausência de órfãos e liberação só após cleanup. Ensaio isolado local não substitui isso.
+5. Boot enabled, Restart/RestartSec/KillMode/dependências e recuperação realmente aplicados; validar sem reboot e sem restart produtivo. Conferir que jobs não podem alterar os controles, teto de disco/cache/workspace e rollback das unidades alteradas.
+6. Checks/regras de branch remotos preservados. Só então configurar prontidão, integrar por PR validado e observar ciclo real pós-merge hosted bloqueado → observador main → tentativa 2 VPS → validate e artifacts concluídos. Se hosted funcionar, preservar sucesso e registrar contingência ainda não exercitada; nunca simular falha oficial ou reexecutar código obsoleto para fabricar prova.
+
+## Rollback
+
+Enquanto esta preparação estiver desativada, não há alteração operacional para reverter. Para remover o código, reverter o commit/PR mantendo hosted e o check validate. Após eventual ativação: desabilitar observador/remover readiness, revisar/cancelar apenas runs afetados, aguardar parada e cleanup do job ativo e parar somente unidades Prisma de CI. Restaurar unidades/coordenação Horus conforme seu próprio PR e evidência, preservando teto conjunto até nenhum job Prisma existir. Não apagar workspaces/evidências, não alterar Docker produtivo nem aplicações. Jobs já enfileirados exigem tratamento explícito; remover variável não os cancela.
+
+---
+
 ## Source: `docs/operations/hrt-email-forwarding.md`
 
 # Recebimento e encaminhamento HRT
@@ -18050,6 +18120,55 @@ Versão 1.0.0. Estado: agreed para implementação local. PO: Bruno, 2026-09-14.
 ## PENDENTE
 
 Nenhuma decisão material pendente. Automação futura de upload exige decisão própria de integração, autenticação, custo e operação.
+
+---
+
+## Source: `docs/qa/agreement-prisma-kvm2-ci.md`
+
+# Contrato Prisma CI KVM2 — 1.0
+
+Estado: agreed. Fonte: pedido explícito anexado por Bruno em 14/11/2026 (horário do cliente). Este registro transcreve os requisitos autorizados; não cria aprovação de produção.
+
+## DEVE
+
+- D-01 — Runner, usuário prisma-ci, label prisma-kvm2-ci, workspace, credenciais e Docker rootless exclusivos. Inspecionar a preparação real antes de configurar o host; preservar filesystem, rede, privilégios e processos do modelo Horus.
+- D-02 — Limites individuais CPUQuota=180%, MemoryHigh/Max=4G, MemorySwapMax=0; containers até 1,8CPU/3GiB. Conjunto de CI sob teto agregado 1,8CPU/4GiB, com apenas um job pesado entre Horus e Prisma e espera do outro; liberar após sucesso, falha e cancelamento, incluindo limpeza.
+- D-03 — GitHub primeiro. Uma única repetição na VPS por prova oficial de faturamento/cota da API, sem qualquer etapa inicial executada. Somente main/PR interno atual; controlador executa main confiável sem dependências/PR. Cada job de testes revalida antes de dependências, inclusive repetição isolada.
+- D-04 — Controlador e testes em Git independentes, cache/lockfile/cwd/relatórios explícitos. Bancos realmente necessários são descartáveis, temporários curtos, parados antes de remover dados; preservar evidências. Instalar somente dependências exigidas pelo Prisma.
+- D-05 — Serviços persistentes com recuperação efetiva verificada, sem reboot ou restart produtivo. Validar isolamento real, recursos, disputa e recuperação. Após merge, comprovar ciclo hosted bloqueado → controlador → VPS → testes/relatórios.
+- D-06 — Preservar required checks, revisão/artefato/ambiente, QA → evidência → autorização específica de produção; registrar PR, SHA, limites efetivos, pendências e rollback. Sem acesso SSH, entregar comandos mínimos ao operador e manter ativação bloqueada.
+
+## PROIBIDO
+
+- P-01 — Reutilizar contas/sockets/credenciais/diretórios Horus; acesso a Docker, arquivos, serviços ou secrets produtivos; usar credenciais Prisma para administrar Horus.
+- P-02 — Contingência para testes/código/dependência/timeout/storage/causa desconhecida, forks, revisões obsoletas, terceira tentativa, loops ou aumento de orçamento.
+- P-03 — Ativar Prisma antes de coordenação conjunta comprovada; ampliar orçamento, alterar produção, mudar testes/referências ou publicar deploy neste movimento.
+- P-04 — Expor chave/tokens; SSH sem validar ED25519 SHA256:Nq8TDkGbnNPlz3Nl0KSdm0ZvMl7usvYSET36LXMYaik.
+
+## FORA DE ESCOPO / AUTONOMIA / PENDÊNCIAS
+
+F-01: runner multiprojeto, migração de deploy, mudanças de produto/banco/produção.
+A-01: adaptar implementação Horus existente, sem novas dependências, testes determinísticos e gate de prontidão fechado até prova operacional.
+Q-01: root@72.60.241.90:22 informado pelo operador (alias prisma-vps), porém conexão recusada neste ambiente; estado prisma-ci/rede/sandbox/coordenação ainda não observado. Bloqueia configuração/ativação, não preparação de código inerte.
+
+## CRITÉRIOS DE ACEITE
+
+CA-D01/D02/D05: readback do host, tentativas negativas de acesso, hierarquia cgroup e métricas sob carga; disputa de dois projetos, falha/cancelamento/limpeza sem sobreposição e retorno à fila. Boot configurado e políticas efetivas conferidas, sem alegar ensaio de reboot.
+CA-D03: fixtures API positivas/negativas e ciclo real pós-merge; dependências nunca precedem a prova na VPS.
+CA-D04: repositórios Git independentes mesmo após checkout parcial, lock/cache/cwd explícitos; evidências preservadas. Sem adicionar PostgreSQL por analogia ao Horus.
+CA-D06: diff/publicadores/checks preservados, evidências reais separadas das provas locais; pendência não recebe PASS.
+
+## Mapa inicial de impacto e preservação
+
+| Área | Relação | Baseline | Prova prevista |
+| --- | --- | --- | --- |
+| Prisma CI / política de cota | direct | b052be8751e66d495c160959839e4cb133ea5ae4, validate hosted | fixtures API, workflow/actionlint, CI remoto |
+| Horus CI / coordenação host | direct | origin/main 5c288b0c152d813cd32710372c07ce2e0df3f102; PR38/39 | inspeção antes de mudança; PR próprio se necessário |
+| Recursos/rede/credenciais KVM2 | critical_transversal | estado não observado nesta sessão | readback e disputa/falha/cancelamento antes de habilitar |
+| Publicadores / required checks | plausible_indirect | validate; scripts release-dispatcher e deploy existentes | preservar nomes/comandos; dispatcher e diff |
+| Produto, persistência, UI | no_impact_identified | sem alteração de runtime, schema ou build flags | diff limitado ao CI/docs/tooling; sem deploy |
+
+Versão operacional CI 1.0; versão do produto inalterada. A implementação parcial não satisfaz a entrega operacional completa.
 
 ---
 
@@ -25310,6 +25429,72 @@ Upload em GPT, sincronização externa, produto runtime, Supabase, QA e produç�
 ## Conclusão
 
 PASS. D-001 a D-008 e P-001 a P-006 possuem implementação e prova proporcional. Prisma permanece v1.6.3. Não houve mudança em produto runtime, Supabase, QA ou produção; o upload do novo arquivo no GPT continua sendo uma ação externa manual do Product Owner.
+
+---
+
+## Source: `docs/qa/aot-prisma-kvm2-ci.md`
+
+# AoT — Prisma CI KVM2, preparação 1.0
+
+Contrato: [versão 1.0](agreement-prisma-kvm2-ci.md), derivado do pedido explícito do usuário. Risco D/E: executor persistente, identidade, rede e orçamento compartilhado. Baseline Prisma b052be8751e66d495c160959839e4cb133ea5ae4; referência Horus 5c288b0c152d813cd32710372c07ce2e0df3f102. Reutilização: verificador e testes Horus adaptados, Actions oficiais existentes e nenhuma nova dependência de produto. Decisão de arquitetura host/coordenação não implementada sem diagnóstico; eventual ADR e PR Horus pertencem à continuação deste mesmo movimento.
+
+## Matriz de Acordos
+
+| ID | Implementação | Teste / evidência | Status | Ambiente / limitação |
+| --- | --- | --- | --- | --- |
+| D-01 | Label/workspaces exclusivos preparados; não alterada conta existente | SSH direto recusado, sem autenticação; diagnóstico read-only entregue | BLOCKED | Arquivos/sockets/rede/credenciais/processos do host não inspecionados |
+| D-02 | Ativação bloqueada por readiness ausente/false | Roteamento testado fechado; nenhum limite alegado como efetivo | BLOCKED | Coordenação/limites/disputa/recuperação no host pendentes; não habilitar |
+| D-03 | Controlador main e verificador main antes do código testado/dependências; uma repetição | 7 testes API com múltiplos negativos e 3 testes de política/workflow PASS | PARTIAL | Ciclo real hosted → controlador → VPS pendente |
+| D-04 | Três checkouts independentes, cache/lock/cwd/relatórios explícitos | Fixture Git parcial/promisor e filho completo PASS | PARTIAL | Checkout real/uploads na VPS pendentes; nenhum banco nativo adicionado |
+| D-05 | Script de diagnóstico somente leitura e checklist no runbook | bash -n PASS; SSH Connection refused; nenhuma unidade criada/alterada | BLOCKED | Persistência/recovery/readback/carga não testados |
+| D-06 | validate/comandos/publicadores preservados; runbook, contexto e PR preparado | Dispatcher, revisão de diff e 22 testes release/contexto PASS | PARTIAL | Integração e ciclo pós-merge não efetuados; produção intocada |
+
+## Proibições verificadas
+
+| ID | Guardrail / teste | Evidência | Status |
+| --- | --- | --- | --- |
+| P-01 | Nenhuma operação host ou Horus; escopo Git apenas Prisma | Diff e registro de conexão recusada; nenhum secret de deploy em workflow | PARTIAL — isolamento operacional não testado |
+| P-02 | Rejeita erro de código/teste/dependência/timeout/storage, forks, revisões fechadas/obsoletas e tentativas extras | Fixtures API e expressão real de roteamento, 11 testes PASS | PASS local |
+| P-03 | Readiness fechado; sem aumento de orçamento ou deploy | Workflow negativo readiness ausente/false; publicadores intactos | PASS local — confirmar variável remota antes de integrar |
+| P-04 | Nenhuma chave/token em diff/relatórios; SSH sem autenticação após falha de conexão | Chave temporária removida, não impressa; bloco operador compara ED25519 antes de autenticar | PASS nesta sessão |
+
+## Mapa de Impacto e Preservação
+
+| Área | Relação | Baseline / regressão | Evidência | Status |
+| --- | --- | --- | --- | --- |
+| Política Prisma CI | direct | foundation hosted/validate preservados; fixtures positivas/negativas | 11 testes dirigidos, actionlint 1.7.7 com label local declarada, bash -n | PASS local; remoto pendente |
+| Recursos/rede/segredos KVM2 | critical_transversal | estado não observado; nenhum serviço alterado | Conexão recusada, readiness fechado | BLOCKED |
+| Coordenação Horus | direct | referência remota lida, nenhum arquivo/credencial modificado | PR38/39 e workflows consultados | BLOCKED para coordenação |
+| Publicadores/checks/artefatos | plausible_indirect | nome validate e comandos originais preservados, relatórios associados a SHA | 22 testes tooling/contexto; diff e dispatcher | PARTIAL — regras remotas/ciclo pendentes |
+| Produto/persistência/UI | no_impact_identified | nenhum runtime/schema/flag/publicador alterado | diff limitado a CI/tooling/docs, sem implantação | PASS por escopo |
+
+### Novidade e preservação
+
+Nova política preparada, desativada por padrão; testes locais não equivalem a runner operacional. Mantidos GitHub primeiro, validate, comandos foundation/ledger/deploy-syntax/audit e checkpoints de publicação. Limitação inicial atualizada: usuário informou root@72.60.241.90:22, mas conexão foi recusada também pela rota externa disponível; VPN desativada. Não houve autorização nova ou mudança de escopo.
+
+## Fora de escopo preservado
+
+F-01: sem runner multiprojeto, deploy, mudança de produto ou de persistência. Confirmado pelo diff. Fidelidade visual: não aplicável, não há superfície visual ou referência.
+
+## Desvios do contrato
+
+Entrega operacional incompleta: conta existente, coordenação, recursos, isolamento, recuperação e ciclo real permanecem BLOCKED/NOT TESTED. Não são dispensados nem tratados como PASS. Código inerte preparado para revisão; nenhuma configuração especulativa do host criada.
+
+## Validação final
+
+- `node --test tests/tooling/ciQuotaFallback.test.mjs tests/tooling/ciWorkflow.test.mjs`: 11 PASS, incluindo fixture Git real e negativos API/routing.
+- `node --test tests/tooling/releaseDispatcher.test.mjs tests/tooling/prismaContext.test.mjs`: 22 PASS.
+- `actionlint` 1.7.7, binário da release oficial com checksum conferido: workflows preparados PASS com label prisma-kvm2-ci declarada em configuração temporária; shellcheck/pyflakes externos não executados.
+- `bash -n scripts/ci/diagnose-kvm2.sh`, lint, foundation e contexto: resultados registrados no fechamento do PR.
+- Não executada suíte integral local; alteração limitada a CI/docs/tooling. CI obrigatório continua com `pnpm validate`, sem remoção de gates.
+
+## Git / QA / ambiente
+
+Branch `codex/prisma-kvm2-ci`, origin existente, baseline acima; PR de preparação em draft. Revisão exata e resultados remotos ficam no PR após publicação. Sem merge, ativação, deploy ou acesso a dados. Não há QA de aplicação necessário para código inerte; ensaios de isolamento/coordenação host continuam obrigatórios antes de ativação.
+
+## Conclusão
+
+PARTIAL/BLOCKED. Próxima ação concreta é executar o diagnóstico mínimo do runbook pelo operador, sem enviar chave/token ao chat. Só após inspecionar o estado real pode-se configurar a conta existente e concluir coordenação, teste de disputa/cancelamento/falha e ciclo completo. Rollback da preparação: reverter o PR; rollback operacional futuro detalhado no runbook. Nenhuma alegação de conclusão operacional.
 
 ---
 
