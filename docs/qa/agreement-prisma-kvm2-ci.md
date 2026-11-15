@@ -1,10 +1,12 @@
-# Contrato Prisma CI KVM2 — 1.0
+# Contrato Prisma CI KVM2 — 1.1
 
 Estado: agreed. Fonte: pedido explícito anexado por Bruno em 14/11/2026 (horário do cliente). Este registro transcreve os requisitos autorizados; não cria aprovação de produção.
 
+Delta1.1 (15/11/2026): corrige a transcrição de D-01 para refletir a condição original autorizada “reutilizar a conta prisma-ci e sua preparação quando adequadas”. Diagnóstico e nova conta registrados, sem relaxar isolamento ou alterar os demais requisitos. A decisão original do usuário prevalece; a versão1.0 permanece no histórico Git.
+
 ## DEVE
 
-- D-01 — Runner, usuário prisma-ci, label prisma-kvm2-ci, workspace, credenciais e Docker rootless exclusivos. Inspecionar a preparação real antes de configurar o host; preservar filesystem, rede, privilégios e processos do modelo Horus.
+- D-01 — Runner, usuário, label prisma-kvm2-ci, workspace, credenciais e Docker rootless exclusivos; reutilizar prisma-ci somente quando adequada. Diagnóstico do operador em15/11 comprovou colisão UID1000 com produção; conta exclusiva prisma-ci-runner UID2001 criada dentro dessa condição autorizada. Inspecionar a preparação real antes de configurar o host; preservar filesystem, rede, privilégios e processos do modelo Horus.
 - D-02 — Limites individuais CPUQuota=180%, MemoryHigh/Max=4G, MemorySwapMax=0; containers até 1,8CPU/3GiB. Conjunto de CI sob teto agregado 1,8CPU/4GiB, com apenas um job pesado entre Horus e Prisma e espera do outro; liberar após sucesso, falha e cancelamento, incluindo limpeza.
 - D-03 — GitHub primeiro. Uma única repetição na VPS por prova oficial de faturamento/cota da API, sem qualquer etapa inicial executada. Somente main/PR interno atual; controlador executa main confiável sem dependências/PR. Cada job de testes revalida antes de dependências, inclusive repetição isolada.
 - D-04 — Controlador e testes em Git independentes, cache/lockfile/cwd/relatórios explícitos. Bancos realmente necessários são descartáveis, temporários curtos, parados antes de remover dados; preservar evidências. Instalar somente dependências exigidas pelo Prisma.
@@ -22,7 +24,7 @@ Estado: agreed. Fonte: pedido explícito anexado por Bruno em 14/11/2026 (horár
 
 F-01: runner multiprojeto, migração de deploy, mudanças de produto/banco/produção.
 A-01: adaptar implementação Horus existente, sem novas dependências, testes determinísticos e gate de prontidão fechado até prova operacional.
-Q-01: root@72.60.241.90:22 informado pelo operador (alias prisma-vps), porém conexão recusada neste ambiente; estado prisma-ci/rede/sandbox/coordenação ainda não observado. Bloqueia configuração/ativação, não preparação de código inerte.
+Q-01: root@72.60.241.90:22 informado pelo operador (alias prisma-vps), porém conexão recusada neste ambiente; diagnóstico parcial recebido do operador e nova conta criada; regras efetivas de rede/sandbox, coordenação e ensaios ainda pendentes de inspeção direta. Bloqueia configuração/ativação, não preparação de código inerte.
 
 ## CRITÉRIOS DE ACEITE
 

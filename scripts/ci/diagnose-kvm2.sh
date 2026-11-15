@@ -7,7 +7,7 @@ uname -srmo
 nproc
 free -b
 printf '=== account / groups / subordinate IDs ===\n'
-for account in prisma-ci horus-ci; do
+for account in prisma-ci prisma-ci-runner horus-ci; do
   if ! getent passwd "$account"; then continue; fi
   id "$account"
   for file in /etc/subuid /etc/subgid; do

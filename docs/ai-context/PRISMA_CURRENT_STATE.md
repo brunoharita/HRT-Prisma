@@ -9,7 +9,11 @@ last_verified: 2026-10-25
 
 # Estado atual do Prisma
 
-## CI KVM2 — preparação 1.0 desativada (14/11/2026)
+## CI KVM2 — delta de diagnóstico do operador (15/11/2026)
+
+Operador comprovou colisão do UID1000 de prisma-ci com cinco containers produtivos sem remapeamento. Identidade antiga preservada e reprovada para CI; operador criou prisma-ci-runner UID/GID2001, senha bloqueada, home0750 e subuids/subgids231072:65536, sem grupos extras. Runner/Docker Prisma não foram ativados. Horus foi reportado em1,8CPU/4GiB/swap0 com serviços ativos/enabled; teto conjunto/coordenação ainda não aplicados/comprovados. Agente segue sem rota SSH utilizável: Connection refused, rede Cloud restricted/enforced sem grant da VPS. Readiness deve permanecer fechado. CI hosted da preparação04ab281e passou no run43670419887; PR5 draft, sem integração ou deploy. Evidências do operador separadas de observação direta no runbook/AoT.
+
+## CI KVM2 — preparação inicial 1.0 desativada (14/11/2026; histórico anterior ao delta acima)
 
 Contingência GitHub primeiro preparada em branch: somente tentativa2 após prova oficial de billing sem etapas executadas; main/PR interno atual, verificador main antes de dependências e checkouts independentes. `PRISMA_KVM2_CI_READY` deve permanecer ausente/false. Não há runner Prisma criado/ativado nem coordenação conjunta comprovada nesta sessão. SSH root@72.60.241.90:22 recusado no ambiente; conta prisma-ci, sandbox/rede, limites individuais/agregado, persistência e recuperação não inspecionados. Teto exigido do conjunto:1,8CPU/4GiB sem swap, um job pesado por vez entre Horus e Prisma. Não declarar conclusão operacional nem migrar deploy. Próxima ação: diagnóstico read-only do operador e implementação/validação conjunta antes de readiness; ver [runbook](../operations/github-actions-kvm2.md) e [AoT](../qa/aot-prisma-kvm2-ci.md). Produto/produção permanecem sem alteração.
 

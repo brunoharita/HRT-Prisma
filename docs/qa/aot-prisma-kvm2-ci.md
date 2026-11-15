@@ -1,12 +1,20 @@
 # AoT — Prisma CI KVM2, preparação 1.0
 
-Contrato: [versão 1.0](agreement-prisma-kvm2-ci.md), derivado do pedido explícito do usuário. Risco D/E: executor persistente, identidade, rede e orçamento compartilhado. Baseline Prisma b052be8751e66d495c160959839e4cb133ea5ae4; referência Horus 5c288b0c152d813cd32710372c07ce2e0df3f102. Reutilização: verificador e testes Horus adaptados, Actions oficiais existentes e nenhuma nova dependência de produto. Decisão de arquitetura host/coordenação não implementada sem diagnóstico; eventual ADR e PR Horus pertencem à continuação deste mesmo movimento.
+Contrato: [versão 1.1](agreement-prisma-kvm2-ci.md), derivado do pedido explícito do usuário. Risco D/E: executor persistente, identidade, rede e orçamento compartilhado. Baseline Prisma b052be8751e66d495c160959839e4cb133ea5ae4; referência Horus 5c288b0c152d813cd32710372c07ce2e0df3f102. Reutilização: verificador e testes Horus adaptados, Actions oficiais existentes e nenhuma nova dependência de produto. Decisão de arquitetura host/coordenação não implementada sem diagnóstico; eventual ADR e PR Horus pertencem à continuação deste mesmo movimento.
+
+## Delta de evidência do operador — 15/11/2026
+
+Diagnóstico recebido e criação da conta pelo operador descritos no [runbook](../operations/github-actions-kvm2.md#diagnóstico-e-preparação-pelo-operador--15112026). prisma-ci UID1000 colide com cinco containers produtivos sem userns remap; identidade reprovada para CI. Conta nova prisma-ci-runner UID/GID2001, senha L, home0750, subuid/subgid231072:65536, sem grupos adicionais. Não houve sinalização/alteração dos processos produtivos. D-01 passa de BLOCKED a PARTIAL: conta preparada por evidência do operador, mas runner, Docker e isolamento ainda não comprovados. A evidência não é observação remota direta do agente.
+
+Limites individuais Horus1,8CPU/4GiB/swap0 e serviços enabled/active reportados pelo operador. ci.slice sem limites efetivos reportados; D-02 permanece BLOCKED. Regra nft/service e demais controles ainda incompletos. A nova tentativa SSH direta falhou; ambiente Cloud com chave ready e rede restricted/enforced sem grant da VPS. Não há ferramenta de mudança de rede disponível. Necessária rota autorizada para continuar diretamente.
+
+CI hosted do SHA04ab281e59b403ce6b7f34138902dff3ec449ed5: [run43670419887](https://github.com/brunoharita/HRT-Prisma/actions/runs/43670419887), validate132678995021 PASS, incluindo foundation, ledger, audit e upload. Não prova contingência nem autoriza fabricá-la. PR5 permanece draft. Delta atual altera somente diagnóstico/docs/contexto; ensaios host e ciclo pós-merge continuam pendentes.
 
 ## Matriz de Acordos
 
 | ID | Implementação | Teste / evidência | Status | Ambiente / limitação |
 | --- | --- | --- | --- | --- |
-| D-01 | Label/workspaces exclusivos preparados; não alterada conta existente | SSH direto recusado, sem autenticação; diagnóstico read-only entregue | BLOCKED | Arquivos/sockets/rede/credenciais/processos do host não inspecionados |
+| D-01 | Label/workspaces preparados; conta antiga preservada; operador criou prisma-ci-runner UID2001 após reprovar UID1000 | Saídas do operador: identidade/grupos/home/faixas; ver delta acima | PARTIAL | Runner/Docker/sandbox e isolamento real pendentes |
 | D-02 | Ativação bloqueada por readiness ausente/false | Roteamento testado fechado; nenhum limite alegado como efetivo | BLOCKED | Coordenação/limites/disputa/recuperação no host pendentes; não habilitar |
 | D-03 | Controlador main e verificador main antes do código testado/dependências; uma repetição | 7 testes API com múltiplos negativos e 3 testes de política/workflow PASS | PARTIAL | Ciclo real hosted → controlador → VPS pendente |
 | D-04 | Três checkouts independentes, cache/lock/cwd/relatórios explícitos | Fixture Git parcial/promisor e filho completo PASS | PARTIAL | Checkout real/uploads na VPS pendentes; nenhum banco nativo adicionado |
@@ -17,7 +25,7 @@ Contrato: [versão 1.0](agreement-prisma-kvm2-ci.md), derivado do pedido explíc
 
 | ID | Guardrail / teste | Evidência | Status |
 | --- | --- | --- | --- |
-| P-01 | Nenhuma operação host ou Horus; escopo Git apenas Prisma | Diff e registro de conexão recusada; nenhum secret de deploy em workflow | PARTIAL — isolamento operacional não testado |
+| P-01 | Serviços produtivos/Horus preservados; operador criou apenas conta CI exclusiva | Saídas do operador e diff; nenhum secret de deploy em workflow | PARTIAL — isolamento operacional não testado |
 | P-02 | Rejeita erro de código/teste/dependência/timeout/storage, forks, revisões fechadas/obsoletas e tentativas extras | Fixtures API e expressão real de roteamento, 11 testes PASS | PASS local |
 | P-03 | Readiness fechado; sem aumento de orçamento ou deploy | Workflow negativo readiness ausente/false; publicadores intactos | PASS local — confirmar variável remota antes de integrar |
 | P-04 | Nenhuma chave/token em diff/relatórios; SSH sem autenticação após falha de conexão | Chave temporária removida, não impressa; bloco operador compara ED25519 antes de autenticar | PASS nesta sessão |
@@ -27,7 +35,7 @@ Contrato: [versão 1.0](agreement-prisma-kvm2-ci.md), derivado do pedido explíc
 | Área | Relação | Baseline / regressão | Evidência | Status |
 | --- | --- | --- | --- | --- |
 | Política Prisma CI | direct | foundation hosted/validate preservados; fixtures positivas/negativas | 11 testes dirigidos, actionlint 1.7.7 com label local declarada, bash -n | PASS local; remoto pendente |
-| Recursos/rede/segredos KVM2 | critical_transversal | estado não observado; nenhum serviço alterado | Conexão recusada, readiness fechado | BLOCKED |
+| Recursos/rede/segredos KVM2 | critical_transversal | diagnóstico parcial do operador; nenhum serviço alterado | Colisão UID1000 registrada; nova conta2001; conexão direta recusada, readiness fechado | BLOCKED |
 | Coordenação Horus | direct | referência remota lida, nenhum arquivo/credencial modificado | PR38/39 e workflows consultados | BLOCKED para coordenação |
 | Publicadores/checks/artefatos | plausible_indirect | nome validate e comandos originais preservados, relatórios associados a SHA | 22 testes tooling/contexto; diff e dispatcher | PARTIAL — regras remotas/ciclo pendentes |
 | Produto/persistência/UI | no_impact_identified | nenhum runtime/schema/flag/publicador alterado | diff limitado a CI/tooling/docs, sem implantação | PASS por escopo |
@@ -58,4 +66,4 @@ Branch `codex/prisma-kvm2-ci`, origin existente, baseline acima; PR de preparaç
 
 ## Conclusão
 
-PARTIAL/BLOCKED. Próxima ação concreta é executar o diagnóstico mínimo do runbook pelo operador, sem enviar chave/token ao chat. Só após inspecionar o estado real pode-se configurar a conta existente e concluir coordenação, teste de disputa/cancelamento/falha e ciclo completo. Rollback da preparação: reverter o PR; rollback operacional futuro detalhado no runbook. Nenhuma alegação de conclusão operacional.
+PARTIAL/BLOCKED. Próxima ação concreta é disponibilizar rota SSH autorizada para o ambiente e retomar a inspeção efetiva das unidades/regras. Conta nova preparada pelo operador; só após conferir o restante do estado real pode-se configurar runner/Docker, concluir coordenação, teste de disputa/cancelamento/falha e ciclo completo. Não solicitar chave/token ao chat. Rollback da preparação: reverter o PR; rollback operacional futuro detalhado no runbook. Nenhuma alegação de conclusão operacional.
