@@ -6,6 +6,9 @@ on:
 
 permissions:
   contents: read
+  actions: read
+  checks: read
+  pull-requests: read
 
 concurrency:
   group: prisma-ci-${{ github.workflow }}-${{ github.ref }}
@@ -13,28 +16,68 @@ concurrency:
 
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    # Readiness stays absent/false until joint host coordination is proven.
+    runs-on: ${{ fromJSON(vars.PRISMA_KVM2_CI_READY == 'true' && github.run_attempt == 2 && github.repository == 'brunoharita/HRT-Prisma' && ((github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == 'brunoharita/HRT-Prisma' && github.event.pull_request.base.ref == 'main')) && '["self-hosted","linux","x64","prisma-kvm2-ci"]' || '["ubuntu-latest"]') }}
     timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: ci-checkout
     steps:
-      - name: Checkout
+      # Verify using trusted main BEFORE checking out or executing test revision.
+      - name: Checkout trusted quota verifier
+        if: runner.environment == 'self-hosted'
         uses: actions/checkout@v4
+        with:
+          ref: main
+          path: .ci-verifier
+          persist-credentials: false
+          sparse-checkout: |
+            scripts/ci-quota-fallback.mjs
+            scripts/lib/ci-quota-fallback.mjs
+          sparse-checkout-cone-mode: false
+
+      - name: Require official quota proof for this retry
+        if: runner.environment == 'self-hosted'
+        working-directory: .ci-verifier
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PRISMA_QUOTA_RUN_ID: ${{ github.run_id }}
+        run: /usr/bin/node scripts/ci-quota-fallback.mjs verify
+
+      - name: Checkout independent full test repository
+        uses: actions/checkout@v4
+        with:
+          path: ci-checkout
+          persist-credentials: false
+
+      - name: Require dedicated checkout and lockfile
+        run: |
+          test -s pnpm-lock.yaml
+          test "$(git rev-parse --show-toplevel)" = "$PWD"
+          test ! -f .git/info/sparse-checkout
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 11.19.0
+          package_json_file: ci-checkout/package.json
 
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: pnpm
+          cache-dependency-path: ci-checkout/pnpm-lock.yaml
 
       - name: Install locked dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Validate foundation
-        run: pnpm validate
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p tmp/ci-reports
+          pnpm validate 2>&1 | tee tmp/ci-reports/foundation.log
 
       - name: Validate Supabase ledger registry
         run: pnpm check:supabase-ledger
@@ -44,3 +87,23 @@ jobs:
 
       - name: Audit production dependencies
         run: pnpm audit --prod --audit-level high
+
+      - name: Preserve CI reports and revision identity
+        if: always()
+        env:
+          TEST_REVISION: ${{ github.sha }}
+          CI_ATTEMPT: ${{ github.run_attempt }}
+          CI_RUN: ${{ github.run_id }}
+        run: |
+          mkdir -p tmp/ci-reports
+          git rev-parse HEAD > tmp/ci-reports/checkout-sha.txt
+          printf '%s\n' "revision=$TEST_REVISION" "run=$CI_RUN" "attempt=$CI_ATTEMPT" > tmp/ci-reports/run.txt
+
+      - name: Upload CI evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: prisma-ci-${{ github.sha }}-${{ github.run_attempt }}
+          path: ci-checkout/tmp/ci-reports/
+          if-no-files-found: error
+          retention-days: 14
